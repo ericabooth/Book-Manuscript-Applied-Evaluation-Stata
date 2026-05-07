@@ -1,0 +1,262 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Beyond Analysis: Strategic Evaluation with Stata
+% Eric Booth & Elizabeth Teas
+% 2026 Edition
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[
+    a4paper,
+    fontsize=10pt,
+    twoside=true,
+    numbers=noenddot,
+]{kaobook}
+
+% --- Language & Typography ---
+\ifxetexorluatex
+    \usepackage{polyglossia}
+    \setmainlanguage{english}
+\else
+    \usepackage[english]{babel}
+\fi
+\usepackage[english=british]{csquotes}
+
+% --- Essential Packages ---
+\usepackage{blindtext}
+\usepackage{kaobiblio}
+\IfFileExists{main.bib}{\addbibresource{main.bib}}{} 
+\usepackage[framed=true]{kaotheorems}
+\usepackage{kaorefs}
+
+% --- Fallback Definitions for Custom kaobook Commands ---
+\providecommand{\Environment}[1]{\texttt{#1}}
+\providecommand{\Command}[1]{\texttt{\textbackslash#1}}
+\providecommand{\Option}[1]{\textsf{#1}}
+
+% Paths for figures
+\graphicspath{{images/}} 
+
+% Index & Glossary
+\makeindex[columns=3, title=Alphabetical Index, intoc]
+\makeglossaries
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	BOOK INFORMATION
+%----------------------------------------------------------------------------------------
+
+\titlehead{Tools for Applied Monitoring, Evaluation and Learning}
+
+\title[Beyond Analysis]{Beyond Analysis: \\ Strategic Evaluation with \Environment{Stata}}
+\subtitle{subtitle here} 
+
+\author{Eric Booth \hspace{0.5in} Elizabeth Teas} 
+
+\date{Drafted: April 2026}
+
+\publishers{xxxxxxxx Press}
+
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%	FRONT MATTER
+%----------------------------------------------------------------------------------------
+
+\frontmatter
+
+\makeatletter
+\lowertitleback{
+    \textbf{Beyond Analysis: Strategic Evaluation with Stata}\\
+    © 2025 Eric Booth \& Elizabeth Teas \vspace{0.5in}
+
+    \textbf{Colophon} \\
+    This document was typeset using the \texttt{kaobook} class, optimized for the practitioner-researcher. The layout emphasizes marginalia for code snippets and implementation pro-tips.
+}
+\makeatother
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+%----------------------------------------------------------------------------------------
+%	MAIN BODY
+%----------------------------------------------------------------------------------------
+
+\mainmatter
+\setchapterstyle{kao}
+
+\chapter*{Preface: The Modern Evaluator's Dilemma}
+Applied evaluation has moved beyond simple pre-post t-tests. Today's evaluator must be part data engineer, part AI prompt engineer, and part visualization specialist. This book provides a roadmap for using Stata as the central "brain" of this complex ecosystem.
+
+%----------------------------------------------------------------------------------------
+% PART I: THE EMBEDDED EVALUATOR
+%----------------------------------------------------------------------------------------
+
+\addpart{Part I: The Embedded Evaluator \newline Principles, Speed, and the Modern Stack}
+
+\chapter{Strategic Evaluation in Implementation Science}
+\section{The Practitioner-Researcher Relationship}
+Explores the "Embedded Evaluation" model. We discuss moving away from "parachute research" toward sustained relationships where the evaluator is a strategic partner in the implementation team.
+\begin{itemize}
+    \item \textbf{Bridging the gap}: Shared goals vs. analytical independence. How to maintain rigor while being "in the room" where decisions are made.
+    \item \textbf{Feedback loops}: Using \Environment{Stata} to provide real-time insights for program adaptation.
+    \item \textbf{Messy Contexts}: Working with nonprofits where data collection is often secondary to service delivery.
+\end{itemize}
+
+\section{Implementation Science Principles in Practice}
+\marginnote{Implementation science focuses on the 'how' and 'why' of program success, not just the 'what'. See \cite{James2013} for foundational concepts.}
+This section defines the core IS frameworks (e.g., RE-AIM, CFIR) and how they translate to data structures in \Environment{Stata}.
+\begin{itemize}
+    \item \textbf{Fidelity Monitoring}: Tracking if the program is being delivered as intended.
+    \item \textbf{Adaptation Tracking}: Coding and managing changes made to the intervention in real-time.
+    \item \textbf{Determinants of Change}: Identifying barriers and facilitators through nested data structures.
+\end{itemize}
+
+\section{Stata as the Central Evaluation Brain}
+Why \Environment{Stata} is the ideal bridge: its ability to handle messy, real-world data while providing the rigor required for publication and the speed required for stakeholders.
+\begin{itemize}
+    \item \textbf{Reproducibility}: Why do-files are superior to point-and-click dashboards for audit trails.
+    \item \textbf{Extensibility}: Using community-contributed commands to solve thorny evaluation problems.
+\end{itemize}
+
+\chapter{Setting Up a High-Performance Environment}
+\section{The Speed Revolution: \texttt{ftools} and \texttt{gtools}}
+\marginnote{When working with millions of administrative records, standard \Environment{Stata} commands can become bottlenecks. We implement \texttt{ftools} and \texttt{gtools} to reclaim your time.}
+Detailed guide on using faster alternatives to core commands.
+\begin{itemize}
+    \item \textbf{Benchmarking}: Comparing \texttt{gcollapse} vs. \texttt{collapse} on large administrative datasets.
+    \item \textbf{Multi-way Fixed Effects}: Using \texttt{reghdfe} for complex nested evaluation designs.
+    \item \textbf{Efficient Hashing}: Understanding why these tools work and when to use them.
+\end{itemize}
+
+\section{Monitoring Real-Time Participation}
+Techniques for building "Command Centers" in \Environment{Stata} to track response rates and program reach.
+\begin{itemize}
+    \item \textbf{Response Rate Trackers}: Automating daily reports from Qualtrics/REDCap APIs.
+    \item \textbf{Attrition Alerts}: Using \Environment{Stata} to flag participants at risk of dropping out before they do.
+    \item \textbf{Geographic Coverage}: Quick mapping to see where participants are (and aren't) coming from.
+\end{itemize}
+
+\section{Communicating with Funders and Stakeholders}
+Using \Environment{Stata} to automate the "Monday Morning Update" for nonprofit boards and foundation officers.
+\begin{itemize}
+    \item \textbf{Dynamic Tables}: Moving beyond copy-pasting to automated \texttt{putexcel} and \texttt{collect} workflows.
+    \item \textbf{Funder-Ready Outputs}: Designing visuals that tell a story of impact and reach without the jargon.
+\end{itemize}
+
+\section{Integrating AI: The Gemini CLI Bridge}
+\marginnote{The \texttt{gemini} package allows \Environment{Stata} to communicate directly with Google's LLMs. We'll cover API key management and \texttt{shell} security.}
+Setup guide for integrating Node.js and the Gemini CLI with \Environment{Stata}. 
+\begin{itemize}
+    \item \textbf{Authentication}: Workflows for macOS, Windows, and Linux.
+    \item \textbf{Prompting from Do-files}: Running AI-assisted cleaning routines directly within your pipeline.
+    \item \textbf{Privacy}: Strategies for de-identifying data before sending it to an LLM.
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+% PART II: DATA ENGINEERING FOR EVALUATORS
+%----------------------------------------------------------------------------------------
+
+\addpart{Part II: Data Engineering \newline Modernization, Cleaning, and Harmonization}
+
+\chapter{Advanced Data Collection \& Modernization}
+\section{Web Scraping and API Pipelines}
+Walks through examples of scraping program data and connecting to APIs like REDCap, Qualtrics, and Census Bureau feeds using \Environment{Stata}.
+
+\section{Unstructured Data: The AI Bridge}
+Using LLMs within \Environment{Stata} to turn qualitative interview fragments or messy program notes into structured, analyzable variables using the \texttt{gemini} package.
+
+\chapter{Harmonization and Master Data Management}
+\section{Merging the Unmergable}
+Fuzzy matching techniques and crosswalk building. Dealing with shifting geographic IDs and changing program taxonomies over time.
+
+\section{Longitudinal Panel Construction}
+Building "Long" files from "Wide" chaos. Techniques for tracking program participants across multiple years of intervention in implementation settings.
+
+\chapter{Ethics, Privacy, and Synthetic Data}
+\section{The Privacy-Utility Tradeoff}
+\marginnote{Data ethics isn't just a compliance box—it's about building trust with participants.}
+Techniques for de-identification and the creation of "Research-Ready" public-use files for non-profit and public sector clients.
+
+\section{Synthetic Data Generation}
+Using \Environment{Stata}'s \texttt{simulate} and AI-driven synthesis to create realistic mock datasets that preserve the covariance matrix of the original sensitive data.
+
+%----------------------------------------------------------------------------------------
+% PART III: THE NEW CAUSAL FRONTIER
+%----------------------------------------------------------------------------------------
+
+\addpart{Part III: The New Causal Frontier \newline Innovative and Non-standard Analysis}
+
+\chapter{Modern Difference-in-Differences}
+\section{The Revolution in Staggered Adoption}
+Explaining the recent shift in DiD methodology and why Two-Way Fixed Effects (TWFE) often fails in applied evaluation. 
+
+\section{Implementing \texttt{csdid} and \texttt{jwdid}}
+A step-by-step guide to estimating heterogeneous treatment effects and producing event-study plots that survive academic and client scrutiny.
+
+\chapter{Synthetic Controls and Matrix Completion}
+\section{The Synthetic Control Method (\texttt{synth})}
+Building a "counterfactual" unit for single-treated unit evaluations. 
+
+\section{Synthetic Difference-in-Differences (\texttt{sdid})}
+Combining the strengths of DiD and Synthetic Control for robust program estimation in complex implementation contexts.
+
+\chapter{Machine Learning for Evaluators}
+\section{Targeting Models with Lasso and Elastic Net}
+Using \texttt{lassopack} to identify which program participants are most likely to drop out or succeed, enabling proactive implementation adjustments.
+
+\section{Random Forests in Stata}
+Applying non-linear classification to predict program outcomes and visualize feature importance for stakeholders.
+
+%----------------------------------------------------------------------------------------
+% PART IV: HIGH-IMPACT COMMUNICATION
+%----------------------------------------------------------------------------------------
+
+\addpart{Part IV: High-Impact Communication \newline Sparklines, Webdocs, and Interactive Reporting}
+
+\chapter{Innovative Visualizations}
+\section{Sparklines and Micro-charts with \texttt{sparkta}}
+\marginnote{Fahad Mirza's \texttt{sparkta} package allows us to generate thousands of "sparklines" (micro-charts) for high-density dashboards.}
+Using \texttt{sparkta} to create dense, data-rich dashboards that show trends at a glance across hundreds of units.
+
+\section{Advanced Coefficient Plots}
+Visualizing effect sizes and confidence intervals across multiple models for easy stakeholder comparison.
+
+\chapter{Dynamic Reporting and Web Integration}
+\section{Dynamic HTML with \texttt{webdoc}}
+\marginnote{By embedding \texttt{sparkta} outputs directly into \texttt{webdoc} workflows, we can generate auto-updating HTML project portals.}
+Building live, searchable project websites directly from your do-files to keep practitioner-partners informed.
+
+\section{AI-Assisted Narrative Generation}
+Using the \texttt{gemini} package to draft the "Executive Summary" based on your \Environment{Stata} output tables.
+
+%----------------------------------------------------------------------------------------
+% PART V: BUILDING TOOLS THAT MATA-ER
+%----------------------------------------------------------------------------------------
+
+\addpart{Part V: Building Tools that \texttt{Mata}-er \newline Custom Development and Scalability}
+
+\chapter{Building Internal Evaluation Toolkits}
+\section{From Scripts to Systems}
+Turning project-specific cleaning code into standardized organization-wide ado-files.
+
+\section{Writing Help Files (\texttt{.sthlp})}
+Best practices for documenting institutional knowledge and custom analytical processes for team onboarding.
+
+\chapter{Scalability and Big Data in the Public Sector}
+\section{Introduction to Mata for Evaluators}
+When even \texttt{gtools} isn't fast enough. Matrix manipulation and custom functions for large-scale administrative data.
+
+%----------------------------------------------------------------------------------------
+% BACK MATTER
+%----------------------------------------------------------------------------------------
+
+\addpart{Appendices}
+
+\chapter*{Appendix A: The Gemini-Stata Setup Guide}
+\chapter*{Appendix B: The Modern Causal Toolbox}
+
+\backmatter
+\printbibliography[heading=bibintoc, title=Bibliography]
+
+\end{document}
