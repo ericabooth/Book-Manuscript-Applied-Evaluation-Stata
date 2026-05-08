@@ -33,7 +33,7 @@ This GitHub repository serves as the digital companion to the book. At this stag
 - **Custom Tools**: Integration scripts for the Gemini CLI and specific evaluation templates.
 
 ## Status Note
-**Only the book outline is currently available publicly.** Full chapter content is being developed for a 2025/2026 release. We are currently sharing the architecture of the book to solicit feedback from the applied evaluation community.
+**Only the book outline is currently available publicly.** Full chapter content is being developed for a 2026/27 release. We are currently sharing the architecture of the book to solicit feedback from the applied evaluation community.
 
 ## Citation & Contact
 If you are interested in reviewing early drafts or collaborating on specific implementation science modules, please contact:
