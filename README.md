@@ -38,12 +38,9 @@ This GitHub repository serves as the digital companion to the book. At this stag
 ## Citation & Contact
 If you are interested in reviewing early drafts or collaborating on specific implementation science modules, please contact:
 
-*Eric Booth* 
+*Eric Booth*  eric.a.booth@gmail.com  Texas2036.org
+    and
+*Elizabeth Teas* Far Harbor, LLC
 
-eric.a.booth@gmail.com  
-Texas2036.org
-    _and_
-*Elizabeth Teas*
-Far Harbor, LLC
 ---
 *This work is released under the terms provided in the [LICENSE](LICENSE) file.*
