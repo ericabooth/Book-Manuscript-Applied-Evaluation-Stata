@@ -48,13 +48,13 @@
 \titlehead{Tools for Applied Monitoring, Evaluation and Learning}
 
 \title[Beyond Analysis]{Beyond Analysis: \\ Strategic Evaluation with \Environment{Stata}}
-\subtitle{subtitle here} 
+\subtitle{Modern Workflows for Implementation Science and Embedded Research} 
 
 \author{Eric Booth \hspace{0.5in} Elizabeth Teas} 
 
 \date{Drafted: April 2026}
 
-\publishers{xxxxxxxx Press}
+\publishers{Technical Press}
 
 \maketitle
 
@@ -86,7 +86,7 @@
 \setchapterstyle{kao}
 
 \chapter*{Preface: The Modern Evaluator's Dilemma}
-Applied evaluation has moved beyond simple pre-post t-tests. Today's evaluator must be part data engineer, part AI prompt engineer, and part visualization specialist. This book provides a roadmap for using Stata as the central "brain" of this complex ecosystem.
+Applied evaluation has moved beyond simple pre-post t-tests. Today's evaluator must be part data engineer, part AI prompt engineer, and part visualization specialist. This book provides a roadmap for using Stata as the central "brain" of this complex ecosystem, focusing on the needs of practitioners working in high-stakes, resource-constrained environments.
 
 %----------------------------------------------------------------------------------------
 % PART I: THE EMBEDDED EVALUATOR
@@ -103,21 +103,43 @@ Explores the "Embedded Evaluation" model. We discuss moving away from "parachute
     \item \textbf{Messy Contexts}: Working with nonprofits where data collection is often secondary to service delivery.
 \end{itemize}
 
+\subsection{Managing Power Dynamics in Embedded Evaluation}
+Strategies for navigating data ownership and the "bad news" problem when evaluation findings conflict with program goals.
+
+\subsection{Building Evaluation Literacy with Staff}
+Using \Environment{Stata}-generated data dictionaries and simple summaries to help non-technical staff understand how their inputs affect the final analysis.
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{evalaudit}]
+\textbf{Proposed Program:} \texttt{evalaudit}. This tool would generate a structured report auditing data-sharing agreements, quasi-identifiers, and reporting timelines to ensure compliance with funder mandates and ethical standards from day one.
+\end{kaobox}
+
 \section{Implementation Science Principles in Practice}
 \marginnote{Implementation science focuses on the 'how' and 'why' of program success, not just the 'what'. See \cite{James2013} for foundational concepts.}
 This section defines the core IS frameworks (e.g., RE-AIM, CFIR) and how they translate to data structures in \Environment{Stata}.
 \begin{itemize}
     \item \textbf{Fidelity Monitoring}: Tracking if the program is being delivered as intended.
     \item \textbf{Adaptation Tracking}: Coding and managing changes made to the intervention in real-time.
-    \item \textbf{Determinants of Change}: Identifying barriers and facilitators through nested data structures.
 \end{itemize}
+
+\subsection{Iterative Evaluation: The PDSA Cycle in Stata}
+How to structure do-files to handle the Plan-Do-Study-Act cycle, where data is analyzed and results are used to adjust implementation in the next month.
+
+\subsection{Contextualizing the Evidence: Using CFIR to Code Site Characteristics}
+Using qualitative coding and site-level variables to explain why an intervention worked in one school but failed in another.
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{fidplot}]
+\textbf{Proposed Program:} \texttt{fidplot}. A specialized graphing tool for fidelity metrics that automatically compares observed implementation scores against a pre-set 'gold standard' or logic model benchmark.
+\end{kaobox}
 
 \section{Stata as the Central Evaluation Brain}
 Why \Environment{Stata} is the ideal bridge: its ability to handle messy, real-world data while providing the rigor required for publication and the speed required for stakeholders.
-\begin{itemize}
-    \item \textbf{Reproducibility}: Why do-files are superior to point-and-click dashboards for audit trails.
-    \item \textbf{Extensibility}: Using community-contributed commands to solve thorny evaluation problems.
-\end{itemize}
+
+\subsection{Bypassing Excel: The Risky Habit of Spreadsheet Analysis}
+Identifying common errors in spreadsheet-based evaluation and providing a workflow for transitioning nonprofits to code-based reproducibility.
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{projsetup}]
+\textbf{Proposed Program:} \texttt{projsetup}. A command to initialize the standardized directory structure, global macro hubs, and master do-files described in this book, ensuring a consistent environment for team-based evaluation.
+\end{kaobox}
 
 \chapter{Setting Up a High-Performance Environment}
 \section{The Speed Revolution: \texttt{ftools} and \texttt{gtools}}
@@ -126,32 +148,48 @@ Detailed guide on using faster alternatives to core commands.
 \begin{itemize}
     \item \textbf{Benchmarking}: Comparing \texttt{gcollapse} vs. \texttt{collapse} on large administrative datasets.
     \item \textbf{Multi-way Fixed Effects}: Using \texttt{reghdfe} for complex nested evaluation designs.
-    \item \textbf{Efficient Hashing}: Understanding why these tools work and when to use them.
 \end{itemize}
+
+\subsection{Large Data Workflows without MP}
+Tips for managing memory and optimizing sort/merge operations on standard Stata flavors when working with extensive health or education records.
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{gtools\_audit}]
+\textbf{Proposed Program:} \texttt{gtools\_audit}. This tool would scan an existing do-file and identify bottlenecks where standard commands could be replaced by \Environment{gtools} or \Environment{ftools} equivalents, projecting potential time savings.
+\end{kaobox}
 
 \section{Monitoring Real-Time Participation}
 Techniques for building "Command Centers" in \Environment{Stata} to track response rates and program reach.
 \begin{itemize}
     \item \textbf{Response Rate Trackers}: Automating daily reports from Qualtrics/REDCap APIs.
-    \item \textbf{Attrition Alerts}: Using \Environment{Stata} to flag participants at risk of dropping out before they do.
-    \item \textbf{Geographic Coverage}: Quick mapping to see where participants are (and aren't) coming from.
+    \item \textbf{Attrition Alerts}: Flagging participants at risk of dropping out before they do.
 \end{itemize}
+
+\subsection{Early Warning Systems: Statistical Process Control (SPC)}
+Applying manufacturing-style control charts to program implementation to detect when fidelity or participation drops below acceptable levels.
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{reachcheck}]
+\textbf{Proposed Program:} \texttt{reachcheck}. A program that compares participation demographics against a target population (using Census or parent-file data) to calculate representative weights and identify under-served sub-populations in real-time.
+\end{kaobox}
 
 \section{Communicating with Funders and Stakeholders}
 Using \Environment{Stata} to automate the "Monday Morning Update" for nonprofit boards and foundation officers.
-\begin{itemize}
-    \item \textbf{Dynamic Tables}: Moving beyond copy-pasting to automated \texttt{putexcel} and \texttt{collect} workflows.
-    \item \textbf{Funder-Ready Outputs}: Designing visuals that tell a story of impact and reach without the jargon.
-\end{itemize}
+
+\subsection{Automating the Appendix}
+Using \texttt{collect} to manage exhaustive reporting tables that funders require but practitioners rarely read, keeping the main report focused on strategic insights.
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{fundertable}]
+\textbf{Proposed Program:} \texttt{fundertable}. A wrapper for \Environment{collect} and \Environment{putexcel} that generates pre-formatted "Executive Summary" tables commonly requested by major philanthropic foundations.
+\end{kaobox}
 
 \section{Integrating AI: The Gemini CLI Bridge}
 \marginnote{The \texttt{gemini} package allows \Environment{Stata} to communicate directly with Google's LLMs. We'll cover API key management and \texttt{shell} security.}
-Setup guide for integrating Node.js and the Gemini CLI with \Environment{Stata}. 
-\begin{itemize}
-    \item \textbf{Authentication}: Workflows for macOS, Windows, and Linux.
-    \item \textbf{Prompting from Do-files}: Running AI-assisted cleaning routines directly within your pipeline.
-    \item \textbf{Privacy}: Strategies for de-identifying data before sending it to an LLM.
-\end{itemize}
+
+\subsection{Prompt Engineering for Evaluators}
+Moving from generic "analyze this" prompts to structured "categorize these 5,000 progress notes based on the following implementation barriers" requests.
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{gemini\_verify}]
+\textbf{Proposed Program:} \texttt{gemini\_verify}. A tool that takes AI-coded text and compares it to a subset of human-coded "gold standard" data, calculating inter-rater reliability and accuracy metrics for the LLM's performance.
+\end{kaobox}
 
 %----------------------------------------------------------------------------------------
 % PART II: DATA ENGINEERING FOR EVALUATORS
@@ -161,25 +199,66 @@ Setup guide for integrating Node.js and the Gemini CLI with \Environment{Stata}.
 
 \chapter{Advanced Data Collection \& Modernization}
 \section{Web Scraping and API Pipelines}
-Walks through examples of scraping program data and connecting to APIs like REDCap, Qualtrics, and Census Bureau feeds using \Environment{Stata}.
+Automating data pulls from platforms using \Environment{Stata}.
+
+\subsection{OAuth and Secure API Handshakes}
+Managing credentials and security when pulling data from clinical or educational platforms directly into \Environment{Stata}'s memory.
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{redcap\_pull}]
+\textbf{Proposed Program:} \texttt{redcap\_pull}. A simplified interface for common REDCap API calls that handles the heavy lifting of JSON parsing and variable labeling automatically.
+\end{kaobox}
 
 \section{Unstructured Data: The AI Bridge}
-Using LLMs within \Environment{Stata} to turn qualitative interview fragments or messy program notes into structured, analyzable variables using the \texttt{gemini} package.
+Using LLMs within \Environment{Stata} to turn messy program notes into structured variables.
+
+\subsection{Sentiment Analysis as an Evaluation Tool}
+Extracting participant tone and satisfaction from open-ended survey responses to quantify "soft" implementation outcomes.
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{text2vars}]
+\textbf{Proposed Program:} \texttt{text2vars}. A program leveraging the Gemini API to scan unstructured progress reports and extract Key Performance Indicators (KPIs) into numeric variables.
+\end{kaobox}
 
 \chapter{Harmonization and Master Data Management}
 \section{Merging the Unmergable}
-Fuzzy matching techniques and crosswalk building. Dealing with shifting geographic IDs and changing program taxonomies over time.
+Fuzzy matching techniques and building robust crosswalks.
+
+\subsection{Spatial Joining without GIS}
+Using \Environment{Stata} for proximity joins (e.g., matching schools to the nearest health clinic) using latitude/longitude data without specialized GIS software.
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{fuzzymatch\_pro}]
+\textbf{Proposed Program:} \texttt{fuzzymatch\_pro}. An extension of \Environment{reclink} that incorporates multiple string distance algorithms (Levenshtein, Jaro-Winkler) and generates a reviewable "Merge Quality Report" with suggestions for human review.
+\end{kaobox}
 
 \section{Longitudinal Panel Construction}
-Building "Long" files from "Wide" chaos. Techniques for tracking program participants across multiple years of intervention in implementation settings.
+Building "Long" files from "Wide" chaos in multi-year evaluations.
+
+\subsection{Transition Matrices: Visualizing Participant Movement}
+Creating datasets that track how participants move through different stages of a program (e.g., from 'Waitlisted' to 'Engaged' to 'Graduated').
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{trackflow}]
+\textbf{Proposed Program:} \texttt{trackflow}. A utility that generates Sankey-style data showing participant movement through program phases, ready for export to interactive web dashboards.
+\end{kaobox}
 
 \chapter{Ethics, Privacy, and Synthetic Data}
 \section{The Privacy-Utility Tradeoff}
-\marginnote{Data ethics isn't just a compliance box—it's about building trust with participants.}
-Techniques for de-identification and the creation of "Research-Ready" public-use files for non-profit and public sector clients.
+Techniques for de-identification and creating "Research-Ready" public-use files.
+
+\subsection{Measuring Re-identification Risk: k-Anonymity and l-Diversity}
+Implementing statistical metrics in \Environment{Stata} to calculate how likely a participant is to be re-identified based on their demographic profile.
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{riskscan}]
+\textbf{Proposed Program:} \texttt{riskscan}. A command that scans a dataset for potential Quasi-Identifiers and calculates re-identification risk metrics before a public-use file is released.
+\end{kaobox}
 
 \section{Synthetic Data Generation}
-Using \Environment{Stata}'s \texttt{simulate} and AI-driven synthesis to create realistic mock datasets that preserve the covariance matrix of the original sensitive data.
+Using \Environment{Stata}'s \texttt{simulate} and AI-driven synthesis.
+
+\subsection{Validating the Fake: Statistical Fidelity Tests}
+How to prove to a client that your synthetic dataset maintains the same correlation structure as the real data without exposing the raw values.
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{synthgen}]
+\textbf{Proposed Program:} \texttt{synthgen}. A command that integrates with Python to generate synthetic cohorts that preserve non-linear relationships and interactions found in the original sensitive data.
+\end{kaobox}
 
 %----------------------------------------------------------------------------------------
 % PART III: THE NEW CAUSAL FRONTIER
@@ -189,24 +268,46 @@ Using \Environment{Stata}'s \texttt{simulate} and AI-driven synthesis to create 
 
 \chapter{Modern Difference-in-Differences}
 \section{The Revolution in Staggered Adoption}
-Explaining the recent shift in DiD methodology and why Two-Way Fixed Effects (TWFE) often fails in applied evaluation. 
+Explaining why Two-Way Fixed Effects (TWFE) often fails in applied settings.
+
+\subsection{The Forbidden Regression: Why Simple Interactions Aren't DiD}
+Identifying common pitfalls where evaluators incorrectly apply DiD logic to staggered treatment timing.
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{did\_selector}]
+\textbf{Proposed Program:} \texttt{did\_selector}. A diagnostic tool that analyzes treatment timing and suggest the most appropriate modern estimator (\texttt{csdid}, \texttt{jwdid}, or \texttt{did2s}) based on the data's structure.
+\end{kaobox}
 
 \section{Implementing \texttt{csdid} and \texttt{jwdid}}
-A step-by-step guide to estimating heterogeneous treatment effects and producing event-study plots that survive academic and client scrutiny.
+Step-by-step guide to estimating heterogeneous treatment effects.
 
 \chapter{Synthetic Controls and Matrix Completion}
 \section{The Synthetic Control Method (\texttt{synth})}
-Building a "counterfactual" unit for single-treated unit evaluations. 
+Building "counterfactual" units for niche evaluation targets.
+
+\subsection{In-space and In-time Placebo Tests}
+Validating synthetic control results through systematic falsification tests to gain stakeholder confidence.
 
 \section{Synthetic Difference-in-Differences (\texttt{sdid})}
-Combining the strengths of DiD and Synthetic Control for robust program estimation in complex implementation contexts.
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{sdid\_viz}]
+\textbf{Proposed Program:} \texttt{sdid\_viz}. A specialized plotting command that overlays the unit weights and counterfactual trends to make the complex 'Synthetic DiD' logic intuitive for non-experts.
+\end{kaobox}
 
 \chapter{Machine Learning for Evaluators}
 \section{Targeting Models with Lasso and Elastic Net}
-Using \texttt{lassopack} to identify which program participants are most likely to drop out or succeed, enabling proactive implementation adjustments.
+Identifying which participants are most likely to drop out or succeed.
+
+\subsection{Ethics of Prediction: Bias Detection in Targeting}
+Auditing ML models to ensure that program targeting isn't reinforcing existing systemic inequities.
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{faircheck}]
+\textbf{Proposed Program:} \texttt{faircheck}. A program that audits machine learning predictions across protected classes (race, gender, income) and reports potential bias in program targeting.
+\end{kaobox}
 
 \section{Random Forests in Stata}
-Applying non-linear classification to predict program outcomes and visualize feature importance for stakeholders.
+
+\subsection{Variable Importance for Program Managers}
+Translating the black box of Random Forests into "Top 5" lists of factors that drive implementation success.
 
 %----------------------------------------------------------------------------------------
 % PART IV: HIGH-IMPACT COMMUNICATION
@@ -216,19 +317,29 @@ Applying non-linear classification to predict program outcomes and visualize fea
 
 \chapter{Innovative Visualizations}
 \section{Sparklines and Micro-charts with \texttt{sparkta}}
-\marginnote{Fahad Mirza's \texttt{sparkta} package allows us to generate thousands of "sparklines" (micro-charts) for high-density dashboards.}
-Using \texttt{sparkta} to create dense, data-rich dashboards that show trends at a glance across hundreds of units.
+Using Fahad Mirza's package for high-density site reporting.
+
+\subsection{Maximizing the Data-to-Ink Ratio}
+Principles of accessible design for clinical and educational dashboards.
 
 \section{Advanced Coefficient Plots}
-Visualizing effect sizes and confidence intervals across multiple models for easy stakeholder comparison.
 
 \chapter{Dynamic Reporting and Web Integration}
 \section{Dynamic HTML with \texttt{webdoc}}
-\marginnote{By embedding \texttt{sparkta} outputs directly into \texttt{webdoc} workflows, we can generate auto-updating HTML project portals.}
-Building live, searchable project websites directly from your do-files to keep practitioner-partners informed.
+Building live, searchable project websites directly from your do-files.
+
+\subsection{The Self-Contained Project Portal}
+Workflows for embedding interactive maps and tables into a single HTML file that stakeholders can open without special software.
 
 \section{AI-Assisted Narrative Generation}
-Using the \texttt{gemini} package to draft the "Executive Summary" based on your \Environment{Stata} output tables.
+Using the \texttt{gemini} package to draft the "Executive Summary."
+
+\subsection{The 'So What?' Test: Finding Meaning in the Table}
+Using AI to identify the single most impactful data point in a complex regression table for inclusion in a policy brief.
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{stata2brief}]
+\textbf{Proposed Program:} \texttt{stata2brief}. A command that takes current analysis results and a custom template to auto-generate a structured one-page summary brief via the Gemini API.
+\end{kaobox}
 
 %----------------------------------------------------------------------------------------
 % PART V: BUILDING TOOLS THAT MATA-ER
@@ -240,12 +351,21 @@ Using the \texttt{gemini} package to draft the "Executive Summary" based on your
 \section{From Scripts to Systems}
 Turning project-specific cleaning code into standardized organization-wide ado-files.
 
+\subsection{The 'Package' Mindset: Versioning Internal Tools}
+Why treating your internal scripts like software leads to more sustainable research teams.
+
 \section{Writing Help Files (\texttt{.sthlp})}
-Best practices for documenting institutional knowledge and custom analytical processes for team onboarding.
 
 \chapter{Scalability and Big Data in the Public Sector}
 \section{Introduction to Mata for Evaluators}
-When even \texttt{gtools} isn't fast enough. Matrix manipulation and custom functions for large-scale administrative data.
+Matrix manipulation for large-scale administrative data.
+
+\subsection{The Trifecta Workflow: Stata, Mata, and Python}
+Strategies for using each language for its specific strength: Stata for management, Mata for computation, and Python for external integration.
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{mata\_bench}]
+\textbf{Proposed Program:} \texttt{mata\_bench}. A utility to benchmark and compare the execution speed of standard \Environment{Stata} loops vs. a Mata implementation of the same logic.
+\end{kaobox}
 
 %----------------------------------------------------------------------------------------
 % BACK MATTER
