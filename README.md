@@ -42,7 +42,7 @@ If you are interested in reviewing early drafts or collaborating on specific imp
 
 eric.a.booth@gmail.com  
 Texas2036.org
-  >  _and_
+    _and_
 *Elizabeth Teas*
 Far Harbor, LLC
 ---
