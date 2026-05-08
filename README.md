@@ -17,7 +17,7 @@ The focus is on moving beyond "parachute research" toward **embedded evaluation*
 - **Applied Data Scientists** looking to modernize their Stata-centric workflows.
 - **Implementation Scientists** focused on fidelity, adaptation, and real-time monitoring.
 
-## Key Innovative Topics
+## Key Topics
 This repository and the accompanying book cover modern research techniques often omitted from traditional evaluation texts:
 - **AI-integrated or supported workflows:** Leveraging the `gemini` Stata package to run LLM prompts directly from do-files for data cleaning and narrative reporting.
 - **Modern/recent causal methods:** Implementing staggered-adoption Difference-in-Differences (`csdid`, `jwdid`) and Synthetic Diff-in-Diff (`sdid`).
