@@ -12,8 +12,8 @@
 The focus is on moving beyond "parachute research" toward **embedded evaluation**—building sustained, strategic relationships between researchers and practitioners.
 
 ## Target Audience
-- **Practitioner-Researchers** working within or alongside nonprofit organizations.
-- **Evaluators** in the public sector or foundation spaces.
+- **Practitioner-Researchers** working within or alongside nonprofit organizations conducting applied monitoring, evaluation, and learning (MEL) activities.
+- **Evaluators** in the public sector or foundation spaces supporting program implementation/interventions.
 - **Applied Data Scientists** looking to modernize their Stata-centric workflows.
 - **Implementation Scientists** focused on fidelity, adaptation, and real-time monitoring.
 
@@ -40,6 +40,9 @@ If you are interested in reviewing early drafts or collaborating on specific imp
 
 **Eric Booth**  
 eric.a.booth@gmail.com  
-
+Texas2036.org
+    _and_
+**Elizabeth Teas**
+Far Harbor, LLC
 ---
 *This work is released under the terms provided in the [LICENSE](LICENSE) file.*
