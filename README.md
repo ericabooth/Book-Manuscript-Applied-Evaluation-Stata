@@ -19,11 +19,11 @@ The focus is on moving beyond "parachute research" toward **embedded evaluation*
 
 ## Key Innovative Topics
 This repository and the accompanying book cover modern research techniques often omitted from traditional evaluation texts:
-- **AI-Integrated Workflows:** Leveraging the `gemini` Stata package to run LLM prompts directly from do-files for data cleaning and narrative reporting.
-- **The New Causal Frontier:** Implementing staggered-adoption Difference-in-Differences (`csdid`, `jwdid`) and Synthetic Diff-in-Diff (`sdid`).
-- **High-Performance Stata:** Using `gtools` and `ftools` to process millions of administrative records in seconds.
-- **Dynamic Visualization:** Building high-density dashboards using Fahad Mirza's `sparkta` package integrated with `webdoc` for auto-updating HTML portals.
-- **Tool Building:** From do-files to custom `.ado` commands and leveraging **Mata** for scalability.
+- **AI-integrated or supported workflows:** Leveraging the `gemini` Stata package to run LLM prompts directly from do-files for data cleaning and narrative reporting.
+- **Modern/recent causal methods:** Implementing staggered-adoption Difference-in-Differences (`csdid`, `jwdid`) and Synthetic Diff-in-Diff (`sdid`).
+- **High-performance Stata:** Using `gtools` and `ftools` to process millions of administrative records in seconds.
+- **Dynamic visualization:** Building high-density dashboards using Fahad Mirza's `sparkta` package integrated with `webdoc` for auto-updating HTML portals.
+- **Tool building:** From do-files to custom `.ado` commands and leveraging **Mata** for scalability.
 
 ## Repository Contents
 This GitHub repository serves as the digital companion to the book. At this stage of development, the following are available:
