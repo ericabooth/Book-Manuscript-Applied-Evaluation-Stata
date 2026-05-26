@@ -1,7 +1,9 @@
 \@ifundefined {etoctocstyle}{\let \etoc@startlocaltoc \@gobble \let \etoc@settocdepth \@gobble \let \etoc@depthtag \@gobble \let \etoc@setlocaltop \@gobble }{}
 \babel@toc {english}{}\relax
 \contentsline {chapter}{\nonumberline Contents}{i}{chapter*.1}%
-\contentsline {part}{\nonumberline Part I: The Embedded Evaluator \newline Principles, Speed, and the Modern Stack}{3}{part*.6}%
+\contentsline {paragraph}{\nonumberline Who this book is for.}{1}{paragraph*.5}%
+\contentsline {paragraph}{\nonumberline How to read it.}{1}{paragraph*.6}%
+\contentsline {part}{\nonumberline Part I: The Embedded Evaluator \newline Principles, Speed, and the Modern Stack}{3}{part*.8}%
 \contentsline {chapter}{\numberline {1}Strategic Evaluation in Implementation Science}{5}{chapter.1}%
 \contentsline {section}{\numberline {1.1}The Practitioner-Researcher Relationship}{5}{section.1.1}%
 \contentsline {mtocsection}{\numberline {1.1}The Practitioner-Researcher Relationship}{5}{section.1.1}%
@@ -9,113 +11,160 @@
 \contentsline {mtocsubsection}{\numberline {1.1.1}Managing Power Dynamics in Embedded Evaluation}{5}{subsection.1.1.1}%
 \contentsline {subsection}{\numberline {1.1.2}Building Evaluation Literacy with Staff}{5}{subsection.1.1.2}%
 \contentsline {mtocsubsection}{\numberline {1.1.2}Building Evaluation Literacy with Staff}{5}{subsection.1.1.2}%
-\contentsline {section}{\numberline {1.2}Implementation Science Principles in Practice}{5}{section.1.2}%
-\contentsline {mtocsection}{\numberline {1.2}Implementation Science Principles in Practice}{5}{section.1.2}%
+\contentsline {section}{\numberline {1.2}Implementation Science Principles in Practice}{6}{section.1.2}%
+\contentsline {mtocsection}{\numberline {1.2}Implementation Science Principles in Practice}{6}{section.1.2}%
 \contentsline {subsection}{\numberline {1.2.1}Iterative Evaluation: The PDSA Cycle in Stata}{6}{subsection.1.2.1}%
 \contentsline {mtocsubsection}{\numberline {1.2.1}Iterative Evaluation: The PDSA Cycle in Stata}{6}{subsection.1.2.1}%
-\contentsline {subsection}{\numberline {1.2.2}Contextualizing the Evidence: Using CFIR to Code Site Characteristics}{6}{subsection.1.2.2}%
-\contentsline {mtocsubsection}{\numberline {1.2.2}Contextualizing the Evidence: Using CFIR to Code Site Characteristics}{6}{subsection.1.2.2}%
-\contentsline {section}{\numberline {1.3}Stata as the Central Evaluation Brain}{6}{section.1.3}%
-\contentsline {mtocsection}{\numberline {1.3}Stata as the Central Evaluation Brain}{6}{section.1.3}%
-\contentsline {subsection}{\numberline {1.3.1}Bypassing Excel: The Risky Habit of Spreadsheet Analysis}{6}{subsection.1.3.1}%
-\contentsline {mtocsubsection}{\numberline {1.3.1}Bypassing Excel: The Risky Habit of Spreadsheet Analysis}{6}{subsection.1.3.1}%
-\contentsline {chapter}{\numberline {2}Setting Up a High-Performance Environment}{7}{chapter.2}%
-\contentsline {section}{\numberline {2.1}The Speed Revolution: \texttt {ftools} and \texttt {gtools}}{7}{section.2.1}%
-\contentsline {mtocsection}{\numberline {2.1}The Speed Revolution: \texttt {ftools} and \texttt {gtools}}{7}{section.2.1}%
-\contentsline {subsection}{\numberline {2.1.1}Large Data Workflows without MP}{7}{subsection.2.1.1}%
-\contentsline {mtocsubsection}{\numberline {2.1.1}Large Data Workflows without MP}{7}{subsection.2.1.1}%
-\contentsline {section}{\numberline {2.2}Monitoring Real-Time Participation}{7}{section.2.2}%
-\contentsline {mtocsection}{\numberline {2.2}Monitoring Real-Time Participation}{7}{section.2.2}%
-\contentsline {subsection}{\numberline {2.2.1}Early Warning Systems: Statistical Process Control (SPC)}{7}{subsection.2.2.1}%
-\contentsline {mtocsubsection}{\numberline {2.2.1}Early Warning Systems: Statistical Process Control (SPC)}{7}{subsection.2.2.1}%
-\contentsline {section}{\numberline {2.3}Communicating with Funders and Stakeholders}{8}{section.2.3}%
-\contentsline {mtocsection}{\numberline {2.3}Communicating with Funders and Stakeholders}{8}{section.2.3}%
-\contentsline {subsection}{\numberline {2.3.1}Automating the Appendix}{8}{subsection.2.3.1}%
-\contentsline {mtocsubsection}{\numberline {2.3.1}Automating the Appendix}{8}{subsection.2.3.1}%
-\contentsline {section}{\numberline {2.4}Integrating AI: The Gemini CLI Bridge}{8}{section.2.4}%
-\contentsline {mtocsection}{\numberline {2.4}Integrating AI: The Gemini CLI Bridge}{8}{section.2.4}%
-\contentsline {subsection}{\numberline {2.4.1}Prompt Engineering for Evaluators}{8}{subsection.2.4.1}%
-\contentsline {mtocsubsection}{\numberline {2.4.1}Prompt Engineering for Evaluators}{8}{subsection.2.4.1}%
-\contentsline {part}{\nonumberline Part II: Data Engineering \newline Modernization, Cleaning, and Harmonization}{9}{part*.8}%
-\contentsline {chapter}{\numberline {3}Advanced Data Collection \& Modernization}{11}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Web Scraping and API Pipelines}{11}{section.3.1}%
-\contentsline {mtocsection}{\numberline {3.1}Web Scraping and API Pipelines}{11}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}OAuth and Secure API Handshakes}{11}{subsection.3.1.1}%
-\contentsline {mtocsubsection}{\numberline {3.1.1}OAuth and Secure API Handshakes}{11}{subsection.3.1.1}%
-\contentsline {section}{\numberline {3.2}Unstructured Data: The AI Bridge}{11}{section.3.2}%
-\contentsline {mtocsection}{\numberline {3.2}Unstructured Data: The AI Bridge}{11}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}Sentiment Analysis as an Evaluation Tool}{11}{subsection.3.2.1}%
-\contentsline {mtocsubsection}{\numberline {3.2.1}Sentiment Analysis as an Evaluation Tool}{11}{subsection.3.2.1}%
-\contentsline {chapter}{\numberline {4}Harmonization and Master Data Management}{13}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Merging the Unmergable}{13}{section.4.1}%
-\contentsline {mtocsection}{\numberline {4.1}Merging the Unmergable}{13}{section.4.1}%
-\contentsline {subsection}{\numberline {4.1.1}Spatial Joining without GIS}{13}{subsection.4.1.1}%
-\contentsline {mtocsubsection}{\numberline {4.1.1}Spatial Joining without GIS}{13}{subsection.4.1.1}%
-\contentsline {section}{\numberline {4.2}Longitudinal Panel Construction}{13}{section.4.2}%
-\contentsline {mtocsection}{\numberline {4.2}Longitudinal Panel Construction}{13}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Transition Matrices: Visualizing Participant Movement}{13}{subsection.4.2.1}%
-\contentsline {mtocsubsection}{\numberline {4.2.1}Transition Matrices: Visualizing Participant Movement}{13}{subsection.4.2.1}%
-\contentsline {chapter}{\numberline {5}Ethics, Privacy, and Synthetic Data}{15}{chapter.5}%
-\contentsline {section}{\numberline {5.1}The Privacy-Utility Tradeoff}{15}{section.5.1}%
-\contentsline {mtocsection}{\numberline {5.1}The Privacy-Utility Tradeoff}{15}{section.5.1}%
-\contentsline {subsection}{\numberline {5.1.1}Measuring Re-identification Risk: k-Anonymity and l-Diversity}{15}{subsection.5.1.1}%
-\contentsline {mtocsubsection}{\numberline {5.1.1}Measuring Re-identification Risk: k-Anonymity and l-Diversity}{15}{subsection.5.1.1}%
-\contentsline {section}{\numberline {5.2}Synthetic Data Generation}{15}{section.5.2}%
-\contentsline {mtocsection}{\numberline {5.2}Synthetic Data Generation}{15}{section.5.2}%
-\contentsline {subsection}{\numberline {5.2.1}Validating the Fake: Statistical Fidelity Tests}{15}{subsection.5.2.1}%
-\contentsline {mtocsubsection}{\numberline {5.2.1}Validating the Fake: Statistical Fidelity Tests}{15}{subsection.5.2.1}%
-\contentsline {part}{\nonumberline Part III: The New Causal Frontier \newline Innovative and Non-standard Analysis}{17}{part*.10}%
-\contentsline {chapter}{\numberline {6}Modern Difference-in-Differences}{19}{chapter.6}%
-\contentsline {section}{\numberline {6.1}The Revolution in Staggered Adoption}{19}{section.6.1}%
-\contentsline {mtocsection}{\numberline {6.1}The Revolution in Staggered Adoption}{19}{section.6.1}%
-\contentsline {subsection}{\numberline {6.1.1}The Forbidden Regression: Why Simple Interactions Aren't DiD}{19}{subsection.6.1.1}%
-\contentsline {mtocsubsection}{\numberline {6.1.1}The Forbidden Regression: Why Simple Interactions Aren't DiD}{19}{subsection.6.1.1}%
-\contentsline {section}{\numberline {6.2}Implementing \texttt {csdid} and \texttt {jwdid}}{19}{section.6.2}%
-\contentsline {mtocsection}{\numberline {6.2}Implementing \texttt {csdid} and \texttt {jwdid}}{19}{section.6.2}%
-\contentsline {chapter}{\numberline {7}Synthetic Controls and Matrix Completion}{21}{chapter.7}%
-\contentsline {section}{\numberline {7.1}The Synthetic Control Method (\texttt {synth})}{21}{section.7.1}%
-\contentsline {mtocsection}{\numberline {7.1}The Synthetic Control Method (\texttt {synth})}{21}{section.7.1}%
-\contentsline {subsection}{\numberline {7.1.1}In-space and In-time Placebo Tests}{21}{subsection.7.1.1}%
-\contentsline {mtocsubsection}{\numberline {7.1.1}In-space and In-time Placebo Tests}{21}{subsection.7.1.1}%
-\contentsline {section}{\numberline {7.2}Synthetic Difference-in-Differences (\texttt {sdid})}{21}{section.7.2}%
-\contentsline {mtocsection}{\numberline {7.2}Synthetic Difference-in-Differences (\texttt {sdid})}{21}{section.7.2}%
-\contentsline {chapter}{\numberline {8}Machine Learning for Evaluators}{23}{chapter.8}%
-\contentsline {section}{\numberline {8.1}Targeting Models with Lasso and Elastic Net}{23}{section.8.1}%
-\contentsline {mtocsection}{\numberline {8.1}Targeting Models with Lasso and Elastic Net}{23}{section.8.1}%
-\contentsline {subsection}{\numberline {8.1.1}Ethics of Prediction: Bias Detection in Targeting}{23}{subsection.8.1.1}%
-\contentsline {mtocsubsection}{\numberline {8.1.1}Ethics of Prediction: Bias Detection in Targeting}{23}{subsection.8.1.1}%
-\contentsline {section}{\numberline {8.2}Random Forests in Stata}{23}{section.8.2}%
-\contentsline {mtocsection}{\numberline {8.2}Random Forests in Stata}{23}{section.8.2}%
-\contentsline {subsection}{\numberline {8.2.1}Variable Importance for Program Managers}{23}{subsection.8.2.1}%
-\contentsline {mtocsubsection}{\numberline {8.2.1}Variable Importance for Program Managers}{23}{subsection.8.2.1}%
-\contentsline {part}{\nonumberline Part IV: High-Impact Communication \newline Sparklines, Webdocs, and Interactive Reporting}{25}{part*.12}%
-\contentsline {chapter}{\numberline {9}Innovative Visualizations}{27}{chapter.9}%
-\contentsline {section}{\numberline {9.1}Sparklines and Micro-charts with \texttt {sparkta}}{27}{section.9.1}%
-\contentsline {mtocsection}{\numberline {9.1}Sparklines and Micro-charts with \texttt {sparkta}}{27}{section.9.1}%
-\contentsline {subsection}{\numberline {9.1.1}Maximizing the Data-to-Ink Ratio}{27}{subsection.9.1.1}%
-\contentsline {mtocsubsection}{\numberline {9.1.1}Maximizing the Data-to-Ink Ratio}{27}{subsection.9.1.1}%
-\contentsline {section}{\numberline {9.2}Advanced Coefficient Plots}{27}{section.9.2}%
-\contentsline {mtocsection}{\numberline {9.2}Advanced Coefficient Plots}{27}{section.9.2}%
-\contentsline {chapter}{\numberline {10}Dynamic Reporting and Web Integration}{29}{chapter.10}%
-\contentsline {section}{\numberline {10.1}Dynamic HTML with \texttt {webdoc}}{29}{section.10.1}%
-\contentsline {mtocsection}{\numberline {10.1}Dynamic HTML with \texttt {webdoc}}{29}{section.10.1}%
-\contentsline {subsection}{\numberline {10.1.1}The Self-Contained Project Portal}{29}{subsection.10.1.1}%
-\contentsline {mtocsubsection}{\numberline {10.1.1}The Self-Contained Project Portal}{29}{subsection.10.1.1}%
-\contentsline {section}{\numberline {10.2}AI-Assisted Narrative Generation}{29}{section.10.2}%
-\contentsline {mtocsection}{\numberline {10.2}AI-Assisted Narrative Generation}{29}{section.10.2}%
-\contentsline {subsection}{\numberline {10.2.1}The 'So What?' Test: Finding Meaning in the Table}{29}{subsection.10.2.1}%
-\contentsline {mtocsubsection}{\numberline {10.2.1}The 'So What?' Test: Finding Meaning in the Table}{29}{subsection.10.2.1}%
-\contentsline {part}{\nonumberline Part V: Building Tools that \texttt {Mata}-er \newline Custom Development and Scalability}{31}{part*.14}%
-\contentsline {chapter}{\numberline {11}Building Internal Evaluation Toolkits}{33}{chapter.11}%
-\contentsline {section}{\numberline {11.1}From Scripts to Systems}{33}{section.11.1}%
-\contentsline {mtocsection}{\numberline {11.1}From Scripts to Systems}{33}{section.11.1}%
-\contentsline {subsection}{\numberline {11.1.1}The 'Package' Mindset: Versioning Internal Tools}{33}{subsection.11.1.1}%
-\contentsline {mtocsubsection}{\numberline {11.1.1}The 'Package' Mindset: Versioning Internal Tools}{33}{subsection.11.1.1}%
-\contentsline {section}{\numberline {11.2}Writing Help Files (\texttt {.sthlp})}{33}{section.11.2}%
-\contentsline {mtocsection}{\numberline {11.2}Writing Help Files (\texttt {.sthlp})}{33}{section.11.2}%
-\contentsline {chapter}{\numberline {12}Scalability and Big Data in the Public Sector}{35}{chapter.12}%
-\contentsline {section}{\numberline {12.1}Introduction to Mata for Evaluators}{35}{section.12.1}%
-\contentsline {mtocsection}{\numberline {12.1}Introduction to Mata for Evaluators}{35}{section.12.1}%
-\contentsline {subsection}{\numberline {12.1.1}The Trifecta Workflow: Stata, Mata, and Python}{35}{subsection.12.1.1}%
-\contentsline {mtocsubsection}{\numberline {12.1.1}The Trifecta Workflow: Stata, Mata, and Python}{35}{subsection.12.1.1}%
-\contentsline {part}{\nonumberline Appendices}{37}{part*.16}%
+\contentsline {subsection}{\numberline {1.2.2}Contextualizing the Evidence: Using CFIR to Code Site Characteristics}{7}{subsection.1.2.2}%
+\contentsline {mtocsubsection}{\numberline {1.2.2}Contextualizing the Evidence: Using CFIR to Code Site Characteristics}{7}{subsection.1.2.2}%
+\contentsline {section}{\numberline {1.3}Stata as the Central Evaluation Brain}{7}{section.1.3}%
+\contentsline {mtocsection}{\numberline {1.3}Stata as the Central Evaluation Brain}{7}{section.1.3}%
+\contentsline {subsection}{\numberline {1.3.1}Bypassing Excel: The Risky Habit of Spreadsheet Analysis}{7}{subsection.1.3.1}%
+\contentsline {mtocsubsection}{\numberline {1.3.1}Bypassing Excel: The Risky Habit of Spreadsheet Analysis}{7}{subsection.1.3.1}%
+\contentsline {section}{\numberline {1.4}Designing for Detectable Effects: Power and the MDE}{8}{section.1.4}%
+\contentsline {mtocsection}{\numberline {1.4}Designing for Detectable Effects: Power and the MDE}{8}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Pre-Registration and the Analysis Plan}{8}{section.1.5}%
+\contentsline {mtocsection}{\numberline {1.5}Pre-Registration and the Analysis Plan}{8}{section.1.5}%
+\contentsline {chapter}{\numberline {2}Setting Up a High-Performance Environment}{11}{chapter.2}%
+\contentsline {section}{\numberline {2.1}The Speed Revolution: \texttt {ftools} and \texttt {gtools}}{11}{section.2.1}%
+\contentsline {mtocsection}{\numberline {2.1}The Speed Revolution: \texttt {ftools} and \texttt {gtools}}{11}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Large Data Workflows without MP}{11}{subsection.2.1.1}%
+\contentsline {mtocsubsection}{\numberline {2.1.1}Large Data Workflows without MP}{11}{subsection.2.1.1}%
+\contentsline {section}{\numberline {2.2}Monitoring Real-Time Participation}{11}{section.2.2}%
+\contentsline {mtocsection}{\numberline {2.2}Monitoring Real-Time Participation}{11}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Early Warning Systems: Statistical Process Control (SPC)}{11}{subsection.2.2.1}%
+\contentsline {mtocsubsection}{\numberline {2.2.1}Early Warning Systems: Statistical Process Control (SPC)}{11}{subsection.2.2.1}%
+\contentsline {section}{\numberline {2.3}Communicating with Funders and Stakeholders}{12}{section.2.3}%
+\contentsline {mtocsection}{\numberline {2.3}Communicating with Funders and Stakeholders}{12}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Automating the Appendix}{12}{subsection.2.3.1}%
+\contentsline {mtocsubsection}{\numberline {2.3.1}Automating the Appendix}{12}{subsection.2.3.1}%
+\contentsline {section}{\numberline {2.4}Integrating AI: The LLM CLI Bridge}{12}{section.2.4}%
+\contentsline {mtocsection}{\numberline {2.4}Integrating AI: The LLM CLI Bridge}{12}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Prompt Engineering for Evaluators}{13}{subsection.2.4.1}%
+\contentsline {mtocsubsection}{\numberline {2.4.1}Prompt Engineering for Evaluators}{13}{subsection.2.4.1}%
+\contentsline {chapter}{\numberline {3}The Careful Use of AI in Evaluation}{15}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Privacy First: What Never Leaves the Building}{15}{section.3.1}%
+\contentsline {mtocsection}{\numberline {3.1}Privacy First: What Never Leaves the Building}{15}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Hallucination and the Verification Protocol}{15}{section.3.2}%
+\contentsline {mtocsection}{\numberline {3.2}Hallucination and the Verification Protocol}{15}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Reproducibility of Stochastic Output}{16}{section.3.3}%
+\contentsline {mtocsection}{\numberline {3.3}Reproducibility of Stochastic Output}{16}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Prompt Injection and Untrusted Text}{16}{section.3.4}%
+\contentsline {mtocsection}{\numberline {3.4}Prompt Injection and Untrusted Text}{16}{section.3.4}%
+\contentsline {section}{\numberline {3.5}A Model-Agnostic Posture}{16}{section.3.5}%
+\contentsline {mtocsection}{\numberline {3.5}A Model-Agnostic Posture}{16}{section.3.5}%
+\contentsline {part}{\nonumberline Part II: Data Engineering \newline Modernization, Cleaning, and Harmonization}{19}{part*.10}%
+\contentsline {chapter}{\numberline {4}Advanced Data Collection \& Modernization}{21}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Web Scraping and API Pipelines}{21}{section.4.1}%
+\contentsline {mtocsection}{\numberline {4.1}Web Scraping and API Pipelines}{21}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}OAuth and Secure API Handshakes}{21}{subsection.4.1.1}%
+\contentsline {mtocsubsection}{\numberline {4.1.1}OAuth and Secure API Handshakes}{21}{subsection.4.1.1}%
+\contentsline {section}{\numberline {4.2}Unstructured Data: The AI Bridge}{21}{section.4.2}%
+\contentsline {mtocsection}{\numberline {4.2}Unstructured Data: The AI Bridge}{21}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Sentiment Analysis as an Evaluation Tool}{21}{subsection.4.2.1}%
+\contentsline {mtocsubsection}{\numberline {4.2.1}Sentiment Analysis as an Evaluation Tool}{21}{subsection.4.2.1}%
+\contentsline {section}{\numberline {4.3}Measurement: From Items to Reliable Scales}{22}{section.4.3}%
+\contentsline {mtocsection}{\numberline {4.3}Measurement: From Items to Reliable Scales}{22}{section.4.3}%
+\contentsline {chapter}{\numberline {5}Harmonization and Master Data Management}{23}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Merging the Unmergable}{23}{section.5.1}%
+\contentsline {mtocsection}{\numberline {5.1}Merging the Unmergable}{23}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Spatial Joining without GIS}{23}{subsection.5.1.1}%
+\contentsline {mtocsubsection}{\numberline {5.1.1}Spatial Joining without GIS}{23}{subsection.5.1.1}%
+\contentsline {section}{\numberline {5.2}Longitudinal Panel Construction}{24}{section.5.2}%
+\contentsline {mtocsection}{\numberline {5.2}Longitudinal Panel Construction}{24}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Transition Matrices: Visualizing Participant Movement}{24}{subsection.5.2.1}%
+\contentsline {mtocsubsection}{\numberline {5.2.1}Transition Matrices: Visualizing Participant Movement}{24}{subsection.5.2.1}%
+\contentsline {section}{\numberline {5.3}Missing Data and Multiple Imputation}{25}{section.5.3}%
+\contentsline {mtocsection}{\numberline {5.3}Missing Data and Multiple Imputation}{25}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Weighting for Representativeness}{25}{section.5.4}%
+\contentsline {mtocsection}{\numberline {5.4}Weighting for Representativeness}{25}{section.5.4}%
+\contentsline {chapter}{\numberline {6}Ethics, Privacy, and Synthetic Data}{27}{chapter.6}%
+\contentsline {section}{\numberline {6.1}The Privacy-Utility Tradeoff}{27}{section.6.1}%
+\contentsline {mtocsection}{\numberline {6.1}The Privacy-Utility Tradeoff}{27}{section.6.1}%
+\contentsline {subsection}{\numberline {6.1.1}Measuring Re-identification Risk: k-Anonymity and l-Diversity}{27}{subsection.6.1.1}%
+\contentsline {mtocsubsection}{\numberline {6.1.1}Measuring Re-identification Risk: k-Anonymity and l-Diversity}{27}{subsection.6.1.1}%
+\contentsline {section}{\numberline {6.2}Synthetic Data Generation}{27}{section.6.2}%
+\contentsline {mtocsection}{\numberline {6.2}Synthetic Data Generation}{27}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Validating the Fake: Statistical Fidelity Tests}{27}{subsection.6.2.1}%
+\contentsline {mtocsubsection}{\numberline {6.2.1}Validating the Fake: Statistical Fidelity Tests}{27}{subsection.6.2.1}%
+\contentsline {part}{\nonumberline Part III: The New Causal Frontier \newline Innovative and Non-standard Analysis}{29}{part*.12}%
+\contentsline {chapter}{\numberline {7}Modern Difference-in-Differences}{31}{chapter.7}%
+\contentsline {section}{\numberline {7.1}The Revolution in Staggered Adoption}{31}{section.7.1}%
+\contentsline {mtocsection}{\numberline {7.1}The Revolution in Staggered Adoption}{31}{section.7.1}%
+\contentsline {subsection}{\numberline {7.1.1}The Forbidden Regression: Why Simple Interactions Aren't DiD}{31}{subsection.7.1.1}%
+\contentsline {mtocsubsection}{\numberline {7.1.1}The Forbidden Regression: Why Simple Interactions Aren't DiD}{31}{subsection.7.1.1}%
+\contentsline {section}{\numberline {7.2}Implementing \texttt {csdid} and \texttt {jwdid}}{31}{section.7.2}%
+\contentsline {mtocsection}{\numberline {7.2}Implementing \texttt {csdid} and \texttt {jwdid}}{31}{section.7.2}%
+\contentsline {subsection}{\numberline {7.2.1}Event-Study Plots and Pre-Trends}{31}{subsection.7.2.1}%
+\contentsline {mtocsubsection}{\numberline {7.2.1}Event-Study Plots and Pre-Trends}{31}{subsection.7.2.1}%
+\contentsline {subsection}{\numberline {7.2.2}Sensitivity Analysis: \texttt {honestDiD} and Oster Bounds}{32}{subsection.7.2.2}%
+\contentsline {mtocsubsection}{\numberline {7.2.2}Sensitivity Analysis: \texttt {honestDiD} and Oster Bounds}{32}{subsection.7.2.2}%
+\contentsline {chapter}{\numberline {8}Regression Discontinuity and Interrupted Time Series}{33}{chapter.8}%
+\contentsline {section}{\numberline {8.1}When a Rule Creates a Natural Experiment}{33}{section.8.1}%
+\contentsline {mtocsection}{\numberline {8.1}When a Rule Creates a Natural Experiment}{33}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Interrupted Time Series for Single-Site Rollouts}{33}{section.8.2}%
+\contentsline {mtocsection}{\numberline {8.2}Interrupted Time Series for Single-Site Rollouts}{33}{section.8.2}%
+\contentsline {chapter}{\numberline {9}Synthetic Controls and Matrix Completion}{35}{chapter.9}%
+\contentsline {section}{\numberline {9.1}The Synthetic Control Method (\texttt {synth})}{35}{section.9.1}%
+\contentsline {mtocsection}{\numberline {9.1}The Synthetic Control Method (\texttt {synth})}{35}{section.9.1}%
+\contentsline {subsection}{\numberline {9.1.1}In-space and In-time Placebo Tests}{35}{subsection.9.1.1}%
+\contentsline {mtocsubsection}{\numberline {9.1.1}In-space and In-time Placebo Tests}{35}{subsection.9.1.1}%
+\contentsline {section}{\numberline {9.2}Synthetic Difference-in-Differences (\texttt {sdid})}{35}{section.9.2}%
+\contentsline {mtocsection}{\numberline {9.2}Synthetic Difference-in-Differences (\texttt {sdid})}{35}{section.9.2}%
+\contentsline {chapter}{\numberline {10}Machine Learning for Evaluators}{37}{chapter.10}%
+\contentsline {section}{\numberline {10.1}Targeting Models with Lasso and Elastic Net}{37}{section.10.1}%
+\contentsline {mtocsection}{\numberline {10.1}Targeting Models with Lasso and Elastic Net}{37}{section.10.1}%
+\contentsline {subsection}{\numberline {10.1.1}Ethics of Prediction: Bias Detection in Targeting}{37}{subsection.10.1.1}%
+\contentsline {mtocsubsection}{\numberline {10.1.1}Ethics of Prediction: Bias Detection in Targeting}{37}{subsection.10.1.1}%
+\contentsline {section}{\numberline {10.2}Random Forests in Stata}{37}{section.10.2}%
+\contentsline {mtocsection}{\numberline {10.2}Random Forests in Stata}{37}{section.10.2}%
+\contentsline {subsection}{\numberline {10.2.1}Variable Importance for Program Managers}{37}{subsection.10.2.1}%
+\contentsline {mtocsubsection}{\numberline {10.2.1}Variable Importance for Program Managers}{37}{subsection.10.2.1}%
+\contentsline {section}{\numberline {10.3}Double/Debiased Machine Learning (\texttt {ddml})}{38}{section.10.3}%
+\contentsline {mtocsection}{\numberline {10.3}Double/Debiased Machine Learning (\texttt {ddml})}{38}{section.10.3}%
+\contentsline {chapter}{\numberline {11}Cost-Effectiveness and Return on Investment}{39}{chapter.11}%
+\contentsline {section}{\numberline {11.1}The Question Funders Actually Ask}{39}{section.11.1}%
+\contentsline {mtocsection}{\numberline {11.1}The Question Funders Actually Ask}{39}{section.11.1}%
+\contentsline {part}{\nonumberline Part IV: High-Impact Communication \newline Sparklines, Webdocs, and Interactive Reporting}{41}{part*.14}%
+\contentsline {chapter}{\numberline {12}Innovative Visualizations}{43}{chapter.12}%
+\contentsline {section}{\numberline {12.1}Sparklines and Micro-charts with \texttt {sparkta}}{43}{section.12.1}%
+\contentsline {mtocsection}{\numberline {12.1}Sparklines and Micro-charts with \texttt {sparkta}}{43}{section.12.1}%
+\contentsline {subsection}{\numberline {12.1.1}Maximizing the Data-to-Ink Ratio}{43}{subsection.12.1.1}%
+\contentsline {mtocsubsection}{\numberline {12.1.1}Maximizing the Data-to-Ink Ratio}{43}{subsection.12.1.1}%
+\contentsline {section}{\numberline {12.2}Advanced Coefficient Plots}{43}{section.12.2}%
+\contentsline {mtocsection}{\numberline {12.2}Advanced Coefficient Plots}{43}{section.12.2}%
+\contentsline {chapter}{\numberline {13}Dynamic Reporting and Web Integration}{45}{chapter.13}%
+\contentsline {section}{\numberline {13.1}Dynamic HTML with \texttt {webdoc}}{45}{section.13.1}%
+\contentsline {mtocsection}{\numberline {13.1}Dynamic HTML with \texttt {webdoc}}{45}{section.13.1}%
+\contentsline {subsection}{\numberline {13.1.1}The Self-Contained Project Portal}{45}{subsection.13.1.1}%
+\contentsline {mtocsubsection}{\numberline {13.1.1}The Self-Contained Project Portal}{45}{subsection.13.1.1}%
+\contentsline {section}{\numberline {13.2}AI-Assisted Narrative Generation}{46}{section.13.2}%
+\contentsline {mtocsection}{\numberline {13.2}AI-Assisted Narrative Generation}{46}{section.13.2}%
+\contentsline {subsection}{\numberline {13.2.1}The 'So What?' Test: Finding Meaning in the Table}{46}{subsection.13.2.1}%
+\contentsline {mtocsubsection}{\numberline {13.2.1}The 'So What?' Test: Finding Meaning in the Table}{46}{subsection.13.2.1}%
+\contentsline {part}{\nonumberline Part V: Building Tools that \texttt {Mata}-er \newline Custom Development and Scalability}{47}{part*.16}%
+\contentsline {chapter}{\numberline {14}Building Internal Evaluation Toolkits}{49}{chapter.14}%
+\contentsline {section}{\numberline {14.1}From Scripts to Systems}{49}{section.14.1}%
+\contentsline {mtocsection}{\numberline {14.1}From Scripts to Systems}{49}{section.14.1}%
+\contentsline {subsection}{\numberline {14.1.1}The 'Package' Mindset: Versioning Internal Tools}{49}{subsection.14.1.1}%
+\contentsline {mtocsubsection}{\numberline {14.1.1}The 'Package' Mindset: Versioning Internal Tools}{49}{subsection.14.1.1}%
+\contentsline {section}{\numberline {14.2}Writing Help Files (\texttt {.sthlp})}{50}{section.14.2}%
+\contentsline {mtocsection}{\numberline {14.2}Writing Help Files (\texttt {.sthlp})}{50}{section.14.2}%
+\contentsline {chapter}{\numberline {15}Scalability and Big Data in the Public Sector}{51}{chapter.15}%
+\contentsline {section}{\numberline {15.1}Introduction to Mata for Evaluators}{51}{section.15.1}%
+\contentsline {mtocsection}{\numberline {15.1}Introduction to Mata for Evaluators}{51}{section.15.1}%
+\contentsline {subsection}{\numberline {15.1.1}The Trifecta Workflow: Stata, Mata, and Python}{51}{subsection.15.1.1}%
+\contentsline {mtocsubsection}{\numberline {15.1.1}The Trifecta Workflow: Stata, Mata, and Python}{51}{subsection.15.1.1}%
+\contentsline {part}{\nonumberline Appendices}{53}{part*.18}%
+\contentsline {chapter}{Appendix A: The LLM-Stata Setup Guide}{55}{chapter*.19}%
+\contentsline {chapter}{Appendix B: The Modern Causal Toolbox}{57}{chapter*.20}%
+\contentsline {chapter}{Appendix C: The Author's Stata Toolkit}{59}{chapter*.21}%
+\contentsline {chapter}{Appendix D: Two Hands-On Worked Examples}{61}{chapter*.22}%
+\contentsline {paragraph}{\nonumberline The question.}{61}{paragraph*.23}%
+\contentsline {paragraph}{\nonumberline Why it is a good teaching case.}{61}{paragraph*.24}%
+\contentsline {paragraph}{\nonumberline The analysis and the honest finding.}{61}{paragraph*.25}%
+\contentsline {paragraph}{\nonumberline Concepts it illustrates.}{62}{paragraph*.26}%
+\contentsline {paragraph}{\nonumberline The question.}{62}{paragraph*.27}%
+\contentsline {paragraph}{\nonumberline Why it is a good teaching case.}{62}{paragraph*.28}%
+\contentsline {paragraph}{\nonumberline The analysis and the honest finding.}{63}{paragraph*.29}%
+\contentsline {paragraph}{\nonumberline Concepts it illustrates.}{63}{paragraph*.30}%
