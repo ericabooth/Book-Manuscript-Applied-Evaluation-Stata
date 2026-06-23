@@ -11,6 +11,10 @@
     numbers=noenddot,
 ]{kaobook}
 
+% --- Geometry Adjustments (5% wider narrative, narrower margins) ---
+\addtolength{\textwidth}{0.05\textwidth}
+\addtolength{\marginparwidth}{-0.05\textwidth}
+
 % --- Language & Typography ---
 \ifxetexorluatex
     \usepackage{polyglossia}
@@ -140,7 +144,12 @@
 \setchapterstyle{kao}
 
 \chapter*{Preface: The Modern Evaluator's Dilemma}
+
+% Example of a full-width paragraph that breaks out of the narrow column 
+% and spans across the margin space.
+\begin{fullwidthpar}
 Applied evaluation has moved beyond simple pre-post t-tests. Today's evaluator must be part data manager, part AI prompt analyst, and part visualization specialist. This book provides a roadmap for using Stata as the central analytical engine of this complex ecosystem, focusing on the needs of practitioners working in high-stakes, resource-constrained environments.
+\end{fullwidthpar}
 
 Most of what follows comes out of a working data-and-research shop, not an academic methods seminar. The patterns, the ado-files, and the cautionary tales are the ones we reach for when a foundation officer needs an answer by Friday, the source data arrived as forty inconsistent spreadsheets, and the same do-file has to run on a colleague's Windows laptop and our own Mac without edits. That context shapes every recommendation here: we favor reproducibility over cleverness, automation over heroics, and tools that a small team can actually maintain.
 
@@ -392,6 +401,15 @@ Unstructured text, such as coach logs or open-ended comments, contains critical 
 \section{Measurement: From Items to Reliable Scales}
 Before survey constructs can be used in regression models, we must evaluate their reliability. We check if items hang together using Cronbach's alpha (\texttt{alpha}), test if they measure a single construct using factor analysis (\texttt{factor}), and utilize item response theory (\texttt{irt}) to model item difficulty and information curves.
 
+\section{Stabilizing Noisy Rates and Percentages}
+When evaluating policies at granular levels (e.g., small rural clinics, targeted neighborhoods, or specialized classrooms), raw success rates are often wildly noisy due to sparse denominators. A single failure at a 5-person site can artificially tank its ranking, leading to misallocated funding or unwarranted punitive action. We apply empirical Bayes shrinkage to pull extreme, low-$N$ rates back toward the regional mean, allowing the data to speak honestly without shouting.
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{rateshrink}]
+\textbf{Proposed Program:} \texttt{rateshrink}. A practical local-rate stabilization command that generates Empirical-Bayes (Beta-binomial or Poisson-gamma) shrinkage estimates. This transforms noisy administrative fractions into stable metrics suitable for public dashboards and benchmarking.
+
+[placeholder: Skeleton draft showing a code block for \texttt{rateshrink} syntax, and an applied example visualization of raw vs. shrunken rates in a scatter plot to demonstrate how it stabilizes low-denominator outliers.]
+\end{kaobox}
+
 \chapter{Harmonization, Master Data Management \& Source Tagging}
 
 \section{Merging the Unmergable}
@@ -405,8 +423,10 @@ Applied researchers must regularly link datasets that lack a common identifier. 
 \subsection{Spatial Joining without GIS}
 We can estimate geographic access (such as a student's distance to the nearest college campus) directly in Stata using great-circle (Haversine) distance calculations. This approach allows researchers to calculate proximity metrics without relying on external GIS software.
 
-\begin{kaobox}[frametitle=Ado-file Idea: \texttt{fuzzymatch\_pro}]
-\textbf{Proposed Program:} \texttt{fuzzymatch\_pro}. An extension of `reclink` that runs multiple string distance algorithms, blocks records by demographic keys, and exports a match quality diagnostic report.
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{fastmatch}]
+\textbf{Proposed Program:} \texttt{fastmatch}. A wrapper for probabilistic record linkage that implements the Expectation-Maximization (EM) algorithm to estimate match probabilities without requiring manually tuned training data (mimicking R's \texttt{fastLink}). This allows evaluators to confidently merge un-keyable administrative files at scale.
+
+[placeholder: Skeleton draft demonstrating the \texttt{fastmatch} syntax, setting blocking variables, and outputting the match probability threshold report.]
 \end{kaobox}
 
 \begin{appliedexample}[Linking Workforce and Education Rosters without a Common ID]
@@ -424,6 +444,12 @@ We can estimate geographic access (such as a student's distance to the nearest c
 
 \section{Data Governance in Multi-Dataset Environments}
 Integrating data from multiple public agencies (such as TEA, TWC, and Census) requires maintaining a clear record of data lineage. If variables are merged without documentation, tracking the origin of specific columns becomes impossible.
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{schemaudit}]
+\textbf{Proposed Program:} \texttt{schemaudit}. A declarative validation framework for longitudinal administrative data. Evaluators define a rulebook (required variables, legal values, ID uniqueness) in a schema file, and this command runs a silent audit against new data extracts, immediately flagging longitudinal schema drift or unexpected data types before they break the pipeline.
+
+[placeholder: Skeleton draft of \texttt{schemaudit} syntax and a code block showing how to define a JSON/CSV rulebook and execute the audit command against a messy agency export.]
+\end{kaobox}
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{srctag} \& \texttt{srcfind}]
 \textbf{Integrated Commands:} \texttt{srctag} writes source metadata (agency, table, vintage) directly into variable characteristics. \texttt{srcfind} searches a directory of Stata files, scanning dataset headers to locate variables that match specific source tags. (Texas 2036 public repository).
@@ -490,6 +516,12 @@ Sharing research datasets requires balancing participant privacy against analyti
 \textbf{Proposed Program:} \texttt{riskscan}. Scans active datasets for potential quasi-identifiers, calculates $k$-anonymity scores, and identifies records that present high re-identification risk.
 \end{kaobox}
 
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{suppress}]
+\textbf{Proposed Program:} \texttt{suppress}. Automates output-independent public-release QA for tables. It handles small-cell suppression, complementary suppression (so totals don't reveal hidden cells), and denominator thresholds, directly integrating with Stata's \texttt{collect} suite to secure tables before publication.
+
+[placeholder: Skeleton draft demonstrating how to pipe a sensitive demographic table through \texttt{suppress} prior to exporting to a public dashboard.]
+\end{kaobox}
+
 \section{Synthetic Data Generation}
 When sharing administrative records is legally prohibited, evaluators can generate synthetic datasets that preserve the covariance structure and non-linear relationships of the original data. This approach allows external researchers to write and test code without accessing sensitive participant records.
 
@@ -525,8 +557,14 @@ The event-study plot is the key visual diagnostic for a DiD design, showing trea
 Relative event time on the $x$-axis (negative = pre-treatment), estimated effect on the $y$-axis, with 95\% CIs and a vertical line at $t=0$. Pre-treatment points must remain flat and indistinguishable from zero to support the parallel trends assumption.
 \end{vizcallout}
 
-\subsection{Sensitivity Analysis: \texttt{honestDiD} and Oster Bounds}
-Because the parallel trends assumption cannot be directly tested, we must run sensitivity analyses. We use Rambachan and Roth's \texttt{honestDiD} to model bounded violations of parallel trends, and Oster's \texttt{psacalc} to check robustness to potential omitted variable bias.
+\subsection{Sensitivity Analysis: \texttt{honestdid} and Oster Bounds}
+Because the parallel trends assumption cannot be directly tested, we must run sensitivity analyses. Rather than relying on a binary \enquote{pass/fail} pre-trend test, modern evaluation requires us to actively bound our treatment effects under potential violations of parallel trends. We use the \texttt{honestdid} package (implementing Rambachan and Roth's framework) to quantify how much the pre-trends would need to diverge in the post-period to invalidate our findings. We pair this with Oster's \texttt{psacalc} to check robustness to potential omitted variable bias.
+
+\begin{kaobox}[frametitle=Package Integration: \texttt{honestdid}]
+\textbf{Integrated Command:} \texttt{honestdid}. A sensitivity analysis tool that formally bounds treatment effects against hypothesized violations of the parallel trends assumption, moving evaluations from defensive posturing to rigorous uncertainty quantification.
+
+[placeholder: Skeleton draft showing a staggered DiD estimation followed by the \texttt{honestdid} sensitivity bounds and the resulting diagnostic plot.]
+\end{kaobox}
 
 \chapter{Regression Discontinuity and Interrupted Time Series}
 
@@ -550,6 +588,12 @@ When no control group exists, interrupted time series (ITS) models changes in le
 \section{The Synthetic Control Method (\texttt{synth})}
 When evaluating a policy implemented in a single unit (such as a single state or flagship site), synthetic control methods construct a weighted combination of untreated control units to match the treated unit's pre-intervention trajectory. We estimate weights, construct the counterfactual trend, and run in-space and in-time placebo tests to check statistical significance.
 
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{twinmatch}]
+\textbf{Proposed Program:} \texttt{twinmatch}. A tool for Small-N donor selection. Evaluators working at the county or district level often have a very small pool of potential controls. \texttt{twinmatch} automates the selection of a sparse set of donor units (\enquote{policy twins}) via penalized estimation, generating valid prediction intervals for synthetic control models.
+
+[placeholder: Skeleton draft demonstrating how to supply a small panel of local jurisdictions to \texttt{twinmatch} to identify the ideal donor weights.]
+\end{kaobox}
+
 \section{Synthetic Difference-in-Differences (\texttt{sdid})}
 Synthetic Difference-in-Differences combines the strengths of DiD and synthetic controls, incorporating unit and time weights to adjust for pre-treatment trends and time-varying shocks.
 
@@ -571,6 +615,21 @@ Predictive models trained on historical data can perpetuate existing systemic in
 
 \section{Random Forests in Stata}
 Where lasso models assume linearity, random forests capture complex interactions and non-linear patterns automatically. We run random forests, calculate variable importance metrics, and display partial dependence plots to interpret the model.
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{causalforest}]
+\textbf{Proposed Program:} \texttt{causalforest}. Brings Generalized Random Forests to Stata to estimate heterogeneous treatment effects. Instead of just asking \enquote{did the program work?}, this allows evaluators to discover \emph{for whom} the program worked best, without manual sub-group p-hacking.
+
+[placeholder: Skeleton draft showing \texttt{causalforest} syntax, followed by a plot of the conditional average treatment effects (CATE) distribution.]
+\end{kaobox}
+
+\section{Distribution-Free Uncertainty with Conformal Inference}
+Traditional confidence intervals rely on strict parametric assumptions that often fail in messy, real-world data. Conformal inference provides distribution-free prediction intervals that are guaranteed to cover the truth $1-\alpha$ of the time, regardless of the underlying model.
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{conformalpred}]
+\textbf{Proposed Program:} \texttt{conformalpred}. Wraps machine learning predictions in valid, finite-sample prediction intervals without assuming normally distributed errors. Critical for reporting honest uncertainty bands to policy stakeholders.
+
+[placeholder: Skeleton draft of generating conformal prediction bounds around a targeting algorithm's risk scores.]
+\end{kaobox}
 
 \section{Double/Debiased Machine Learning (\texttt{ddml})}
 Double/debiased machine learning (DML) uses machine learning to control for high-dimensional confounding while maintaining valid statistical inference on the treatment effect. We implement DML in Stata using the `ddml` package.

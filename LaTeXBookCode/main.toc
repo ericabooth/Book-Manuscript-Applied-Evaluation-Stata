@@ -1,9 +1,9 @@
 \@ifundefined {etoctocstyle}{\let \etoc@startlocaltoc \@gobble \let \etoc@settocdepth \@gobble \let \etoc@depthtag \@gobble \let \etoc@setlocaltop \@gobble }{}
 \babel@toc {english}{}\relax
 \contentsline {chapter}{\nonumberline Contents}{i}{chapter*.1}%
-\contentsline {paragraph}{\nonumberline Who this book is for.}{1}{paragraph*.6}%
-\contentsline {paragraph}{\nonumberline How to read it.}{1}{paragraph*.8}%
-\contentsline {part}{\nonumberline Part I: The Embedded Stack \newline Principles, Speed, and the Modern Stack}{3}{part*.10}%
+\contentsline {paragraph}{\nonumberline Who this book is for.}{1}{paragraph*.5}%
+\contentsline {paragraph}{\nonumberline How to read it.}{1}{paragraph*.6}%
+\contentsline {part}{\nonumberline Part I: The Embedded Stack \newline Principles, Speed, and the Modern Stack}{3}{part*.8}%
 \contentsline {chapter}{\numberline {1}Strategic Evaluation in Implementation Science}{5}{chapter.1}%
 \contentsline {section}{\numberline {1.1}The Practitioner-Researcher Relationship}{5}{section.1.1}%
 \contentsline {mtocsection}{\numberline {1.1}The Practitioner-Researcher Relationship}{5}{section.1.1}%
@@ -21,8 +21,8 @@
 \contentsline {mtocsection}{\numberline {1.3}Stata as the Central Evaluation Brain}{7}{section.1.3}%
 \contentsline {subsection}{\numberline {1.3.1}Bypassing Excel: The Risky Habit of Spreadsheet Analysis}{7}{subsection.1.3.1}%
 \contentsline {mtocsubsection}{\numberline {1.3.1}Bypassing Excel: The Risky Habit of Spreadsheet Analysis}{7}{subsection.1.3.1}%
-\contentsline {section}{\numberline {1.4}Designing for Detectable Effects: Power and the MDE}{8}{section.1.4}%
-\contentsline {mtocsection}{\numberline {1.4}Designing for Detectable Effects: Power and the MDE}{8}{section.1.4}%
+\contentsline {section}{\numberline {1.4}Designing for Detectable Effects: Power and the MDE}{7}{section.1.4}%
+\contentsline {mtocsection}{\numberline {1.4}Designing for Detectable Effects: Power and the MDE}{7}{section.1.4}%
 \contentsline {section}{\numberline {1.5}Pre-Registration and the Analysis Plan}{8}{section.1.5}%
 \contentsline {mtocsection}{\numberline {1.5}Pre-Registration and the Analysis Plan}{8}{section.1.5}%
 \contentsline {chapter}{\numberline {2}Setting Up a High-Performance Environment}{9}{chapter.2}%
@@ -32,14 +32,14 @@
 \contentsline {mtocsubsection}{\numberline {2.1.1}Large Data Workflows without MP}{9}{subsection.2.1.1}%
 \contentsline {section}{\numberline {2.2}Monitoring Real-Time Participation}{9}{section.2.2}%
 \contentsline {mtocsection}{\numberline {2.2}Monitoring Real-Time Participation}{9}{section.2.2}%
-\contentsline {subsection}{\numberline {2.2.1}Early Warning Systems: Statistical Process Control (SPC)}{10}{subsection.2.2.1}%
-\contentsline {mtocsubsection}{\numberline {2.2.1}Early Warning Systems: Statistical Process Control (SPC)}{10}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.1}Early Warning Systems: Statistical Process Control (SPC)}{9}{subsection.2.2.1}%
+\contentsline {mtocsubsection}{\numberline {2.2.1}Early Warning Systems: Statistical Process Control (SPC)}{9}{subsection.2.2.1}%
 \contentsline {section}{\numberline {2.3}Communicating with Funders and Stakeholders}{10}{section.2.3}%
 \contentsline {mtocsection}{\numberline {2.3}Communicating with Funders and Stakeholders}{10}{section.2.3}%
 \contentsline {subsection}{\numberline {2.3.1}Automating the Appendix}{10}{subsection.2.3.1}%
 \contentsline {mtocsubsection}{\numberline {2.3.1}Automating the Appendix}{10}{subsection.2.3.1}%
-\contentsline {section}{\numberline {2.4}Integrating AI: The LLM CLI Bridge}{11}{section.2.4}%
-\contentsline {mtocsection}{\numberline {2.4}Integrating AI: The LLM CLI Bridge}{11}{section.2.4}%
+\contentsline {section}{\numberline {2.4}Integrating AI: The LLM CLI Bridge}{10}{section.2.4}%
+\contentsline {mtocsection}{\numberline {2.4}Integrating AI: The LLM CLI Bridge}{10}{section.2.4}%
 \contentsline {chapter}{\numberline {3}The Careful Use of AI in Evaluation}{13}{chapter.3}%
 \contentsline {section}{\numberline {3.1}Privacy First: What Never Leaves the Building}{13}{section.3.1}%
 \contentsline {mtocsection}{\numberline {3.1}Privacy First: What Never Leaves the Building}{13}{section.3.1}%
@@ -51,7 +51,7 @@
 \contentsline {mtocsection}{\numberline {3.4}Prompt Injection and Untrusted Text}{14}{section.3.4}%
 \contentsline {section}{\numberline {3.5}A Model-Agnostic Posture}{14}{section.3.5}%
 \contentsline {mtocsection}{\numberline {3.5}A Model-Agnostic Posture}{14}{section.3.5}%
-\contentsline {part}{\nonumberline Part II: Data Wrangling and Survey Assembly \newline Ingestion, Harmonization, and Scale Construction}{15}{part*.12}%
+\contentsline {part}{\nonumberline Part II: Data Wrangling and Survey Assembly \newline Ingestion, Harmonization, and Scale Construction}{15}{part*.10}%
 \contentsline {chapter}{\numberline {4}Advanced Data Ingestion \& API Pipelines}{17}{chapter.4}%
 \contentsline {section}{\numberline {4.1}Generalizing the API Handshake in Stata}{17}{section.4.1}%
 \contentsline {mtocsection}{\numberline {4.1}Generalizing the API Handshake in Stata}{17}{section.4.1}%
@@ -59,6 +59,8 @@
 \contentsline {mtocsection}{\numberline {4.2}Unstructured Data: The AI Bridge}{17}{section.4.2}%
 \contentsline {section}{\numberline {4.3}Measurement: From Items to Reliable Scales}{18}{section.4.3}%
 \contentsline {mtocsection}{\numberline {4.3}Measurement: From Items to Reliable Scales}{18}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Stabilizing Noisy Rates and Percentages}{18}{section.4.4}%
+\contentsline {mtocsection}{\numberline {4.4}Stabilizing Noisy Rates and Percentages}{18}{section.4.4}%
 \contentsline {chapter}{\numberline {5}Harmonization, Master Data Management \& Source Tagging}{19}{chapter.5}%
 \contentsline {section}{\numberline {5.1}Merging the Unmergable}{19}{section.5.1}%
 \contentsline {mtocsection}{\numberline {5.1}Merging the Unmergable}{19}{section.5.1}%
@@ -68,8 +70,8 @@
 \contentsline {mtocsection}{\numberline {5.2}Data Governance in Multi-Dataset Environments}{20}{section.5.2}%
 \contentsline {section}{\numberline {5.3}Longitudinal Panel Construction}{20}{section.5.3}%
 \contentsline {mtocsection}{\numberline {5.3}Longitudinal Panel Construction}{20}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Missing Data and Multiple Imputation}{20}{section.5.4}%
-\contentsline {mtocsection}{\numberline {5.4}Missing Data and Multiple Imputation}{20}{section.5.4}%
+\contentsline {section}{\numberline {5.4}Missing Data and Multiple Imputation}{21}{section.5.4}%
+\contentsline {mtocsection}{\numberline {5.4}Missing Data and Multiple Imputation}{21}{section.5.4}%
 \contentsline {section}{\numberline {5.5}Weighting for Representativeness}{21}{section.5.5}%
 \contentsline {mtocsection}{\numberline {5.5}Weighting for Representativeness}{21}{section.5.5}%
 \contentsline {chapter}{\numberline {6}Modern Survey Instrumentation \& Nonresponse Bias}{23}{chapter.6}%
@@ -86,7 +88,7 @@
 \contentsline {mtocsection}{\numberline {7.1}The Privacy-Utility Tradeoff}{25}{section.7.1}%
 \contentsline {section}{\numberline {7.2}Synthetic Data Generation}{25}{section.7.2}%
 \contentsline {mtocsection}{\numberline {7.2}Synthetic Data Generation}{25}{section.7.2}%
-\contentsline {part}{\nonumberline Part III: The Causal Frontier \newline Innovative and Non-standard Analysis}{27}{part*.14}%
+\contentsline {part}{\nonumberline Part III: The Causal Frontier \newline Innovative and Non-standard Analysis}{27}{part*.12}%
 \contentsline {chapter}{\numberline {8}Modern Difference-in-Differences}{29}{chapter.8}%
 \contentsline {section}{\numberline {8.1}The Revolution in Staggered Adoption}{29}{section.8.1}%
 \contentsline {mtocsection}{\numberline {8.1}The Revolution in Staggered Adoption}{29}{section.8.1}%
@@ -96,8 +98,8 @@
 \contentsline {mtocsection}{\numberline {8.2}Implementing \texttt {csdid} and \texttt {jwdid}}{29}{section.8.2}%
 \contentsline {subsection}{\numberline {8.2.1}Event-Study Plots and Pre-Trends}{29}{subsection.8.2.1}%
 \contentsline {mtocsubsection}{\numberline {8.2.1}Event-Study Plots and Pre-Trends}{29}{subsection.8.2.1}%
-\contentsline {subsection}{\numberline {8.2.2}Sensitivity Analysis: \texttt {honestDiD} and Oster Bounds}{30}{subsection.8.2.2}%
-\contentsline {mtocsubsection}{\numberline {8.2.2}Sensitivity Analysis: \texttt {honestDiD} and Oster Bounds}{30}{subsection.8.2.2}%
+\contentsline {subsection}{\numberline {8.2.2}Sensitivity Analysis: \texttt {honestdid} and Oster Bounds}{30}{subsection.8.2.2}%
+\contentsline {mtocsubsection}{\numberline {8.2.2}Sensitivity Analysis: \texttt {honestdid} and Oster Bounds}{30}{subsection.8.2.2}%
 \contentsline {chapter}{\numberline {9}Regression Discontinuity and Interrupted Time Series}{31}{chapter.9}%
 \contentsline {section}{\numberline {9.1}When a Rule Creates a Natural Experiment}{31}{section.9.1}%
 \contentsline {mtocsection}{\numberline {9.1}When a Rule Creates a Natural Experiment}{31}{section.9.1}%
@@ -115,12 +117,14 @@
 \contentsline {mtocsubsection}{\numberline {11.1.1}Ethics of Prediction: Bias Detection in Targeting}{35}{subsection.11.1.1}%
 \contentsline {section}{\numberline {11.2}Random Forests in Stata}{35}{section.11.2}%
 \contentsline {mtocsection}{\numberline {11.2}Random Forests in Stata}{35}{section.11.2}%
-\contentsline {section}{\numberline {11.3}Double/Debiased Machine Learning (\texttt {ddml})}{35}{section.11.3}%
-\contentsline {mtocsection}{\numberline {11.3}Double/Debiased Machine Learning (\texttt {ddml})}{35}{section.11.3}%
+\contentsline {section}{\numberline {11.3}Distribution-Free Uncertainty with Conformal Inference}{35}{section.11.3}%
+\contentsline {mtocsection}{\numberline {11.3}Distribution-Free Uncertainty with Conformal Inference}{35}{section.11.3}%
+\contentsline {section}{\numberline {11.4}Double/Debiased Machine Learning (\texttt {ddml})}{36}{section.11.4}%
+\contentsline {mtocsection}{\numberline {11.4}Double/Debiased Machine Learning (\texttt {ddml})}{36}{section.11.4}%
 \contentsline {chapter}{\numberline {12}Cost-Effectiveness and Return on Investment}{37}{chapter.12}%
 \contentsline {section}{\numberline {12.1}The Question Funders Directly Ask}{37}{section.12.1}%
 \contentsline {mtocsection}{\numberline {12.1}The Question Funders Directly Ask}{37}{section.12.1}%
-\contentsline {part}{\nonumberline Part IV: High-Impact Communication \newline Sparklines, Webdocs, and Interactive Reporting}{39}{part*.16}%
+\contentsline {part}{\nonumberline Part IV: High-Impact Communication \newline Sparklines, Webdocs, and Interactive Reporting}{39}{part*.14}%
 \contentsline {chapter}{\numberline {13}Innovative and Diagnostic Visualizations}{41}{chapter.13}%
 \contentsline {section}{\numberline {13.1}Sparklines and Micro-charts}{41}{section.13.1}%
 \contentsline {mtocsection}{\numberline {13.1}Sparklines and Micro-charts}{41}{section.13.1}%
@@ -135,7 +139,7 @@
 \contentsline {mtocsubsection}{\numberline {14.1.1}The Self-Contained Project Portal}{43}{subsection.14.1.1}%
 \contentsline {section}{\numberline {14.2}AI-Assisted Narrative Generation \& Alignment Tools}{44}{section.14.2}%
 \contentsline {mtocsection}{\numberline {14.2}AI-Assisted Narrative Generation \& Alignment Tools}{44}{section.14.2}%
-\contentsline {part}{\nonumberline Part V: Building Tools that \texttt {Mata}-er \newline Custom Development and Scalability}{45}{part*.18}%
+\contentsline {part}{\nonumberline Part V: Building Tools that \texttt {Mata}-er \newline Custom Development and Scalability}{45}{part*.16}%
 \contentsline {chapter}{\numberline {15}Building Internal Evaluation Toolkits}{47}{chapter.15}%
 \contentsline {section}{\numberline {15.1}From Scripts to Systems}{47}{section.15.1}%
 \contentsline {mtocsection}{\numberline {15.1}From Scripts to Systems}{47}{section.15.1}%
@@ -146,16 +150,16 @@
 \contentsline {mtocsection}{\numberline {16.1}Introduction to Mata for Evaluators}{49}{section.16.1}%
 \contentsline {subsection}{\numberline {16.1.1}The Trifecta Workflow: Stata, Mata, and Python}{49}{subsection.16.1.1}%
 \contentsline {mtocsubsection}{\numberline {16.1.1}The Trifecta Workflow: Stata, Mata, and Python}{49}{subsection.16.1.1}%
-\contentsline {part}{\nonumberline Appendices}{51}{part*.20}%
-\contentsline {chapter}{Appendix A: The LLM-Stata Setup Guide}{53}{chapter*.21}%
-\contentsline {chapter}{Appendix B: The Modern Causal Toolbox}{55}{chapter*.22}%
-\contentsline {chapter}{Appendix C: The Author's Stata Toolkit}{57}{chapter*.23}%
-\contentsline {chapter}{Appendix D: Two Hands-On Worked Examples}{59}{chapter*.24}%
-\contentsline {paragraph}{\nonumberline The question.}{59}{paragraph*.27}%
-\contentsline {paragraph}{\nonumberline Why it is a good teaching case.}{59}{paragraph*.29}%
-\contentsline {paragraph}{\nonumberline The analysis and the honest finding.}{59}{paragraph*.31}%
-\contentsline {paragraph}{\nonumberline Concepts it illustrates.}{60}{paragraph*.33}%
-\contentsline {paragraph}{\nonumberline The question.}{60}{paragraph*.36}%
-\contentsline {paragraph}{\nonumberline Why it is a good teaching case.}{60}{paragraph*.38}%
-\contentsline {paragraph}{\nonumberline The analysis and the honest finding.}{60}{paragraph*.40}%
-\contentsline {paragraph}{\nonumberline Concepts it illustrates.}{61}{paragraph*.42}%
+\contentsline {part}{\nonumberline Appendices}{51}{part*.18}%
+\contentsline {chapter}{Appendix A: The LLM-Stata Setup Guide}{53}{chapter*.19}%
+\contentsline {chapter}{Appendix B: The Modern Causal Toolbox}{55}{chapter*.20}%
+\contentsline {chapter}{Appendix C: The Author's Stata Toolkit}{57}{chapter*.21}%
+\contentsline {chapter}{Appendix D: Two Hands-On Worked Examples}{59}{chapter*.22}%
+\contentsline {paragraph}{\nonumberline The question.}{59}{paragraph*.23}%
+\contentsline {paragraph}{\nonumberline Why it is a good teaching case.}{59}{paragraph*.24}%
+\contentsline {paragraph}{\nonumberline The analysis and the honest finding.}{59}{paragraph*.25}%
+\contentsline {paragraph}{\nonumberline Concepts it illustrates.}{60}{paragraph*.26}%
+\contentsline {paragraph}{\nonumberline The question.}{60}{paragraph*.27}%
+\contentsline {paragraph}{\nonumberline Why it is a good teaching case.}{60}{paragraph*.28}%
+\contentsline {paragraph}{\nonumberline The analysis and the honest finding.}{60}{paragraph*.29}%
+\contentsline {paragraph}{\nonumberline Concepts it illustrates.}{61}{paragraph*.30}%
