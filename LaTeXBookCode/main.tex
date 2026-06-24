@@ -466,6 +466,58 @@ A Sankey flow diagram showing participant movement through program phases (e.g.,
 \textbf{Proposed Program:} \texttt{trackflow}. Reshapes panel data into a source-target flow format, exporting the coordinates to a JSON file ready for interactive Sankey rendering.
 \end{kaobox}
 
+
+\subsection*{\texttt{cxchangelog}: a one-command Stata tool for the
+item-changes inventory}
+
+\textbf{Goal.} Replace the hand-built
+\texttt{item\_changes\_inventory\_2025studyfix.xlsx} pass with a single
+\texttt{ado} that regenerates the codebook from any long-format crosswalk
+dataset. The Wave-9 work proved the format is useful; it should auto-emit.
+
+\textbf{Syntax.}
+\begin{verbatim}
+cxchangelog using FILE.xlsx, wave(varname) concept(varname)
+   [ wording(varname)  options(varname)  study(varname)
+     compare(prior.xlsx)  code(baselice|simple)
+     highlight(yellow|vintage)  summary  flag(varlist) ]
+\end{verbatim}
+
+\textbf{Sheets emitted.}
+\begin{itemize}\setlength\itemsep{0pt}
+  \item \texttt{items\_by\_wave} --- one row per concept, columns
+        \texttt{w1..wN} carrying \texttt{A/S/W/O/B/R/N} lifecycle codes
+        derived from wave-to-wave wording + option diffs.
+  \item \texttt{options\_by\_wave} --- same logic at the response-option level.
+  \item \texttt{summary} --- per-wave totals (\texttt{A\_added},
+        \texttt{S\_same}, \texttt{W\_wording}, \texttt{O\_options},
+        \texttt{R\_removed}, \texttt{N\_not\_asked}).
+  \item \texttt{*\_coverage} (when \texttt{study()} supplied) --- per-study
+        presence matrix, mirroring our \texttt{w9\_coverage} tab.
+\end{itemize}
+
+\textbf{Utility / rationale.}
+\begin{enumerate}\setlength\itemsep{0pt}
+  \item Removes the manual fix-xlsx step every new wave.
+  \item Reproducible: any analyst regenerates the codebook in one line.
+  \item \texttt{compare(prior.xlsx)} diffs against a frozen vintage and
+        auto-highlights what shifted between releases.
+  \item Standardizes the lifecycle-code convention so the format is shareable
+        across Texas 2036 datasets, not just TVP.
+\end{enumerate}
+
+\textbf{Use case.} Wave 10 lands. After \texttt{\_runall.do}:
+\begin{verbatim}
+use ${clean}/question_inventory, clear
+cxchangelog using ${docs}/item_changes_w10.xlsx,
+    wave(wave) concept(concept_id) wording(q_text)
+    options(options) study(study) summary
+    compare(${docs}/item_changes_w9.xlsx) highlight(vintage)
+\end{verbatim}
+Instant codebook; every added, removed, or reworded item is flagged in the
+diff --- no manual triage of orphans, no v3-v4-v5 patching cycle.
+
+
 \section{Missing Data and Multiple Imputation}
 Missing values are rarely missing at random. Dropping incomplete cases can bias causal estimates. We diagnose missingness patterns (\texttt{misstable patterns}), test if missingness depends on observed covariates, and run multiple imputation (\texttt{mi}) to propagate imputation uncertainty into our standard errors.
 

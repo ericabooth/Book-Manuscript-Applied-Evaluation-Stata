@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.22)  23 JUN 2026 17:44
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.22)  24 JUN 2026 09:49
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -3176,14 +3176,23 @@ Package tocbasic Info: character protrusion at lot deactivated on input line 13
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
+
+
+Class scrbook Warning: odd/even page label number 1 undefined on input line 146
+.
+
+
+Class scrbook Warning: odd/even page label number 2 undefined on input line 150
+.
+
 LaTeX Font Info:    Font shape `T1/zpllf/m/it' will be
-(Font)              scaled to size 9.70001pt on input line 155.
+(Font)              scaled to size 9.70001pt on input line 160.
 
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.161 ... Principles, Speed, and the Modern Stack}
+l.166 ... Principles, Speed, and the Modern Stack}
                                                   
 \openout4 = `main.mw'.
 
@@ -3199,7 +3208,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.161 ... Principles, Speed, and the Modern Stack}
+l.166 ... Principles, Speed, and the Modern Stack}
                                                   
 \openout4 = `main.mw'.
 
@@ -3213,19 +3222,19 @@ l.161 ... Principles, Speed, and the Modern Stack}
 part without number
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\newline' on input line 161.
+(hyperref)                removing `\newline' on input line 166.
 
 LaTeX Font Info:    Font shape `T1/qhv/b/n' will be
-(Font)              scaled to size 22.44386pt on input line 161.
+(Font)              scaled to size 22.44386pt on input line 166.
 LaTeX Font Info:    Font shape `T1/zpllf/m/n' will be
-(Font)              scaled to size 24.13362pt on input line 161.
+(Font)              scaled to size 24.13362pt on input line 166.
 LaTeX Font Info:    Font shape `T1/zpllf/m/sc' will be
-(Font)              scaled to size 24.13362pt on input line 161.
+(Font)              scaled to size 24.13362pt on input line 166.
 Package microtype Info: Character `029' is missing
 (microtype)             in font `T1/zpllf/m/sc/24.88'.
 (microtype)             Ignoring protrusion settings for this character.
 LaTeX Font Info:    Font shape `T1/zpllf/b/sc' will be
-(Font)              scaled to size 24.13362pt on input line 161.
+(Font)              scaled to size 24.13362pt on input line 166.
 Package microtype Info: Character `029' is missing
 (microtype)             in font `T1/zpllf/b/sc/24.88'.
 (microtype)             Ignoring protrusion settings for this character.
@@ -3241,31 +3250,42 @@ Package microtype Info: Character `029' is missing
 
 
 chapter 1.
+
+Class scrbook Warning: odd/even page label number 3 undefined on input line 168
+.
+
 LaTeX Font Info:    Font shape `T1/qhv/b/n' will be
-(Font)              scaled to size 12.99pt on input line 166.
+(Font)              scaled to size 12.99pt on input line 171.
 LaTeX Font Info:    Font shape `T1/zpllf/b/n' will be
-(Font)              scaled to size 13.968pt on input line 166.
+(Font)              scaled to size 13.968pt on input line 171.
 
 Package hyperref Warning: bookmark level for unknown mtocsection defaults to 0.
 
 
 LaTeX Font Info:    Font shape `T1/zpllf/b/n' will be
-(Font)              scaled to size 11.64001pt on input line 169.
+(Font)              scaled to size 11.64001pt on input line 174.
 
 Package hyperref Warning: bookmark level for unknown mtocsubsection defaults to
  0.
 
 LaTeX Font Info:    Font shape `T1/zpllf/m/n' will be
-(Font)              scaled to size 8.73001pt on input line 171.
+(Font)              scaled to size 8.73001pt on input line 176.
 LaTeX Font Info:    Font shape `OT1/minzpl/m/n' will be
-(Font)              scaled to size 8.73001pt on input line 171.
-Package mdframed Info: mdframed works in twoside mode on input line 184.
+(Font)              scaled to size 8.73001pt on input line 176.
+
+LaTeX Warning: Reference `sec:prereg' on page 5 undefined on input line 178.
+
+Package mdframed Info: mdframed works in twoside mode on input line 189.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 184.
+(mdframed)              on input line 189.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 195.
+(mdframed)              on input line 200.
+
+LaTeX Warning: Reference `mdf@pagelabel-1' on page 5 undefined on input line 20
+0.
+
 \openout4 = `main.mw'.
 
 [5
@@ -3274,71 +3294,110 @@ Package mdframed Info: mdframed detected package amsthm
 ] (./main.mw)
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 197.
+
+
+LaTeX Warning: Reference `mdf@pagelabel-2' on page 6 undefined on input line 20
+0.
+
+Package mdframed Info: mdframed works in twoside mode on input line 202.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 197.
+(mdframed)              on input line 202.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 199.
+(mdframed)              on input line 204.
 LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
-(Font)              scaled to size 8.50006pt on input line 199.
-Package mdframed Info: mdframed works in twoside mode on input line 212.
+(Font)              scaled to size 8.50006pt on input line 204.
+
+LaTeX Warning: Reference `mdf@pagelabel-3' on page 6 undefined on input line 20
+4.
+
+Package mdframed Info: mdframed works in twoside mode on input line 217.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 212.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 214.
-\openout4 = `main.mw'.
-
- [6{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/newtx/ntx-ecth-tlf.enc}{
-/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/newpx/px-lms.enc}] (./main.m
-w)
-\openout4 = `main.mw'.
-
-Package mdframed Info: mdframed works in twoside mode on input line 219.
+(mdframed)              on input line 217.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 219.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 221.
-Package mdframed Info: mdframed works in twoside mode on input line 229.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 229.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 231.
+
+LaTeX Warning: Reference `mdf@pagelabel-4' on page 6 undefined on input line 21
+9.
+
 \openout4 = `main.mw'.
 
- [7] (./main.mw)
+[6{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/newtx/ntx-ecth-tlf.enc}{/
+usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/newpx/px-lms.enc}] (./main.mw
+)
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 241.
+
+
+LaTeX Warning: Reference `mdf@pagelabel-5' on page 7 undefined on input line 21
+9.
+
+Package mdframed Info: mdframed works in twoside mode on input line 224.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 241.
+(mdframed)              on input line 224.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 243.
+(mdframed)              on input line 226.
+
+LaTeX Warning: Reference `mdf@pagelabel-6' on page 7 undefined on input line 22
+6.
+
+Package mdframed Info: mdframed works in twoside mode on input line 234.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 234.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 236.
+
+LaTeX Warning: Reference `mdf@pagelabel-7' on page 7 undefined on input line 23
+6.
+
 \openout4 = `main.mw'.
 
- [8] (./main.mw)
+[7] (./main.mw)
+\openout4 = `main.mw'.
+
+Package mdframed Info: mdframed works in twoside mode on input line 246.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 246.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 248.
+
+
+LaTeX Warning: Reference `mdf@pagelabel-8' on page 8 undefined on input line 24
+8.
+
+\openout4 = `main.mw'.
+
+[8] (./main.mw)
 \openout4 = `main.mw'.
 
 
 chapter 2.
+
+Class scrbook Warning: odd/even page label number 4 undefined on input line 253
+.
+
 LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
-(Font)              scaled to size 12.24008pt on input line 251.
-Package mdframed Info: mdframed works in twoside mode on input line 261.
+(Font)              scaled to size 12.24008pt on input line 256.
+Package mdframed Info: mdframed works in twoside mode on input line 266.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 261.
+(mdframed)              on input line 266.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 263.
+(mdframed)              on input line 268.
+
+LaTeX Warning: Reference `mdf@pagelabel-9' on page 9 undefined on input line 26
+8.
+
 \openout4 = `main.mw'.
 
 [9
@@ -3347,43 +3406,61 @@ Package mdframed Info: mdframed detected package amsthm
 ] (./main.mw)
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 276.
+Package mdframed Info: mdframed works in twoside mode on input line 281.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 276.
+(mdframed)              on input line 281.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 278.
-Package mdframed Info: mdframed works in twoside mode on input line 280.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 280.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 282.
-Package mdframed Info: mdframed works in twoside mode on input line 295.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 295.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 297.
-\openout4 = `main.mw'.
+(mdframed)              on input line 283.
 
- [10{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/newtx/ntx-ot1-tlf.enc}]
- (./main.mw)
-\openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 302.
+LaTeX Warning: Reference `mdf@pagelabel-10' on page 10 undefined on input line 
+283.
+
+Package mdframed Info: mdframed works in twoside mode on input line 285.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 285.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 287.
+
+LaTeX Warning: Reference `mdf@pagelabel-11' on page 10 undefined on input line 
+287.
+
+Package mdframed Info: mdframed works in twoside mode on input line 300.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 300.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 302.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 304.
+
+LaTeX Warning: Reference `mdf@pagelabel-12' on page 10 undefined on input line 
+302.
+
 \openout4 = `main.mw'.
 
- [11] (./main.mw)
+[10{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/newtx/ntx-ot1-tlf.enc}]
+(./main.mw)
+\openout4 = `main.mw'.
+
+Package mdframed Info: mdframed works in twoside mode on input line 307.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 307.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 309.
+
+
+LaTeX Warning: Reference `mdf@pagelabel-13' on page 11 undefined on input line 
+309.
+
+\openout4 = `main.mw'.
+
+[11] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -3396,20 +3473,32 @@ Package mdframed Info: mdframed detected package amsthm
 
 
 chapter 3.
-Package mdframed Info: mdframed works in twoside mode on input line 317.
+
+Class scrbook Warning: odd/even page label number 5 undefined on input line 311
+.
+
+Package mdframed Info: mdframed works in twoside mode on input line 322.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 317.
+(mdframed)              on input line 322.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 319.
-Package mdframed Info: mdframed works in twoside mode on input line 329.
+(mdframed)              on input line 324.
+
+LaTeX Warning: Reference `mdf@pagelabel-14' on page 13 undefined on input line 
+324.
+
+Package mdframed Info: mdframed works in twoside mode on input line 334.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 329.
+(mdframed)              on input line 334.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 331.
+(mdframed)              on input line 336.
+
+LaTeX Warning: Reference `mdf@pagelabel-15' on page 13 undefined on input line 
+336.
+
 \openout4 = `main.mw'.
 
 [13] (./main.mw)
@@ -3420,25 +3509,30 @@ pdfTeX warning (ext4): destination with the same identifier (name{appliedexampl
 e.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.342 ...00 Progress Notes Without Getting Burned]
+l.347 ...00 Progress Notes Without Getting Burned]
                                                   
-Package mdframed Info: mdframed works in twoside mode on input line 342.
+Package mdframed Info: mdframed works in twoside mode on input line 347.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 342.
+(mdframed)              on input line 347.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 354.
+(mdframed)              on input line 359.
+
+
+LaTeX Warning: Reference `mdf@pagelabel-16' on page 14 undefined on input line 
+359.
+
 \openout4 = `main.mw'.
 
- [14] (./main.mw)
+[14] (./main.mw)
 \openout4 = `main.mw'.
 
 
 part without number
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\newline' on input line 360.
+(hyperref)                removing `\newline' on input line 365.
 
 \openout4 = `main.mw'.
 
@@ -3456,113 +3550,174 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 
 chapter 4.
 
+Class scrbook Warning: odd/even page label number 6 undefined on input line 367
+.
+
+
 pdfTeX warning (ext4): destination with the same identifier (name{appliedexampl
 e.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.367 ...ting Benchmark School Data from Zelma.ai]
+l.372 ...ting Benchmark School Data from Zelma.ai]
                                                   
-Package mdframed Info: mdframed works in twoside mode on input line 367.
+Package mdframed Info: mdframed works in twoside mode on input line 372.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 367.
+(mdframed)              on input line 372.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 378.
-Package mdframed Info: mdframed works in twoside mode on input line 380.
+(mdframed)              on input line 383.
+
+
+LaTeX Warning: Reference `mdf@pagelabel-17' on page 17 undefined on input line 
+383.
+
+Package mdframed Info: mdframed works in twoside mode on input line 385.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 380.
+(mdframed)              on input line 385.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 382.
-Package mdframed Info: mdframed works in twoside mode on input line 392.
+(mdframed)              on input line 387.
+
+LaTeX Warning: Reference `mdf@pagelabel-18' on page 17 undefined on input line 
+387.
+
+Package mdframed Info: mdframed works in twoside mode on input line 397.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 392.
+(mdframed)              on input line 397.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 394.
+(mdframed)              on input line 399.
+
+LaTeX Warning: Reference `mdf@pagelabel-19' on page 17 undefined on input line 
+399.
+
 \openout4 = `main.mw'.
 
- [17
+[17
 
 
 ] (./main.mw)
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 402.
+
+
+LaTeX Warning: Reference `mdf@pagelabel-20' on page 18 undefined on input line 
+399.
+
+Package mdframed Info: mdframed works in twoside mode on input line 407.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 402.
+(mdframed)              on input line 407.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 406.
+(mdframed)              on input line 411.
+
+LaTeX Warning: Reference `mdf@pagelabel-21' on page 18 undefined on input line 
+411.
+
 \openout4 = `main.mw'.
 
- [18]
-(./main.mw)
+[18] (./main.mw)
 \openout4 = `main.mw'.
 
 
 chapter 5.
-Package mdframed Info: mdframed works in twoside mode on input line 421.
+
+Class scrbook Warning: odd/even page label number 7 undefined on input line 413
+.
+
+Package mdframed Info: mdframed works in twoside mode on input line 426.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 421.
+(mdframed)              on input line 426.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 425.
+(mdframed)              on input line 430.
+
+LaTeX Warning: Reference `mdf@pagelabel-22' on page 19 undefined on input line 
+430.
+
 
 pdfTeX warning (ext4): destination with the same identifier (name{appliedexampl
 e.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.427 ...nd Education Rosters without a Common ID]
+l.432 ...nd Education Rosters without a Common ID]
                                                   
-Package mdframed Info: mdframed works in twoside mode on input line 427.
+Package mdframed Info: mdframed works in twoside mode on input line 432.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 427.
+(mdframed)              on input line 432.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 438.
+(mdframed)              on input line 443.
+
+
+LaTeX Warning: Reference `mdf@pagelabel-23' on page 19 undefined on input line 
+443.
+
 \openout4 = `main.mw'.
 
- [19
+[19
 
 
 ] (./main.mw)
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 443.
+Package mdframed Info: mdframed works in twoside mode on input line 448.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 443.
+(mdframed)              on input line 448.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 447.
-Package mdframed Info: mdframed works in twoside mode on input line 449.
+(mdframed)              on input line 452.
+
+
+LaTeX Warning: Reference `mdf@pagelabel-24' on page 20 undefined on input line 
+452.
+
+Package mdframed Info: mdframed works in twoside mode on input line 454.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 449.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 451.
-Package mdframed Info: mdframed works in twoside mode on input line 456.
+(mdframed)              on input line 454.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 456.
+
+LaTeX Warning: Reference `mdf@pagelabel-25' on page 20 undefined on input line 
+456.
+
+Package mdframed Info: mdframed works in twoside mode on input line 461.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 458.
-Package mdframed Info: mdframed works in twoside mode on input line 460.
+(mdframed)              on input line 461.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 460.
+(mdframed)              on input line 463.
+
+LaTeX Warning: Reference `mdf@pagelabel-26' on page 20 undefined on input line 
+463.
+
+Package mdframed Info: mdframed works in twoside mode on input line 465.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 462.
+(mdframed)              on input line 465.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 467.
+
+LaTeX Warning: Reference `mdf@pagelabel-27' on page 20 undefined on input line 
+467.
+
+
+Overfull \hbox (19.76022pt too wide) in paragraph at lines 473--477
+\T1/zpllf/b/n/10 (-20) Goal. \T1/zpllf/m/n/10 (-20) Re-place the hand-built \T1
+/fvm/m/n/10 item_-changes_-inventory_-2025studyfix.xlsx
+ []
+
 
 Underfull \vbox (badness 2158) has occurred while \output is active []
 
@@ -3572,52 +3727,83 @@ Underfull \vbox (badness 2158) has occurred while \output is active []
 (./main.mw)
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 467.
+
+Overfull \hbox (2.57921pt too wide) in paragraph at lines 516--516
+[]    \T1/fvm/m/n/10 compare(${docs}/item_changes_w9.xlsx) highlight(vintage)[]
+ 
+ []
+
+Package mdframed Info: mdframed works in twoside mode on input line 524.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 467.
+(mdframed)              on input line 524.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 469.
+(mdframed)              on input line 526.
+
+LaTeX Warning: Reference `mdf@pagelabel-28' on page 21 undefined on input line 
+526.
+
 \openout4 = `main.mw'.
 
- [21] (./main.mw)
+[21] (./main.mw)
 \openout4 = `main.mw'.
 
+
+
+LaTeX Warning: Reference `mdf@pagelabel-29' on page 22 undefined on input line 
+526.
+
 \openout4 = `main.mw'.
 
- [22
-
-
-] (./main.mw)
+[22] (./main.mw)
 \openout4 = `main.mw'.
 
 
 chapter 6.
-Package mdframed Info: mdframed works in twoside mode on input line 479.
+
+Class scrbook Warning: odd/even page label number 8 undefined on input line 531
+.
+
+Package mdframed Info: mdframed works in twoside mode on input line 536.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 479.
+(mdframed)              on input line 536.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 481.
-Package mdframed Info: mdframed works in twoside mode on input line 486.
+(mdframed)              on input line 538.
+
+LaTeX Warning: Reference `mdf@pagelabel-30' on page 23 undefined on input line 
+538.
+
+Package mdframed Info: mdframed works in twoside mode on input line 543.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 486.
+(mdframed)              on input line 543.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 488.
-Package mdframed Info: mdframed works in twoside mode on input line 493.
+(mdframed)              on input line 545.
+
+LaTeX Warning: Reference `mdf@pagelabel-31' on page 23 undefined on input line 
+545.
+
+Package mdframed Info: mdframed works in twoside mode on input line 550.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 493.
+(mdframed)              on input line 550.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 495.
+(mdframed)              on input line 552.
+
+LaTeX Warning: Reference `mdf@pagelabel-32' on page 23 undefined on input line 
+552.
+
 \openout4 = `main.mw'.
 
-[23] (./main.mw)
+[23
+
+
+] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -3627,27 +3813,43 @@ Package mdframed Info: mdframed detected package amsthm
 
 
 chapter 7.
-Package mdframed Info: mdframed works in twoside mode on input line 510.
+
+Class scrbook Warning: odd/even page label number 9 undefined on input line 557
+.
+
+Package mdframed Info: mdframed works in twoside mode on input line 567.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 510.
+(mdframed)              on input line 567.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 512.
-Package mdframed Info: mdframed works in twoside mode on input line 514.
+(mdframed)              on input line 569.
+
+LaTeX Warning: Reference `mdf@pagelabel-33' on page 25 undefined on input line 
+569.
+
+Package mdframed Info: mdframed works in twoside mode on input line 571.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 514.
+(mdframed)              on input line 571.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 518.
-Package mdframed Info: mdframed works in twoside mode on input line 523.
+(mdframed)              on input line 575.
+
+LaTeX Warning: Reference `mdf@pagelabel-34' on page 25 undefined on input line 
+575.
+
+Package mdframed Info: mdframed works in twoside mode on input line 580.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 523.
+(mdframed)              on input line 580.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 525.
+(mdframed)              on input line 582.
+
+LaTeX Warning: Reference `mdf@pagelabel-35' on page 25 undefined on input line 
+582.
+
 \openout4 = `main.mw'.
 
 [25
@@ -3668,7 +3870,7 @@ Package mdframed Info: mdframed detected package amsthm
 part without number
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\newline' on input line 531.
+(hyperref)                removing `\newline' on input line 588.
 
 \openout4 = `main.mw'.
 
@@ -3682,20 +3884,32 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 
 
 chapter 8.
-Package mdframed Info: mdframed works in twoside mode on input line 541.
+
+Class scrbook Warning: odd/even page label number 10 undefined on input line 59
+0.
+
+Package mdframed Info: mdframed works in twoside mode on input line 598.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 541.
+(mdframed)              on input line 598.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 543.
-Package mdframed Info: mdframed works in twoside mode on input line 551.
+(mdframed)              on input line 600.
+
+LaTeX Warning: Reference `mdf@pagelabel-36' on page 29 undefined on input line 
+600.
+
+Package mdframed Info: mdframed works in twoside mode on input line 608.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 551.
+(mdframed)              on input line 608.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 553.
+(mdframed)              on input line 610.
+
+LaTeX Warning: Reference `mdf@pagelabel-37' on page 29 undefined on input line 
+610.
+
 \openout4 = `main.mw'.
 
 [29
@@ -3704,27 +3918,40 @@ Package mdframed Info: mdframed detected package amsthm
 ] (./main.mw)
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 558.
+Package mdframed Info: mdframed works in twoside mode on input line 615.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 558.
+(mdframed)              on input line 615.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 562.
+(mdframed)              on input line 619.
+
+
+LaTeX Warning: Reference `mdf@pagelabel-38' on page 30 undefined on input line 
+619.
+
 \openout4 = `main.mw'.
 
- [30] (./main.mw)
+[30] (./main.mw)
 \openout4 = `main.mw'.
 
 
 chapter 9.
-Package mdframed Info: mdframed works in twoside mode on input line 574.
+
+Class scrbook Warning: odd/even page label number 11 undefined on input line 62
+1.
+
+Package mdframed Info: mdframed works in twoside mode on input line 631.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 574.
+(mdframed)              on input line 631.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 576.
+(mdframed)              on input line 633.
+
+LaTeX Warning: Reference `mdf@pagelabel-39' on page 31 undefined on input line 
+633.
+
 \openout4 = `main.mw'.
 
 [31
@@ -3743,20 +3970,32 @@ Package mdframed Info: mdframed detected package amsthm
 
 
 chapter 10.
-Package mdframed Info: mdframed works in twoside mode on input line 586.
+
+Class scrbook Warning: odd/even page label number 12 undefined on input line 63
+8.
+
+Package mdframed Info: mdframed works in twoside mode on input line 643.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 586.
+(mdframed)              on input line 643.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 590.
-Package mdframed Info: mdframed works in twoside mode on input line 595.
+(mdframed)              on input line 647.
+
+LaTeX Warning: Reference `mdf@pagelabel-40' on page 33 undefined on input line 
+647.
+
+Package mdframed Info: mdframed works in twoside mode on input line 652.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 595.
+(mdframed)              on input line 652.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 597.
+(mdframed)              on input line 654.
+
+LaTeX Warning: Reference `mdf@pagelabel-41' on page 33 undefined on input line 
+654.
+
 \openout4 = `main.mw'.
 
 [33] (./main.mw)
@@ -3772,60 +4011,93 @@ Package mdframed Info: mdframed detected package amsthm
 
 
 chapter 11.
-Package mdframed Info: mdframed works in twoside mode on input line 607.
+
+Class scrbook Warning: odd/even page label number 13 undefined on input line 65
+6.
+
+Package mdframed Info: mdframed works in twoside mode on input line 664.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 607.
+(mdframed)              on input line 664.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 609.
-Package mdframed Info: mdframed works in twoside mode on input line 614.
+(mdframed)              on input line 666.
+
+LaTeX Warning: Reference `mdf@pagelabel-42' on page 35 undefined on input line 
+666.
+
+Package mdframed Info: mdframed works in twoside mode on input line 671.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 614.
+(mdframed)              on input line 671.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 618.
+(mdframed)              on input line 675.
+
+LaTeX Warning: Reference `mdf@pagelabel-43' on page 35 undefined on input line 
+675.
+
 \openout4 = `main.mw'.
 
 [35] (./main.mw)
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 623.
+Package mdframed Info: mdframed works in twoside mode on input line 680.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 623.
+(mdframed)              on input line 680.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 627.
-Package mdframed Info: mdframed works in twoside mode on input line 632.
+(mdframed)              on input line 684.
+
+
+LaTeX Warning: Reference `mdf@pagelabel-44' on page 36 undefined on input line 
+684.
+
+Package mdframed Info: mdframed works in twoside mode on input line 689.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 632.
+(mdframed)              on input line 689.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 634.
+(mdframed)              on input line 691.
+
+LaTeX Warning: Reference `mdf@pagelabel-45' on page 36 undefined on input line 
+691.
+
 \openout4 = `main.mw'.
 
- [36] (./main.mw)
+[36] (./main.mw)
 \openout4 = `main.mw'.
 
 
 chapter 12.
-Package mdframed Info: mdframed works in twoside mode on input line 641.
+
+Class scrbook Warning: odd/even page label number 14 undefined on input line 69
+3.
+
+Package mdframed Info: mdframed works in twoside mode on input line 698.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 641.
+(mdframed)              on input line 698.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 643.
-Package mdframed Info: mdframed works in twoside mode on input line 645.
+(mdframed)              on input line 700.
+
+LaTeX Warning: Reference `mdf@pagelabel-46' on page 37 undefined on input line 
+700.
+
+Package mdframed Info: mdframed works in twoside mode on input line 702.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 645.
+(mdframed)              on input line 702.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 647.
+(mdframed)              on input line 704.
+
+LaTeX Warning: Reference `mdf@pagelabel-47' on page 37 undefined on input line 
+704.
+
 \openout4 = `main.mw'.
 
 [37
@@ -3846,7 +4118,7 @@ Package mdframed Info: mdframed detected package amsthm
 part without number
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\newline' on input line 653.
+(hyperref)                removing `\newline' on input line 710.
 
 \openout4 = `main.mw'.
 
@@ -3860,27 +4132,43 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 
 
 chapter 13.
-Package mdframed Info: mdframed works in twoside mode on input line 660.
+
+Class scrbook Warning: odd/even page label number 15 undefined on input line 71
+2.
+
+Package mdframed Info: mdframed works in twoside mode on input line 717.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 660.
+(mdframed)              on input line 717.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 662.
-Package mdframed Info: mdframed works in twoside mode on input line 670.
+(mdframed)              on input line 719.
+
+LaTeX Warning: Reference `mdf@pagelabel-48' on page 41 undefined on input line 
+719.
+
+Package mdframed Info: mdframed works in twoside mode on input line 727.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 670.
+(mdframed)              on input line 727.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 672.
-Package mdframed Info: mdframed works in twoside mode on input line 674.
+(mdframed)              on input line 729.
+
+LaTeX Warning: Reference `mdf@pagelabel-49' on page 41 undefined on input line 
+729.
+
+Package mdframed Info: mdframed works in twoside mode on input line 731.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 674.
+(mdframed)              on input line 731.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 676.
+(mdframed)              on input line 733.
+
+LaTeX Warning: Reference `mdf@pagelabel-50' on page 41 undefined on input line 
+733.
+
 \openout4 = `main.mw'.
 
 [41
@@ -3899,34 +4187,51 @@ Package mdframed Info: mdframed detected package amsthm
 
 
 chapter 14.
-Package mdframed Info: mdframed works in twoside mode on input line 683.
+
+Class scrbook Warning: odd/even page label number 16 undefined on input line 73
+5.
+
+Package mdframed Info: mdframed works in twoside mode on input line 740.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 683.
+(mdframed)              on input line 740.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 685.
-Package mdframed Info: mdframed works in twoside mode on input line 690.
+(mdframed)              on input line 742.
+
+LaTeX Warning: Reference `mdf@pagelabel-51' on page 43 undefined on input line 
+742.
+
+Package mdframed Info: mdframed works in twoside mode on input line 747.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 690.
+(mdframed)              on input line 747.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 692.
+(mdframed)              on input line 749.
+
+LaTeX Warning: Reference `mdf@pagelabel-52' on page 43 undefined on input line 
+749.
+
 
 pdfTeX warning (ext4): destination with the same identifier (name{appliedexampl
 e.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.694 ...From Do-File to Shareable Project Portal]
+l.751 ...From Do-File to Shareable Project Portal]
                                                   
-Package mdframed Info: mdframed works in twoside mode on input line 694.
+Package mdframed Info: mdframed works in twoside mode on input line 751.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 694.
+(mdframed)              on input line 751.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 705.
+(mdframed)              on input line 762.
+
+
+LaTeX Warning: Reference `mdf@pagelabel-53' on page 43 undefined on input line 
+762.
+
 
 Underfull \vbox (badness 3128) has occurred while \output is active []
 
@@ -3936,33 +4241,42 @@ Underfull \vbox (badness 3128) has occurred while \output is active []
 (./main.mw)
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 710.
+Package mdframed Info: mdframed works in twoside mode on input line 767.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 710.
+(mdframed)              on input line 767.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 712.
-Package mdframed Info: mdframed works in twoside mode on input line 714.
+(mdframed)              on input line 769.
+
+
+LaTeX Warning: Reference `mdf@pagelabel-54' on page 44 undefined on input line 
+769.
+
+Package mdframed Info: mdframed works in twoside mode on input line 771.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 714.
+(mdframed)              on input line 771.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 716.
+(mdframed)              on input line 773.
+
+LaTeX Warning: Reference `mdf@pagelabel-55' on page 44 undefined on input line 
+773.
+
 \openout4 = `main.mw'.
 
- [44] (./main.mw)
+[44] (./main.mw)
 \openout4 = `main.mw'.
 
 
 part without number
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\newline' on input line 722.
+(hyperref)                removing `\newline' on input line 779.
 
 LaTeX Font Info:    Font shape `T1/fvm/b/sc' will be
-(Font)              scaled to size 21.14815pt on input line 722.
+(Font)              scaled to size 21.14815pt on input line 779.
 Package microtype Info: Character `029' is missing
 (microtype)             in font `T1/fvm/b/sc/24.88'.
 (microtype)             Ignoring protrusion settings for this character.
@@ -3981,30 +4295,43 @@ Package microtype Info: Character `029' is missing
 
 
 chapter 15.
-Package mdframed Info: mdframed works in twoside mode on input line 734.
+
+Class scrbook Warning: odd/even page label number 17 undefined on input line 78
+1.
+
+Package mdframed Info: mdframed works in twoside mode on input line 791.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 734.
+(mdframed)              on input line 791.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 736.
+(mdframed)              on input line 793.
+
+LaTeX Warning: Reference `mdf@pagelabel-56' on page 47 undefined on input line 
+793.
+
 
 pdfTeX warning (ext4): destination with the same identifier (name{appliedexampl
 e.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.738 ...ning a One-Off Script Into a Shared Tool]
+l.795 ...ning a One-Off Script Into a Shared Tool]
                                                   
-Package mdframed Info: mdframed works in twoside mode on input line 738.
+Package mdframed Info: mdframed works in twoside mode on input line 795.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 738.
+(mdframed)              on input line 795.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 749.
+(mdframed)              on input line 806.
+
+
+LaTeX Warning: Reference `mdf@pagelabel-57' on page 47 undefined on input line 
+806.
+
 \openout4 = `main.mw'.
 
- [47
+[47
 
 
 ] (./main.mw)
@@ -4015,26 +4342,37 @@ Package mdframed Info: mdframed detected package amsthm
  [48
 
 
-]
-(./main.mw)
+] (./main.mw)
 \openout4 = `main.mw'.
 
 
 chapter 16.
-Package mdframed Info: mdframed works in twoside mode on input line 764.
+
+Class scrbook Warning: odd/even page label number 18 undefined on input line 81
+1.
+
+Package mdframed Info: mdframed works in twoside mode on input line 821.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 764.
+(mdframed)              on input line 821.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 766.
-Package mdframed Info: mdframed works in twoside mode on input line 771.
+(mdframed)              on input line 823.
+
+LaTeX Warning: Reference `mdf@pagelabel-58' on page 49 undefined on input line 
+823.
+
+Package mdframed Info: mdframed works in twoside mode on input line 828.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 771.
+(mdframed)              on input line 828.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 773.
+(mdframed)              on input line 830.
+
+LaTeX Warning: Reference `mdf@pagelabel-59' on page 49 undefined on input line 
+830.
+
 \openout4 = `main.mw'.
 
 [49] (./main.mw)
@@ -4060,9 +4398,14 @@ part without number
  [52] (./main.mw)
 \openout4 = `main.mw'.
 
+
+
+Class scrbook Warning: odd/even page label number 19 undefined on input line 83
+8.
+
 \openout4 = `main.mw'.
 
- [53
+[53
 
 
 ] (./main.mw)
@@ -4077,7 +4420,12 @@ part without number
 \openout4 = `main.mw'.
 
 
-Overfull \hbox (1.66028pt too wide) in paragraph at lines 797--798
+
+Class scrbook Warning: odd/even page label number 20 undefined on input line 84
+7.
+
+
+Overfull \hbox (1.66028pt too wide) in paragraph at lines 854--855
 []\T1/zpllf/m/n/10 (-20) Use Syn-thetic Difference-
  []
 
@@ -4094,9 +4442,14 @@ Overfull \hbox (1.66028pt too wide) in paragraph at lines 797--798
 ] (./main.mw)
 \openout4 = `main.mw'.
 
+
+
+Class scrbook Warning: odd/even page label number 21 undefined on input line 85
+8.
+
 \openout4 = `main.mw'.
 
- [57] (./main.mw)
+[57] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -4107,55 +4460,67 @@ Overfull \hbox (1.66028pt too wide) in paragraph at lines 797--798
 ] (./main.mw)
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 824.
+
+
+Class scrbook Warning: odd/even page label number 22 undefined on input line 87
+7.
+
+Package mdframed Info: mdframed works in twoside mode on input line 881.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 824.
+(mdframed)              on input line 881.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 828.
+(mdframed)              on input line 885.
+
+LaTeX Warning: Reference `mdf@pagelabel-60' on page 59 undefined on input line 
+885.
+
 LaTeX Font Info:    Font shape `T1/zpllf/m/n' will be
-(Font)              scaled to size 7.76001pt on input line 833.
+(Font)              scaled to size 7.76001pt on input line 890.
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 6.80005pt on input line 834.
+(Font)              scaled to size 6.80005pt on input line 891.
 \openout4 = `main.mw'.
 
- [59]
-(./main.mw)
+[59] (./main.mw)
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 848.
+Package mdframed Info: mdframed works in twoside mode on input line 905.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 848.
+(mdframed)              on input line 905.
 
-Underfull \hbox (badness 1194) in paragraph at lines 849--852
+Underfull \hbox (badness 1194) in paragraph at lines 906--909
 []\T1/zpllf/b/n/10 (+20) Data: \T1/zpllf/m/n/10 (+20) Texas school per-for-manc
 e (STAAR), 2012--2025, school
  []
 
 
-Underfull \hbox (badness 1960) in paragraph at lines 849--852
+Underfull \hbox (badness 1960) in paragraph at lines 906--909
 \T1/zpllf/m/n/10 (+20) level (TEA via the EDC/Zelma ex-port; large pub-lic CSVs
 ,
  []
 
 
-Underfull \hbox (badness 1721) in paragraph at lines 849--852
+Underfull \hbox (badness 1721) in paragraph at lines 906--909
 \LMS/npxsy/m/n/10 ^^Y$\T1/zpllf/m/n/10 (+20) 400MB per year). \T1/zpllf/b/n/10 
 (+20) Run: \T1/fvm/m/n/10 analyze_-performance.do\T1/zpllf/m/n/10 (+20) . \T1/z
 pllf/b/n/10 (+20) Out-puts:
  []
 
 
-Underfull \hbox (badness 2269) in paragraph at lines 849--852
+Underfull \hbox (badness 2269) in paragraph at lines 906--909
 \T1/fvm/m/n/10 analytic_-performance.dta\T1/zpllf/m/n/10 (+20) , four trend fig
 -ures, a log. \T1/zpllf/b/n/10 (+20) Unit:
  []
 
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 852.
+(mdframed)              on input line 909.
+
+LaTeX Warning: Reference `mdf@pagelabel-61' on page 60 undefined on input line 
+909.
+
 \openout4 = `main.mw'.
 
 [60] (./main.mw)
@@ -4208,7 +4573,7 @@ Package mdframed Info: mdframed detected package amsthm
 
 
 
-LaTeX Warning: Empty bibliography on input line 876.
+LaTeX Warning: Empty bibliography on input line 933.
 
 
 Package glossaries Warning: No \printglossary or \printglossaries found. 
@@ -5033,6 +5398,9 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 LaTeX Warning: There were undefined references.
 
 
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
 Package biblatex Warning: Please (re)run Biber on the file:
 (biblatex)                main
 (biblatex)                and rerun LaTeX afterwards.
@@ -5058,10 +5426,10 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 63408 strings out of 467525
- 1276268 string characters out of 5418982
- 2555277 words of memory out of 5000000
- 89605 multiletter control sequences out of 15000+600000
+ 63426 strings out of 467525
+ 1276661 string characters out of 5418982
+ 2550523 words of memory out of 5000000
+ 89619 multiletter control sequences out of 15000+600000
  745753 words of font info for 268 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  122i,19n,159p,11208b,2455s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -5076,10 +5444,10 @@ ype1/public/newtx/txsym.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/pub
 lic/newpx/zplb.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/newpx
 /zplr.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/newpx/zplri.pf
 b>
-Output written on main.pdf (72 pages, 325810 bytes).
+Output written on main.pdf (72 pages, 329425 bytes).
 PDF statistics:
- 1169 PDF objects out of 1200 (max. 8388607)
- 1059 compressed objects within 11 object streams
- 205 named destinations out of 1000 (max. 500000)
+ 1172 PDF objects out of 1200 (max. 8388607)
+ 1062 compressed objects within 11 object streams
+ 209 named destinations out of 1000 (max. 500000)
  54877 words of extra memory for PDF output out of 61914 (max. 10000000)
 

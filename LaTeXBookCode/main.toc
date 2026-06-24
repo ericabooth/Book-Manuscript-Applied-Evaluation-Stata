@@ -72,8 +72,8 @@
 \contentsline {mtocsection}{\numberline {5.3}Longitudinal Panel Construction}{20}{section.5.3}%
 \contentsline {section}{\numberline {5.4}Missing Data and Multiple Imputation}{21}{section.5.4}%
 \contentsline {mtocsection}{\numberline {5.4}Missing Data and Multiple Imputation}{21}{section.5.4}%
-\contentsline {section}{\numberline {5.5}Weighting for Representativeness}{21}{section.5.5}%
-\contentsline {mtocsection}{\numberline {5.5}Weighting for Representativeness}{21}{section.5.5}%
+\contentsline {section}{\numberline {5.5}Weighting for Representativeness}{22}{section.5.5}%
+\contentsline {mtocsection}{\numberline {5.5}Weighting for Representativeness}{22}{section.5.5}%
 \contentsline {chapter}{\numberline {6}Modern Survey Instrumentation \& Nonresponse Bias}{23}{chapter.6}%
 \contentsline {section}{\numberline {6.1}API Ingestion \& Metadata Automation}{23}{section.6.1}%
 \contentsline {mtocsection}{\numberline {6.1}API Ingestion \& Metadata Automation}{23}{section.6.1}%
