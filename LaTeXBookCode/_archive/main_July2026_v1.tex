@@ -93,18 +93,6 @@
 % Paths for figures
 \graphicspath{{images/}}
 
-% Flow diagrams (workflow pipelines, decision trees)
-\usepackage{tikz}
-\usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit, backgrounds, calc}
-% Reusable node styles for the book's pipeline diagrams
-\tikzset{
-    stage/.style={rectangle, rounded corners=3pt, draw=vizRule, line width=0.9pt,
-        fill=vizBg, text width=1.7cm, align=center, minimum height=1.0cm, font=\sffamily\footnotesize},
-    substep/.style={rectangle, rounded corners=2pt, draw=aeRule, line width=0.6pt,
-        fill=aeBg, align=left, font=\sffamily\scriptsize, inner sep=3pt},
-    flow/.style={-{Stealth[length=2mm]}, line width=0.9pt, draw=aeRule},
-}
-
 % Index & Glossary
 \makeindex[columns=3, title=Alphabetical Index, intoc]
 \makeglossaries
@@ -118,12 +106,12 @@
 \titlehead{Tools for Applied Monitoring, Evaluation and Learning}
 
 % --- Working title under review. Three candidates (see book_update_plan.md, Sec. 2):
-%   1. Applied Program Evaluation Using Stata: A Practical Workflow from Data to Deliverables
+%   1. Applied Program Evaluation Using Stata: From Public Data to Client-Ready Results
 %   2. Evaluation Workflows Using Stata: A Practical Guide for Embedded Researchers
 %   3. Embedded Evaluation: Stata Tools for Applied Research and Evaluation (current)
 % The Stata Press house grammar is "[task] Using Stata"; candidate 1 is recommended.
 \title[Embedded Evaluation]{Applied Program Evaluation \\ Using Stata}
-\subtitle{A Practical Workflow from Data to Deliverables}
+\subtitle{From Public Data to Client-Ready Results}
 
 \author{Eric Booth \hspace{0.5in} Elizabeth Teas}
 
@@ -145,7 +133,7 @@
     © 2026 Eric Booth \& Elizabeth Teas \vspace{0.5in}
 
     \textbf{Colophon} \\
-    This document was typeset using the \texttt{kaobook} class. Every figure, table, and number in the worked examples is produced by a do-file in the companion \texttt{code/} folder, which downloads only public data.
+    This document was typeset using the \texttt{kaobook} class, optimized for the practitioner-researcher. The layout emphasizes marginalia for code snippets and implementation notes.
 }
 \makeatother
 
@@ -163,27 +151,25 @@
 \chapter*{Preface: The Modern Evaluator's Dilemma}
 
 \begin{fullwidthpar}
-Textbooks teach evaluation as though the data were clean, the deadline were distant, and the audience were neutral. Real evaluation is the opposite. The data arrives as forty inconsistent spreadsheets, the answer is due Friday, and the finding has funding attached. This book is about doing that job well, with Stata as the one place you pull the data, build the evidence, and hand the client something they can open and use.
+Applied evaluation has outgrown the pre-post $t$-test. Today's evaluator is part data engineer, part survey manager, part visualization designer, and, increasingly, part careful user of machine learning. This book is a practical, opinionated guide to doing that whole job from one place, with Stata as the command center that pulls the data, builds the panel, answers the question at the right level of rigor, and hands the client something they can open and use.
 \end{fullwidthpar}
 
-Most of what follows comes out of a working data-and-research shop, not a methods seminar. The patterns, the do-files, and the cautionary tales are the ones we reach for when a foundation officer needs an answer by Monday, the source data came as a website with no download button, and the same code has to run on a colleague's Windows laptop and our own Mac without edits. That context shapes every choice here. We favor reproducibility over cleverness, automation over heroics, and tools a small team can maintain.
+Most of what follows comes out of a working data-and-research shop, not a methods seminar. The patterns, the ado-files, and the cautionary tales are the ones we reach for when a foundation officer needs an answer by Friday, the source data arrived as forty inconsistent spreadsheets, and the same do-file has to run on a colleague's Windows laptop and our own Mac without edits. That context shapes every recommendation here. We favor reproducibility over cleverness, automation over heroics, and tools that a small team can actually maintain.
 
-A word on artificial intelligence, since it appears throughout. Large language models can code messy text and draft a summary faster than any team could by hand. They can also leak confidential data, invent a classification, and produce a result that will not reproduce tomorrow. We treat AI as a power tool: useful in the right jig, dangerous when waved around freely. Wherever we hand work to a model, we pair it with a verification step, a privacy check, and a logged, reproducible trail (Chapter~\ref{ch:ai}).
+A word on artificial intelligence, since it appears throughout. Large language models have changed how quickly we can code messy text, draft a summary, or scaffold an analysis. They have also introduced new ways to be confidently wrong, to leak confidential data, and to produce a result that cannot be reproduced tomorrow. We treat AI as a power tool: useful in the right jig, dangerous when waved around freely. Wherever we hand work to a model, we pair it with a verification step, a privacy check, and a logged, reproducible trail (Chapter~\ref{ch:ai}).
 
-\paragraph{The four promises.} One idea runs through the book. Good evaluation work is \emph{replicable} (a colleague reruns it next month from the raw files and gets the same answer), \emph{extensible} (the next wave, site, or client fits without a rewrite), \emph{accessible} (partners and funders can open and understand the output), and \emph{actionable} (it tells someone what to do next Monday, in the units they budget in). These four words recur on purpose. Every section says which promises its methods serve, and why the reader's partners are better off for it.
+\paragraph{The four promises.} One idea organizes the book. A good evaluation workflow makes work \emph{replicable} (a colleague can rerun it next month from raw source and get the same answer), \emph{extensible} (the next wave, site, or client fits without a rewrite), \emph{accessible} (partners and funders can open and understand the outputs), and \emph{actionable} (the result tells someone what to do next Monday, in the units they budget and staff in). These four words are the book's recurring vocabulary. Every chapter says which promises its methods serve, and why the evaluator's partners and audiences are better off for it.
 
-\paragraph{Everything here runs.} This is not a book of pseudocode. Every worked example is a do-file in the companion \texttt{code/} folder, and every one downloads only public data, most of it with a single \texttt{import delimited} from a URL and no login. The figures in these pages were produced by those do-files. You can rerun them, change a county or a year, and watch the result change.
-
-\paragraph{Who this book is for.} Evaluators, applied researchers, and analysts who already know some Stata and want a practical workflow for embedded, real-world evaluation, especially in nonprofits, agencies, and foundations where the data is messy, the stakes are real, and the team is small.
+\paragraph{Who this book is for.} Evaluators, applied researchers, and data analysts who already know some Stata and want a practical workflow for embedded, real-world evaluation, especially in nonprofits, agencies, and foundations where the data is messy, the stakes are real, and the team is small.
 
 \paragraph{What you should be able to do.} Working through the book, you should be able to:
 \begin{itemize}
-    \item After Chapter~\ref{ch:embedded}: name the four promises and turn a funder's one-line question into a one-page, rerunnable answer.
-    \item After Chapter~\ref{ch:workshop}: set up a project with one control file that holds every path and runs the whole pipeline in order.
-    \item After Chapter~\ref{ch:apis}: pull Census, education, economic, and health data straight into Stata from public APIs.
+    \item After Chapter~\ref{ch:embedded}: state the four promises and turn a funder's one-line question into a one-page, rerunnable answer.
+    \item After Chapter~\ref{ch:workshop}: lay out a project so it survives a new laptop, a new teammate, and next month's data.
+    \item After Chapter~\ref{ch:apis}: pull public data from the Census, education, economic, and health APIs directly into Stata.
     \item After Chapter~\ref{ch:noapi}: harvest data from agencies that publish files but offer no API.
     \item After Chapter~\ref{ch:surveys}: auto-download survey responses, watch response rates live, and track instruments across waves.
-    \item After Chapter~\ref{ch:panels}: link files with no common ID and assemble longitudinal data you can defend in an audit.
+    \item After Chapter~\ref{ch:panels}: link files with no common ID and assemble panels you can defend in an audit.
     \item After Chapter~\ref{ch:trust}: build reliable scales, weight for representativeness, and stabilize noisy small-site rates.
     \item After Chapter~\ref{ch:claims}: match your claim to your design, and run a defensible difference-in-differences when a causal claim is required.
     \item After Chapter~\ref{ch:graphs}: build graphics a busy reader understands at a glance.
@@ -195,220 +181,126 @@ A word on artificial intelligence, since it appears throughout. Large language m
     \item After Chapter~\ref{ch:tools}: turn a one-off do-file into a shared, versioned team tool and archive the whole project.
 \end{itemize}
 
-\paragraph{How to read it, by role.} Chapters stand on their own; skip to what you need. Three paths:
+\paragraph{How to read it, by role.} Chapters stand on their own; skip to what you need. Three paths through the book:
 \begin{itemize}
     \item \emph{The nonprofit program evaluator} who collects survey and program data: Chapters~\ref{ch:embedded}, \ref{ch:workshop}, \ref{ch:surveys}, \ref{ch:panels}, \ref{ch:trust}, \ref{ch:graphs}, and~\ref{ch:sheets}.
     \item \emph{The agency or foundation analyst} who works from public administrative data: Chapters~\ref{ch:embedded}, \ref{ch:apis}, \ref{ch:noapi}, \ref{ch:panels}, \ref{ch:claims}, \ref{ch:interactive}, and~\ref{ch:portals}.
     \item \emph{The research-shop tool-builder}: Chapters~\ref{ch:workshop}, \ref{ch:ai}, \ref{ch:sharing}, \ref{ch:tools}, and the appendices.
 \end{itemize}
-Throughout, \emph{Applied Example} pull-outs work a complete scenario end to end with runnable code, \emph{Visualization to build} callouts specify a chart and the story it must tell, and \emph{Ado-file idea} boxes flag tools, some already on the authors' GitHub, some still on the wish list.
+Throughout, \emph{Applied Example} pull-outs walk a complete scenario end to end, \emph{Visualization to build} callouts specify a chart worth making and the story it must tell, and \emph{Ado-file idea} boxes flag tools, some already written and on the authors' GitHub, some still on the wish list.
 
 %----------------------------------------------------------------------------------------
 % PART I
 %----------------------------------------------------------------------------------------
 
-\addpart{Part I: The Embedded Evaluator Workflow \newline Principles, Environment, and the Four Promises}
+\addpart{Part I: The Embedded Workshop \newline Principles, Environment, and the Four Promises}
 
 \chapter{The embedded evaluator}\label{ch:embedded}
 
 A foundation officer emails on Thursday afternoon: \enquote{Are we actually reaching the rural students we promised, or mostly the suburban ones near the host sites?} The program team has an enrollment spreadsheet. You have until Monday. This is the ordinary weather of embedded evaluation, and it is the situation this book is built for.
 
-The question this chapter answers is not \enquote{what statistics should I know} but \enquote{what does the work actually look like, start to finish.} We lay out the pipeline the rest of the book follows (Figure~\ref{fig:pipeline}), define the four promises we judge every step against, and describe how an embedded evaluator works alongside a program without being captured by it. By the end you should see the shape of the whole job and know where each later chapter fits into it.
-
-\begin{figure*}
-\centering
-\begin{tikzpicture}[node distance=0.55cm and 0.9cm]
-  \node[stage] (get)  {Get the data};
-  \node[stage, right=of get]   (evi) {Turn it into evidence};
-  \node[stage, right=of evi]   (com) {Communicate it};
-  \node[stage, right=of com]   (sus) {Sustain it};
-  \node[stage, left=of get]    (set) {Set up};
-  \draw[flow] (set) -- (get);
-  \draw[flow] (get) -- (evi);
-  \draw[flow] (evi) -- (com);
-  \draw[flow] (com) -- (sus);
-  % substep captions
-  \node[substep, below=0.35cm of set, text width=1.7cm] {Ch.\,1--2\\control file, folders};
-  \node[substep, below=0.35cm of get, text width=1.9cm] {Ch.\,3--6\\APIs, scrapes, surveys, panels};
-  \node[substep, below=0.35cm of evi, text width=1.7cm] {Ch.\,7--8\\measure, compare, DiD};
-  \node[substep, below=0.35cm of com, text width=1.9cm] {Ch.\,9--12\\graphs, sheets, portals};
-  \node[substep, below=0.35cm of sus, text width=1.7cm] {Ch.\,13--15\\AI, privacy, tools};
-\end{tikzpicture}
-\caption[The embedded evaluator's pipeline]{The pipeline this book follows, and the map of its parts. Work flows left to right: you set up a project, get the data (from APIs, scraped files, and surveys), turn it into evidence, communicate it, and sustain it for the next cycle. Each later chapter is a tool for one of these stages.}
-\label{fig:pipeline}
-\end{figure*}
+This chapter sets up the rest. We describe the reader we are writing for and the week we assume, define the four promises that the book measures every method against, and lay out how the embedded evaluator works alongside a program without being captured by it. We introduce the running examples and the companion toolkit, and we close with a map of the pipeline the chapters follow. The aim is that by the end you can turn a question like the Thursday email into a one-page answer that anyone on your team can reproduce next month.
 
 \section{Who this book is for, and the week it assumes}
-The embedded evaluator sits inside or beside a program rather than auditing it from a distance. That proximity buys context, real-time access to how a program runs, and a seat in the operational conversation. It also means the work arrives on the program's schedule, in the program's formats, under the program's political weather. We assume a small team, standard Stata licenses without the multi-processor edition, data that is often protected by law or agreement, and funders who read the first page and skim the rest.
+The embedded evaluator sits inside or beside a program rather than auditing it from a distance. That proximity buys context, real-time access to how a program actually runs, and a seat in the operational conversation. It also means the work arrives on the program's schedule, in the program's formats, under the program's political weather. We assume a small team, standard Stata licenses without the multi-processor edition, data that is often protected by law or agreement, and funders who read the first page and skim the rest.
 
-Those constraints decide what counts as a good tool. A method that needs a cluster, a data-science team, or a week of runtime is not a method you can use on a Thursday-to-Monday clock. That is why the chapters are ordered as the work happens (Figure~\ref{fig:pipeline}), not as a statistics syllabus would arrange them.
+Those constraints are not incidental; they decide what counts as a good tool. A method that needs a cluster, a data-science team, or a week of runtime is not a method an embedded evaluator can use on the Thursday-to-Monday clock. Writing to the real audience rather than an idealized one is the first act of accessibility in the book, and it is why the chapters are ordered as the work actually happens rather than as a statistics syllabus would arrange them.
 
 \section{Four promises: replicable, extensible, accessible, actionable}\label{sec:promises}
-We judge every workflow and tool in this book against four properties, and we use these four words often. A workflow is \emph{replicable} when a colleague reruns it from the raw files next month and gets the same numbers; the test is a one-command rebuild, not a memory of which cells you edited. It is \emph{extensible} when the next survey wave, program year, or client fits by changing a parameter rather than copying a script. It is \emph{accessible} when the people who need the result, front-line staff, funders, community partners, can open it and understand it without a statistics degree or a paid license. It is \emph{actionable} when it tells someone what to do next, in the units they plan in: students served, dollars returned, percentage points gained.
+The book judges every workflow and every tool against four properties, and it uses these four words on purpose and often. A workflow is \emph{replicable} when a colleague can rerun it from the raw source files next month and get the same numbers; the test is a one-command rebuild of the Monday brief, not a memory of which cells you edited. It is \emph{extensible} when the next survey wave, program year, site, or client fits by changing a parameter rather than copying and editing a script. It is \emph{accessible} when the people who need the result, front-line staff, funders, and community partners, can open it and understand it without a statistics degree or a paid license. It is \emph{actionable} when it tells someone what to do next, in the units they plan in: students served, dollars returned, percentage points gained, weeks saved.
 
-These four are the applied researcher's answer to \enquote{why are we doing it this way?} A slower, coded pipeline beats a fast spreadsheet because it is replicable; a labeled dataset beats a clever one because it is accessible; a stabilized small-site rate beats a raw one because it is actionable for the people who fund those sites. Each section names the promise it serves, so the reasoning is always on the page.
+We keep these four in view because they are the applied researcher's answer to the recurring question, \enquote{why are we doing it this way?} A slower, coded pipeline beats a fast spreadsheet because it is replicable; a labeled, documented dataset beats a clever one because it is accessible; a stabilized small-site rate beats a raw one because it is actionable for the people who fund and staff those sites. Each section ahead names the promise it serves, so the reasoning is always on the page and never assumed.
 
 \section{Working embedded: partners, power, and bad news}\label{sec:literacy}
-Embedded evaluation runs on trust, and trust is easiest to keep when the ground rules pre-date the findings. Program managers hope for good news, and that hope can turn into quiet pressure to move a baseline or soften a null. The defense is procedural: agree on data ownership, primary outcomes, and success thresholds in writing before the data is unblinded, and treat a pre-registered analysis plan (Section~\ref{sec:prereg}) as something you can point to when the pressure comes. None of this requires distrusting your partners; it protects the relationship from the incentives around it.
+Embedded evaluation runs on trust, and trust is easiest to keep when the ground rules pre-date the findings. Program managers naturally hope for good news, and that hope can turn into quiet pressure to move a baseline, favor a subgroup, or soften a null. The defense is procedural, not heroic: define data ownership and publication rights in writing on day one, agree on primary outcomes and success thresholds before the data is unblinded, and treat a pre-registered analysis plan (Section~\ref{sec:prereg}) as a commitment device you can point to when the pressure arrives. None of this requires distrusting your partners; it protects the relationship from the incentives around it.
 
-Data quality also depends on the front-line staff who enter it, so part of the job is building their evaluation literacy. When staff see data entry as paperwork, they produce blanks and inconsistent categories; when they see how their inputs feed a dashboard they use, they clean up at the source. A plain-language data dictionary generated straight from the data (via \texttt{codebook, compact} and \texttt{labelbook}) turns documentation into something staff can read, which serves accessibility and, downstream, replicability.
+The quality of evaluation data also depends on the front-line staff who enter it, so part of the job is building their evaluation literacy. When staff see data entry as paperwork, they produce blanks and inconsistent categories; when they see how their inputs feed a dashboard they use, they clean up at the source. A plain-language data dictionary generated straight from the data (via \texttt{codebook, compact} and \texttt{labelbook}, and the \texttt{datadict} tool below) turns documentation into something staff can read, which serves both accessibility and, downstream, replicability. This is the reciprocal side of embeddedness: the evaluator who explains the data makes the data worth analyzing.
 
 \begin{appliedexample}[From a funder's question to a one-page answer]
-\textbf{Scenario.} The Thursday email: are we reaching rural students, or mostly suburban ones near the host sites? You have an enrollment spreadsheet and until Monday.
+\textbf{Scenario.} The Thursday email: \enquote{Are we reaching the rural students we promised, or mostly the suburban ones near the host sites?} You have an enrollment spreadsheet and until Monday.
 
 \medskip
-\textbf{The workflow, and where the book builds each step.}
+\textbf{The embedded move.} Rather than launch a study, you answer with data in hand, and you make the answer rerunnable so next month's file needs one command, not another weekend:
 \begin{enumerate}
-    \item \textbf{Ingest} the shared-drive folder of enrollment exports into one clean dataset (\texttt{convertanything}, Chapter~\ref{ch:noapi}).
-    \item \textbf{Classify} students as rural or not by merging a county-rurality crosswalk onto ZIP codes (Chapter~\ref{ch:panels}).
-    \item \textbf{Benchmark} observed rural enrollment against a Census target pulled with \texttt{getcensus} (Chapter~\ref{ch:apis}).
-    \item \textbf{Communicate} with one bar chart of observed versus targeted rural share, plus two sentences (Chapter~\ref{ch:graphs}).
+    \item \textbf{Ingest.} Consolidate the shared-drive folder of enrollment exports into one clean dataset with \texttt{convertanything} (Chapter~\ref{ch:noapi}).
+    \item \textbf{Classify.} Merge a county-to-rurality crosswalk onto student ZIP codes (Chapter~\ref{ch:panels}).
+    \item \textbf{Benchmark.} Compare observed rural enrollment against Census reach targets pulled with \texttt{getcensus} (Chapter~\ref{ch:apis}).
+    \item \textbf{Communicate.} Output one bar chart of observed versus targeted rural participation, with a short narrative (Chapter~\ref{ch:graphs}).
 \end{enumerate}
-The workflow is the point. It is replicable because it runs from the raw exports, and actionable because it answers the officer's question in her own units. Every step is a later chapter; this scenario is the thread that ties them together.
+The workflow is the point. It is replicable because it runs from the raw exports, and actionable because it answers the officer's question in the units she asked it in.
 \end{appliedexample}
 
-\begin{kaobox}[frametitle=Ado-file Idea: \texttt{evalaudit} and \texttt{datadict}]
-\textbf{Proposed programs.} \texttt{evalaudit} writes a project-startup checklist auditing data-sharing agreements and funder mandates. \texttt{datadict} builds a plain-language data dictionary (an HTML page or a spreadsheet tab) from variable labels, value labels, and missingness rates, ordered for program staff. Both are plans, not yet code.
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{evalaudit}]
+\textbf{Proposed program:} \texttt{evalaudit}. Generates a project-startup checklist auditing data-sharing agreements, funder mandates, and ethics requirements, and writes a standardized Markdown record so the ground rules are documented before the first analysis.
 \end{kaobox}
 
-\section{The running examples, and how to get them}
-The book leans on a few named, public datasets, reused across chapters so that the workflow, not a new dataset each time, is what you learn. Naming and shipping them is also what makes the book replicable. Table~\ref{tab:data} lists the anchors; all download in one or two steps, and all but two need no key or login.
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{datadict}]
+\textbf{Proposed program:} \texttt{datadict}. Builds a plain-language data dictionary (an HTML page or a Sheets/Excel tab) from variable labels, value labels, characteristics, and missingness rates, ordered for program staff rather than analysts. The evaluation-literacy tool this section calls for; it reappears in the client toolkit of Section~\ref{sec:teamtoolkit}.
+\end{kaobox}
 
-\begin{table}[htbp]
-\centering
-\footnotesize
-\caption[The book's running datasets]{The running datasets. Every one is public; the ``How'' column is the command that gets it. Full setup for the two that need a free key is in Appendix~\ref{app:setup}.}
-\label{tab:data}
-\begin{tabular}{@{}p{2.5cm}p{3.4cm}p{2.1cm}p{3.0cm}@{}}
-\hline
-\textbf{Dataset} & \textbf{What it is} & \textbf{Unit} & \textbf{How to get it} \\
-\hline
-BLS QCEW & County employment and wages, quarterly & County-quarter & \texttt{import delimited} a URL; no key \\
-County Health Rankings & Health and social measures, annual & County-year & \texttt{copy} a URL; no key \\
-Texas STAAR (TAPR) & School test results, 2012--2025 & School-year & scraped files; no key \\
-CDC PRAMS & Maternal-health indicators & State & Excel workbooks; no key \\
-ACS (Census) & Income, poverty, insurance & Any geography & \texttt{getcensus}; free key \\
-FRED & Economic time series & Series-period & \texttt{import fred}; free key \\
-\hline
-\end{tabular}
-\end{table}
-
-Everything installs and runs from the companion \texttt{code/} folder. Run \texttt{01\_install.do} once to fetch the packages the book uses, then \texttt{00\_control.do} to set your paths (Chapter~\ref{ch:workshop}). As a first taste, here is the entire recipe for the wage figure that opens the data chapter, real numbers, no key, four lines:
-{\footnotesize
-\begin{verbatim}
-import delimited ///
-    "https://data.bls.gov/cew/data/api/2023/1/area/48453.csv", ///
-    clear varnames(1) stringcols(1 3)
-keep if own_code == 5 & industry_code == "10"   // total private sector
-list area_fips avg_wkly_wage, clean noobs        // Travis County (Austin), TX
-\end{verbatim}
-}
-That block downloads Austin's county wage record and prints one number, the average private-sector weekly wage. Chapter~\ref{ch:apis} turns the same four lines into a five-county comparison and the figure on page~\pageref{fig:qcew}.
+\section{The running examples and the book's toolkit}
+The book leans on a handful of named, public datasets, reused across chapters so that the workflow, not a new dataset each time, is what you learn. Naming and shipping them is also what makes the book itself replicable: every figure can be rebuilt from a download.
+\begin{itemize}
+    \item \emph{The Texas STAAR school panel.} School-by-grade-by-subject test results, 2012--2025, from the Texas Education Agency. A large administrative panel that teaches memory-aware ingestion (Chapter~\ref{ch:workshop}) and the comparison-group caution behind causal claims (Section~\ref{sec:did}). Written up in full in Appendix~\ref{app:walkthroughs}.
+    \item \emph{County Health Rankings.} Annual county files of health and social measures, used for the interactive dashboards of Chapters~\ref{ch:interactive} and~\ref{ch:sheets}.
+    \item \emph{BLS QCEW county wages.} Quarterly county-by-industry employment and wages, downloadable as plain CSVs with no key, the cleanest replicable-download loop in the book (Chapter~\ref{ch:apis}).
+    \item \emph{The CDC PRAMS workbooks.} Maternal-health indicators published as human-readable Excel, used to teach irregular-spreadsheet ingestion (Chapter~\ref{ch:noapi}) and honest reporting of a null (Appendix~\ref{app:walkthroughs}).
+    \item \emph{A simulated program-enrollment file.} A small, synthetic intake-and-survey dataset that ships with the book, so the survey and client-toolkit chapters (\ref{ch:surveys}, \ref{ch:sheets}) run without exposing anyone's records.
+\end{itemize}
+The companion packages install from the authors' GitHub with \texttt{net install}; Appendix~\ref{app:toolkit} lists every one with its chapter home, and Appendix~\ref{app:setup} covers one-time setup.
 
 \section{How the book is organized}
-The chapters follow the pipeline of Figure~\ref{fig:pipeline}. Part~I sets up principles and environment. Part~II gets the data: from APIs (Chapter~\ref{ch:apis}), from agencies with no API (Chapter~\ref{ch:noapi}), from survey platforms (Chapter~\ref{ch:surveys}), and into trustworthy longitudinal data (Chapter~\ref{ch:panels}). Part~III turns data into evidence: reliable measurement (Chapter~\ref{ch:trust}) and defensible claims, including the book's one causal section (Chapter~\ref{ch:claims}). Part~IV communicates: static graphics (Chapter~\ref{ch:graphs}), interactive infographics (Chapter~\ref{ch:interactive}), spreadsheet deliverables (Chapter~\ref{ch:sheets}), and self-contained portals (Chapter~\ref{ch:portals}). Part~V sustains the practice: careful AI (Chapter~\ref{ch:ai}), safe sharing (Chapter~\ref{ch:sharing}), and shared tooling with a replication archive (Chapter~\ref{ch:tools}).
+The chapters follow the embedded evaluator's production pipeline rather than a ladder of statistical difficulty. Part~I sets up principles and environment. Part~II gets the data: from APIs (Chapter~\ref{ch:apis}), from agencies with no API (Chapter~\ref{ch:noapi}), from survey platforms (Chapter~\ref{ch:surveys}), and into trustworthy panels (Chapter~\ref{ch:panels}). Part~III turns data into evidence: reliable measurement (Chapter~\ref{ch:trust}) and defensible claims, including the book's one causal section (Chapter~\ref{ch:claims}). Part~IV communicates: static graphics (Chapter~\ref{ch:graphs}), interactive infographics (Chapter~\ref{ch:interactive}), spreadsheet deliverables (Chapter~\ref{ch:sheets}), and self-contained portals (Chapter~\ref{ch:portals}). Part~V sustains the practice: careful AI (Chapter~\ref{ch:ai}), safe sharing (Chapter~\ref{ch:sharing}), and shared tooling with a replication archive (Chapter~\ref{ch:tools}).
 
-\paragraph{Where this leaves you.} You now have the shape of the whole job, the four promises, and the reader paths for your role. Next we set up a project so the pipeline you build survives a new laptop, a new teammate, and next month's data.
+\paragraph{Where this leaves you.} You now have the book's organizing idea, the four promises, and the reader paths that fit your role. That serves the most basic promise of all, accessibility, by telling you which chapters pay your salary. Next we set up a workshop so that the pipeline you build survives a new laptop and a new teammate.
 
-\chapter{Setting up a project that survives deadlines}\label{ch:workshop}
+\chapter{Setting up a workshop that survives deadlines}\label{ch:workshop}
 
-You wrote a do-file that ran perfectly last month. Today it dies on your coworker's laptop over a hard-coded path, and you cannot remember which of three folders holds the version that made the figure the client already saw. The question this chapter answers is: how do you set up a project once so that these failures cannot happen? The answer is a folder layout, a control file, and a few habits, and it takes about ten minutes to put in place.
+You wrote a do-file that ran perfectly last month. Today it dies on your coworker's laptop over a hard-coded path, and you cannot remember which of three folders holds the version that made the figure the client already saw. The fix is not discipline you have to remember; it is a workshop laid out so the right thing is the easy thing.
 
-We build the setup in the order you would do it: install the packages, lay out the folders, write the control file that holds every path in one place, and adopt the numbered-pipeline convention that lets the whole project rebuild with one command. Every habit here is an investment in the first two promises, replicable and extensible, paid once and returned on every project after.
+This chapter builds that workshop. We set one folder pattern for every project, replace spreadsheet analysis with code, buy back the iteration speed that makes reproducibility bearable, and record enough that any run can be repeated. Each habit here is an investment in the first two promises, replicable and extensible, paid once and returned on every project after.
 
-\section{Install once: the packages the book uses}
-Before anything else, install the community packages the examples call. Doing this in a single, rerunnable do-file (rather than by hand, one \texttt{ssc install} at a time) means a new teammate reproduces your environment by running one file. The companion \texttt{01\_install.do} does exactly this; its core is a loop that skips anything already present:
-{\footnotesize
-\begin{verbatim}
-foreach pkg in estout coefplot gtools reghdfe getcensus {
-    capture which `pkg'
-    if _rc ssc install `pkg', replace
-}
-\end{verbatim}
-}
-Recording the environment in code, not in a memory or a wiki page, is the part of replicability that beginners skip and experts never do. When you file a bug or ask for help, the same discipline produces a minimal working example with \texttt{writeinput}, which turns the data in memory into a self-contained \texttt{input} block others can run.
+\section{One folder pattern for every project}
+Every project gets the same skeleton: a numbered pipeline of do-files (\texttt{100\_ingest}, \texttt{200\_clean}, and so on through \texttt{600\_report}), a single master control do-file that runs them in order, and a strict separation between run-specific parameters (cohort dates, site filters, file paths) and the logic that consumes them. When the layout is identical across projects, a teammate opening a new repository already knows where ingestion lives and where the report is built, and next quarter's rerun is a matter of changing the master file's parameters rather than hunting through scripts.
 
-\section{One control file for every path and preference}\label{sec:control}
-The single most useful file in a project is the control file. It does three jobs: it sets every path in one place, so moving the project to a new machine means editing one line; it sets project-wide preferences once, so every do-file behaves the same; and it can run the whole pipeline in order. Here is the heart of the companion \texttt{00\_control.do}:
-{\footnotesize
-\begin{verbatim}
-clear all
-version 18                  // pin the language version for reproducibility
-set more off
-set varabbrev off           // require full variable names; abbreviations hide bugs
+Cross-platform paths are the other half of survival. A shared do-file that hard-codes \texttt{C:\textbackslash Users\textbackslash...} breaks the moment it opens on a Mac, so we resolve the shared-drive root once, into a global, and reference everything relative to it. That single habit is what lets the same code run unedited on a Windows laptop and a Mac, which is the concrete meaning of extensible across people, not just across time.
 
-* THE ONE PLACE YOU EDIT: point this at your project folder.
-global root "REPLACE/WITH/YOUR/PATH"
-
-* Everything else is derived from root; you never touch these.
-global raw     "$root/raw"        // untouched downloads
-global clean   "$root/clean"      // analysis-ready data
-global code    "$root/code"       // the do-files
-global output  "$root/output"     // logs and tables
-global figures "$root/figures"    // exported graphs
-foreach f in raw clean output figures {
-    capture mkdir "${`f'}"        // create any missing folder; safe to rerun
-}
-
-set scheme s2color                // one graphics style for the whole project
-\end{verbatim}
-}
-Now every downstream do-file refers to \texttt{\$clean} and \texttt{\$figures} rather than a literal path, so a script written on a Mac runs unedited on a Windows laptop once the one \texttt{root} line is changed. Pinning \texttt{version} and turning off \texttt{varabbrev} are small reproducibility insurance: the first makes today's code behave the same next year, the second turns a silently-wrong abbreviation into a clear error. This one file is the concrete meaning of \emph{extensible across people}, not just across time.
-
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}[node distance=0.35cm]
-  \node[substep, text width=3.2cm] (c) {\texttt{00\_control.do}\\\scriptsize sets \$root, \$clean, \dots};
-  \node[stage, below=of c, text width=2.6cm] (i) {\texttt{100\_ingest}};
-  \node[stage, below=0.3cm of i, text width=2.6cm] (cl) {\texttt{200\_clean}};
-  \node[stage, below=0.3cm of cl, text width=2.6cm] (a) {\texttt{300\_analyze}};
-  \node[stage, below=0.3cm of a, text width=2.6cm] (r) {\texttt{600\_report}};
-  \draw[flow] (c) -- (i);
-  \draw[flow] (i) -- (cl);
-  \draw[flow] (cl) -- (a);
-  \draw[flow] (a) -- (r) node[midway, right, font=\sffamily\scriptsize] {\;\dots};
-\end{tikzpicture}
-\caption[The numbered pipeline]{The numbered pipeline. The control file sets the paths, then sources each stage in order. Numbering by hundreds leaves room to insert a \texttt{150\_} step later without renaming everything.}
-\label{fig:numbered}
-\end{figure}
-
-\section{The numbered pipeline}
-Give the project's do-files numbered names that sort into the order they run: \texttt{100\_ingest}, \texttt{200\_clean}, \texttt{300\_analyze}, up to \texttt{600\_report} (Figure~\ref{fig:numbered}). Numbering by hundreds leaves gaps, so a new step slots in as \texttt{250\_} without renaming the rest. The control file ends with an optional block that runs them all:
-{\footnotesize
-\begin{verbatim}
-local run_all 0                    // flip to 1 to rebuild the whole project
-if `run_all' {
-    do "$code/01_install.do"
-    do "$code/20_ch03_apis.do"
-    * ...each stage, in order...
-}
-\end{verbatim}
-}
-The payoff is that the entire project rebuilds from raw download to final figure with one switch, which is the operational definition of replicable. When a reviewer asks where a number came from, the honest and fast answer is \enquote{run the pipeline and watch it appear,} not \enquote{let me find the right spreadsheet.}
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{projectbuilder}]
+\textbf{Proposed program:} \texttt{projectbuilder}. Scaffolds the standard directory tree, the global-macro hub, and the master do-file described here, so a new project starts consistent instead of improvised. Pairs with \texttt{driveuse} for cross-platform path resolution.
+\end{kaobox}
 
 \section{Excel is a format, not a calculator}
-Spreadsheets are where good evaluations quietly go wrong. A hard-coded cell edit, a sort that scrambles rows, a formula that stops at row 999: none of these leave a trace, and none can be reproduced on next month's file. The rule is a single sentence worth taping to the monitor: Excel is a format, not a calculator. It is a fine way to receive data and a fine way to deliver it (Chapter~\ref{ch:sheets}), and it is never where a number is computed.
+Spreadsheets are where good evaluations quietly go wrong. A hard-coded cell edit, a sort that scrambles rows out of alignment, a formula that silently stops at row 999: none of these leave a trace, and none can be reproduced on next month's file. Our rule is a single sentence worth taping to the monitor: Excel is a format, not a calculator. It is a fine way to receive data and a fine way to deliver it, and it is never the place where a number is computed.
 
-Every step from the raw CSV to the final figure runs in code, where it can be read, reviewed, and rerun. That is the difference between telling a skeptical client \enquote{trust me} and telling them \enquote{rerun me,} and it is the foundation the rest of the book's replicability stands on.
+Every step from the raw CSV to the final figure runs in code, where it can be read, reviewed, and rerun. That is the difference between telling a skeptical client \enquote{trust me} and telling them \enquote{rerun me}, and it is the foundation the rest of the book's replicability stands on. When a deliverable has to live in a spreadsheet, we build it from Stata (Chapter~\ref{ch:sheets}) so the spreadsheet is an output of the pipeline, not a detour around it.
 
 \section{Speed you will actually notice}
-Reproducibility is only bearable if a rerun is quick, so speed is a reproducibility feature, not a luxury. On files with millions of rows, the community packages \texttt{gtools} and \texttt{ftools} turn \texttt{collapse} into \texttt{gcollapse} and \texttt{egen} into \texttt{gegen} for large speed-ups, and \texttt{reghdfe} absorbs high-dimensional fixed effects that would otherwise stall. The bigger lever is filtering on import: the STAAR pipeline (Appendix~\ref{app:walkthroughs}) reads fourteen files of roughly 400\,MB each but keeps only the rows it needs, so the full file never sits in memory.
+Reproducibility is only bearable if a rerun is quick, so speed is a reproducibility feature, not a luxury. On administrative files with millions of rows, the community packages \texttt{gtools} and \texttt{ftools} (which compile core operations in C) turn \texttt{collapse} into \texttt{gcollapse} and \texttt{egen} into \texttt{gegen} for order-of-magnitude gains, and \texttt{reghdfe} absorbs high-dimensional fixed effects that would otherwise stall. The larger lever is filtering on import: the STAAR ingest loop (Appendix~\ref{app:walkthroughs}) reads fourteen files of roughly 400\,MB each but keeps only the school-level, Grade 4 and 8, all-students rows, so the full file never occupies memory at once.
 
-For teams on standard Stata, disciplined memory habits do most of the work: drop unneeded variables and rows right after ingestion, run \texttt{compress} before saving, and benchmark before optimizing. A pipeline that reruns in minutes gets rerun; one that takes a day gets patched by hand, and hand-patching is where reproducibility dies.
+For teams on standard Stata without the multi-processor edition, disciplined memory habits do most of the work: drop unneeded variables and rows immediately after ingestion, run \texttt{compress} before saving, and benchmark before optimizing so effort lands where the runtime actually is. The payoff is that a pipeline which reruns in minutes gets rerun, while one that takes a day gets patched by hand, and hand-patching is where reproducibility dies.
 
-\paragraph{Where this leaves you.} Your projects now have a folder layout, a control file that holds every path in one place and rebuilds the pipeline on command, and habits that keep reruns fast and honest. Those are the replicable and extensible promises, banked once for every project ahead. Part~II turns to filling the project with data, beginning with the public APIs in Chapter~\ref{ch:apis}.
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{gtools\_audit}]
+\textbf{Proposed program:} \texttt{gtools\_audit}. Scans a do-file for standard commands (\texttt{collapse}, \texttt{egen}, and the like) that have faster \texttt{gtools}/\texttt{ftools} equivalents and estimates the time saved, so speed-ups are targeted rather than guessed.
+\end{kaobox}
+
+\section{Recording what you did}
+A run you cannot repeat is an anecdote, so the workshop records itself. A log file captures what happened; version control on the do-files captures how the code got there; and a dependency step captures the environment, because a pipeline that silently needs an uninstalled package is not replicable on anyone else's machine. The command \texttt{usepackage} scans a do-file and installs the user-written packages it calls, so a new teammate can reproduce the analysis without a scavenger hunt.
+
+When something does go wrong and you need help, the fastest path is a minimal working example: a self-contained snippet of data plus code that reproduces the problem and nothing else. The \texttt{writeinput} command turns the dataset in memory (or a small subset) into a reproducible \texttt{input} block, which is the courtesy that gets questions answered on Statalist and the discipline that often reveals the bug before you have to ask. Recording the environment this way is the part of replicability that beginners skip and experts never do.
+
+\paragraph{Where this leaves you.} Your projects now have a layout that survives a new laptop and a new teammate, a no-spreadsheet rule with an audit trail, speed that makes reruns routine, and a record complete enough to repeat. Those are the replicable and extensible promises, banked once for every project ahead. With the workshop standing, Part~II turns to filling it with data, beginning with the public APIs in Chapter~\ref{ch:apis}.
 
 %----------------------------------------------------------------------------------------
 % PART II
 %----------------------------------------------------------------------------------------
 
-\addpart{Part II: Getting the Data \newline APIs, Scrapes, Surveys, and Longitudinal Data}
+\addpart{Part II: Getting the Data \newline APIs, Scrapes, Surveys, and Panels}
 
 \chapter{Downloading public data through APIs}\label{ch:apis}
 
 The funder wants a line in the report about how your program's counties compare to the state on child poverty. The number exists at \texttt{census.gov}, and you have twenty minutes before the draft is due. An application programming interface, or API, is the door that makes twenty minutes enough: a web address you can query from Stata and get data back, no browser and no copy-paste.
 
-This chapter teaches the grammar of that door once, then the vocabulary of the agencies worth knowing: Census, education, economic, and health data, each reachable from Stata with a package, a native command, or a few lines of Python. The worked example in Section~\ref{sec:qcew} downloads real county wage data and builds the figure on the facing page, start to finish, with no key. The point throughout is that a scripted download is a replicable download: the number in the report rebuilds next year by rerunning the same lines, which a screenshot never can.
+This chapter teaches the grammar of that door once and then the vocabulary of the agencies worth knowing: Census, education, economic, and health data, each reachable from Stata with a package, a native command, or a few lines of Python. We close with the three general routes that cover any API you meet later. The point throughout is that a scripted download is a replicable download; the number in the report can be rebuilt next year by rerunning the same lines, which a screenshot never can.
 
 \section{The shape of an API request}
 Almost every data API is the same object underneath: a base URL, a path that names the dataset, and a query string of parameters that names the slice you want. Some return comma-separated text you can read directly; others return JSON, a nested text format that needs one parsing step. Many require a free key, a short string that identifies you to the server. The key belongs in your \texttt{profile.do} as a global macro, never pasted into shared code, because a key in a public repository is a key someone else will spend.
@@ -435,7 +327,7 @@ educationdata using "school ccd directory", meta
 }
 The \texttt{sub()} option subsets on the server so you download only what you need, and \texttt{meta} returns the codebook without downloading data at all. Someone else has already done the cross-year name harmonization that Chapter~\ref{ch:panels} treats as hard-won; here it arrives as a gift, and the panel lands analysis-ready. That is extensibility bought cheaply: add a year to \texttt{sub()} and the panel grows.
 
-\section{Economic series with import fred}
+\section{Economic series with import fred and BLS flat files}
 Economic context, unemployment and wages, is what nearly every workforce or place-based evaluation needs for its comparison story. Stata reads the Federal Reserve's FRED database natively, no package required:
 {\footnotesize
 \begin{verbatim}
@@ -443,77 +335,29 @@ set fredkey YOUR_KEY, permanently
 import fred TXUR CAUR NYUR, daterange(2010-01-01 .) clear
 \end{verbatim}
 }
-FRED returns wide data, one column per series, so a \texttt{reshape long} is the first teaching moment in panel construction. FRED needs a free key (Appendix~\ref{app:setup}); the next source needs none at all.
-
-\section{A worked example: county wages from the BLS, no key}\label{sec:qcew}
-The question a workforce board actually asks is concrete: what does a job pay here, compared with the metros we compete with? The Bureau of Labor Statistics answers it through the Quarterly Census of Employment and Wages (QCEW), and it posts the data as plain CSV files, one per county-year, that Stata reads directly from a URL with no key. Each file is downloaded by a single \texttt{import delimited}. To compare five Texas metros we loop over their county FIPS codes and keep the one row we want, the total private-sector line (ownership code~5, industry code~10):
+FRED returns wide data, one column per series, so a \texttt{reshape long} is the first teaching moment in panel construction. For county-by-industry detail, the Bureau of Labor Statistics posts Quarterly Census of Employment and Wages (QCEW) slices as plain CSVs with no key at all, which makes the cleanest replicable loop in the book:
 {\footnotesize
 \begin{verbatim}
-local counties 48453 48201 48113 48029 48439   // Travis Harris Dallas Bexar Tarrant
-tempfile master
-local first 1
-foreach fips of local counties {
-    import delimited ///
-        "https://data.bls.gov/cew/data/api/2023/1/area/`fips'.csv", ///
-        clear varnames(1) stringcols(1 3)
-    keep if own_code == 5 & industry_code == "10"      // total, private sector
-    keep area_fips avg_wkly_wage month3_emplvl
-    if `first' local first 0
-    else       append using `master'
-    save `master', replace
-}
+import delimited "https://data.bls.gov/cew/data/api/2024/1/area/48453.csv", clear
 \end{verbatim}
 }
-One detail earns a comment. We force columns~1 and~3 (the county FIPS code and the industry code) to import as strings with \texttt{stringcols(1 3)}, because they are identifiers, not quantities: read as numbers, \texttt{"48453"} would keep its value but \texttt{"10"} could collide with other codes, and leading zeros in smaller FIPS codes would vanish. Reading identifiers as text is a habit that prevents a whole class of silent merge failures later.
+Loop that line over years, quarters, and area FIPS codes and you have assembled a county-quarter wage panel that anyone can rebuild from the same URLs. Zero keys and a plain \texttt{import delimited} is as replicable as data acquisition gets.
 
-After labeling each county for a client-readable chart, the extract is five rows, and the numbers are real:
+\section{Health and community context: PLACES and County Health Rankings}
+Small-area health estimates make community need visible to a funder who thinks in counties. The CDC's PLACES project models roughly forty health measures down to the tract, served through Socrata endpoints that emit CSV directly, so no parsing bridge is needed:
 {\footnotesize
 \begin{verbatim}
-    county                 month3_emplvl   avg_wkly_wage
-    Harris (Houston)            2129826            1,900
-    Travis (Austin)              660281            1,862
-    Dallas                      1644115            1,839
-    Tarrant (Ft. Worth)          872936            1,391
-    Bexar (San Antonio)          764432            1,270
+import delimited ///
+  "https://data.cdc.gov/resource/i46a-9kgh.csv?$limit=5000&stateabbr=TX", clear
 \end{verbatim}
 }
-This makes sense: Houston, Austin, and Dallas anchor the state's corporate and technology payrolls, while Fort Worth and San Antonio sit several hundred dollars a week lower, a gap of roughly a third. A workforce board reading this sees immediately that a training program aiming at the regional wage will look very different in Bexar than in Harris. One \texttt{graph hbar} turns the extract into the exhibit:
-{\footnotesize
-\begin{verbatim}
-graph hbar (asis) avg_wkly_wage, over(county, sort(1) descending) ///
-    blabel(bar, format(%9.0fc)) bar(1, color(navy)) ///
-    ytitle("Average weekly wage, private sector ($), 2023 Q1")
-graph export "$figures/ch03_qcew_wages.png", replace
-\end{verbatim}
-}
+The query parameters after the \texttt{?} are the teaching point, and one of them is a trap worth a warning.
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{ch03_qcew_wages.png}
-\caption[County wages from the BLS QCEW]{Average private-sector weekly wage across five Texas metro counties, 2023 Q1, built end to end by \texttt{20\_ch03\_apis.do} from public BLS data with no API key. The command that made this figure is printed above it; change the county codes or the year and it rebuilds.}
-\label{fig:qcew}
-\end{figure}
-
-The whole example, download to figure, is one short do-file (\texttt{20\_ch03\_apis.do}) that anyone can rerun from the same URLs. Loop the same code over more quarters and years and the five-row snapshot becomes a county-quarter panel, which is where Chapter~\ref{ch:panels} picks it up. Zero keys and a plain \texttt{import delimited} is as replicable as data acquisition gets, and the payoff is a comparison the board did not have before.
-
-\section{Health and community context: County Health Rankings and PLACES}
-Small-area health estimates make community need visible to a funder who thinks in counties. County Health Rankings publishes an annual analytic file, one row per county, at a stable per-year URL, so a plain \texttt{copy} then \texttt{import} pulls a national county dataset of premature death, child poverty, and clinical-care measures with no key and no login:
-{\footnotesize
-\begin{verbatim}
-copy "https://www.countyhealthrankings.org/sites/default/files/media/document/analytic_data2024.csv" ///
-     "$raw/chr2024.csv", replace
-import delimited "$raw/chr2024.csv", clear varnames(1)
-\end{verbatim}
-}
-The download is a real one, roughly 3{,}200 counties and several hundred columns, and its header is the kind of thing you meet constantly: the file's first data row is a second label row, and the column names are long phrases like \texttt{Premature Death raw value} that Stata munges into \texttt{prematuredeathrawvalue}. Cleaning that (dropping the label row, renaming the handful of columns you need) is the harmonization work of Chapter~\ref{ch:panels}, previewed here so the download does not look tidier than it is.
-
-The CDC's PLACES project is the other standing source, modeling roughly forty health measures down to the tract through Socrata endpoints that emit CSV directly. Socrata is worth knowing, and it carries two traps worth a boxed warning, one of them specific to Stata.
-
-\begin{vizcallout}[Two Socrata traps: the \$ collision and silent truncation]
-First, Socrata's row filter is spelled \texttt{\$limit}, and Stata reads \texttt{\$} as the start of a global macro, so \texttt{"...?\$limit=5000"} silently becomes \texttt{"...?=5000"} and the download fails. Build the URL with \texttt{char(36)} to insert a literal dollar sign: \texttt{local u = "...?" + char(36) + "limit=5000\&stateabbr=TX"}, then \texttt{import delimited "`u'"}. Second, without a limit Socrata returns only the first 1{,}000 rows, so a state's worth of tracts arrives truncated but looks complete. Set the limit above your expected row count and confirm \texttt{\_N} after import. Both are the kind of error that survives all the way to a published table.
+\begin{vizcallout}[Watch out: the \$limit trap]
+Socrata endpoints return only 1,000 rows by default. Ask for a state's worth of tracts without \texttt{\$limit} and you will silently receive a truncated file that looks complete. Always set \texttt{\$limit} above your expected row count and confirm the count after import. Silent truncation is the kind of error that survives all the way to a published table.
 \end{vizcallout}
 
-These sources serve the actionable promise: they turn \enquote{this community has real need} from an assertion into a number a board can act on.
+County Health Rankings publishes an annual analytic CSV at a stable per-year URL, so the same \texttt{copy}-then-\texttt{import} loop builds a multi-year county panel of premature death, child poverty, and clinical-care measures with no login. These sources serve the actionable promise: they turn \enquote{this community has real need} from an assertion into a number a board can act on.
 
 \section{Three routes from Stata to any API}\label{sec:threeroutes}
 Every API you will meet reduces to one of three routes, a pattern drawn from the authors' Stata Journal work on connecting Stata to web services. The first route is a bare \texttt{import delimited} from a URL, which works whenever the endpoint returns CSV and needs no authentication, as PLACES and QCEW do above. The second route, for endpoints that require an authorization header or return nested JSON, is a short \texttt{python:} block that uses the \texttt{requests} library to fetch and the Stata Function Interface to hand the parsed rows back to Stata. The third route runs the other direction, using \texttt{file write} to post data out to a web service.
@@ -657,11 +501,11 @@ The value is extensibility across time and staff turnover: when a new analyst as
 
 \paragraph{Where this leaves you.} You can now auto-download responses from the platforms evaluators use, watch response rates while a survey is live, carry question meaning into the data, build scales and percent-agree indicators reproducibly, diagnose nonresponse, and track an instrument across waves. Those serve replicable, extensible, and the most operational form of actionable. Chapter~\ref{ch:panels} takes the data you have gathered, from APIs, scrapes, and surveys, and assembles it into panels you can defend.
 
-\chapter{Building longitudinal data you can trust}\label{ch:panels}
+\chapter{Building panels you can trust}\label{ch:panels}
 
-Two agency files sit on your desk: student rosters from the education agency, wage records from the workforce agency. They describe the same people and share no common identifier, and the merge you build will have to survive an auditor asking how you knew these two rows were the same person. Linking data across sources and stacking it across years is where most administrative evaluation questions are actually won or lost.
+Two agency files sit on your desk: student rosters from the education agency, wage records from the workforce agency. They describe the same people and share no common identifier, and the merge you build will have to survive an auditor asking how you knew these two rows were the same person. Linking and shaping data is where most administrative evaluation questions are actually won or lost.
 
-This chapter builds longitudinal data you can defend, the kind that follows the same units across time (what Stata calls a panel). We link files with no shared key, treat crosswalks as data, trace every variable to its source, refuse bad data loudly, reshape into analysis-ready panels, and handle missingness honestly. The through-line is that a dataset is only as trustworthy as its construction is documented, so every step here leaves a record, which is replicability applied to the most error-prone part of the pipeline.
+This chapter builds panels you can defend. We link files with no shared key, treat crosswalks as data, trace every variable to its source, refuse bad data loudly, reshape into analysis-ready panels, and handle missingness honestly. The through-line is that a panel is only as trustworthy as its construction is documented, so every step here leaves a record, which is replicability applied to the most error-prone part of the pipeline.
 
 \section{Merging the unmergeable}
 When two files share no identifier, we link them probabilistically, and we do it in a way that shows its work. Clean the names on both sides (lowercase, strip suffixes, expand common nicknames so \enquote{Bob} can meet \enquote{Robert}), block on something cheap like birth year to cut the number of candidate pairs, score the remaining pairs with a string distance such as Jaro-Winkler, and set two thresholds: accept high-confidence matches automatically and route the ambiguous middle band to human review. Storing the similarity score as a variable lets you run the analysis again at a stricter threshold to see whether the finding holds, which turns a judgment call into a sensitivity test.
@@ -814,12 +658,12 @@ The reason to bind our own hands is that an embedded shop trades on credibility,
 
 Your finding is real, and your graph is the reason nobody saw it: three colors of gridline, a legend the reader has to decode, and a message buried under decoration. For most audiences the graph is the finding, because the graph is what they actually look at, so a chapter on communication has to start here.
 
-This chapter treats a graphic as an argument, not a decoration, and works through the handful of choices that decide whether the argument lands: what to strip away, how to show distributions and categories so they read at a glance, how to draw coefficients instead of tabling them, how to put a story line on a trend, and how to write a caption that carries the finding on its own. The aim is a graph a busy program officer understands in the few seconds they will give it, which is the accessible promise made visual.
+This chapter treats graphics as arguments, following Nick Cox and Edward Tufte in spending ink on data and almost nothing else. We cover the data-ink budget, distributions and categories that read at a glance, coefficients drawn instead of tabled, trends with a story line, and captions that carry the finding on their own. The aim is graphs a busy program officer understands in the few seconds they will give it, which is the accessible promise made visual.
 
-\section{Spend ink on the data}
-The goal of an evaluation graphic is narrow: get one finding into a busy reader's head in a few seconds. The way to do it is to spend the reader's attention on the data and almost nothing else. Strip the redundant gridlines, boxes, and heavy tick labels; label the lines directly instead of making the reader decode a legend; and choose colors that stay distinct for the roughly one reader in twelve with color vision deficiency. This matters because for most audiences the graph \emph{is} the finding, and every mark that is not data is attention taken from the result.
+\section{The data-ink budget}
+Every mark on a graph competes for the reader's attention, so the working rule is to spend ink on the data and strip nearly everything else. Redundant gridlines, boxes, and heavy tick labels are attention taken from the result; direct labels on the lines beat a legend the reader has to cross-reference; and colorblind-safe palettes with real contrast keep the graph legible to the roughly one reader in twelve who would otherwise lose a series. These are not matters of taste but of whether the finding lands.
 
-A second habit separates a decorative chart from an honest one: know what each graph type hides as well as what it shows. Take two diagnostics an evaluator makes constantly. A residual scatter (fitted values against what the model missed) should look like a shapeless, patternless cloud; a pattern in it is a warning that the model is wrong, so here no visible structure is the good news. An observed-versus-fitted plot is the opposite kind of chart: it tends to look reassuring even when the model is poor, because plotting a variable against a version of itself always trends upward. So we use it, but we read it knowing it flatters. Naming both what a chart shows and how it can mislead is what keeps a graph honest evidence rather than decoration.
+Each graph type also carries a characteristic failure, and knowing it is half of using the type well. Cox's aphorism for residual scatter, \enquote{no news is good news,} names what a good one shows: an even, patternless cloud. His warning about the observed-versus-fitted plot is the counterpart, it flatters, making even a poor model look reasonable, so we read it knowing it is an optimistic view. Naming both the reading and the failure mode for each chart is what turns a graph from decoration into evidence.
 
 \section{Distributions and categories that read at a glance}
 Survey results in particular die in stacked-bar noise, so the categorical graphs get special care. Cox's \texttt{catplot} and \texttt{statplot} lay out categorical distributions cleanly, and for Likert items a diverging bar, centered between agreement and disagreement, shows the balance of opinion far better than a stack that makes the reader do arithmetic. The point is to choose the layout that lets the pattern show itself rather than forcing the reader to reconstruct it.

@@ -1,457 +1,337 @@
-# Embedded Evaluation: Stata Tools for Applied Research and Evaluation
+# Book Plan (July 2026 overhaul): Applied Evaluation Using Stata
 
- 
----
+This plan replaces the June 2026 plan. It reorganizes the book around the workflow of an embedded evaluator, moves causal methods down to a single section plus a reference appendix, and elevates the material practitioners reach for weekly: public-data APIs, survey platform automation, panel construction, infographic-quality graphics, and client-ready deliverables in Excel, Google Sheets, and self-contained HTML. The prior draft and plan are preserved in `BookManuscript_ARCHIVE_20260704_0032.tar.gz`.
 
-## 1. The Marketable Hook: The Embedded Evaluator
-Updated objective/framing: 
-Instead of positioning the book as a standard Stata software manual, we reposition it around the identity of the **Embedded Evaluator**—the practitioner-researcher who serves as a strategic partner inside foundations, think-tanks, non-profit programs, and public agencies doing applied, actionable, and accessible research and evaluation work in real-world program and policy evaluation contexts often employing researcher-practitioner approaches.  The book should embrace this view point of a research building stata-centric workflows and bootstrapped , free/low cost tools. The toolkit is stata centric but embraces llm tech carefully and ethically, tools to visualize results dynamically/interactively, and tools to quickly scarpe public data or survey data software (via apis, etc). 
-
-### Core Narrative Hook
-*   **The Dilemma:** Academic textbooks teach econometrics under the assumption of clean, static datasets, infinite compute time, and neutral political settings. Real-world evaluation is the opposite: data arrives late as forty fragmented, unharmonized spreadsheets, the program director needs an answer by Friday morning, and the results carry high funding and policy stakes.
-*   **The Stance (BLUF):** This book bridges the gap between causal econometrics and public sector data engineering. It demonstrates how to use Stata as a command center to ingest messy data, run modern causal models (staggered DiD, synthetic controls, debiased ML), verify algorithmic fairness, and output interactive, self-contained reports that require no server infrastructure.
-
-### The Client-Empathy Lens and Client-Facing Toolkit
-A key thesis of this revision is the shift from *evaluator as auditor* to *evaluator as empathetic partner*. Causal rigor is useless if the client rejects the findings due to a defensive reaction to "bad news." This book introduces a client-facing toolkit that leverages Stata-centric automation to build trust:
-*   **Staff Literacy:** Using Stata's `codebook` and `labelbook` output to generate interactive, plain-language data dictionaries so front-line program staff understand *why* data quality matters.
-*   **Quick Wins:** Automating the "Monday Morning Update" to provide program managers with operational metrics (using `collect` and `putexcel`) before causal findings are finalized.
-*   **Collaborative Logic Modeling:** Using Stata-orchestrated LLM checklists (`evalpreflight`) to de-risk logic models and establish measurement plans *with* the client before data collection begins.
-*   **Empathic Survey Design:** Implementing automated survey suite tools (`surveytracker`, `likertscale`) to minimize respondent burden and present clean, scannable data summaries that respect the client's time.
-*   **Source Transparency:** Utilizing data source tagging (`srctag`, `srcfind`) to prove variable lineage to skeptical agency clients, showing exactly how raw administrative databases map to final policy findings.
+Three research inputs shaped the changes. First, a genre study of thirteen Stata Press books: workflow books there are ordered as the reader's production pipeline, use gerund chapter titles, run 8 to 16 chapters, and close with reporting and protection chapters. Second, style field guides built from Gelman, Hill, and Vehtari's *Regression and Other Stories* and from Nick Cox's *Speaking Stata* columns; their concrete moves are folded into the style contract below. Third, an inventory of the authors' existing tools, worked examples, and public data sources, so every chapter is anchored to assets that exist or are honestly flagged as still to build.
 
 ---
 
-## 2. Refined Chapter-by-Chapter Outline
+## 1. Positioning: the shelf gap and the hook
 
-The book is structured into five parts, moving from foundational environments to survey instrumentation, complex causal analysis, data governance, dynamic reporting, and custom package development. 
+**The gap.** Stata Press has intake books (Mitchell's *Data Management Using Stata*), output books (*Create and Export Tables Using Stata*), and estimation books (Cameron and Trivedi). No title spans design to deliverable for evaluators, and none treats the internet-facing work (APIs, survey platforms, web reports) that fills a working evaluator's week. Long's *Workflow of Data Analysis Using Stata*, the closest ancestor, is seventeen years old. This book claims that empty shelf space.
 
-```mermaid
-graph TD
-    classDef part fill:#14776A,stroke:#fff,stroke-width:2px,color:#fff;
-    classDef chap fill:#FBF1DF,stroke:#B5651D,stroke-width:1px,color:#7A3E0E;
-    
-    Part1[Part I: The Embedded Stack]:::part --> Ch1(Chapter 1: Strategic Evaluation & MDE):::chap
-    Part1 --> Ch2(Chapter 2: High-Performance Setup):::chap
-    Part1 --> Ch3(Chapter 3: Governed AI Integration):::chap
-    
-    Part2[Part II: Data Engineering & Surveys]:::part --> Ch4(Chapter 4: Ingestion & API Pipelines):::chap
-    Part2 --> Ch5(Chapter 5: Harmonization & Tagging):::chap
-    Part2 --> Ch6(Chapter 6: Survey Suite & Nonresponse):::chap
-    Part2 --> Ch7(Chapter 7: Ethics, Privacy & Synthetic Data):::chap
-    
-    Part3[Part III: The Causal Frontier]:::part --> Ch8(Chapter 8: Modern Staggered DiD):::chap
-    Part3 --> Ch9(Chapter 9: Cutoffs & ITS):::chap
-    Part3 --> Ch10(Chapter 10: Synthetic Controls & SDID):::chap
-    Part3 --> Ch11(Chapter 11: ML & Algorithmic Fairness):::chap
-    Part3 --> Ch12(Chapter 12: Cost-Effectiveness & ROI):::chap
-    
-    Part4[Part IV: Communication]:::part --> Ch13(Chapter 13: Tuftean Visualizations):::chap
-    Part4 --> Ch14(Chapter 14: Offline Web Portals):::chap
-    
-    Part5[Part V: Tool Building]:::part --> Ch15(Chapter 15: Scripts to Packages):::chap
-    Part5 --> Ch16(Chapter 16: Mata-er Scalability):::chap
-```
+**The hook stays: the embedded evaluator.** Academic texts assume clean data, patient timelines, and neutral audiences. The embedded evaluator gets forty inconsistent spreadsheets on Thursday, a funder question due Monday, and findings with money attached. The book equips that person to run everything from one Stata command center: pull the data by API, assemble a trustworthy panel, answer the question at the right level of rigor, and hand the client something they can open, use, and keep.
 
-### Part I: The Embedded Stack: Principles, Speed, and Environment
-*   **Chapter 1: Strategic Evaluation in Implementation Science**
-    *   *Section 1.1: The Practitioner-Researcher Relationship*
-        *   Managing Power Dynamics in Embedded Evaluation (Data ownership, "bad news" problem)
-        *   Building Evaluation Literacy with Staff (Data dictionaries, `codebook, compact`, `labelbook`)
-        *   *Applied Example:* From a Funder's Question to a One-Page Answer (using `convertanything`, county rurality crosswalk, `reachcheck`)
-        *   *Ado-file Idea:* `evalaudit` (audits data-sharing agreements, compliance, mandates)
-    *   *Section 1.2: Implementation Science Principles in Practice*
-        *   Iterative Evaluation: The PDSA Cycle in Stata (standardized pipelines `100_` to `600_`)
-        *   *Visualization Callout:* The PDSA Run Chart (`xline()` annotations)
-        *   Contextualizing the Evidence: Using CFIR to Code Site Characteristics
-        *   *Ado-file Idea:* `fidplot` (graphs site-level fidelity metrics against benchmarks)
-    *   *Section 1.3: Stata as the Central Evaluation Brain*
-        *   Bypassing Excel: The Risky Habit of Spreadsheet Analysis
-        *   *Ado-file Idea:* `projectbuilder` (standardizes workspace directories, folder setups, and master controls; with a minor note on `driveuse` for cross-platform path resolution).
-    *   *Section 1.4: Designing for Detectable Effects: Power and the MDE*
-        *   Power for cluster designs, design effects, and `clustersampsi` logic
-        *   *Visualization Callout:* The Power Curve (power vs. sample size/clusters)
-    *   *Section 1.5: Pre-Registration and the Analysis Plan* (hypotheses, primary outcomes, confirmatory vs. exploratory)
-*   **Chapter 2: Setting Up a High-Performance Environment**
-    *   *Section 2.1: The Speed Revolution: `ftools` and `gtools`*
-        *   Benchmarking `gcollapse` vs. `collapse` and multi-way fixed effects with `reghdfe`
-        *   Large Data Workflows without MP (memory limits, `keep`/`drop` early, `compress`)
-        *   *Ado-file Idea:* `gtools_audit` (projects speedups from `gtools`/`ftools` replacements)
-    *   *Section 2.2: Monitoring Real-Time Participation*
-        *   REDCap/Qualtrics APIs, response rates, and attrition alerts
-        *   Early Warning Systems: Statistical Process Control (SPC) (control charts)
-        *   *Visualization Callout:* The Control Chart (time-series, upper/lower control limits)
-        *   *Ado-file Idea:* `reachcheck` (compares demographics to target population, calculates weights)
-    *   *Section 2.3: Communicating with Funders and Stakeholders*
-        *   Automating the Appendix (using Stata's `collect` for secondary tables)
-        *   *Ado-file Idea:* `fundertable` (wrapper for `collect`/`putexcel` for executive summaries)
-    *   *Section 2.4: Integrating AI: The LLM CLI Bridge*
-        *   Prompt Engineering for Evaluators, shell API calls, API key hygiene
-        *   *Package Integration:* `Gemini-stata` (executing prompts from the command line)
-*   **Chapter 3: The Careful Use of AI in Evaluation**
-    *   *Section 3.1: Privacy First: What Never Leaves the Building* (FERPA/HIPAA, local Ollama models)
-        *   *Ado-file Idea:* `ai_privacy_gate` (pre-flight check scanning for PII before transmission)
-    *   *Section 3.2: Hallucination and the Verification Protocol* (gold-standard subset, Kappa threshold)
-        *   *New Tool Integration:* `llmsieve` (LLM consensus and human-in-the-loop agreement auditor)
-    *   *Section 3.3: Reproducibility of Stochastic Output* (pinning versions, temperature 0, response caching)
-    *   *Section 3.4: Prompt Injection and Untrusted Text* (separating system instructions from data)
-    *   *Section 3.5: A Model-Agnostic Posture* (provider-agnostic wrappers)
-    *   *Applied Example:* Coding 5,000 Progress Notes Without Getting Burned (privacy gate, 150 gold standard, Kappa check, caching, disclosure)
+**The four promises.** Every chapter and every tool is measured against four properties, introduced in Chapter 1 and used as recurring language throughout, in the way Gelman repeats "comparisons, not effects":
 
-### Part II: Data Engineering and Survey Instrumentation
-*   **Chapter 4: Advanced Data Ingestion & API Pipelines**
-    *   *Section 4.1: Generalizing the API Handshake in Stata*
-        *   Designing robust Stata-Python workflows for generic web APIs
-        *   Handling authorization headers (OAuth2, Bearer tokens), query parameters, and pagination
-        *   Request throttling, rate limiting, and defensive HTTP parsing (`jsonio` + `requests` in Python)
-        *   *Applied Case Study:* Connecting to the **Zelma.ai API** to scrape and ingest district school test score benchmarks
-        *   *Ado-file Idea:* `redcap_pull` (JSON parsing and variable labeling wrapper)
-    *   *Section 4.2: Unstructured Data: The AI Bridge*
-        *   Sentiment Analysis as an Evaluation Tool
-        *   *Ado-file Idea:* `text2vars` (extracts indicators from progress notes with verification hooks)
-    *   *Section 4.3: Measurement: From Items to Reliable Scales* (Cronbach's alpha, EFA/CFA, sem, IRT)
-*   **Chapter 5: Harmonization, Master Data Management & Source Tagging**
-    *   *Section 5.1: Merging the Unmergable* (probabilistic matching, string distance, Jaro-Winkler)
-        *   Spatial Joining without GIS (lat/long nearest-neighbor, Haversine distance)
-        *   *Applied Example:* Linking Two Agency Files With No Common ID
-        *   *Ado-file Idea:* `fuzzymatch_pro` (reclink extension, Jaro-Winkler, Merge Quality Report)
-    *   *Section 5.2: Data Governance in Multi-Dataset Environments*
-        *   The lineage problem: tracking variable history across combined agency databases (TEA, TWC, etc.)
-        *   Standardizing source tags inside variable characteristics
-        *   *Package Integration:* `srctag` (data source tagging) and `srcfind` (source searching library auditor)
-    *   *Section 5.3: Longitudinal Panel Construction* (wide reshaping, lineage crosswalks)
-        *   Transition Matrices: Visualizing Participant Movement (tracking states across periods)
-        *   *Visualization Callout:* The Sankey Flow (using `statashiny` widget)
-        *   *Ado-file Idea:* `trackflow` (Sankey flow-data shaper)
-    *   *Section 5.4: Missing Data and Multiple Imputation* (diagnosing patterns, MAR, `mi set`/`impute`)
-        *   *Visualization Callout:* The Missingness Map (heatmap of missing variables)
-    *   *Section 5.5: Weighting for Representativeness* (svyset, post-stratification, raking)
-*   **Chapter 6: Modern Survey Instrumentation & Nonresponse Bias**
-    *   *Section 6.1: API Ingestion & Metadata Automation*
-        *   Qualtrics and Google Forms APIs; pulling raw columns and value metadata into Stata
-        *   Mapping survey questions directly to Stata variable characteristics (`char define`)
-        *   *Package Integration:* `surveytracker` (longitudinal item/construct tracker)
-    *   *Section 6.2: Auto-Encoding & Scale Simplification*
-        *   Automating categorical string encoding and value labeling off platform metadata
-        *   Calculating scale indices, Cronbach's alpha, and collapsed percent-agree variables
-        *   *Package Integration:* `likertscale` (Likert scale auto-processor)
-    *   *Section 6.3: Comprehensive Survey Bias Analysis*
-        *   Item vs. Unit nonresponse diagnostics; modeling missingness patterns
-        *   Calculating post-stratification and raking weights
-        *   *Package Integration:* `nonresponse` (nonresponse bias auditor) and `loebias` (Level-of-Effort survey bias auditor)
-    *   *Section 6.4: Graphing Surveys with Nick Cox's Diagnostics*
-        *   Tufte-style survey visualization tips using `statplot`, `catplot`, and inline `sparkta2`
-*   **Chapter 7: Ethics, Privacy, and Synthetic Data**
-    *   *Section 7.1: The Privacy-Utility Tradeoff* (quasi-identifiers, ZIP, birth date, sex)
-        *   Measuring Re-identification Risk: k-Anonymity and l-Diversity
-        *   *Ado-file Idea:* `riskscan` (scans dataset for potential Quasi-Identifiers and calculates risk metrics)
-    *   *Section 7.2: Synthetic Data Generation* (simulate, AI-driven synthesis, statistical fidelity validation)
-        *   *Ado-file Idea:* `synthgen` (integrates with Python to generate synthetic cohorts)
+- **Replicable.** Anyone on the team can rerun it next month and get the same answer, from raw source to final figure.
+- **Extensible.** The next wave, year, site, or client fits without rewriting; the pipeline grows by parameter, not by copy-paste.
+- **Accessible.** Program staff, funders, and partners can read, open, and understand the outputs without a statistics degree or a software license.
+- **Actionable.** The output tells someone what to do next Monday, in the units they budget and staff in.
 
-### Part III: The Causal Frontier: Non-Standard Policy Analysis
-*   **Chapter 8: Modern Difference-in-Differences**
-    *   *Section 8.1: The Revolution in Staggered Adoption* (TWFE bias, negative weights, staggered timing)
-        *   The Forbidden Regression: Why Simple Interactions Aren't DiD (contaminated controls)
-        *   *Ado-file Idea:* `did_selector` (analyzes treatment timing and suggests `csdid`, `jwdid`, or `did2s`)
-    *   *Section 8.2: Implementing `csdid` and `jwdid`*
-        *   Event-Study Plots and Pre-Trends
-        *   *Visualization Callout:* The Event-Study Plot (relative event time, CIs, zero lines)
-        *   Sensitivity Analysis: `honestDiD` and Oster Bounds (`psacalc` omitted-variable bias)
-*   **Chapter 9: Regression Discontinuity and Interrupted Time Series**
-    *   *Section 9.1: When a Rule Creates a Natural Experiment* (sharp/fuzzy RD, rdrobust, bandwidth)
-        *   Validity checks: manipulation of the running variable (`rddensity`), covariate continuity
-        *   *Visualization Callout:* The RD Plot (binned means, fitted curves on sides of cutoff)
-    *   *Section 9.2: Interrupted Time Series for Single-Site Rollouts* (ITS, level/slope changes, comparative ITS)
-*   **Chapter 10: Synthetic Controls and Matrix Completion**
-    *   *Section 10.1: The Synthetic Control Method (`synth`)*
-        *   In-space and In-time Placebo Tests (falsification tests)
-    *   *Section 10.2: Synthetic Difference-in-Differences (`sdid`)* (unit and time weights)
-        *   *Ado-file Idea:* `sdid_viz` (plotting command overlaying weights and counterfactual trends)
-*   **Chapter 11: Machine Learning and Algorithmic Fairness in Targeting**
-    *   *Section 11.1: Targeting Models with Lasso and Elastic Net* (cvlasso, train/test split)
-        *   Ethics of Prediction: Bias Detection in Targeting (fairness checks, false positive/negative balance)
-        *   *New Tool Integration:* `faircheck` (algorithmic fairness auditor)
-    *   *Section 11.2: Random Forests in Stata* (interactions, variable importance, partial-dependence plots)
-    *   *Section 11.3: Double/Debiased Machine Learning (`ddml` + `pystacked`)*
-        *   *Ado-file Idea:* `cate_explorer` (surfaces Conditional Average Treatment Effects for managers)
-*   **Chapter 12: Cost-Effectiveness and Return on Investment**
-    *   *Section 12.1: The Question Funders Directly Ask* (cost-effectiveness, ROI, perspective-based accounting)
-        *   Monte Carlo simulations of ROI, discounting future benefits
-        *   *Visualization Callout:* The Tornado / Sensitivity Chart (tornado diagram of influence)
-        *   *Ado-file Idea:* `roisim` (takes effect, standard error, cost table, and runs Monte Carlo simulation of ROI)
+Each section's narrative says explicitly which promises it serves and why the reader's partners and audiences benefit. This is a book requirement, not decoration: it is the applied researcher's answer to "why are we doing it this way?"
 
-### Part IV: High-Impact Communication: Visualizations and Portals
-*   **Chapter 13: Innovative and Diagnostic Visualizations**
-    *   *Section 13.1: Sparklines and Micro-charts* (portfolios, inline graphics)
-        *   *Package Integration:* `sparkta2` (high-density inline trend sparklines)
-        *   Maximizing the Data-to-Ink Ratio (Tuftean design, stripping chartjunk, accessibility)
-    *   *Section 13.2: Advanced Coefficient Plots* (`coefplot`, `marginsplot`, predictive margins)
-        *   *Package Integration:* `statplot` (Tufte-inspired statistical plotting)
-        *   *Visualization Callout:* The Small-Multiple Coefficient Plot (by outcome/subgroup)
-*   **Chapter 14: Dynamic Reporting and Self-Contained Web Portals**
-    *   *Section 14.1: Dynamic HTML with `webdoc`* (`webdoc2` Bootstrap-5 compilation wrapper)
-        *   The Self-Contained Project Portal (`statashiny` standalone HTML interactive widgets)
-        *   *Applied Example:* From Do-File to Shareable Project Portal (using projectbuilder, statashiny, webdoc2, wdiframe)
-    *   *Section 14.2: AI-Assisted Narrative Generation & Alignment Tools*
-        *   The 'So What?' Test (finding key outcomes)
-        *   *Ado-file Idea:* `stata2brief` (generates one-page summary briefs via API)
-        *   *New Tool Integration:* `evalpreflight` (Evaluator Pre-flight & Adversarial Review Checklist Generator)
-
-### Part V: Building Tools that Mata-er: Custom Development
-*   **Chapter 15: From Scripts to Systems**
-    *   *Section 15.1: From Scripts to Systems* (sharing team tools, refactoring)
-        *   The 'Package' Mindset: Versioning Internal Tools (`_codeshare` suite, GitHub installation, metadata files)
-        *   *Applied Example:* Turning a One-Off Script Into a Shared Tool (the `dsload` story)
-        *   *Package Integration:* `usepackage` (auto-dependency resolution) and `writeinput` (writing memory to self-contained test scripts)
-    *   *Section 15.2: Writing Help Files (`.sthlp`, SMCL markup, Viewer rendering)*
-*   **Chapter 16: Scalability and the Stata-Mata-Python Trifecta**
-    *   *Section 16.1: Introduction to Mata for Evaluators* (matrix operations, compiled speed)
-        *   The Trifecta Workflow: Stata, Mata, and Python (Stata for data, Mata for matrix, Python for web/APIs/scrapers/LLMs)
-        *   *Package Integration:* `lstrfun` (macro manipulation via Mata)
-        *   *Ado-file Idea:* `mata_bench` (benchmarks Stata loops vs. Mata implementation)
+**What this book is not.** It is not a causal inference text. Causal methods get one working section (8.2) and a quick-reference appendix that routes readers to the right estimator and the right specialist book. The rest of the causal-frontier material from earlier drafts is cut or reduced to pointers (migration map in Section 6 below).
 
 ---
 
-## 3. Technical Specifications for New/Integrated Stata Tools
+## 2. Title proposals
 
-### Tool 1: `loebias` (Level-of-Effort Nonresponse Bias Auditor)
+Stata Press house grammar is "[task noun phrase] Using Stata," with a subtitle that promises a mode of use rather than restating content. Three candidates, in recommended order:
 
-#### Syntax & Options
-```stata
-loebias varlist [if] [in] [weight] , contact(varname) [options]
-```
+1. **Applied Program Evaluation Using Stata: A Practical Workflow from Data to Deliverables.** On-genre, names the audience's task, and the subtitle states the book's actual span (all data, not just public; through to client deliverables). This is the working subtitle now in `main.tex`.
+2. **Evaluation Workflows Using Stata: A Practical Guide for Embedded Researchers.** Leans on the "workflow book" sub-genre signal; keeps the embedded identity in the subtitle.
+3. **Embedded Evaluation: Stata Tools for Applied Research and Evaluation.** The current title. Distinctive but off-genre; if kept, consider adding "Using Stata" to the subtitle for shelf findability.
 
-*   `contact(varname)`: (Required) Integer variable indicating the contact attempt number (e.g., 1, 2, 3, ..., $K$).
-*   `threshold(#)`: Stabilization threshold (absolute change in cumulative estimate). Default is `0.02`.
-*   `ci`: Display confidence intervals on the generated stabilization plot.
-*   `graph`: Produce a cumulative line graph showing the estimate's path toward stabilization.
-*   `saving(filename [, replace])`: Save the cumulative dataset containing attempt-level estimates, standard errors, and cumulative sample sizes.
-
-#### Technical Implementation Details
-`loebias` calculates the cumulative weighted mean (or proportion) of each variable in `varlist` for all observations reached *up to* contact attempt $k \in [1, K]$.
-1.  **Mathematical Logic:** Let $Y$ be the outcome of interest, and $C_i$ be the number of contact attempts required to reach respondent $i$. The cumulative estimate at attempt $k$ is:
-    \[\bar{Y}_k = \frac{\sum_{i: C_i \le k} w_i Y_i}{\sum_{i: C_i \le k} w_i}\]
-    Where $w_i$ is the survey weight.
-2.  **Trend Test:** Runs a Wald test for trend across the contact waves to identify if early responders differ significantly from late responders:
-    \[Y_i = \beta_0 + \beta_1 C_i + \epsilon_i\]
-    Testing $H_0: \beta_1 = 0$ using clustered standard errors where appropriate.
-3.  **Mata Optimization:** The accumulation loop is written in Mata to handle large survey portfolios ($N > 100,000$ observations across dozens of variables) instantly.
+A Gelman-style page of "fun alternate chapter titles" in the front matter is planned regardless (one wry alternate per chapter; see style contract).
 
 ---
 
-### Tool 2: `faircheck` (Algorithmic Fairness Auditor)
+## 3. Style contract
 
-#### Syntax & Options
-```stata
-faircheck depvar predvar [if] [in] , group(varname) [options]
-```
+House rules for every chapter, drawn from the Gelman and Cox field guides plus the authors' own writing rules. Writers and revisers check drafts against this list.
 
-*   `group(varname)`: (Required) Categorical variable defining protected subgroups (e.g., race, gender, geographic region).
-*   `threshold(#)`: Cut-off threshold for continuous predictions (probabilities). Default is `0.5`.
-*   `reference(# | string)`: Subgroup value or label to serve as the baseline comparison. Defaults to the group with the highest selection rate.
-*   `disparity(#)`: Adverse impact threshold. Default is `0.80` (implementing the EEOC's four-fifths rule).
-*   `plot`: Generates a bar chart comparing selection rates and true positive rates across groups.
+**Voice and paragraphs**
+1. Plain declaratives, first-person plural, present tense. Confidence without boasting; minimal em-dashes.
+2. Every paragraph: topic or transition sentence first, then the evidence or rationale, then the why-we-care sentence connecting to the chapter's job. Groups of paragraphs get explicit signposts.
+3. Jargon is defined at first use in plain words, labeled as jargon ("in survey jargon, this is *unit nonresponse*"), or deferred with a forwarding address ("we take this up properly in Section 8.2"). No technobabble, no filler phrases.
+4. Pithy, earned aphorisms as memory hooks, one per major idea, Cox-style: "no news is good news" for residual scatter; ours include "Excel is a format, not a calculator" and "the estimate is only as credible as the comparison group."
+5. Honest hedging in words, not hedging by vagueness: "the gain shrinks to 1.7 points, and we would not bet the program on the difference."
 
-#### Technical Implementation Details
-`faircheck` evaluates classification performance metrics across groups. For each group $g$:
-*   **Selection Rate (Demographic Parity):** $\mathbb{P}(\hat{Y} = 1 | G = g)$
-*   **True Positive Rate (Equalized Odds - TPR):** $\mathbb{P}(\hat{Y} = 1 | Y = 1, G = g)$
-*   **False Positive Rate (Equalized Odds - FPR):** $\mathbb{P}(\hat{Y} = 1 | Y = 0, G = g)$
-*   **Positive Predictive Value (Predictive Parity - PPV):** $\mathbb{P}(Y = 1 | \hat{Y} = 1, G = g)$
+**Structure and signposts**
+6. Chapters open with the reader's felt pain in one or two sentences (Cox), then a one-paragraph roadmap that links backward, announces the plan, and previews the close (Gelman).
+7. Chapters end with a short "Where this leaves you" section: what you can now do, which promises it served, and a one-sentence trail to the next chapter.
+8. Cross-references always carry numbers ("Section 6.3," "Figure 9.4"), never "as we saw earlier."
+9. Section titles: gerund-plus-object for actions ("Merging the unmergeable"), noun phrases for objects of study ("The cross-wave codebook"), and an occasional full-sentence title when the section is the claim ("Excel is a format, not a calculator").
 
-Disparity ratios are calculated as:
-\[\text{Ratio}_g = \frac{\text{Metric}_g}{\text{Metric}_{\text{reference}}}\]
+**Code, examples, and figures**
+10. The four-beat example rhythm: one or two paragraphs of real backstory; a short code block (never a dump); verbatim output; interpretation of each number in policy units (percentage points, dollars, students, weeks). Then the "This makes sense:" check against substantive intuition.
+11. The exact command appears above every figure it produces. Captions are self-contained: plot type, then an interpretive sentence, sometimes a question.
+12. Offstage work is confessed, not hidden ("we cleaned the district names offstage; the do-file shows the surgery").
+13. Named running examples with a data-folder footnote at first use; examples recur across chapters with explicit forward and backward references.
+14. Boxed elements keep their current three types: *Applied Example* (end-to-end scenario), *Visualization to build* (chart spec with the story it must tell), and *Ado-file idea* (short plan for a tool, no code in this pass).
+15. Each tool introduction reviews what official Stata or existing community commands already do, states the gap, then lists the new tool's design principles as bullets (Cox).
 
----
-
-### Tool 3: `llmsieve` (LLM Consensus and Gold-Standard Auditor)
-
-#### Syntax & Options
-```stata
-llmsieve varlist [if] [in] , generate(newvar) [options]
-```
-
-*   `varlist`: Categorical variables containing text classification tags generated by different LLMs or distinct prompt configurations (e.g., `gemini_tag claude_tag gpt_tag`).
-*   `generate(newvar)`: (Required) Base name for the generated audit variables:
-    *   `newvar_consensus`: The majority-vote category. If a tie occurs, it is marked as missing (`.`) or defined by priority.
-    *   `newvar_agreement`: Proportion of models in agreement (range $[0, 1]$).
-    *   `newvar_entropy`: Normalized Shannon Entropy measuring coding uncertainty.
-*   **Options:**
-    *   `gold(varname)`: The variable containing the human-coded "gold standard" truth. When specified, `llmsieve` switches from consensus-only to benchmarking mode, calculating accuracy, precision, recall, and Cohen's $\kappa$ (or Fleiss' $\kappa$ if comparing multiple LLMs to the human standard).
-    *   `threshold(#)`: Flag cases where agreement falls below this proportion. Default is `0.67`.
-    *   `flag(varname)`: Create a dummy variable flagging cases below the agreement threshold for human adjudication.
-    *   `priority(varname)`: Tie-breaker model variable (e.g., trust Claude over Llama).
-    *   `kappa`: Computes Fleiss' Kappa coefficient for inter-rater agreement.
-
-#### Technical Implementation Details
-1.  **Agreement Calculation:** For each observation $i$ with $M$ model variables:
-    \[\text{Agreement}_i = \frac{\max(count(v_{1i}, \dots, v_{Mi}))}{M}\]
-2.  **Entropy Calculation:** Measures the dispersion of classifications across categories:
-    \[H_i = -\frac{1}{\log(M)} \sum_{c=1}^{C} p_{ic} \log(p_{ic})\]
-    Where $p_{ic}$ is the proportion of models that coded observation $i$ as category $c$. $H_i = 0$ represents unanimous consensus; $H_i = 1$ represents complete disagreement.
-3.  **Fleiss' Kappa:** Computes the overall reliability of the LLM team, checking if the agreement is better than random chance.
+**Front and back matter (Stata Press conventions)**
+16. Chapter 1 carries the meta-sections: read me first, the four promises, the running examples with one subsection per dataset, how the book is organized, support materials.
+17. Preface includes a Gelman-style skills contract: one "after this chapter you can..." line per chapter, plus suggested reading paths for three personas (program evaluator at a nonprofit, agency/foundation analyst, research shop tool-builder).
+18. Back matter: appendices, references, subject index. Data and packages installable from inside Stata (GitHub `net install` now; `stata-press.com/data/<abbrev>` pattern if the book lands there).
 
 ---
 
-### Tool 4: `evalpreflight` (Evaluator Pre-flight & Adversarial Review Checklist Generator)
+## 4. The new structure
 
-#### Syntax & Options
-```stata
-evalpreflight using filename.txt [if] [in] , mode(string) generate(newfile.md) [options]
-```
+Fifteen chapters in five parts, ordered as the embedded evaluator's production pipeline: set up, get data, make evidence, communicate, sustain. Part titles are terse noun phrases (house rule); chapter titles are workflow gerunds with two deliberate exceptions.
 
-*   `using filename.txt`: (Required) Path to the text input file containing the document to review (e.g., draft evaluation report, draft theory of change, data dictionary, program description).
-*   `mode(string)`: (Required) Type of review to run:
-    *   `preflight`: Logic Model & Theory of Change pre-flight check. Focuses on identifying measurement opportunities, potential public data sources (e.g. FRED, Census), causal mechanisms (DAG pathways), confounders, and sources of selection bias.
-    *   `blindspot`: Adversarial review of an evaluation product/report. Identifies logical gaps, alternative explanations, statistical caveats, and potential sources of cognitive or reporting bias.
-*   `generate(newfile.md)`: (Required) Path to the Markdown file (`.md`) to write the audit results.
-*   `model(string)`: LLM model to use (default is `gemini`).
-*   `dag`: In `preflight` mode, explicitly formats causal loops and confounding mechanisms into raw text representations and a compiled `mermaid` block for visual integration.
-*   `replace`: Overwrite the existing markdown file if it exists.
+For each section below: what it covers, the assets it draws on, and the "why" annotation that the manuscript text must carry (audiences served, promises kept).
 
-#### Technical Implementation Details
-`evalpreflight` acts as the Stata orchestrator for a secure Python API script.
-1.  **Stata-Python Seam:** The ado-file packages the input document, injects it into a structured prompt based on the chosen mode, makes the API call via Python's SDK, and writes the returned Markdown response to disk.
-2.  **Prompt Constraints (preflight):** Instructs the model to return a structured checklist:
-    *   *Section 1: Causal Linkages & Confounders* (merging concepts into a Mermaid graph syntax).
-    *   *Section 2: Measurement Gaps* (matching constructs to Stata-native measurement tools like alpha/IRT).
-    *   *Section 3: Public Data Matches* (mapping county/state variables to Census or FRED codes).
-3.  **Prompt Constraints (blindspot):** Instructs the model to act as a hostile peer reviewer:
-    *   *Section 1: Alternative Explanations* (what else could explain this correlation?).
-    *   *Section 2: Selection Bias Alerts* (how might the sample be self-selected?).
-    *   *Section 3: Technical Caveats* (suggesting sensitivity checks like Oster bounds or placebos).
+### Part I. The Embedded Workshop
+
+#### Chapter 1: The embedded evaluator (read me first)
+*Felt pain opening: the Thursday email, the Monday deadline, the forty spreadsheets.*
+
+- **1.1 Who this book is for, and the week it assumes.** Personas and the real constraints: small team, standard Stata licenses, protected data, funders who read only page one. *Why: sets expectations so each reader knows which chapters pay their salary; serves accessibility by writing to the actual audience, not an idealized one.*
+- **1.2 Four promises: replicable, extensible, accessible, actionable.** Defines the book's evaluative language with one concrete pass/fail example per promise (e.g., replicable = a colleague reruns the Monday brief from raw files with one command). *Why: gives evaluators the vocabulary to justify workflow investments to partners and supervisors; every later chapter closes against these.*
+- **1.3 Working embedded: partners, power, and bad news.** Data ownership agreements on day one; pre-registered outcome definitions as a shield; building staff evaluation literacy with plain-language data dictionaries generated from `codebook, compact` and `labelbook`. Keeps the funder's-question Applied Example (rural reach, answered by Monday). *Why: findings survive politics only when the ground rules pre-date the findings; literacy work makes front-line staff partners in data quality rather than sources of missingness. Serves actionable and accessible.* *Ado-file ideas:* `evalaudit` (project startup checklist auditing data-sharing agreements and funder mandates), `datadict` (NEW; see Section 5).
+- **1.4 The running examples and the book's toolkit.** One subsection per running dataset (Stata Press convention): the Texas STAAR school panel, County Health Rankings state/county files, BLS QCEW county wages, the PRAMS workbooks, and a small simulated program-enrollment file for survey chapters. Install pattern for the companion packages. *Why: named, downloadable, recurring data is what makes the book itself replicable.*
+- **1.5 How the book is organized.** The pipeline map, chapter by chapter, plus the three persona reading paths.
+
+#### Chapter 2: Setting up a workshop that survives deadlines
+*Felt pain: the do-file that ran last month and dies today, on your coworker's laptop.*
+
+- **2.1 One folder pattern for every project.** The numbered pipeline (`100_ingest` through `600_report`), a master control do-file, parameters separated from logic; cross-platform paths with `driveuse`. *Why: the next analyst, including future you, finds everything where they expect it; extensibility begins as a directory layout.* *Ado-file idea:* `projectbuilder` (scaffolds the layout, globals, and master do-file).
+- **2.2 Excel is a format, not a calculator.** The no-spreadsheet-analysis rule and what replaces each spreadsheet habit. *Why: audit trail; the difference between "trust me" and "rerun me" when a client challenges a number. Serves replicable.*
+- **2.3 Speed you will actually notice.** `gtools`/`ftools`, filter-on-import, `compress`, memory habits for standard (non-MP) Stata, benchmarked on the STAAR ingest loop (400 MB yearly files, only the needed slice ever lands in memory). *Why: iteration speed is analysis quality; a pipeline that reruns in minutes gets rerun, one that takes a day gets patched by hand.*
+- **2.4 Recording what you did.** Logs, version control basics for do-files, dependency capture with `usepackage`, and minimal working examples with `writeinput` when asking for help or filing bugs. *Why: replicable includes the environment, not just the code.*
+
+### Part II. Getting the Data
+
+#### Chapter 3: Downloading public data through APIs
+*Felt pain: the context statistic the funder wants exists at census.gov and you have 20 minutes.*
+
+- **3.1 The shape of an API request.** URL anatomy, keys and where to keep them (`profile.do`, never in shared code), JSON versus CSV endpoints, polite request habits. *Why: one mental model covers every agency; this is the chapter's grammar lesson before the vocabulary.*
+- **3.2 Census data with getcensus.** ACS tables at any geography, `getcensus catalog` for discovery, building a county covariate panel in four commands. Flag honestly: the package covers ACS; decennial/CPS endpoints get the thin Python bridge from 3.6. *Why: denominators and community context on demand; the reach-check example from 1.3 gets its benchmark data here. Serves actionable (real geography, real units) and replicable.*
+- **3.3 Education panels with educationdata.** The Urban Institute portal's harmonized CCD/IPEDS/CRDC endpoints from the official Stata package; no key, consistent names across years. *Why: cross-year name harmonization done by someone else is a gift; the panel arrives analysis-ready.*
+- **3.4 Economic series with import fred and BLS flat files.** Native `import fred` for state/county series; the QCEW open-data CSV pattern (`import delimited` a URL, loop years and quarters, no key at all). *Why: the cleanest replicable-download loop in the book; wages and unemployment are the context every workforce evaluation needs.*
+- **3.5 Health and community context: PLACES and County Health Rankings.** Socrata CSV endpoints with query filters; the `$limit` silent-truncation gotcha in a warning box; CHR annual analytic files by stable URL. *Why: small-area health estimates make need visible to funders; the truncation box saves readers a real, common error.*
+- **3.6 Three routes from Stata to any API.** The general pattern from the authors' Stata Journal work: bare `import delimited` from a URL; a `python:` block with `requests` for authenticated JSON; `file write` for web output. Decision rules for which route. *Why: extensible; when the next agency posts a new endpoint, the reader already owns the pattern.*
+- *Ado-file idea:* `panelstack` (NEW; see Section 5). *Applied Example:* a 2015-2023 Texas county panel (income, child poverty, unemployment) assembled from three APIs and stacked with provenance tags.
+
+#### Chapter 4: Harvesting data when there is no API
+*Felt pain: the state posts exactly what you need, as 84 separate download-button files.*
+
+- **4.1 Reading the site before you scrape.** Terms of use, form structure, politeness delays, resumability; when to ask the agency for a bulk file instead. *Why: embedded evaluators depend on agency goodwill; scrape like someone who has to email them next week.*
+- **4.2 A real case: fourteen years of Texas school report cards.** The TEA TAPR downloader pattern (form parsing, year/level loops, organized output folders) and the honest lesson that element names mutate across years, resolved with the master reference sheet and rename maps. *Why: this is what "panel datasets that are tricky to download and combine" actually looks like; the payoff is a district panel no one else in the room has.*
+- **4.3 Streaming the impossibly large.** The price-transparency pattern: filtering a 100+ GB cloud JSON stream down to a Stata dataset on a laptop. Presented as a case study in not downloading what you cannot hold. *Why: extends the reader's sense of what a small shop can do; the sieve idea generalizes.*
+- **4.4 Converting whatever lands in the shared drive.** `convertanything` for folder trees of mixed formats; hand-crafted `import excel, cellrange()` for published-for-humans workbooks, with the PRAMS block geometry as the worked case and the rule "document the geometry you assumed." *Why: accessible in reverse; the world sends people-formatted files, and the pipeline must absorb them replicably.*
+
+#### Chapter 5: Working with survey platforms
+*Felt pain: the survey closes Friday and nobody can say what the response rate was on Tuesday.*
+
+- **5.1 Pulling responses automatically.** The platform-by-platform patterns: REDCap's single POST (simplest), Qualtrics' three-step export, SurveyMonkey pagination and its rate limits, KoBoToolbox, and the zero-auth Google Sheets one-liner (`import delimited` on a link-shared response sheet) as the instant win. *Why: hand-downloading is the survey version of spreadsheet analysis; automation makes monitoring possible at all. Serves replicable and extensible.*
+- **5.2 Watching response rates while the survey is alive.** A scheduled monitoring do-file; response counts against the roster; control-chart logic for when a dip is noise versus news; attrition alerts; demographic reach against benchmarks. *Visualization callout:* the control chart, small-multiples by site. *Ado-file idea:* `reachcheck`. *Why: mid-course corrections happen only if the evaluator can see mid-course; this is the most directly actionable section in the book, and program teams are the audience.*
+- **5.3 From platform metadata to labeled variables.** Question text into variable characteristics (`char define`), auto-encoding from platform metadata, and `surveytracker` for logging instruments wave over wave. *Why: the codebook writes itself, and the survey's meaning travels with the data.*
+- **5.4 Scales without tears.** `likertscale`: encoding, reverse-coding, alpha, indices, top-two-box percent-agree variables that clients actually read. *Why: accessible; percent-agree is the lingua franca of program boards, and computing it consistently prevents quiet errors.*
+- **5.5 Who did not answer, and does it matter.** Unit versus item nonresponse, frame comparisons with `nonresponse`, level-of-effort stabilization with `loebias`, and the handoff to weighting in Chapter 7. *Why: the honest answer to "can we trust a 22 percent response rate" is a diagnostic, not a shrug.*
+- **5.6 The cross-wave codebook.** `cxchangelog`: regenerate the item-changes inventory from a long-format crosswalk; lifecycle codes for added, reworded, re-optioned, and dropped items; diff against a frozen vintage. Demo data: a synthetic multi-wave crosswalk (planned; see Section 5). *Why: extensible across waves and staff turnover; the tracker answers "did we change this question in 2024?" in seconds instead of an afternoon.*
+- *Ado-file idea:* `surveypull` (NEW; see Section 5).
+
+#### Chapter 6: Building panels you can trust
+*Felt pain: two agency files, no shared ID, and a merge that must survive an audit.*
+
+- **6.1 Merging the unmergeable.** Cleaning names, blocking, string distance, thresholds with a manual-review band; nearest-value joins on dates and amounts with `nearmrg`. *Ado-file idea:* `fastmatch` (EM-based probabilistic linkage). *Why: most administrative questions are join questions; documented match quality is what makes the answer defensible.*
+- **6.2 Crosswalks as first-class files.** State, region, rurality, district lineage; versioned lookup tables in the repo. *Why: crosswalks encode decisions; treating them as data makes the decisions reviewable.*
+- **6.3 Where did this number come from?** Source lineage in variable characteristics with `srctag`, warehouse search with `srcfind`; the skeptical-client scene (running the lineage check in front of the workforce agency) kept from the prior plan. *Why: trust with agency partners is won by traceability; this is the accessibility of provenance.*
+- **6.4 Schema drift and the polluted year.** Declarative validation with `schemaudit` (rulebook of required variables, legal values, uniqueness); flagging known-bad periods rather than averaging over them, with the 2016 STAAR vendor failure as the worked case. *Why: the pipeline should refuse bad data loudly; a documented flag today prevents a wrong finding next year.*
+- **6.5 Reshaping into analysis-ready panels.** Panel IDs, wide/long discipline, transition matrices of participant movement. *Visualization callout:* the Sankey flow. *Ado-file idea:* `trackflow`. *Why: the panel is the book's central data structure; participant-flow pictures answer the program director's first question, "where do people go?"*
+- **6.6 Missing data honestly.** Patterns with `misstable`, the missingness map, when multiple imputation earns its complexity. *Why: dropped rows are silent decisions; making them visible is a replicability duty.*
+
+### Part III. Turning Data into Evidence
+
+#### Chapter 7: Making numbers trustworthy
+*Felt pain: a five-person site ranks worst in the state because one family moved.*
+
+- **7.1 From items to reliable scales.** Alpha, exploratory factor checks, when IRT adds value for an applied shop. *Why: a scale that does not hang together produces findings that do not replicate across waves.*
+- **7.2 Weights that restore the population.** `svyset`, post-stratification, raking against frame margins, connected back to the nonresponse diagnostics of 5.5. *Why: representativeness is the difference between "our respondents" and "our participants"; funders quote the second.*
+- **7.3 Small sites, noisy rates.** Empirical Bayes shrinkage for sparse denominators. *Ado-file idea:* `rateshrink` (Beta-binomial and Poisson-gamma shrinkage with a raw-versus-shrunken scatter). *Why: rankings drive funding and blame; stabilized rates protect small sites from statistical accidents. Directly actionable for dashboard builders.*
+- **7.4 Power and the smallest effect you can see.** MDE framing for program directors, cluster designs, the power curve with the budget line marked. *Why: the most expensive mistake is the study too small to find what it was funded to find; this section is stakeholder expectation management with math.*
+
+#### Chapter 8: From differences to defensible claims
+*Felt pain: "so did it work?" asked in a room with money on the table.*
+
+- **8.1 Comparisons first.** Well-built descriptive comparisons, uncertainty stated in policy units, the "This makes sense:" ritual, and the discipline of pre-specified primary outcomes. *Why: most evaluation questions are answered credibly at this level; rigor is matching the claim to the design, not maximizing machinery.*
+- **8.2 When only a causal claim will do: a working DiD kit.** THE causal section, and deliberately the only one. Staggered rollouts and why naive two-way fixed effects mislead (the contaminated-comparison intuition, one paragraph, no algebra); `csdid` on the Medicaid expansion workshop data end to end; the event-study plot as the design's honesty check; a closing map of adjacent designs (cutoffs, single units, interrupted series) in three sentences each, all routed to Appendix B and the specialist shelf (Cunningham; Huntington-Klein). Anchored by the STAAR baseline-sensitivity lesson: the estimate is only as credible as the comparison group. *Why: applied researchers need enough causal literacy to use `csdid` responsibly and to know when to call a specialist; one honest section serves them better than five chapters they will not read.*
+- **8.3 What did it cost, what did it return.** Cost-effectiveness perspectives, discounting, Monte Carlo uncertainty. *Visualization callout:* the tornado chart. *Ado-file idea:* `roisim`. *Why: funders ask this question directly; an ROI with honest error bars beats a point estimate that overpromises.*
+- **8.4 Subgroups without fishing.** Pre-registration of subgroup analyses, exploratory findings labeled as such. *Why: the garden of forking paths is a reputational risk for an embedded shop; the discipline here is what makes 8.1's simplicity trustworthy.*
+
+### Part IV. Communicating Results
+
+#### Chapter 9: Graphing for busy readers
+*Felt pain: your finding is real and your graph is why nobody saw it.*
+
+- **9.1 The data-ink budget.** Cox and Tufte principles as working rules with an aphorism and a failure mode per graph type; colorblind-safe palettes; direct labels over legends. *Why: the graph is the finding for most readers; ink spent on decoration is attention taken from the result.*
+- **9.2 Distributions and categories that read at a glance.** `statplot`, `catplot`, diverging Likert bars for survey items. *Why: survey results in particular die in stacked-bar noise; these layouts are the rescue.*
+- **9.3 Coefficients as pictures.** `coefplot`, small multiples across outcomes and subgroups on a shared scale. *Visualization callout:* the small-multiple coefficient plot. *Why: a regression table is a wall; the same information as a picture invites comparison.*
+- **9.4 Trends with a story line.** Run charts with annotated reference lines (`xline()` at the policy change), control charts from 5.2 revisited as communication devices. *Why: "did the line move after we acted" is the program officer's native question; build the graph that answers it at a glance.*
+- **9.5 Captions that carry the finding.** The self-contained caption discipline: plot type, takeaway sentence, cross-reference. *Why: reports are skimmed; captions are read.*
+
+#### Chapter 10: Building interactive charts and infographics
+*Felt pain: the board wants "something like the newspaper does," due Thursday.*
+
+- **10.1 Sparklines: the word-sized trend.** `sparkta2` inline trends in portfolio tables; forty sites scanned in one column. (Prerequisite flagged: the sparkta2 source must be published to the authors' GitHub before print; currently only rendered galleries are public.) *Why: density with dignity; portfolio managers see every site's trajectory without forty pages.*
+- **10.2 Fourteen chart types from one command.** `googlechart`: geo choropleths, animated bubbles over panels, searchable tables, diverging bars; brand theming; the download menu for client self-service. *Why: infographic-quality output from a do-file keeps the graphic inside the replicable pipeline instead of in a designer's one-off file.*
+- **10.3 Choosing static, interactive, or animated.** Decision rules by audience and venue; when interactivity subtracts. *Why: the medium is a claim about how the audience will use the evidence; choose it deliberately.*
+
+#### Chapter 11: Delivering through spreadsheets
+*Felt pain: the client lives in Excel and Sheets, and will not leave.*
+
+- **11.1 Formatted Excel from collect and putexcel.** Automated summary and appendix workbooks; the Monday-morning update as a scheduled artifact. *Ado-file idea:* `fundertable` (pre-formatted executive summary tables). *Why: meeting clients in their native format is accessibility in practice; automation makes the recurring deliverable cheap enough to sustain.*
+- **11.2 Google Sheets as a live channel.** `googlesheets`: export, `put` values and formulas, format, insert native charts, and re-import for round-trip QA; OAuth setup deferred to Appendix A; the Forms-response import (`since()`, `tail()`) bridging back to Chapter 5. *Why: a Sheet the whole program team can open, on their phones, updated by your do-file, is embedded evaluation made tangible.*
+- **11.3 Toolkits program teams keep using.** The capstone Applied Example: an enrollment-tracker toolkit for a field team (validated entry tab, auto-updating charts, plain-language data dictionary tab from `datadict`), built and refreshed entirely from Stata. *Why: this is the book's thesis in one artifact; the evaluator ships a tool, not a PDF, and the team's own data quality improves because they can see themselves in it.*
+
+#### Chapter 12: Publishing self-contained reports and portals
+*Felt pain: the client's firewall eats anything that needs a server.*
+
+- **12.1 From do-file to webpage.** `webdoc2`: headings, collapsible code, navigation, numbers in the text that come from the data. *Why: the report that regenerates itself cannot drift from the analysis; replicable reporting is the end of copy-paste errors.*
+- **12.2 Interactive without a server.** `statashiny`: searchable tables, live-filtering charts, value cards, all in static files. *Why: interactivity for clients behind restrictive IT, with nothing to install and nothing to maintain.*
+- **12.3 One folder the client can own.** Assembling the offline portal; optional GitHub Pages publication; versioning delivered artifacts. *Applied Example:* from do-file to shareable project portal (kept and expanded with the live example sites). *Why: handing over a folder the client controls respects their ownership of their own evidence; extensible because next quarter is one rerun away.*
+
+### Part V. Sustaining the Practice
+
+#### Chapter 13: Using AI without getting burned
+*Felt pain: 5,000 free-text case notes, one intern, and a coding deadline.*
+Consolidates all prior AI material (old Chapters 2.4, 3, 4.2, and 14.2) into one chapter of guardrails and one worked pattern.
+
+- **13.1 What never leaves the building.** FERPA/HIPAA constraints, PII stripping before any API call, local models for protected text. *Ado-file idea:* `ai_privacy_gate`. *Why: one leaked record can end a data-sharing agreement; privacy is the precondition for using these tools at all.*
+- **13.2 A measurement, not an oracle.** LLM output treated as a measurement requiring validation: human-coded gold standard, kappa thresholds, multi-model consensus with `llmsieve`. *Why: fluent is not accurate; the validation protocol is what makes AI-coded variables publishable.*
+- **13.3 Reproducing stochastic output.** Pinned versions, temperature zero, cached responses as the frozen analysis dataset; model-agnostic wrappers (the `gemini` command and its local Ollama fallback). *Why: replicable includes the model; tomorrow's rerun must not change today's finding.*
+- **13.4 Untrusted text and prompt injection.** Separating instructions from data; validating output values; auditing classification distributions. *Why: survey respondents can write anything, including instructions to your model.*
+- **13.5 Auditing prediction for fairness.** When models target people (outreach lists, risk scores): selection rates, error-rate balance, the four-fifths rule with `faircheck`. *Why: targeting models inherit history; the audit is the evaluator's duty of care to participants, and increasingly the funder's compliance question.*
+- **13.6 Coding 5,000 progress notes without getting burned.** The kept Applied Example, now the chapter capstone: gate, gold standard, sieve, verify, cache, disclose. Also here: `text2vars` and `stata2brief`/`evalpreflight` as drafting and adversarial-review aids, each behind the same guardrails.
+
+#### Chapter 14: Sharing data and results safely
+*Felt pain: the partner wants the file, the lawyer wants it de-identified, both by Friday.*
+
+- **14.1 Quasi-identifiers and re-identification.** k-anonymity and l-diversity in plain terms; ZIP plus birthdate plus sex as the canonical trap. *Ado-file idea:* `riskscan`. *Why: "we removed the names" is not de-identification; the metrics give the lawyer and the evaluator a shared standard.*
+- **14.2 Suppressing small cells without lying.** Primary and complementary suppression, denominator thresholds, integrated with `collect` before export. *Ado-file idea:* `suppress`. *Why: public dashboards and small subgroups collide constantly; principled suppression keeps tables publishable and people unidentifiable.*
+- **14.3 Synthetic stand-ins.** Generating synthetic cohorts that preserve structure for code development and external collaboration. *Ado-file idea:* `synthgen`. *Why: partners can build against realistic data while the real records never move.*
+- **14.4 Sanitizing raw files with a human in the loop.** The production pattern: scan incoming files, emit a for-human-review workbook, execute removals with dry-run mode and an audit receipt. *Ado-file idea:* `rawsweep` (NEW; see Section 5). *Why: intake is where PII sneaks in; a receipt-producing gate makes compliance demonstrable, not asserted.*
+
+#### Chapter 15: Turning scripts into shared tools
+*Felt pain: three colleagues, three slightly different copies of the same do-file, three answers.*
+
+- **15.1 When a do-file wants to be a command.** The `dsload` story: extract, parameterize, generalize. *Why: the team's consistency problem is a packaging problem; extensibility across people, not just projects.*
+- **15.2 Help files people actually read.** SMCL basics, the runnable-example rule, `editanything` as the developer's opener. *Why: a tool without a help file dies with its author's memory.*
+- **15.3 Distributing through GitHub and net install.** `.pkg` and `stata.toc`, versioning internal libraries, install lines clients and colleagues can paste; `ScrapeSSC` for air-gapped machines. *Why: distribution is what turns a fix into a standard; accessible to teammates by design.*
+- **15.4 A dash of Mata and Python where it counts.** The trifecta in one honest section: Stata as the system of record, Python for web and APIs, Mata only where matrix speed pays (with `lstrfun` as the example). Absorbs and retires the old Mata chapter. *Why: evaluators need the seams, not the languages; know enough to call across them.*
+- **15.5 The replication archive.** The two-tier pattern: canonical deposit with a DOI on openICPSR, convenience mirror on GitHub where `use "https://raw.githubusercontent.com/..."` works in one line; what goes in the archive (data, code, codebooks, environment). *Why: the book ends where the genre says it must, on protection and permanence; the archive is the four promises kept after the contract ends.*
+
+### Appendices
+
+- **Appendix A: The setup guide.** Consolidated one-time configuration: API keys and `profile.do`; the Python bridge and venvs; Google Cloud OAuth for `googlesheets` (with the credential-free Sheets fallback for readers who skip it); LLM CLI and local Ollama setup. *Kept from old Appendix A, widened beyond LLMs so no chapter carries setup friction in its body.*
+- **Appendix B: The causal quick-reference toolbox.** Expanded from the old Appendix B into the landing zone for everything Part III used to hold: scenario-to-estimator table (staggered timing, cutoffs, single units, interrupted series, high-dimensional confounding), the Stata command for each (`csdid`, `jwdid`, `rdrobust`/`rddensity`, `synth`, `sdid`, `ddml`), one-paragraph intuition each, sensitivity tools (`honestdid`, `psacalc`), and an annotated pointer shelf (Cunningham; Huntington-Klein; Cameron and Trivedi Vol. II).
+- **Appendix C: The book's toolkit.** Roster of every package and proposed tool with chapter homes and install lines (updated to the new numbering; adds googlesheets, googlechart, statashiny, cxchangelog, and the four new proposals).
+- **Appendix D: Two end-to-end walkthroughs.** Kept: D.1 PRAMS (messy workbook to ecological regression, the honest null) and D.2 Texas STAAR (big administrative panel, the baseline-sensitivity lesson), with cross-references retargeted to new chapter numbers. Known fixes carried as tasks: regenerate the contaminated STAAR log; ship the 15.6 MB analytic checkpoint rather than 5 GB of raw CSVs; note the `estout`/`coefplot` installs; fix the West Virginia crosswalk nit.
 
 ---
 
-### Tool 5: `surveytracker` (Longitudinal Survey Instrument and Construct Tracker)
+## 5. Tool roster
 
-#### Syntax & Options
-```stata
-surveytracker [varlist] [if] [in], excel(filename.xlsx) wave(string) [options]
-```
+### 5.1 Existing packages the book showcases (published, installable)
 
-*   `varlist`: List of variables currently in memory to inventory. Defaults to all variables.
-*   `excel(filename.xlsx)`: (Required) Path to the running Excel spreadsheet where the longitudinal instrument history is maintained.
-*   `wave(string)`: (Required) Label for the current survey wave (e.g., "2025 Wave 1", "T2").
-*   `constructs(varname)`: Variable in memory containing the construct names associated with each variable.
-*   `sheet(string)`: Name of the sheet inside the Excel workbook. Defaults to "Survey_Inventory".
-*   `replace`: Overwrites the sheet if it already exists (useful for re-runs).
+| Package | Chapter home | Role |
+|---|---|---|
+| `googlechart` | 10 | 14 interactive chart types from one command; flagship infographic tool |
+| `googlesheets` | 11 (5, 3) | Sheets import/export/put/format/addchart; live client channel |
+| `statashiny` | 12 | Serverless interactive dashboards |
+| `webdoc2` | 12 | Bootstrap-5 dynamic HTML reports over Jann's webdoc |
+| `sparkta2` | 10 | Inline sparklines and offline D3 graphics — **source must be published before print** |
+| `statplot` | 9 | High-density categorical/statistical plots (with N. Cox) |
+| `convertanything` | 4 | Folder trees of mixed formats to clean datasets |
+| `nearmrg` | 6 | Nearest-value merges on dates/amounts |
+| `writeinput` | 2, 15 | In-memory data to reproducible input blocks (MWEs) |
+| `editanything` | 15 | Open any text file from the command line; dev workflow |
+| `usepackage` | 2 | Dependency scan and auto-install |
+| `ScrapeSSC` | 15 | Local SSC catalog for air-gapped installs |
+| `gemini` | 13 | LLM CLI bridge with local Ollama fallback |
+| `validemail` | 5 | Survey email validation (format, MX, disposable) |
+| `driveuse` | 2 | Cross-platform Google Drive path resolution |
+| `importR` | 4 | R data formats into Stata |
+| `surveytracker`, `likertscale`, `nonresponse`, `loebias`, `llmsieve`, `faircheck`, `evalpreflight`, `srctag`/`srcfind` | 5, 5, 5, 5, 13, 13, 13, 6 | Specified in Section 5.4 below (specs carried forward) |
 
----
+### 5.2 Proposed tools carried forward (plans only, no code this pass)
 
-### Tool 6: `likertscale` (Scale Processing and Collapsing Automator)
+`projectbuilder` (Ch 2), `reachcheck` (Ch 5), `fundertable` (Ch 11), `ai_privacy_gate` (Ch 13), `evalaudit` (Ch 1), `riskscan`/`suppress`/`synthgen` (Ch 14), `rateshrink` (Ch 7), `schemaudit` (Ch 6), `fastmatch` (Ch 6), `trackflow` (Ch 6), `cxchangelog` (Ch 5), `roisim` (Ch 8), `text2vars`/`stata2brief` (Ch 13).
 
-#### Syntax & Options
-```stata
-likertscale varlist [if] [in], generate(newvar) [options]
-```
+### 5.3 New tool ideas added this pass (plans only)
 
-*   `varlist`: Variables containing the Likert scale items (must share the same value label coding).
-*   `generate(newvar)`: (Required) Base name for the generated index variables.
-    *   Creates `newvar_mean`: The row-wise average index score.
-    *   Creates `newvar_agree`: A collapsed percent-agree indicator if the `agree` option is specified.
-*   **Options:**
-    *   `agree`: Generates collapsed "Percent Agree" (top-two box) variables for each item in the list, where the value is set to 1 if the respondent selected "Agree" or "Strongly Agree" (or the top-two categories in the label set), and 0 otherwise.
-    *   `scale(#)`: Points on the Likert scale. Defaults to `5`. Auto-calculates thresholds for the top-two box based on the scale points (e.g., $\ge 4$ on a 5-point scale, $\ge 6$ on a 7-point scale).
-    *   `alpha`: Automatically runs Cronbach's alpha and prints scale reliability statistics in the console, saving `r(alpha)` in memory.
-    *   `label`: Auto-labels the collapsed variables with "Percent Agree: [original label text]".
+- **`surveypull` (Ch 5).** One wrapper over the platform APIs: `surveypull, platform(redcap|qualtrics|surveymonkey|kobo|gsheet) ...` with subcommands `responses` (download to labeled .dta), `monitor` (counts and response rates against a roster, exit code for schedulers), and `codebook` (platform metadata to a data dictionary). Fills the inventory's biggest gap: no existing repo touches Qualtrics/REDCap. Design principle: REDCap first (simplest API), one authentication story per platform, all secrets in environment variables.
+- **`panelstack` (Ch 3-4).** Stacks year-stamped files into a harmonized panel: takes a folder pattern plus a rename-map CSV (old name, new name, first year, last year), applies vintage-aware renames, tags provenance with `srctag` conventions, and reports what failed to match. Solves the "combine half" of the TAPR/QCEW/CHR download loops, which the inventory flagged as undemonstrated.
+- **`datadict` (Ch 1, 11).** Generates a plain-language data dictionary (HTML or a Sheets/Excel tab) from variable labels, value labels, characteristics, and missingness rates, ordered for program staff rather than analysts. The evaluation-literacy tool 1.3 promises; pairs with the Chapter 11 toolkit example.
+- **`rawsweep` (Ch 14).** Generalizes the production sanitization pattern that currently exists only in deleted git history: scan incoming raw files, emit a for-human-review workbook of flagged fields, execute removals with confirmation and dry-run modes, and write an audit receipt. Resurrects a real, book-worthy workflow before it is lost.
 
----
+### 5.4 Detailed specs carried forward unchanged
 
-### Tool 7: `nonresponse` (Comprehensive Survey Nonresponse Bias Suite)
+The nine tool specifications from the June plan (`loebias`, `faircheck`, `llmsieve`, `evalpreflight`, `surveytracker`, `likertscale`, `nonresponse`, `srctag`, `srcfind`) remain the reference specs; they are unchanged except for chapter renumbering and live in the archive copy of the June plan and in Appendix C's roster. The unit-test plan (test_*.do per tool) carries forward and gains `test_surveypull.do`, `test_panelstack.do`, `test_datadict.do`, `test_rawsweep.do`, and `test_cxchangelog.do` (fix the `code(baselice|simple)` typo to `code(baseline|simple)` when implementing).
 
-#### Syntax & Options
-```stata
-nonresponse [varlist] [if] [in], frame(filename.dta) id(varname) [options]
-```
+### 5.5 Cut from the plan, with reasons
 
-*   `varlist`: Variables to audit for item-level nonresponse. If empty, the command defaults to auditing unit-level nonresponse only.
-*   `frame(filename.dta)`: (Required) Path to the sampling frame or population dataset (containing the universe of individuals who were sent the survey).
-*   `id(varname)`: (Required) Unique identifier variable present in both the response data and the sampling frame.
-*   `item`: Runs item-level missingness diagnostics on the specified `varlist`.
-*   `unit`: Runs unit-level nonresponse bias checks comparing respondents to the overall frame population.
-*   `rake(varlist)`: Calculates raking (post-stratification) weights based on frame characteristics (e.g., age, race, region) to correct for identified unit nonresponse.
-*   `saving(filename.dta [, replace])`: Saves the combined response-frame dataset with newly calculated weights.
+`did_selector`, `sdid_viz`, `twinmatch`, `causalforest`, `conformalpred`, `cate_explorer` (causal/ML scope removed; Appendix B points to existing community tools instead); `mata_bench` (Mata reduced to one section); `gtools_audit` and `fidplot` (thin value next to their chapters' main tools); `llm_verify` (subsumed by `llmsieve`); `qualtrics_pull`/`redcap_pull` (subsumed by `surveypull`).
 
 ---
 
-### Tool 8: `srctag` (Variable Source Tagging Utility)
+## 6. Worked-example data roster
 
-#### Syntax & Options
-```stata
-srctag varlist [if] [in], source(string) [options]
-```
+Ranked for the book's needs: free, low login friction, panel/time dimension, policy relevance, shippable size.
 
-*   `varlist`: Variables to tag with source metadata. Defaults to all variables.
-*   `source(string)`: (Required) Identifier of the source agency or database (e.g., "TEA", "TWC", "Census_ACS_2024").
-*   `table(string)`: Specific raw table or sheet name from which the variables originate.
-*   `vintage(string)`: Data vintage or release year (e.g., "2025", "2024-Q3").
-*   `note(string)`: Supplementary description stored in variable metadata.
-*   `clear`: Strips all existing source tags from the specified variables.
+| # | Dataset and access | Book home |
+|---|---|---|
+| 1 | NCES CCD district enrollment via `educationdata` (no key) | Ch 3 core demo; Ch 6 panel |
+| 2 | BLS QCEW county flat CSVs (no key, `import delimited` loop) | Ch 3.4; `panelstack` demo |
+| 3 | FRED state/county series via native `import fred` (free key) | Ch 3.4; reshape teaching moment |
+| 4 | ACS county tables via `getcensus` (free key) | Ch 3.2; reach-check benchmarks |
+| 5 | CDC PLACES county file via Socrata CSV (no key) | Ch 3.5; `$limit` gotcha box |
+| 6 | County Health Rankings analytic CSVs 2010-2025 (no login) | Ch 3.5; Ch 10-11 dashboard data (already used in the SJ paper) |
+| 7 | Texas TEA TAPR advanced downloads (no login, messy) | Ch 4.2; the "real client data" case |
+| 8 | Medicaid expansion workshop panel (ships with NSF materials) | Ch 8.2 csdid worked example |
 
-#### Technical Implementation Details
-`srctag` establishes data governance by storing source lineage directly inside Stata variable characteristics.
-1.  **Characteristic Definitions:** For each variable $v$ in `varlist`, it sets:
-    *   `char define v[src_name] "source_string"`
-    *   `char define v[src_table] "table_string"`
-    *   `char define v[src_vintage] "vintage_string"`
-    *   `char define v[src_date] "current_date_string"`
-2.  **Dataset-Level Lineage:** In addition to variable-level tags, it updates a dataset characteristic `_dta[src_manifest]` listing all distinct agencies represented in the dataset. This ensures that even after multiple merges, the composite dataset carries a clean audit trail.
+Plus: PRAMS 2016-2022 workbooks (shipped files; **note: the PRAMS ARF request portal is suspended as of mid-2026, so PRAMS is presented as shipped public workbooks and a sidebar on DUA-based access, never as a live-API example**); the STAAR analytic checkpoint (`analytic_performance.dta`, 15.6 MB, shippable) with download instructions for the 5 GB raw layer; a simulated enrollment/survey file for Chapters 5 and 11 (to be generated, ships with the book); a synthetic multi-wave item crosswalk for the `cxchangelog` demo (to be generated).
+
+Hosting: canonical archive on openICPSR with a DOI, convenience mirror on GitHub for one-line `use` from raw URLs (the Ch 15.5 pattern, practiced on the book itself).
 
 ---
 
-### Tool 9: `srcfind` (Metadata Library Search Auditor)
+## 7. Migration map (old structure to new)
 
-#### Syntax & Options
-```stata
-srcfind [varlist] using path/ [if] [in] , [options]
-```
-
-*   `using path/`: (Required) Path to the data directory containing a library of `.dta` files to scan.
-*   `source(string)`: Filter variables that match a specific source tag (e.g., source("TEA")).
-*   `table(string)`: Filter variables that originate from a specific raw table.
-*   `vintage(string)`: Filter variables by vintage year.
-*   `query(string)`: Search term to match against variable names, labels, or question text characteristics.
-*   `detail`: Prints full metadata details including value labels and notes for matched variables.
-
-#### Technical Implementation Details
-`srcfind` serves as the search engine for data warehouses in multi-dataset environments.
-1.  **File Parsing:** The command loops through all `.dta` files in the specified directory. It reads only the dataset headers and variable descriptors using Mata's file parsing commands, which makes the scan extremely fast without loading large datasets into active memory.
-2.  **Characteristic Reading:** Extracts characteristics (`src_name`, `src_table`, `src_vintage`, `question`) for each variable and evaluates matches against search parameters.
-3.  **Audit Output:** Returns a structured list showing which `.dta` files contain matching variables, their labels, and their exact source lineage.
-
----
-
-## 4. Pedagogical Movement and Style Guidelines
-
-Following the writing styles of **Andrew Gelman** and **Nick Cox**, sections must move from intuitive narrative to concrete application, graphic diagnostic, code blocks, and finally statistical theory.
-
-### Pedagogical Template (Example: Chapter 5 - Data Lineage & Client Empathy)
-
-```
-[Narrative: Intuition First] -> [Client-Empathy Use Case Box] -> [Diagnostic/Portal Picture] -> [Code Block] -> [Technical Details]
-```
-
-1.  **The Narrative:** Explain *why* data lineage is the bedrock of credibility. In policy research, the most dangerous question is: *"Where did this number come from?"* If the evaluator cannot trace a variable back to its raw table and vintage within seconds, trust with the agency client evaporates.
-2.  **Client-Empathy Use Case Box:** 
-    *   *Scenario:* A state workforce commission client is skeptical of an evaluation report showing that graduates of a training program are earning less than the state average. They suspect the data was joined incorrectly or comes from an outdated wage ledger.
-    *   *The Lens:* Instead of debating, the evaluator runs `srcfind` on their warehouse folder directly in front of the client. The command immediately prints the exact variables used, showing they carry tags (`srctag`) linking them to the TWC's own *Q3 2025 Wage Ledger*. The client sees that the analysis respects their own data structures, neutralizing the adversarial dynamic and pivoting the conversation to program improvement.
-3.  **Diagnostic/Portal Picture:** Embed a screenshot of the Stata Viewer rendering a variables metadata report showing custom source characteristics.
-4.  **Code Block:** Provide copy-pasteable Stata code showing how to tag variables on ingestion and search a library of files.
-5.  **Technical Details:** Explain the Mata-based dataset header parsing structures that make `srcfind` run efficiently without loading datasets.
+| Old (June 2026) | Disposition |
+|---|---|
+| Ch 1 Strategic Evaluation (1.1-1.3) | Ch 1 (1.3, 1.2); PDSA/CFIR trimmed into Ch 2.1 and Ch 9.4 examples |
+| Ch 1.4 Power/MDE, 1.5 Pre-registration | Ch 7.4; Ch 8.1/8.4 |
+| Ch 2 High-Performance Environment | Ch 2 (speed, folders); 2.2 monitoring to Ch 5.2; 2.3 funder tables to Ch 11.1; 2.4 LLM bridge to Ch 13 |
+| Ch 3 Careful AI | Ch 13 (consolidated) |
+| Ch 4 Ingestion & APIs | Ch 3 (APIs) and Ch 4 (no-API); 4.2 AI bridge to Ch 13.6; 4.3 measurement to Ch 7.1; rateshrink to Ch 7.3 |
+| Ch 5 Harmonization/MDM | Ch 6; missing data 6.6; weighting to Ch 7.2; cxchangelog to Ch 5.6 |
+| Ch 6 Survey Instrumentation | Ch 5 (expanded into the platform-operations chapter) |
+| Ch 7 Ethics/Privacy/Synthetic | Ch 14 |
+| Ch 8 Modern DiD | Ch 8.2 (one section) + Appendix B |
+| Ch 9 RD & ITS | Appendix B (pointers only) |
+| Ch 10 Synthetic Controls | Appendix B (pointers only) |
+| Ch 11 ML & Fairness | faircheck to Ch 13.5; lasso/forests/ddml/conformal to Appendix B pointers |
+| Ch 12 Cost-Effectiveness | Ch 8.3 |
+| Ch 13 Visualizations | Ch 9 and Ch 10 (split static/interactive; googlechart added) |
+| Ch 14 Dynamic Reporting | Ch 12; AI narrative tools to Ch 13.6; googlesheets added as new Ch 11 |
+| Ch 15 Scripts to Systems | Ch 15 |
+| Ch 16 Mata Trifecta | Ch 15.4 (one section) |
+| Appendices A-D | A widened (all setup); B expanded (causal landing zone); C updated roster; D kept with fixes |
 
 ---
 
-## 5. Verification & Unit Testing Plan
+## 7b. Companion code and substance pass (July 4, second revision)
 
-To verify that the nine custom Stata tools function correctly and handle edge cases, we will implement the following automated test scripts:
+Per author feedback, the book moves from narrative skeleton to substantive draft with working code, figures, tables, and diagrams. Changes made:
+- **Subtitle** changed to "A Practical Workflow from Data to Deliverables" (was "From Public Data to Client-Ready Results"; the book is not just public data).
+- **Part I** renamed "The Embedded Evaluator Workflow" (dropped the "workshop" lens). **Chapter 2** retitled "Setting up a project that survives deadlines" (was "...a workshop..."). **Chapter 6** retitled "Building longitudinal data you can trust" (was "Building panels...", which was ambiguous between nested and survey panels).
+- **Companion do-file suite** created in `code/`: `00_control.do` (master control file: one editable root path, derived subfolders, project preferences, and a `run_all` switch that sources every stage in order), `01_install.do` (one-time package install), `20_ch03_apis.do` (downloads real BLS QCEW county wages with no key and builds the wage figure). All tested in Stata 19; the QCEW example produces verified real numbers (e.g., Harris/Houston $1,900/wk, Bexar/San Antonio $1,270/wk, 2023 Q1).
+- **New chapter about control files** (Section 2.2) with the actual control-file code, the numbered-pipeline convention (100_ingest ... 600_report), and the run-all block.
+- **Figures/diagrams** added via TikZ (preamble now loads tikz): a five-stage pipeline flow diagram (Fig 1.1), the numbered-pipeline diagram (Ch 2), a running-datasets table (Table 1.1), and the QCEW wage figure exported by the do-file and included from `images/ch03_qcew_wages.png` (Fig 3.1). Manuscript compiles clean (0 errors, 0 undefined refs, 90 pp).
+- **Writing made punchier**: chapters now lead with the concrete question, then how, then why; removed unexplained name-dropping (e.g., the Cox residual-scatter passage in Ch 9 rewritten to explain the idea directly).
+- Deeply revised so far: Preface, Ch 1, Ch 2, Ch 3, plus the Ch 6 retitle/opening and the Ch 9 data-ink section. **Still to receive the same worked-code + figure treatment: Chapters 4, 5, 7, 8, 10, 11, 12, 13, 14, 15** (they currently hold the first-pass narrative skeleton).
 
-### Automated Unit Tests
-*   `test_loebias.do`: Simulates a survey dataset of $N=10,000$ observations with built-in nonresponse bias. Verifies that the Wald trend test returns correct significance statistics.
-*   `test_faircheck.do`: Generates model predictions with known disparities and verifies that disparity ratio flags are triggered exactly when the ratio falls below the user-specified threshold.
-*   `test_llmsieve.do`: Verifies consensus variables are generated correctly under agreement thresholds, and that accuracy metrics/Kappa are correctly printed when a `gold()` variable is specified.
-*   `test_evalpreflight.do`: Verifies that Stata can successfully pass text to the LLM API and write a structured, non-empty Markdown checklist file containing required headings.
-*   `test_surveytracker.do`: Simulates a multi-wave survey dataset. Verifies that `surveytracker` writes correct metadata to an Excel workbook, appends subsequent waves correctly, and flags item text discrepancies.
-*   `test_likertscale.do`: Simulates Likert-scale items with varying response labels. Verifies that mean indices are computed correctly, "%-agree" variables collapse at the correct threshold, and Cronbach's alpha values are accurate.
-*   `test_nonresponse.do`: Creates a simulated target frame and respondent file with built-in selection bias. Verifies that unit and item missingness tests identify the bias and that raking weights stabilize the demographics back to frame margins.
-*   `test_srctag.do`: Simulates dataset merging. Verifies that variable-level characteristics (`src_name`, `src_table`, `src_vintage`) and dataset-level characteristics are preserved after merges.
-*   `test_srcfind.do`: Populates a temporary directory with various dummy `.dta` files carrying different source tags. Verifies that `srcfind` correctly finds matching variables, filters by source and vintage, and fails gracefully when no files exist in the path.
+Data sources confirmed working from Stata via `copy`/`import delimited`, no key: BLS QCEW (county CSV), County Health Rankings (annual analytic CSV), Stata built-ins (`sysuse`, stata-press.com/data URLs). Confirmed key-required (Appendix A setup): Census `getcensus`, FRED `import fred`. Documented gotcha (tested): Socrata `$limit` collides with Stata's `$` macro; fix with `char(36)`.
+
+## 8. Production notes and open tasks
+
+1. **This pass (done in main.tex):** new part/chapter/section architecture, retitled throughout; narrative skeleton, annotations, and idea stems rewritten to the style contract; every section carries its why-it-helps and four-promises language; no package code written.
+2. **Before drafting full chapters:** publish `sparkta2` source; regenerate the STAAR log; generate the two synthetic demo datasets (enrollment/survey file; item crosswalk); regenerate SJ demo figures from an actual Stata run; verify `net install` URLs and EDC/Zelma redistribution terms.
+3. **Book data abbreviation: DECIDED (July 2026): `apes`** (Applied Program Evaluation using Stata). Use it for: the companion data/package URL per house convention (`stata-press.com/data/apes/` if the book lands there; GitHub raw mirror meanwhile), the `net install apes` companion package name, and any shipped-dataset prefixes (`apes_enrollment.dta`, `apes_crosswalk.dta`). The `code/` folder and do-file names stay as they are; the handle appears where readers download things.
+4. **Fun alternate titles page:** draft one wry alternate per chapter during full drafting (e.g., Ch 2: "Your do-file should survive your laptop"; Ch 8: "The estimate is only as credible as the comparison group").
