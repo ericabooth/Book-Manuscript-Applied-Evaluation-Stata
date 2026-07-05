@@ -359,8 +359,8 @@ FRED & Economic time series & Series-period & \texttt{import fred}; free key \\
 Everything installs and runs from the companion \texttt{code/} folder. Run \texttt{01\_install.do} once to fetch the packages the book uses, then \texttt{00\_control.do} to set your paths (Chapter~\ref{ch:workshop}). As a first taste, here is the entire recipe for the wage figure that opens the data chapter, real numbers, no key, four lines:
 {\footnotesize
 \begin{verbatim}
-local url "https://data.bls.gov/cew/data/api"
-import delimited "`url'/2023/1/area/48453.csv", ///
+import delimited ///
+    "https://data.bls.gov/cew/data/api/2023/1/area/48453.csv", ///
     clear varnames(1) stringcols(1 3)
 keep if own_code == 5 & industry_code == "10"
 list area_fips avg_wkly_wage, clean noobs
@@ -683,8 +683,7 @@ graph hbar (asis) avg_wkly_wage, ///
     over(county, sort(1) descending label(labsize(small))) ///
     bar(1, color(navy)) blabel(bar, format(%9.0fc)) ///
     title("Private-sector weekly wage, Texas metros, 2023 Q1")
-graph export "$figures/ch03_qcew_wages.png", ///
-    replace width(2400)
+graph export "$figures/ch03_qcew_wages.png", replace width(2400)
 \end{verbatim}
 }
 
@@ -712,74 +711,16 @@ The download is a real one, roughly 3{,}200 counties and several hundred columns
 
 The CDC's PLACES project is the other standing source, modeling roughly forty health measures down to the tract through Socrata endpoints that emit CSV directly.\marginnote{Socrata speaks SoQL, a SQL-like query language, so you can push \texttt{\$where} and \texttt{\$select} clauses server-side and download only the columns and rows you need, the same filter-at-the-source instinct that Chapter~\ref{ch:noapi} scales to 100\,GB files.} Socrata is worth knowing, and it carries two traps worth a boxed warning, one of them specific to Stata (see the box below).
 
-\begin{vizcallout}[The Socrata truncation trap]
-Without a row limit, a Socrata endpoint returns only the first 1{,}000 rows, so a state's worth of tracts arrives truncated but looks complete. Constrain the request with field filters (as in the \texttt{webapi} examples of Section~\ref{sec:webapi}), and confirm the count with \texttt{count} after import. Socrata's own \texttt{\$limit} option would do this too, but its leading dollar sign collides with Stata's macro syntax; Section~\ref{sec:webapi} shows the clean way around it. Silent truncation is the kind of error that survives all the way to a published table.
+\begin{vizcallout}[Two Socrata traps: the \$ collision and silent truncation]
+First, Socrata's row filter is spelled \texttt{\$limit}, and Stata reads \texttt{\$} as the start of a global macro, so \texttt{"...?\$limit=5000"} silently becomes \texttt{"...?=5000"} and the download fails. Build the URL with \texttt{char(36)} to insert a literal dollar sign: \texttt{local u = "...?" + char(36) + "limit=5000\&stateabbr=TX"}, then \texttt{import delimited "`u'"}. Second, without a limit Socrata returns only the first 1{,}000 rows, so a state's worth of tracts arrives truncated but looks complete. Set the limit above your expected row count and confirm \texttt{\_N} after import. Both are the kind of error that survives all the way to a published table.
 \end{vizcallout}
 
 These sources serve the actionable promise: they turn \enquote{this community has real need} from an assertion into a number a board can act on.
 
 \section{Three routes from Stata to any API}\label{sec:threeroutes}
-Every API you will meet reduces to one of three routes, and knowing which one a new endpoint needs is what lets you reuse a template instead of learning each agency from scratch. The first route is a bare \texttt{import delimited} from a URL, which works whenever the endpoint returns comma-separated text and needs no login, as PLACES and QCEW do above. The second route is for endpoints that hand back JSON or want an authorization token, and it is the one that used to mean writing Python; the \texttt{webapi} command (Section~\ref{sec:webapi}) now collapses it into a single line. The third route runs the other direction, writing data out to a web service, and it is how the \texttt{googlesheets} and \texttt{googlechart} tools of Chapters~\ref{ch:sheets} and~\ref{ch:interactive} publish results back to the browser.
+Every API you will meet reduces to one of three routes, a pattern drawn from the authors' Stata Journal work on connecting Stata to web services. The first route is a bare \texttt{import delimited} from a URL, which works whenever the endpoint returns CSV and needs no authentication, as PLACES and QCEW do above. The second route, for endpoints that require an authorization header or return nested JSON, is a short \texttt{python:} block that uses the \texttt{requests} library to fetch and the Stata Function Interface to hand the parsed rows back to Stata. The third route runs the other direction, using \texttt{file write} to post data out to a web service.
 
-Owning one template per route is what makes this skill extensible past the agencies named here. When a state agency stands up a new endpoint next year, you will not need a new chapter; you will recognize which route applies and reuse it. That is the difference between learning five APIs and learning how APIs work.
-
-\subsection{JSON without tears, and the \texttt{webapi} command}\label{sec:webapi}
-The moment an evaluator hits an API that answers in JSON rather than a tidy CSV, the twenty-minute job threatens to become a Python project. This section is the shortcut: what JSON is, in one paragraph, and the one command that turns it into a Stata dataset.
-
-Start with the format, because the word scares people more than the thing does. \emph{JSON} (JavaScript Object Notation) is just text that stores data as labeled boxes inside labeled boxes. A record for one person might read \texttt{\{"id":1, "name":"Leanne Graham", "address":\{"city":"Gwenborough"\}\}}: three fields, and the third, \texttt{address}, is itself a small box holding \texttt{city}. That nesting is the only thing that makes JSON harder to read than a spreadsheet, because a spreadsheet cannot put a box inside a cell. The fix is \emph{flattening}: turning \texttt{address.city} into a plain column named \texttt{addresscity}, so the nested box becomes an ordinary variable.
-
-The \texttt{webapi} command does the request, the authentication, and the flattening in one line, and it leans only on the Python that ships inside Stata, so there is nothing to \texttt{pip install}. Ask a public endpoint for its data and \texttt{webapi} hands you a dataset:
-{\footnotesize
-\begin{verbatim}
-webapi get using ///
-    "https://jsonplaceholder.typicode.com/users", clear
-list id name addresscity in 1/3, noobs
-\end{verbatim}
-}
-The reply is ten records with nested addresses, and the flattening has already happened, so \texttt{address.city} arrives as the column \texttt{addresscity} with no work on your part:
-{\footnotesize
-\begin{verbatim}
-  +------------------------------------------+
-  | id               name        addresscity |
-  |------------------------------------------|
-  |  1      Leanne Graham        Gwenborough |
-  |  2       Ervin Howell        Wisokyburgh |
-  |  3   Clementine Bauch      McKenziehaven |
-  +------------------------------------------+
-\end{verbatim}
-}
-That is the whole idea: you name the URL, and the nested reply lands as flat variables. This makes sense once you see it, and it is why an evaluator can treat a JSON API as just another data source rather than a programming detour.
-
-The same one line reaches real health data. The CDC serves national mortality through a JSON endpoint, and a field filter keeps the request to the rows you want, still with no key:
-{\footnotesize
-\begin{verbatim}
-webapi get using ///
-    "https://data.cdc.gov/resource/bi63-dtpu.json", ///
-    params("year=2017|cause_name=All causes") clear
-\end{verbatim}
-}
-That returns 52 rows (one per state, plus the District of Columbia and the national total) over HTTP~200, ready to \texttt{destring} and rank. The \texttt{params()} option takes pipe-separated \texttt{key=value} pairs and encodes them into the query string for you, so you never hand-build a URL.
-
-When an endpoint does need a key, \texttt{webapi} carries it without ever putting it in your do-file. Store the token once as a global in \texttt{profile.do}, then pass it by reference:
-{\footnotesize
-\begin{verbatim}
-* one-time, in profile.do:  global API_TOKEN "your_token"
-webapi get using "https://api.example.org/v1/series", ///
-    bearer("$API_TOKEN") params("since=2026-01-01") ///
-    records("data") clear
-\end{verbatim}
-}
-Three options cover the auth schemes you will meet: \texttt{bearer()} for a token, \texttt{basicauth("user:pw")} for a username and password, and \texttt{apikeyheader()} or \texttt{apikeyparam()} for a plain API key. The \texttt{records("data")} option points at the branch of the reply that holds the rows, for the common case where an API wraps its data in an envelope of metadata. Keeping the key in \texttt{profile.do} rather than the script is the same discipline as every other credential in this book: a key in a shared file is a key someone else will spend.
-
-\begin{vizcallout}[The one JSON trap in Stata: the \$ sign]
-Socrata endpoints (data.cdc.gov and many state portals) offer query options that begin with a dollar sign, such as \texttt{\$limit} and \texttt{\$where}. Stata reads \texttt{\$} as the start of a global macro, so \texttt{params("\$limit=5000")} silently collapses to \texttt{params("=5000")} and the request fails. The clean fix is to not use the dollar options at all: the plain field filters shown above (\texttt{field=value}) do the same filtering with no dollar sign, and if you only need to cap the row count you can \texttt{keep in 1/5000} in Stata after the import. It is the one non-obvious trap in the chapter, and it bites everyone once.
-\end{vizcallout}
-
-\begin{kaobox}[frametitle=Package Integration: \texttt{webapi}]
-\textbf{Integrated command:} \texttt{webapi get}/\texttt{post}. Fetches a JSON (or CSV) web reply, optionally with a bearer token, basic auth, or an API key, and flattens the nested reply into a Stata dataset, using only Stata's built-in Python. It also polls an endpoint on a timer (\texttt{every()}, \texttt{times()}) to build a live panel, which is the survey-monitoring pattern of Chapter~\ref{ch:surveys}. The companion \texttt{ch03\_webapi.do} runs every example here against live public endpoints with no key.
-\end{kaobox}
-
-The reason this matters is reach: once JSON is no harder than CSV, the set of data an embedded evaluator can pull on a deadline widens from the handful of agencies that publish flat files to the far larger set that serve JSON, which is most modern APIs. That is the accessible and extensible promise pointed at the whole open-data landscape, not just the friendly corner of it.
+Knowing which route a new endpoint needs, and owning a template for each, is what makes this skill extensible past the agencies named in this chapter. When a state agency stands up a new endpoint next year, you will not need a new chapter; you will recognize which of the three routes applies and reuse the template. That is the difference between learning five APIs and learning how APIs work.
 
 \begin{kaobox}[frametitle=Ado-file Idea: \texttt{panelstack}]
 \textbf{Proposed program:} \texttt{panelstack}. Stacks year-stamped files into one harmonized panel: given a folder pattern and a rename-map CSV (old name, new name, first year, last year), it applies vintage-aware renames, tags each variable's source with \texttt{srctag} conventions (Chapter~\ref{ch:panels}), and reports what failed to match. It is the \enquote{combine} half of the download loops above, so a multi-year panel becomes one command instead of a fragile copy-and-edit.
@@ -792,7 +733,7 @@ The reason this matters is reach: once JSON is no harder than CSV, the set of da
 \textbf{The build.} Pull ACS income and poverty with \texttt{getcensus} (county, \texttt{statefips(48)}); pull county unemployment from FRED with \texttt{import fred}; assemble QCEW wages from the no-key CSV loop. Stack the three with \texttt{panelstack}, tagging each variable's source so the exhibit's provenance is auditable. The whole exhibit rebuilds next year by rerunning the do-file, which is why it is replicable, and it reports in the counties and dollars the board plans in, which is why it is actionable.
 \end{appliedexample}
 
-\paragraph{Where this leaves you.} You can now pull public data from the Census, education, economic, and health APIs into Stata, handle a JSON reply in one line with \texttt{webapi}, and place any new endpoint into the three-route pattern. Every one of those downloads is replicable because it runs from a URL rather than a screenshot, and JSON is no longer a reason to reach for a programmer. But plenty of agencies publish data with no API at all; Chapter~\ref{ch:noapi} is how you get it anyway.
+\paragraph{Where this leaves you.} You can now pull public data from the Census, education, economic, and health APIs into Stata, and you own a three-route pattern for any endpoint the book did not name. Every one of those downloads is replicable because it runs from a URL rather than a screenshot. But plenty of agencies publish data with no API at all; Chapter~\ref{ch:noapi} is how you get it anyway.
 
 \chapter{Harvesting data when there is no API}\label{ch:noapi}
 
@@ -1850,61 +1791,11 @@ The board wants \enquote{something like the newspaper does,} an interactive map 
 
 We cover sparklines for scanning a large portfolio, a single command that emits fourteen interactive chart types, and the judgment of when interactivity actually helps versus when it just adds motion. The through-line is that infographic-quality output should come from a do-file, so the graphic is as replicable and as easily updated as any other output in the book.\marginnote{A quiet failure mode: an interactive chart that loads its plotting library from a live CDN looks fine on your machine and blanks out on the client's, where the firewall blocks the outside request. Prefer libraries you can vendor locally.}
 
-\section{The visualization suite: one toolkit, five tools}\label{sec:suite}
-Before the individual commands, meet the toolkit they belong to. This chapter and the two that follow feature five of the authors' Stata packages that were built to work together, each a single command that takes a Stata dataset one step closer to something a client can open in a browser. Rather than five unrelated tricks, they form one pipeline: two tools bring data \emph{in}, three \emph{render} it as a chart or dashboard, and one \emph{wraps} the results into a finished report or web portal. Learn where each one sits and you can assemble a deliverable from parts instead of hand-building it every time.
-
-Two plain-language definitions carry the whole suite. An \emph{interactive chart} is a picture the reader can act on, hover a state to read its value, type a name into a search box, drag a slider, rather than only look at. \emph{Self-contained HTML} means the whole thing, the data and the code that draws it, lives inside one \texttt{.html} file you can email, so \enquote{it renders in the browser} simply means the reader double-clicks that file and the chart draws itself on their screen, no software to install.\marginnote{HTML is the plain-text format web pages are written in; a browser is any program that opens it (Chrome, Safari, Edge). \enquote{Renders} is just the browser's word for \enquote{draws.} If you can open a web page, you can open everything this suite produces.}
-
-The five tools divide the work along two axes. The first axis is \emph{online versus offline}: does the finished page need an internet connection to draw itself, or does it carry everything it needs? The second is \emph{chart versus container}: is the tool drawing a single graphic, or is it a shell that holds many graphics and prose together? Figure~\ref{fig:suite-pipeline} lays out the pipeline, and Table~\ref{tab:suite-matrix} places each tool in the grid those two axes make.
-
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}[node distance=0.5cm and 0.75cm]
-  \node[stage] (ing) {Ingest};
-  \node[stage, right=of ing] (ren) {Render};
-  \node[stage, right=of ren] (wrap) {Wrap};
-  \draw[flow] (ing) -- (ren);
-  \draw[flow] (ren) -- (wrap);
-  \node[substep, below=0.35cm of ing, text width=2.0cm]
-    {\texttt{webapi} (Ch.\,3)\\\texttt{googlesheets} (Ch.\,11)};
-  \node[substep, below=0.35cm of ren, text width=2.4cm]
-    {\texttt{googlechart} (online)\\\texttt{sparkta2} (offline)\\\texttt{statashiny} (Ch.\,12)};
-  \node[substep, below=0.35cm of wrap, text width=2.0cm]
-    {\texttt{webdoc2} (Ch.\,12)\\one report or portal};
-\end{tikzpicture}
-\caption[The visualization suite pipeline]{The suite as one pipeline. Data comes in through \texttt{webapi} (JSON APIs, Chapter~\ref{ch:apis}) or \texttt{googlesheets} (live Google Sheets, Chapter~\ref{ch:sheets}); it is rendered as a chart by \texttt{googlechart} (online) or \texttt{sparkta2} (offline), or as an interactive dashboard by \texttt{statashiny}; and \texttt{webdoc2} wraps the results into one shippable report or GitHub-Pages portal (both Chapter~\ref{ch:portals}). This chapter owns the render column's two chart tools.}
-\label{fig:suite-pipeline}
-\end{figure}
-
-The grid is the useful part, because it tells you which tool to reach for by asking two questions. Does the page have to work with the internet off? Then you are in the offline row: \texttt{sparkta2} for a chart, \texttt{statashiny} or \texttt{webdoc2} for a container. Are you drawing one graphic or holding many? That is the chart-versus-container column. Every tool owns exactly one cell, so the choice is rarely ambiguous once you name the venue and the deliverable.
-
-\begin{table*}[htbp]
-\centering
-\caption[The visualization suite at a glance]{The five-tool suite placed on the two axes that decide between them: online versus offline (does the finished page need the internet to draw?) and chart versus container (one graphic, or a shell that holds many?). \texttt{webapi} sits in the ingest column and is shown for completeness; the render and wrap tools are the subject of this chapter and the next two. Read down the \enquote{Best for} column to pick a tool by the job in front of you.}
-\label{tab:suite-matrix}
-{\footnotesize
-\begin{tabular}{lllll}
-\hline
-Tool & Layer & Renders & Net at view & Best for \\
-\hline
-\texttt{webapi}      & Ingest    & (data in)      & ---  & JSON APIs feeding the suite (Ch.\,3) \\
-\texttt{googlesheets}& Ingest    & (data I/O)     & live & Live Google Sheets as source or surface (Ch.\,11) \\
-\texttt{googlechart} & Chart     & Online (Google)& yes  & Web embeds, filter dropdowns, US-state geo, bubble-with-Play \\
-\texttt{sparkta2}    & Chart     & Offline (D3)   & no   & Air-gapped briefs; TX county / district maps \\
-\texttt{statashiny}  & Container & Offline (JS)   & no   & Single-file dashboards: sliders, search, cards (Ch.\,12) \\
-\texttt{webdoc2}     & Container & Offline (BS-5) & no   & The report/portal shell that embeds the above (Ch.\,12) \\
-\hline
-\end{tabular}
-}
-\end{table*}
-
-This chapter builds out the two chart tools in the render column, \texttt{googlechart} online and \texttt{sparkta2} offline, because a chart is the atom of every deliverable the suite ships. Chapter~\ref{ch:sheets} covers \texttt{googlesheets}, the live-data connector, and Chapter~\ref{ch:portals} covers the two containers, \texttt{statashiny} and \texttt{webdoc2}, that wrap these charts into a single report or portal. Keep the grid in mind as we go: every command below is an instance of one cell in it.
-
 \section{Sparklines: the word-sized trend}
 When a portfolio has forty sites, forty separate trend charts is not communication, it is a stack no one reads. A sparkline, a word-sized line with no axes, solves this by fitting a whole trajectory into a table cell,\marginnote{Tufte coined \enquote{sparkline} in \emph{Beautiful Evidence} (2006), defining it as a \enquote{small, intense, word-sized graphic.} The point is that it sits inline with text, at the resolution of the surrounding type.} so a reader scans one column and sees every site's trend at once, the rising ones and the falling ones jumping out. The \texttt{sparkta2} engine generates these inline trends and drops them into dashboard tables, which is density with dignity: every site shown, no site given a page it does not need.
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{sparkta2}]
-\textbf{Integrated command:} \texttt{sparkta2}. The suite's \emph{offline} chart tool (Table~\ref{tab:suite-matrix}): a D3-based engine that generates high-density inline trend sparklines and sub-state maps, rendering fully offline. %TODO-verify: the sparkta2 package source is not yet public; only rendered galleries exist. It must be published to the authors' GitHub before the book can direct readers to install it.
+\textbf{Integrated command:} \texttt{sparkta2}. Generates high-density inline trend sparklines (and related offline D3 graphics) and exports them into dashboard tables. %TODO-verify: the sparkta2 package source is not yet public; only rendered galleries exist. It must be published to the authors' GitHub before the book can direct readers to install it.
 \end{kaobox}
 
 One honest caveat travels with this tool. As of this writing the \texttt{sparkta2} source is not yet published, only rendered galleries are public, so the book's claim rests on output the reader cannot yet install. Publishing the engine is a prerequisite for this section, and we flag it plainly rather than imply an install that does not exist.
@@ -1966,138 +1857,37 @@ The panel is real, not simulated: 144 attempted downloads, one row kept per coun
 
 The whole exhibit is one short do-file (\texttt{ch10\_smallmult.do}) that reruns from the same public URLs, so next quarter's data point arrives by editing the year range in one \texttt{forvalues} line. That is the sparkline's promise made replicable: the density is generated, not hand-placed, so the wall refreshes when the data does rather than drifting out of date in a design file. It is also extensible, add a county and the wall grows, and accessible, because it reports in dollars a week and county names a board already uses.
 
-\subsection{What \texttt{sparkta2} adds: offline and sub-state}\label{sec:sparkta2}
-The spark wall is native Stata; \texttt{sparkta2} is the suite tool that generalizes it, and it earns its place in the grid by owning the one cell \texttt{googlechart} cannot: an interactive chart that draws with the internet off, and a map below the state level. Where \texttt{googlechart}'s geographic type stops at US states (Section~\ref{sec:gc-geo}), \texttt{sparkta2} renders Texas \emph{county} and even \emph{school-district} choropleths, the sub-state geography an education or workforce evaluator actually reports in. It does this by bundling its drawing engine (D3, a JavaScript charting library) \emph{inside} the HTML file, so there is no live library to fetch and nothing to blank behind a firewall.\marginnote{\enquote{D3} is a widely used JavaScript library for data-driven graphics. The point for us is not the library but where it lives: \texttt{sparkta2} ships it inside the file, so the page is truly self-contained. \texttt{googlechart} instead links out to Google's copy at view time, which is the online-versus-offline split of Table~\ref{tab:suite-matrix}.}
-
-Its planned type list reads like the offline complement to \texttt{googlechart}: multi-series lines, diverging bars, donuts, a bar-race animation, hexbin density maps, bivariate two-variable choropleths, and the sub-state maps that are its signature. The decision between the two siblings comes down to two questions, both drawn straight from Table~\ref{tab:suite-matrix}. Must the page render with no internet, for an air-gapped agency or an embargoed report? Choose \texttt{sparkta2}. Do you need geography finer than the state, a map of Texas counties or independent school districts? Choose \texttt{sparkta2}, because \texttt{googlechart}'s \texttt{geo} type cannot draw it. For everything else, native filter dropdowns, an animated bubble with a Play button, a searchable table, US-state maps, \texttt{googlechart} is the richer tool, and the rest of this chapter is its worked examples. We restate the caveat once so no reader is misled: the \texttt{sparkta2} engine is not yet published, so treat this subsection as a description of what it renders, not an install you can run today.
-
 \section{Fourteen chart types from one command}
-Hand a client a page they can explore rather than a figure they can only look at, and do it without leaving the do-file. The \texttt{googlechart} command turns a Stata dataset into a self-contained interactive HTML page, with fourteen chart types from one syntax: geographic choropleths, bubbles that animate across a time panel, searchable tables, diverging Likert bars, and the rest. It carries a brand theme and an optional download menu, so a client can export the underlying data or a PNG themselves, which turns a static deliverable into a small tool the audience can use.\marginnote{The catch behind the name: the Google Charts renderer historically loaded from Google's servers, so a page built this way can go blank offline or behind a strict firewall. Confirm the output embeds its own assets before you promise it runs air-gapped, or ship its offline sibling \texttt{sparkta2} instead.}
+Hand a client a page they can explore rather than a figure they can only look at, and do it without leaving the do-file. The \texttt{googlechart} command turns a Stata dataset into a self-contained interactive HTML page, with fourteen chart types from one syntax: geographic choropleths, bubbles that animate across a time panel, searchable tables, diverging Likert bars, and the rest. It carries a brand theme and an optional download menu, so a client can export the underlying data or a PNG themselves, which turns a static deliverable into a small tool the audience can use.\marginnote{The catch behind the name: the Google Charts renderer historically loaded from Google's servers, so a page built this way can go blank offline or behind a strict firewall. Confirm the output embeds its own assets before you promise it runs air-gapped.}
 
 Because the chart is written by a do-file, it stays inside the replicable pipeline: the interactive graphic rebuilds when the data updates, rather than living as a hand-made artifact in a design file that drifts out of date. That is the key difference from a one-off dashboard, and it is why infographic-quality output belongs in code.\marginnote{A useful test of any \enquote{interactive} deliverable: could you regenerate last quarter's version from scratch if you had to? If the answer is \enquote{only by re-clicking through a design tool,} it is not really in the pipeline yet.} The authors' Stata Journal work documents the command and the general Stata-to-web pattern behind it.
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{googlechart}]
-\textbf{Integrated command:} \texttt{googlechart}. The suite's \emph{online} chart tool (Table~\ref{tab:suite-matrix}). From any dataset, writes a self-contained interactive HTML page (column, bar, line, area, combo, pie, donut, scatter, animated bubble, geo, timeline, searchable table, histogram, and diverging stacked bar), with filter dropdowns, a brand theme, and an optional data/PNG download menu. It writes the file with no key and no network; the browser fetches Google's drawing code only when the page is opened.
+\textbf{Integrated command:} \texttt{googlechart}. From any dataset, writes a self-contained interactive HTML page (column, bar, line, area, combo, pie, donut, scatter, animated bubble, geo, timeline, searchable table, histogram, and diverging stacked bar), with filter dropdowns, a brand theme, and an optional data/PNG download menu.
 \end{kaobox}
 
-\subsection{How one command writes an interactive page}\label{sec:gc-how}
-The mechanics are worth one paragraph, because they explain both the \enquote{no key} promise and the \enquote{needs network at view time} caveat that newcomers trip over. When you run \texttt{googlechart}, it does not call any web service. It writes a single text file that holds three things: your data, embedded as JSON (the labeled-box text format of Chapter~\ref{ch:apis}); a small block of styling; and the entire drawing engine, inlined as JavaScript at the bottom of the file. Nothing is fetched while Stata runs, so there is no key, no login, and no network call at build time. The one thing the file does \emph{not} carry is Google's chart-drawing library itself, which its licence forbids redistributing, so the page links out to Google's copy. That link is followed by the reader's browser when they open the page, which is the whole meaning of \enquote{needs network at view time}: the file builds offline but draws online.\marginnote{This is the online cell of Table~\ref{tab:suite-matrix} made concrete. The data and logic are yours and travel in the file; only the last library is Google's and is fetched on open. If the reader's network blocks \texttt{gstatic.com}, the page blanks, which is exactly the failure the offline sibling \texttt{sparkta2} avoids.}
-
-Every example below follows one shape. Load a dataset, call \texttt{googlechart} with a \texttt{type()} and a few options, and it writes one \texttt{.html} file named by \texttt{export()}. The \texttt{noopen} option we use throughout just suppresses the auto-open so a do-file can build a dozen pages without popping a dozen browser tabs. These commands are runnable: the companion \texttt{ch10\_googlechart.do} builds all six pages in this chapter, offline and with no key, and you can open the results in any browser.
-
-\subsection{Worked example 1: a US-state choropleth}\label{sec:gc-geo}
-The geographic choropleth answers the request an evaluator hears most: \enquote{show me my states on a map.} A \emph{choropleth} shades each region by a value, so darker means more, and the eye finds the hot spots without reading a single number. We use the County Health Rankings \& Roadmaps 2025 state extract, one row per state, and map the share of residents without health insurance. The geographic key lives in \texttt{geo\_code} as a \enquote{US-XX} code (\texttt{US-TX}, \texttt{US-CA}), and \texttt{name()} points \texttt{googlechart} at it:
+\subsection{Two types worth showing: geo and table}
+Two of the fourteen types cover most of what a board actually asks for. The geographic choropleth answers \enquote{show me my counties on a map,} and the searchable table answers \enquote{let me find my own row.} We show the syntax display-only, because the live renderer needs assets this page cannot fetch, but the commands are exactly what the do-file writes. The county-wage panel from Section~\ref{sec:sparkwall} feeds a Texas choropleth in one call:
 {\footnotesize
 \begin{verbatim}
-import delimited using ///
-    "`DATA'/chr_states_2025.csv", varnames(1) clear
-googlechart uninsured, name(geo_code) type(geo)  ///
-    georegion("US") georesolution("us-states")   ///
-    tx2036style scheme(blues)                     ///
-    download datatable downloadpos(below)         ///
-    title("Uninsured rate by state, 2025")        ///
-    width(960) height(560) noopen                 ///
-    export("`OUT'/01_geo_uninsured.html")
+* display only: writes wages_geo.html
+googlechart avg_wkly_wage, type(geo) ///
+    region("US-TX") resolution(provinces) ///
+    id(area_fips) label(county) ///
+    saving("$out/wages_geo.html")
 \end{verbatim}
 }
-Four options carry the type. The two geography settings, \texttt{georegion("US")} and \texttt{georesolution("us-states")}, tell the renderer to draw the fifty states plus DC rather than a world map. \texttt{scheme(blues)} sets the color ramp, so the darkest state is the highest uninsured rate. And \texttt{download datatable} adds two things a client asks for the moment they see the map: a menu to export the picture as an image, and a \enquote{view data} panel that shows and downloads the numbers behind it. The result is Figure~\ref{fig:gc-geo}: Texas is the darkest state at roughly nineteen percent uninsured, a cluster of southern and mountain-west states trails it, and the northeast is palest.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{ch10_gc_geo.png}
-\caption[A googlechart US-state choropleth]{The \texttt{type(geo)} choropleth of the uninsured rate by state, 2025, written by \texttt{ch10\_googlechart.do} with the command printed above. Darker is higher; the legend runs from 2.9 to 18.8 percent. In the browser this map is interactive: hover a state and its exact value appears. \texttt{googlechart}'s \texttt{geo} type stops at the state level; for a Texas county map, use the offline sibling \texttt{sparkta2} (Section~\ref{sec:sparkta2}).}
-\label{fig:gc-geo}
-\end{figure}
-
-This makes sense: the uninsured map is the well-known coverage gap between states that expanded Medicaid and states that did not, and Texas anchors the dark end every year. The point for the suite is that this map is not a screenshot; it is written by the do-file from the CHR file, so when the 2026 release posts, rerunning the do-file redraws the map with no hand-editing. That is the replicable promise applied to an interactive graphic.\marginnote{The \texttt{geo} type is the one most likely to blank behind a firewall, because it fetches boundary data at render time. Before you promise a client an air-gapped map, open the HTML with your network off and confirm it still draws; if it does not, ship the offline \texttt{sparkta2} choropleth or the static map of Chapter~\ref{ch:graphs}.}
-
-\subsection{Worked example 2: an animated bubble with a Play button}\label{sec:gc-bubble}
-Some stories are trajectories, and a trajectory wants motion. The animated bubble is \texttt{googlechart}'s Rosling-style chart: each state is a circle, and pressing Play walks it through time so the reader watches the whole field move. We switch to the CHR \emph{panel} extract, which has one row per state per year from 2016 to 2025, because animation needs frames: without a row for each time value, there is nothing to animate.\marginnote{This is the one requirement newcomers miss. \texttt{time(year)} adds the Play button, but the button only does something if the data is a \emph{panel}, one row per entity per period. A single cross-section with \texttt{time()} draws a static bubble and no motion. Check that your data is long, not wide, before reaching for \texttt{time()}.} We plot children in poverty against premature death, size each bubble by how rural the state is, and color it by whether its uninsured rate clears ten percent:
+The \texttt{region("US-TX")} and \texttt{resolution(provinces)} options draw counties rather than states, and \texttt{id(area\_fips)} tells the renderer which column holds the geographic key. The same dataset becomes a searchable, sortable table with a different \texttt{type()}:
 {\footnotesize
 \begin{verbatim}
-import delimited using ///
-    "`DATA'/chr_states_panel.csv", varnames(1) clear
-gen byte highunins = uninsured >= 10
-label define hu 0 "Uninsured < 10%" 1 "Uninsured >= 10%"
-label values highunins hu
-googlechart child_poverty premature_death,       ///
-    name(usps) over(highunins)                    ///
-    sizevar(pct_rural) time(year) type(bubble)    ///
-    tooltipvars(uninsured)                         ///
-    tx2036style download datatable downloadpos(below) ///
-    title("Child poverty vs premature death"      ///
-          " (press Play: 2016 to 2025)")           ///
-    width(920) height(560) noopen                 ///
-    export("`OUT'/04_bubble.html")
+* display only: writes wages_table.html
+googlechart county avg_wkly_wage ///
+    month3_emplvl, type(table) ///
+    format(avg_wkly_wage "$#,##0") ///
+    saving("$out/wages_table.html")
 \end{verbatim}
 }
-Read the roles one at a time, because \texttt{type(bubble)} uses more of them than any other type. The two variables in the varlist are the x and y axes (poverty and premature death). \texttt{name(usps)} labels each bubble with its state postal code. \texttt{over(highunins)} colors the bubbles by group, so the high-uninsured states stand out. \texttt{sizevar(pct\_rural)} scales each circle by rurality. And \texttt{time(year)} is the option that adds the Play button and the year slider. The result is Figure~\ref{fig:gc-bubble}.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{ch10_gc_bubble.png}
-\caption[A googlechart animated bubble]{The \texttt{type(bubble)} chart with \texttt{time(year)}, written by \texttt{ch10\_googlechart.do}, shown at one frame. Each circle is a state, sized by how rural it is and colored by whether its uninsured rate clears ten percent. In the browser a Play button walks all fifty states from 2016 to 2025; here we print the final frame. The upward drift, poorer-child states carry higher premature death, is the trajectory that justifies the motion.}
-\label{fig:gc-bubble}
-\end{figure}
-
-This makes sense, and it is the honest test for animation: the story \emph{is} the trajectory, states climbing together up the poverty-mortality diagonal over a decade, so motion carries information a single frame cannot. Note one panel honesty in the do-file: only 2024 and 2025 are the real CHR releases, and the earlier years are simulated to give the Play control frames to move through, which the chart's note says out loud. When you build your own, feed \texttt{time()} a real panel and the animation earns its keep; feed it filler and you have decoration.
-
-\subsection{Worked example 3: a searchable table}\label{sec:gc-table}
-The other request an evaluator hears constantly is the opposite of a map: \enquote{let me find my own row.} The searchable table answers it. \texttt{type(table)} is the one type that usually takes \emph{no} varlist; instead you list the columns you want in \texttt{tooltipvars()}, and two switches turn an ordinary table into a tool: \texttt{tablesearch} adds a search box, and \texttt{tableheadersticky} freezes the header row so it stays visible as the reader scrolls:
-{\footnotesize
-\begin{verbatim}
-import delimited using ///
-    "`DATA'/chr_states_2025.csv", varnames(1) clear
-googlechart, type(table)                          ///
-    tooltipvars(state uninsured median_income     ///
-                premature_death obesity           ///
-                child_poverty unemployment        ///
-                pct_rural)                         ///
-    tablesearch tableheadersticky                 ///
-    tx2036style download datatable downloadpos(below) ///
-    title("2025 County Health Rankings:"          ///
-          " state measures (searchable)")          ///
-    width(980) height(460) noopen                 ///
-    export("`OUT'/05_table.html")
-\end{verbatim}
-}
-The payoff is in Figure~\ref{fig:gc-table}: a client opens the page, types their state name into the search box, and reads their own row without a spreadsheet, or clicks a column header to sort every state by that measure. This is the accessible promise served directly, the audience finds their own number instead of hunting a printed table, and because the file is written by the do-file it refreshes when the CHR data does.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{ch10_gc_table.png}
-\caption[A googlechart searchable table]{The \texttt{type(table)} output with \texttt{tablesearch} and \texttt{tableheadersticky}, written by \texttt{ch10\_googlechart.do}. All 51 rows (fifty states plus DC) and eight measures; the search box at top filters as the reader types, the sticky header keeps the column names in view, and any column sorts on a click. The columns come from \texttt{tooltipvars()}, not a varlist, which is the one syntax quirk of the table type.}
-\label{fig:gc-table}
-\end{figure}
-
-\subsection{Worked example 4: a diverging stacked bar}\label{sec:gc-divbar}
-The last type is the one survey work needs most and general tools handle worst: the diverging stacked bar for Likert data. A \emph{Likert} item is the familiar strongly-disagree-to-strongly-agree scale, and the honest way to chart it is to center the neutral response on zero, push disagreement left and agreement right, so the balance of opinion reads at a glance. \texttt{type(divbar)} does exactly this. It needs two roles: \texttt{name()} for the question and \texttt{level()} for the response category, plus \texttt{levelorder()} to fix the stack order and \texttt{centerlevel()} to name the neutral level that sits on zero:
-{\footnotesize
-\begin{verbatim}
-googlechart share, name(q) level(response)        ///
-    type(divbar)                                  ///
-    levelorder("Strongly disagree|Disagree"       ///
-        + "|Neutral|Agree|Strongly agree")         ///
-    centerlevel(Neutral)                           ///
-    tx2036style download datatable downloadpos(below) ///
-    title("Texans on state policy"                ///
-          " (illustrative survey data)")           ///
-    subtitle("Diverging stacked bar;"             ///
-             " neutral centered on zero")          ///
-    width(1040) height(420) noopen                ///
-    export("`OUT'/06_divbar.html")
-\end{verbatim}
-}
-The data here is a small synthetic set, three policy statements each with five Likert levels, written inline in the do-file so the shape is illustrative rather than a real poll. Figure~\ref{fig:gc-divbar} shows the result: each statement is one horizontal bar split at zero, disagreement in reds to the left and agreement in blues to the right, with the neutral slice straddling the center line.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{ch10_gc_divbar.png}
-\caption[A googlechart diverging stacked bar]{The \texttt{type(divbar)} chart, written by \texttt{ch10\_googlechart.do} from illustrative Likert data. \texttt{centerlevel(Neutral)} puts the neutral response on the zero line and sign-flips the disagree side to the left, so the reader sees the balance of opinion per item at a glance. This is the Pew-style diverging bar; the underlying numbers are synthetic and shown only for shape.}
-\label{fig:gc-divbar}
-\end{figure}
-
-Four types, one command, one do-file. Between them the geo map, the animated bubble, the searchable table, and the diverging bar cover most of what a board actually asks for, and every one is written offline with no key. Two options recur across all four and are worth naming once. \texttt{tx2036style} applies the author's brand palette and font in one word, so every page looks like it came from the same shop; swap in \texttt{scheme(blues)} or \texttt{scheme(rdbu)} for a different ramp. And \texttt{download datatable} pairs an image-export menu with a \enquote{view the data} panel, so the client can take both the picture and the numbers, which is what turns a chart into a small tool. The remaining ten types (column, line, area, combo, pie, donut, scatter, timeline, histogram, and the rest) follow the same grammar: a \texttt{type()}, a varlist or a set of role options, and an \texttt{export()}.
+A client opens \texttt{wages\_table.html}, types their county name into the search box, and sorts by wage without a spreadsheet, which is the accessible promise served directly: the audience finds their own number instead of hunting a printed table. Both files are written by the do-file, so both rebuild when the wage panel refreshes, and neither is a hand-made artifact that can drift.\marginnote{The \texttt{geo} type is the one most likely to blank behind a firewall, because it fetches map tiles and boundary data at render time. Before you promise a client an air-gapped map, open the HTML with your network off and confirm it still draws; if it does not, ship the static choropleth from Chapter~\ref{ch:graphs} instead.}
 
 \section{Choosing static, interactive, or animated}
 Interactivity is a claim about how the audience will use the evidence, so it should be chosen, not defaulted to. A printed report or a slide wants a clean static figure; a client who will genuinely explore, filter to their county, compare their site, wants interactivity; a change over time that the eye should follow wants animation, but only when the motion carries information rather than decorating it. Animation that adds nothing subtracts, because it makes the reader wait for a story a static small-multiple would have told at once.\sidenote{Rosling's bubble charts are the honorable exception: motion works there because the story \emph{is} the trajectory over time. If your animation would read just as well as a set of before/after panels, ship the panels.}
@@ -2123,16 +1913,16 @@ Animated & Watcher & Screen, talk & Re-render frames & Motion carries no signal 
 
 Read the table as a ladder of risk. Static output has essentially no failure mode: it renders anywhere a reader can open a PDF, and the only way it disappoints is by being the wrong chart. Interactive output buys exploration at the cost of a live rendering dependency, so it fails exactly where Section~\ref{sec:sparkwall}'s margin notes warn, behind a firewall or when a CDN is blocked. Animated output buys a followed-over-time story at the cost of the reader's patience, so it fails when the motion carries no information the eye needed to see move. Choosing deliberately is what keeps interactive output in service of the message instead of showing off the tool, which protects the accessible promise from the temptation to be clever.
 
-A practical corollary follows from the failure column. When you are not sure the venue will render an interactive or animated deliverable, build the static version first and treat the fancier form as an enhancement, not the base case.\marginnote{This is progressive enhancement, borrowed from web design: ship a version that works everywhere, then layer on features for the environments that support them. A dashboard that degrades to a readable table has a floor; one that degrades to a blank page has none.} The spark wall of Section~\ref{sec:sparkwall} is precisely this hedge: it is a static small-multiple that carries the whole finding, so if the interactive map blanks behind the client's firewall, the exhibit that survives still answers the question. And when the venue is offline for good, an air-gapped agency or an embargoed report, the choice inside the interactive row is \texttt{sparkta2} over \texttt{googlechart}, because only the offline sibling carries its drawing engine in the file. That ordering, static as the floor and interactivity as the bonus, is the actionable habit this chapter most wants you to keep.
+A practical corollary follows from the failure column. When you are not sure the venue will render an interactive or animated deliverable, build the static version first and treat the fancier form as an enhancement, not the base case.\marginnote{This is progressive enhancement, borrowed from web design: ship a version that works everywhere, then layer on features for the environments that support them. A dashboard that degrades to a readable table has a floor; one that degrades to a blank page has none.} The spark wall of Section~\ref{sec:sparkwall} is precisely this hedge: it is a static small-multiple that carries the whole finding, so if the interactive map blanks behind the client's firewall, the exhibit that survives still answers the question. That ordering, static as the floor and interactivity as the bonus, is the actionable habit this chapter most wants you to keep.
 
 \begin{appliedexample}[One dataset, three deliverables]
 \textbf{Scenario.} The workforce board wants the county wage story in three places: a one-page printed brief, an exploratory portal on the agency website, and a two-minute clip in the director's talk.
 
 \medskip
-\textbf{The build.} From the single \texttt{ch10\_smallmult.do} panel, ship three forms of the same numbers. For the brief, the static spark wall of Figure~\ref{fig:sparkwall}, which needs nothing to render and cannot break. For the portal, the \texttt{googlechart type(geo)} choropleth and \texttt{type(table)} search of Section~\ref{sec:gc-geo}, or their offline \texttt{sparkta2} equivalents if the agency firewall blocks the CDN. For the talk, the animated \texttt{type(bubble)} of Section~\ref{sec:gc-bubble}, used only because the trajectory is the point. Each deliverable is written by the same do-file from the same panel, so all three rebuild when next quarter's QCEW file posts, and Chapter~\ref{ch:portals} shows how \texttt{webdoc2} wraps the portal pieces into one shippable page. That is replicable (one do-file, three outputs), extensible (add a county, all three grow), accessible (each audience gets the form it can use), and actionable (the board plans in the counties and dollars every version reports).
+\textbf{The build.} From the single \texttt{ch10\_smallmult.do} panel, ship three forms of the same numbers. For the brief, the static spark wall of Figure~\ref{fig:sparkwall}, which needs nothing to render and cannot break. For the portal, the \texttt{googlechart type(geo)} choropleth and \texttt{type(table)} search from Section~\ref{sec:sparkwall}, vendored so they do not blank behind the agency firewall. For the talk, an animated bubble of wage against employment over the twenty-four quarters, used only because the trajectory is the point. Each deliverable is written by the same do-file from the same panel, so all three rebuild when next quarter's QCEW file posts. That is replicable (one do-file, three outputs), extensible (add a county, all three grow), accessible (each audience gets the form it can use), and actionable (the board plans in the counties and dollars every version reports).
 \end{appliedexample}
 
-\paragraph{Where this leaves you.} You can now build sparkline portfolios and spark walls, interactive charts, and infographics straight from a do-file, and you know when interactivity earns its keep versus when a static small-multiple already told the story. You have also met the suite these commands belong to: \texttt{googlechart} online and \texttt{sparkta2} offline are its two chart tools, fed by \texttt{webapi} and \texttt{googlesheets} and wrapped by \texttt{statashiny} and \texttt{webdoc2}. Because they come from code, these graphics stay replicable and easy to refresh, and because you build the static floor first, a blocked CDN never leaves you with nothing to show. Chapter~\ref{ch:sheets} turns to the format most clients actually live in, the spreadsheet, and how to deliver through it without giving up the pipeline.
+\paragraph{Where this leaves you.} You can now build sparkline portfolios and spark walls, interactive charts, and infographics straight from a do-file, and you know when interactivity earns its keep versus when a static small-multiple already told the story. Because they come from code, these graphics stay replicable and easy to refresh, and because you build the static floor first, a blocked CDN never leaves you with nothing to show. Chapter~\ref{ch:sheets} turns to the format most clients actually live in, the spreadsheet, and how to deliver through it without giving up the pipeline.
 \chapter{Delivering through spreadsheets}\label{ch:sheets}
 
 The client lives in Excel and Google Sheets and is not going to leave, so a beautiful PDF they cannot edit is a deliverable that dies on arrival. Meeting an audience in the format they already use is not a compromise; it is the accessible promise taken seriously. The trick is to produce those spreadsheets from Stata, so the convenience of the format does not cost you the reproducibility of the pipeline.
@@ -2194,174 +1984,28 @@ putexcel save
 }
 Because \texttt{B3} is filled from \texttt{\_b[hours]} rather than a typed number, the workbook cannot fall out of step with the model that produced the \LaTeX{} table on the same run.\marginnote{A discipline worth adopting: never let a number reach a client-facing cell by keyboard. If it did not come from \texttt{\_b[]}, \texttt{e()}, \texttt{r()}, or a stored table, it is a transcription error waiting to be discovered in a meeting.} Delivering in the client's native format is accessibility in practice, and automating it is what turns a dreaded recurring chore into a rerun. A funder table that regenerates itself cannot fall out of sync with the analysis behind it, which is replicability protecting the client from a stale number.
 
-\section{Google Sheets as a live channel}\label{sec:googlesheets}
+\section{Google Sheets as a live channel}
 A Google Sheet the whole program team can open, on their phones, in a meeting, and that your do-file refreshes, is embedded evaluation made tangible. The \texttt{googlesheets} command connects Stata to a Sheet with a syntax that mirrors the familiar \texttt{import}/\texttt{export}/\texttt{putexcel} family: export a dataset, \texttt{put} individual values and formulas, \texttt{format} cells, insert a native Sheets chart that stays live, and re-import to check that what you wrote is what landed. Its Forms-response import (\texttt{since()} and \texttt{tail()}) reaches back to the survey work of Chapter~\ref{ch:surveys}, so a live response sheet can flow straight into an updating summary.\marginnote{Watch the quotas: the free Google Sheets API caps reads and writes per minute per user, so a do-file that pushes a large dataset row by row will hit a \texttt{429} error. Export in one bulk write, not a loop, and back off if you must retry.}
 
-Before the workflow, one plain-language pass over the terms, because the API vocabulary is where newcomers get lost. A \emph{Sheet ID} is the roughly forty-character string in a Google Sheets URL between \texttt{/d/} and \texttt{/edit}; it names the workbook the way a file path names a file, and every command below takes it (or the whole URL) after \texttt{using}. A \emph{tab} is one sheet inside that workbook, named in \texttt{sheet()} and case-sensitive. \emph{OAuth} is the one-time browser sign-in that lets Stata act as you, so you never paste a password into code and never have to share each Sheet with a robot account; the setup is a one-time chore in Appendix~\ref{app:setup}. With that sign-in done once per machine, every line in this section runs exactly as written.
-
-\subsection{The workflow, one command at a time}
-The worked example writes a real dataset to a real Sheet: the County Health Rankings 2025 state file, one row per state, the same data the \texttt{googlechart} charts of Chapter~\ref{ch:interactive} render offline. Because these commands touch a live Google account, they are shown as a copy-pasteable recipe rather than run at book-build time; point \texttt{\$SS} at a Sheet you can open, complete the Appendix~\ref{app:setup} sign-in once, and they execute as printed. We load the extract and confirm the connection first, because a \texttt{ping} that fails now saves a confusing error three commands later:
+In practice the same three lines you would run against a local workbook now target a Sheet the team already has open. You push the current summary, drop a live chart beside it, and read the sheet back to confirm the write landed where you meant:
 {\footnotesize
 \begin{verbatim}
-import delimited using ///
-    "`c(pwd)'/../data/chr_states_2025.csv", varnames(1) clear
-googlesheets ping, spreadsheet("$SS")
+googlesheets export summary using "SHEET_ID", ///
+    sheet("Monday update") replace
+googlesheets addchart using "SHEET_ID", ///
+    sheet("Monday update") type(column) ///
+    range("A1:C7")
+googlesheets import using "SHEET_ID", ///
+    sheet("Monday update") clear firstrow
 \end{verbatim}
 }
-A tab has to exist before you can write to it, so the next pair deletes any stale copy and makes a fresh one. The \texttt{capture} in front of \texttt{deletesheet} swallows the error on the first run, when there is nothing to delete yet:
-{\footnotesize
-\begin{verbatim}
-capture googlesheets deletesheet, spreadsheet("$SS") ///
-    title("CHR states 2025")
-googlesheets addsheet, spreadsheet("$SS") ///
-    title("CHR states 2025")
-\end{verbatim}
-}
-Now the dataset lands in one bulk write. Exporting the whole frame in a single call, rather than a row-by-row loop, is what keeps you under the per-minute API quota; \texttt{firstrow(variables)} writes the variable names as the header row:
-{\footnotesize
-\begin{verbatim}
-googlesheets export using "$SS", ///
-    sheet("CHR states 2025") firstrow(variables)
-\end{verbatim}
-}
-The columns arrive in the dataset's order, so the header sits in row~1 and the 51 states fill rows 2 through 52. Column~E is median household income and column~H is the uninsured rate, which is all the geography the formatting and charting steps below need.
-
-\subsection{Formatting cells from code}
-Delivering in the client's format means it should look finished, not like a raw dump. The \texttt{format} subcommand is the Sheets analog of \texttt{putexcel}'s cell formatting: give it a range and the styling you want. Here the header row gets a navy fill, white bold text, and Montserrat at 12 point, the Texas 2036 house look, and two data columns get number formats so income reads as dollars and the uninsured rate carries one decimal:\marginnote{The \texttt{numfmt()} strings are ordinary spreadsheet format codes, the same ones the Excel \enquote{Custom} number-format box takes. \texttt{"\$"\#,\#\#0} is dollars with a thousands separator; \texttt{0.0} is one decimal place. If you know the Excel codes, you already know these.}
-{\footnotesize
-\begin{verbatim}
-googlesheets format using "$SS", ///
-    sheet("CHR states 2025") range("A1:K1") ///
-    bgcolor("#1B2D55") fgcolor("#FFFFFF") bold ///
-    font("Montserrat") fontsize(12)
-googlesheets format using "$SS", ///
-    sheet("CHR states 2025") range("E2:E52") ///
-    numfmt(`""$"#,##0"')
-googlesheets format using "$SS", ///
-    sheet("CHR states 2025") range("H2:H52") numfmt("0.0")
-\end{verbatim}
-}
-The formatting is set once in the do-file, so the header stays navy and the dollars stay formatted every time the sheet rebuilds, with no one reapplying styles by hand after a refresh.
-
-\subsection{Writing single values, formulas, and a matrix}
-Alongside the exported table you often want a few computed cells: a title, a build stamp, a summary statistic, a live formula the sheet recomputes, even a whole matrix. The \texttt{put} subcommand is the \texttt{putexcel} analog and takes exactly one of \texttt{string()}, \texttt{value()}, \texttt{formula()}, or \texttt{matrix()} per call. A title and a dated build stamp go off to the side in column~M:
-{\footnotesize
-\begin{verbatim}
-googlesheets put using "$SS", sheet("CHR states 2025") ///
-    cell(M1) string("2025 County Health Rankings")
-googlesheets put using "$SS", sheet("CHR states 2025") ///
-    cell(M2) string("Built in Stata on `=c(current_date)'")
-\end{verbatim}
-}
-A computed number is written the same way. We summarize in Stata and \texttt{put} the rounded mean as a \texttt{value()}, which lands as a real number the sheet can chart, not text:
-{\footnotesize
-\begin{verbatim}
-quietly summarize uninsured
-googlesheets put using "$SS", sheet("CHR states 2025") ///
-    cell(M3) string("Mean uninsured (%)")
-googlesheets put using "$SS", sheet("CHR states 2025") ///
-    cell(N3) value(`=round(r(mean),.1)')
-\end{verbatim}
-}
-The difference between \texttt{value()} and \texttt{formula()} is worth pausing on, because it is the difference between a snapshot and a link. A \texttt{value()} writes the number Stata computed and freezes it. A \texttt{formula()} writes a spreadsheet expression that Google recomputes in the browser, so it tracks the cells it points at even after the team edits them:
-{\footnotesize
-\begin{verbatim}
-googlesheets put using "$SS", sheet("CHR states 2025") ///
-    cell(M4) string("Max uninsured (%)")
-googlesheets put using "$SS", sheet("CHR states 2025") ///
-    cell(N4) formula("=MAX(H2:H52)")
-\end{verbatim}
-}
-The most useful \texttt{put} for an evaluator is \texttt{matrix()}, which drops a whole Stata matrix into the sheet as a rectangular block anchored at one cell. A correlation matrix is the natural case: compute it in Stata, grab it from \texttt{r(C)}, and write it starting at M6, where it fills a four-by-four block:
-{\footnotesize
-\begin{verbatim}
-correlate uninsured median_income ///
-    premature_death child_poverty
-matrix C = r(C)
-googlesheets put using "$SS", sheet("CHR states 2025") ///
-    cell(M6) matrix(C)
-\end{verbatim}
-}
-That single call is why \texttt{matrix()} earns its place: a correlation table a client would otherwise ask you to retype lands in the sheet exactly as Stata computed it, every cell traceable to \texttt{r(C)} rather than to a keyboard.
-
-\subsection{Native Sheets charts that stay live}
-The step with no \texttt{putexcel} equivalent is \texttt{addchart}. It inserts a real Google Sheets chart object, not a static image: the team can hover it for tooltips, resize it, recolor it in the browser, and it redraws when the cells it reads change. It is the interactive-chart idea, meaning a picture the reader can point at and it responds, delivered natively inside the tool the client already uses. The first chart ranks the fifteen states with the highest uninsured rate. We build that top-fifteen block on its own tab, then point a bar chart at it:\marginnote{\texttt{domain()} is the category axis (here the state names) and \texttt{series()} is the values plotted against it (the uninsured rate). \texttt{anchor()} is the top-left cell the chart floats over. \texttt{targetsheet()} lets a chart built from one tab's data appear on another, which is how a dashboard tab collects charts drawn from several data tabs.}
-{\footnotesize
-\begin{verbatim}
-preserve
-    gsort -uninsured
-    keep in 1/15
-    keep state uninsured
-    capture googlesheets deletesheet, spreadsheet("$SS") ///
-        title("Top15 uninsured")
-    googlesheets addsheet, spreadsheet("$SS") ///
-        title("Top15 uninsured")
-    googlesheets export using "$SS", ///
-        sheet("Top15 uninsured") firstrow(variables)
-restore
-
-googlesheets addchart using "$SS", ///
-    sheet("Top15 uninsured") type(bar) ///
-    domain(A2:A16) series(B2:B16) ///
-    names("Uninsured (%)") ///
-    title("States with the highest uninsured rate") ///
-    xlabel("Uninsured (%)") tx2036style legendpos(NONE) ///
-    targetsheet("Top15 uninsured") anchor(D2) ///
-    width(620) height(420)
-\end{verbatim}
-}
-The second chart is a scatter that puts each state's median income against its premature-death rate, drawn straight from columns~E and~F of the main tab and anchored beside the summary block:
-{\footnotesize
-\begin{verbatim}
-googlesheets addchart using "$SS", ///
-    sheet("CHR states 2025") type(scatter) ///
-    domain(E2:E52) series(F2:F52) names("State") ///
-    title("Higher income, fewer years of life lost") ///
-    xlabel("Median household income (USD)") ///
-    ylabel("Premature death (YPLL per 100,000)") ///
-    tx2036style legendpos(NONE) ///
-    targetsheet("CHR states 2025") anchor(M9) ///
-    width(620) height(400)
-\end{verbatim}
-}
-These two charts stay live inside the Sheet. When next quarter's do-file overwrites the data, the bars and points redraw against the new numbers with no chart-rebuilding step, which is the whole point of a native chart over a pasted-in picture.
-
-\subsection{Reading back to confirm the write}
-The last step closes the loop by reading the tab back into Stata. This is not ceremony: an evaluator who writes to a shared sheet and never reads it back is trusting that the API, the tab name, and the range all behaved, and any one of those can be quietly wrong. We re-import the block we wrote and assert the row count we expect:\marginnote{The nastiest silent failure is a partial write: the API returns success after landing the first few hundred rows, then the connection drops. The tab looks written, the row count is wrong, and only a read-back \texttt{count} catches it.}
-{\footnotesize
-\begin{verbatim}
-googlesheets import using "$SS", ///
-    sheet("CHR states 2025") range("A1:K52") firstrow clear
-count
-assert _N == 51
-\end{verbatim}
-}
-Reading the sheet back and comparing it against what you exported catches the silent write failure before the team ever opens a stale or half-written tab.
+The re-import is not ceremony. It is the check that closes the loop: an evaluator who writes to a shared sheet and never reads it back is trusting that the API, the tab name, and the range all behaved, and any one of those can be quietly wrong.\marginnote{The nastiest silent failure is a partial write: the API returns success after landing the first few hundred rows, then the connection drops. The tab looks written, the row count is wrong, and only a read-back \texttt{count} catches it.} Reading the sheet back into Stata and comparing it against what you exported catches the silent write failure before the team sees a stale or half-written tab.
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{googlesheets}]
-\textbf{Integrated command:} \texttt{googlesheets}. Reads, writes, formats, and charts Google Sheets from Stata (\texttt{import}, \texttt{export}, \texttt{put}, \texttt{format}, \texttt{addchart}, and tab management), authenticating through a one-time Google sign-in. The one-time OAuth setup is covered in Appendix~\ref{app:setup}, with a credential-free path for readers who only need to read a link-shared sheet. The whole workflow above is collected in \texttt{ch11\_googlesheets.do}, marked display-only because it needs that sign-in and a live Sheet.
+\textbf{Integrated command:} \texttt{googlesheets}. Reads, writes, formats, and charts Google Sheets from Stata (\texttt{import}, \texttt{export}, \texttt{put}, \texttt{format}, \texttt{addchart}, and tab management), authenticating through a one-time Google sign-in. The one-time OAuth setup is covered in Appendix~\ref{app:setup}, with a credential-free path for readers who only need to read a link-shared sheet.
 \end{kaobox}
 
-\subsection{Google Forms as a live monitoring feed}
-The same \texttt{import} that reads a data tab reads a Google Form's responses, which is what turns a Sheet from a delivery surface into a monitoring feed. A Form writes every submission as a new row on a tab named \enquote{Form Responses 1,} with the submission time in the first column. Reading that tab on a schedule is the survey-monitoring pattern of Chapter~\ref{ch:surveys}, now pointed at a live sheet instead of a static extract. Two options keep each scheduled pull small and quota-cheap. The \texttt{tail()} option keeps only the last \texttt{N} rows, which is all a running dashboard needs:
-{\footnotesize
-\begin{verbatim}
-googlesheets import using "$SS", ///
-    sheet("Form Responses 1") firstrow clear tail(50)
-\end{verbatim}
-}
-The \texttt{since()} option keeps only rows at or after a cutoff in a named column, so a cron job pulls just what arrived since it last ran. It parses dates and numbers as such, so it is robust to Google's unpadded timestamps like \texttt{2026-07-04 9:00:00}:
-{\footnotesize
-\begin{verbatim}
-googlesheets import using "$SS", ///
-    sheet("Form Responses 1") firstrow clear ///
-    since(Timestamp=2026-07-04 12:00:00)
-\end{verbatim}
-}
-That is the bridge back to Chapter~\ref{ch:surveys}: the responses your Form collects flow straight into an updating summary, and the same \texttt{export} and \texttt{addchart} steps above write the refreshed numbers back to a tab the team is already watching.
-
-\subsection{Why a live Sheet beats a static export}
-It is worth being explicit about why this whole apparatus beats emailing a workbook. A static export is a photograph: correct the moment you took it, stale the moment the data moves, and multiplied into a dozen slightly different copies the instant you send it to a dozen inboxes. A live Sheet is a window onto the current numbers. The team opens it on their phones in a meeting and sees today's figures, not last Tuesday's; your do-file refreshes it on a schedule, so there is one copy and it is always current; and because a Form can feed it, the loop from data collection to shared summary closes without anyone touching a cell by hand. That collapses the distance between the analysis and the people it serves, which is accessibility and actionability at once, delivered in the tool the client never leaves.
+The reason a live Sheet matters is that it collapses the distance between the analysis and the people it serves: the team sees the current numbers without waiting for a report, and the evaluator updates them without emailing a new file each time. That is accessibility and actionability at once, delivered in the tool the client never leaves.
 
 \section{Toolkits program teams keep using}\label{sec:teamtoolkit}
 This is the book's thesis in a single artifact. The best deliverable is often not a report at all but a tool the program team keeps using after the evaluator has moved on.\marginnote{The blunt test of embedded work: a year after you leave, is the artifact still in weekly use, or is it a PDF in an inbox? Tools that the team can edit and rerun themselves survive; reports that only you could regenerate do not.}
@@ -2370,7 +2014,7 @@ This is the book's thesis in a single artifact. The best deliverable is often no
 \textbf{Scenario.} A field team enters enrollments all year and needs to see their own progress, without waiting on the evaluator and without breaking the data.
 
 \medskip
-\textbf{The build, entirely from Stata.} A Google Sheets workbook with a validated entry tab (dropdowns and checks that stop bad values at the source), an auto-updating charts tab that redraws as rows arrive, and a plain-language data dictionary tab generated by \texttt{datadict} (Chapter~\ref{ch:embedded}) so the team understands every field. The evaluator's do-file builds and refreshes it: a scheduled run pulls the latest Form responses with \texttt{googlesheets import}, rebuilds the summary, and writes it back with a fresh \texttt{addchart}, so the team opens the sheet Monday to numbers that are already current. When a stakeholder needs the same picture behind a firewall, where the live Sheet cannot follow, the identical rebuilt table feeds a \texttt{googlechart} export (Chapter~\ref{ch:interactive}), a self-contained HTML file that renders in any browser with nothing to log in to.
+\textbf{The build, entirely from Stata.} A Google Sheets workbook with a validated entry tab (dropdowns and checks that stop bad values at the source), an auto-updating charts tab that redraws as rows arrive, and a plain-language data dictionary tab generated by \texttt{datadict} (Chapter~\ref{ch:embedded}) so the team understands every field. The evaluator's do-file builds and refreshes it: a scheduled run pulls the latest Form responses with \texttt{googlesheets import}, rebuilds the summary, and writes it back with a fresh \texttt{addchart}, so the team opens the sheet Monday to numbers that are already current.
 
 \medskip
 \textbf{Why it is the thesis.} The evaluator ships a tool, not a PDF, so the work is extensible (next quarter is a rerun) and accessible (the team reads and uses it without help). And because the team can see themselves in the data, their entry improves at the source, which quietly raises the quality of every analysis downstream. This is what embedded evaluation looks like when it works.
@@ -2425,43 +2069,6 @@ Read the block top to bottom and the discipline shows itself. The \texttt{webdoc
 The reason a \texttt{webdoc} report is trustworthy is structural, not a matter of care. In a hand-written report the prose and the analysis live in two files, and nothing forces them to agree; a figure can be updated while the sentence next to it keeps last month's number, and no error is ever raised. In a \texttt{webdoc} report the sentence and the number are produced in the same run from the same data, so they cannot disagree. That is what \enquote{compile the report from the analysis} buys you: not a tidier workflow, but a class of error that can no longer happen.
 \end{vizcallout}
 
-\subsection{The \texttt{webdoc2} quickstart, and pulling the pieces in}
-The skeleton above is Jann's \texttt{webdoc}; the \texttt{webdoc2} wrapper keeps that shape but renames the verbs for readability and adds the Bootstrap styling for free. You \emph{init} with \texttt{wdinit}, write a heading with \texttt{wputh1}, a paragraph with \texttt{wput}, and a logged code block by opening \texttt{wd} and closing it with \texttt{wdclose}. A \texttt{button} block does the same but ships the code collapsed behind a \enquote{click to view} panel, so a report can carry its full provenance without cluttering the page. The quickstart below is the smallest \texttt{webdoc2} report, verbatim from the package, and display-only because it needs the \texttt{webdoc2} package:
-{\footnotesize
-\begin{verbatim}
-wdinit quickstart, replace
-wputh1 Quickstart
-wput   This page was generated from a
-wput   20-line Stata do-file by webdoc2.
-wputh2 Run a regression and show it inline
-wd
-sysuse auto, clear
-regress price mpg weight
-wdclose
-wputh2 Same regression, collapsed by default
-button
-sysuse auto, clear
-regress price mpg weight foreign
-buttonclose
-webdoc close
-\end{verbatim}
-}
-The value of \texttt{webdoc2} for a portal, though, is not the styling but two embed commands that let one page hold the whole suite. \texttt{wdimg} drops a static image into the report, which is how an offline \texttt{sparkta2} map (Chapter~\ref{ch:interactive}) lands in the narrative. \texttt{wdiframe} embeds an entire other HTML file inside a framed panel, which is how a \texttt{statashiny} dashboard or a \texttt{googlechart} page becomes a live section of the report rather than a separate link.\marginnote{An \emph{iframe} is a webpage embedded inside another webpage, shown in its own panel. It is the mechanism that lets one report scroll past a paragraph, then a fully interactive dashboard, then another paragraph, with the dashboard behaving exactly as it would on its own.} Those two lines are what turn \texttt{webdoc2} from a report writer into the container that wraps every other tool in the suite:
-{\footnotesize
-\begin{verbatim}
-wdinit "$portal/report", replace
-wputh1 Q3 Site Outcomes
-wput   Enrollment and completion, rebuilt
-wput   from the analysis file.
-wdimg  "charts/county_map.png", ///
-    caption("Completion by county")
-wdiframe "charts/dashboard.html", ///
-    height(640)
-webdoc close
-\end{verbatim}
-}
-Read the two embed lines and the pipeline comes into view. The \texttt{wdimg} line pulls in an offline county map that some other tool drew; the \texttt{wdiframe} line pulls in the interactive dashboard \texttt{statashiny} built, whole and live, into the same scrolling page. The report is no longer a document that mentions the charts; it is the container that holds them. The live \texttt{webdoc2} example site shows a finished report of exactly this shape.\marginnote{See \texttt{ericabooth.github.io/} \texttt{Webdoc2\_Example\_Site} for a full report, and the \texttt{statashiny} example site, which is itself a \texttt{webdoc2} page with a dashboard embedded by \texttt{wdiframe}. Both host free on GitHub Pages, which is the last step of the capstone below.}
-
 \section{Interactive without a server}
 Clients behind strict IT still deserve interactivity, and \texttt{statashiny} provides it without a server, compiling a Stata dataset into static files that behave like a small app: searchable tables, charts that filter live, value cards, all running in the browser from local files. It is the offline cousin of the interactive charts in Chapter~\ref{ch:interactive}, built for the setting where nothing may be installed and nothing may phone home.
 
@@ -2470,47 +2077,6 @@ Clients behind strict IT still deserve interactivity, and \texttt{statashiny} pr
 \end{kaobox}
 
 Interactivity with nothing to install and nothing to maintain is accessibility for the hardest audience, the one behind a firewall that blocks the tools everyone else assumes.\marginnote{One \texttt{file://} gotcha: browsers block some local resource loads under the same-origin policy, so a portal that loads external data files can render blank when opened by double-click. Inline the data into the HTML, or ship a tiny \enquote{open me} launcher, and test on a machine that is not yours.} Delivering it as static files means the client can keep and reopen it long after the engagement ends.
-
-\subsection{The init, add, build workflow}
-The \texttt{statashiny} command builds a dashboard in three moves, and learning the shape once is enough to build any of them. You \emph{init} the dashboard to open an empty page and name it, you \emph{add} elements one at a time until the page holds what you want, and you \emph{build} to write the finished HTML. Each added element is one line: an \texttt{output()} option drops a widget the reader looks at, such as a searchable table or a headline number, and an \texttt{input()} option drops a control the reader touches, such as a slider. It is the same discipline as assembling a graph one \texttt{addplot} at a time, except the pieces are interactive and the finished object is a webpage.\marginnote{The phrase \enquote{searchable table} means a table with a search box above it: the reader types \enquote{Travis} and every row without that word vanishes, all in the browser with no query sent anywhere. A \enquote{value card} is a single headline number in a box, the kind a dashboard puts at the top so the one figure that matters is read before anything else.}
-
-The smallest complete dashboard is the three moves and nothing else. Collapse a dataset to the rows you want to show, init the page, add one table, and build. The block is display-only because it needs the \texttt{statashiny} package, but it is the whole workflow:
-{\footnotesize
-\begin{verbatim}
-sysuse auto, clear
-collapse (mean) price mpg weight length ///
-    (count) n=price, by(foreign)
-
-statashiny, title("Auto Summary Table") replace
-statashiny autotab, output(table) ///
-    label("Descriptives by Origin")
-statashiny, build export("dashboard.html") open
-\end{verbatim}
-}
-Read the three moves in order. The first \texttt{statashiny} line with \texttt{title()} is \emph{init}: it opens the page and names it. The middle line is one \emph{add}: \texttt{autotab} is the element's id, and \texttt{output(table)} says draw a searchable table of the data in memory. The last line is \emph{build}: \texttt{export()} names the file and \texttt{open} pops it in your browser. That single HTML file is the whole dashboard, data and interactivity together, ready to email or drop in a portal folder.
-
-Most real dashboards add a few more elements before they build, and the two that earn their place first are value cards and a slider. A \emph{value card} puts one headline number in a box at the top of the page, so the figure that matters is read before the table below it. A \emph{slider} is a control the reader drags to filter the view live, in the browser, with nothing recomputed on a server. Both are still one line each, added between init and build:
-{\footnotesize
-\begin{verbatim}
-sysuse auto, clear
-collapse (mean) price mpg ///
-    (count) n=price, by(foreign)
-
-statashiny, title("Auto Outcomes") replace
-statashiny meanprice, output(val) ///
-    label("Mean price") prefix("$")
-statashiny meanmpg, output(val) ///
-    label("Mean mpg")
-statashiny tbl, output(table) ///
-    label("Means by origin")
-statashiny mpgcut, input(num) ///
-    val(20) min(10) max(40) step(1)
-statashiny, build ///
-    export("dashboard.html") open
-\end{verbatim}
-}
-The two \texttt{output(val)} lines are the value cards, each a labeled headline number, and \texttt{prefix("\$")} stamps a dollar sign in front of the price. The \texttt{output(table)} line is the searchable table as before. The one \texttt{input(num)} line is the slider: \texttt{val()} sets where the handle starts and \texttt{min()}, \texttt{max()}, and \texttt{step()} set its range and grain, so the reader drags from 10 to 40 in steps of one and the view filters as they go. The workflow never changes: init, add as many elements as the page needs, build one file. The live \texttt{statashiny} example site shows the finished form, and is itself built with \texttt{statashiny} and \texttt{webdoc2} together, which is the pairing the rest of this chapter assembles.\marginnote{See the live dashboard at \texttt{ericabooth.github.io/} \texttt{StataShiny\_Example\_Site}. It renders entirely from the single HTML file the build step wrote, so viewing the page source shows the data and the interactivity inlined together, with nothing fetched from a server.}
-
 
 The word \enquote{static} is doing quiet work here and deserves unpacking, because it is what separates a portal that survives a firewall from a dashboard that does not. A hosted dashboard is a program running on a server somewhere: it computes a chart when you ask for one, which means it needs a machine that is always on, a network path to it, and someone to keep it patched. A \texttt{statashiny} bundle is the opposite. The filtering and charting logic is compiled down to JavaScript that ships inside the files, and the data ships alongside it, so the \enquote{server} is your own browser reading local files.\marginnote{This is the same client-side shift that let \enquote{single-page apps} replace server round-trips on the web. For a portal it has a security dividend too: with no server accepting requests, there is no endpoint for IT to audit and nothing to patch after you leave.} Nothing is computed on demand by a remote machine, which is exactly why nothing can go down and why the strictest IT department has nothing to block: there is no connection to make.
 
@@ -2607,131 +2173,11 @@ webdoc put run 600_report.do.
 }
 Because the stamp is produced by the same run that produced the numbers, it cannot drift from them, which is the same structural guarantee that made the \texttt{webdoc} report trustworthy in the first place. A board member holding a laptop reads the footer and knows the cut; a colleague on the shared drive reads the folder name and knows the copy; an auditor reads the tag and rebuilds the exact numbers. That closes the last gap in owning the evidence: not just that the client has the folder, but that everyone can tell, forever, which folder it is.
 
-\section{The whole suite in one folder}\label{sec:capstone}
-Everything in this book that touched the web has been building toward one deliverable, and this section assembles it. The tools introduced across the visualization chapters are not five isolated commands; they are a pipeline, and each owns one link in it. The data comes in through \texttt{webapi} from a public API (Chapter~\ref{ch:apis}) or through \texttt{googlesheets} from a live team sheet (Chapter~\ref{ch:sheets}). It becomes charts two ways, because the delivery target decides which: \texttt{googlechart} for an online interactive page with filter dropdowns, and \texttt{sparkta2} for an offline map that renders without a network, including the county and school-district geography that the online engine cannot draw (both Chapter~\ref{ch:interactive}). The interactive drill-down is a \texttt{statashiny} dashboard. And \texttt{webdoc2} wraps all of it, narrative and charts and dashboard, into one \texttt{index.html}. Data in, charts out, one report around them, one folder the client owns.
-
-The reason to see the whole chain at once, rather than each tool in its own chapter, is that the chain is the product. A reader who has met the tools separately can still miss that they compose, and the composition is what turns a pile of HTML files into a portal. Figure~\ref{fig:pipeline} draws the pipeline, and the do-file sketch that follows walks the same arrows in code.
-
-\begin{figure*}[htbp]
-\centering
-\begin{tikzpicture}[node distance=0.6cm and 1.1cm]
-  \node[stage, text width=2.5cm] (ingest) {\textbf{Ingest}\\\scriptsize\texttt{webapi}\\\scriptsize\texttt{googlesheets}\\\scriptsize\itshape Ch\,3 / Ch\,11};
-  \node[substep, right=of ingest, text width=2.5cm] (online)
-    {\texttt{googlechart}\\\scriptsize online chart\\\scriptsize\itshape Ch\,10};
-  \node[substep, below=0.5cm of online, text width=2.5cm] (offline)
-    {\texttt{sparkta2}\\\scriptsize offline map\\\scriptsize\itshape Ch\,10};
-  \node[substep, above=0.5cm of online, text width=2.5cm] (dash)
-    {\texttt{statashiny}\\\scriptsize dashboard\\\scriptsize\itshape Ch\,12};
-  \node[stage, right=of online, text width=2.5cm, fill=aeBg] (wrap)
-    {\textbf{Wrap}\\\scriptsize\texttt{webdoc2}\\\scriptsize\itshape Ch\,12};
-  \node[stage, right=of wrap, text width=2.4cm] (out)
-    {\sffamily\textbf{index.html}\\\scriptsize one folder,\\\scriptsize opens offline};
-  \draw[flow] (ingest.east) -- (online.west);
-  \draw[flow] (ingest.east) to[out=20,in=180] (dash.west);
-  \draw[flow] (ingest.east) to[out=-20,in=180] (offline.west);
-  \draw[flow] (dash.east) to[out=0,in=160] (wrap.north west);
-  \draw[flow] (online.east) -- (wrap.west);
-  \draw[flow] (offline.east) to[out=0,in=200] (wrap.south west);
-  \draw[flow] (wrap.east) -- (out.west);
-\end{tikzpicture}
-\caption[The suite pipeline, end to end]{The suite as one pipeline. \texttt{webapi} or \texttt{googlesheets} ingests the data; \texttt{googlechart} renders an online interactive chart, \texttt{sparkta2} an offline map, and \texttt{statashiny} an interactive dashboard; \texttt{webdoc2} wraps all three into one \texttt{index.html} that opens offline from a single folder. Each box names the chapter that teaches it. The companion \texttt{ch12\_portal.do} walks these same arrows in code.}
-\label{fig:pipeline}
-\end{figure*}
-
-The orchestration is one do-file, and its shape is worth seeing even though the middle of it needs packages and OAuth this build does not assume. The sketch below is display-only; it is the pipeline of Figure~\ref{fig:pipeline} written as the commands you would actually run, one stage at a time. It begins by pulling data with \texttt{webapi}, the no-key JSON route of Chapter~\ref{ch:apis}:
-{\footnotesize
-\begin{verbatim}
-* 1. INGEST: public JSON in one line, no key
-webapi get using ///
-    "https://data.cdc.gov/resource/bi63-dtpu.json", ///
-    params("year=2017|cause_name=All causes") clear
-\end{verbatim}
-}
-With data in memory, the two chart tools write their HTML into the portal's \texttt{charts/} folder. \texttt{googlechart} draws the online state choropleth; \texttt{sparkta2} draws the offline county map that the online engine cannot. The \texttt{sparkta2} line is commented because its source is still forthcoming (Chapter~\ref{ch:interactive}), so the sketch shows the intended call rather than promising an install:
-{\footnotesize
-\begin{verbatim}
-* 2a. CHART online: googlechart interactive page
-googlechart uninsured, name(geo_code) type(geo) ///
-    georegion("US") georesolution("us-states") ///
-    tx2036style scheme(blues) download datatable ///
-    title("Uninsured rate by state, 2025") ///
-    noopen export("$charts/geo_uninsured.html")
-
-* 2b. CHART offline: sparkta2 sub-state map (sketch)
-* sparkta2 completed, name(county) ///
-*     type(choropleth) geo(tx-counties) ///
-*     tx2036style export("$charts/county_map.html")
-\end{verbatim}
-}
-Next the interactive dashboard, built with the init, add, build workflow from earlier in this chapter, exported into the same \texttt{charts/} folder:
-{\footnotesize
-\begin{verbatim}
-* 3. INTERACTIVE: statashiny drill-down dashboard
-statashiny, title("Site Outcomes") replace
-statashiny cards, output(val) ///
-    label("Completion") suffix("%")
-statashiny tbl, output(table) label("By site")
-statashiny cut, input(num) ///
-    val(50) min(0) max(100) step(5)
-statashiny, build export("$charts/dashboard.html")
-\end{verbatim}
-}
-Now the wrap. \texttt{webdoc2} writes \texttt{index.html} with the narrative, embeds the dashboard and the online chart as live panels with \texttt{wdiframe}, drops the offline map with \texttt{wdimg}, and stamps the version and date into the footer at build time so it cannot drift from the numbers (Section~\ref{sec:versioning}):
-{\footnotesize
-\begin{verbatim}
-* 4. WRAP: webdoc2 assembles the one page
-wdinit "$portal/index", replace
-wputh1 Q3 Site Outcomes
-wput   Rebuilt from the analysis on $S_DATE.
-wputh2 Interactive dashboard
-wdiframe "charts/dashboard.html", height(640)
-wputh2 Uninsured by state
-wdiframe "charts/geo_uninsured.html", height(600)
-wputh2 Completion by county (offline map)
-wdimg  "charts/county_map.png", ///
-    caption("Offline county choropleth")
-wput ---
-wput Version $version, built $S_DATE.
-webdoc close
-\end{verbatim}
-}
-That is the whole suite in one file. The folder it produces is already a website, so the optional last step is to hand the client a link: push the folder to a repository and turn on GitHub Pages, which is how both the \texttt{statashiny} and \texttt{webdoc2} example sites are hosted, at no cost and with no server to keep alive. The figures below are real \texttt{googlechart} output from this pipeline on County Health Rankings data, the actual pages a reader opens from the \texttt{charts/} folder.
-
-\begin{figure}[htbp]
-\centering
-{\footnotesize
-\begin{verbatim}
-googlechart uninsured, name(geo_code) ///
-    type(geo) georegion("US") ///
-    georesolution("us-states") ///
-    tx2036style scheme(blues)
-\end{verbatim}
-}
-\includegraphics[width=\linewidth]{ch10_gc_geo.png}
-\caption[The online chart the pipeline embeds]{The \texttt{googlechart} state choropleth from stage 2a of the pipeline, real output on County Health Rankings uninsured rates. In the portal this page is embedded live by \texttt{wdiframe}, so the reader hovers a state and reads its rate without leaving the report.}
-\label{fig:capgeo}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-{\footnotesize
-\begin{verbatim}
-googlechart, type(table) tablesearch ///
-    tableheadersticky tx2036style ///
-    tooltipvars(state uninsured ///
-        median_income premature_death)
-\end{verbatim}
-}
-\includegraphics[width=\linewidth]{ch10_gc_table.png}
-\caption[The searchable table the dashboard mirrors]{A \texttt{googlechart} searchable table on the same data: a reader types a state and the rows filter live in the browser. The \texttt{statashiny} dashboard of stage~3 offers the same interaction offline, and \texttt{webdoc2} embeds one of them into the portal by \texttt{wdiframe}.}
-\label{fig:captable}
-\end{figure}
-
-\begin{appliedexample}[One evaluation, one folder]
-\textbf{Scenario.} A client wants one offline folder to share with their steering committee: a narrative report, an interactive dashboard of site outcomes, an online chart, and an offline county map, and they need to know six months from now exactly which cut the committee approved.
+\begin{appliedexample}[From do-file to shareable project portal]
+\textbf{Scenario.} A client wants one offline folder to share with their steering committee: a narrative report, interactive tables of site outcomes, and the impact graphs, and they need to know six months from now exactly which cut the committee approved.
 
 \medskip
-\textbf{The build, end to end.} Scaffold the folder with \texttt{projectbuilder} (Chapter~\ref{ch:workshop}). Ingest the data with \texttt{webapi} (Chapter~\ref{ch:apis}) or \texttt{googlesheets} (Chapter~\ref{ch:sheets}). Render the online chart with \texttt{googlechart} and the offline county map with \texttt{sparkta2} into \texttt{charts/} (Chapter~\ref{ch:interactive}); build the drill-down dashboard with \texttt{statashiny}; then wrap narrative, dashboard, chart, and map into \texttt{index.html} with \texttt{webdoc2}, embedding the interactive pieces with \texttt{wdiframe} and the map with \texttt{wdimg}. Stamp the version and date into the footer at build time, tag the commit that built the folder, and name the folder to match (Section~\ref{sec:versioning}). The companion \texttt{ch12\_portal.do} sketches this exact sequence and scaffolds the stamped folder. The result is a folder the committee opens on any laptop, with no server and no logins, that the evaluator rebuilds next quarter in one command and that carries its own provenance so no copy is ever mistaken for another. The live example sites show the finished form.
+\textbf{The portal build.} Scaffold the workspace with \texttt{projectbuilder} (Chapter~\ref{ch:workshop}); run the analysis and export figures with \texttt{statplot} and \texttt{sparkta2} (Chapters~\ref{ch:graphs}, \ref{ch:interactive}); generate interactive tables and charts with \texttt{statashiny} into \texttt{charts/}; compile the narrative into \texttt{report.html} with \texttt{webdoc2}; and write an \texttt{index.html} landing page that links the pieces and carries the version-and-date stamp of Section~\ref{sec:versioning}. Tag the commit that built the folder and name the folder to match. The result is a folder the committee opens on any laptop, with no server and no logins, that the evaluator rebuilds next quarter in one command and that carries its own provenance so no copy is ever mistaken for another. The live example sites for these tools show the finished form.
 \end{appliedexample}
 
 \paragraph{Where this leaves you.} You can now publish a self-updating report, add interactivity that needs no server, hand the client a single folder they own and can reopen offline, and stamp each delivery so no one ever confuses which numbers a board saw. You can also defend the choice of format against the alternatives, because Table~\ref{tab:formats} lays out exactly which property each one trades away. Those close the communication loop on all four promises: replicable, extensible, accessible, and actionable delivery. Part~V turns to sustaining the practice over time, beginning with the careful use of AI in Chapter~\ref{ch:ai}.
@@ -3183,7 +2629,7 @@ f dsload.ado
 f dsload.sthlp
 \end{verbatim}
 }
-The install line a colleague pastes points \texttt{net install} at the raw repository folder, giving the package name and a \texttt{from()} URL. Stata reads \texttt{stata.toc}, finds \texttt{dsload}, reads \texttt{dsload.pkg}, and copies the files into the user's ado-path. Nothing about this needs a package server or an SSC submission; a plain GitHub repository is a working distribution channel, which is why a two-person evaluation shop can ship tools the same way a large group does.\marginnote{SSC, the Boston College archive Baum has curated since 1998, remains the front door for discovery: a package there is one \texttt{ssc install} away and shows up in \texttt{search}. GitHub is faster to publish and iterate; the common path is to develop on GitHub and submit to SSC once the tool has stabilized.}
+The install line a colleague pastes points \texttt{net install} at the raw repository folder, for example \texttt{net install dsload, from(...raw GitHub URL...)}. Stata reads \texttt{stata.toc}, finds \texttt{dsload}, reads \texttt{dsload.pkg}, and copies the two \texttt{f} files into the user's ado-path. Nothing about this needs a package server or an SSC submission; a plain GitHub repository is a working distribution channel, which is why a two-person evaluation shop can ship tools the same way a large group does.\marginnote{SSC, the Boston College archive Baum has curated since 1998, remains the front door for discovery: a package there is one \texttt{ssc install} away and shows up in \texttt{search}. GitHub is faster to publish and iterate; the common path is to develop on GitHub and submit to SSC once the tool has stabilized.}
 
 The point is reach: a tool nobody can install is a tool nobody uses, so distribution is the step that lets the rest of the team, and the wider community, benefit from work done once. Making a tool installable is the final act of the accessible promise, pointed at fellow evaluators.
 
@@ -3240,7 +2686,7 @@ Read the table in ratios, not milliseconds. The vectorized \texttt{gen} and the 
 The reason to know the seams rather than the whole of each language is proportion: an evaluator's time is better spent on the pipeline than on reimplementing it in a faster language that the work does not need. Reach for Mata or Python where it counts, and nowhere else, and the trifecta stays a help rather than a distraction.
 
 \section{The replication archive}\label{sec:archive}
-The book ends where the genre says it must, on preservation, because a workflow that cannot be rerun after the engagement ends has not kept its first promise. The archive uses two tiers: a canonical copy with a permanent identifier on a repository like openICPSR (a DOI, versioning, longevity), paired with a convenience mirror on GitHub, from which a single \texttt{use} of the file's raw URL loads the data in one line with no login.\marginnote{The division of labour matters: cite the openICPSR DOI in the paper, because a DOI is promised to resolve for decades and freezes an exact version, whereas a GitHub raw URL is a convenience that can move, rename, or vanish the day someone force-pushes. Never cite the raw URL as the archival record.} The canonical copy is for permanence and citation; the mirror is for the colleague who just wants to run the code today.
+The book ends where the genre says it must, on preservation, because a workflow that cannot be rerun after the engagement ends has not kept its first promise. The archive uses two tiers: a canonical copy with a permanent identifier on a repository like openICPSR (a DOI, versioning, longevity), paired with a convenience mirror on GitHub where \texttt{use "https://raw.githubusercontent.com/.../file.dta", clear} loads the data in one line with no login.\marginnote{The division of labour matters: cite the openICPSR DOI in the paper, because a DOI is promised to resolve for decades and freezes an exact version, whereas a GitHub raw URL is a convenience that can move, rename, or vanish the day someone force-pushes. Never cite the raw URL as the archival record.} The canonical copy is for permanence and citation; the mirror is for the colleague who just wants to run the code today.
 
 What goes into the archive is not a folder dump but a manifest, so a stranger can tell at a glance that nothing is missing. The manifest below is the one this book's own replication archive uses, and it doubles as a checklist: every row names an item, points at where the book demonstrated it, and says why a replicator needs it.
 

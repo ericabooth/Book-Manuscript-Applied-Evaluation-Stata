@@ -39,9 +39,26 @@ set scheme s2color                 // a clean default; swap for your house schem
 
 *--- 4. Optional: run the whole pipeline, in order ----------------------------*
 * Leave at 0 to just load these globals. Flip to 1 to rebuild everything.
-local run_all 0
+local run_all 0     // flip to 1 to rebuild everything
 if `run_all' {
-    do "$code/01_install.do"       // one-time: install the packages the book uses
-    do "$code/20_ch03_apis.do"     // download public data through APIs
-    * ...add each chapter's do-file here, in the order you want them to run...
+    do "$code/01_install.do"
+    do "$code/ch01_reach.do"
+    do "$code/ch02_benchmark.do"
+    do "$code/20_ch03_apis.do"
+    do "$code/ch03_webapi.do"
+    do "$code/ch03_educationdata.do"
+    do "$code/ch04_chr.do"
+    do "$code/ch05_monitoring.do"
+    do "$code/ch06_longitudinal.do"
+    do "$code/ch07_trust.do"
+    do "$code/ch08_did.do"
+    do "$code/ch09_graphs.do"
+    do "$code/ch10_smallmult.do"
+    do "$code/ch10_googlechart.do"
+    do "$code/ch11_tables.do"
+    do "$code/ch11_googlesheets.do"
+    do "$code/ch12_portal.do"
+    do "$code/ch13_validation.do"
+    do "$code/ch14_kanon.do"
+    do "$code/ch15_bench.do"
 }

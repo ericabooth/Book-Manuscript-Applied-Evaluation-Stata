@@ -25,10 +25,28 @@ Launch Stata in the project folder, then either:
 |------|---------|--------------|
 | `00_control.do` | 2 | Master control: sets all paths and preferences in one place; can run the whole pipeline in order. |
 | `01_install.do` | 2 | One-time install of the packages the book uses. |
-| `20_ch03_apis.do` | 3 | Downloads BLS QCEW county wages (no key) and builds the wage-comparison figure. |
+| `ch01_reach.do` | 1 | Simulated program enrollment vs. a rural-reach target; the one-page-answer bar figure. |
+| `ch02_benchmark.do` | 2 | Expands `nlsw88` to ~2M rows; times `collapse` vs `gcollapse`, `egen` vs `gegen`. |
+| `20_ch03_apis.do` | 3 | Downloads BLS QCEW county wages (no key); builds the wage-comparison figure. |
+| `ch03_webapi.do` | 3 | JSON APIs in one line with `webapi` (jsonplaceholder, CDC); no key, stdlib Python. |
+| `ch03_educationdata.do` | 3 | Urban Institute CCD enrollment (no key); Texas state-year enrollment trend. |
+| `ch04_chr.do` | 4 | Downloads the County Health Rankings analytic CSV; cleans the label row; county scatter. |
+| `ch05_monitoring.do` | 5 | Simulated survey response monitoring; control chart + alert list + Likert alpha. |
+| `ch06_longitudinal.do` | 6 | `nlswork` panel description; missingness map; wage-quartile transition matrix; fuzzy merge. |
+| `ch07_trust.do` | 7 | Reliability alpha; NHANES II weighting; empirical-Bayes shrinkage; power curve. |
+| `ch08_did.do` | 8 | Simulated staggered adoption; naive TWFE vs `csdid`; event study; ROI Monte Carlo. |
+| `ch09_graphs.do` | 9 | Before/after data-ink pair; coefficient small-multiples; annotated run chart. |
+| `ch10_smallmult.do` | 10 | QCEW quarterly wage small-multiples ("spark wall") for six Texas counties. |
+| `ch10_googlechart.do` | 10 | Six `googlechart` interactive HTML charts (geo, bar, scatter, animated bubble, searchable table, divbar) on CHR&R 2025 state data; no key, builds offline. |
+| `ch11_tables.do` | 11 | Builds a real LaTeX earnings table the manuscript ingests via `\input`; putexcel. |
+| `ch12_portal.do` | 12 | Suite capstone: chains webapi/googlesheets → googlechart/statashiny → webdoc2 into one offline portal. |
+| `ch11_googlesheets.do` | 11 | `googlesheets` workflow on CHR data (export, format, put matrix, native live charts); display-only (OAuth). |
+| `ch13_validation.do` | 13 | Simulated AI validation: kappa, multi-model consensus, four-fifths fairness check. |
+| `ch14_kanon.do` | 14 | k-anonymity on `nlsw88` as an admin stand-in; coarsening; small-cell suppression. |
+| `ch15_bench.do` | 15 | Mata vs loop vs vectorized timing benchmark. |
 
-More chapter do-files are added as the manuscript is drafted. Numbering leaves
-gaps (10, 20, 30, ...) so new steps slot in without renaming the rest.
+Numbering leaves gaps so new steps slot in without renaming the rest. Every
+figure in the book is produced by one of these files.
 
 ## Data note
 

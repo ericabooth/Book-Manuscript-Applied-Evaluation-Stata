@@ -1,21 +1,47 @@
 \babel@toc {english}{}\relax
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {1.1}{\ignorespaces The embedded evaluator's pipeline}}{5}{figure.caption.17}%
+\contentsline {figure}{\numberline {1.2}{\ignorespaces Rural reach against target, simulated}}{9}{figure.caption.19}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces The numbered pipeline}}{10}{figure.caption.21}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces The project folder tree}}{12}{figure.caption.23}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces The numbered pipeline}}{13}{figure.caption.24}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Native versus gtools timings}}{15}{figure.caption.26}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces County wages from the BLS QCEW}}{17}{figure.caption.26}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Texas public school enrollment, 2015--2022}}{21}{figure.caption.31}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces County wages from the BLS QCEW}}{23}{figure.caption.32}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Premature death vs child poverty, Texas counties}}{32}{figure.caption.36}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Small-multiples response-rate control chart}}{37}{figure.caption.39}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Missingness map for a longitudinal sample}}{49}{figure.caption.44}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {7.1}{\ignorespaces Empirical-Bayes shrinkage of small-site rates}}{56}{figure.caption.50}%
+\contentsline {figure}{\numberline {7.2}{\ignorespaces Power curves and the budget line}}{58}{figure.caption.51}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {8.1}{\ignorespaces Event-study plot from \texttt {csdid}}}{63}{figure.caption.55}%
+\contentsline {figure}{\numberline {8.2}{\ignorespaces ROI tornado from a Monte Carlo}}{65}{figure.caption.56}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {9.1}{\ignorespaces Data-ink, before and after}}{70}{figure.caption.61}%
+\contentsline {figure}{\numberline {9.2}{\ignorespaces Coefficient small multiples}}{72}{figure.caption.62}%
+\contentsline {figure}{\numberline {9.3}{\ignorespaces Run chart with an intervention line}}{73}{figure.caption.63}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {10.1}{\ignorespaces The visualization suite pipeline}}{76}{figure.caption.67}%
+\contentsline {figure}{\numberline {10.2}{\ignorespaces A spark wall of Texas county wages}}{78}{figure.caption.69}%
+\contentsline {figure}{\numberline {10.3}{\ignorespaces A googlechart US-state choropleth}}{81}{figure.caption.70}%
+\contentsline {figure}{\numberline {10.4}{\ignorespaces A googlechart animated bubble}}{82}{figure.caption.71}%
+\contentsline {figure}{\numberline {10.5}{\ignorespaces A googlechart searchable table}}{83}{figure.caption.72}%
+\contentsline {figure}{\numberline {10.6}{\ignorespaces A googlechart diverging stacked bar}}{84}{figure.caption.73}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {12.1}{\ignorespaces The self-contained portal folder}}{100}{figure.caption.80}%
+\contentsline {figure}{\numberline {12.2}{\ignorespaces The suite pipeline, end to end}}{102}{figure.caption.83}%
+\contentsline {figure}{\numberline {12.3}{\ignorespaces The online chart the pipeline embeds}}{104}{figure.caption.84}%
+\contentsline {figure}{\numberline {12.4}{\ignorespaces The searchable table the dashboard mirrors}}{105}{figure.caption.85}%
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {13.1}{\ignorespaces Model-human agreement by category}}{111}{figure.caption.90}%
 \addvspace {10\p@ }
-\addvspace {10\p@ }
-\addvspace {10\p@ }
-\addvspace {10\p@ }
-\addvspace {10\p@ }
-\addvspace {10\p@ }
-\addvspace {10\p@ }
-\addvspace {10\p@ }
+\contentsline {figure}{\numberline {14.1}{\ignorespaces Distribution of quasi-identifier cell sizes}}{117}{figure.caption.94}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

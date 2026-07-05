@@ -329,6 +329,16 @@ Per author feedback, the book moves from narrative skeleton to substantive draft
 
 Data sources confirmed working from Stata via `copy`/`import delimited`, no key: BLS QCEW (county CSV), County Health Rankings (annual analytic CSV), Stata built-ins (`sysuse`, stata-press.com/data URLs). Confirmed key-required (Appendix A setup): Census `getcensus`, FRED `import fred`. Documented gotcha (tested): Socrata `$limit` collides with Stata's `$` macro; fix with `char(36)`.
 
+## 7c. Full chapter build-out (July 4, third revision)
+
+All 15 chapters expanded from skeleton to substantive draft with tested Stata code, real output, figures, tables, and worked examples. Manuscript now ~2,850 lines / 132 pages, compiles clean (0 errors, 0 undefined refs, 0 orphaned figures).
+
+- **17 figures**, all Stata-tested and visually QA'd, all referenced: ch01_reach (simulated reach bar), ch02_benchmark (gcollapse timings), ch03_ccd_enrollment + ch03_qcew_wages, ch04_chr_scatter (real CHR county scatter, full-width), ch05_monitor (8-panel response control chart), ch06_missmap, ch07_power + ch07_shrink (EB shrinkage, full-width), ch08_event + ch08_tornado, ch09_ink (before/after data-ink, full-width) + ch09_coefplot + ch09_runchart, ch10_sparkwall (QCEW small-multiples, full-width), ch13_agreement, ch14_kdist.
+- **16 companion do-files** in `code/` (ch01_reach ... ch15_bench), all wired into `00_control.do` run_all in order; `code/README.md` documents each. All download only public data (BLS QCEW, CHR, educationdata, Stata built-ins) or use clearly-labeled simulated data (seed 20260704).
+- **ch11 ships a generated LaTeX table** (`ch11_wage_table.tex`) that `main.tex` `\input`s — the reproducible-reporting thesis made physical (the do-file writes the table the book reads).
+- Data handle finalized: **`apes`**.
+- Editorial polish pass in progress: sharpen every section's opening objective, add margin notes to fill margins, convert select wide objects to full width, smooth transitions.
+
 ## 8. Production notes and open tasks
 
 1. **This pass (done in main.tex):** new part/chapter/section architecture, retitled throughout; narrative skeleton, annotations, and idea stems rewritten to the style contract; every section carries its why-it-helps and four-promises language; no package code written.
