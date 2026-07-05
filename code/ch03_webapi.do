@@ -3,10 +3,9 @@
 * Every request here hits a live PUBLIC endpoint with NO API key.
 * webapi uses only Stata's built-in Python (no pip install).
 *
-* Install once:
+* Install once (public repo, install verified 2026-07-05):
 *   net install webapi, ///
 *     from("https://raw.githubusercontent.com/ericabooth/webapi-stata-public/main/") replace
-* (until published, put webapi.ado + webapi_helper.py on your adopath.)
 *==============================================================================*
 * Standalone globals; in the full project these come from 00_control.do.
 global root "`c(pwd)'"

@@ -1,38 +1,39 @@
 \babel@toc {english}{}\relax
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {1.1}{\ignorespaces The four promises, with pass/fail tests}}{7}{table.caption.18}%
-\contentsline {table}{\numberline {1.2}{\ignorespaces The book's running datasets}}{10}{table.caption.20}%
+\contentsline {table}{\numberline {1.1}{\ignorespaces The four promises, with pass/fail tests}}{9}{table.caption.20}%
+\contentsline {table}{\numberline {1.2}{\ignorespaces The book's running datasets}}{12}{table.caption.22}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {2.1}{\ignorespaces gtools timings on two million rows}}{14}{table.caption.25}%
-\addvspace {10\p@ }
-\addvspace {10\p@ }
-\contentsline {table}{\numberline {4.1}{\ignorespaces Five highest-need Texas counties}}{31}{table.caption.35}%
-\addvspace {10\p@ }
-\contentsline {table}{\numberline {5.1}{\ignorespaces Percent agree by site, simulated coaching battery}}{39}{table.caption.40}%
-\addvspace {10\p@ }
-\contentsline {table}{\numberline {6.1}{\ignorespaces Wage-quartile transition matrix}}{47}{table.caption.43}%
-\addvspace {10\p@ }
-\contentsline {table}{\numberline {7.1}{\ignorespaces Weighted versus unweighted means, NHANES~II}}{55}{table.caption.49}%
-\addvspace {10\p@ }
-\contentsline {table}{\numberline {8.1}{\ignorespaces TWFE vs.\ Callaway--Sant'Anna on a known truth}}{61}{table.caption.54}%
-\addvspace {10\p@ }
-\contentsline {table}{\numberline {9.1}{\ignorespaces Before and after the intervention}}{73}{table.caption.64}%
-\addvspace {10\p@ }
-\contentsline {table}{\numberline {10.1}{\ignorespaces The visualization suite at a glance}}{76}{table.caption.68}%
-\contentsline {table}{\numberline {10.2}{\ignorespaces Choosing static, interactive, or animated}}{84}{table.caption.74}%
-\addvspace {10\p@ }
-\contentsline {table}{\numberline {11.1}{\ignorespaces Reproducible earnings table, ingested from a do-file}}{88}{table.caption.77}%
-\addvspace {10\p@ }
-\contentsline {table}{\numberline {12.1}{\ignorespaces Delivery formats compared}}{100}{table.caption.81}%
-\contentsline {table}{\numberline {12.2}{\ignorespaces What to stamp on a delivered portal}}{101}{table.caption.82}%
+\contentsline {table}{\numberline {2.1}{\ignorespaces gtools timings on two million rows}}{19}{table.caption.28}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {14.1}{\ignorespaces $k$-anonymity of four ordinary columns}}{124}{table.caption.100}%
-\contentsline {table}{\numberline {14.2}{\ignorespaces Coarsening industry collapses unique records}}{125}{table.caption.102}%
-\contentsline {table}{\numberline {14.3}{\ignorespaces Primary and complementary suppression}}{127}{table.caption.103}%
+\contentsline {table}{\numberline {4.1}{\ignorespaces Five highest-need Texas counties}}{35}{table.caption.40}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {15.1}{\ignorespaces Three ways to build one variable, one million rows}}{134}{table.caption.106}%
-\contentsline {table}{\numberline {15.2}{\ignorespaces A replication-archive manifest}}{136}{table.caption.107}%
+\contentsline {table}{\numberline {5.1}{\ignorespaces Percent agree by site, simulated coaching battery}}{43}{table.caption.46}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {6.1}{\ignorespaces Wage-quartile transition matrix}}{51}{table.caption.50}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {7.1}{\ignorespaces Weighted versus unweighted means, NHANES~II}}{59}{table.caption.57}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {8.1}{\ignorespaces TWFE vs.\ Callaway--Sant'Anna on a known truth}}{68}{table.caption.63}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {9.1}{\ignorespaces Before and after the intervention}}{79}{table.caption.74}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {10.1}{\ignorespaces The visualization suite at a glance}}{82}{table.caption.79}%
+\contentsline {table}{\numberline {10.2}{\ignorespaces Choosing static, interactive, or animated}}{90}{table.caption.85}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {11.1}{\ignorespaces Reproducible earnings table, ingested from a do-file}}{94}{table.caption.89}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {12.1}{\ignorespaces Delivery formats compared}}{108}{table.caption.94}%
+\contentsline {table}{\numberline {12.2}{\ignorespaces What to stamp on a delivered portal}}{110}{table.caption.95}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {14.1}{\ignorespaces $k$-anonymity of four ordinary columns}}{132}{table.caption.115}%
+\contentsline {table}{\numberline {14.2}{\ignorespaces Coarsening industry collapses unique records}}{133}{table.caption.117}%
+\contentsline {table}{\numberline {14.3}{\ignorespaces Primary and complementary suppression}}{135}{table.caption.118}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {15.1}{\ignorespaces Three ways to build one variable, one million rows}}{142}{table.caption.122}%
+\contentsline {table}{\numberline {15.2}{\ignorespaces A replication-archive manifest}}{144}{table.caption.123}%
+\addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

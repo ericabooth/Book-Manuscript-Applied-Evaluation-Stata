@@ -24,8 +24,19 @@ capture which libjson
 if _rc ssc install libjson, replace            // educationdata dependency
 
 *--- The book's own packages (from the authors' GitHub) -----------------------*
-* Uncomment the ones you want; each installs with a single net command.
+* webapi is required by ch03_webapi.do (and the guarded ch12 portal build);
+* the others are optional. Each installs with one net command (verified 2026-07).
+capture which webapi
+if _rc net install webapi, from("https://raw.githubusercontent.com/ericabooth/webapi-stata-public/main/") replace
+* Uncomment the ones you want:
 * net install googlechart, from("https://raw.githubusercontent.com/ericabooth/googlechart-stata-public/main/") replace
 * net install googlesheets, from("https://raw.githubusercontent.com/ericabooth/googlesheets-stata-public/main/") replace
+* net install statashiny, from("https://raw.githubusercontent.com/ericabooth/StataShiny-public/main/") replace
+* webdoc2 needs Ben Jann's webdoc first, and a separate net get for its
+* Bootstrap header.html (net get drops ancillary files in the current dir):
+* ssc install webdoc, replace
+* net install webdoc2, from("https://raw.githubusercontent.com/ericabooth/webdoc2-stata-public/main/") replace
+* net get webdoc2, from("https://raw.githubusercontent.com/ericabooth/webdoc2-stata-public/main/")
+* (sparkta2 is not yet published; its examples in the book are display-only.)
 
 di as result "Package setup complete."

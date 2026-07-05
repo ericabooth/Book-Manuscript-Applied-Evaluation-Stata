@@ -9,7 +9,12 @@ figures in the book are produced by these files.
 1. Put this project folder anywhere on your machine.
 2. Open `00_control.do` and edit the single `global root` line to point at the
    project folder. That is the only path you ever edit.
-3. Run `01_install.do` once to fetch the community packages the book uses.
+3. Run `01_install.do` once to fetch the community packages the book uses,
+   plus the authors' `webapi` package from
+   [WebAPI-stata-public](https://github.com/ericabooth/WebAPI-stata-public).
+   The other suite packages (`googlechart`, `googlesheets`, `statashiny`,
+   `webdoc2`) sit in a commented block in the same file — uncomment the ones
+   you want; each installs from its public GitHub repo with one `net` command.
 
 ## Running an example
 

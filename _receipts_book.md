@@ -12,13 +12,21 @@ This ledger is the single source of truth for the book's numbers. Every worked-e
 |---|---|---|---|---|---|---|
 | 1 | Houston private-sector weekly wage, 2023 Q1 | \$1,900 | code/20_ch03_apis.do | `stata-mp -b do code/20_ch03_apis.do` (list block) | 2026-07-04 | verified |
 | 2 | Austin / Dallas / Ft. Worth / San Antonio weekly wage | 1,862 / 1,839 / 1,391 / 1,270 | code/20_ch03_apis.do | same log | 2026-07-04 | verified |
-| 3 | jsonplaceholder users returned; CDC mortality rows | 10 ; 52 (HTTP 200) | code/ch13_...→ch03_webapi.do | `stata-mp -b do code/ch03_webapi.do` (needs webapi on adopath) | 2026-07-04 | verified |
+| 3 | jsonplaceholder users returned; CDC mortality rows | 10 ; 52 (HTTP 200) | code/ch13_...→ch03_webapi.do | `stata-mp -b do code/ch03_webapi.do` (webapi now net-installable, see row 15) | 2026-07-05 | verified |
 | 4 | TX public-school enrollment 2015; 2022; 2020 dip | 5,301,916 ; 5,519,724 ; ~122,000 | code/ch03_educationdata.do | `stata-mp -b do code/ch03_educationdata.do` (list block) | 2026-07-04 | verified |
 | 5 | DiD: true ATT ; naive TWFE ; csdid (seed 20260704) | 4.83 ; 3.26 (bias -1.57) ; 4.86 (+0.03) | code/ch08_did.do | `stata-mp -b do code/ch08_did.do` (table block) | 2026-07-04 | verified |
 | 6 | Backbone tripwire: N with wage<5 (two wrong guesses caught) | 757 (132, 278 failed) | code/ch13_backbone.do | `stata-mp -b do code/ch13_backbone.do` | 2026-07-05 | verified |
 | 7 | Parallel bootstrap of tenure coef: reps ; SE ; 95% CI | 1000 ; 0.019 ; [0.112, 0.187] | code/ch13_parallel.do | `stata-mp -b do code/ch13_parallel.do` | 2026-07-05 | verified |
 | 8 | Cronbach's alpha before/after dropping weak item (sim) | 0.7576 -> 0.7939 | code/ch07_trust.do | `stata-mp -b do code/ch07_trust.do` | 2026-07-04 | verified |
-| 9 | External citations in bibliography, all web-verified | 18 works | LaTeXBookCode/main.bib | biblatex; see references.bib provenance | 2026-07-05 | verified |
+| 9 | External citations in bibliography, all web-verified | 27 works | LaTeXBookCode/main.bib | biblatex; see references.bib provenance | 2026-07-05 | verified |
+| 10 | Capstone (App. E): usable counties after clean | 3,088 | code/capstone_chr.do | `stata-mp -b do code/capstone_chr.do` (Counties analyzed line) | 2026-07-05 | verified |
+| 11 | Capstone: YPLL per +10pt child poverty, naive OLS ; R2 | +2,992 (prose "~2,990") ; 0.545 | code/capstone_chr.do | same log (Naive: line; coef 299.17 x10) | 2026-07-05 | verified |
+| 12 | Capstone: YPLL per +10pt child poverty, state FE | +2,782 (prose "~2,780") | code/capstone_chr.do | same log (State FE: line; coef 278.18 x10) | 2026-07-05 | verified |
+| 13 | Capstone fig: mean YPLL at 30-bin vs 10-bin (round/5 bins, drop n<10) | 12,945 vs 6,826 (caption "~12,900 / ~6,800") | code/capstone_chr.do | round(childpov/5)*5 collapse | 2026-07-05 | verified |
+| 14 | Capstone tripwire caught real outlier county YPLL | ~41,000 | code/capstone_chr.do | assert ypll<50000 (was <40000, fired) | 2026-07-05 | verified |
+| 15 | webapi installs from public GitHub; full ch03_webapi.do reproduces against the PUBLISHED package | net install works; 10 users, 52 rows, HTTP 200, 0 errors | github.com/ericabooth/WebAPI-stata-public | `net install webapi, from("https://raw.githubusercontent.com/ericabooth/webapi-stata-public/main/") replace` then run ch03_webapi.do | 2026-07-05 | verified |
+| 16 | statashiny installs from public GitHub | net install works, which resolves | github.com/ericabooth/StataShiny-public | `net install statashiny, from("https://raw.githubusercontent.com/ericabooth/StataShiny-public/main/") replace` | 2026-07-05 | verified |
+| 17 | googlechart, googlesheets, webdoc2 install from public GitHub (sandboxed net install + which) | all three resolve; webdoc2 needs `ssc install webdoc` + `net get webdoc2` for header.html (lands in cwd) | github.com/ericabooth/{googlechart,googlesheets,webdoc2}-stata-public | `net install <pkg>, from("https://raw.githubusercontent.com/ericabooth/<repo>/main/") replace` | 2026-07-05 | verified |
 
 Any figure or table number in a caption traces to the same do-file as the panel it describes.
 
@@ -30,8 +38,14 @@ Any figure or table number in a caption traces to the same do-file as the panel 
 - [x] Sentence pass (actors and objects named, jargon glossed, hedges specific)
 - [x] Walk-through pattern where a technical concept is compressed
 - [x] Numbers pass (all worked-example numbers traced to do-files above; frozen, not to be altered by editors)
-- [ ] Cold read as the target reader
-- [ ] Independent adversarial review (blindspot)
+- [x] Cold read as the target reader (three-lens usability review + fixer, 2026-07-05)
+- [x] Grew citation base to 27 (survey methods, record linkage, reproducibility/openICPSR, CHR data)
+- [x] Capstone appendix (App. E): one public dataset, ingest-to-deliverable, tested (code/capstone_chr.do)
+- [x] Exercises track: 5 per chapter, 15 chapters (in TOC)
+- [x] Front/back matter: skills contract (preface), fun alternate titles page, 165-entry subject index (\printindex, p163)
+- [x] Independent adversarial review (blindspot, 2026-07-05): 1 BLOCKING (Fig E.1 caption bin means used stale ceil-binning 12,600/6,100 vs figure's round-binning 12,945/6,826) + 2 MINOR (Ch05 Ex3 answer-leak; receipts +2,990 vs log +2,992) -- ALL FIXED and reverified. Rest clean: capstone re-run reproduced, rescale/caveat correct, no-key true, exercises grounded, index on-target, fun-titles in taste, 0 real undefined refs.
+- [x] Fixed ch08_event.png figure note "2 to 6" -> "2 to 9" (true max effect is 9 for t=5 cohort); caption + body now consistent
+- [x] Three-lens review triage/fix (2026-07-05, review task w4kmalx8x ran 12:36 pre-fix-batch): ALL 4 BLOCKING (dup fig:pipeline, dup tab:bench, appendix Production-note, appendix contaminated-log) verified ALREADY FIXED in earlier session work. IMPORTANT already fixed: Ch6 xref->ch:claims, ch07 6.3M arithmetic, ch11 filename match, dripw gloss, Comparisons-first pointer, ch13 0.81 agreement, projectbuilder box in Ch2, ROI loss-tail. NEWLY FIXED this pass: (a) IMPORTANT 42_ch10:12 "The five tools"->"These six tools" (last holdout of 5-vs-6; title/caption/line-8 all say six); (b) MINOR 52_ch14 histogram snippet missing `gen kplot = min(k,30)` (paste-error) restored; (c) MINOR 24_ch06 misstable table truncated to 196/200 -> restored full real 7-row output summing to 200. VERIFIED-NO-CHANGE: ch14 caption "15 cells of k=2" recomputed = 15 (egen group ...,missing gives 103 cells/24 unique/63 in k2-4; 15*2+7*3+3*4=63), correct, describes its own histogram. DEFERRED (judgment, not defects): U13 "Speed you will actually notice" title (defensible, caption already says "benchmark before you optimize"); U14 half-width margin note (already carries the give-or-take-four clarifier); U12 %TODO-verify comment (LaTeX comment, won't render; resolves when sparkta2 ships).
 
 ## Decisions log (including rejected alternatives and dead ends)
 
@@ -41,3 +55,6 @@ Any figure or table number in a caption traces to the same do-file as the panel 
 | 2026-07-05 | Left one cosmetic "undefined references" biblatex backref warning | 0 real undefined refs/cites; class-file surgery would risk breakage | disabling backref/citecounter (loses "cited on pages") |
 | 2026-07-05 | clearwriter pass is surgical refinement, not rewrite | Book already built on Gelman/Cox patterns; skill says do not over-rewrite clean prose | full rewrite (would risk breaking tested code/numbers) |
 | 2026-07-04 | sparkta2 kept with %TODO-verify | source not yet public | printing an install line that would 404 |
+| 2026-07-05 | Install lines added to every suite Package Integration box (webapi Ch3, googlechart Ch10, googlesheets Ch11, webdoc2+statashiny Ch12) + toolkit pattern + Setup Guide pointer | Eric published the repos; every line sandbox-verified before printing | pointing readers only at 01_install.do (a reader skimming one chapter would miss it) |
+| 2026-07-05 | Book standardizes on `/main/` branch in raw GitHub URLs | main is the default branch on all five repos; repo READMEs' `/master/` also resolves but is redundant | printing both forms (invites drift) |
+| 2026-07-05 | webdoc2 box shows three lines (ssc webdoc, net install, net get) | header.html is an ancillary .pkg file net install won't place; verified net get drops it in cwd | pretending net install suffices (reader's wdinit would fail) |

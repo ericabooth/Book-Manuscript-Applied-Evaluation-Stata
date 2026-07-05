@@ -9,12 +9,15 @@
 *   (statashiny) -> a Bootstrap-5 report shell (webdoc2) that wraps them all
 *   into a single index.html the client can open offline.
 *
-*   Most of this file is DISPLAY-ONLY. statashiny, webdoc2, and sparkta2 need
-*   packages (and sometimes OAuth) that are not assumed installed here, so those
-*   blocks are wrapped in `if 0 { ... }' and clearly commented. What DOES run
-*   with no packages and no network is the folder-scaffolding section at the
-*   bottom: it builds the portal skeleton and a stamped README so you can see
-*   the shape of the deliverable before the tools fill it in.
+*   Most of this file is DISPLAY-ONLY. The suite tools are not assumed
+*   installed here, so those blocks are wrapped in `if 0 { ... }' and clearly
+*   commented. Five of the six now install from the authors' GitHub with one
+*   net command each (webapi, googlechart, googlesheets, statashiny, webdoc2;
+*   see 01_install.do and Appendix A); sparkta2's source is still forthcoming,
+*   so its line stays a sketch. What DOES run with no packages and no network
+*   is the folder-scaffolding section at the bottom: it builds the portal
+*   skeleton and a stamped README so you can see the shape of the deliverable
+*   before the tools fill it in.
 *
 * HOW TO USE
 *   Read top to bottom for the pipeline. To scaffold a real portal folder,
@@ -128,8 +131,9 @@ if 0 {   // DISPLAY-ONLY: requires -webdoc2- (and -webdoc-)
 ********************************************************************************
 * PART C -- THE CAPSTONE: one evaluation, one folder (DISPLAY-ONLY sketch)
 *   The whole suite in sequence. Each step names the chapter that teaches it.
-*   Guarded because it needs webapi/googlesheets/googlechart/sparkta2/
-*   statashiny/webdoc2 all installed and (for the live ones) network + OAuth.
+*   Guarded because it needs the whole suite installed and (for the live
+*   ones) network + OAuth. webapi/googlesheets/googlechart/statashiny/webdoc2
+*   install from the authors' GitHub (01_install.do); sparkta2 is a sketch.
 ********************************************************************************
 if 0 {   // DISPLAY-ONLY: full-suite orchestration
 

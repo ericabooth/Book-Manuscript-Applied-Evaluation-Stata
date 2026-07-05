@@ -1,7 +1,7 @@
 *==============================================================================*
 * ch08_did.do  --  Chapter 8: from differences to defensible claims
 * (a) SIMULATED staggered adoption: 60 units, 12 periods, cohorts at t=5,9
-*     plus a never-treated group; dynamic effect growing 2 -> 6.
+*     plus a never-treated group; dynamic effect growing 2 -> 9 (t=5 cohort).
 *     Naive TWFE (reghdfe) vs Callaway-Sant'Anna (csdid) against a KNOWN truth.
 * (b) Event-study figure from csdid (pre-trend read).
 * (c) ROI Monte Carlo -> tornado horizontal-bar chart.
@@ -26,7 +26,8 @@ set more off
 * 60 units, 12 periods. Cohort 1 (units 1-20) adopts at t=5; cohort 2
 * (units 21-40) adopts at t=9; units 41-60 are never treated (cohort 0).
 * The treatment effect is dynamic: 2 in the first exposed period, +1 each
-* period after (exposure 0 -> effect 2, exposure 4 -> effect 6).
+* period after (exposure 0 -> effect 2; the t=5 cohort reaches exposure 7 ->
+* effect 9 by the final period, while the late t=9 cohort tops out at 5).
 set seed 20260704
 set obs 60
 gen unit   = _n
@@ -78,7 +79,7 @@ csdid_plot,                                                          ///
     ytitle("Estimated effect (outcome units)", size(small))          ///
     xtitle("Periods since treatment", size(small))                   ///
     note("Simulated: 60 units, 12 periods, cohorts at t=5 and t=9," ///
-        " never-treated controls; true effect grows 2 to 6.",        ///
+        " never-treated controls; true effect grows 2 to 9.",        ///
         size(vsmall))                                                ///
     legend(order(2 "Pre-treatment (should be flat near 0)"           ///
         4 "Post-treatment (the estimated effect)")                   ///

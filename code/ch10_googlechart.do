@@ -21,9 +21,9 @@
 *   (Ch.11); the finished charts get wrapped into one report or portal by
 *   statashiny / webdoc2 (Ch.12).
 *
-* PREREQUISITE (once):
+* PREREQUISITE (once; public repo, install verified 2026-07-05):
 *   net install googlechart, ///
-*     from("https://raw.githubusercontent.com/ericabooth/googlechart-stata-public/master/") replace
+*     from("https://raw.githubusercontent.com/ericabooth/googlechart-stata-public/main/") replace
 *
 * DATA: two tidied CHR extracts ship in ./data next to this file.
 *   chr_states_2025.csv   51 rows (50 states + DC), one row per state, 2025.

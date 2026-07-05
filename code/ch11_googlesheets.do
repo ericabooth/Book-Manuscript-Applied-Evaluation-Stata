@@ -7,6 +7,10 @@
 * It is the copy-pasteable workflow: point $SS at your own Sheet, complete
 * the Appendix-A sign-in once, and every command here runs as written.
 *
+* Install once (public repo, install verified 2026-07-05):
+*   net install googlesheets, ///
+*     from("https://raw.githubusercontent.com/ericabooth/googlesheets-stata-public/main/") replace
+*
 * Data: County Health Rankings & Roadmaps (CHR&R) 2025 state extract,
 *   51 rows (50 states + DC). Columns A-K:
 *   A fips  B state  C usps  D geo_code  E median_income  F premature_death

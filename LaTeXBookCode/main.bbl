@@ -196,6 +196,38 @@
       \verb https://openreview.net/forum?id=YfZ4ZPt8zd
       \endverb
     \endentry
+    \entry{cronbach1951alpha}{article}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=535f1fcde8830899a17499b42476a71a}{%
+           family={Cronbach},
+           familyi={C\bibinitperiod},
+           given={Lee\bibnamedelima J.},
+           giveni={L\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{535f1fcde8830899a17499b42476a71a}
+      \strng{fullhash}{535f1fcde8830899a17499b42476a71a}
+      \strng{bibnamehash}{535f1fcde8830899a17499b42476a71a}
+      \strng{authorbibnamehash}{535f1fcde8830899a17499b42476a71a}
+      \strng{authornamehash}{535f1fcde8830899a17499b42476a71a}
+      \strng{authorfullhash}{535f1fcde8830899a17499b42476a71a}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Psychometrika}
+      \field{number}{3}
+      \field{title}{Coefficient Alpha and the Internal Structure of Tests}
+      \field{volume}{16}
+      \field{year}{1951}
+      \field{pages}{297\bibrangedash 334}
+      \range{pages}{38}
+      \verb{doi}
+      \verb 10.1007/BF02310555
+      \endverb
+    \endentry
     \entry{cunningham2021mixtape}{book}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=4dcc5a18019c71f8991659bdbf42b2b7}{%
@@ -226,6 +258,126 @@
       \field{isbn}{9780300251685}
       \field{title}{Causal Inference: The Mixtape}
       \field{year}{2021}
+    \endentry
+    \entry{deming1940raking}{article}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=3b10d88d2c27a6d7249236cfa47c4be9}{%
+           family={Deming},
+           familyi={D\bibinitperiod},
+           given={W.\bibnamedelimi Edwards},
+           giveni={W\bibinitperiod\bibinitdelim E\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=285810daeb12d4621bd2fbd73a94c29a}{%
+           family={Stephan},
+           familyi={S\bibinitperiod},
+           given={Frederick\bibnamedelima F.},
+           giveni={F\bibinitperiod\bibinitdelim F\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{9d1ee8a98cc04081cc0cf1d3e9e43cf8}
+      \strng{fullhash}{9d1ee8a98cc04081cc0cf1d3e9e43cf8}
+      \strng{bibnamehash}{9d1ee8a98cc04081cc0cf1d3e9e43cf8}
+      \strng{authorbibnamehash}{9d1ee8a98cc04081cc0cf1d3e9e43cf8}
+      \strng{authornamehash}{9d1ee8a98cc04081cc0cf1d3e9e43cf8}
+      \strng{authorfullhash}{9d1ee8a98cc04081cc0cf1d3e9e43cf8}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{The Annals of Mathematical Statistics}
+      \field{number}{4}
+      \field{title}{On a Least Squares Adjustment of a Sampled Frequency Table When the Expected Marginal Totals Are Known}
+      \field{volume}{11}
+      \field{year}{1940}
+      \field{pages}{427\bibrangedash 444}
+      \range{pages}{18}
+      \verb{doi}
+      \verb 10.1214/aoms/1177731829
+      \endverb
+    \endentry
+    \entry{enamorado2019linkage}{article}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=b78dcd139fdd4b23969983e9fc9ccc3d}{%
+           family={Enamorado},
+           familyi={E\bibinitperiod},
+           given={Ted},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=124ab18d8907d3a247593f553982e7dd}{%
+           family={Fifield},
+           familyi={F\bibinitperiod},
+           given={Benjamin},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3fb69a8c942c769b74775b484c82bbe9}{%
+           family={Imai},
+           familyi={I\bibinitperiod},
+           given={Kosuke},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{787dbaf0c17698761da22249fd531d77}
+      \strng{fullhash}{787dbaf0c17698761da22249fd531d77}
+      \strng{bibnamehash}{787dbaf0c17698761da22249fd531d77}
+      \strng{authorbibnamehash}{787dbaf0c17698761da22249fd531d77}
+      \strng{authornamehash}{787dbaf0c17698761da22249fd531d77}
+      \strng{authorfullhash}{787dbaf0c17698761da22249fd531d77}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{American Political Science Review}
+      \field{number}{2}
+      \field{title}{Using a Probabilistic Model to Assist Merging of Large-Scale Administrative Records}
+      \field{volume}{113}
+      \field{year}{2019}
+      \field{pages}{353\bibrangedash 371}
+      \range{pages}{19}
+      \verb{doi}
+      \verb 10.1017/S0003055418000783
+      \endverb
+    \endentry
+    \entry{fellegi1969linkage}{article}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=3512111ae31e192e17da34a459844765}{%
+           family={Fellegi},
+           familyi={F\bibinitperiod},
+           given={Ivan\bibnamedelima P.},
+           giveni={I\bibinitperiod\bibinitdelim P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a816d536603224ac2d3a6bfcfd534a11}{%
+           family={Sunter},
+           familyi={S\bibinitperiod},
+           given={Alan\bibnamedelima B.},
+           giveni={A\bibinitperiod\bibinitdelim B\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{a02762c13c7328d97c299739a13bfd48}
+      \strng{fullhash}{a02762c13c7328d97c299739a13bfd48}
+      \strng{bibnamehash}{a02762c13c7328d97c299739a13bfd48}
+      \strng{authorbibnamehash}{a02762c13c7328d97c299739a13bfd48}
+      \strng{authornamehash}{a02762c13c7328d97c299739a13bfd48}
+      \strng{authorfullhash}{a02762c13c7328d97c299739a13bfd48}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of the American Statistical Association}
+      \field{number}{328}
+      \field{title}{A Theory for Record Linkage}
+      \field{volume}{64}
+      \field{year}{1969}
+      \field{pages}{1183\bibrangedash 1210}
+      \range{pages}{28}
+      \verb{doi}
+      \verb 10.1080/01621459.1969.10501049
+      \endverb
     \endentry
     \entry{gao2023pal}{inproceedings}{}
       \name{author}{8}{}{%
@@ -367,6 +519,44 @@
       \verb 10.1016/j.jeconom.2021.03.014
       \endverb
     \endentry
+    \entry{groves2008nonresponse}{article}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=fc80c28145bfbcb4429404be3befc52a}{%
+           family={Groves},
+           familyi={G\bibinitperiod},
+           given={Robert\bibnamedelima M.},
+           giveni={R\bibinitperiod\bibinitdelim M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=cba0c6db71edd489eef5946a6ed430f3}{%
+           family={Peytcheva},
+           familyi={P\bibinitperiod},
+           given={Emilia},
+           giveni={E\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{5e68cce57099f4f531e88fae5334e927}
+      \strng{fullhash}{5e68cce57099f4f531e88fae5334e927}
+      \strng{bibnamehash}{5e68cce57099f4f531e88fae5334e927}
+      \strng{authorbibnamehash}{5e68cce57099f4f531e88fae5334e927}
+      \strng{authornamehash}{5e68cce57099f4f531e88fae5334e927}
+      \strng{authorfullhash}{5e68cce57099f4f531e88fae5334e927}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Public Opinion Quarterly}
+      \field{number}{2}
+      \field{title}{The Impact of Nonresponse Rates on Nonresponse Bias: A Meta-Analysis}
+      \field{volume}{72}
+      \field{year}{2008}
+      \field{pages}{167\bibrangedash 189}
+      \range{pages}{23}
+      \verb{doi}
+      \verb 10.1093/poq/nfn011
+      \endverb
+    \endentry
     \entry{huntingtonklein2022effect}{book}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=6887be9a9a480474e5f6f4d0070a8ca6}{%
@@ -397,6 +587,34 @@
       \field{isbn}{9781032125787}
       \field{title}{The Effect: An Introduction to Research Design and Causality}
       \field{year}{2022}
+    \endentry
+    \entry{openicpsr}{misc}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=815600c974e28e1b0a3823207d48436c}{%
+           family={{Inter-university Consortium for Political and Social Research}},
+           familyi={I\bibinitperiod}}}%
+      }
+      \strng{namehash}{815600c974e28e1b0a3823207d48436c}
+      \strng{fullhash}{815600c974e28e1b0a3823207d48436c}
+      \strng{bibnamehash}{815600c974e28e1b0a3823207d48436c}
+      \strng{authorbibnamehash}{815600c974e28e1b0a3823207d48436c}
+      \strng{authornamehash}{815600c974e28e1b0a3823207d48436c}
+      \strng{authorfullhash}{815600c974e28e1b0a3823207d48436c}
+      \field{sortinit}{I}
+      \field{sortinithash}{8d291c51ee89b6cd86bf5379f0b151d8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Data repository, University of Michigan}
+      \field{title}{{openICPSR}}
+      \field{year}{2026}
+      \verb{urlraw}
+      \verb https://www.openicpsr.org
+      \endverb
+      \verb{url}
+      \verb https://www.openicpsr.org
+      \endverb
     \endentry
     \entry{ji2023survey}{article}{}
       \name{author}{10}{}{%
@@ -480,6 +698,38 @@
       \field{year}{2023}
       \verb{doi}
       \verb 10.1145/3571730
+      \endverb
+    \endentry
+    \entry{king1995replication}{article}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=e62a3c431989b28a48ea18aa5cfcfbed}{%
+           family={King},
+           familyi={K\bibinitperiod},
+           given={Gary},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{e62a3c431989b28a48ea18aa5cfcfbed}
+      \strng{fullhash}{e62a3c431989b28a48ea18aa5cfcfbed}
+      \strng{bibnamehash}{e62a3c431989b28a48ea18aa5cfcfbed}
+      \strng{authorbibnamehash}{e62a3c431989b28a48ea18aa5cfcfbed}
+      \strng{authornamehash}{e62a3c431989b28a48ea18aa5cfcfbed}
+      \strng{authorfullhash}{e62a3c431989b28a48ea18aa5cfcfbed}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{PS: Political Science \& Politics}
+      \field{number}{3}
+      \field{title}{Replication, Replication}
+      \field{volume}{28}
+      \field{year}{1995}
+      \field{pages}{444\bibrangedash 452}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.2307/420301
       \endverb
     \endentry
     \entry{liu2024lost}{article}{}
@@ -777,6 +1027,50 @@
       \verb https://arxiv.org/abs/2406.10279
       \endverb
     \endentry
+    \entry{stodden2018reproducibility}{article}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=2f18fc23a917fe1f0c74958b593f4e71}{%
+           family={Stodden},
+           familyi={S\bibinitperiod},
+           given={Victoria},
+           giveni={V\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8fbfa5c8b7b9e2c3411b8bda47e3ba67}{%
+           family={Seiler},
+           familyi={S\bibinitperiod},
+           given={Jennifer},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1dfe3e99026450a5e9a935fb2edc2c8d}{%
+           family={Ma},
+           familyi={M\bibinitperiod},
+           given={Zhaokun},
+           giveni={Z\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{76bcb73b02c078fb52b0ff7bde7fd4fd}
+      \strng{fullhash}{76bcb73b02c078fb52b0ff7bde7fd4fd}
+      \strng{bibnamehash}{76bcb73b02c078fb52b0ff7bde7fd4fd}
+      \strng{authorbibnamehash}{76bcb73b02c078fb52b0ff7bde7fd4fd}
+      \strng{authornamehash}{76bcb73b02c078fb52b0ff7bde7fd4fd}
+      \strng{authorfullhash}{76bcb73b02c078fb52b0ff7bde7fd4fd}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Proceedings of the National Academy of Sciences}
+      \field{number}{11}
+      \field{title}{An Empirical Analysis of Journal Policy Effectiveness for Computational Reproducibility}
+      \field{volume}{115}
+      \field{year}{2018}
+      \field{pages}{2584\bibrangedash 2589}
+      \range{pages}{6}
+      \verb{doi}
+      \verb 10.1073/pnas.1708290115
+      \endverb
+    \endentry
     \entry{sweeney2002kanon}{article}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=4b70cbf7a64d719bc32e412248e3ff64}{%
@@ -839,6 +1133,34 @@
       \field{isbn}{9780961392109}
       \field{title}{The Visual Display of Quantitative Information}
       \field{year}{1983}
+    \endentry
+    \entry{chr2024}{misc}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=c77a8182a309550a6c46bde04477dbff}{%
+           family={{University of Wisconsin Population Health Institute}},
+           familyi={U\bibinitperiod}}}%
+      }
+      \strng{namehash}{c77a8182a309550a6c46bde04477dbff}
+      \strng{fullhash}{c77a8182a309550a6c46bde04477dbff}
+      \strng{bibnamehash}{c77a8182a309550a6c46bde04477dbff}
+      \strng{authorbibnamehash}{c77a8182a309550a6c46bde04477dbff}
+      \strng{authornamehash}{c77a8182a309550a6c46bde04477dbff}
+      \strng{authorfullhash}{c77a8182a309550a6c46bde04477dbff}
+      \field{sortinit}{U}
+      \field{sortinithash}{6901a00e45705986ee5e7ca9fd39adca}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Analytic data file, public}
+      \field{title}{{County Health Rankings \& Roadmaps 2024}}
+      \field{year}{2024}
+      \verb{urlraw}
+      \verb https://www.countyhealthrankings.org
+      \endverb
+      \verb{url}
+      \verb https://www.countyhealthrankings.org
+      \endverb
     \endentry
   \enddatalist
 \endrefsection
