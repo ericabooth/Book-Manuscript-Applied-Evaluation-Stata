@@ -58,6 +58,8 @@ if `run_all' {
     do "$code/ch11_tables.do"
     do "$code/ch11_googlesheets.do"
     do "$code/ch12_portal.do"
+    do "$code/ch13_backbone.do"
+    do "$code/ch13_parallel.do"
     do "$code/ch13_validation.do"
     do "$code/ch14_kanon.do"
     do "$code/ch15_bench.do"
