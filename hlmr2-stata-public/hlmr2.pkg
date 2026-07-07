@@ -1,0 +1,21 @@
+v 3
+d hlmr2: Nakagawa marginal and conditional R-squared after mixed
+d
+d hlmr2 computes the Nakagawa and Schielzeth (2013) marginal and
+d conditional R-squared for linear multilevel models fit by mixed.
+d The marginal R-squared is the share of outcome variance explained
+d by the fixed effects; the conditional R-squared adds the random
+d effects.  Results are stored in r() for use in loops and tables.
+d Works with one or more nested random-effects levels and with both
+d the sd() and var() parameter labels that estat sd produces across
+d Stata versions.
+d
+d Requires: Stata 16 or newer
+d
+d Author: Eric A. Booth, Sr Researcher, Texas 2036
+d Support: eric.a.booth@gmail.com
+d
+d Distribution-Date: 20260706
+d
+f hlmr2.ado
+f hlmr2.sthlp

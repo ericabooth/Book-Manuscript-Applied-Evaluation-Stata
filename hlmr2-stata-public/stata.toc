@@ -1,0 +1,3 @@
+v 3
+d hlmr2: Nakagawa marginal and conditional R-squared after mixed
+p hlmr2

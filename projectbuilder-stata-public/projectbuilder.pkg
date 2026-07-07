@@ -1,0 +1,24 @@
+v 3
+d projectbuilder: scaffold a data-analysis project folder with a numbered do-file pipeline
+d
+d projectbuilder creates a new project folder with the five-folder
+d layout (raw, clean, code, output, figures), a control file that
+d holds every path in one place and can rebuild the whole pipeline,
+d numbered do-file stubs (100_ingest through 500_report), and a
+d README stamped with the project metadata you pass as options.
+d Metadata does double duty: the source URL seeds the ingest stub,
+d outcome and by-variable lists seed the analysis stub, and a
+d descsave flag seeds a codebook call in the cleaning stub. The
+d program never overwrites an existing folder, is self-contained
+d (no template folder), and uses only Stata's cross-platform file
+d commands.
+d
+d Requires: Stata 16.0 or newer. No dependencies.
+d
+d Author: Eric A. Booth, Sr Researcher, Texas 2036
+d Support: eric.a.booth@gmail.com
+d
+d Distribution-Date: 20260706
+d
+f projectbuilder.ado
+f projectbuilder.sthlp

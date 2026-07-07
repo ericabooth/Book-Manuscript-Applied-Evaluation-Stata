@@ -1,0 +1,184 @@
+% Verified external references (July 2026). Currently cited in prose as
+% author-year; this file is ready if the book later adopts formal \cite.
+% Not auto-loaded: the preamble looks for main.bib, not references.bib.
+
+@article{liu2024lost,
+  author  = {Liu, Nelson F. and Lin, Kevin and Hewitt, John and Paranjape, Ashwin and Bevilacqua, Michele and Petroni, Fabio and Liang, Percy},
+  title   = {Lost in the Middle: How Language Models Use Long Contexts},
+  journal = {Transactions of the Association for Computational Linguistics},
+  volume  = {12}, pages = {157--173}, year = {2024},
+  doi     = {10.1162/tacl_a_00638},
+  url     = {https://aclanthology.org/2024.tacl-1.9/}
+}
+
+@article{ouyang2025nondeterminism,
+  author  = {Ouyang, Shuyin and Zhang, Jie M. and Harman, Mark and Wang, Meng},
+  title   = {An Empirical Study of the Non-Determinism of {ChatGPT} in Code Generation},
+  journal = {ACM Transactions on Software Engineering and Methodology},
+  volume  = {34}, number = {2}, articleno = {34}, year = {2025},
+  doi     = {10.1145/3697010}, url = {https://arxiv.org/abs/2308.02828}
+}
+
+@inproceedings{bender2021parrots,
+  author    = {Bender, Emily M. and Gebru, Timnit and McMillan-Major, Angelina and Shmitchell, Shmargaret},
+  title     = {On the Dangers of Stochastic Parrots: Can Language Models Be Too Big?},
+  booktitle = {Proceedings of the 2021 ACM Conference on Fairness, Accountability, and Transparency (FAccT '21)},
+  pages     = {610--623}, year = {2021}, publisher = {ACM},
+  doi       = {10.1145/3442188.3445922}
+}
+
+@inproceedings{gao2023pal,
+  author    = {Gao, Luyu and Madaan, Aman and Zhou, Shuyan and Alon, Uri and Liu, Pengfei and Yang, Yiming and Callan, Jamie and Neubig, Graham},
+  title     = {{PAL}: Program-aided Language Models},
+  booktitle = {Proceedings of the 40th International Conference on Machine Learning (ICML 2023)},
+  series    = {PMLR}, volume = {202}, pages = {10764--10799}, year = {2023},
+  url       = {https://proceedings.mlr.press/v202/gao23f.html}
+}
+
+@article{chen2023pot,
+  author  = {Chen, Wenhu and Ma, Xueguang and Wang, Xinyi and Cohen, William W.},
+  title   = {Program of Thoughts Prompting: Disentangling Computation from Reasoning for Numerical Reasoning Tasks},
+  journal = {Transactions on Machine Learning Research}, year = {2023},
+  url     = {https://openreview.net/forum?id=YfZ4ZPt8zd}
+}
+
+@article{ji2023survey,
+  author  = {Ji, Ziwei and Lee, Nayeon and Frieske, Rita and Yu, Tiezheng and Su, Dan and Xu, Yan and Ishii, Etsuko and Bang, Ye Jin and Madotto, Andrea and Fung, Pascale},
+  title   = {Survey of Hallucination in Natural Language Generation},
+  journal = {ACM Computing Surveys}, volume = {55}, number = {12},
+  articleno = {248}, year = {2023}, doi = {10.1145/3571730}
+}
+
+@inproceedings{spracklen2025packages,
+  author    = {Spracklen, Joseph and Wijewickrama, Raveen and Sakib, A. H. M. Nazmus and Maiti, Anindya and Viswanath, Bimal and Jadliwala, Murtuza},
+  title     = {We Have a Package for You! A Comprehensive Analysis of Package Hallucinations by Code Generating {LLMs}},
+  booktitle = {Proceedings of the 34th USENIX Security Symposium (USENIX Security '25)},
+  year      = {2025}, url = {https://arxiv.org/abs/2406.10279}
+}
+
+@book{long2009workflow,
+  author    = {Long, J. Scott},
+  title     = {The Workflow of Data Analysis Using Stata},
+  publisher = {Stata Press}, address = {College Station, TX},
+  year      = {2009}, isbn = {978-1-59718-047-4}
+}
+
+@article{callaway2021did,
+  author  = {Callaway, Brantly and Sant'Anna, Pedro H. C.},
+  title   = {Difference-in-Differences with Multiple Time Periods},
+  journal = {Journal of Econometrics}, year = {2021},
+  volume  = {225}, number = {2}, pages = {200--230},
+  doi     = {10.1016/j.jeconom.2020.12.001}
+}
+@article{goodmanbacon2021did,
+  author  = {Goodman-Bacon, Andrew},
+  title   = {Difference-in-Differences with Variation in Treatment Timing},
+  journal = {Journal of Econometrics}, year = {2021},
+  volume  = {225}, number = {2}, pages = {254--277},
+  doi     = {10.1016/j.jeconom.2021.03.014}
+}
+@article{rambachan2023honest,
+  author  = {Rambachan, Ashesh and Roth, Jonathan},
+  title   = {A More Credible Approach to Parallel Trends},
+  journal = {The Review of Economic Studies}, year = {2023},
+  volume  = {90}, number = {5}, pages = {2555--2591},
+  doi     = {10.1093/restud/rdad018}
+}
+@unpublished{gelman2013forking,
+  author = {Gelman, Andrew and Loken, Eric},
+  title  = {The Garden of Forking Paths},
+  note   = {Working paper, Department of Statistics, Columbia University},
+  year   = {2013}
+}
+@article{reinhart2010debt,
+  author  = {Reinhart, Carmen M. and Rogoff, Kenneth S.},
+  title   = {Growth in a Time of Debt},
+  journal = {American Economic Review}, year = {2010},
+  volume  = {100}, number = {2}, pages = {573--578},
+  doi     = {10.1257/aer.100.2.573}
+}
+@article{sweeney2002kanon,
+  author  = {Sweeney, Latanya},
+  title   = {k-anonymity: A Model for Protecting Privacy},
+  journal = {International Journal of Uncertainty, Fuzziness and Knowledge-Based Systems},
+  year    = {2002}, volume = {10}, number = {5}, pages = {557--570},
+  doi     = {10.1142/S0218488502001648}
+}
+@book{tufte1983visual,
+  author    = {Tufte, Edward R.},
+  title     = {The Visual Display of Quantitative Information},
+  publisher = {Graphics Press}, address = {Cheshire, CT},
+  year      = {1983}, isbn = {9780961392109}
+}
+@book{cunningham2021mixtape,
+  author    = {Cunningham, Scott},
+  title     = {Causal Inference: The Mixtape},
+  publisher = {Yale University Press}, address = {New Haven, CT},
+  year      = {2021}, isbn = {9780300251685}
+}
+@book{huntingtonklein2022effect,
+  author    = {Huntington-Klein, Nick},
+  title     = {The Effect: An Introduction to Research Design and Causality},
+  publisher = {Chapman \& Hall/CRC}, address = {Boca Raton, FL},
+  year      = {2022}, isbn = {9781032125787}
+}
+@book{cameron2022microeconometrics,
+  author    = {Cameron, A. Colin and Trivedi, Pravin K.},
+  title     = {Microeconometrics Using Stata},
+  edition   = {2}, publisher = {Stata Press}, address = {College Station, TX},
+  year      = {2022}, note = {Two volumes}, isbn = {9781597183598}
+}
+
+@article{groves2008nonresponse,
+  author = {Groves, Robert M. and Peytcheva, Emilia},
+  title = {The Impact of Nonresponse Rates on Nonresponse Bias: A Meta-Analysis},
+  journal = {Public Opinion Quarterly}, year = {2008}, volume = {72}, number = {2},
+  pages = {167--189}, doi = {10.1093/poq/nfn011}
+}
+@article{cronbach1951alpha,
+  author = {Cronbach, Lee J.},
+  title = {Coefficient Alpha and the Internal Structure of Tests},
+  journal = {Psychometrika}, year = {1951}, volume = {16}, number = {3},
+  pages = {297--334}, doi = {10.1007/BF02310555}
+}
+@article{deming1940raking,
+  author = {Deming, W. Edwards and Stephan, Frederick F.},
+  title = {On a Least Squares Adjustment of a Sampled Frequency Table When the Expected Marginal Totals Are Known},
+  journal = {The Annals of Mathematical Statistics}, year = {1940}, volume = {11},
+  number = {4}, pages = {427--444}, doi = {10.1214/aoms/1177731829}
+}
+@article{fellegi1969linkage,
+  author = {Fellegi, Ivan P. and Sunter, Alan B.},
+  title = {A Theory for Record Linkage},
+  journal = {Journal of the American Statistical Association}, year = {1969},
+  volume = {64}, number = {328}, pages = {1183--1210}, doi = {10.1080/01621459.1969.10501049}
+}
+@article{enamorado2019linkage,
+  author = {Enamorado, Ted and Fifield, Benjamin and Imai, Kosuke},
+  title = {Using a Probabilistic Model to Assist Merging of Large-Scale Administrative Records},
+  journal = {American Political Science Review}, year = {2019}, volume = {113},
+  number = {2}, pages = {353--371}, doi = {10.1017/S0003055418000783}
+}
+@article{stodden2018reproducibility,
+  author = {Stodden, Victoria and Seiler, Jennifer and Ma, Zhaokun},
+  title = {An Empirical Analysis of Journal Policy Effectiveness for Computational Reproducibility},
+  journal = {Proceedings of the National Academy of Sciences}, year = {2018},
+  volume = {115}, number = {11}, pages = {2584--2589}, doi = {10.1073/pnas.1708290115}
+}
+@article{king1995replication,
+  author = {King, Gary},
+  title = {Replication, Replication},
+  journal = {PS: Political Science \& Politics}, year = {1995}, volume = {28},
+  number = {3}, pages = {444--452}, doi = {10.2307/420301}
+}
+@misc{openicpsr,
+  author = {{Inter-university Consortium for Political and Social Research}},
+  title = {{openICPSR}}, howpublished = {Data repository, University of Michigan},
+  url = {https://www.openicpsr.org}, year = {2026}
+}
+@misc{chr2024,
+  author = {{University of Wisconsin Population Health Institute}},
+  title = {{County Health Rankings \& Roadmaps 2024}},
+  howpublished = {Analytic data file, public},
+  url = {https://www.countyhealthrankings.org}, year = {2024}
+}

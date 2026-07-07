@@ -1,0 +1,3 @@
+v 3
+d riskscan: k-anonymity re-identification scan for Stata
+p riskscan

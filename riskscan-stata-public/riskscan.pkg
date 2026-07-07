@@ -1,0 +1,23 @@
+v 3
+d riskscan: k-anonymity re-identification scan
+d
+d riskscan measures how exposed a de-identified dataset still is.
+d It groups records by every combination of the quasi-identifiers
+d you name, computes the cell size k for each record, and reports
+d distinct cells, unique records (k=1), records below a threshold
+d (default k<5), and a cell-size distribution. Options add an
+d l-diversity check on a sensitive variable, a flag variable for
+d at-risk records, and a listing of the smallest cells. Returned
+d scalars let a do-file gate a data release programmatically.
+d
+d Requires: Stata 16.0 or newer. No other dependencies; the
+d command reads only the data in memory and makes no network
+d requests.
+d
+d Author: Eric A. Booth, Sr Researcher, Texas 2036
+d Support: eric.a.booth@gmail.com
+d
+d Distribution-Date: 20260706
+d
+f riskscan.ado
+f riskscan.sthlp

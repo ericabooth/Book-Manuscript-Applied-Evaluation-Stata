@@ -8,7 +8,10 @@
 *==============================================================================*
 
 *--- Community packages from SSC ----------------------------------------------*
-foreach pkg in estout coefplot gtools ftools reghdfe {
+* usepackage (Booth, SSC) is itself a package-loader: -usepackage- installs
+* and loads a named list of packages in one call, which teams use to pin a
+* project's toolchain. Installed here the ordinary way; see help usepackage.
+foreach pkg in estout coefplot gtools ftools reghdfe usepackage {
     capture which `pkg'
     if _rc ssc install `pkg', replace
 }
@@ -32,11 +35,31 @@ if _rc net install webapi, from("https://raw.githubusercontent.com/ericabooth/we
 * net install googlechart, from("https://raw.githubusercontent.com/ericabooth/googlechart-stata-public/main/") replace
 * net install googlesheets, from("https://raw.githubusercontent.com/ericabooth/googlesheets-stata-public/main/") replace
 * net install statashiny, from("https://raw.githubusercontent.com/ericabooth/StataShiny-public/main/") replace
+* net install convertanything, from("https://raw.githubusercontent.com/ericabooth/convertanything-stata-public/main/") replace
+* net install importR, from("https://raw.githubusercontent.com/ericabooth/importR-stata/main/") replace  // needs R (haven) or python pyreadstat to run
 * webdoc2 needs Ben Jann's webdoc first, and a separate net get for its
 * Bootstrap header.html (net get drops ancillary files in the current dir):
 * ssc install webdoc, replace
 * net install webdoc2, from("https://raw.githubusercontent.com/ericabooth/webdoc2-stata-public/main/") replace
 * net get webdoc2, from("https://raw.githubusercontent.com/ericabooth/webdoc2-stata-public/main/")
 * (sparkta2 is not yet published; its examples in the book are display-only.)
+
+*--- The eleven packages built FOR this book -----------------------------------*
+* Each lives in a <name>-stata-public folder that publishes to the authors'
+* GitHub with the book. Until those repos are live, install from the local
+* folders that ship beside this project (edit BOOKPKG to your copy's path);
+* after publication the same names install from raw.githubusercontent.com
+* with the usual one-line net install.
+* NOTE: -net- mistakes a colon in a folder path for a URL scheme, so if your
+* copy sits under a path containing ":", copy the package folders somewhere
+* colon-free first (or wait for the GitHub repos).
+local BOOKPKG ""   // e.g. "/path/to/book-repo" ; leave empty to skip
+if "`BOOKPKG'" != "" {
+    foreach pkg in projectbuilder combineall cxchangelog ///
+        rateshrink conformalpred hlmr2 twinmatch roisim suppress riskscan undummy {
+        capture which `pkg'
+        if _rc net install `pkg', from("`BOOKPKG'/`pkg'-stata-public/") replace
+    }
+}
 
 di as result "Package setup complete."

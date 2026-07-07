@@ -1,0 +1,21 @@
+v 3
+d undummy. Recombine a set of dummy/indicator variables into one categorical variable.
+d
+d undummy reverses one-hot/dummy coding: it collapses a set of
+d mutually exclusive indicator variables (numeric or string) back
+d into a single categorical variable, with value labels taken from
+d an existing label, from the dummy variable names, or stored under
+d a new label name. It verifies that the dummies are mutually
+d exclusive before combining and can run that check alone. Useful
+d for agency extracts and survey-platform exports that deliver one
+d column per category.
+d
+d Requires: Stata 16.0 or later. No other dependencies.
+d
+d Author: Eric A. Booth, Sr Researcher, Texas 2036
+d Support: eric.a.booth@gmail.com
+d
+d Distribution-Date: 20260706
+d
+f undummy.ado
+f undummy.sthlp

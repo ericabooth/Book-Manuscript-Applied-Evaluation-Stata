@@ -43,7 +43,7 @@ googlesheets addsheet,    spreadsheet("$SS") title("CHR states 2025")
 googlesheets export using "$SS", sheet("CHR states 2025") firstrow(variables)
 
 *--- 4. Format cells (the -putexcel ..., overwritefmt- analog) ----------------*
-* Header row: navy fill, white text, bold, Montserrat 12pt (Texas 2036 look).
+* Header row: navy fill, white text, bold, Montserrat 12pt (a house look).
 googlesheets format using "$SS", sheet("CHR states 2025") range("A1:K1") ///
     bgcolor("#1B2D55") fgcolor("#FFFFFF") bold font("Montserrat") ///
     fontsize(12)
@@ -104,7 +104,7 @@ googlesheets addchart using "$SS", sheet("Top15 uninsured") type(bar) ///
     domain(A2:A16) series(B2:B16) names("Uninsured (%)") ///
     title("States with the highest uninsured rate (2025)") ///
     xlabel("Uninsured (%)") ///
-    tx2036style legendpos(NONE) ///
+    legendpos(NONE) ///
     targetsheet("Top15 uninsured") anchor(D2) width(620) height(420)
 
 * Chart 2 -- scatter of median income (E) vs premature death (F).
@@ -113,7 +113,7 @@ googlesheets addchart using "$SS", sheet("CHR states 2025") type(scatter) ///
     title("Higher income, fewer years of life lost (states, 2025)") ///
     xlabel("Median household income (USD)") ///
     ylabel("Premature death (YPLL per 100,000)") ///
-    tx2036style legendpos(NONE) ///
+    legendpos(NONE) ///
     targetsheet("CHR states 2025") anchor(M9) width(620) height(400)
 
 *--- 7. Round-trip QA: read the tab back and confirm the write landed --------*

@@ -65,7 +65,7 @@ import delimited using "`DATA'/chr_states_2025.csv", varnames(1) clear
 
 googlechart uninsured, name(geo_code) type(geo)              ///
     georegion("US") georesolution("us-states")              ///
-    tx2036style scheme(blues)                               ///
+    scheme(blues)                               ///
     download datatable downloadpos(below)                   ///
     title("Uninsured rate by state, 2025")                  ///
     note("Source: County Health Rankings & Roadmaps 2025.") ///
@@ -85,7 +85,7 @@ preserve
     gsort -uninsured
     keep in 1/15
     googlechart uninsured, name(usps) type(bar)             ///
-        directlabels tx2036style                           ///
+        directlabels                           ///
         download datatable downloadpos(below)              ///
         title("Fifteen states with the highest uninsured rate (2025)") ///
         xlabel("Uninsured (%)")                            ///
@@ -105,7 +105,7 @@ import delimited using "`DATA'/chr_states_2025.csv", varnames(1) clear
 
 googlechart median_income premature_death, name(state) type(scatter) ///
     tooltipvars(uninsured child_poverty)                   ///
-    tx2036style download datatable downloadpos(below) animate ///
+    download datatable downloadpos(below) animate ///
     title("Median income vs premature death (states, 2025)") ///
     xlabel("Median household income (USD)")                ///
     ylabel("Premature death (YPLL per 100,000)")           ///
@@ -131,7 +131,7 @@ label variable premature_death "Premature death (YPLL/100k)"
 googlechart child_poverty premature_death, name(usps) over(highunins) ///
     sizevar(pct_rural) time(year) type(bubble)             ///
     tooltipvars(uninsured)                                 ///
-    tx2036style download datatable downloadpos(below)      ///
+    download datatable downloadpos(below)      ///
     title("Child poverty vs premature death (press Play: 2016 to 2025)") ///
     note("2024-2025 actual CHR releases; 2016-2023 simulated to demo Play.") ///
     xlabel("Children in poverty (%)")                      ///
@@ -155,7 +155,7 @@ googlechart, type(table)                                   ///
                 premature_death obesity child_poverty      ///
                 unemployment pct_rural)                    ///
     tablesearch tableheadersticky                          ///
-    tx2036style download datatable downloadpos(below)      ///
+    download datatable downloadpos(below)      ///
     title("2025 County Health Rankings: state measures (searchable)") ///
     width(980) height(460) noopen                          ///
     export("`OUT'/05_table.html")
@@ -192,7 +192,7 @@ end
 googlechart share, name(q) level(response) type(divbar)    ///
     levelorder("Strongly disagree|Disagree|Neutral|Agree|Strongly agree") ///
     centerlevel(Neutral)                                   ///
-    tx2036style download datatable downloadpos(below)      ///
+    download datatable downloadpos(below)      ///
     title("Texans on state policy (illustrative survey data)") ///
     subtitle("Diverging stacked bar; neutral centered on zero") ///
     width(1040) height(420) noopen                         ///

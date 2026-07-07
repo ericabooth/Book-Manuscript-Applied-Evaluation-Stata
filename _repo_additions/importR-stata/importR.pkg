@@ -1,0 +1,16 @@
+v 3
+d importR. Dual-bridge importer for R data files (.Rdata and .rds).
+d
+d Reads an R data file into Stata. It prefers a local R (via Rscript and the
+d haven package) and falls back to Stata's Python integration with the
+d pyreadstat library, so it works whichever of the two is installed.
+d
+d Requires: Stata 16+, and either R (with haven) or python with pyreadstat.
+d
+d Author: Eric A. Booth, Sr Researcher, Texas 2036
+d Support: eric.a.booth@gmail.com
+d Distribution-Date: 20260706
+f importR.ado
+f importR.sthlp
+f RtoStata.py
+f pythontoR.py

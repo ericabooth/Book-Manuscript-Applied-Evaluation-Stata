@@ -16,6 +16,22 @@ figures in the book are produced by these files.
    `webdoc2`) sit in a commented block in the same file — uncomment the ones
    you want; each installs from its public GitHub repo with one `net` command.
 
+## The eleven book packages
+
+Eleven tools the book teaches were built alongside it, each in its own
+`<name>-stata-public/` folder one level up from this one: `projectbuilder`
+(scaffold the Chapter 2 layout), `schemaudit` (declarative extract
+validation), `panelstack` (vintage-aware multi-year stacking), `cxchangelog`
+(cross-wave survey codebooks), `rateshrink` (empirical-Bayes rate
+stabilization), `conformalpred` (split-conformal prediction intervals),
+`hlmr2` (Nakagawa multilevel R-squared), `twinmatch` (Mahalanobis policy
+twins), `roisim` (Monte Carlo ROI with tornado export), `suppress`
+(small-cell + complementary suppression), and `riskscan` (k-anonymity scan).
+Each folder holds the ado, a SMCL help file, a `test_<name>.do` battery that
+runs on synthetic or shipped Stata data, and installation files. They publish
+to the authors' GitHub with the book; until then, `01_install.do` shows how
+to install them from the local folders.
+
 ## Running an example
 
 Launch Stata in the project folder, then either:

@@ -1,0 +1,1055 @@
+% Verified external references (July 2026). Currently cited in prose as
+% author-year; this file is ready if the book later adopts formal \cite.
+% Not auto-loaded: the preamble looks for main.bib, not references.bib.
+
+@article{liu2024lost,
+  author  = {Liu, Nelson F. and Lin, Kevin and Hewitt, John and Paranjape, Ashwin and Bevilacqua, Michele and Petroni, Fabio and Liang, Percy},
+  title   = {Lost in the Middle: How Language Models Use Long Contexts},
+  journal = {Transactions of the Association for Computational Linguistics},
+  volume  = {12}, pages = {157--173}, year = {2024},
+  doi     = {10.1162/tacl_a_00638},
+  url     = {https://aclanthology.org/2024.tacl-1.9/}
+}
+
+@article{ouyang2025nondeterminism,
+  author  = {Ouyang, Shuyin and Zhang, Jie M. and Harman, Mark and Wang, Meng},
+  title   = {An Empirical Study of the Non-Determinism of {ChatGPT} in Code Generation},
+  journal = {ACM Transactions on Software Engineering and Methodology},
+  volume  = {34}, number = {2}, articleno = {34}, year = {2025},
+  doi     = {10.1145/3697010}, url = {https://arxiv.org/abs/2308.02828}
+}
+
+@inproceedings{bender2021parrots,
+  author    = {Bender, Emily M. and Gebru, Timnit and McMillan-Major, Angelina and Shmitchell, Shmargaret},
+  title     = {On the Dangers of Stochastic Parrots: Can Language Models Be Too Big?},
+  booktitle = {Proceedings of the 2021 ACM Conference on Fairness, Accountability, and Transparency (FAccT '21)},
+  pages     = {610--623}, year = {2021}, publisher = {ACM},
+  doi       = {10.1145/3442188.3445922}
+}
+
+@inproceedings{gao2023pal,
+  author    = {Gao, Luyu and Madaan, Aman and Zhou, Shuyan and Alon, Uri and Liu, Pengfei and Yang, Yiming and Callan, Jamie and Neubig, Graham},
+  title     = {{PAL}: Program-aided Language Models},
+  booktitle = {Proceedings of the 40th International Conference on Machine Learning (ICML 2023)},
+  series    = {PMLR}, volume = {202}, pages = {10764--10799}, year = {2023},
+  url       = {https://proceedings.mlr.press/v202/gao23f.html}
+}
+
+@article{chen2023pot,
+  author  = {Chen, Wenhu and Ma, Xueguang and Wang, Xinyi and Cohen, William W.},
+  title   = {Program of Thoughts Prompting: Disentangling Computation from Reasoning for Numerical Reasoning Tasks},
+  journal = {Transactions on Machine Learning Research}, year = {2023},
+  url     = {https://openreview.net/forum?id=YfZ4ZPt8zd}
+}
+
+@article{ji2023survey,
+  author  = {Ji, Ziwei and Lee, Nayeon and Frieske, Rita and Yu, Tiezheng and Su, Dan and Xu, Yan and Ishii, Etsuko and Bang, Ye Jin and Madotto, Andrea and Fung, Pascale},
+  title   = {Survey of Hallucination in Natural Language Generation},
+  journal = {ACM Computing Surveys}, volume = {55}, number = {12},
+  articleno = {248}, year = {2023}, doi = {10.1145/3571730}
+}
+
+@inproceedings{spracklen2025packages,
+  author    = {Spracklen, Joseph and Wijewickrama, Raveen and Sakib, A. H. M. Nazmus and Maiti, Anindya and Viswanath, Bimal and Jadliwala, Murtuza},
+  title     = {We Have a Package for You! A Comprehensive Analysis of Package Hallucinations by Code Generating {LLMs}},
+  booktitle = {Proceedings of the 34th USENIX Security Symposium (USENIX Security '25)},
+  year      = {2025}, url = {https://arxiv.org/abs/2406.10279}
+}
+
+@book{long2009workflow,
+  author    = {Long, J. Scott},
+  title     = {The Workflow of Data Analysis Using Stata},
+  publisher = {Stata Press}, address = {College Station, TX},
+  year      = {2009}, isbn = {978-1-59718-047-4}
+}
+
+@article{callaway2021did,
+  author  = {Callaway, Brantly and Sant'Anna, Pedro H. C.},
+  title   = {Difference-in-Differences with Multiple Time Periods},
+  journal = {Journal of Econometrics}, year = {2021},
+  volume  = {225}, number = {2}, pages = {200--230},
+  doi     = {10.1016/j.jeconom.2020.12.001}
+}
+@article{goodmanbacon2021did,
+  author  = {Goodman-Bacon, Andrew},
+  title   = {Difference-in-Differences with Variation in Treatment Timing},
+  journal = {Journal of Econometrics}, year = {2021},
+  volume  = {225}, number = {2}, pages = {254--277},
+  doi     = {10.1016/j.jeconom.2021.03.014}
+}
+@article{rambachan2023honest,
+  author  = {Rambachan, Ashesh and Roth, Jonathan},
+  title   = {A More Credible Approach to Parallel Trends},
+  journal = {The Review of Economic Studies}, year = {2023},
+  volume  = {90}, number = {5}, pages = {2555--2591},
+  doi     = {10.1093/restud/rdad018}
+}
+@unpublished{gelman2013forking,
+  author = {Gelman, Andrew and Loken, Eric},
+  title  = {The Garden of Forking Paths},
+  note   = {Working paper, Department of Statistics, Columbia University},
+  year   = {2013}
+}
+@article{reinhart2010debt,
+  author  = {Reinhart, Carmen M. and Rogoff, Kenneth S.},
+  title   = {Growth in a Time of Debt},
+  journal = {American Economic Review}, year = {2010},
+  volume  = {100}, number = {2}, pages = {573--578},
+  doi     = {10.1257/aer.100.2.573}
+}
+@article{sweeney2002kanon,
+  author  = {Sweeney, Latanya},
+  title   = {k-anonymity: A Model for Protecting Privacy},
+  journal = {International Journal of Uncertainty, Fuzziness and Knowledge-Based Systems},
+  year    = {2002}, volume = {10}, number = {5}, pages = {557--570},
+  doi     = {10.1142/S0218488502001648}
+}
+@book{tufte1983visual,
+  author    = {Tufte, Edward R.},
+  title     = {The Visual Display of Quantitative Information},
+  publisher = {Graphics Press}, address = {Cheshire, CT},
+  year      = {1983}, isbn = {9780961392109}
+}
+@book{cunningham2021mixtape,
+  author    = {Cunningham, Scott},
+  title     = {Causal Inference: The Mixtape},
+  publisher = {Yale University Press}, address = {New Haven, CT},
+  year      = {2021}, isbn = {9780300251685}
+}
+@book{huntingtonklein2022effect,
+  author    = {Huntington-Klein, Nick},
+  title     = {The Effect: An Introduction to Research Design and Causality},
+  publisher = {Chapman \& Hall/CRC}, address = {Boca Raton, FL},
+  year      = {2022}, isbn = {9781032125787}
+}
+@book{cameron2022microeconometrics,
+  author    = {Cameron, A. Colin and Trivedi, Pravin K.},
+  title     = {Microeconometrics Using Stata},
+  edition   = {2}, publisher = {Stata Press}, address = {College Station, TX},
+  year      = {2022}, note = {Two volumes}, isbn = {9781597183598}
+}
+
+@article{groves2008nonresponse,
+  author = {Groves, Robert M. and Peytcheva, Emilia},
+  title = {The Impact of Nonresponse Rates on Nonresponse Bias: A Meta-Analysis},
+  journal = {Public Opinion Quarterly}, year = {2008}, volume = {72}, number = {2},
+  pages = {167--189}, doi = {10.1093/poq/nfn011}
+}
+@article{cronbach1951alpha,
+  author = {Cronbach, Lee J.},
+  title = {Coefficient Alpha and the Internal Structure of Tests},
+  journal = {Psychometrika}, year = {1951}, volume = {16}, number = {3},
+  pages = {297--334}, doi = {10.1007/BF02310555}
+}
+@article{deming1940raking,
+  author = {Deming, W. Edwards and Stephan, Frederick F.},
+  title = {On a Least Squares Adjustment of a Sampled Frequency Table When the Expected Marginal Totals Are Known},
+  journal = {The Annals of Mathematical Statistics}, year = {1940}, volume = {11},
+  number = {4}, pages = {427--444}, doi = {10.1214/aoms/1177731829}
+}
+@article{fellegi1969linkage,
+  author = {Fellegi, Ivan P. and Sunter, Alan B.},
+  title = {A Theory for Record Linkage},
+  journal = {Journal of the American Statistical Association}, year = {1969},
+  volume = {64}, number = {328}, pages = {1183--1210}, doi = {10.1080/01621459.1969.10501049}
+}
+@article{enamorado2019linkage,
+  author = {Enamorado, Ted and Fifield, Benjamin and Imai, Kosuke},
+  title = {Using a Probabilistic Model to Assist Merging of Large-Scale Administrative Records},
+  journal = {American Political Science Review}, year = {2019}, volume = {113},
+  number = {2}, pages = {353--371}, doi = {10.1017/S0003055418000783}
+}
+@article{stodden2018reproducibility,
+  author = {Stodden, Victoria and Seiler, Jennifer and Ma, Zhaokun},
+  title = {An Empirical Analysis of Journal Policy Effectiveness for Computational Reproducibility},
+  journal = {Proceedings of the National Academy of Sciences}, year = {2018},
+  volume = {115}, number = {11}, pages = {2584--2589}, doi = {10.1073/pnas.1708290115}
+}
+@article{king1995replication,
+  author = {King, Gary},
+  title = {Replication, Replication},
+  journal = {PS: Political Science \& Politics}, year = {1995}, volume = {28},
+  number = {3}, pages = {444--452}, doi = {10.2307/420301}
+}
+@misc{openicpsr,
+  author = {{Inter-university Consortium for Political and Social Research}},
+  title = {{openICPSR}}, howpublished = {Data repository, University of Michigan},
+  url = {https://www.openicpsr.org}, year = {2026}
+}
+@misc{chr2024,
+  author = {{University of Wisconsin Population Health Institute}},
+  title = {{County Health Rankings \& Roadmaps 2024}},
+  howpublished = {Analytic data file, public},
+  url = {https://www.countyhealthrankings.org}, year = {2024}
+}
+
+
+% ==== merged from bib_fragments (Phase D) ====
+@techreport{aapor2023standard,
+  author      = {{American Association for Public Opinion Research}},
+  title       = {Standard Definitions: Final Dispositions of Case Codes and Outcome Rates for Surveys},
+  institution = {AAPOR}, type = {Report},
+  year        = {2023}, note = {10th edition},
+  url         = {https://aapor.org/standards-and-ethics/standard-definitions/}
+}
+
+@article{abadie2021synth,
+  author  = {Abadie, Alberto},
+  title   = {Using Synthetic Controls: Feasibility, Data Requirements, and Methodological Aspects},
+  journal = {Journal of Economic Literature}, year = {2021},
+  volume  = {59}, number = {2}, pages = {391--425},
+  doi     = {10.1257/jel.20191450}
+}
+
+@inproceedings{abowd2018census,
+  author    = {Abowd, John M.},
+  title     = {The {U.S.} {Census} {Bureau} Adopts Differential Privacy},
+  booktitle = {Proceedings of the 24th ACM SIGKDD International Conference
+               on Knowledge Discovery \& Data Mining (KDD '18)},
+  pages     = {2867},
+  year      = {2018},
+  publisher = {ACM},
+  doi       = {10.1145/3219819.3226070}
+}
+
+@article{abramitzky2021linking,
+  author = {Abramitzky, Ran and Boustan, Leah and Eriksson, Katherine and Feigenbaum, James and P{\'e}rez, Santiago},
+  title = {Automated Linking of Historical Data},
+  journal = {Journal of Economic Literature}, year = {2021}, volume = {59},
+  number = {3}, pages = {865--918}, doi = {10.1257/jel.20201599}
+}
+
+@misc{aea2018principles,
+  author = {{American Evaluation Association}},
+  title  = {Guiding Principles for Evaluators},
+  year   = {2018},
+  howpublished = {Adopted 1994; revised 2004, 2011, and 2018},
+  url    = {https://www.eval.org/About/Guiding-Principles}
+}
+
+@article{angelopoulos2023conformal,
+  author  = {Angelopoulos, Anastasios N. and Bates, Stephen},
+  title   = {Conformal Prediction: A Gentle Introduction},
+  journal = {Foundations and Trends in Machine Learning},
+  volume  = {16}, number = {4}, pages = {494--591}, year = {2023},
+  doi     = {10.1561/2200000101}
+}
+
+@article{athey2016recursive,
+  author  = {Athey, Susan and Imbens, Guido},
+  title   = {Recursive Partitioning for Heterogeneous Causal Effects},
+  journal = {Proceedings of the National Academy of Sciences}, year = {2016},
+  volume  = {113}, number = {27}, pages = {7353--7360},
+  doi     = {10.1073/pnas.1510489113}
+}
+
+@article{athey2017state,
+  author  = {Athey, Susan and Imbens, Guido W.},
+  title   = {The State of Applied Econometrics: Causality and Policy Evaluation},
+  journal = {Journal of Economic Perspectives}, year = {2017},
+  volume  = {31}, number = {2}, pages = {3--32},
+  doi     = {10.1257/jep.31.2.3}
+}
+
+@article{bailey2020linking,
+  author = {Bailey, Martha J. and Cole, Connor and Henderson, Morgan and Massey, Catherine},
+  title = {How Well Do Automated Linking Methods Perform? {L}essons from {US} Historical Data},
+  journal = {Journal of Economic Literature}, year = {2020}, volume = {58},
+  number = {4}, pages = {997--1044}, doi = {10.1257/jel.20191526}
+}
+
+@article{ball2012tier,
+  author  = {Ball, Richard and Medeiros, Norm},
+  title   = {Teaching Integrity in Empirical Research: A Protocol for Documenting Data Management and Analysis},
+  journal = {The Journal of Economic Education}, year = {2012},
+  volume  = {43}, number = {2}, pages = {182--189},
+  doi     = {10.1080/00220485.2012.659647}
+}
+
+@article{biemer2010tse,
+  author  = {Biemer, Paul P.},
+  title   = {Total Survey Error: Design, Implementation, and Evaluation},
+  journal = {Public Opinion Quarterly}, year = {2010}, volume = {74},
+  number  = {5}, pages = {817--848}, doi = {10.1093/poq/nfq058}
+}
+
+@misc{booth2011usepackage,
+  author       = {Booth, Eric A.},
+  title        = {{USEPACKAGE}: Stata module to find and install a list of user-written packages needed to run a do-file},
+  year         = {2011},
+  howpublished = {Statistical Software Components S457280, Boston College Department of Economics},
+  note         = {Available from SSC}
+}
+
+@article{borkin2016beyond,
+  author  = {Borkin, Michelle A. and Bylinskii, Zoya and Kim, Nam Wook and Bainbridge, Constance May and Yeh, Chelsea S. and Borkin, Daniel and Pfister, Hanspeter and Oliva, Aude},
+  title   = {Beyond Memorability: Visualization Recognition and Recall},
+  journal = {IEEE Transactions on Visualization and Computer Graphics}, year = {2016},
+  volume  = {22}, number = {1}, pages = {519--528},
+  doi     = {10.1109/TVCG.2015.2467732}
+}
+
+@inproceedings{boy2015storytelling,
+  author    = {Boy, Jeremy and Detienne, Fran{\c{c}}oise and Fekete, Jean-Daniel},
+  title     = {Storytelling in Information Visualizations: Does It Engage Users to Explore Data?},
+  booktitle = {Proceedings of the 33rd Annual ACM Conference on Human Factors in Computing Systems (CHI '15)},
+  year      = {2015},
+  pages     = {1449--1458},
+  publisher = {ACM},
+  doi       = {10.1145/2702123.2702452}
+}
+
+@article{broman2018spreadsheets,
+  author  = {Broman, Karl W. and Woo, Kara H.},
+  title   = {Data Organization in Spreadsheets},
+  journal = {The American Statistician}, year = {2018},
+  volume  = {72}, number = {1}, pages = {2--10},
+  doi     = {10.1080/00031305.2017.1375989}
+}
+
+@book{bryk2015improve,
+  author    = {Bryk, Anthony S. and Gomez, Louis M. and Grunow, Alicia and LeMahieu, Paul G.},
+  title     = {Learning to Improve: How America's Schools Can Get Better at Getting Better},
+  publisher = {Harvard Education Press}, address = {Cambridge, MA},
+  year      = {2015}, isbn = {978-1-61250-791-0}
+}
+
+@techreport{card2010administrative,
+  author      = {Card, David and Chetty, Raj and Feldstein, Martin and Saez, Emmanuel},
+  title       = {Expanding Access to Administrative Data for Research in the United States},
+  institution = {National Science Foundation},
+  type        = {{NSF} {SBE} 2020 white paper}, year = {2010},
+  url         = {https://eml.berkeley.edu/~saez/card-chetty-feldstein-saezNSF10dataaccess.pdf}
+}
+
+@article{cattaneo2021prediction,
+  author  = {Cattaneo, Matias D. and Feng, Yingjie and Titiunik, Roc{\'i}o},
+  title   = {Prediction Intervals for Synthetic Control Methods},
+  journal = {Journal of the American Statistical Association}, year = {2021},
+  volume  = {116}, number = {536}, pages = {1865--1880},
+  doi     = {10.1080/01621459.2021.1979561}
+}
+
+@article{cattaneo2025scpi,
+  author  = {Cattaneo, Matias D. and Feng, Yingjie and Palomba, Filippo and Titiunik, Roc{\'i}o},
+  title   = {scpi: Uncertainty Quantification for Synthetic Control Methods},
+  journal = {Journal of Statistical Software}, year = {2025},
+  volume  = {113}, number = {1}, pages = {1--38},
+  doi     = {10.18637/jss.v113.i01}
+}
+
+@misc{census2020acs,
+  author = {{U.S. Census Bureau}},
+  title = {Understanding and Using American Community Survey Data: What All Data Users Need to Know},
+  howpublished = {Handbook, U.S. Government Publishing Office, Washington, DC},
+  year = {2020},
+  url = {https://www.census.gov/programs-surveys/acs/library/handbooks/general.html}
+}
+
+@misc{chingos2018portal,
+  author = {Chingos, Matthew M. and Blom, Erica},
+  title  = {Why We Built the Education Data Portal},
+  howpublished = {Data@Urban, Urban Institute, October 2, 2018},
+  year   = {2018},
+  url    = {https://urban-institute.medium.com/why-we-built-the-education-data-portal-3cae85048b48}
+}
+
+@book{christen2012matching,
+  author = {Christen, Peter},
+  title = {Data Matching: Concepts and Techniques for Record Linkage, Entity Resolution, and Duplicate Detection},
+  publisher = {Springer}, address = {Berlin}, year = {2012},
+  doi = {10.1007/978-3-642-31164-2}
+}
+
+@book{christensen2019transparent,
+  author    = {Christensen, Garret and Freese, Jeremy and Miguel, Edward},
+  title     = {Transparent and Reproducible Social Science Research: How to Do Open Science},
+  publisher = {University of California Press}, address = {Oakland, CA},
+  year      = {2019}, isbn = {978-0-520-29695-4}
+}
+
+@article{cleveland1984graphical,
+  author  = {Cleveland, William S. and McGill, Robert},
+  title   = {Graphical Perception: Theory, Experimentation, and Application to the Development of Graphical Methods},
+  journal = {Journal of the American Statistical Association}, year = {1984},
+  volume  = {79}, number = {387}, pages = {531--554},
+  doi     = {10.1080/01621459.1984.10478080}
+}
+
+@article{coburn2016partnerships,
+  author  = {Coburn, Cynthia E. and Penuel, William R.},
+  title   = {Research--Practice Partnerships in Education: Outcomes, Dynamics, and Open Questions},
+  journal = {Educational Researcher},
+  volume  = {45}, number = {1}, pages = {48--54}, year = {2016},
+  doi     = {10.3102/0013189X16631750}
+}
+
+@article{coburn2016rpp,
+  author  = {Coburn, Cynthia E. and Penuel, William R.},
+  title   = {Research--Practice Partnerships in Education: Outcomes, Dynamics, and Open Questions},
+  journal = {Educational Researcher},
+  year    = {2016},
+  volume  = {45},
+  number  = {1},
+  pages   = {48--54},
+  doi     = {10.3102/0013189X16631750}
+}
+
+@misc{congress2019evidence,
+  author = {{U.S. Congress}},
+  title  = {Foundations for Evidence-Based Policymaking Act of 2018},
+  howpublished = {Public Law 115--435, 132 Stat. 5529},
+  year   = {2019},
+  url    = {https://www.congress.gov/115/plaws/publ435/PLAW-115publ435.pdf}
+}
+
+@article{connelly2016administrative,
+  author  = {Connelly, Roxanne and Playford, Christopher J. and Gayle, Vernon and Dibben, Chris},
+  title   = {The Role of Administrative Data in the Big Data Revolution in Social Science Research},
+  journal = {Social Science Research}, year = {2016}, volume = {59},
+  pages   = {1--12}, doi = {10.1016/j.ssresearch.2016.04.015}
+}
+
+@article{cousins1992participatory,
+  author  = {Cousins, J. Bradley and Earl, Lorna M.},
+  title   = {The Case for Participatory Evaluation},
+  journal = {Educational Evaluation and Policy Analysis},
+  volume  = {14}, number = {4}, pages = {397--418}, year = {1992},
+  doi     = {10.3102/01623737014004397}
+}
+
+@article{cox2002lists,
+  author = {Cox, Nicholas J.},
+  title = {Speaking {Stata}: How to Face Lists with Fortitude},
+  journal = {The Stata Journal}, year = {2002},
+  volume = {2}, number = {2}, pages = {202--222},
+  doi = {10.1177/1536867X0200200208}
+}
+
+@article{deaton2018rcts,
+  author  = {Deaton, Angus and Cartwright, Nancy},
+  title   = {Understanding and Misunderstanding Randomized Controlled Trials},
+  journal = {Social Science \& Medicine},
+  volume  = {210}, pages = {2--21}, year = {2018},
+  doi     = {10.1016/j.socscimed.2017.12.005}
+}
+
+@book{dillman2014tailored,
+  author    = {Dillman, Don A. and Smyth, Jolene D. and Christian, Leah Melani},
+  title     = {Internet, Phone, Mail, and Mixed-Mode Surveys: The Tailored Design Method},
+  edition   = {4}, publisher = {Wiley}, address = {Hoboken, NJ},
+  year      = {2014}, isbn = {978-1-118-45614-9}
+}
+
+@article{doidge2019linkage,
+  author = {Doidge, James C. and Harron, Katie L.},
+  title = {Reflections on Modern Methods: Linkage Error Bias},
+  journal = {International Journal of Epidemiology}, year = {2019},
+  volume = {48}, number = {6}, pages = {2050--2060}, doi = {10.1093/ije/dyz203}
+}
+
+@inproceedings{dwork2006diffpriv,
+  author    = {Dwork, Cynthia},
+  title     = {Differential Privacy},
+  booktitle = {Automata, Languages and Programming (ICALP 2006)},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {4052},
+  pages     = {1--12},
+  year      = {2006},
+  publisher = {Springer},
+  doi       = {10.1007/11787006_1}
+}
+
+@article{dworkroth2014found,
+  author  = {Dwork, Cynthia and Roth, Aaron},
+  title   = {The Algorithmic Foundations of Differential Privacy},
+  journal = {Foundations and Trends in Theoretical Computer Science},
+  volume  = {9},
+  number  = {3--4},
+  pages   = {211--407},
+  year    = {2014},
+  doi     = {10.1561/0400000042}
+}
+
+@article{efron1975data,
+  author  = {Efron, Bradley and Morris, Carl},
+  title   = {Data Analysis Using {Stein's} Estimator and Its Generalizations},
+  journal = {Journal of the American Statistical Association},
+  volume  = {70}, number = {350}, pages = {311--319}, year = {1975},
+  doi     = {10.1080/01621459.1975.10479864}
+}
+
+@article{einav2014bigdata,
+  author  = {Einav, Liran and Levin, Jonathan},
+  title   = {Economics in the Age of Big Data},
+  journal = {Science}, year = {2014}, volume = {346}, number = {6210},
+  pages   = {1243089}, doi = {10.1126/science.1243089}
+}
+
+@article{elemam2008kanon,
+  author  = {El Emam, Khaled and Dankar, Fida Kamal},
+  title   = {Protecting Privacy Using {$k$}-Anonymity},
+  journal = {Journal of the American Medical Informatics Association},
+  volume  = {15},
+  number  = {5},
+  pages   = {627--637},
+  year    = {2008},
+  doi     = {10.1197/jamia.M2716}
+}
+
+@article{farquhar2024semantic,
+  author  = {Farquhar, Sebastian and Kossen, Jannik and Kuhn, Lorenz and Gal, Yarin},
+  title   = {Detecting Hallucinations in Large Language Models Using Semantic Entropy},
+  journal = {Nature},
+  volume  = {630}, number = {8017}, pages = {625--630}, year = {2024},
+  doi     = {10.1038/s41586-024-07421-0},
+  url     = {https://www.nature.com/articles/s41586-024-07421-0}
+}
+
+@article{fay1979estimates,
+  author  = {Fay, Robert E. and Herriot, Roger A.},
+  title   = {Estimates of Income for Small Places: An Application of
+             {James-Stein} Procedures to Census Data},
+  journal = {Journal of the American Statistical Association},
+  volume  = {74}, number = {366}, pages = {269--277}, year = {1979},
+  doi     = {10.1080/01621459.1979.10482505}
+}
+
+@book{few2013dashboard,
+  author    = {Few, Stephen},
+  title     = {Information Dashboard Design: Displaying Data for At-a-Glance Monitoring},
+  edition   = {2},
+  year      = {2013},
+  publisher = {Analytics Press},
+  address   = {Burlingame, CA},
+  isbn      = {978-1938377006}
+}
+
+@unpublished{field2026betabin,
+  author  = {Field, Samuel and Dong, Fei and Booth, Eric and Hastings, Philip and Malone, Patrick},
+  title   = {Rethinking ``Signal-to-Noise'': A Coherent Beta-Binomial
+             Reliability Formulation for Assessing Quality Measures},
+  note    = {Pre-print under review, Far Harbor LLC; replication materials at
+             \url{https://github.com/ericabooth/BetaBinomialPaperMaterials}},
+  year    = {2026},
+  url     = {https://github.com/ericabooth/BetaBinomialPaperMaterials}
+}
+
+@article{fitzgerald1998attrition,
+  author = {Fitzgerald, John and Gottschalk, Peter and Moffitt, Robert},
+  title = {An Analysis of Sample Attrition in Panel Data: The {M}ichigan {P}anel {S}tudy of {I}ncome {D}ynamics},
+  journal = {Journal of Human Resources}, year = {1998}, volume = {33},
+  number = {2}, pages = {251--299}, doi = {10.2307/146433}
+}
+
+@article{franconeri2021science,
+  author  = {Franconeri, Steven L. and Padilla, Lace M. and Shah, Priti and Zacks, Jeffrey M. and Hullman, Jessica},
+  title   = {The Science of Visual Data Communication: What Works},
+  journal = {Psychological Science in the Public Interest}, year = {2021},
+  volume  = {22}, number = {3}, pages = {110--161},
+  doi     = {10.1177/15291006211051956}
+}
+
+@techreport{gaboardi2020opendp,
+  author      = {Gaboardi, Marco and Hay, Michael and Vadhan, Salil},
+  title       = {A Programming Framework for {OpenDP}},
+  institution = {Harvard University},
+  year        = {2020},
+  note        = {Working paper, 6th Workshop on the Theory and
+                 Practice of Differential Privacy (TPDP 2020)}
+}
+
+@unpublished{gentzkow2014code,
+  author = {Gentzkow, Matthew and Shapiro, Jesse M.},
+  title  = {Code and Data for the Social Sciences: A Practitioner's Guide},
+  note   = {Manual, University of Chicago and Stanford University},
+  year   = {2014}
+}
+
+@article{gilbert2018guild,
+  author = {Gilbert, Ruth and Lafferty, Rachael and Hagger-Johnson, Gareth and Harron, Katie and Zhang, Li-Chun and Smith, Peter and Dibben, Chris and Goldstein, Harvey},
+  title = {{GUILD}: {GU}idance for {I}nformation about {L}inking {D}ata sets},
+  journal = {Journal of Public Health}, year = {2018}, volume = {40},
+  number = {1}, pages = {191--198}, doi = {10.1093/pubmed/fdx037}
+}
+
+@article{greenlund2022places,
+  author  = {Greenlund, Kurt J. and Lu, Hua and Wang, Yan and Matthews, Kevin A. and LeClercq, Jennifer M. and Lee, Benjamin and others},
+  title   = {{PLACES}: Local Data for Better Health},
+  journal = {Preventing Chronic Disease}, year = {2022},
+  volume  = {19}, pages = {E31}, doi = {10.5888/pcd19.210459}
+}
+
+@article{groves2006nonresponse,
+  author  = {Groves, Robert M.},
+  title   = {Nonresponse Rates and Nonresponse Bias in Household Surveys},
+  journal = {Public Opinion Quarterly}, year = {2006}, volume = {70},
+  number  = {5}, pages = {646--675}, doi = {10.1093/poq/nfl033}
+}
+
+@article{groves2010tse,
+  author  = {Groves, Robert M. and Lyberg, Lars},
+  title   = {Total Survey Error: Past, Present, and Future},
+  journal = {Public Opinion Quarterly}, year = {2010}, volume = {74},
+  number  = {5}, pages = {849--879}, doi = {10.1093/poq/nfq065}
+}
+
+@article{harron2017challenges,
+  author = {Harron, Katie and Dibben, Chris and Boyd, James and Hjern, Anders and Azimaee, Mahmoud and Barreto, Mauricio L. and Goldstein, Harvey},
+  title = {Challenges in Administrative Data Linkage for Research},
+  journal = {Big Data \& Society}, year = {2017}, volume = {4}, number = {2},
+  doi = {10.1177/2053951717745678}
+}
+
+@book{hatry2006performance,
+  author    = {Hatry, Harry P.},
+  title     = {Performance Measurement: Getting Results},
+  edition   = {2}, publisher = {Urban Institute Press},
+  address   = {Washington, DC}, year = {2006}
+}
+
+@article{hazlett2020kernel,
+  author  = {Hazlett, Chad},
+  title   = {Kernel Balancing: A Flexible Non-Parametric Weighting Procedure for Estimating Causal Effects},
+  journal = {Statistica Sinica}, year = {2020},
+  volume  = {30}, number = {3}, pages = {1155--1189},
+  url     = {https://www3.stat.sinica.edu.tw/statistica/j30n3/j30n32/j30n32.html}
+}
+
+@book{healy2018data,
+  author    = {Healy, Kieran},
+  title     = {Data Visualization: A Practical Introduction},
+  publisher = {Princeton University Press}, address = {Princeton, NJ},
+  year      = {2018}, isbn = {9780691181615}
+}
+
+@inproceedings{heer2010crowdsourcing,
+  author    = {Heer, Jeffrey and Bostock, Michael},
+  title     = {Crowdsourcing Graphical Perception: Using Mechanical Turk to Assess Visualization Design},
+  booktitle = {Proceedings of the SIGCHI Conference on Human Factors in Computing Systems (CHI '10)},
+  year      = {2010}, pages = {203--212}, address = {New York, NY},
+  publisher = {ACM}, doi = {10.1145/1753326.1753357}
+}
+
+@article{herndon2014debt,
+  author  = {Herndon, Thomas and Ash, Michael and Pollin, Robert},
+  title   = {Does High Public Debt Consistently Stifle Economic
+             Growth? A Critique of Reinhart and Rogoff},
+  journal = {Cambridge Journal of Economics}, year = {2014},
+  volume  = {38}, number = {2}, pages = {257--279},
+  doi     = {10.1093/cje/bet075}
+}
+
+@book{herzog2007quality,
+  author = {Herzog, Thomas N. and Scheuren, Fritz J. and Winkler, William E.},
+  title = {Data Quality and Record Linkage Techniques},
+  publisher = {Springer}, address = {New York}, year = {2007},
+  isbn = {978-0-387-69502-0}, doi = {10.1007/0-387-69505-2}
+}
+
+@article{hullman2011rhetoric,
+  author  = {Hullman, Jessica and Diakopoulos, Nicholas},
+  title   = {Visualization Rhetoric: Framing Effects in Narrative Visualization},
+  journal = {IEEE Transactions on Visualization and Computer Graphics},
+  year    = {2011},
+  volume  = {17},
+  number  = {12},
+  pages   = {2231--2240},
+  doi     = {10.1109/TVCG.2011.255}
+}
+
+@article{jann2017webdoc,
+  author  = {Jann, Ben},
+  title   = {Creating {HTML} or {Markdown} Documents from within {Stata}
+             using \texttt{webdoc}},
+  journal = {The Stata Journal},
+  year    = {2017},
+  volume  = {17}, number = {1}, pages = {3--38},
+  doi     = {10.1177/1536867X1701700102}
+}
+
+@article{jaro1989tampa,
+  author = {Jaro, Matthew A.},
+  title = {Advances in Record-Linkage Methodology as Applied to Matching the 1985 Census of Tampa, Florida},
+  journal = {Journal of the American Statistical Association}, year = {1989},
+  volume = {84}, number = {406}, pages = {414--420}, doi = {10.1080/01621459.1989.10478785}
+}
+
+@techreport{kellogg2004logic,
+  author      = {{W. K. Kellogg Foundation}},
+  title       = {Logic Model Development Guide},
+  institution = {W. K. Kellogg Foundation},
+  address     = {Battle Creek, MI}, year = {2004}
+}
+
+@book{knaflic2015storytelling,
+  author    = {Knaflic, Cole Nussbaumer},
+  title     = {Storytelling with Data: A Data Visualization Guide for Business Professionals},
+  publisher = {Wiley}, address = {Hoboken, NJ},
+  year      = {2015}, isbn = {9781119002253}
+}
+
+@article{knuth1984literate,
+  author  = {Knuth, Donald E.},
+  title   = {Literate Programming},
+  journal = {The Computer Journal},
+  year    = {1984},
+  volume  = {27}, number = {2}, pages = {97--111},
+  doi     = {10.1093/comjnl/27.2.97}
+}
+
+@article{kosara2013storytelling,
+  author  = {Kosara, Robert and Mackinlay, Jock},
+  title   = {Storytelling: The Next Step for Visualization},
+  journal = {Computer},
+  year    = {2013},
+  volume  = {46},
+  number  = {5},
+  pages   = {44--50},
+  doi     = {10.1109/MC.2013.36}
+}
+
+@book{kreuter2013paradata,
+  editor    = {Kreuter, Frauke},
+  title     = {Improving Surveys with Paradata: Analytic Uses of Process Information},
+  publisher = {Wiley}, address = {Hoboken, NJ},
+  year      = {2013}, isbn = {978-0-470-90541-8}
+}
+
+@article{krotov2020legality,
+  author  = {Krotov, Vlad and Johnson, Leigh and Silva, Leiser},
+  title   = {Tutorial: Legality and Ethics of Web Scraping},
+  journal = {Communications of the Association for Information Systems},
+  year    = {2020},
+  volume  = {47},
+  pages   = {539--563},
+  doi     = {10.17705/1CAIS.04724}
+}
+
+@inproceedings{kuhn2023semantic,
+  author    = {Kuhn, Lorenz and Gal, Yarin and Farquhar, Sebastian},
+  title     = {Semantic Uncertainty: Linguistic Invariances for Uncertainty Estimation in Natural Language Generation},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2023},
+  doi       = {10.48550/arXiv.2302.09664},
+  url       = {https://arxiv.org/abs/2302.09664}
+}
+
+@article{lahiri2005linked,
+  author = {Lahiri, Partha and Larsen, Michael D.},
+  title = {Regression Analysis with Linked Data},
+  journal = {Journal of the American Statistical Association}, year = {2005},
+  volume = {100}, number = {469}, pages = {222--230}, doi = {10.1198/016214504000001277}
+}
+
+@article{landers2016scraping,
+  author  = {Landers, Richard N. and Brusso, Robert C. and Cavanaugh, Katelyn J. and Collmus, Andrew B.},
+  title   = {A Primer on Theory-Driven Web Scraping: Automatic Extraction of Big Data from the Internet for Use in Psychological Research},
+  journal = {Psychological Methods},
+  year    = {2016},
+  volume  = {21},
+  number  = {4},
+  pages   = {475--492},
+  doi     = {10.1037/met0000081}
+}
+
+@article{lei2018distribution,
+  author  = {Lei, Jing and G'Sell, Max and Rinaldo, Alessandro and
+             Tibshirani, Ryan J. and Wasserman, Larry},
+  title   = {Distribution-Free Predictive Inference for Regression},
+  journal = {Journal of the American Statistical Association},
+  volume  = {113}, number = {523}, pages = {1094--1111}, year = {2018},
+  doi     = {10.1080/01621459.2017.1307116}
+}
+
+@article{luscombe2022scraping,
+  author  = {Luscombe, Alex and Dick, Kevin and Walby, Kevin},
+  title   = {Algorithmic Thinking in the Public Interest: Navigating Technical, Legal, and Ethical Hurdles to Web Scraping in the Social Sciences},
+  journal = {Quality \& Quantity},
+  year    = {2022},
+  volume  = {56},
+  number  = {3},
+  pages   = {1023--1044},
+  doi     = {10.1007/s11135-021-01164-0}
+}
+
+@article{meyer2015surveys,
+  author  = {Meyer, Bruce D. and Mok, Wallace K. C. and Sullivan, James X.},
+  title   = {Household Surveys in Crisis},
+  journal = {Journal of Economic Perspectives}, year = {2015},
+  volume  = {29}, number = {4}, pages = {199--226},
+  doi     = {10.1257/jep.29.4.199}
+}
+
+@article{nakagawa2013general,
+  author  = {Nakagawa, Shinichi and Schielzeth, Holger},
+  title   = {A General and Simple Method for Obtaining {R2} from
+             Generalized Linear Mixed-Effects Models},
+  journal = {Methods in Ecology and Evolution},
+  volume  = {4}, number = {2}, pages = {133--142}, year = {2013},
+  doi     = {10.1111/j.2041-210x.2012.00261.x}
+}
+
+@inproceedings{narayanan2008deanon,
+  author    = {Narayanan, Arvind and Shmatikov, Vitaly},
+  title     = {Robust De-anonymization of Large Sparse Datasets},
+  booktitle = {2008 IEEE Symposium on Security and Privacy (SP 2008)},
+  pages     = {111--125},
+  year      = {2008},
+  publisher = {IEEE},
+  doi       = {10.1109/SP.2008.33}
+}
+
+@article{neter1965mismatch,
+  author = {Neter, John and Maynes, E. Scott and Ramanathan, R.},
+  title = {The Effect of Mismatching on the Measurement of Response Errors},
+  journal = {Journal of the American Statistical Association}, year = {1965},
+  volume = {60}, number = {312}, pages = {1005--1027}, doi = {10.1080/01621459.1965.10480846}
+}
+
+@misc{obama2009transparency,
+  author = {Obama, Barack},
+  title  = {Transparency and Open Government: Memorandum for the Heads of Executive Departments and Agencies},
+  howpublished = {Federal Register 74(15): 4685--4686},
+  year   = {2009},
+  url    = {https://www.federalregister.gov/documents/2009/01/26/E9-1777/transparency-and-open-government}
+}
+
+@article{panko1998errors,
+  author  = {Panko, Raymond R.},
+  title   = {What We Know About Spreadsheet Errors},
+  journal = {Journal of Organizational and End User Computing},
+  year    = {1998},
+  volume  = {10}, number = {2}, pages = {15--21},
+  doi     = {10.4018/joeuc.1998040102}
+}
+
+@book{patton2008utilization,
+  author    = {Patton, Michael Quinn},
+  title     = {Utilization-Focused Evaluation},
+  edition   = {4}, publisher = {Sage}, address = {Thousand Oaks, CA},
+  year      = {2008}, isbn = {978-1-4129-5861-5}
+}
+
+@article{peng2011reproducible,
+  author  = {Peng, Roger D.},
+  title   = {Reproducible Research in Computational Science},
+  journal = {Science}, year = {2011},
+  volume  = {334}, number = {6060}, pages = {1226--1227},
+  doi     = {10.1126/science.1213847}
+}
+
+@article{penner2019administrative,
+  author  = {Penner, Andrew M. and Dodge, Kenneth A.},
+  title   = {Using Administrative Data for Social Science and Policy},
+  journal = {RSF: The Russell Sage Foundation Journal of the Social Sciences},
+  year    = {2019}, volume = {5}, number = {2}, pages = {1--18},
+  doi     = {10.7758/RSF.2019.5.2.01}
+}
+
+@article{penuel2015partnerships,
+  author  = {Penuel, William R. and Allen, Anna-Ruth and
+             Coburn, Cynthia E. and Farrell, Caitlin},
+  title   = {Conceptualizing Research--Practice Partnerships as
+             Joint Work at Boundaries},
+  journal = {Journal of Education for Students Placed at Risk},
+  year    = {2015},
+  volume  = {20}, number = {1-2}, pages = {182--197},
+  doi     = {10.1080/10824669.2014.988334}
+}
+
+@book{penuel2017creating,
+  author    = {Penuel, William R. and Gallagher, Daniel J.},
+  title     = {Creating Research-Practice Partnerships in Education},
+  publisher = {Harvard Education Press}, address = {Cambridge, MA},
+  year      = {2017}, isbn = {978-1-68253-047-4}
+}
+
+@misc{prestonwerner2013semver,
+  author = {Preston-Werner, Tom},
+  title = {Semantic Versioning 2.0.0},
+  year = {2013}, howpublished = {Specification},
+  url = {https://semver.org}
+}
+
+@book{rao2015small,
+  author    = {Rao, J. N. K. and Molina, Isabel},
+  title     = {Small Area Estimation},
+  edition   = {2}, year = {2015},
+  publisher = {John Wiley \& Sons},
+  address   = {Hoboken, NJ},
+  isbn      = {9781118735787}
+}
+
+@article{remington2015rankings,
+  author  = {Remington, Patrick L. and Catlin, Bridget B. and Gennuso, Keith P.},
+  title   = {The County Health Rankings: Rationale and Methods},
+  journal = {Population Health Metrics}, year = {2015},
+  volume  = {13}, number = {11},
+  doi     = {10.1186/s12963-015-0044-2}
+}
+
+@article{roth2023trending,
+  author  = {Roth, Jonathan and Sant'Anna, Pedro H. C. and Bilinski, Alyssa and Poe, John},
+  title   = {What's Trending in Difference-in-Differences? A Synthesis of the Recent Econometrics Literature},
+  journal = {Journal of Econometrics}, year = {2023},
+  volume  = {235}, number = {2}, pages = {2218--2244},
+  doi     = {10.1016/j.jeconom.2023.03.008}
+}
+
+@book{rubin1987imputation,
+  author = {Rubin, Donald B.},
+  title = {Multiple Imputation for Nonresponse in Surveys},
+  publisher = {John Wiley \& Sons}, address = {New York}, year = {1987},
+  doi = {10.1002/9780470316696}
+}
+
+@article{sandve2013reproducible,
+  author  = {Sandve, Geir Kjetil and Nekrutenko, Anton and
+             Taylor, James and Hovig, Eivind},
+  title   = {Ten Simple Rules for Reproducible Computational
+             Research},
+  journal = {PLoS Computational Biology}, year = {2013},
+  volume  = {9}, number = {10}, pages = {e1003285},
+  doi     = {10.1371/journal.pcbi.1003285}
+}
+
+@article{schwabish2014economist,
+  author  = {Schwabish, Jonathan A.},
+  title   = {An Economist's Guide to Visualizing Data},
+  journal = {Journal of Economic Perspectives}, year = {2014},
+  volume  = {28}, number = {1}, pages = {209--234},
+  doi     = {10.1257/jep.28.1.209}
+}
+
+@article{segel2010narrative,
+  author  = {Segel, Edward and Heer, Jeffrey},
+  title   = {Narrative Visualization: Telling Stories with Data},
+  journal = {IEEE Transactions on Visualization and Computer Graphics},
+  year    = {2010},
+  volume  = {16},
+  number  = {6},
+  pages   = {1139--1148},
+  doi     = {10.1109/TVCG.2010.179}
+}
+
+@article{shafer2008tutorial,
+  author  = {Shafer, Glenn and Vovk, Vladimir},
+  title   = {A Tutorial on Conformal Prediction},
+  journal = {Journal of Machine Learning Research},
+  volume  = {9}, pages = {371--421}, year = {2008},
+  url     = {https://jmlr.org/papers/v9/shafer08a.html}
+}
+
+@article{smith2016software,
+  author = {Smith, Arfon M. and Katz, Daniel S. and Niemeyer, Kyle E.},
+  title = {Software Citation Principles},
+  journal = {PeerJ Computer Science}, year = {2016},
+  volume = {2}, pages = {e86}, doi = {10.7717/peerj-cs.86}
+}
+
+@article{trisovic2022code,
+  author  = {Trisovic, Ana and Lau, Matthew K. and Pasquier, Thomas and Crosas, Merc{\`e}},
+  title   = {A Large-Scale Study on Research Code Quality and Execution},
+  journal = {Scientific Data}, year = {2022},
+  volume  = {9}, pages = {60},
+  doi     = {10.1038/s41597-022-01143-6}
+}
+
+@article{tseng2012uses,
+  author  = {Tseng, Vivian},
+  title   = {The Uses of Research in Policy and Practice},
+  journal = {Social Policy Report},
+  volume  = {26}, number = {2}, year = {2012},
+  url     = {https://wtgrantfoundation.org/wp-content/uploads/2015/10/The-Uses-of-Research-in-Policy-and-Practice.pdf}
+}
+
+@book{tufte2006beautiful,
+  author    = {Tufte, Edward R.},
+  title     = {Beautiful Evidence},
+  year      = {2006},
+  publisher = {Graphics Press},
+  address   = {Cheshire, CT}
+}
+
+@misc{w3c2018wcag,
+  author       = {{World Wide Web Consortium}},
+  title        = {Web Content Accessibility Guidelines ({WCAG}) 2.1},
+  howpublished = {W3C Recommendation},
+  year         = {2018},
+  note         = {\url{https://www.w3.org/TR/WCAG21/}}
+}
+
+@article{wager2018forests,
+  author  = {Wager, Stefan and Athey, Susan},
+  title   = {Estimation and Inference of Heterogeneous Treatment Effects Using Random Forests},
+  journal = {Journal of the American Statistical Association}, year = {2018},
+  volume  = {113}, number = {523}, pages = {1228--1242},
+  doi     = {10.1080/01621459.2017.1319839}
+}
+
+@book{walby2019foi,
+  editor    = {Walby, Kevin and Luscombe, Alex},
+  title     = {Freedom of Information and Social Science Research Design},
+  publisher = {Routledge},
+  address   = {London},
+  year      = {2019},
+  isbn      = {978-1-138-34574-4}
+}
+
+@article{walton2020seed,
+  author  = {Walton, Gregory M. and Yeager, David S.},
+  title   = {Seed and Soil: Psychological Affordances in Contexts Help to Explain Where Wise Interventions Succeed or Fail},
+  journal = {Current Directions in Psychological Science},
+  volume  = {29}, number = {3}, pages = {219--226}, year = {2020},
+  doi     = {10.1177/0963721420904453}
+}
+
+@book{weiss1998evaluation,
+  author    = {Weiss, Carol H.},
+  title     = {Evaluation: Methods for Studying Programs and Policies},
+  edition   = {2}, publisher = {Prentice Hall},
+  address   = {Upper Saddle River, NJ}, year = {1998}
+}
+
+@article{wilson2017good,
+  author  = {Wilson, Greg and Bryan, Jennifer and Cranston, Karen and Kitzes, Justin and Nederbragt, Lex and Teal, Tracy K.},
+  title   = {Good Enough Practices in Scientific Computing},
+  journal = {PLOS Computational Biology}, year = {2017},
+  volume  = {13}, number = {6}, pages = {e1005510},
+  doi     = {10.1371/journal.pcbi.1005510}
+}
+
+@article{wilson2017goodenough,
+  author = {Wilson, Greg and Bryan, Jennifer and Cranston, Karen and
+            Kitzes, Justin and Nederbragt, Lex and Teal, Tracy K.},
+  title = {Good Enough Practices in Scientific Computing},
+  journal = {PLOS Computational Biology}, year = {2017},
+  volume = {13}, number = {6}, pages = {e1005510},
+  doi = {10.1371/journal.pcbi.1005510}
+}
+
+@techreport{wwc2022handbook,
+  author      = {{What Works Clearinghouse}},
+  title       = {What Works Clearinghouse Procedures and Standards Handbook, Version 5.0},
+  institution = {U.S. Department of Education, Institute of Education Sciences, National Center for Education Evaluation and Regional Assistance},
+  year        = {2022},
+  url         = {https://ies.ed.gov/ncee/wwc/handbooks}
+}
+
+@book{xie2015dynamic,
+  author    = {Xie, Yihui},
+  title     = {Dynamic Documents with {R} and \texttt{knitr}},
+  edition   = {2},
+  publisher = {Chapman and Hall/CRC},
+  address   = {Boca Raton, FL},
+  year      = {2015}, isbn = {978-1-4987-1696-3}
+}
+
+@article{yeager2019mindset,
+  author  = {Yeager, David S. and Hanselman, Paul and Walton, Gregory M. and Murray, Jared S. and Crosnoe, Robert and Muller, Chandra and others},
+  title   = {A National Experiment Reveals Where a Growth Mindset Improves Achievement},
+  journal = {Nature},
+  volume  = {573}, number = {7774}, pages = {364--369}, year = {2019},
+  doi     = {10.1038/s41586-019-1466-y}
+}

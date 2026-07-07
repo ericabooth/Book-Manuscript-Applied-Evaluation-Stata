@@ -1,0 +1,26 @@
+v 3
+d rateshrink v0.1.1. Empirical-Bayes shrinkage for noisy small-denominator rates.
+d
+d Rates computed on small denominators are noisy by construction: one
+d event at a five-person site can move it to the bottom of a ranking.
+d rateshrink pulls each unit's raw rate toward the overall mean in
+d proportion to how little data supports it, producing rates stable
+d enough for dashboards, rankings, and benchmarking. Supports
+d Beta-binomial shrinkage for proportions and Poisson-gamma shrinkage
+d for event rates with exposure denominators, with optional posterior
+d intervals and per-unit Beta-binomial reliability via rel().
+d
+d Companion methods paper: Field, Dong, Booth, Hastings, and Malone
+d (2026, pre-print under review), "Rethinking 'Signal-To-Noise': A
+d Coherent Beta-Binomial Reliability Formulation for Assessing Quality
+d Measures," Far Harbor, LLC. Replication materials:
+d https://github.com/ericabooth/BetaBinomialPaperMaterials
+d
+d Requires: Stata 16.0 or newer
+d
+d Author: Eric A. Booth, Sr Researcher, Texas 2036
+d Support: eric.a.booth@gmail.com
+d
+d Distribution-Date: 20260706
+f rateshrink.ado
+f rateshrink.sthlp

@@ -1,0 +1,3 @@
+v 3
+d rateshrink: Empirical-Bayes rate stabilization for Stata
+p rateshrink Empirical-Bayes shrinkage for noisy small-denominator rates

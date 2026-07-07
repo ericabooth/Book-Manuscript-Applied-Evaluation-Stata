@@ -1,0 +1,19 @@
+v 3
+d roisim: Monte Carlo return-on-investment simulation with tornado export
+d
+d roisim answers the money question with a range instead of a single
+d ratio. It draws each uncertain input (effect, cost, and optionally
+d the discount rate and horizon) many times, computes the return on
+d investment for every draw, and reports the percentile distribution
+d and the break-even probability Pr(ROI > 0). A one-way sensitivity
+d sweep, exportable to CSV with saving(), feeds a tornado bar chart
+d that shows which assumptions drive the answer.
+d
+d Requires: Stata 16.0 or newer
+d
+d Author: Eric A. Booth, Sr Researcher, Texas 2036
+d Support: eric.a.booth@gmail.com
+d
+d Distribution-Date: 20260706
+f roisim.ado
+f roisim.sthlp

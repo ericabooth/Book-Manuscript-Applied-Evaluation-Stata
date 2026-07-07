@@ -149,7 +149,7 @@ if 0 {   // DISPLAY-ONLY: full-suite orchestration
     * --- 2a. CHART, ONLINE: googlechart interactive page (Ch10) -------------*
     googlechart uninsured, name(geo_code) type(geo) ///
         georegion("US") georesolution("us-states") ///
-        tx2036style scheme(blues) download datatable ///
+        scheme(blues) download datatable ///
         title("Uninsured rate by state, 2025") ///
         width(960) height(560) noopen ///
         export("$charts/geo_uninsured.html")
@@ -159,7 +159,7 @@ if 0 {   // DISPLAY-ONLY: full-suite orchestration
     * cannot; it renders offline (D3 bundled inline). Source forthcoming,
     * so this line is a sketch of the intended call:
     * sparkta2 completed, name(county) type(choropleth) ///
-    *     geo(tx-counties) tx2036style ///
+    *     geo(tx-counties) ///
     *     export("$charts/county_map.html")
 
     * --- 3. INTERACTIVE: statashiny drill-down dashboard (Ch12) -------------*

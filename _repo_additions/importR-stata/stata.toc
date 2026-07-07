@@ -1,0 +1,3 @@
+v 3
+d importR: import R data (.Rdata/.rds) into Stata via an R or Python bridge
+p importR
