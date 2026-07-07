@@ -9,12 +9,12 @@
 \contentsline {paragraph}{\nonumberline How to read it.}{2}{paragraph*.16}%
 \contentsline {part}{\nonumberline Part I: The Embedded Evaluator Workflow \newline Principles, Environment, and the Four Principles}{3}{part*.19}%
 \contentsline {chapter}{\numberline {1}The embedded evaluator}{5}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Who this book is for, and the week it assumes}{6}{section.1.1}%
-\contentsline {mtocsection}{\numberline {1.1}Who this book is for, and the week it assumes}{6}{section.1.1}%
+\contentsline {section}{\numberline {1.1}Who this book is for, and the workflow it assumes}{5}{section.1.1}%
+\contentsline {mtocsection}{\numberline {1.1}Who this book is for, and the workflow it assumes}{5}{section.1.1}%
 \contentsline {section}{\numberline {1.2}Four principles: replicable, extensible, accessible, actionable}{6}{section.1.2}%
 \contentsline {mtocsection}{\numberline {1.2}Four principles: replicable, extensible, accessible, actionable}{6}{section.1.2}%
-\contentsline {section}{\numberline {1.3}Working embedded: partners, power, and bad news}{7}{section.1.3}%
-\contentsline {mtocsection}{\numberline {1.3}Working embedded: partners, power, and bad news}{7}{section.1.3}%
+\contentsline {section}{\numberline {1.3}Working embedded: partners, power, and bad news}{6}{section.1.3}%
+\contentsline {mtocsection}{\numberline {1.3}Working embedded: partners, power, and bad news}{6}{section.1.3}%
 \contentsline {section}{\numberline {1.4}Embedded evaluation is the researcher-practitioner model, put to work}{9}{section.1.4}%
 \contentsline {mtocsection}{\numberline {1.4}Embedded evaluation is the researcher-practitioner model, put to work}{9}{section.1.4}%
 \contentsline {subsection}{\numberline {1.4.1}A written charter buys independence back after you trade distance for access}{11}{subsection.1.4.1}%
@@ -26,7 +26,7 @@
 \contentsline {section}{\numberline {1.6}How the book is organized}{14}{section.1.6}%
 \contentsline {mtocsection}{\numberline {1.6}How the book is organized}{14}{section.1.6}%
 \contentsline {paragraph}{\nonumberline Where this leaves you.}{14}{paragraph*.27}%
-\contentsline {section}{Exercises}{15}{section*.28}%
+\contentsline {section}{Exercises}{14}{section*.28}%
 \contentsline {chapter}{\numberline {2}Setting up a project that survives deadlines}{17}{chapter.2}%
 \contentsline {section}{\numberline {2.1}The control file is a handoff, not housekeeping}{17}{section.2.1}%
 \contentsline {mtocsection}{\numberline {2.1}The control file is a handoff, not housekeeping}{17}{section.2.1}%

@@ -17,13 +17,13 @@
   \item \texttt{char define}, \hyperpage{60}
   \item choropleth, \hyperpage{122}
   \item coarsening, \hyperpage{188}
-  \item \texttt{codebook}, \hyperpage{8}
+  \item \texttt{codebook}, \hyperpage{7}
   \item \texttt{coefplot}, \hyperpage{111}
   \item \texttt{collapse}, \hyperpage{25}
   \item \texttt{collect}, \hyperpage{136}, \hyperpage{189}
   \item \texttt{combineall}, \hyperpage{42}, \hyperpage{47}
   \item complementary suppression, \hyperpage{190}
-  \item conceptual use, \hyperpage{10}
+  \item conceptual use, \hyperpage{9}
   \item \texttt{confirm}, \hyperpage{72}
   \item conformal prediction, \hyperpage{86}
   \item \texttt{conformalpred}, \hyperpage{87}
@@ -39,7 +39,7 @@
 
   \indexspace
 
-  \item data dictionary, \hyperpage{8}
+  \item data dictionary, \hyperpage{7}
   \item data-ink ratio, \hyperpage{107}
   \item \texttt{datadict}, \hyperpage{144}, \hyperpage{169}
   \item design effect, \hyperpage{89}
@@ -56,10 +56,10 @@
   \item \texttt{educationdata}, \hyperpage{34}
   \item \texttt{egen}, \hyperpage{25}
   \item embarrassingly parallel, \hyperpage{170}
-  \item embedded evaluation, \hyperpage{6}
+  \item embedded evaluation, \hyperpage{5}
   \item empirical Bayes shrinkage, \hyperpage{84}, \hyperpage{199}
   \item \texttt{esttab}, \hyperpage{137}
-  \item evaluation literacy, \hyperpage{8}
+  \item evaluation literacy, \hyperpage{7}
   \item event study, \hyperpage{96}
 
   \indexspace
@@ -98,8 +98,8 @@
   \item \texttt{import excel}, \hyperpage{53}
   \item \texttt{import fred}, \hyperpage{36}
   \item \texttt{importR}, \hyperpage{52}
-  \item improvement science, \hyperpage{11}
-  \item instrumental use, \hyperpage{10}
+  \item improvement science, \hyperpage{10}
+  \item instrumental use, \hyperpage{9}
   \item inter-rater reliability, \hyperpage{173}
   \item interactive chart, \hyperpage{117}
   \item intraclass correlation, \hyperpage{88}
@@ -125,7 +125,7 @@
   \indexspace
 
   \item $l$-diversity, \hyperpage{185}
-  \item \texttt{labelbook}, \hyperpage{8}
+  \item \texttt{labelbook}, \hyperpage{7}
   \item level-of-effort, \hyperpage{62}
   \item Likert scale, \hyperpage{110}, \hyperpage{125}
   \item \texttt{likertscale}, \hyperpage{61}
@@ -170,11 +170,11 @@
   \item Plan-Do-Study-Act cycle, \hyperpage{7}
   \item post-stratification, \hyperpage{83}
   \item \texttt{power}, \hyperpage{89}
-  \item pre-registered analysis plan, \hyperpage{7}
+  \item pre-registered analysis plan, \hyperpage{6}
   \item pre-registration, \hyperpage{103}
   \item price transparency files, \hyperpage{51}
   \item probabilistic record linkage, \hyperpage{67}
-  \item process use, \hyperpage{10}
+  \item process use, \hyperpage{9}
   \item program-aided language models, \hyperpage{166}
   \item \texttt{projectbuilder}, \hyperpage{22}, \hyperpage{161}, 
 		\hyperpage{168}
@@ -203,7 +203,7 @@
   \item replicable workflow, \hyperpage{6}
   \item replication archive, \hyperpage{202}
   \item reproducible reporting, \hyperpage{137}
-  \item research-practice partnership, \hyperpage{10}
+  \item research-practice partnership, \hyperpage{9}
   \item return on investment, \hyperpage{101}
   \item \texttt{riskscan}, \hyperpage{186}
   \item \texttt{roisim}, \hyperpage{102}
@@ -252,7 +252,7 @@
   \item unbalanced panel, \hyperpage{74}
   \item \texttt{undummy}, \hyperpage{56}
   \item \texttt{usepackage}, \hyperpage{19}
-  \item utilization-focused evaluation, \hyperpage{11}
+  \item utilization-focused evaluation, \hyperpage{10}
 
   \indexspace
 
