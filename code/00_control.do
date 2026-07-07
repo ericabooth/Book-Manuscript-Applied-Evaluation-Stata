@@ -52,6 +52,7 @@ if `run_all' {
     do "$code/ch06_longitudinal.do"
     do "$code/ch07_trust.do"
     do "$code/ch08_did.do"
+    do "$code/ch08_oaxaca.do"
     do "$code/ch09_graphs.do"
     do "$code/ch10_smallmult.do"
     do "$code/ch10_googlechart.do"

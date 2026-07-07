@@ -11,7 +11,7 @@
 * usepackage (Booth, SSC) is itself a package-loader: -usepackage- installs
 * and loads a named list of packages in one call, which teams use to pin a
 * project's toolchain. Installed here the ordinary way; see help usepackage.
-foreach pkg in estout coefplot gtools ftools reghdfe usepackage {
+foreach pkg in estout coefplot gtools ftools reghdfe usepackage oaxaca {
     capture which `pkg'
     if _rc ssc install `pkg', replace
 }

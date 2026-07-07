@@ -485,6 +485,38 @@
       \verb 10.1093/poq/nfq058
       \endverb
     \endentry
+    \entry{blinder1973wage}{article}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=c747dbf34ee9a12f5efc12158d6650c7}{%
+           family={Blinder},
+           familyi={B\bibinitperiod},
+           given={Alan\bibnamedelima S.},
+           giveni={A\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{c747dbf34ee9a12f5efc12158d6650c7}
+      \strng{fullhash}{c747dbf34ee9a12f5efc12158d6650c7}
+      \strng{bibnamehash}{c747dbf34ee9a12f5efc12158d6650c7}
+      \strng{authorbibnamehash}{c747dbf34ee9a12f5efc12158d6650c7}
+      \strng{authornamehash}{c747dbf34ee9a12f5efc12158d6650c7}
+      \strng{authorfullhash}{c747dbf34ee9a12f5efc12158d6650c7}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{The Journal of Human Resources}
+      \field{number}{4}
+      \field{title}{Wage Discrimination: Reduced Form and Structural Estimates}
+      \field{volume}{8}
+      \field{year}{1973}
+      \field{pages}{436\bibrangedash 455}
+      \range{pages}{20}
+      \verb{doi}
+      \verb 10.2307/144855
+      \endverb
+    \endentry
     \entry{blischak2016git}{article}{}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=2f5e7eff1ecea61dc6faa885ab2fdf03}{%
@@ -3095,6 +3127,39 @@
       \verb https://www.openicpsr.org
       \endverb
     \endentry
+    \entry{jann2008oaxaca}{article}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=fe15a2c6323193f38ebd40cff31e53f8}{%
+           family={Jann},
+           familyi={J\bibinitperiod},
+           given={Ben},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{fe15a2c6323193f38ebd40cff31e53f8}
+      \strng{fullhash}{fe15a2c6323193f38ebd40cff31e53f8}
+      \strng{bibnamehash}{fe15a2c6323193f38ebd40cff31e53f8}
+      \strng{authorbibnamehash}{fe15a2c6323193f38ebd40cff31e53f8}
+      \strng{authornamehash}{fe15a2c6323193f38ebd40cff31e53f8}
+      \strng{authorfullhash}{fe15a2c6323193f38ebd40cff31e53f8}
+      \field{extraname}{1}
+      \field{sortinit}{J}
+      \field{sortinithash}{b2f54a9081ace9966a7cb9413811edb4}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{The Stata Journal}
+      \field{number}{4}
+      \field{title}{The {Blinder--Oaxaca} Decomposition for Linear Regression Models}
+      \field{volume}{8}
+      \field{year}{2008}
+      \field{pages}{453\bibrangedash 479}
+      \range{pages}{27}
+      \verb{doi}
+      \verb 10.1177/1536867X0800800401
+      \endverb
+    \endentry
     \entry{jann2017webdoc}{article}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=fe15a2c6323193f38ebd40cff31e53f8}{%
@@ -3110,6 +3175,7 @@
       \strng{authorbibnamehash}{fe15a2c6323193f38ebd40cff31e53f8}
       \strng{authornamehash}{fe15a2c6323193f38ebd40cff31e53f8}
       \strng{authorfullhash}{fe15a2c6323193f38ebd40cff31e53f8}
+      \field{extraname}{2}
       \field{sortinit}{J}
       \field{sortinithash}{b2f54a9081ace9966a7cb9413811edb4}
       \field{extradatescope}{labelyear}
@@ -4066,6 +4132,38 @@
       \range{pages}{23}
       \verb{doi}
       \verb 10.1080/01621459.1965.10480846
+      \endverb
+    \endentry
+    \entry{oaxaca1973male}{article}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=2b7949159d6f286d1586b677578226ab}{%
+           family={Oaxaca},
+           familyi={O\bibinitperiod},
+           given={Ronald},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{2b7949159d6f286d1586b677578226ab}
+      \strng{fullhash}{2b7949159d6f286d1586b677578226ab}
+      \strng{bibnamehash}{2b7949159d6f286d1586b677578226ab}
+      \strng{authorbibnamehash}{2b7949159d6f286d1586b677578226ab}
+      \strng{authornamehash}{2b7949159d6f286d1586b677578226ab}
+      \strng{authorfullhash}{2b7949159d6f286d1586b677578226ab}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{International Economic Review}
+      \field{number}{3}
+      \field{title}{Male--Female Wage Differentials in Urban Labor Markets}
+      \field{volume}{14}
+      \field{year}{1973}
+      \field{pages}{693\bibrangedash 709}
+      \range{pages}{17}
+      \verb{doi}
+      \verb 10.2307/2525981
       \endverb
     \endentry
     \entry{obama2009transparency}{misc}{}

@@ -56,6 +56,7 @@ Launch Stata in the project folder, then either:
 | `ch06_longitudinal.do` | 6 | `nlswork` panel description; missingness map; wage-quartile transition matrix; fuzzy merge. |
 | `ch07_trust.do` | 7 | Reliability alpha; NHANES II weighting; empirical-Bayes shrinkage; power curve. |
 | `ch08_did.do` | 8 | Simulated staggered adoption; naive TWFE vs `csdid`; event study; ROI Monte Carlo. |
+| `ch08_oaxaca.do` | 8 | Blinder-Oaxaca decomposition of the white-Black wage gap in `nlsw88` (no key); `oaxaca` + `coefplot`; explained vs unexplained with tripwires. |
 | `ch09_graphs.do` | 9 | Before/after data-ink pair; coefficient small-multiples; annotated run chart. |
 | `ch10_smallmult.do` | 10 | QCEW quarterly wage small-multiples ("spark wall") for six Texas counties. |
 | `ch10_googlechart.do` | 10 | Six `googlechart` interactive HTML charts (geo, bar, scatter, animated bubble, searchable table, divbar) on CHR&R 2025 state data; no key, builds offline. |
