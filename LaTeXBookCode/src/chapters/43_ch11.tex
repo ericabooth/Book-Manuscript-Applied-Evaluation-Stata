@@ -1,0 +1,323 @@
+\chapter{Delivering through spreadsheets}\label{ch:sheets}
+
+The client lives in Excel and Google Sheets and is not going to leave, so a beautiful PDF they cannot edit is a deliverable that dies on arrival. Meeting an audience in the format they already use is not a compromise; it is the accessible principle taken seriously. The trick is to produce those spreadsheets from Stata, so the convenience of the format does not cost you the reproducibility of the pipeline.
+
+This chapter builds formatted Excel workbooks from code, uses Google Sheets as a live channel a whole team can open, and finishes with a toolkit a program team keeps using. The recurring idea is that the spreadsheet should be an output of the do-file, computed in code and delivered in the client's format, never a place where numbers are edited by hand.
+
+\section{Meeting practitioners where they work}\label{sec:ch11-rationale}
+An embedded evaluator who insists that every deliverable arrive as a PDF or a Stata dataset is asking the program team to come to the analyst's tools, and the team will not. The people you serve run their programs in Excel and Google Sheets: they track enrollment there, they build their board decks from there, and they email tabs to funders from there. Meeting them in that format is the accessible principle put into practice, and it is also the brokerage move at the center of a research--practice partnership. \textcite{penuel2015partnerships} frame such partnerships not as a pipeline that translates finished research into practice but as \enquote{joint work at boundaries,} where researcher and practitioner meet on shared objects that both can act on. A spreadsheet a do-file builds and a program manager edits is exactly that kind of boundary object: it lives in the practitioner's tool, carries the analyst's numbers, and gives both sides a place to work. \textcite{patton2008utilization} makes the same point from the evaluation side under the banner of utilization-focused evaluation: a finding no one uses is a finding wasted, and use rises when the deliverable lands where the intended user already works. Delivering through spreadsheets is that principle taken literally.
+
+The catch is that the spreadsheet is also the single most error-prone artifact in the applied evaluator's kit, so meeting practitioners there without discipline trades reach for risk. Reviewing decades of audits and experiments, \textcite{panko1998errors} reports that people entering formulas into cells are roughly 96 to 99 percent accurate per cell, which sounds reassuring until you multiply it across a workbook: a spreadsheet with a few hundred formula cells almost certainly contains at least one wrong bottom-line number, and the developers who built it are confidently sure it does not. The multiplication is worth writing out, because it is what turns a comfortable per-cell rate into an uncomfortable per-workbook one:
+\[
+\Pr(\text{at least one wrong cell}) \;=\; 1-(1-e)^{n},
+\]
+with \(e\) the per-cell error rate and \(n\) the count of hand-entered formula cells. At Panko's \(e=0.02\) and a modest \(n=200\), that is \(1-0.98^{200}\approx 0.98\)\index{spreadsheet errors}: a workbook of a few hundred typed formulas is all but certain to hide at least one wrong number, and raising \(n\) only pushes the probability closer to one. The error rate does not fall with importance. It is a property of hand entry itself, and it is why a workbook typed by a careful analyst is not safe simply because the analyst was careful.
+
+The cost of that hand-entry risk is not hypothetical, and the book has already cited the case where it bit hardest. \textcite{reinhart2010debt} reported that economic growth falls sharply once a country's public debt passes 90 percent of GDP, a finding that shaped austerity arguments across several governments. \textcite{herndon2014debt} obtained the underlying workbook and found, among other issues, a spreadsheet formula that averaged only fifteen of twenty countries because the range in one cell stopped five rows short; correcting it and the other errors moved the headline average for high-debt countries from $-0.1$ percent growth to a positive $2.2$ percent. The point for an evaluator is not that the authors were careless but that a single mis-typed cell range, invisible in a rendered table, reversed a conclusion that policy leaned on. If it can happen in the most scrutinized spreadsheet of its decade, it can happen in the Monday-morning update no one double-checks.\marginnote{The honest framing: \parencite{reinhart2010debt} is the finding and \parencite{herndon2014debt} is the correction. Cite them together, not as a gotcha but as the clearest available case of why a client-facing number should never be typed where a range can silently go wrong.}
+
+The defense is a single discipline that runs through every section of this chapter: never let a number reach a client-facing cell by keyboard. If a value did not come from \texttt{\_b[]}, \texttt{e()}, \texttt{r()}, a stored table, or a live formula the sheet recomputes, it is a transcription waiting to be caught in a meeting. This is the same rule \textcite{sandve2013reproducible} give as the first of their ten rules for reproducible computational work, \enquote{avoid manual data manipulation steps,} and the same tidy-input rule \textcite{broman2018spreadsheets} press on anyone who organizes data in a spreadsheet: keep one rectangle of raw values, do no calculation inside the data, and let the computation live in code you can rerun. The never-typed-number discipline is what lets an evaluator have the reach of the client's format without inheriting the client's error rate. It is worth being clear about what the discipline does and does not buy. It does not make the analysis correct; a wrong model written faithfully to a cell is still wrong. What it removes is the whole category of error that sits between a correct result and the number a client reads, the transcription slip and the stale copy that no rendered table reveals. That category is the one that reversed the debt finding and the one an evaluator can close for good. The rest of the chapter is that discipline applied three ways: to Excel you build with \texttt{putexcel}, to a live Google Sheet, and to a standing team toolkit.
+
+\section{Formatted Excel from collect and putexcel}
+You take the deliverables you dread rebuilding, the balance table, the regression appendix, the standing summary, and turn each one into something a do-file regenerates on command. Stata's \texttt{collect}\index{collect@\texttt{collect}} and \texttt{putexcel}\index{putexcel@\texttt{putexcel}} write formatted tables straight to a workbook,\marginnote{Rough division of labor: \texttt{putexcel} places values and formatting cell by cell, while \texttt{collect} (Stata 17+) builds a styled table object you lay out once and export to Excel, Word, or \LaTeX{} alike. Reach for \texttt{collect} when the same table has to ship in several formats.} so those recurring deliverables are generated rather than assembled by hand. The \enquote{Monday morning update,} a short workbook of key program metrics that a steering committee expects each week, becomes a scheduled artifact that rebuilds from the current data with one command, which is what makes a weekly deliverable cheap enough to sustain.
+
+The point is easiest to see when the same numbers have to travel to three audiences at once: a funder who wants a \LaTeX{} appendix table, a program manager who wants an Excel tab, and a board that wants a slide. If those three artifacts are typed by hand, they drift the moment an estimate changes upstream, and the version a board saw stops matching the analysis behind it. If instead one do-file estimates the model once and writes each format from the stored results, the three artifacts cannot disagree, because they are the same numbers rendered three ways. Figure~\ref{fig:ch11-viz-fanout} traces that fan-out: a single estimation step feeds three writers, and every audience reads a rendering of the same stored coefficients.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=6mm]
+\node[io] (data) {current\\data extract};
+\node[stage, right=9mm of data] (est) {estimate once\\ \texttt{eststo}};
+\node[annot, below=1mm of est] {stored: \texttt{\_b[]}, \texttt{e()}, \texttt{r()}};
+\node[stage, right=16mm of est, yshift=15mm] (tex) {\LaTeX{} table\\ \texttt{esttab}};
+\node[stage, right=16mm of est] (xl) {Excel tab\\ \texttt{putexcel}};
+\node[stage, right=16mm of est, yshift=-15mm] (gs) {Google Sheet\\ \texttt{googlesheets}};
+\node[io, right=9mm of tex] (funder) {funder\\appendix};
+\node[io, right=9mm of xl] (mgr) {program\\manager};
+\node[io, right=9mm of gs] (team) {whole\\team, live};
+\draw[flow] (data) -- (est);
+\draw[flow] (est.east) -- (tex.west);
+\draw[flow] (est.east) -- (xl.west);
+\draw[flow] (est.east) -- (gs.west);
+\draw[flow] (tex) -- (funder);
+\draw[flow] (xl) -- (mgr);
+\draw[flow] (gs) -- (team);
+\end{tikzpicture}
+\caption[One do-file, three audiences]{The chapter's thesis as a picture: the model is estimated \emph{once} and its stored results feed three writers, so the funder's \LaTeX{} appendix, the manager's Excel tab, and the team's live Google Sheet are the same numbers rendered three ways and cannot drift apart. Notice that no path passes through a keyboard between the estimate and any audience.}
+\label{fig:ch11-viz-fanout}
+\end{figure}
+
+Consider a workforce program that pays participants to complete training and wants to report what the training is associated with in later earnings. We simulate 900 participants across three enrollment cohorts (labeled simulated, seed \texttt{20260704}), where post-program quarterly earnings rise with training hours and prior experience. One do-file estimates a dose-only model and then a model with controls:
+{\footnotesize
+\begin{verbatim}
+eststo clear
+eststo m1: regress earn hours
+eststo m2: regress earn hours exper female i.cohort
+\end{verbatim}
+}
+Reading the second model in the client's own units, each training hour is worth about \$20 more in quarterly earnings, and a year of prior experience about \$148, both estimated precisely (standard errors of 1.7 and 7.8). The 2024 cohort earns roughly \$428 more per quarter than the 2022 cohort, while the 2023 cohort's \$67 gap is within noise. This makes sense: a training dose and prior work history are exactly the two things a job-readiness program expects to move earnings, and the later cohort entered a stronger labor market.
+
+The reproducible-reporting\index{reproducible reporting} thesis stops being a slogan the moment that table is not typed but generated. The next command hands \texttt{esttab}\index{esttab@\texttt{esttab}} the two stored models and writes a \LaTeX{} table fragment to disk, in the book's own plain-\texttt{\textbackslash hline} style with no \texttt{booktabs}, which the manuscript then \texttt{\textbackslash input}s directly:
+{\footnotesize
+\begin{verbatim}
+esttab m1 m2 using "$output/ch11_wage_table.tex", ///
+    replace fragment label collabels(none)      ///
+    nonotes nostar b(%9.1f) se(%9.1f)            ///
+    stats(N r2, fmt(%9.0fc %9.3f)                ///
+        labels("Participants" "R-squared"))      ///
+    order(hours exper female)                    ///
+    varlabels(_cons Constant)                    ///
+    mtitle("Dose only" "Dose + controls")
+\end{verbatim}
+}
+Table~\ref{tab:wage} is not a screenshot and not hand-set numbers. It is the file that command wrote, ingested by the book at compile time.\marginnote{This is the whole thesis, made physical: the table you are reading was written by \texttt{ch11\_tables.do} and pulled into the manuscript with a single \texttt{\textbackslash input}. Change the data, rerun the do-file, recompile, and every number here updates itself. Nothing in this table was typed by a human.} If you ever doubt that a book can practice what it preaches about reproducibility, this is where to check: rerun the do-file with a new extract and every number below changes on the next compile, untouched by hand.
+
+\begin{table}[htbp]
+\centering
+\caption[Reproducible earnings table, ingested from a do-file]{Program earnings model for a simulated workforce cohort (seed \texttt{20260704}). OLS coefficients with standard errors in parentheses; earnings are dollars per quarter. \textbf{This table is not typed:} \texttt{ch11\_tables.do} estimated the two models and wrote this exact \texttt{tabular} with \texttt{esttab}; the book ingests it with \texttt{\textbackslash input\{ch11\_wage\_table.tex\}}. Rerun the do-file and the numbers here update on the next compile.}
+\label{tab:wage}
+\input{ch11_wage_table.tex}
+\end{table}
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{fundertable}]
+\textbf{Proposed program:} \texttt{fundertable}. A wrapper over \texttt{collect} and \texttt{putexcel} that produces the pre-formatted executive-summary and appendix tables funders commonly request, so the format work is done once and reused.
+\end{kaobox}
+
+The same stored estimates that wrote the \LaTeX{} table also write the Excel tab a program manager opens, and \texttt{putexcel} places each value and its formatting cell by cell:
+{\footnotesize
+\begin{verbatim}
+putexcel set "$output/summary.xlsx", replace
+putexcel A1 = "Program earnings model", bold
+putexcel A2 = "Term" B2 = "Dose + controls", bold
+putexcel A3 = "Training hours ($/hr equiv)"
+putexcel B3 = (_b[hours])
+putexcel A4 = "Participants" B4 = (e(N))
+putexcel save
+\end{verbatim}
+}
+Because \texttt{B3} is filled from \texttt{\_b[hours]} rather than a typed number, the workbook cannot fall out of step with the model that produced the \LaTeX{} table on the same run.\marginnote{A discipline worth adopting: never let a number reach a client-facing cell by keyboard. If it did not come from \texttt{\_b[]}, \texttt{e()}, \texttt{r()}, or a stored table, it is a transcription error waiting to be discovered in a meeting.} When the evaluator delivers in the client's native format, the work becomes accessible, and automating that write turns a dreaded recurring chore into a rerun. A funder table that regenerates itself cannot fall out of sync with the analysis behind it, which is replicability protecting the client from a stale number.
+
+This is where the Reinhart--Rogoff lesson lands on a concrete keystroke. The error \textcite{herndon2014debt} found was a formula whose range stopped short, and no reviewer caught it because the rendered table showed only the result, not the range. A \texttt{putexcel} write that reads \texttt{\_b[hours]} removes the class of error entirely: there is no cell range for a human to mis-type, because the value is pulled from the estimate Stata just computed. The point is not that \texttt{putexcel} makes you careful. It is that the discipline moves the number's origin from a keyboard, where \textcite{panko1998errors} shows even careful entry fails a few times per hundred cells, to a stored result that cannot be off by a transcription. \textcite{broman2018spreadsheets} press the same separation from the data side: keep the workbook's data a plain rectangle of raw values and do the arithmetic in code, so the spreadsheet a client edits and the computation an evaluator trusts never share a cell. A workbook built this way is safe to hand over precisely because the parts a practitioner will touch and the parts that must not drift are kept apart by construction.
+
+\section{Google Sheets as a live channel}\label{sec:googlesheets}
+A Google Sheet the whole program team can open, on their phones, in a meeting, and that your do-file refreshes, is embedded evaluation made tangible. The \texttt{googlesheets}\index{googlesheets@\texttt{googlesheets}} command connects Stata to a Sheet with a syntax that mirrors the familiar \texttt{import}/\texttt{export}/\texttt{putexcel} family: export a dataset, \texttt{put} individual values and formulas, \texttt{format} cells, insert a native Sheets chart that stays live, and re-import to check that what you wrote is what landed. Its Forms-response import (\texttt{since()} and \texttt{tail()}) reaches back to the survey work of Chapter~\ref{ch:surveys}, so a live response sheet can flow straight into an updating summary.\marginnote{Watch the quotas: the free Google Sheets API caps reads and writes per minute per user, so a do-file that pushes a large dataset row by row will hit a \texttt{429} error. Export in one bulk write, not a loop, and back off if you must retry.}
+
+Before the workflow, one plain-language pass over the terms, because the API vocabulary is where newcomers get lost. A \emph{Sheet ID} is the roughly forty-character string in a Google Sheets URL between \texttt{/d/} and \texttt{/edit}; it names the workbook the way a file path names a file, and every command below takes it (or the whole URL) after \texttt{using}. A \emph{tab} is one sheet inside that workbook, named in \texttt{sheet()} and case-sensitive. \emph{OAuth}\index{OAuth} is the one-time browser sign-in that lets Stata act as you, so you never paste a password into code and never have to share each Sheet with a robot account; the setup is a one-time chore in Appendix~\ref{app:setup}. With that sign-in done once per machine, every line in this section runs exactly as written.
+
+\subsection{The workflow, one command at a time}
+The worked example writes a real dataset to a real Sheet: the County Health Rankings 2025 state file, one row per state, the same data the \texttt{googlechart}\index{googlechart@\texttt{googlechart}} charts of Chapter~\ref{ch:interactive} render offline. Because these commands touch a live Google account, they are shown as a copy-pasteable recipe rather than run at book-build time; point \texttt{\$SS} at a Sheet you can open, complete the Appendix~\ref{app:setup} sign-in once, and they execute as printed. We load the extract and confirm the connection first, because a \texttt{ping} that fails now saves a confusing error three commands later:
+{\footnotesize
+\begin{verbatim}
+import delimited using ///
+    "`c(pwd)'/../data/chr_states_2025.csv", varnames(1) clear
+googlesheets ping, spreadsheet("$SS")
+\end{verbatim}
+}
+A tab has to exist before you can write to it, so the next pair deletes any stale copy and makes a fresh one. The \texttt{capture} in front of \texttt{deletesheet} swallows the error on the first run, when there is nothing to delete yet:
+{\footnotesize
+\begin{verbatim}
+capture googlesheets deletesheet, spreadsheet("$SS") ///
+    title("CHR states 2025")
+googlesheets addsheet, spreadsheet("$SS") ///
+    title("CHR states 2025")
+\end{verbatim}
+}
+Now the dataset lands in one bulk write. Exporting the whole frame in a single call, rather than a row-by-row loop, is what keeps you under the per-minute API quota\index{API quota}; \texttt{firstrow(variables)} writes the variable names as the header row:
+{\footnotesize
+\begin{verbatim}
+googlesheets export using "$SS", ///
+    sheet("CHR states 2025") firstrow(variables)
+\end{verbatim}
+}
+The columns arrive in the dataset's order, so the header sits in row~1 and the 51 states fill rows 2 through 52. Column~E is median household income and column~H is the uninsured rate, which is all the geography the formatting and charting steps below need.
+
+\subsection{Formatting cells from code}
+Delivering in the client's format means it should look finished, not like a raw dump. The \texttt{format} subcommand is the Sheets analog of \texttt{putexcel}'s cell formatting: give it a range and the styling you want. Here the header row gets a navy fill, white bold text, and Montserrat at 12 point, the kind of house look any shop can standardize on, and two data columns get number formats so income reads as dollars and the uninsured rate carries one decimal:\marginnote{The \texttt{numfmt()} strings are ordinary spreadsheet format codes, the same ones the Excel \enquote{Custom} number-format box takes. \texttt{"\$"\#,\#\#0} is dollars with a thousands separator; \texttt{0.0} is one decimal place. If you know the Excel codes, you already know these.}
+{\footnotesize
+\begin{verbatim}
+googlesheets format using "$SS", ///
+    sheet("CHR states 2025") range("A1:K1") ///
+    bgcolor("#1B2D55") fgcolor("#FFFFFF") bold ///
+    font("Montserrat") fontsize(12)
+googlesheets format using "$SS", ///
+    sheet("CHR states 2025") range("E2:E52") ///
+    numfmt(`""$"#,##0"')
+googlesheets format using "$SS", ///
+    sheet("CHR states 2025") range("H2:H52") numfmt("0.0")
+\end{verbatim}
+}
+The formatting is set once in the do-file, so the header stays navy and the dollars stay formatted every time the sheet rebuilds, with no one reapplying styles by hand after a refresh.
+
+\subsection{Writing single values, formulas, and a matrix}
+Alongside the exported table you often want a few computed cells: a title, a build stamp, a summary statistic, a live formula the sheet recomputes, even a whole matrix. The \texttt{put} subcommand is the \texttt{putexcel} analog and takes exactly one of \texttt{string()}, \texttt{value()}, \texttt{formula()}, or \texttt{matrix()} per call. A title and a dated build stamp go off to the side in column~M:
+{\footnotesize
+\begin{verbatim}
+googlesheets put using "$SS", sheet("CHR states 2025") ///
+    cell(M1) string("2025 County Health Rankings")
+googlesheets put using "$SS", sheet("CHR states 2025") ///
+    cell(M2) string("Built in Stata on `=c(current_date)'")
+\end{verbatim}
+}
+A computed number is written the same way. We summarize in Stata and \texttt{put} the rounded mean as a \texttt{value()}, which lands as a real number the sheet can chart, not text:
+{\footnotesize
+\begin{verbatim}
+quietly summarize uninsured
+googlesheets put using "$SS", sheet("CHR states 2025") ///
+    cell(M3) string("Mean uninsured (%)")
+googlesheets put using "$SS", sheet("CHR states 2025") ///
+    cell(N3) value(`=round(r(mean),.1)')
+\end{verbatim}
+}
+The difference between \texttt{value()} and \texttt{formula()} is worth pausing on, because it is the difference between a snapshot and a link. A \texttt{value()} writes the number Stata computed and freezes it. A \texttt{formula()} writes a spreadsheet expression that Google recomputes in the browser, so it tracks the cells it points at even after the team edits them:
+{\footnotesize
+\begin{verbatim}
+googlesheets put using "$SS", sheet("CHR states 2025") ///
+    cell(M4) string("Max uninsured (%)")
+googlesheets put using "$SS", sheet("CHR states 2025") ///
+    cell(N4) formula("=MAX(H2:H52)")
+\end{verbatim}
+}
+The most useful \texttt{put} for an evaluator is \texttt{matrix()}, which drops a whole Stata matrix into the sheet as a rectangular block anchored at one cell. A correlation matrix is the natural case: compute it in Stata, grab it from \texttt{r(C)}, and write it starting at M6, where it fills a four-by-four block:
+{\footnotesize
+\begin{verbatim}
+correlate uninsured median_income ///
+    premature_death child_poverty
+matrix C = r(C)
+googlesheets put using "$SS", sheet("CHR states 2025") ///
+    cell(M6) matrix(C)
+\end{verbatim}
+}
+That single call is why \texttt{matrix()} earns its place: a correlation table a client would otherwise ask you to retype lands in the sheet exactly as Stata computed it, every cell traceable to \texttt{r(C)} rather than to a keyboard. Table~\ref{tab:ch11-viz-put} collects the choice among the three writing modes on the one axis that decides it: whether you want a frozen snapshot or a cell the team's later edits keep live.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption[Choosing among put's writing modes]{Which \texttt{put} argument to reach for. The deciding question is whether the cell should stay live: use \texttt{formula()} when it must recompute against cells the team edits, \texttt{value()} or \texttt{matrix()} when a fixed number or block is what the run produced.}
+\label{tab:ch11-viz-put}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\texttt{put} & Live in browser? & Reach for it when \\
+\midrule
+\texttt{value()}   & No (frozen)  & the figure is final this run \\
+\texttt{formula()} & Yes (Sheets recomputes) & it must track cells the team edits \\
+\texttt{matrix()}  & No (frozen)  & a whole table (e.g.\ \texttt{r(C)}) lands at once \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Native Sheets charts that stay live}
+The step with no \texttt{putexcel} equivalent is \texttt{addchart}\index{addchart@\texttt{addchart}}. It inserts a real Google Sheets chart object, not a static image: the team can hover it for tooltips, resize it, recolor it in the browser, and it redraws when the cells it reads change. It is the interactive-chart idea, meaning a picture the reader can point at and it responds, delivered natively inside the tool the client already uses. The first chart ranks the fifteen states with the highest uninsured rate. We build that top-fifteen block on its own tab, then point a bar chart at it:\marginnote{\texttt{domain()} is the category axis (here the state names) and \texttt{series()} is the values plotted against it (the uninsured rate). \texttt{anchor()} is the top-left cell the chart floats over. \texttt{targetsheet()} lets a chart built from one tab's data appear on another, which is how a dashboard tab collects charts drawn from several data tabs.}
+{\footnotesize
+\begin{verbatim}
+preserve
+    gsort -uninsured
+    keep in 1/15
+    keep state uninsured
+    capture googlesheets deletesheet, spreadsheet("$SS") ///
+        title("Top15 uninsured")
+    googlesheets addsheet, spreadsheet("$SS") ///
+        title("Top15 uninsured")
+    googlesheets export using "$SS", ///
+        sheet("Top15 uninsured") firstrow(variables)
+restore
+
+googlesheets addchart using "$SS", ///
+    sheet("Top15 uninsured") type(bar) ///
+    domain(A2:A16) series(B2:B16) ///
+    names("Uninsured (%)") ///
+    title("States with the highest uninsured rate") ///
+    xlabel("Uninsured (%)") legendpos(NONE) ///
+    targetsheet("Top15 uninsured") anchor(D2) ///
+    width(620) height(420)
+\end{verbatim}
+}
+The second chart is a scatter that puts each state's median income against its premature-death rate, drawn straight from columns~E and~F of the main tab and anchored beside the summary block:
+{\footnotesize
+\begin{verbatim}
+googlesheets addchart using "$SS", ///
+    sheet("CHR states 2025") type(scatter) ///
+    domain(E2:E52) series(F2:F52) names("State") ///
+    title("Higher income, fewer years of life lost") ///
+    xlabel("Median household income (USD)") ///
+    ylabel("Premature death (YPLL per 100,000)") ///
+    legendpos(NONE) ///
+    targetsheet("CHR states 2025") anchor(M9) ///
+    width(620) height(400)
+\end{verbatim}
+}
+These two charts stay live inside the Sheet. When next quarter's do-file overwrites the data, the bars and points redraw against the new numbers with no chart-rebuilding step, which is the whole point of a native chart over a pasted-in picture.
+
+\subsection{Reading back to confirm the write}
+The last step closes the loop by reading the tab back into Stata. This is not ceremony: an evaluator who writes to a shared sheet and never reads it back is trusting that the API, the tab name, and the range all behaved, and any one of those can be quietly wrong. We re-import the block we wrote and assert the row count we expect\index{read-back verification}:\marginnote{The nastiest silent failure is a partial write: the API returns success after landing the first few hundred rows, then the connection drops. The tab looks written, the row count is wrong, and only a read-back \texttt{count} catches it.}
+{\footnotesize
+\begin{verbatim}
+googlesheets import using "$SS", ///
+    sheet("CHR states 2025") range("A1:K52") firstrow clear
+count
+assert _N == 51
+\end{verbatim}
+}
+Reading the sheet back and comparing it against what you exported catches the silent write failure before the team ever opens a stale or half-written tab.
+
+\begin{kaobox}[frametitle=Package Integration: \texttt{googlesheets}]
+\textbf{Integrated command:} \texttt{googlesheets}. Reads, writes, formats, and charts Google Sheets from Stata (\texttt{import}, \texttt{export}, \texttt{put}, \texttt{format}, \texttt{addchart}, and tab management), authenticating through a one-time Google sign-in. Install it once from the authors' GitHub:
+{\footnotesize
+\begin{verbatim}
+local gh "https://raw.githubusercontent.com/ericabooth"
+net install googlesheets, ///
+    from("`gh'/googlesheets-stata-public/main/") replace
+\end{verbatim}
+}
+The one-time OAuth setup is covered in Appendix~\ref{app:setup}, with a credential-free path for readers who only need to read a link-shared sheet. The whole workflow above is collected in \texttt{ch11\_googlesheets.do}, marked display-only because it needs that sign-in and a live Sheet.
+\end{kaobox}
+
+\subsection{Google Forms as a live monitoring feed}
+The same \texttt{import} that reads a data tab reads a Google Form's responses, which is what turns a Sheet from a delivery surface into a monitoring feed. A Form writes every submission as a new row on a tab named \enquote{Form Responses 1,} with the submission time in the first column. Reading that tab on a schedule is the survey-monitoring pattern of Chapter~\ref{ch:surveys}, now pointed at a live sheet instead of a static extract. Two options keep each scheduled pull small and quota-cheap. The \texttt{tail()} option keeps only the last \texttt{N} rows, which is all a running dashboard needs:
+{\footnotesize
+\begin{verbatim}
+googlesheets import using "$SS", ///
+    sheet("Form Responses 1") firstrow clear tail(50)
+\end{verbatim}
+}
+The \texttt{since()} option keeps only rows at or after a cutoff in a named column, so a cron job pulls just what arrived since it last ran. It parses dates and numbers as such, so it is robust to Google's unpadded timestamps like \texttt{2026-07-04 9:00:00}:
+{\footnotesize
+\begin{verbatim}
+googlesheets import using "$SS", ///
+    sheet("Form Responses 1") firstrow clear ///
+    since(Timestamp=2026-07-04 12:00:00)
+\end{verbatim}
+}
+That is the bridge back to Chapter~\ref{ch:surveys}: the responses your Form collects flow straight into an updating summary, and the same \texttt{export} and \texttt{addchart} steps above write the refreshed numbers back to a tab the team is already watching.
+
+\subsection{Why a live Sheet beats a static export}
+It is worth being explicit about why this whole apparatus beats emailing a workbook. A static export is a photograph: correct the moment you took it, stale the moment the data moves, and multiplied into a dozen slightly different copies the instant you send it to a dozen inboxes. A live Sheet is a window onto the current numbers. The team opens it on their phones in a meeting and sees today's figures, not last Tuesday's; your do-file refreshes it on a schedule, so there is one copy and it is always current; and because a Form can feed it, the loop from data collection to shared summary closes without anyone touching a cell by hand. A live Sheet closes the distance between the analysis and the people it serves: it makes the numbers accessible and lets the team act on them at once, delivered in the tool the client never leaves.
+
+The live Sheet is also where the utilization case and the error case meet. \textcite{patton2008utilization} argues that findings get used when the intended user can reach them without friction, and a shared tab the team already opens has less friction than any attachment. But a shared tab that a helpful colleague edits by hand carries exactly the risk \textcite{panko1998errors} documents, so the discipline that protects the emailed workbook has to protect the live one too. The resolution is the division the whole chapter turns on: the do-file owns the computed cells and the team owns the notes and flags around them. When the refresh writes the summary block from \texttt{\_b[]} and \texttt{r()} rather than trusting a cell someone might have retyped, the Sheet stays both usable and correct, and the boundary object \textcite{penuel2015partnerships} describe stays trustworthy for both sides to work on. A live Sheet earns its place not because it is convenient but because convenience and correctness stop trading against each other once the numbers arrive from code.
+
+\section{Toolkits program teams keep using}\label{sec:teamtoolkit}
+This is the book's thesis in a single artifact. The best deliverable is often not a report at all but a tool the program team keeps using after the evaluator has moved on.\marginnote{The blunt test of embedded work: a year after you leave, is the artifact still in weekly use, or is it a PDF in an inbox? Tools that the team can edit and rerun themselves survive; reports that only you could regenerate do not.}
+
+\begin{appliedexample}[An enrollment tracker the field team keeps]
+\textbf{Scenario.} A field team enters enrollments all year and needs to see their own progress, without waiting on the evaluator and without breaking the data.
+
+\medskip
+\textbf{The build, entirely from Stata.} A Google Sheets workbook with a validated entry tab (dropdowns and checks that stop bad values at the source), an auto-updating charts tab that redraws as rows arrive, and a plain-language data dictionary tab generated by \texttt{datadict}\index{datadict@\texttt{datadict}} (Chapter~\ref{ch:embedded}) so the team understands every field. The evaluator's do-file builds and refreshes it: a scheduled run pulls the latest Form responses with \texttt{googlesheets import}, rebuilds the summary, and writes it back with a fresh \texttt{addchart}, so the team opens the sheet Monday to numbers that are already current. When a stakeholder needs the same picture behind a firewall, where the live Sheet cannot follow, the identical rebuilt table feeds a \texttt{googlechart} export (Chapter~\ref{ch:interactive}), a self-contained HTML file that renders in any browser with nothing to log in to.
+
+\medskip
+\textbf{Why it is the thesis.} The evaluator ships a tool, not a PDF, so the work is extensible (next quarter is a rerun) and accessible (the team reads and uses it without help). And because the team can see themselves in the data, their entry improves at the source, which quietly raises the quality of every analysis downstream. This is what embedded evaluation looks like when it works.
+\end{appliedexample}
+
+The tracker is also where the brokerage argument stops being abstract. A tool the field team edits and reruns is the standing boundary object \textcite{penuel2015partnerships} describe: the evaluator's numbers and the practitioner's daily work meet on one artifact that neither side has to leave its own tools to reach. And because the validated entry tab stops bad values at the source, the tool does more than report the data; it improves the data, which is a return on the partnership that a one-time report cannot deliver. \textcite{patton2008utilization} would call this the deepest form of use, where the evaluation changes not just what a program knows but how it operates day to day.
+
+The earnings table earlier in this chapter and the enrollment tracker here are the same idea pointed at two audiences. One writes a static number into a \LaTeX{} appendix and an Excel tab from stored estimates; the other writes a living number into a shared sheet on a schedule. Both refuse the hand-edited cell, because the hand-edited cell is where a deliverable stops being reproducible and starts being a liability, and the Reinhart--Rogoff correction \parencite{herndon2014debt} is the standing reminder of what one such cell can cost. That refusal, held consistently, is what lets an evaluator hand over the pipeline and not just the printout.
+
+\paragraph{Where this leaves you.} You can now deliver formatted Excel from code, ingest a \LaTeX{} table straight from the do-file that computed it, run a live Google Sheet as a shared channel, and hand a program team a tool they keep using, all built from the do-file so the pipeline stays intact. Those are the accessible and actionable principles, delivered in the client's own tools. Chapter~\ref{ch:portals} covers the last delivery format, the self-contained report or portal that runs offline behind any firewall.
+
+\section*{Exercises}\addcontentsline{toc}{section}{Exercises}
+\begin{enumerate}
+\item \emph{Try it on your own data.} Take a dataset you already report on, estimate one model with \texttt{regress}, store it with \texttt{eststo}, and write an Excel tab with \texttt{putexcel} where each number comes from \texttt{\_b[]} or \texttt{e()} rather than the keyboard. Open the workbook and confirm no client-facing cell was typed by hand.
+\item Rerun \texttt{ch11\_tables.do} after changing the simulation seed, recompile the book, and confirm that Table~\ref{tab:wage} shows different coefficients while the surrounding prose still compiles. This proves the table is ingested, not hand-set.
+\item Open \texttt{ch11\_googlesheets.do} and change one \texttt{value()} call to a \texttt{formula()} that reads the same range. Edit a source cell in the browser afterward and confirm the formula cell updates while a plain \texttt{value()} cell does not.
+\item Break the read-back check on purpose: change the \texttt{assert \_N == 51} line to expect \texttt{52} rows, rerun the import step, and confirm the do-file stops with an assertion error rather than passing silently.
+\item Predict the mean uninsured rate you expect \texttt{summarize} to report for the CHR states file, then run the \texttt{quietly summarize uninsured} step and compare your guess against \texttt{r(mean)} before it is written to cell~N3.
+\item \emph{Reproduce the class of error that reversed a policy finding.} In the summary block, type one figure by hand into a cell instead of writing it from \texttt{r()}, then change the upstream data and rerun everything except that cell. Confirm the typed cell now disagrees with the code-written cells, and connect what you see to the range error \textcite{herndon2014debt} found in the Reinhart--Rogoff workbook: the deliverable looked finished while one number no longer matched the data behind it.
+\end{enumerate}

@@ -42,8 +42,8 @@
 \contentsline {mtocsection}{\numberline {2.5}One control file for every path and preference}{21}{section.2.5}%
 \contentsline {section}{\numberline {2.6}\enquote {Works on my machine} is four failures wearing one coat}{23}{section.2.6}%
 \contentsline {mtocsection}{\numberline {2.6}\enquote {Works on my machine} is four failures wearing one coat}{23}{section.2.6}%
-\contentsline {section}{\numberline {2.7}The numbered pipeline}{23}{section.2.7}%
-\contentsline {mtocsection}{\numberline {2.7}The numbered pipeline}{23}{section.2.7}%
+\contentsline {section}{\numberline {2.7}The numbered pipeline}{24}{section.2.7}%
+\contentsline {mtocsection}{\numberline {2.7}The numbered pipeline}{24}{section.2.7}%
 \contentsline {section}{\numberline {2.8}Leave a paper trail: logging every run}{24}{section.2.8}%
 \contentsline {mtocsection}{\numberline {2.8}Leave a paper trail: logging every run}{24}{section.2.8}%
 \contentsline {section}{\numberline {2.9}Excel is a format, not a calculator}{25}{section.2.9}%

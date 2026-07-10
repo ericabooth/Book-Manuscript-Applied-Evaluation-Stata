@@ -1,0 +1,119 @@
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	BOOK INFORMATION
+%----------------------------------------------------------------------------------------
+
+% --- Working title under review. Three candidates (see book_update_plan.md, Sec. 2):
+%   1. Applied Program Evaluation Using Stata: A Practical Workflow from Data to Deliverables
+%   2. Evaluation Workflows Using Stata: A Practical Guide for Embedded Researchers
+%   3. Embedded Evaluation: Stata Tools for Applied Research and Evaluation (current)
+% The Stata Press house grammar is "[task] Using Stata"; candidate 1 is recommended.
+\title[Embedded Evaluation]{Applied Program Evaluation \\ Using Stata}
+\subtitle{A Practical Workflow from Data to Deliverables}
+
+\author{Eric Booth \hspace{0.5in} Elizabeth Teas}
+
+\date{Drafted: July 2026}
+
+\publishers{Technical Press}
+
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%	FRONT MATTER
+%----------------------------------------------------------------------------------------
+
+\frontmatter
+
+\makeatletter
+\lowertitleback{
+    \textbf{Applied Program Evaluation Using Stata}\\
+    © 2026 Eric Booth \& Elizabeth Teas \vspace{0.5in}
+
+    \textbf{Colophon} \\
+    This document was typeset using the \texttt{kaobook} class. Every figure, table, and number in the worked examples is produced by a do-file in the companion \texttt{code/} folder, which downloads only public data.
+}
+\makeatother
+
+\pagelayout{wide}
+\tableofcontents
+\listoffigures
+\listoftables
+
+%----------------------------------------------------------------------------------------
+%	MAIN BODY
+%----------------------------------------------------------------------------------------
+
+\mainmatter
+\setchapterstyle{kao}
+
+\pagelayout{wide}
+\chapter*{Preface}
+\markboth{Preface}{Preface}
+
+Most evaluation textbooks assume the data arrive clean, the deadline sits comfortably far off, and the audience is neutral. The working evaluator meets the opposite on every project. The data lands as forty inconsistent spreadsheets, the answer is due Friday, and the finding has funding riding on it. This book is about doing that job well, and doing all of it in one place: you pull the data, build the evidence, and hand the client something they can open, from a single Stata project that anyone on your team can rerun next year and get the same answer.
+
+That last clause is the whole argument. An evaluator who can pull public data through an API, defend a longitudinal file to an auditor, produce a claim at the right level of rigor, and ship a client-ready product, all from scripted and logged Stata, is worth more to a small organization than a specialist who can do any one of those things brilliantly and none of the others reproducibly. This book teaches the whole chain, and it insists on tools a two-person shop can still run after the grant ends: reproducibility over cleverness, automation over heroics.
+
+\paragraph{Four principles, and a test for each.} One standard runs through every chapter. Good evaluation work is \emph{replicable} (a colleague reruns it next month from the raw files and gets the same numbers), \emph{extensible} (the next wave, site, or client fits without a rewrite), \emph{accessible} (a partner or funder can open the output and understand it), and \emph{actionable} (it tells a named person what to do on Monday, in the units they budget in). Each principle comes with a pass/fail test, so it is a bar the work clears or does not, never a slogan. We reserve \emph{replicable} for the strict sense, same code and same data yield the same result, which is a lower bar than \emph{reproducible} (a fresh team collecting fresh data reaches the same conclusion) and the one an embedded evaluator can actually guarantee. Every section names which principle its methods serve, and why the reader's partners are better off for it.
+
+\paragraph{A word on AI.} Large language models appear throughout this book, always in a supporting role. An LLM can draft code and summarize messy text faster than any team could by hand, and it can just as easily leak confidential data, invent a classification, or produce a number that will not reproduce tomorrow, because most hosted LLMs return different output on the same prompt and the vendor can change the weights under a fixed name without notice. We treat an LLM the way a shop treats a power tool: useful in the right jig, dangerous waved around freely. Wherever this book hands work to an LLM, it pairs the LLM with a verification step, a privacy check, and a logged, reproducible trail, and it keeps Stata, not the LLM, holding the results (Chapter~\ref{ch:ai}).
+
+\paragraph{Everything here runs.} This is not a book of pseudocode. Every worked example is a do-file in the companion \texttt{code/} folder, and each one downloads only public data, most of it with a single \texttt{import delimited} from a URL and no login. The figures in these pages came out of those do-files. You can rerun any of them, change a county or a year, and watch the result change on the page.
+
+\paragraph{Who this book is for.} This book is written for evaluators, applied researchers, and analysts who already know some Stata and want a practical workflow for embedded, real-world evaluation, especially in the nonprofits, agencies, and foundations where the data is messy, the stakes are real, and the team is small.
+
+\paragraph{The arc of the book.} The chapters follow one project from an empty folder to a delivered portal, grouped into five parts that build on each other. You start by setting up a project that survives a deadline. You get the data, wherever it lives: behind an API, buried in a website with no download button, or arriving as survey waves you have to stitch into a defensible panel. You turn that data into evidence at the honest level of rigor, from a careful descriptive comparison up to a difference-in-differences when the question demands it. You deliver the result in a form the client already opens, a chart, a spreadsheet, or a self-contained web portal. And you sustain the practice, using AI without getting burned, sharing data without re-identifying anyone, and turning a one-off do-file into a tool the whole team reuses. The arc is the point: each part hands the next one something it can build on.
+
+\bigskip
+{\centering
+\begin{tikzpicture}[node distance=0.45cm and 0.62cm]
+  \node[stage, text width=2.15cm, align=center] (p1) {\textbf{Part I}\\[2pt]Set up to move fast};
+  \node[stage, right=of p1, text width=2.15cm, align=center] (p2) {\textbf{Part II}\\[2pt]Get any public data};
+  \node[stage, right=of p2, text width=2.15cm, align=center] (p3) {\textbf{Part III}\\[2pt]Make defensible claims};
+  \node[stage, right=of p3, text width=2.15cm, align=center] (p4) {\textbf{Part IV}\\[2pt]Deliver what clients open};
+  \node[stage, right=of p4, text width=2.15cm, align=center] (p5) {\textbf{Part V}\\[2pt]Sustain the practice};
+  \draw[flow] (p1) -- (p2);
+  \draw[flow] (p2) -- (p3);
+  \draw[flow] (p3) -- (p4);
+  \draw[flow] (p4) -- (p5);
+  \node[substep, below=0.3cm of p1, text width=2.05cm, align=center] {Ch.\,1--2};
+  \node[substep, below=0.3cm of p2, text width=2.05cm, align=center] {Ch.\,3--6};
+  \node[substep, below=0.3cm of p3, text width=2.05cm, align=center] {Ch.\,7--8};
+  \node[substep, below=0.3cm of p4, text width=2.05cm, align=center] {Ch.\,9--12};
+  \node[substep, below=0.3cm of p5, text width=2.05cm, align=center] {Ch.\,13--15};
+\end{tikzpicture}
+\par}
+\nopagebreak
+\medskip
+{\small\noindent The five parts as one arc: each equips the reader to do the next. A project set up in Part~I makes the data harvesting of Part~II reproducible, the panel built in Part~II is what Part~III turns into a defensible claim, and so on to a delivered, sustainable product. Chapter~\ref{ch:embedded} opens with the same journey drawn as an evaluation workflow.\par}
+\bigskip
+
+\paragraph{How to read it.} Every chapter stands on its own, so skip to whatever this week's deadline needs. If you would rather follow a path through the book, start from your role:
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{@{}p{3.5cm}p{4.6cm}p{5.0cm}@{}}
+\toprule
+\textbf{If you are\ldots} & \textbf{and you work from\ldots} & \textbf{start with these chapters} \\
+\midrule
+the nonprofit program evaluator & survey and program data you collect yourself & \ref{ch:embedded}, \ref{ch:workshop}, \ref{ch:surveys}, \ref{ch:panels}, \ref{ch:trust}, \ref{ch:graphs}, \ref{ch:sheets} \\
+\addlinespace
+the agency or foundation analyst & public administrative data others publish & \ref{ch:embedded}, \ref{ch:apis}, \ref{ch:noapi}, \ref{ch:panels}, \ref{ch:claims}, \ref{ch:interactive}, \ref{ch:portals} \\
+\addlinespace
+the research-shop tool-builder & code the rest of the team will reuse & \ref{ch:workshop}, \ref{ch:ai}, \ref{ch:sharing}, \ref{ch:tools}, and the appendices \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent Three kinds of pull-out recur so you can recognize them at a glance. An \emph{Applied Example} works one scenario end to end with runnable code; a \emph{Visualization to build} callout specifies a chart and the story it has to tell; and an \emph{Ado-file idea} box flags a tool, some already on the authors' GitHub, some still on the wish list.
+
+%----------------------------------------------------------------------------------------
+% PART I
+%----------------------------------------------------------------------------------------
+
+\pagelayout{margin}
+\addpart{Part I: The Embedded Evaluator Workflow \newline Principles, Environment, and the Four Principles}
+

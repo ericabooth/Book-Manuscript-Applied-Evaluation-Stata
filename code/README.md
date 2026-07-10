@@ -20,17 +20,24 @@ figures in the book are produced by these files.
 
 Eleven tools the book teaches were built alongside it, each in its own
 `<name>-stata-public/` folder one level up from this one: `projectbuilder`
-(scaffold the Chapter 2 layout), `schemaudit` (declarative extract
-validation), `panelstack` (vintage-aware multi-year stacking), `cxchangelog`
-(cross-wave survey codebooks), `rateshrink` (empirical-Bayes rate
-stabilization), `conformalpred` (split-conformal prediction intervals),
-`hlmr2` (Nakagawa multilevel R-squared), `twinmatch` (Mahalanobis policy
-twins), `roisim` (Monte Carlo ROI with tornado export), `suppress`
-(small-cell + complementary suppression), and `riskscan` (k-anonymity scan).
+(scaffold a project, ingest data, rebuild docs on every refresh),
+`combineall` (append/merge/convert a whole folder, with vintage-aware
+harmonization), `cxchangelog` (cross-wave survey codebooks), `undummy`
+(recombine one-hot columns into one categorical), `rateshrink`
+(empirical-Bayes rate stabilization), `conformalpred` (split-conformal
+prediction intervals), `hlmr2` (Nakagawa multilevel R-squared), `twinmatch`
+(Mahalanobis policy twins), `roisim` (Monte Carlo ROI with tornado export),
+`suppress` (small-cell + complementary suppression), and `riskscan`
+(k-anonymity scan).
 Each folder holds the ado, a SMCL help file, a `test_<name>.do` battery that
 runs on synthetic or shipped Stata data, and installation files. They publish
 to the authors' GitHub with the book; until then, `01_install.do` shows how
 to install them from the local folders.
+
+`projectbuilder` composes the others: it calls `convertanything` to turn a
+raw drop into `.dta`, then `combineall` to append those into the analytic
+file, then writes a documentation site (prettier when `webdoc2` is present).
+Each is optional and degrades gracefully if it is not installed.
 
 ## Running an example
 
@@ -48,6 +55,7 @@ Launch Stata in the project folder, then either:
 | `01_install.do` | 2 | One-time install of the packages the book uses. |
 | `ch01_reach.do` | 1 | Simulated program enrollment vs. a rural-reach target; the one-page-answer bar figure. |
 | `ch02_benchmark.do` | 2 | Expands `nlsw88` to ~2M rows; times `collapse` vs `gcollapse`, `egen` vs `gegen`. |
+| `ch02_projectbuilder.do` | 2 | Scaffolds a project two ways with `projectbuilder`: data-on-disk (Method A) and scaffold-now/`rebuild`-on-refresh (Method B); chains `convertanything` -> `combineall` into the analytic file. Creates folders, so run it standalone. |
 | `20_ch03_apis.do` | 3 | Downloads BLS QCEW county wages (no key); builds the wage-comparison figure. |
 | `ch03_webapi.do` | 3 | JSON APIs in one line with `webapi` (jsonplaceholder, CDC); no key, stdlib Python. |
 | `ch03_educationdata.do` | 3 | Urban Institute CCD enrollment (no key); Texas state-year enrollment trend. |

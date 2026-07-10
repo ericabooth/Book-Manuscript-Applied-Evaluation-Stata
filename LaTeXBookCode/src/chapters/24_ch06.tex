@@ -1,0 +1,280 @@
+\chapter{Building longitudinal data you can trust}\label{ch:panels}
+
+Two agency files sit on your desk: student rosters from the education agency, wage records from the workforce agency. They describe the same people and share no common identifier, and the merge you build will have to survive an auditor asking how you knew these two rows were the same person. Linking data across sources and stacking it across years is where most administrative evaluation questions are actually won or lost.
+
+This chapter builds longitudinal data you can defend, the kind that follows the same units across time (what Stata calls a panel). We link files with no shared key, treat crosswalks as data, trace every variable to its source, refuse bad data loudly, declare and reshape into analysis-ready panels, code the transitions that answer a director's first question, and handle missingness honestly. The through-line is that a dataset is only as trustworthy as its construction is documented, so every step here leaves a record, which is replicability applied to the most error-prone part of the pipeline.
+
+\section{Merging the unmergeable}
+When two files share no identifier, we link them probabilistically\index{probabilistic record linkage} \parencite{fellegi1969linkage}, and we do it in a way that shows its work. Clean the names on both sides (lowercase, strip suffixes, expand common nicknames so \enquote{Bob} can meet \enquote{Robert}), block on something cheap like birth year to cut the number of candidate pairs, score the remaining pairs with a string distance such as Jaro-Winkler\index{Jaro-Winkler distance}, and set two thresholds: accept high-confidence matches automatically and route the ambiguous middle band to human review.\marginnote{Why Jaro-Winkler over Levenshtein here: it rewards agreement in the first few characters, which suits names, where prefixes are stable and the tail is where typos and truncations land. Levenshtein edit distance treats a slip in the first letter and the last as equally costly, which for surnames it is not.} Storing the similarity score as a variable lets you run the analysis again at a stricter threshold to see whether the finding holds, which turns a judgment call into a sensitivity test.
+
+Blocking is the move that makes the whole thing tractable, and it is worth seeing concretely. Comparing every pair of two 100{,}000-row files is ten billion comparisons; blocking on birth year splits the files into roughly a hundred small pools and cuts the work by two orders of magnitude. The gamble is that a true match never disagrees on the blocking key, so you block on your most reliable field. To make the mechanics visible, here are two tiny simulated rosters of the same six people, with names entered inconsistently and one birth year mistyped. We clean the names, compute Stata's built-in \texttt{soundex}\index{soundex@\texttt{soundex}} phonetic code so \enquote{Smith} can meet \enquote{Smythe}, block on birth year with \texttt{joinby}\index{joinby@\texttt{joinby}}, and flag the pairs whose codes agree:
+{\footnotesize
+\begin{verbatim}
+gen sdx_a = soundex(lname_a)          // in roster A
+gen clean_b = upper(subinstr(lname_b, "'", "", .))
+gen sdx_b   = soundex(clean_b)        // in roster B
+use rosterA, clear
+joinby byear using rosterB            // block on birth year
+gen soundex_hit = (sdx_a == sdx_b)
+\end{verbatim}
+}
+Birth-year blocking is doing real work here: it forms only 8 candidate pairs out of the 36 that a full cross-product would compare, and within each block the soundex codes decide the match. Three accepted pairs read like this:
+{\footnotesize
+\begin{verbatim}
+    lname_a   lname_b   byear   sdx_a   sdx_b   soundex_hit
+      SMITH    SMYTHE    1975    S530    S530             1
+    JOHNSON    JONSON    1980    J525    J525             1
+     NGUYEN    JONSON    1980    N250    J525             0
+\end{verbatim}
+}
+The first two rows are true matches the phonetic code recovers despite the spelling drift: \texttt{SMITH} and \texttt{SMYTHE} both collapse to \texttt{S530}, \texttt{JOHNSON} and \texttt{JONSON} both to \texttt{J525}. The third row is the honest failure. \texttt{NGUYEN} was born in 1980, but its true partner \texttt{WINGUYEN} was entered as 1981, so blocking never places the pair in the same pool; the only 1980 candidate \texttt{NGUYEN} can see is \texttt{JONSON}, and the codes rightly disagree. That is the standing cost of blocking on a mistypable field, and it is why you block on your most reliable one and, for high-stakes links, widen the block (birth year plus or minus one) at the price of more pairs to score.
+
+Two honest limits close the demo. Soundex is a blunt instrument: it is English-biased, it can force unlike names into one code, and it says nothing about how close two near-misses are.\marginnote{Soundex keeps the first letter, so \enquote{Catherine} (\texttt{C365}) and \enquote{Katherine} (\texttt{K365}) never meet, and it is tuned to English orthography, so it mishandles many transliterated names. Treat it as a fast blocker, not a final scorer.} The graded string distances that actually rank candidates, Jaro-Winkler and the edit distances, live in community packages: \texttt{reclink}\index{reclink@\texttt{reclink}} and \texttt{reclink2} for full probabilistic record linkage \parencite{enamorado2019linkage}, and \texttt{strdist} for pairwise Jaro-Winkler and Levenshtein scores you can threshold yourself. The pattern above (clean, block, score, threshold) is the same whichever scorer you reach for; only the scoring line changes.
+
+Jaro-Winkler is worth seeing as an object, because its whole design is in the formula. The base Jaro score rewards matching characters and penalizes ones that match but are out of order, and the Winkler term then boosts pairs that already agree on their opening characters:
+\[\resizebox{\linewidth}{!}{$\displaystyle \mathrm{JW}(s_1,s_2)=\mathrm{Jaro}(s_1,s_2)+\ell\,p\,\bigl(1-\mathrm{Jaro}(s_1,s_2)\bigr),
+  \qquad
+  \mathrm{Jaro}=\tfrac{1}{3}\!\left(\tfrac{m}{|s_1|}+\tfrac{m}{|s_2|}+\tfrac{m-t}{m}\right),$}\]
+where $m$ is the count of matching characters between strings $s_1$ and $s_2$, $t$ is the number of those matches that are transposed, $|s_i|$ is a string's length, $\ell$ is the length of the shared leading prefix (capped at four), and $p$ is a small scaling constant (Winkler used $0.1$). The $\ell\,p$ term is exactly the prefix reward the margin note describes: two surnames that agree on their first letters get pushed toward $1$, while a first-letter slip leaves $\ell=0$ and no boost, which is why Jaro-Winkler suits names and plain edit distance does not.
+
+\begin{figure}[htbp]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[node distance=6mm]
+\node[io] (a) {File A};
+\node[io,below=5mm of a] (b) {File B};
+\node[stage,right=8mm of $(a)!0.5!(b)$] (clean) {Clean\\names};
+\node[stage,right=7mm of clean] (block) {Block\\(birth yr)};
+\node[stage,right=7mm of block] (score) {Score\\pairs};
+\node[decision,right=9mm of score] (thr) {weight\\vs.\\bands?};
+\node[io,right=13mm of thr] (acc) {Accept};
+\node[io,above=5mm of acc] (rev) {Review};
+\node[io,below=5mm of acc] (rej) {Reject};
+\draw[flow] (a) -- (clean);
+\draw[flow] (b) -- (clean);
+\draw[flow] (clean) -- (block);
+\draw[flow] (block) -- (score);
+\draw[flow] (score) -- (thr);
+\draw[flow] (thr) -- (acc) node[annot,midway,above]{$w\ge t_{\text{hi}}$};
+\draw[flow] (thr.north) |- (rev.west) node[annot,pos=0.75,above]{$t_{\text{lo}}\le w< t_{\text{hi}}$};
+\draw[flow] (thr.south) |- (rej.west) node[annot,pos=0.75,below]{$w< t_{\text{lo}}$};
+\node[annot,below=1mm of block,text width=1.9cm] {cut candidate pairs};
+\node[annot,below=1mm of score,text width=1.9cm] {Jaro--Winkler};
+\end{tikzpicture}%
+}
+\caption[The clean-block-score-threshold linkage pipeline]{The probabilistic-linkage pipeline the section walks: two source files are name-cleaned, blocked on a reliable key to cut the candidate pairs, scored with a string comparator, then split by match weight into three bands. See that the middle band routes to human review rather than a silent accept or reject, and that only the scoring box changes when you swap comparators.}
+\label{fig:ch06-viz-linkpipe}
+\end{figure}
+
+None of this machinery is improvised. The clean-block-score-threshold pattern is the Fellegi-Sunter framework\index{Fellegi-Sunter framework}\index{match weight} made operational, and the framework says exactly what the score should be: for a candidate pair with agreement pattern $\gamma$ across the compared fields, the match weight is the base-2 log-likelihood ratio
+\[
+  w(\gamma)=\log_2\frac{\Pr(\gamma\mid\text{true match})}{\Pr(\gamma\mid\text{non-match})}
+           =\log_2\frac{m_\gamma}{u_\gamma},
+\]
+\[
+  \text{pair}=\begin{cases}
+    \text{accept}, & w \ge t_{\text{hi}},\\
+    \text{review}, & t_{\text{lo}} \le w < t_{\text{hi}},\\
+    \text{reject}, & w < t_{\text{lo}},
+  \end{cases}
+\]
+where $m_\gamma$ is the probability of seeing pattern $\gamma$ among records that truly match, $u_\gamma$ the probability of seeing it among records that do not, and $t_{\text{lo}},t_{\text{hi}}$ the two thresholds that carve the weight into the accept, clerical-review, and reject bands. Fields that agree when a pair is a true match but rarely agree by chance (a full Social Security number) earn large positive weight; fields that agree easily by chance (a common surname) earn little. It has a production pedigree an auditor will recognize: \textcite{jaro1989tampa} built exactly this pipeline, string comparators and clerical-review band included, to match the 1985 Tampa test census against its coverage survey for the United States Census Bureau. For an evaluation team that wants one practitioner-level reference on the whole chain, from cleaning and standardization through blocking to match-quality assessment, \textcite{herzog2007quality} covers it with worked federal-data examples. Knowing the lineage matters for more than comfort: when an agency's data steward asks why your team trusts a fuzzy match, the honest answer is that the method has matched national censuses for four decades, and your contribution is the documented settings, not the invention.
+
+For numeric keys rather than names (dates, timestamps, rounded amounts), the join is nearest-value rather than exact, and \texttt{nearmrg}\index{nearmrg@\texttt{nearmrg}} performs it, optionally within exact-match groups and with a distance limit. Most administrative questions are join questions in disguise, and a documented, tunable match is what makes the answer defensible when someone asks how the two files were linked.
+
+\pagelayout{wide}
+\section{Linkage error is measurement error in disguise}\label{sec:ch06-linkerror}
+The links you accept become the data your estimates stand on, so a mismatched pair is not a clerical blemish; it is measurement error\index{linkage error} injected before the first regression runs. This result is old: \textcite{neter1965mismatch} showed that even a modest rate of mismatched records inflates residual variance and biases regression coefficients, typically toward zero. An evaluator who reports a null program effect from linked wage records therefore has to rule out a rival explanation before writing the finding: the null may be the linkage speaking, not the program.
+
+The error rates in practice are large enough to matter. When \textcite{bailey2020linking} put widely used automated linking algorithms up against hand-linked ground truth in United States historical data, trained human reviewers classified 15 to 37 percent of the algorithms' chosen links as errors, and the false links were not random noise: they were systematically related to baseline sample characteristics, which converts linkage error into exactly the kind of correlated measurement error that shifts estimates rather than merely widening their intervals. \textcite{abramitzky2021linking} map the trade-off the previous section's thresholds implement: stricter acceptance rules buy accuracy at the cost of fewer links and a less representative linked sample, so no threshold choice is innocent. Both reviews examine at scale the same accept-review-reject machinery this chapter builds on the Fellegi-Sunter foundation \parencite{fellegi1969linkage}, and both reach the conclusion an embedded evaluator should carry into every linked analysis: report the match rate and the threshold, because together they are a quality disclosure, not an implementation detail.
+
+It helps to name the mechanisms precisely, because each one calls for a different check. \textcite{doidge2019linkage} sort linkage error into three manifestations an evaluator will recognize from other parts of the toolkit: missed links behave like missing data (the unlinked participant looks like a nonrespondent), false links behave like measurement error or misclassification (the participant wears someone else's wages), and differential linkage behaves like selection (the linked sample stops representing the enrolled population). The taxonomy is useful because it tells you which existing diagnostic to borrow. If missed links dominate, the missingness tools at the end of this chapter apply; if false links dominate, the threshold-sensitivity rerun below is the check; if linkage rates differ across groups, the subgroup match-rate table is the check, and the analogy to attrition is exact. The What Works Clearinghouse formalizes that last analogy for experimental studies: its standards treat differential attrition beyond stated bounds as a design flaw that lowers a study's evidence rating \parencite{wwc2022handbook}, and a linked-data study whose match rates differ across arms or subgroups faces the same arithmetic, whether or not a reviewer applies the label. An embedded evaluator who wants a linked analysis to survive an evidence review should therefore compute differential match rates with the same seriousness as differential attrition, because functionally they are the same quantity.
+
+Two defenses fit inside an ordinary evaluation workflow, and neither requires new statistics. First, treat the stored similarity score as a sensitivity dial: rerun the headline estimate at a stricter threshold and report whether it moves, which bounds how much the finding depends on the ambiguous middle band of matches. Statisticians have pushed further, building estimators that weight each linked pair by its match probability \parencite{lahiri2005linked}, and an evaluator does not need to implement those estimators to inherit their discipline, only to report the sensitivity they formalize. Second, deliver a linkage report as a standing artifact: counts at each stage (candidate pairs formed, pairs surviving the block, auto-accepted, clerically reviewed, rejected) plus match rates by subgroup, because a match rate that differs across race or geography mimics differential attrition and biases comparisons even when the overall rate looks healthy. Mature data-linkage centers separate the linkage step from the analysis step as a matter of design, and the linkage report is the artifact that crosses that boundary \parencite{harron2017challenges}; agency data-sharing agreements increasingly require one, and the AEA Guiding Principles' call for systematic inquiry, communicating methods and limitations openly, asks for the same document by another name. The report is cheap to produce if you build it as you go, because each stage of the link (block, score, threshold, review) is one \texttt{count} away from its row in the table; reconstructing the same counts after the fact, from an undocumented merge, can take days. An evaluator who wants a template rather than a principle can borrow one from health research: the GUILD guidance itemizes what data providers, data linkers, and analysts should each report at every stage of a linkage so that a reader can assess the biases the link may have introduced \parencite{gilbert2018guild}, and its checklist maps almost line for line onto the stage counts above. For depth beyond what an evaluation team usually needs, \textcite{christen2012matching} is the standard reference on the full data-matching pipeline, from cleaning through blocking to evaluation of match quality.
+
+\section{Crosswalks as first-class files}
+A crosswalk\index{crosswalk} (ZIP to county, county to region, district to its successor after a boundary change) looks like a lookup table and behaves like a set of decisions. Treating it as a versioned data file in the repository, rather than a lookup buried in code, makes those decisions visible and reviewable: which vintage of the rurality classification did we use, and when did it change? Stamp the vintage into the filename, not just a comment, so \texttt{zip\_county\_2023q1.dta} beats \texttt{zip\_county.dta}: ZIP-to-county is the classic trap, since ZIPs are USPS delivery routes that cross county lines and get retired, so a 2019 crosswalk quietly misroutes 2024 addresses. Crosswalks encode choices, and choices that are reviewable are choices a partner can trust.
+
+This is a small habit with a large payoff for extensibility. When next year's data uses a redrawn district map, you update one crosswalk file and rerun, rather than editing merge logic scattered across do-files. The crosswalk is data, so it gets the same replicability guarantees as data.
+
+\section{Where did this number come from?}\label{sec:lineage}
+The most dangerous question in policy research is also the simplest: \emph{where did this number come from?} If an evaluator cannot trace a variable back to its source table and vintage within seconds, trust with an agency client evaporates. We store that lineage directly in the data, using \texttt{srctag}\index{srctag@\texttt{srctag}} to write the source agency, table, and vintage into each variable's characteristics, so the provenance travels with the dataset through every subsequent merge, and \texttt{srcfind}\index{srcfind@\texttt{srcfind}} to search a warehouse of \texttt{.dta} files for variables matching a given source.
+
+\begin{appliedexample}[Proving lineage to a skeptical agency]
+\textbf{Scenario.} A state workforce commission doubts a report showing that program graduates earn less than the state average. They suspect the wage data was joined wrong or came from a stale ledger.
+
+\medskip
+\textbf{The embedded move.} Instead of arguing, you run \texttt{srcfind} on your warehouse folder in front of them. It prints the exact variables used, each carrying an \texttt{srctag} that ties it to the commission's own Q3 2025 wage ledger. The client sees that the analysis respects their data structures, the adversarial dynamic dissolves, and the conversation turns from \enquote{is this wrong} to \enquote{what do we do about it.} Traceability is what made that pivot possible.
+\end{appliedexample}
+
+Storing lineage this way makes the analysis accessible to the client: an agency partner who can see where every number originated has no reason to treat the work as a black box. It is also the quiet precondition for the multi-agency panels this chapter builds, because a variable with no source tag becomes untraceable the moment it is merged with another file.
+
+The evaluation literature has a name for why this scene matters beyond the immediate save. Utilization-focused evaluation holds that findings get used when the intended users trust the process that produced them, and that trust is built with specific people, not with audiences in the abstract \parencite{patton2008utilization}. For an embedded evaluator, the primary intended users include the agency's data stewards, and what a data steward trusts is not a p-value but an audit trail: which table, which vintage, which join. Lineage tags, versioned crosswalks, and the linkage report of Section~\ref{sec:ch06-linkerror} are the artifacts that answer a steward's questions in the steward's own vocabulary, which is why this chapter treats them as deliverables rather than internal hygiene. The same logic runs through research-practice partnerships, where the long-run asset is the relationship that survives staff turnover on both sides; a documented pipeline is the part of that relationship that does not leave when a person does. Provenance work looks like overhead in the week you do it and like the whole ballgame in the meeting where a finding is challenged.
+
+\begin{kaobox}[frametitle=Package Integration: \texttt{srctag} and \texttt{srcfind}]
+\textbf{Integrated commands:} \texttt{srctag} writes source metadata (agency, table, vintage) into variable characteristics and maintains a dataset-level manifest of all sources represented; \texttt{srcfind} scans a directory of Stata files by reading only their headers, so a warehouse search is fast and never loads the data.
+\end{kaobox}
+
+\section{Schema drift and the polluted year}
+A pipeline should refuse bad data loudly rather than average over it quietly. Administrative extracts drift\index{schema drift}: a variable changes type, a code that was never legal appears, an ID that should be unique repeats. The defense is a validation step that checks each new extract against a rulebook of required variables, legal values, and uniqueness constraints, and stops with a clear message when the data violates them. Native Stata already carries everything that rulebook needs: \texttt{confirm}\index{confirm@\texttt{confirm}} verifies that a variable exists with the expected type, \texttt{isid}\index{isid@\texttt{isid}} halts if the identifier is not unique, and \texttt{assert}\index{assert@\texttt{assert}} halts if any observation violates a stated condition. Placed at the top of the do-file that ingests an extract, four lines become a contract the data must satisfy before a single analysis line runs:
+{\footnotesize
+\begin{verbatim}
+* --- the rulebook: refuse bad data loudly ---
+confirm numeric variable id year status wage
+isid id year
+assert inlist(status, 1, 2, 3)
+assert wage > 0 & wage < 500000 if !missing(wage)
+\end{verbatim}
+}
+On a clean 200-row extract this block runs silently and the pipeline proceeds. Change one status code to an illegal value and \texttt{assert} refuses:
+{\footnotesize
+\begin{verbatim}
+. assert inlist(status, 1, 2, 3)
+1 contradiction in 200 observations
+assertion is false
+r(9);
+\end{verbatim}
+}
+The message names the count of offending rows, the do-file stops at the exact line that failed, and nothing downstream runs on polluted data, which is precisely the behavior you want from a pipeline a partner agency will re-feed every quarter. The discipline lies in writing the rulebook once, when you first study the extract's codebook, and then never editing it silently: when next year's file adds a legal status code of 4, the failing \texttt{assert} forces a visible, dated decision to widen the rule rather than an invisible drift in what the pipeline accepts. A rulebook that lives in the do-file is versioned with the do-file, so the audit trail of what the pipeline tolerated, and when that changed, comes free.
+
+Sometimes the data is bad for a known reason, and the honest move is to flag the period, not to smooth over it. The 2016 Texas STAAR results are the standing example: a vendor transition and a cut-score change corrupted that year's comparability, so the analytic pipeline marks 2016 explicitly and carries the caveat forward rather than letting a bad year masquerade as a data point (Appendix~\ref{app:walkthroughs}). A documented flag today is what prevents a wrong finding next year, which is replicability protecting the future analyst from a trap the present one already found. The 2016 STAAR online-testing failure hit tens of thousands of students, whose sessions were disrupted or answers lost, and the legislature ultimately barred using that year's results for accountability; the lesson is to carry the flag as a variable through every merge, because a caveat that lives only in a memo dies at the first append.
+
+\section{Declaring the panel: \texttt{xtset} and \texttt{xtdescribe}}\label{sec:xtset}
+Before any panel method runs, Stata has to know two things: which variable identifies a unit and which variable orders time. One command, \texttt{xtset id time}\index{xtset@\texttt{xtset}}, declares both, and from that point on the whole \texttt{xt} family (fixed effects, lagged terms, transition counts) knows how to walk the data. Getting this declaration right is not bookkeeping; it is the difference between a lag that reaches back one survey wave and one that silently reaches across two different people. We use the National Longitudinal Survey of Young Women (\texttt{nlswork}), which ships with Stata, so this runs on any machine with no download:
+{\footnotesize
+\begin{verbatim}
+webuse nlswork, clear
+xtset idcode year
+xtdescribe
+\end{verbatim}
+}
+The \texttt{xtdescribe} output is a shape report for the panel, and reading it is the first thing you do with any new longitudinal file:
+{\footnotesize
+\begin{verbatim}
+  idcode:  1, 2, ..., 5159              n =     4711
+    year:  68, 69, ..., 88              T =       15
+           Delta(year) = 1 unit
+           Span(year)  = 21 periods
+           (idcode*year uniquely identifies each obs)
+
+Distribution of T_i: min  5%  25%  50%  75%  95%  max
+                       1   1    3    5    9   13   15
+\end{verbatim}
+}
+Read this top to bottom and it tells you what kind of panel you have. There are 4{,}711 women (\texttt{n}) observed over a possible 15 survey years drawn from a 21-year span, and the parenthetical line confirms that \texttt{idcode} and \texttt{year} together uniquely identify every row, which is the uniqueness check you never want to skip before merging. The distribution of \texttt{T\_i} is where the honesty lives: the median woman appears only 5 times and a quarter appear 3 times or fewer, so this is an unbalanced panel\index{unbalanced panel}, not a tidy rectangle. \enquote{Unbalanced} is the normal case, not a defect; it becomes a threat only when whether a unit stays in the panel is related to the outcome, which is attrition bias, and \texttt{xtdescribe} shows you the imbalance so you can ask that question even though it cannot answer it for you.
+
+The imbalance is not a nuisance to be normalized away; it is information about who stays in a program and who leaves, and \texttt{xtdescribe} surfaces it in one glance. Its pattern block (omitted above for width) prints the most common attendance strings, and the modal pattern here is a single wave followed by dropout, exactly the attrition an evaluator must reckon with before trusting a follow-up estimate. Declaring the panel is what makes every later step (the transitions below and the fixed effects of Chapter~\ref{ch:claims}) both possible and correct, which is why it earns its own section rather than a passing mention.
+
+\subsection{Asking whether attrition is selective}\label{sec:ch06-attrition}
+You can go one step past describing the imbalance and test whether it looks selective, using nothing beyond a \texttt{by} prefix and a t-test. The standard first move, formalized for the Panel Study of Income Dynamics by \textcite{fitzgerald1998attrition}, is attrition on observables: compare the baseline characteristics of units who leave the panel early against those who stay, because if leavers already differ at entry on things you can see, you should doubt that they match on things you cannot. In \texttt{nlswork}, call a woman a leaver if she appears three or fewer times, then compare first-observation outcomes across the two groups:
+{\footnotesize
+\begin{verbatim}
+bysort idcode: gen T_i = _N
+bysort idcode (year): gen first = (_n == 1)
+gen leaver = (T_i <= 3)
+ttest ln_wage if first, by(leaver)
+\end{verbatim}
+}
+The comparison is informative in both directions here. Leavers are a third of the panel (1{,}529 of 4{,}711 women), and at their first observation they earn more, not less, than stayers: mean log wage 1.55 against 1.48, a gap of about 7 log points with a t-statistic near 4.7, and the same pattern holds for schooling (13.0 grades against 12.6). So attrition in this panel is selective, and it selects out the better-paid and better-educated, which means a naive analysis of long-stayers would tilt toward a lower-wage sample without anyone deciding that on purpose. The test cannot certify the opposite, since units can differ on unobservables while matching on everything measured, so state the finding with its real strength: a detectable baseline difference is a warning to address before proceeding, while a null is permission to proceed, not proof of safety. \textcite{fitzgerald1998attrition} found substantial and selective attrition in the PSID yet only modest damage to its representativeness, which is the calibration worth carrying: selectivity is common, its practical bite is an empirical question, and the two-line check above is how you start answering it for your own panel.
+
+\pagelayout{margin}
+\section{Reshaping into analysis-ready panels}
+Shape your data into the one structure every later method assumes, and answer the director's first question in the same move: where do people go? The panel is the central data structure of this book, and you reach it by reshaping the raw extracts with discipline. Build a stable panel identifier, keep the wide-versus-long distinction deliberate rather than accidental, and, when the question is about movement, code the transitions: how many participants went from intake to active to graduated, and how many stalled or left.\marginnote{\texttt{reshape} fails loudly when the \texttt{i} and \texttt{j} pair is not unique, which is a gift: the error is really telling you two rows claim the same unit-period. Fix the duplicate at the source rather than forcing the reshape, or the panel inherits a phantom observation.} A transition matrix\index{transition matrix} turns that movement into a table, and the same information becomes a picture that answers the program director's first question, \emph{where do people go?}
+
+To make a transition matrix concrete, we ask where workers land in the wage distribution from one observation to the next. Cut log wage into within-year quartiles, look each worker's next quartile up with a one-period lead, and cross-tabulate now against next as row percentages:
+{\footnotesize
+\begin{verbatim}
+xtile wq = ln_wage, nq(4)
+bysort idcode (year): gen wq_next = wq[_n+1]
+tab wq wq_next, row nofreq
+\end{verbatim}
+}
+Each row of Table~\ref{tab:transition} sums to 100 percent and reads as a probability: given a worker in this quartile now, where is she next? The diagonal is persistence, and it dominates. A worker in the bottom quartile stays there 61 percent of the time and reaches the top only 4 percent of the time; a worker in the top quartile stays 82 percent of the time. This makes sense: wages are sticky, and a single wage ladder does not turn low earners into high earners between survey waves. The off-diagonal mass sits next to the diagonal, so movement, when it happens, is mostly one rung at a time. For an evaluator, that persistence is the counterfactual: a program claiming to move participants up the wage distribution has to beat a world in which most people simply stay where they were, and the matrix quantifies exactly how strong that pull is.
+
+\begin{table}[htbp]
+\centering
+\caption[Wage-quartile transition matrix]{Wage-quartile transition matrix, \texttt{nlswork}: row percentages from a worker's current within-year log-wage quartile (rows) to her quartile at the next observation (columns). The diagonal is persistence. Built by \texttt{ch06\_longitudinal.do}.}
+\label{tab:transition}
+{\footnotesize
+\begin{tabular}{lccccc}
+\hline
+             & \multicolumn{4}{c}{Next quartile} &        \\
+Now          & Q1     & Q2     & Q3     & Q4     & Total  \\
+\hline
+Q1 (low)     & 61.19  & 26.49  &  8.70  &  3.62  & 100.00 \\
+Q2           & 20.44  & 49.51  & 25.01  &  5.03  & 100.00 \\
+Q3           &  6.41  & 14.20  & 58.06  & 21.33  & 100.00 \\
+Q4 (high)    &  3.02  &  3.88  & 10.95  & 82.15  & 100.00 \\
+\hline
+\end{tabular}
+}
+\end{table}
+
+\begin{vizcallout}[Visualization to build: the Sankey flow]
+A Sankey diagram of participant movement through program phases (Intake $\rightarrow$ Active $\rightarrow$ Graduated, with the leaks at each stage). Shape the flow data in Stata with \texttt{trackflow}, then render it as an interactive widget with \texttt{statashiny} (Chapter~\ref{ch:portals}). The width of each stream is the count, so a director sees where participants are lost without reading a table.
+\end{vizcallout}
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{trackflow}]
+\textbf{Proposed program:} \texttt{trackflow}. Reshapes panel data into a source-target flow format and exports the coordinates as JSON ready for interactive Sankey rendering, so participant-flow pictures come straight from the panel.
+\end{kaobox}
+
+\section{Missing data honestly}
+Dropped rows are silent decisions, and making them visible is a replicability duty. Missing values are rarely missing at random, so casewise deletion can quietly bias an estimate; we first diagnose the pattern with \texttt{misstable patterns}\index{misstable@\texttt{misstable}}, then decide. That command tabulates which combinations of variables go missing together, and on a 200-row sample of the panel it prints a compact map of the structure:
+{\footnotesize
+\begin{verbatim}
+misstable patterns ln_wage hours tenure ///
+    union wks_ue msp, frequency
+
+  Missing-value patterns (1 means complete)
+    Frequency |  1  2  3  4
+  ------------+-------------
+           92 |  1  1  1  1
+           59 |  1  1  1  0
+           45 |  1  1  0  1
+            1 |  0  1  0  1
+            1 |  0  1  1  1
+            1 |  1  0  1  0
+            1 |  1  0  1  1
+  ------------+-------------
+          200 |
+  Variables: (1) hours (2) tenure (3) wks_ue (4) union
+\end{verbatim}
+}
+The table already tells the story: \texttt{ln\_wage} and \texttt{msp} never go missing (they are dropped from the pattern list because they are complete), while the gaps concentrate in \texttt{union} and \texttt{wks\_ue}, sometimes together and sometimes alone. The missingness map in Figure~\ref{fig:missmap} makes that same structure legible at a glance, which is what you want before choosing a remedy. Only when missingness is substantial and plausibly related to observed covariates do we reach for multiple imputation\index{multiple imputation} \parencite{rubin1987imputation}, which propagates the added uncertainty into the standard errors rather than pretending the gaps were never there.\marginnote{Rubin's old rule of thumb was that five imputations suffice, but with 30 to 50 percent missing you want closer to the missing-fraction as a percentage, so 40 imputations, to keep the standard errors stable. And impute inside \texttt{mi estimate}, never by filling in a single \enquote{best guess} that hides the uncertainty you just admitted to.}
+
+The command that draws the map is a two-color tile plot: one \texttt{scatter} of the missing cells in maroon over another of the present cells in gray, with rows sorted so missingness clusters at the bottom of the frame:
+{\footnotesize
+\begin{verbatim}
+twoway (scatter rowid col if m==1, mcolor(maroon) ///
+        msymbol(square)) ///
+       (scatter rowid col if m==0, mcolor(gs14)  ///
+        msymbol(square)), ///
+    legend(order(1 "missing" 2 "present"))
+graph export "ch06_missmap.png", replace width(2400)
+\end{verbatim}
+}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{ch06_missmap.png}
+\caption[Missingness map for a longitudinal sample]{Missingness map for 200 observations sampled (seed 20260704) from the shipped \texttt{nlswork} panel. Each row is one observation, each column one variable; maroon marks a missing cell and rows are sorted by how much is missing. The gaps cluster in \texttt{union} and \texttt{wks\_ue}, while \texttt{ln\_wage}, \texttt{hours}, \texttt{tenure}, and \texttt{msp} are effectively complete, which matches the \texttt{misstable patterns} table and tells you casewise deletion here would drop rows on those two variables, not at random. Built by \texttt{ch06\_longitudinal.do}; the command is printed above it.}
+\label{fig:missmap}
+\end{figure}
+
+\begin{vizcallout}[Visualization to build: the missingness map]
+A heatmap with variables as columns and observations as rows, missing cells shaded. \texttt{misstable patterns} gives the structure; a tile plot makes it visible, so you can see whether missingness clusters in particular variables or particular respondents before deciding how to handle it.
+\end{vizcallout}
+
+You make missingness visible so the reader can hold the analysis to account: a reader who can see how much data was missing, and where, can judge the analysis, while a quiet \texttt{drop} hides the decision entirely. Notice how the chapter's threats have converged: a missed link surfaces as a missing cell, selective attrition surfaces as a short panel, and both end up in the same \texttt{misstable} output, which is why \textcite{doidge2019linkage} treat missingness methods and linkage-error methods as one family. The practical payoff of that unification is that the diagnosis you just learned serves every gap in the panel, whatever produced it. Honest missingness handling is the last thing that stands between a clean-looking panel and a trustworthy one.
+
+\paragraph{Where this leaves you.} You can now link files with no common key and know which scorer to reach for, treat crosswalks and lineage as first-class data, refuse bad extracts, declare a panel with \texttt{xtset} and read its shape, code the transitions that answer a director's first question, and handle missingness in the open. Together those make a panel you can defend in an audit, the trustworthy foundation everything in Part~III stands on. You can also quantify the two quiet threats that ride along with any linked panel: rerun a finding at a stricter match threshold to bound its dependence on ambiguous links, and test whether the units your panel loses differ at baseline from the ones it keeps. Chapter~\ref{ch:trust} turns to making the numbers on that panel trustworthy in their own right.
+
+\section*{Exercises}\addcontentsline{toc}{section}{Exercises}
+\begin{enumerate}
+\item \emph{Try it on your own data.} Take two files you already hold that describe the same people but share no clean identifier, clean the names on both sides, and block on your single most reliable field before scoring any pairs. Confirm the block reduces the candidate pairs by counting rows before and after the \texttt{joinby}, and report what fraction of the full cross-product you avoided.
+\item Rerun \texttt{ch06\_longitudinal.do} on the shipped \texttt{nlswork} panel, but change the \texttt{xtset} time variable from \texttt{year} to a constant, and read the error \texttt{xtset} returns. Explain in one sentence why a panel needs a time variable that actually varies within each unit.
+\item Predict, before you run anything, which quartile of the wage distribution is stickiest, then compute the \texttt{nlswork} transition matrix and check your guess against the diagonal in Table~\ref{tab:transition}.
+\item Break the reshape on purpose: duplicate one \texttt{idcode}--\texttt{year} row in the panel, run \texttt{reshape}, and confirm that Stata halts on the non-unique \texttt{i}--\texttt{j} pair rather than building a silent phantom observation.
+\item Run \texttt{misstable patterns} on six variables from a working extract, name the two variables where the gaps concentrate, and decide from the pattern alone whether casewise deletion would drop rows at random.
+\item Repeat the attrition check of Section~\ref{sec:ch06-attrition} on \texttt{nlswork} with a different cutoff: define leavers as women observed only once, compare their first-observation \texttt{ln\_wage} and \texttt{grade} to everyone else's, and write two sentences on whether the selectivity you found strengthens or weakens at the stricter definition.
+\end{enumerate}

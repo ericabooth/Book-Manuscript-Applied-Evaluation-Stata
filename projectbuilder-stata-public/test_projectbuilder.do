@@ -1,198 +1,162 @@
-* test_projectbuilder.do -- test battery for projectbuilder v1.0.0
+* test_projectbuilder.do -- test battery for projectbuilder v2.0.0
 * Run from any scratch directory:  stata-mp -b do test_projectbuilder.do
-* All paths live in globals set here; nothing below is hard-coded.
+* All paths live in globals set here; synthetic data only (no committed
+* .dta/.log).  Judge success by the absence of r(NNN); and failed asserts.
 
 clear all
 set more off
 version 16.0
+set seed 20260707
 
+* ---- where the package lives (edit if you moved it) -------------------
 global pkgroot "/Users/ebooth/Documents/GitHub/Book Manuscript:Applied Evaluation-Stata/projectbuilder-stata-public"
 
-adopath + "$pkgroot"
-set seed 20260706
+* Prepend so this source copy wins over any older installed copy in PLUS.
+adopath ++ "$pkgroot"
 
-* fresh scratch tree for this run (tempfile gives a unique, unused path)
+* ---- fresh scratch tree for this run ----------------------------------
 tempfile tbase
 global work "`tbase'_pbtest"
 mkdir "$work"
 
-di as text "{hline 70}"
-di as text "TEST 1: plain scaffold -- every folder and file exists"
-di as text "{hline 70}"
-projectbuilder demo, path("$work")
-local rproj `"`r(project)'"'
-local rpath `"`r(path)'"'
-assert `"`rproj'"' == "demo"
-assert `"`rpath'"' == `"$work/demo"'
-foreach d in raw clean code output figures {
-    confirm file "$work/demo/`d'/."
-}
-foreach f in 00_control.do 100_ingest.do 200_clean.do ///
-             300_analyze.do 400_visualize.do 500_report.do {
-    confirm file "$work/demo/code/`f'"
-}
-confirm file "$work/demo/README.md"
-
-di as text "{hline 70}"
-di as text "TEST 2: run the generated 00_control.do; globals resolve"
-di as text "{hline 70}"
-do "$work/demo/code/00_control.do"
-assert `"$root"'    == `"$work/demo"'
-assert `"$raw"'     == `"$work/demo/raw"'
-assert `"$clean"'   == `"$work/demo/clean"'
-assert `"$code"'    == `"$work/demo/code"'
-assert `"$output"'  == `"$work/demo/output"'
-assert `"$figures"' == `"$work/demo/figures"'
-foreach g in root raw clean code output figures {
-    confirm file "${`g'}/."
-}
-
-di as text "{hline 70}"
-di as text "TEST 3: re-run on the same target -> refuse to clobber (602)"
-di as text "{hline 70}"
-capture noisily projectbuilder demo, path("$work")
-assert _rc == 602
-* and it changed nothing: the control file is still there
-confirm file "$work/demo/code/00_control.do"
-
-di as text "{hline 70}"
-di as text "TEST 4: Source/Subsource nesting"
-di as text "{hline 70}"
-projectbuilder Agency/Extract, path("$work")
-local rproj `"`r(project)'"'
-local rpath `"`r(path)'"'
-assert `"`rproj'"' == "Agency_Extract"
-assert `"`rpath'"' == `"$work/Agency/Extract"'
-foreach d in raw clean code output figures {
-    confirm file "$work/Agency/Extract/`d'/."
-}
-confirm file "$work/Agency/Extract/code/00_control.do"
-confirm file "$work/Agency/Extract/README.md"
-* a second subsource under the same source nests beside the first
-projectbuilder Agency/Extract2, path("$work")
-confirm file "$work/Agency/Extract2/code/00_control.do"
-
-di as text "{hline 70}"
-di as text "TEST 5: metadata-rich scaffold -- stamps land where promised"
-di as text "{hline 70}"
-
-* helper: load a text file one line per obs into v1 (defined here, after
-* TEST 2, because the generated 00_control.do runs -clear all-, which
-* drops any program defined earlier in this do-file)
+* helper: load a text file one line per obs into v1 (line-oriented read)
 capture program drop loadlines
 program define loadlines
-    * `0' arrives already quoted by the caller; do not re-quote it
     import delimited using `0', clear delimiters("`=char(1)'", asstring) ///
         varnames(nonames) bindquote(nobind) encoding("utf-8")
 end
 
-projectbuilder MetaRich, path("$work")                              ///
-    description("pbtest-marker-4711 county unemployment extracts")  ///
-    url("https://example.org/data/unemp.csv")                       ///
-    topic("labor markets") publicfacing(yes) timeline(annual)       ///
-    othernotes("received from J. Doe on 2026-06-30")                ///
-    outcomes(unemp_rate labor_force) over(county year) descsave
+di as text "{hline 70}"
+di as text "TEST a1: Method B -- scaffold only, every folder and file exists"
+di as text "{hline 70}"
+projectbuilder Demo, path("$work")
+assert `"`r(project)'"' == "Demo"
+assert `"`r(path)'"'    == `"$work/Demo"'
+assert r(nraw)       == 0
+assert r(nconverted) == 0
+assert r(rebuilt)    == 0
 
-* 5a. README carries the description, url, topic, timeline, notes
-loadlines "$work/MetaRich/README.md"
-quietly count if strpos(v1, "pbtest-marker-4711 county unemployment extracts")
+foreach d in 01_raw 01_raw/_archive 01_raw/_converted ///
+             02_cleaned 02_cleaned/_archive ///
+             03_output 03_output/_archive ///
+             _code _code/_archive ///
+             _documentation _documentation/_archive _documentation/website ///
+             _archive {
+    confirm file "$work/Demo/`d'/."
+}
+foreach f in 000_control.do 100_data_download.do 200_data_management.do ///
+             300_labels.do 400_data_profiler.do 500_aggregation.do    ///
+             600_analysis.do {
+    confirm file "$work/Demo/_code/`f'"
+}
+foreach f in index.do _runall.do Readme.md {
+    confirm file "$work/Demo/_documentation/`f'"
+}
+confirm file "$work/Demo/_documentation/website/index.html"
+
+* 01_raw must be empty (no files; subfolders don't count)
+local rl : dir "$work/Demo/01_raw" files "*"
+assert `: word count `rl'' == 0
+
+di as text "{hline 70}"
+di as text "TEST a2: edit a code file, drop data, rebuild -> convert/combine/docs"
+di as text "{hline 70}"
+
+* sentinel line appended to a code file the 'user' has edited
+tempname sfh
+file open `sfh' using "$work/Demo/_code/000_control.do", write text append
+file write `sfh' _n "* SENTINEL-KEEP-ME-4711" _n
+file close `sfh'
+
+* two synthetic CSVs dropped into 01_raw by hand
+sysuse auto, clear
+quietly export delimited using "$work/Demo/01_raw/auto_part1.csv", replace
+keep make price mpg
+quietly export delimited using "$work/Demo/01_raw/auto_part2.csv", replace
+
+projectbuilder Demo, path("$work") rebuild
+assert r(nraw)    == 2
+assert r(rebuilt) == 1
+confirm file "$work/Demo/_documentation/website/index.html"
+
+* the rebuilt documentation mentions both raw files
+loadlines "$work/Demo/_documentation/website/index.html"
+quietly count if strpos(v1, "auto_part1.csv")
 assert r(N) >= 1
-quietly count if strpos(v1, "https://example.org/data/unemp.csv")
-assert r(N) >= 1
-quietly count if strpos(v1, "labor markets")
-assert r(N) >= 1
-quietly count if strpos(v1, "annual")
-assert r(N) >= 1
-quietly count if strpos(v1, "received from J. Doe on 2026-06-30")
+quietly count if strpos(v1, "auto_part2.csv")
 assert r(N) >= 1
 
-* 5b. url() lands as the download-target comment in 100_ingest.do
-loadlines "$work/MetaRich/code/100_ingest.do"
-quietly count if strpos(v1, "https://example.org/data/unemp.csv")
-assert r(N) >= 2   // the recorded comment and the ready-to-uncomment copy line
-
-* 5c. outcomes()/over() land as suggested locals in 300_analyze.do
-loadlines "$work/MetaRich/code/300_analyze.do"
-quietly count if strpos(v1, `"local outcomes "unemp_rate labor_force""')
+* rebuild WITHOUT replace must NOT overwrite the edited code file
+loadlines "$work/Demo/_code/000_control.do"
+quietly count if strpos(v1, "SENTINEL-KEEP-ME-4711")
 assert r(N) == 1
-quietly count if strpos(v1, `"local over     "county year""')
-assert r(N) == 1
 
-* 5d. descsave option writes the commented descsave call in 200_clean.do
-loadlines "$work/MetaRich/code/200_clean.do"
-quietly count if strpos(v1, "descsave")
-assert r(N) >= 1
-
-* 5e. without descsave, 200_clean.do has no descsave call
-loadlines "$work/demo/code/200_clean.do"
-quietly count if strpos(v1, "descsave")
+di as text "{hline 70}"
+di as text "TEST a3: rebuild WITH replace overwrites the code file"
+di as text "{hline 70}"
+projectbuilder Demo, path("$work") rebuild replace
+loadlines "$work/Demo/_code/000_control.do"
+quietly count if strpos(v1, "SENTINEL-KEEP-ME-4711")
 assert r(N) == 0
 
-* 5f. the generated control file contains real $-globals and `locals',
-*     not placeholder artifacts.  Needles are built with char() so the
-*     test itself does not macro-expand them ($root is set by TEST 2).
-loadlines "$work/MetaRich/code/00_control.do"
-quietly count if strpos(v1, "global raw") & strpos(v1, char(36) + "root/raw")
-assert r(N) == 1
-quietly count if strpos(v1, char(36) + "{" + char(96) + "f'}")
-assert r(N) == 1
-quietly count if strpos(v1, "if " + char(96) + "run_all' {")
-assert r(N) == 1
-quietly count if strpos(v1, "local run_all 0")
-assert r(N) == 1
-quietly count if strpos(v1, "~D") | strpos(v1, "~B")
-assert r(N) == 0
+di as text "{hline 70}"
+di as text "TEST b: Method A -- data() copies a folder of files into 01_raw/"
+di as text "{hline 70}"
+mkdir "$work/_src2"
+sysuse auto, clear
+quietly export delimited using "$work/_src2/src_a.csv", replace
+keep make foreign
+quietly export delimited using "$work/_src2/src_b.csv", replace
+projectbuilder Demo2, path("$work") data("$work/_src2") ///
+    description("two synthetic CSVs")
+assert r(nraw) == 2
+confirm file "$work/Demo2/01_raw/src_a.csv"
+confirm file "$work/Demo2/01_raw/src_b.csv"
 
 di as text "{hline 70}"
-di as text "TEST 6: outcomes()/over() capped at 10 with a trim note"
+di as text "TEST c: clobber guard -- rerun without rebuild -> _rc==602"
 di as text "{hline 70}"
-projectbuilder CapTest, path("$work") ///
-    outcomes(o1 o2 o3 o4 o5 o6 o7 o8 o9 o10 o11 o12)
-loadlines "$work/CapTest/code/300_analyze.do"
-quietly count if strpos(v1, "o10")
-assert r(N) >= 1
-quietly count if strpos(v1, "o11")
-assert r(N) == 0
+capture noisily projectbuilder Demo, path("$work")
+assert _rc == 602
+confirm file "$work/Demo/_code/000_control.do"
 
 di as text "{hline 70}"
-di as text "TEST 7: default base path is the current working directory"
+di as text "TEST d: leaf/option validation -> _rc==198"
 di as text "{hline 70}"
-local oldpwd `"`c(pwd)'"'
-quietly cd "$work"
-* compare against c(pwd), not $work: the OS may resolve symlinks
-* (e.g. /var -> /private/var on macOS) when changing directory
-local workres `"`c(pwd)'"'
-projectbuilder PwdDefault
-local rpath `"`r(path)'"'
-assert `"`rpath'"' == `"`workres'/PwdDefault"'
-confirm file "$work/PwdDefault/code/00_control.do"
-quietly cd `"`oldpwd'"'
-
-di as text "{hline 70}"
-di as text "TEST 8: validation errors (all exit 198)"
-di as text "{hline 70}"
-
-* 8a. leaf name with ".."
-capture noisily projectbuilder "bad..leaf", path("$work")
+capture noisily projectbuilder "../evil", path("$work")
+assert _rc == 198
+capture noisily projectbuilder EvilPF, path("$work") publicfacing(maybe)
 assert _rc == 198
 
-* 8b. backslash in the name
-capture noisily projectbuilder "Agency\Sub", path("$work")
-assert _rc == 198
+di as text "{hline 70}"
+di as text "TEST e: Source/Subsource nesting"
+di as text "{hline 70}"
+projectbuilder Agency/Extract, path("$work")
+assert `"`r(project)'"' == "Agency_Extract"
+assert `"`r(path)'"'    == `"$work/Agency/Extract"'
+confirm file "$work/Agency/Extract/_code/000_control.do"
+confirm file "$work/Agency/Extract/_documentation/website/index.html"
 
-* 8c. more than one level of nesting
-capture noisily projectbuilder A/B/C, path("$work")
-assert _rc == 198
-
-* 8d. invalid publicfacing()
-capture noisily projectbuilder BadMeta, path("$work") publicfacing(maybe)
-assert _rc == 198
-
-* 8e. empty subsource
-capture noisily projectbuilder Agency/, path("$work")
-assert _rc == 198
+di as text "{hline 70}"
+di as text "TEST f: the generated 000_control.do runs; its globals are real dirs"
+di as text "{hline 70}"
+* stash test state: the control file runs -clear all-, which drops globals,
+* programs, and adopath additions.
+local W  "$work"
+local PK "$pkgroot"
+do "$work/Demo2/_code/000_control.do"
+assert `"$root"'      == `"`W'/Demo2"'   // NB: $root is stamped absolute
+assert `"$raw"'       == `"`W'/Demo2/01_raw"'
+assert `"$converted"' == `"`W'/Demo2/01_raw/_converted"'
+assert `"$cleaned"'   == `"`W'/Demo2/02_cleaned"'
+assert `"$output"'    == `"`W'/Demo2/03_output"'
+assert `"$code"'      == `"`W'/Demo2/_code"'
+assert `"$docs"'      == `"`W'/Demo2/_documentation"'
+foreach g in root raw converted cleaned output code docs {
+    confirm file "${`g'}/."
+}
 
 di as text ""
 di as text "{hline 70}"
-di as text "projectbuilder: ALL TESTS PASSED"
+di as text "projectbuilder v2.0.0: ALL TESTS PASSED"
 di as text "{hline 70}"

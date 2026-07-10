@@ -1,25 +1,35 @@
-*! version 1.0.0  06jul2026  Eric A. Booth, Sr Researcher, Texas 2036
+*! version 2.0.0  07jul2026  Eric A. Booth, Sr Researcher, Texas 2036
 *! projectbuilder -- scaffold a data-analysis project folder with a
-*!                   numbered do-file pipeline.
-*! Self-contained: every scaffold file is written by this program;
-*! no template folder is required.
-*! Companion package to "Applied Program Evaluation Using Stata".
-*! Cross-OS: uses Stata's mkdir and file commands; no shell calls.
+*!                   numbered do-file pipeline, then (optionally) ingest
+*!                   data, convert it, combine it, and build documentation.
+*!
+*! A generalization of the author's production scaffolding tool: the
+*! organization-locked pieces (shared-drive discovery, a template folder,
+*! a logo fetcher) are gone.  Everything the scaffold needs is written by
+*! this program with -file write-; nothing external is required.
+*!
+*! Cross-OS: uses only Stata's mkdir, copy, cd, and file commands;
+*! no shell calls.  Companion to "Applied Program Evaluation Using Stata".
 *! Support: eric.a.booth@gmail.com
 
 program define projectbuilder, rclass
     version 16
     syntax anything(name=projspec id="source[/subsource]") [, ///
+        PATH(string)         ///
         DEScription(string)  ///
         URL(string)          ///
-        PATH(string)         ///
+        DATA(string)         ///
         TOPIC(string)        ///
         PUBlicfacing(string) ///
         TIMEline(string)     ///
         OTHERnotes(string)   ///
         OUTcomes(string)     ///
         OVer(string)         ///
-        DESCsave]
+        DESCsave             ///
+        REBUILD              ///
+        REPLACE              ///
+        BUILDDOCS            ///
+        NOAUTOconvert]
 
     * ---- validate publicfacing ------------------------------------------
     if !inlist(lower(`"`publicfacing'"'), "", "yes", "no", "unsure") {
@@ -56,7 +66,7 @@ program define projectbuilder, rclass
         local base = substr(`"`base'"', 1, strlen(`"`base'"') - 1)
     }
 
-    * ---- parse source[/subsource] ----------------------------------------
+    * ---- parse source[/subsource] ---------------------------------------
     local projspec = subinstr(`"`projspec'"', char(34), "", .)
     local projspec = strtrim(`"`projspec'"')
     if `"`projspec'"' == "" {
@@ -75,7 +85,7 @@ program define projectbuilder, rclass
         local proj_label `"`leaf'"'
     }
 
-    * ---- validate names (no path tricks) ---------------------------------
+    * ---- validate names (no path tricks) --------------------------------
     if strpos(`"`projspec'"', "..") | strpos(`"`projspec'"', "\") {
         di as err `"projectbuilder: "`projspec'" is not a valid project name (no ".." or "\" allowed)"'
         exit 198
@@ -92,16 +102,26 @@ program define projectbuilder, rclass
     if `"`parent'"' != "" local target `"`base'/`parent'/`leaf'"'
     else                  local target `"`base'/`leaf'"'
 
-    * ---- refuse to clobber an existing target ----------------------------
+    * ---- rebuild vs. fresh scaffold; refuse to clobber ------------------
+    * A fresh call never overwrites an existing project (exit 602).
+    * -rebuild- opts in to working on an existing project; it preserves
+    * any do-file in _code that the user edited unless -replace- is given.
     capture confirm file `"`target'/."'
-    if !_rc {
+    local exists = (_rc == 0)
+    if `exists' & "`rebuild'" == "" {
         di as err `"projectbuilder: target already exists -- `target'"'
         di as err  "                projectbuilder never overwrites an existing project."
-        di as err  "                Rename or move that folder manually, then re-run."
+        di as err  "                Rerun with -rebuild- to refresh it, or rename it and re-run."
         exit 602
     }
+    * writecode=1 means (over)write the numbered do-files; on rebuild we
+    * only write a code file that is missing, unless -replace- is given.
+    local writecode = cond("`rebuild'" != "" & "`replace'" == "", 0, 1)
 
-    * ---- build the folder tree (Stata's mkdir is cross-OS) ---------------
+    if `exists' di as txt `"projectbuilder: rebuilding `target'"'
+    else        di as txt `"projectbuilder: scaffolding `target'"'
+
+    * ---- build the folder tree (Stata's mkdir is cross-OS) --------------
     capture mkdir `"`base'"'
     capture confirm file `"`base'/."'
     if _rc {
@@ -110,276 +130,659 @@ program define projectbuilder, rclass
         exit 601
     }
     if `"`parent'"' != "" capture mkdir `"`base'/`parent'"'
-    mkdir `"`target'"'
-    foreach sub in raw clean code output figures {
-        mkdir `"`target'/`sub'"'
+    capture mkdir `"`target'"'
+    foreach sub in 01_raw 02_cleaned 03_output _code _documentation _archive {
+        capture mkdir `"`target'/`sub'"'
     }
-    di as txt `"projectbuilder: scaffolding `target'"'
+    capture mkdir `"`target'/01_raw/_archive"'
+    capture mkdir `"`target'/01_raw/_converted"'
+    capture mkdir `"`target'/02_cleaned/_archive"'
+    capture mkdir `"`target'/03_output/_archive"'
+    capture mkdir `"`target'/_code/_archive"'
+    capture mkdir `"`target'/_documentation/_archive"'
+    capture mkdir `"`target'/_documentation/website"'
 
-    * ---- values stamped into the scaffold files --------------------------
+    * ---- convenient path locals -----------------------------------------
+    local raw       `"`target'/01_raw"'
+    local converted `"`target'/01_raw/_converted"'
+    local cleaned   `"`target'/02_cleaned"'
+    local output    `"`target'/03_output"'
+    local code      `"`target'/_code"'
+    local docs      `"`target'/_documentation"'
+    local web       `"`docs'/website"'
+
+    * ---- values stamped into the scaffold files -------------------------
     local today : di %tdCCYY-NN-DD daily(`"`c(current_date)'"', "DMY")
     local author `"`c(username)'"'
+    local sver = c(stata_version)
     local descfull `"`description'"'
     if `"`descfull'"' == "" local descfull "(add a one-line description of the project here)"
-    local url_readme `"`url'"'
-    if `"`url_readme'"' == "" local url_readme "(none recorded)"
+    local url_show `"`url'"'
+    if `"`url_show'"' == "" local url_show "(none recorded)"
     foreach m in topic publicfacing timeline othernotes {
-        local `m'_readme `"``m''"'
-        if `"``m'_readme'"' == "" local `m'_readme "(not recorded)"
+        local `m'_show `"``m''"'
+        if `"``m'_show'"' == "" local `m'_show "(not recorded)"
     }
+    local gh "https://raw.githubusercontent.com/ericabooth"
+    local urlbase ""
+    if `"`url'"' != "" pb_base urlbase `"`url'"'
 
-    * In the projectbuilder_wl helper, ~D becomes a literal $ and ~B a
-    * literal backtick in the written file.  Values such as `target' and
-    * `descfull' expand here, at scaffold time -- which is the point.
-
-    * ---- code/00_control.do ----------------------------------------------
+    *=====================================================================*
+    * WRITE THE NUMBERED PIPELINE (do-files in _code)                     *
+    * Each file is guarded: on -rebuild- without -replace-, a file that   *
+    * already exists (i.e., the user may have edited it) is left alone.   *
+    *=====================================================================*
     tempname fh
-    file open `fh' using `"`target'/code/00_control.do"', write text replace
-    projectbuilder_wl `fh' `"*==============================================================="'
-    projectbuilder_wl `fh' `"* 00_control.do -- `proj_label'"'
-    projectbuilder_wl `fh' `"* Created `today' by `author' (scaffolded by projectbuilder)"'
-    projectbuilder_wl `fh' `"* The control file: every path in one place."'
-    projectbuilder_wl `fh' `"*==============================================================="'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"clear all"'
-    projectbuilder_wl `fh' `"version `c(stata_version)'      // pin the language version"'
-    projectbuilder_wl `fh' `"set more off"'
-    projectbuilder_wl `fh' `"set varabbrev off    // abbreviations hide bugs"'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"*---------------------------------------------------------------"'
-    projectbuilder_wl `fh' `"* THE ONE PLACE YOU EDIT: the project root."'
-    projectbuilder_wl `fh' `"* projectbuilder stamped the absolute path it scaffolded."'
-    projectbuilder_wl `fh' `"* If this project ever moves -- new machine, new teammate,"'
-    projectbuilder_wl `fh' `"* new drive -- edit ONLY the global root line below."'
-    projectbuilder_wl `fh' `"*---------------------------------------------------------------"'
-    projectbuilder_wl `fh' `"global root "`target'""'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"* Derived from root; you never touch these."'
-    projectbuilder_wl `fh' `"global raw     "~Droot/raw"       // untouched downloads"'
-    projectbuilder_wl `fh' `"global clean   "~Droot/clean"     // analysis-ready data"'
-    projectbuilder_wl `fh' `"global code    "~Droot/code"      // the do-files"'
-    projectbuilder_wl `fh' `"global output  "~Droot/output"    // logs and tables"'
-    projectbuilder_wl `fh' `"global figures "~Droot/figures"   // exported graphs"'
-    projectbuilder_wl `fh' `"foreach f in raw clean output figures {"'
-    projectbuilder_wl `fh' `"    capture mkdir "~D{~Bf'}"      // safe to rerun"'
-    projectbuilder_wl `fh' `"}"'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"* set scheme stcolor    // uncomment to pin one graphics style"'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"*---------------------------------------------------------------"'
-    projectbuilder_wl `fh' `"* Optional: rebuild the whole pipeline, in order."'
-    projectbuilder_wl `fh' `"*---------------------------------------------------------------"'
-    projectbuilder_wl `fh' `"local run_all 0    // flip to 1 to rebuild everything"'
-    projectbuilder_wl `fh' `"if ~Brun_all' {"'
-    projectbuilder_wl `fh' `"    do "~Dcode/100_ingest.do""'
-    projectbuilder_wl `fh' `"    do "~Dcode/200_clean.do""'
-    projectbuilder_wl `fh' `"    do "~Dcode/300_analyze.do""'
-    projectbuilder_wl `fh' `"    do "~Dcode/400_visualize.do""'
-    projectbuilder_wl `fh' `"    do "~Dcode/500_report.do""'
-    projectbuilder_wl `fh' `"}"'
-    file close `fh'
 
-    * ---- code/100_ingest.do -----------------------------------------------
-    file open `fh' using `"`target'/code/100_ingest.do"', write text replace
-    projectbuilder_wl `fh' `"*==============================================================="'
-    projectbuilder_wl `fh' `"* 100_ingest.do -- `proj_label'"'
-    projectbuilder_wl `fh' `"* Single job: fetch or copy the raw source files into ~Draw."'
-    projectbuilder_wl `fh' `"* Raw files are write-once: downloaded, never edited by hand."'
-    projectbuilder_wl `fh' `"* Numbered by hundreds on purpose -- a new step slots in as"'
-    projectbuilder_wl `fh' `"* 150_ without renaming the rest."'
-    projectbuilder_wl `fh' `"*==============================================================="'
-    projectbuilder_wl `fh' `"* Globals (~Droot, ~Draw, ~Dclean, ~Doutput, ~Dfigures) come"'
-    projectbuilder_wl `fh' `"* from 00_control.do -- run that first."'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"* Suggested per-run log (dated, so runs never overwrite):"'
-    projectbuilder_wl `fh' `"* log using "~Doutput/100_ingest_~DS_DATE.log", replace text"'
-    projectbuilder_wl `fh' `""'
+    * ---- _code/000_control.do -------------------------------------------
+    pb_guard dowrite `writecode' `"`code'/000_control.do"'
+    if `dowrite' {
+        quietly file open `fh' using `"`code'/000_control.do"', write text replace
+        pb_wl `fh' `"*==============================================================="'
+        pb_wl `fh' `"* 000_control.do -- `proj_label'"'
+        pb_wl `fh' `"* Created `today' by `author' (scaffolded by projectbuilder v2.0.0)"'
+        pb_wl `fh' `"* The control file: every path in one place."'
+        pb_wl `fh' `"*==============================================================="'
+        pb_wl `fh' `""'
+        pb_wl `fh' `"clear all"'
+        pb_wl `fh' `"version `sver'      // pin the language version"'
+        pb_wl `fh' `"set more off"'
+        pb_wl `fh' `"set varabbrev off    // abbreviations hide bugs"'
+        pb_wl `fh' `""'
+        pb_wl `fh' `"*---------------------------------------------------------------"'
+        pb_wl `fh' `"* >>> THE ONE PLACE YOU EDIT: the project root. <<<"'
+        pb_wl `fh' `"* projectbuilder stamped the absolute path it scaffolded below."'
+        pb_wl `fh' `"* If this project ever MOVES -- new machine, new teammate, new"'
+        pb_wl `fh' `"* drive -- edit ONLY the global root line, then rerun this file."'
+        pb_wl `fh' `"*---------------------------------------------------------------"'
+        pb_wl `fh' `"global root "`target'""'
+        pb_wl `fh' `""'
+        pb_wl `fh' `"* Derived from root; you should not need to touch these."'
+        pb_wl `fh' `"global raw       "~Droot/01_raw"            // untouched source files"'
+        pb_wl `fh' `"global converted "~Droot/01_raw/_converted" // raw -> .dta, one per file"'
+        pb_wl `fh' `"global cleaned   "~Droot/02_cleaned"        // the analytic file(s)"'
+        pb_wl `fh' `"global output    "~Droot/03_output"         // logs, tables, exhibits"'
+        pb_wl `fh' `"global code      "~Droot/_code"             // the do-files"'
+        pb_wl `fh' `"global docs      "~Droot/_documentation"    // the documentation site"'
+        pb_wl `fh' `"foreach d in raw converted cleaned output code docs {"'
+        pb_wl `fh' `"    capture mkdir "~D{~Bd'}"     // safe to rerun"'
+        pb_wl `fh' `"}"'
+        pb_wl `fh' `""'
+        pb_wl `fh' `"* set scheme stcolor    // uncomment to pin one graphics style"'
+        pb_wl `fh' `""'
+        pb_wl `fh' `"*---------------------------------------------------------------"'
+        pb_wl `fh' `"* Optional: run the whole numbered pipeline, in order."'
+        pb_wl `fh' `"*---------------------------------------------------------------"'
+        pb_wl `fh' `"local run_all 0    // flip to 1 to run every numbered step"'
+        pb_wl `fh' `"if ~Brun_all' {"'
+        pb_wl `fh' `"    do "~Dcode/100_data_download.do""'
+        pb_wl `fh' `"    do "~Dcode/200_data_management.do""'
+        pb_wl `fh' `"    do "~Dcode/300_labels.do""'
+        pb_wl `fh' `"    do "~Dcode/400_data_profiler.do""'
+        pb_wl `fh' `"    do "~Dcode/500_aggregation.do""'
+        pb_wl `fh' `"    do "~Dcode/600_analysis.do""'
+        pb_wl `fh' `"}"'
+        file close `fh'
+    }
+
+    * ---- _code/100_data_download.do -------------------------------------
+    pb_guard dowrite `writecode' `"`code'/100_data_download.do"'
+    if `dowrite' {
+        quietly file open `fh' using `"`code'/100_data_download.do"', write text replace
+        pb_wl `fh' `"*==============================================================="'
+        pb_wl `fh' `"* 100_data_download.do -- `proj_label'"'
+        pb_wl `fh' `"* Single job: get the raw source files into ~Draw."'
+        pb_wl `fh' `"* Raw files are write-once: downloaded/copied, never edited by hand."'
+        pb_wl `fh' `"*==============================================================="'
+        pb_wl `fh' `"* Globals come from 000_control.do -- run that first."'
+        pb_wl `fh' `""'
+        if `"`url'"' != "" {
+            pb_wl `fh' `"* Source URL recorded from the url() option:"'
+            pb_wl `fh' `"*   `url'"'
+            pb_wl `fh' `"* Fetch it with Stata's -copy- (works for http/https URLs):"'
+            pb_wl `fh' `"capture copy "`url'" "~Draw/`urlbase'", replace"'
+            pb_wl `fh' `"if _rc di as txt "100: could not fetch the URL; check the address or drop the file into ~Draw by hand.""'
+        }
+        else {
+            pb_wl `fh' `"* No source URL was recorded at scaffold time."'
+            pb_wl `fh' `"* If the source lives at a URL, note it here and fetch with -copy-:"'
+            pb_wl `fh' `"* copy "https://example.com/data.csv" "~Draw/data.csv", replace"'
+            pb_wl `fh' `"* If the files arrive by hand (email, thumb drive, shared folder),"'
+            pb_wl `fh' `"* drop them into ~Draw and record who sent them, and when, below."'
+        }
+        pb_wl `fh' `""'
+        pb_wl `fh' `"* Provenance notes (who/where/when the raw files came from):"'
+        pb_wl `fh' `"*   `othernotes_show'"'
+        file close `fh'
+    }
+
+    * ---- _code/200_data_management.do -----------------------------------
+    pb_guard dowrite `writecode' `"`code'/200_data_management.do"'
+    if `dowrite' {
+        quietly file open `fh' using `"`code'/200_data_management.do"', write text replace
+        pb_wl `fh' `"*==============================================================="'
+        pb_wl `fh' `"* 200_data_management.do -- `proj_label'"'
+        pb_wl `fh' `"* Single job: turn the raw drop in ~Draw into ONE analytic file"'
+        pb_wl `fh' `"* in ~Dcleaned, in two passes:"'
+        pb_wl `fh' `"*   Pass 1  convertanything : every csv/xlsx/dta in ~Draw -> .dta"'
+        pb_wl `fh' `"*                             in ~Dconverted (names cleaned)."'
+        pb_wl `fh' `"*   Pass 2  combineall      : append those .dta into the analytic file."'
+        pb_wl `fh' `"* projectbuilder runs both passes for you at scaffold/rebuild time"'
+        pb_wl `fh' `"* when the packages are installed; this file is the reproducible"'
+        pb_wl `fh' `"* record of what it ran (and a teaching artifact if they are not)."'
+        pb_wl `fh' `"*==============================================================="'
+        pb_wl `fh' `"* Globals come from 000_control.do -- run that first."'
+        pb_wl `fh' `""'
+        pb_wl `fh' `"* --- Pass 1: convert every raw file to .dta -----------------------"'
+        pb_wl `fh' `"capture which convertanything"'
+        pb_wl `fh' `"if _rc {"'
+        pb_wl `fh' `"    di as txt "convertanything not installed. Install it with:""'
+        pb_wl `fh' `"    di as txt `"    net install convertanything, from("`gh'/convertanything-stata-public/main/") replace"'"'
+        pb_wl `fh' `"}"'
+        pb_wl `fh' `"else {"'
+        pb_wl `fh' `"    convertanything using "~Draw", recursive ///"'
+        pb_wl `fh' `"        saving("~Dconverted") replace clear cleannames compress"'
+        pb_wl `fh' `"}"'
+        pb_wl `fh' `""'
+        pb_wl `fh' `"* --- Pass 2: append the converted files into the analytic file ----"'
+        pb_wl `fh' `"capture which combineall"'
+        pb_wl `fh' `"if _rc {"'
+        pb_wl `fh' `"    di as txt "combineall not installed. Install it with:""'
+        pb_wl `fh' `"    di as txt `"    net install combineall, from("`gh'/combineall-stata-public/main/") replace"'"'
+        pb_wl `fh' `"}"'
+        pb_wl `fh' `"else {"'
+        pb_wl `fh' `"    capture noisily combineall using "~Dcleaned/`proj_label'_analytic", ///"'
+        pb_wl `fh' `"        cmethod(append) directory("~Dconverted") filetype(dta) replace"'
+        pb_wl `fh' `"    if _rc di as txt "combineall found nothing to append; run Pass 1 first.""'
+        pb_wl `fh' `"}"'
+        pb_wl `fh' `""'
+        pb_wl `fh' `"* From here, load the analytic file and reshape/merge as the project needs:"'
+        pb_wl `fh' `"* use "~Dcleaned/`proj_label'_analytic.dta", clear"'
+        file close `fh'
+    }
+
+    * ---- _code/300_labels.do --------------------------------------------
+    pb_guard dowrite `writecode' `"`code'/300_labels.do"'
+    if `dowrite' {
+        quietly file open `fh' using `"`code'/300_labels.do"', write text replace
+        pb_wl `fh' `"*==============================================================="'
+        pb_wl `fh' `"* 300_labels.do -- `proj_label'"'
+        pb_wl `fh' `"* Single job: variable/value labels and provenance on the analytic"'
+        pb_wl `fh' `"* file, plus (optionally) a codebook export for the documentation."'
+        pb_wl `fh' `"*==============================================================="'
+        pb_wl `fh' `"* Globals come from 000_control.do -- run that first."'
+        pb_wl `fh' `""'
+        pb_wl `fh' `"use "~Dcleaned/`proj_label'_analytic.dta", clear"'
+        pb_wl `fh' `""'
+        pb_wl `fh' `"* label variable somevar "Human-readable label""'
+        pb_wl `fh' `"* label define yesno 0 "No" 1 "Yes""'
+        pb_wl `fh' `"* label values flagvar yesno"'
+        pb_wl `fh' `""'
+        pb_wl `fh' `"* --- Source lineage: tag each variable with the raw file it came"'
+        pb_wl `fh' `"* from, then make that lineage searchable (author's -srctag-/-srcfind-)."'
+        pb_wl `fh' `"capture which srctag"'
+        pb_wl `fh' `"if _rc {"'
+        pb_wl `fh' `"    di as txt "srctag/srcfind not installed (author's GitHub); skipping lineage tags.""'
+        pb_wl `fh' `"}"'
+        pb_wl `fh' `"else {"'
+        pb_wl `fh' `"    * srctag, source("~Draw") // record which raw file/vintage each var came from"'
+        pb_wl `fh' `"    * srcfind somevar         // later: search a variable's source lineage"'
+        pb_wl `fh' `"}"'
+        if "`descsave'" != "" {
+            pb_wl `fh' `""'
+            pb_wl `fh' `"* --- Codebook export via -descsave- (SSC: ssc install descsave) ----"'
+            pb_wl `fh' `"capture which descsave"'
+            pb_wl `fh' `"if _rc {"'
+            pb_wl `fh' `"    di as txt "descsave not installed. Install it with:  ssc install descsave""'
+            pb_wl `fh' `"}"'
+            pb_wl `fh' `"else {"'
+            pb_wl `fh' `"    descsave using "~Ddocs/`proj_label'_codebook.xlsx", ///"'
+            pb_wl `fh' `"        list(name type format varlab vallab) replace"'
+            pb_wl `fh' `"}"'
+        }
+        pb_wl `fh' `""'
+        pb_wl `fh' `"compress"'
+        pb_wl `fh' `"save "~Dcleaned/`proj_label'_analytic.dta", replace"'
+        file close `fh'
+    }
+
+    * ---- _code/400_data_profiler.do -------------------------------------
+    pb_guard dowrite `writecode' `"`code'/400_data_profiler.do"'
+    if `dowrite' {
+        quietly file open `fh' using `"`code'/400_data_profiler.do"', write text replace
+        pb_wl `fh' `"*==============================================================="'
+        pb_wl `fh' `"* 400_data_profiler.do -- `proj_label'"'
+        pb_wl `fh' `"* Single job: profile the analytic file -- distributions of the"'
+        pb_wl `fh' `"* outcome variables, optionally broken down by the -over- variables."'
+        pb_wl `fh' `"*==============================================================="'
+        pb_wl `fh' `"* Globals come from 000_control.do -- run that first."'
+        pb_wl `fh' `""'
+        pb_wl `fh' `"use "~Dcleaned/`proj_label'_analytic.dta", clear"'
+        pb_wl `fh' `""'
+        pb_wl `fh' `"local outcomes "`outcomes'"   // recorded from outcomes(); edit freely"'
+        pb_wl `fh' `"local over     "`over'"   // recorded from over(); edit freely"'
+        pb_wl `fh' `""'
+        pb_wl `fh' `"foreach y of local outcomes {"'
+        pb_wl `fh' `"    capture confirm variable ~By'"'
+        pb_wl `fh' `"    if _rc continue          // silently skip vars not in this file"'
+        pb_wl `fh' `"    summarize ~By', detail"'
+        pb_wl `fh' `"    foreach g of local over {"'
+        pb_wl `fh' `"        capture confirm variable ~Bg'"'
+        pb_wl `fh' `"        if _rc continue"'
+        pb_wl `fh' `"        table ~Bg', statistic(mean ~By') statistic(count ~By')"'
+        pb_wl `fh' `"    }"'
+        pb_wl `fh' `"}"'
+        file close `fh'
+    }
+
+    * ---- _code/500_aggregation.do ---------------------------------------
+    pb_guard dowrite `writecode' `"`code'/500_aggregation.do"'
+    if `dowrite' {
+        quietly file open `fh' using `"`code'/500_aggregation.do"', write text replace
+        pb_wl `fh' `"*==============================================================="'
+        pb_wl `fh' `"* 500_aggregation.do -- `proj_label'"'
+        pb_wl `fh' `"* Single job: build the aggregated/collapsed tables the analysis"'
+        pb_wl `fh' `"* needs (e.g., one row per unit-period), written to ~Dcleaned."'
+        pb_wl `fh' `"*==============================================================="'
+        pb_wl `fh' `"* Globals come from 000_control.do -- run that first."'
+        pb_wl `fh' `""'
+        pb_wl `fh' `"use "~Dcleaned/`proj_label'_analytic.dta", clear"'
+        pb_wl `fh' `""'
+        pb_wl `fh' `"* Typical shape of this step:"'
+        pb_wl `fh' `"* collapse (mean) `outcomes', by(`over')"'
+        pb_wl `fh' `"* save "~Dcleaned/`proj_label'_agg.dta", replace"'
+        file close `fh'
+    }
+
+    * ---- _code/600_analysis.do ------------------------------------------
+    pb_guard dowrite `writecode' `"`code'/600_analysis.do"'
+    if `dowrite' {
+        quietly file open `fh' using `"`code'/600_analysis.do"', write text replace
+        pb_wl `fh' `"*==============================================================="'
+        pb_wl `fh' `"* 600_analysis.do -- `proj_label'"'
+        pb_wl `fh' `"* Single job: the analysis itself -- models, estimates, and the"'
+        pb_wl `fh' `"* tables/figures for the deliverable, written to ~Doutput."'
+        pb_wl `fh' `"*==============================================================="'
+        pb_wl `fh' `"* Globals come from 000_control.do -- run that first."'
+        pb_wl `fh' `""'
+        pb_wl `fh' `"use "~Dcleaned/`proj_label'_analytic.dta", clear"'
+        pb_wl `fh' `""'
+        pb_wl `fh' `"* Suggested per-run log (dated, so runs never overwrite):"'
+        pb_wl `fh' `"* log using "~Doutput/600_analysis_~DS_DATE.log", replace text"'
+        pb_wl `fh' `""'
+        pb_wl `fh' `"* ... regress / logit / margins / graph / collect export ..."'
+        pb_wl `fh' `"* graph export "~Doutput/fig01.png", replace width(2400)"'
+        pb_wl `fh' `""'
+        pb_wl `fh' `"* capture log close"'
+        file close `fh'
+    }
+
+    *=====================================================================*
+    * DOCUMENTATION SOURCES (index.do, _runall.do)                        *
+    * Guarded like code: these are do-files the user may customize.       *
+    *=====================================================================*
+
+    * ---- _documentation/index.do ----------------------------------------
+    pb_guard dowrite `writecode' `"`docs'/index.do"'
+    if `dowrite' {
+        quietly file open `fh' using `"`docs'/index.do"', write text replace
+        pb_wl `fh' `"*==============================================================="'
+        pb_wl `fh' `"* index.do -- documentation source for `proj_label'"'
+        pb_wl `fh' `"* Rendered to website/index.html by _runall.do (needs webdoc2)."'
+        pb_wl `fh' `"* If webdoc2 is absent, projectbuilder writes a plain index.html"'
+        pb_wl `fh' `"* directly, so the documentation always exists."'
+        pb_wl `fh' `"*==============================================================="'
+        pb_wl `fh' `""'
+        pb_wl `fh' `"* Build it with:  webdoc2 "index.do"   (see _runall.do)"'
+        pb_wl `fh' `"* Content subcommands: wdinit, wputh1, wput (edit freely)."'
+        pb_wl `fh' `""'
+        pb_wl `fh' `"wdinit index, replace"'
+        pb_wl `fh' `"wputh1 `proj_label'"'
+        pb_wl `fh' `"wput `descfull'"'
+        pb_wl `fh' `"wput <b>Source URL:</b> `url_show'"'
+        pb_wl `fh' `"wput <b>Topic:</b> `topic_show'"'
+        pb_wl `fh' `"wput <b>Public-facing:</b> `publicfacing_show'"'
+        pb_wl `fh' `"wput <b>Refresh timeline:</b> `timeline_show'"'
+        pb_wl `fh' `"wput <b>Other notes:</b> `othernotes_show'"'
+        file close `fh'
+    }
+
+    * ---- _documentation/_runall.do --------------------------------------
+    pb_guard dowrite `writecode' `"`docs'/_runall.do"'
+    if `dowrite' {
+        quietly file open `fh' using `"`docs'/_runall.do"', write text replace
+        pb_wl `fh' `"*==============================================================="'
+        pb_wl `fh' `"* _runall.do -- build website/index.html for `proj_label'"'
+        pb_wl `fh' `"*==============================================================="'
+        pb_wl `fh' `"* Prettier docs use webdoc2 (author's GitHub; needs -ssc install webdoc-)."'
+        pb_wl `fh' `"* projectbuilder always writes website/index.html directly as a"'
+        pb_wl `fh' `"* fallback; this renders the webdoc2 version when it is available."'
+        pb_wl `fh' `"capture which webdoc2"'
+        pb_wl `fh' `"if _rc {"'
+        pb_wl `fh' `"    di as txt "webdoc2 not installed; using the built-in website/index.html.""'
+        pb_wl `fh' `"    di as txt "  ssc install webdoc""'
+        pb_wl `fh' `"    di as txt `"  net install webdoc2, from("`gh'/webdoc2-stata-public/main/") replace"'"'
+        pb_wl `fh' `"}"'
+        pb_wl `fh' `"else {"'
+        pb_wl `fh' `"    * cd so webdoc2 finds index.do and writes index.html beside it"'
+        pb_wl `fh' `"    cd "~Ddocs""'
+        pb_wl `fh' `"    capture noisily webdoc2 "index.do""'
+        pb_wl `fh' `"    if _rc di as txt "webdoc2 render skipped; the built-in website/index.html remains.""'
+        pb_wl `fh' `"}"'
+        file close `fh'
+    }
+
+    *=====================================================================*
+    * METHOD A: INGEST DATA NOW  (data() and/or url())                    *
+    *=====================================================================*
+    if `"`data'"' != "" {
+        local dsrc `"`data'"'
+        if inlist(substr(`"`dsrc'"', -1, 1), "/", "\") {
+            local dsrc = substr(`"`dsrc'"', 1, strlen(`"`dsrc'"') - 1)
+        }
+        capture confirm file `"`dsrc'/."'
+        if !_rc {
+            * a directory: copy every (non-hidden) file into 01_raw/
+            local dfiles : dir `"`dsrc'"' files "*"
+            local ncopy = 0
+            foreach f of local dfiles {
+                if substr(`"`f'"', 1, 1) == "." continue
+                capture copy `"`dsrc'/`f'"' `"`raw'/`f'"', replace
+                if !_rc local ++ncopy
+            }
+            di as txt `"projectbuilder: copied `ncopy' file(s) from `dsrc' into 01_raw/"'
+        }
+        else {
+            capture confirm file `"`dsrc'"'
+            if !_rc {
+                pb_base bn `"`dsrc'"'
+                copy `"`dsrc'"' `"`raw'/`bn'"', replace
+                di as txt `"projectbuilder: copied 1 file into 01_raw/ (`bn')"'
+            }
+            else {
+                di as txt `"projectbuilder: data("`data'") not found; nothing copied into 01_raw/."'
+            }
+        }
+    }
     if `"`url'"' != "" {
-        projectbuilder_wl `fh' `"* Download target (recorded from the url() option):"'
-        projectbuilder_wl `fh' `"*   `url'"'
-        projectbuilder_wl `fh' `"* Fetch it with Stata's -copy- (works for http/https URLs):"'
-        projectbuilder_wl `fh' `"* copy "`url'" "~Draw/rawfile.ext", replace"'
+        local ubn `"`urlbase'"'
+        capture copy `"`url'"' `"`raw'/`ubn'"', replace
+        if !_rc di as txt `"projectbuilder: fetched `url' into 01_raw/ (`ubn')"'
+        else    di as txt `"projectbuilder: url() not reachable now; the fetch is written into 100_data_download.do to run later."'
     }
-    else {
-        projectbuilder_wl `fh' `"* No source URL was recorded at scaffold time."'
-        projectbuilder_wl `fh' `"* If the source lives at a URL, note it here and fetch with -copy-:"'
-        projectbuilder_wl `fh' `"* copy "https://example.com/data.csv" "~Draw/data.csv", replace"'
-        projectbuilder_wl `fh' `"* If the files arrive by hand (email, thumb drive), drop them"'
-        projectbuilder_wl `fh' `"* into ~Draw and record who sent them and when in README.md."'
+
+    * ---- count raw files -------------------------------------------------
+    pb_count nraw `"`raw'"' "*"
+
+    *=====================================================================*
+    * AUTO-PASS: convertanything -> combineall over 01_raw/               *
+    * (projectbuilder's own run; the do-file holds the reproducible copy) *
+    *=====================================================================*
+    if `nraw' > 0 & "`noautoconvert'" == "" {
+        capture which convertanything
+        if _rc {
+            di as txt "projectbuilder: convertanything not installed; skipping auto-convert."
+            di as txt `"                install: net install convertanything, from("`gh'/convertanything-stata-public/main/") replace"'
+        }
+        else {
+            di as txt "projectbuilder: converting 01_raw/ -> 01_raw/_converted/ ..."
+            capture noisily convertanything using `"`raw'"', recursive ///
+                saving(`"`converted'"') replace clear cleannames compress
+        }
+        * combine only if there is something converted to combine
+        pb_count nconverted `"`converted'"' "*.dta"
+        if `nconverted' > 0 {
+            capture which combineall
+            if _rc {
+                di as txt "projectbuilder: combineall not installed; skipping auto-combine."
+                di as txt `"                install: net install combineall, from("`gh'/combineall-stata-public/main/") replace"'
+            }
+            else {
+                di as txt "projectbuilder: appending converted files -> 02_cleaned/`proj_label'_analytic.dta ..."
+                capture noisily combineall using "`cleaned'/`proj_label'_analytic", ///
+                    cmethod(append) directory("`converted'") filetype(dta) replace
+            }
+        }
+        else {
+            di as txt "projectbuilder: nothing converted yet; skipping auto-combine."
+            di as txt "                (install convertanything, or add .dta files to 01_raw/_converted/)."
+        }
     }
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"* capture log close"'
-    file close `fh'
-
-    * ---- code/200_clean.do --------------------------------------------------
-    file open `fh' using `"`target'/code/200_clean.do"', write text replace
-    projectbuilder_wl `fh' `"*==============================================================="'
-    projectbuilder_wl `fh' `"* 200_clean.do -- `proj_label'"'
-    projectbuilder_wl `fh' `"* Single job: read from ~Draw, write analysis-ready .dta files"'
-    projectbuilder_wl `fh' `"* to ~Dclean.  Every transformation starts from the untouched"'
-    projectbuilder_wl `fh' `"* raw files, so a cleaning bug is one rerun away from repair."'
-    projectbuilder_wl `fh' `"*==============================================================="'
-    projectbuilder_wl `fh' `"* Globals come from 00_control.do -- run that first."'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"* Suggested per-run log (dated, so runs never overwrite):"'
-    projectbuilder_wl `fh' `"* log using "~Doutput/200_clean_~DS_DATE.log", replace text"'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"* Typical shape of this step:"'
-    projectbuilder_wl `fh' `"* import delimited "~Draw/data.csv", clear varnames(1)"'
-    projectbuilder_wl `fh' `"* ... rename, destring, label, check ..."'
-    projectbuilder_wl `fh' `"* compress"'
-    projectbuilder_wl `fh' `"* save "~Dclean/data.dta", replace"'
-    if "`descsave'" != "" {
-        projectbuilder_wl `fh' `""'
-        projectbuilder_wl `fh' `"* Codebook export via -descsave- (install once: ssc install descsave):"'
-        projectbuilder_wl `fh' `"* descsave, list(name type format vallab varlab) ///"'
-        projectbuilder_wl `fh' `"*     saving("~Doutput/codebook.dta", replace)"'
+    else if `nraw' == 0 {
+        di as txt "projectbuilder: 01_raw/ is empty -- scaffold only (Method B)."
     }
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"* capture log close"'
-    file close `fh'
 
-    * ---- code/300_analyze.do ------------------------------------------------
-    file open `fh' using `"`target'/code/300_analyze.do"', write text replace
-    projectbuilder_wl `fh' `"*==============================================================="'
-    projectbuilder_wl `fh' `"* 300_analyze.do -- `proj_label'"'
-    projectbuilder_wl `fh' `"* Single job: read from ~Dclean, run the analysis, write tables"'
-    projectbuilder_wl `fh' `"* to ~Doutput.  No cleaning here -- if a variable needs fixing,"'
-    projectbuilder_wl `fh' `"* fix it in 200_clean.do and rerun."'
-    projectbuilder_wl `fh' `"*==============================================================="'
-    projectbuilder_wl `fh' `"* Globals come from 00_control.do -- run that first."'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"* Suggested per-run log (dated, so runs never overwrite):"'
-    projectbuilder_wl `fh' `"* log using "~Doutput/300_analyze_~DS_DATE.log", replace text"'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"* Suggested analysis locals (recorded from the outcomes() and"'
-    projectbuilder_wl `fh' `"* over() options at scaffold time; edit freely):"'
-    projectbuilder_wl `fh' `"local outcomes "`outcomes'"   // outcome variables to summarize"'
-    projectbuilder_wl `fh' `"local over     "`over'"   // by-variables for breakdowns"'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"* Typical shape of this step:"'
-    projectbuilder_wl `fh' `"* use "~Dclean/data.dta", clear"'
-    projectbuilder_wl `fh' `"* foreach y of local outcomes {"'
-    projectbuilder_wl `fh' `"*     foreach g of local over {"'
-    projectbuilder_wl `fh' `"*         table ~Bg', statistic(mean ~By') statistic(count ~By')"'
-    projectbuilder_wl `fh' `"*     }"'
-    projectbuilder_wl `fh' `"* }"'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"* capture log close"'
-    file close `fh'
+    * ---- count converted files ------------------------------------------
+    pb_count nconverted `"`converted'"' "*.dta"
 
-    * ---- code/400_visualize.do ----------------------------------------------
-    file open `fh' using `"`target'/code/400_visualize.do"', write text replace
-    projectbuilder_wl `fh' `"*==============================================================="'
-    projectbuilder_wl `fh' `"* 400_visualize.do -- `proj_label'"'
-    projectbuilder_wl `fh' `"* Single job: read from ~Dclean (or ~Doutput), export graphs"'
-    projectbuilder_wl `fh' `"* to ~Dfigures.  Every figure the report uses is rebuilt here."'
-    projectbuilder_wl `fh' `"*==============================================================="'
-    projectbuilder_wl `fh' `"* Globals come from 00_control.do -- run that first."'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"* Suggested per-run log (dated, so runs never overwrite):"'
-    projectbuilder_wl `fh' `"* log using "~Doutput/400_visualize_~DS_DATE.log", replace text"'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"* Typical shape of this step:"'
-    projectbuilder_wl `fh' `"* use "~Dclean/data.dta", clear"'
-    projectbuilder_wl `fh' `"* graph ..."'
-    projectbuilder_wl `fh' `"* graph export "~Dfigures/fig01_descriptives.png", replace width(2400)"'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"* capture log close"'
-    file close `fh'
+    *=====================================================================*
+    * DOCUMENTATION OUTPUT: always build website/index.html + Readme.md   *
+    * webdoc2 (via builddocs) only makes it prettier.                     *
+    *=====================================================================*
+    local built_stamp `"`today' `c(current_time)'"'
 
-    * ---- code/500_report.do ---------------------------------------------------
-    file open `fh' using `"`target'/code/500_report.do"', write text replace
-    projectbuilder_wl `fh' `"*==============================================================="'
-    projectbuilder_wl `fh' `"* 500_report.do -- `proj_label'"'
-    projectbuilder_wl `fh' `"* Single job: assemble the final deliverable -- the tables and"'
-    projectbuilder_wl `fh' `"* figures built upstream -- into the report, memo, or slide"'
-    projectbuilder_wl `fh' `"* inputs, written to ~Doutput."'
-    projectbuilder_wl `fh' `"*==============================================================="'
-    projectbuilder_wl `fh' `"* Globals come from 00_control.do -- run that first."'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"* Suggested per-run log (dated, so runs never overwrite):"'
-    projectbuilder_wl `fh' `"* log using "~Doutput/500_report_~DS_DATE.log", replace text"'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"* Typical shape of this step:"'
-    projectbuilder_wl `fh' `"* putdocx / putpdf / collect export ... writing to "~Doutput/""'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"* capture log close"'
-    file close `fh'
+    pb_docs `"`web'/index.html"' `"`docs'/Readme.md"' `"`raw'"' `"`converted'"' `"`cleaned'"' ///
+        , project(`"`proj_label'"') date(`"`today'"') author(`"`author'"') ///
+          desc(`"`descfull'"') url(`"`url_show'"') topic(`"`topic_show'"') ///
+          public(`"`publicfacing_show'"') timeline(`"`timeline_show'"') ///
+          othernotes(`"`othernotes_show'"') stamp(`"`built_stamp'"')
 
-    * ---- README.md at the project root ---------------------------------------
-    file open `fh' using `"`target'/README.md"', write text replace
-    projectbuilder_wl `fh' `"# `proj_label'"'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"`descfull'"'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"| Field            | Value |"'
-    projectbuilder_wl `fh' `"|------------------|-------|"'
-    projectbuilder_wl `fh' `"| Project          | `proj_label' |"'
-    projectbuilder_wl `fh' `"| Created          | `today' |"'
-    projectbuilder_wl `fh' `"| Author           | `author' |"'
-    projectbuilder_wl `fh' `"| Description      | `descfull' |"'
-    projectbuilder_wl `fh' `"| Source URL       | `url_readme' |"'
-    projectbuilder_wl `fh' `"| Topic            | `topic_readme' |"'
-    projectbuilder_wl `fh' `"| Public-facing    | `publicfacing_readme' |"'
-    projectbuilder_wl `fh' `"| Refresh timeline | `timeline_readme' |"'
-    projectbuilder_wl `fh' `"| Other notes      | `othernotes_readme' |"'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"## Layout"'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"    `leaf'/"'
-    projectbuilder_wl `fh' `"    ├── raw/       untouched downloads (write-once; never edited)"'
-    projectbuilder_wl `fh' `"    ├── clean/     analysis-ready .dta files"'
-    projectbuilder_wl `fh' `"    ├── code/      numbered do-files; 00_control.do holds every path"'
-    projectbuilder_wl `fh' `"    ├── output/    logs and tables"'
-    projectbuilder_wl `fh' `"    └── figures/   exported graphs"'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"## How to run"'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"1. Open code/00_control.do.  The root global is stamped with this"'
-    projectbuilder_wl `fh' `"   folder's absolute path; if the project moves, edit that one line."'
-    projectbuilder_wl `fh' `"2. Run 00_control.do to set the path globals."'
-    projectbuilder_wl `fh' `"3. Work down the numbered pipeline: 100_ingest, 200_clean,"'
-    projectbuilder_wl `fh' `"   300_analyze, 400_visualize, 500_report.  The numbering is the"'
-    projectbuilder_wl `fh' `"   run order; gaps are left so a 150_ step can slot in later."'
-    projectbuilder_wl `fh' `"4. To rebuild everything in order, flip local run_all to 1 in"'
-    projectbuilder_wl `fh' `"   00_control.do and rerun it."'
-    projectbuilder_wl `fh' `""'
-    projectbuilder_wl `fh' `"Scaffolded by projectbuilder on `today'."'
-    file close `fh'
+    if "`builddocs'" != "" {
+        capture which webdoc2
+        if _rc {
+            di as txt "projectbuilder: webdoc2 not installed; used the built-in HTML fallback."
+            di as txt "                install: ssc install webdoc"
+            di as txt `"                         net install webdoc2, from("`gh'/webdoc2-stata-public/main/") replace"'
+        }
+        else {
+            di as txt "projectbuilder: rendering documentation with webdoc2 ..."
+            * _runall.do cd's into _documentation; save and restore the cwd.
+            local pb_pwd `"`c(pwd)'"'
+            capture noisily do `"`docs'/_runall.do"'
+            quietly cd `"`pb_pwd'"'
+        }
+    }
 
-    * ---- summary + next steps --------------------------------------------
+    *=====================================================================*
+    * SUMMARY + NEXT STEPS                                                *
+    *=====================================================================*
     di as txt _n "{hline 66}"
-    di as txt "projectbuilder OK"
+    di as txt "projectbuilder OK  (v2.0.0)"
     di as txt `"  Project       : `proj_label'"'
     di as txt `"  Location      : `target'"'
     di as txt `"  Description   : `descfull'"'
-    di as txt `"  Source URL    : `url'"'
+    di as txt `"  Source URL    : `url_show'"'
+    di as txt `"  Raw files     : `nraw'"'
+    di as txt `"  Converted     : `nconverted'"'
     di as txt `"  Outcomes      : `outcomes'"'
     di as txt `"  Over          : `over'"'
     di as txt `"  Descsave      : `=cond("`descsave'" != "", "yes", "no")'"'
-    di as txt `"  Topic         : `topic'"'
-    di as txt `"  Public-facing : `publicfacing'"'
-    di as txt `"  Timeline      : `timeline'"'
+    di as txt `"  Topic         : `topic_show'"'
+    di as txt `"  Public-facing : `publicfacing_show'"'
+    di as txt `"  Timeline      : `timeline_show'"'
+    di as txt `"  Mode          : `=cond(`exists', "rebuild", "fresh scaffold")'"'
     di as txt "{hline 66}"
     di as txt _n "Next steps:"
-    di as txt `"  1. do "`target'/code/00_control.do"    (sets the path globals)"'
-    di as txt  "  2. Put raw files in raw/, or edit code/100_ingest.do to fetch them"
-    di as txt  "  3. Work down the pipeline: 100_ingest -> 200_clean -> 300_analyze"
-    di as txt  "     -> 400_visualize -> 500_report"
-    di as txt  "  4. To rebuild everything, flip -local run_all- to 1 in 00_control.do"
+    if `nraw' == 0 {
+        di as txt  "  1. Put the raw source files in 01_raw/ (or edit"
+        di as txt  "     _code/100_data_download.do to fetch them by URL)."
+        di as txt `"  2. Rerun:  projectbuilder `projspec', rebuild"'
+        di as txt  "     -- this converts, combines, and rebuilds the docs."
+        di as txt `"  3. do "`code'/000_control.do"   then work down 100..600."'
+    }
+    else {
+        di as txt `"  1. do "`code'/000_control.do"    (sets the path globals)"'
+        di as txt  "  2. Review 02_cleaned/`proj_label'_analytic.dta, then work down"
+        di as txt  "     the pipeline: 300_labels -> 400_data_profiler ->"
+        di as txt  "     500_aggregation -> 600_analysis."
+        di as txt  "  3. Every data refresh is just another:"
+        di as txt `"       projectbuilder `projspec', rebuild"'
+    }
+    di as txt `"  Docs: `web'/index.html"'
 
-    return local project `"`proj_label'"'
-    return local path    `"`target'"'
+    * ---- stored results --------------------------------------------------
+    return local project     `"`proj_label'"'
+    return local path        `"`target'"'
+    return scalar nraw       = `nraw'
+    return scalar nconverted = `nconverted'
+    return scalar rebuilt    = cond(`exists', 1, 0)
 end
 
 
-* --- Helper: write one line, turning ~D into a literal $ and ~B into a
+*=====================================================================*
+* HELPERS                                                             *
+*=====================================================================*
+
+* --- pb_wl: write one line, turning ~D into a literal $ and ~B into a
 *     literal backtick.  The line is written as a string EXPRESSION, so the
 *     substituted characters are never re-parsed by the macro processor --
-*     which is what lets a self-contained ado emit files containing $globals
-*     and `locals' without a template folder or -filefilter-.
-program define projectbuilder_wl
+*     which lets a self-contained ado emit files full of $globals and
+*     `locals' without any template folder or -filefilter-.
+program define pb_wl
     gettoken fh 0 : 0
     file write `fh' (subinstr(subinstr(`0', "~D", char(36), .), "~B", char(96), .)) _n
+end
+
+* --- pb_guard: set the caller's local `flag' to 1 if the code file should
+*     be (over)written -- i.e., writecode==1, or the file does not yet exist.
+program define pb_guard
+    gettoken flag 0 : 0
+    gettoken wc   0 : 0
+    gettoken f    0 : 0
+    local go = `wc'
+    capture confirm file `"`f'"'
+    if _rc local go = 1
+    c_local `flag' `go'
+end
+
+* --- pb_base: set the caller's local `retname' to the basename (last path
+*     segment) of a path/URL.  Strips any trailing ? query.  Falls back to
+*     download.dat.
+program define pb_base
+    gettoken retname 0 : 0
+    gettoken p 0 : 0
+    local q = strpos(`"`p'"', "?")
+    if `q' > 0 local p = substr(`"`p'"', 1, `q' - 1)
+    local s = max(strrpos(`"`p'"', "/"), strrpos(`"`p'"', "\"))
+    if `s' > 0 local p = substr(`"`p'"', `s' + 1, .)
+    if `"`p'"' == "" local p "download.dat"
+    c_local `retname' `"`p'"'
+end
+
+* --- pb_count: set the caller's local `retname' to the count of non-hidden
+*     files matching a pattern in a directory.
+program define pb_count
+    gettoken retname 0 : 0
+    gettoken dir 0 : 0
+    gettoken pat 0 : 0
+    local list : dir `"`dir'"' files `"`pat'"'
+    local k = 0
+    foreach f of local list {
+        if substr(`"`f'"', 1, 1) == "." continue
+        local ++k
+    }
+    c_local `retname' `k'
+end
+
+* --- pb_docs: write the fallback website/index.html and _documentation/
+*     Readme.md, stamped with metadata and a listing of what is in 01_raw/,
+*     01_raw/_converted/, and 02_cleaned/.  Always run, so docs always exist.
+program define pb_docs
+    gettoken html   0 : 0
+    gettoken readme 0 : 0
+    gettoken rawd   0 : 0
+    gettoken convd  0 : 0
+    gettoken cleand 0 : 0
+    syntax [, project(string) date(string) author(string) desc(string) ///
+        url(string) topic(string) public(string) timeline(string) ///
+        othernotes(string) stamp(string) ]
+
+    tempname fh
+
+    * ---- website/index.html ---------------------------------------------
+    quietly file open `fh' using `"`html'"', write text replace
+    file write `fh' "<!doctype html>" _n
+    file write `fh' `"<html lang="en"><head><meta charset="utf-8">"' _n
+    file write `fh' `"<meta name="viewport" content="width=device-width, initial-scale=1">"' _n
+    file write `fh' `"<title>`project' -- project documentation</title>"' _n
+    file write `fh' "<style>" _n
+    file write `fh' "body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;" _n
+    file write `fh' "max-width:820px;margin:2rem auto;padding:0 1rem;line-height:1.5;color:#1a1a1a}" _n
+    file write `fh' "h1{margin-bottom:.2rem} table{border-collapse:collapse;margin:1rem 0}" _n
+    file write `fh' "th,td{text-align:left;padding:.3rem .8rem;border-bottom:1px solid #ddd;vertical-align:top}" _n
+    file write `fh' "code{background:#f4f4f4;padding:.1rem .3rem;border-radius:3px}" _n
+    file write `fh' ".muted{color:#666;font-size:.9rem}</style></head><body>" _n
+    file write `fh' `"<h1>`project'</h1>"' _n
+    file write `fh' `"<p>`desc'</p>"' _n
+    file write `fh' "<table>" _n
+    file write `fh' `"<tr><th>Created</th><td>`date'</td></tr>"' _n
+    file write `fh' `"<tr><th>Author</th><td>`author'</td></tr>"' _n
+    file write `fh' `"<tr><th>Source URL</th><td>`url'</td></tr>"' _n
+    file write `fh' `"<tr><th>Topic</th><td>`topic'</td></tr>"' _n
+    file write `fh' `"<tr><th>Public-facing</th><td>`public'</td></tr>"' _n
+    file write `fh' `"<tr><th>Refresh timeline</th><td>`timeline'</td></tr>"' _n
+    file write `fh' `"<tr><th>Other notes</th><td>`othernotes'</td></tr>"' _n
+    file write `fh' "</table>" _n
+    pb_htmllist `fh' `"`rawd'"'   "*"      "Raw files (01_raw/)"
+    pb_htmllist `fh' `"`convd'"'  "*.dta"  "Converted files (01_raw/_converted/)"
+    pb_htmllist `fh' `"`cleand'"' "*.dta"  "Analytic files (02_cleaned/)"
+    file write `fh' `"<p class="muted">Built `stamp' by projectbuilder v2.0.0."' _n
+    file write `fh' " Install webdoc2 for a richer rendering.</p>" _n
+    file write `fh' "</body></html>" _n
+    file close `fh'
+
+    * ---- _documentation/Readme.md ---------------------------------------
+    quietly file open `fh' using `"`readme'"', write text replace
+    file write `fh' `"# `project'"' _n _n
+    file write `fh' `"`desc'"' _n _n
+    file write `fh' "| Field | Value |" _n
+    file write `fh' "|-------|-------|" _n
+    file write `fh' `"| Created | `date' |"' _n
+    file write `fh' `"| Author | `author' |"' _n
+    file write `fh' `"| Source URL | `url' |"' _n
+    file write `fh' `"| Topic | `topic' |"' _n
+    file write `fh' `"| Public-facing | `public' |"' _n
+    file write `fh' `"| Refresh timeline | `timeline' |"' _n
+    file write `fh' `"| Other notes | `othernotes' |"' _n
+    file write `fh' _n
+    pb_mdlist `fh' `"`rawd'"'   "*"     "Raw files (01_raw/)"
+    pb_mdlist `fh' `"`convd'"'  "*.dta" "Converted files (01_raw/_converted/)"
+    pb_mdlist `fh' `"`cleand'"' "*.dta" "Analytic files (02_cleaned/)"
+    file write `fh' _n `"_Built `stamp' by projectbuilder v2.0.0._"' _n
+    file close `fh'
+end
+
+program define pb_htmllist
+    gettoken fh  0 : 0
+    gettoken dir 0 : 0
+    gettoken pat 0 : 0
+    gettoken hdr 0 : 0
+    file write `fh' `"<h3>`hdr'</h3>"' _n
+    local list : dir `"`dir'"' files `"`pat'"'
+    local any = 0
+    file write `fh' "<ul>" _n
+    foreach f of local list {
+        if substr(`"`f'"', 1, 1) == "." continue
+        file write `fh' `"<li><code>`f'</code></li>"' _n
+        local any = 1
+    }
+    if !`any' file write `fh' "<li class=""muted"">(none yet)</li>" _n
+    file write `fh' "</ul>" _n
+end
+
+program define pb_mdlist
+    gettoken fh  0 : 0
+    gettoken dir 0 : 0
+    gettoken pat 0 : 0
+    gettoken hdr 0 : 0
+    file write `fh' `"## `hdr'"' _n _n
+    local list : dir `"`dir'"' files `"`pat'"'
+    local any = 0
+    foreach f of local list {
+        if substr(`"`f'"', 1, 1) == "." continue
+        file write `fh' `"- `f'"' _n
+        local any = 1
+    }
+    if !`any' file write `fh' "- (none yet)" _n
+    file write `fh' _n
 end

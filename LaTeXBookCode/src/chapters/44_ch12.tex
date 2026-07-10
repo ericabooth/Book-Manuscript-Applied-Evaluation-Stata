@@ -1,0 +1,473 @@
+\chapter{Publishing self-contained reports and portals}\label{ch:portals}
+
+The client's IT department blocks anything that needs a server, and half your interactive work assumes one. The deliverable that survives a restrictive firewall is a single folder of static files that runs in any browser with nothing to install and nothing to maintain. This chapter shows you how to build one of those folders, tool by tool.
+
+We move from a do-file that compiles itself into a webpage, to interactive elements that run without a server, to assembling the whole thing into one folder the client can own, and finally to stamping each delivered version so no one confuses which numbers a board saw. The point throughout is reproducible delivery: a report that regenerates from the analysis cannot drift from it, and a portal that is just files cannot break when a server goes down.
+
+The idea underneath the whole chapter is not new, and naming its lineage tells an embedded evaluator why the effort pays off. \textcite{knuth1984literate} proposed \emph{literate programming}, the practice of writing a program and its explanation as one interleaved document rather than two files that fall out of step. \textcite{peng2011reproducible} carried the same idea into computational science, arguing that when a result cannot be fully re-run by others, publishing the code and data that produced it is the minimum standard a reader should accept. The self-contained portal is that argument made concrete for an evaluator: the report and the analysis are one artifact, so a practitioner reading a completion rate can trace it back to the line of code that computed it, and a successor can rebuild every figure from the same folder. \textcite{jann2017webdoc} built the Stata tool this chapter leans on, and \textcite{xie2015dynamic} built the parallel tool in R, so the practice travels across the software an evaluation team is likely to already run.
+
+\subsection{Why the notebook discipline is what earns a reader's trust}
+The lineage matters to an embedded evaluator for a reason beyond tidiness: the discipline behind a literate document is what lets a practitioner trust a number without re-running the analysis themselves. \textcite{rule2019ten} distill a decade of computational-notebook practice into rules a working analyst can follow, and three of them describe exactly what a \texttt{webdoc2} report either enforces or leaves to the author. They ask the analyst to tell a story with the narrative, so a reader follows the reasoning and not only the output; to keep the code in the order it runs, so a re-runner reproduces the same result rather than a version that only worked in the author's session; and to share the whole notebook so a successor can rebuild it. An evaluator reading those rules against the tools in this chapter can see which the software guarantees and which still fall to the author.
+
+The split is worth naming, because it tells an evaluator where their own care still does the work. A \texttt{webdoc} do-file guarantees run order for free: the file executes top to bottom, so the numbers on the page are the numbers that most recent run produced, and the hidden-state trap that lets a notebook print a result no clean re-run can reproduce cannot arise. That is the guarantee \textcite{rule2019ten} warn is hardest to keep by hand in an interactive notebook, and it is the one a do-file makes structural. The narrative, though, is still the evaluator's job: the \texttt{webdoc put} lines that explain why a completion rate moved are prose an author can write well or badly, and no tool checks that the story matches the table. Naming which half the software carries lets an evaluator spend their attention on the half it does not.
+
+There is a practical test an evaluator can borrow directly from the notebook community, and it costs nothing to adopt. Notebook users guard against hidden state by running the whole document from a clean session before they trust it, the \enquote{restart and run all} check that \textcite{rule2019ten} treat as a baseline habit. A \texttt{webdoc} do-file gives an evaluator the same check for free, because the way to build the report is to run the do-file from the top in a fresh Stata session, which is a clean run by construction. The habit to keep is the discipline around it: never patch a number into the delivered HTML by hand, and never trust a report built from a session that has been open and edited all afternoon. Build the deliverable from a clean run of the file, every time, so the folder you hand over is one a successor can reproduce from the same file rather than one that only exists because your session happened to hold the right state.
+
+\section{From do-file to webpage}
+A report written by hand from analysis output drifts the moment a number changes upstream, so we compile the report from the analysis instead. Ben Jann's \texttt{webdoc}\index{webdoc@\texttt{webdoc}}\index{literate programming}\marginnote{Jann built \texttt{webdoc} as the engine behind his own online Stata tutorials; it is the same literate-programming idea as Markdown notebooks, but native to Stata and driven from an ordinary do-file. It also underpins \texttt{markdoc}-style workflows in the community.} weaves text, code, and results into an HTML document where the numbers in the prose come straight from the data, and the \texttt{webdoc2}\index{webdoc2@\texttt{webdoc2}} wrapper adds Bootstrap-5 styling, collapsible code panels, a navigation bar, and a table of contents, so the output looks finished without hand-written HTML. A report that rebuilds itself is the end of copy-paste errors between the analysis and the write-up.
+
+\begin{kaobox}[frametitle=Package Integration: \texttt{webdoc2}]
+\textbf{Integrated command:} \texttt{webdoc2}. Wraps \texttt{webdoc} with Bootstrap-5 templates, collapsible code, a navbar, and a responsive layout, turning a do-file into a polished HTML report whose numbers come from the data it just analyzed. Install Ben Jann's \texttt{webdoc} first, then \texttt{webdoc2} from the authors' GitHub; the third line fetches the Bootstrap header template, which \texttt{net} drops in the current directory:
+{\footnotesize
+\begin{verbatim}
+ssc install webdoc, replace
+local gh "https://raw.githubusercontent.com/ericabooth"
+net install webdoc2, ///
+    from("`gh'/webdoc2-stata-public/main/") replace
+net get webdoc2, ///
+    from("`gh'/webdoc2-stata-public/main/")
+\end{verbatim}
+}
+\end{kaobox}
+
+That self-updating quality is replicable reporting in its purest form: change the data, rerun, and the report is current, with no risk that a figure and its surrounding sentence disagree. For an embedded evaluator producing the same report each quarter, this is the difference between a rewrite and a rerun. \textcite{gentzkow2014code} make the same point as a workflow rule for empirical social scientists: automate every step from raw data to finished output, because any step a human does by hand is a step that will eventually be done wrong or forgotten. A \texttt{webdoc} report is that rule applied to the last mile, the write-up, which is the step most reports still leave manual.
+
+The connection to the evaluator's own toolkit is direct. \textcite{patton2008utilization} argues that an evaluation earns its keep only when the intended users actually use it, and that use rises when the reporting fits how those users work rather than how the evaluator prefers to publish. A quarterly report a program director can reopen, trust, and act on the day it lands is a utilization-focused deliverable in Patton's sense; a report that drifts from its own numbers, or that dies when the evaluator's server is decommissioned, quietly fails the use test no matter how sound the analysis underneath it.
+
+\subsection{The shape of a \texttt{webdoc} do-file}
+The mechanics are worth seeing once, because the shape of the file is what makes the promise real. A \texttt{webdoc} do-file is an ordinary do-file with a few extra commands that mark which parts become prose, which parts become printed code, and which parts become embedded results. You open a document with \texttt{webdoc init}, drop headings and paragraphs with \texttt{webdoc put}, run analysis inside a \texttt{webdoc stlog} block so both the command and its output land in the page, drop a figure with \texttt{webdoc graph}, and close the document with \texttt{webdoc close}. The skeleton below is display-only; it is the smallest complete report that still tells the whole story.\marginnote{Each verbatim line here stays under about sixty-six characters on purpose. The longest real risk in a book like this is a code line that runs off the page and forces an ugly overflow; the same discipline that keeps a do-file readable in a narrow editor keeps it inside the margin here.}
+{\footnotesize
+\begin{verbatim}
+webdoc init report, replace ///
+    header(bootstrap) toc
+
+webdoc put # Q3 Site Outcomes
+webdoc put Enrollment and completion by site,
+webdoc put rebuilt from the analysis file.
+
+webdoc stlog
+    use "$clean/sites.dta", clear
+    tabstat completed, by(site) stat(mean n)
+webdoc stlog close
+
+webdoc graph: ///
+    graph bar completed, over(site)
+
+webdoc put Completion is highest at the two
+webdoc put urban sites; see the bar above.
+
+webdoc close
+\end{verbatim}
+}
+Read the block top to bottom and the discipline shows itself. The \texttt{webdoc init} line names the output file and asks for the Bootstrap header and a table of contents, so the page arrives styled without a line of hand-written HTML. The \texttt{webdoc put} lines are the narrative, written in Markdown, so a heading is a \texttt{\#} and the prose reads as prose. The \texttt{webdoc stlog} block is the load-bearing part: everything between \texttt{stlog} and \texttt{stlog close} runs in Stata, and both the command and its printed result are captured into the page, so the completion means in the table are the ones the data actually produced, not numbers a human retyped. The \texttt{webdoc graph} line runs a graph command and embeds the image inline. When the do-file finishes, \texttt{webdoc close} writes the HTML. The next quarter's report is the same file run against the next quarter's data, which is the whole point.
+
+\begin{vizcallout}[Why the numbers cannot lie]
+The reason a \texttt{webdoc} report is trustworthy is structural, not a matter of care. In a hand-written report the prose and the analysis live in two files, and nothing forces them to agree; a figure can be updated while the sentence next to it keeps last month's number, and no error is ever raised. In a \texttt{webdoc} report the sentence and the number are produced in the same run from the same data, so they cannot disagree. That is what \enquote{compile the report from the analysis} buys you: not a tidier workflow, but a class of error that can no longer happen.
+\end{vizcallout}
+
+\subsection{The \texttt{webdoc2} quickstart, and pulling the pieces in}
+The skeleton above is Jann's \texttt{webdoc}; the \texttt{webdoc2} wrapper keeps that shape but renames the verbs for readability and adds the Bootstrap styling for free. You \emph{init} with \texttt{wdinit}, write a heading with \texttt{wputh1}, a paragraph with \texttt{wput}, and a logged code block by opening \texttt{wd} and closing it with \texttt{wdclose}. A \texttt{button} block does the same but ships the code collapsed behind a \enquote{click to view} panel, so a report can carry its full provenance without cluttering the page. The quickstart below is the smallest \texttt{webdoc2} report, verbatim from the package, and display-only because it needs the \texttt{webdoc2} package:
+{\footnotesize
+\begin{verbatim}
+wdinit quickstart, replace
+wputh1 Quickstart
+wput   This page was generated from a
+wput   20-line Stata do-file by webdoc2.
+wputh2 Run a regression and show it inline
+wd
+sysuse auto, clear
+regress price mpg weight
+wdclose
+wputh2 Same regression, collapsed by default
+button
+sysuse auto, clear
+regress price mpg weight foreign
+buttonclose
+webdoc close
+\end{verbatim}
+}
+The value of \texttt{webdoc2} for a portal, though, is not the styling but two embed commands that let one page hold the whole suite. \texttt{wdimg} drops a static image into the report, which is how an offline \texttt{sparkta2} map (Chapter~\ref{ch:interactive}) lands in the narrative. \texttt{wdiframe} embeds an entire other HTML file inside a framed panel, which is how a \texttt{statashiny} dashboard or a \texttt{googlechart} page becomes a live section of the report rather than a separate link.\marginnote{An \emph{iframe} is a webpage embedded inside another webpage, shown in its own panel. It is the mechanism that lets one report scroll past a paragraph, then a fully interactive dashboard, then another paragraph, with the dashboard behaving exactly as it would on its own.} Those two lines are what turn \texttt{webdoc2} from a report writer into the container that wraps every other tool in the suite:
+{\footnotesize
+\begin{verbatim}
+wdinit "$portal/report", replace
+wputh1 Q3 Site Outcomes
+wput   Enrollment and completion, rebuilt
+wput   from the analysis file.
+wdimg  "charts/county_map.png", ///
+    caption("Completion by county")
+wdiframe "charts/dashboard.html", ///
+    height(640)
+webdoc close
+\end{verbatim}
+}
+Read the two embed lines and the pipeline comes into view. The \texttt{wdimg} line pulls in an offline county map that some other tool drew; the \texttt{wdiframe} line pulls in the interactive dashboard \texttt{statashiny} built, whole and live, into the same scrolling page. The report is no longer a document that mentions the charts; it is the container that holds them. The live \texttt{webdoc2} example site shows a finished report of exactly this shape.\marginnote{See \texttt{ericabooth.github.io/} \texttt{Webdoc2\_Example\_Site} for a full report, and the \texttt{statashiny} example site, which is itself a \texttt{webdoc2} page with a dashboard embedded by \texttt{wdiframe}. Both host free on GitHub Pages, which is the last step of the capstone below.}
+
+\section{Interactive without a server}
+Clients behind strict IT still deserve interactivity, and \texttt{statashiny}\index{statashiny@\texttt{statashiny}} provides it without a server, compiling a Stata dataset into static files that behave like a small app: searchable tables, charts that filter live, value cards, all running in the browser from local files. It is the offline cousin of the interactive charts in Chapter~\ref{ch:interactive}, built for the setting where nothing may be installed and nothing may phone home.
+
+\begin{kaobox}[frametitle=Package Integration: \texttt{statashiny}]
+\textbf{Integrated command:} \texttt{statashiny}. Compiles a Stata dataset into self-contained interactive HTML (searchable tables via DataTables, charts via Chart.js, filters, and value cards) that runs offline in any browser with no server. Install it once from the authors' GitHub (note the repo name differs from the command name):
+{\footnotesize
+\begin{verbatim}
+local gh "https://raw.githubusercontent.com/ericabooth"
+net install statashiny, ///
+    from("`gh'/StataShiny-public/main/") replace
+\end{verbatim}
+}
+\end{kaobox}
+
+Interactivity with nothing to install and nothing to maintain is accessibility for the hardest audience, the one behind a firewall that blocks the tools everyone else assumes.\marginnote{One \texttt{file://} gotcha: browsers block some local resource loads under the same-origin policy, so a portal that loads external data files can render blank when opened by double-click. Inline the data into the HTML, or ship a tiny \enquote{open me} launcher, and test on a machine that is not yours.} When you deliver it as static files, the client can keep and reopen it long after the engagement ends.
+
+Accessibility here carries two meanings, and an evaluator working with under-resourced agencies should hold both. The first is the technical standard: \parencite{w3c2018wcag} sets out the Web Content Accessibility Guidelines, which govern how a page serves readers who use a screen reader, navigate by keyboard, or need sufficient color contrast. Because a \texttt{webdoc2} portal is ordinary HTML, an evaluator can meet those guidelines with the same care they would give a printed report: real headings the reader can jump between, alt text on every embedded chart, and text that does not rely on color alone to carry a finding. The second meaning is structural and is the one this chapter presses. A deliverable that runs from local files with nothing to install does not assume the client has a maintained server, an IT staff to whitelist a new domain, or a budget line for a hosting subscription. For a small nonprofit or a county agency, those assumptions are exactly what excludes them from tools built for better-resourced partners, so shipping a folder that opens on any laptop is an equity practice, not only a convenience.
+
+\subsection{A self-contained deliverable is an access decision, not a convenience}
+The equity claim deserves a concrete case, because an evaluator who states it abstractly will not feel the weight of the design choice. Picture the under-resourced partner the researcher-practitioner model most often serves: a county health department with one data-literate staffer and no budget line for a business-intelligence license, or a community nonprofit whose entire technology stack is a shared laptop and a free email account. A hosted dashboard asks that partner for things they do not have: a maintained server, an IT staffer to whitelist a new domain, a recurring subscription, and someone to renew it after the evaluator's contract ends. A single-file portal asks for none of that. It opens by double-click on the laptop the staffer already owns, and it keeps working the year after the engagement closes, when the grant that paid for a fancier tool has lapsed. The choice between the two is not a matter of taste; it decides whether the partner can read their own evidence.
+
+Framing the deliverable this way connects the chapter to a wider argument about who open work serves. \textcite{mckiernan2016open} review the case that open, self-contained scholarship widens participation, because a result anyone can open and rebuild reaches readers a paywalled or infrastructure-heavy result never will. Their argument is written for researchers weighing whether openness helps their own careers, but the same logic runs the other direction for an evaluator: a deliverable that assumes a well-resourced reader quietly narrows the audience to the well-resourced, and a deliverable that assumes nothing but a browser widens it. An evaluator who ships a self-contained folder is making the accessible principle a distributional choice about which partners get to hold their own numbers, not only a technical box checked on a delivery form.
+
+The maintenance burden is the part of the equity argument that surfaces only after the engagement ends, and it is the part an evaluator is best placed to foresee. A hosted tool does not stop costing money and attention when the final report ships; someone has to renew the subscription, patch the server, and answer the partner's help request when a login breaks. In a well-resourced organization that someone exists, so the burden is invisible. In an under-resourced partner that someone is the same overworked staffer who runs everything else, so the burden lands squarely on the person least able to carry it, and the tool falls into disuse the first time it breaks unattended. A static folder moves that burden to zero: there is nothing to renew, nothing to patch, and no login to break, so the deliverable keeps serving the partner without asking anything of them after handoff. Designing for the partner's steady-state capacity, not just their capacity during the engagement, is what makes the accessible principle hold once the evaluator has left the room.
+
+The honest boundary on the claim is that a static folder trades away one thing a hosted tool provides, and an evaluator should name the trade rather than hide it. A portal that ships as files cannot run a fresh query against a live database, so a partner who needs tomorrow's numbers, not this quarter's cut, is genuinely better served by a maintained system. The self-contained folder is the right answer when the deliverable is a periodic report the partner owns and reopens, and the wrong answer when the need is a constantly refreshing operational display. Saying so keeps the equity argument credible: the folder is an access win for the reporting use it is built for, not a universal replacement for infrastructure the partner might one day be able to afford.
+
+\subsection{The init, add, build workflow}
+The \texttt{statashiny} command builds a dashboard in three moves, and learning the shape once is enough to build any of them. You \emph{init} the dashboard to open an empty page and name it, you \emph{add} elements one at a time until the page holds what you want, and you \emph{build} to write the finished HTML. Each added element is one line: an \texttt{output()} option drops a widget the reader looks at, such as a searchable table or a headline number, and an \texttt{input()} option drops a control the reader touches, such as a slider. It is the same discipline as assembling a graph one \texttt{addplot} at a time, except the pieces are interactive and the finished object is a webpage.\marginnote{The phrase \enquote{searchable table} means a table with a search box above it: the reader types \enquote{Travis} and every row without that word vanishes, all in the browser with no query sent anywhere. A \enquote{value card} is a single headline number in a box, the kind a dashboard puts at the top so the one figure that matters is read before anything else.}
+
+The smallest complete dashboard is the three moves and nothing else. Collapse a dataset to the rows you want to show, init the page, add one table, and build. The block is display-only because it needs the \texttt{statashiny} package, but it is the whole workflow:
+{\footnotesize
+\begin{verbatim}
+sysuse auto, clear
+collapse (mean) price mpg weight length ///
+    (count) n=price, by(foreign)
+
+statashiny, title("Auto Summary Table") replace
+statashiny autotab, output(table) ///
+    label("Descriptives by Origin")
+statashiny, build export("dashboard.html") open
+\end{verbatim}
+}
+Read the three moves in order. The first \texttt{statashiny} line with \texttt{title()} is \emph{init}: it opens the page and names it. The middle line is one \emph{add}: \texttt{autotab} is the element's id, and \texttt{output(table)} says draw a searchable table of the data in memory. The last line is \emph{build}: \texttt{export()} names the file and \texttt{open} pops it in your browser. That single HTML file is the whole dashboard, data and interactivity together, ready to email or drop in a portal folder.
+
+Most real dashboards add a few more elements before they build, and the two that earn their place first are value cards and a slider. A \emph{value card} puts one headline number in a box at the top of the page, so the figure that matters is read before the table below it. A \emph{slider} is a control the reader drags to filter the view live, in the browser, with nothing recomputed on a server. Both are still one line each, added between init and build:
+{\footnotesize
+\begin{verbatim}
+sysuse auto, clear
+collapse (mean) price mpg ///
+    (count) n=price, by(foreign)
+
+statashiny, title("Auto Outcomes") replace
+statashiny meanprice, output(val) ///
+    label("Mean price") prefix("$")
+statashiny meanmpg, output(val) ///
+    label("Mean mpg")
+statashiny tbl, output(table) ///
+    label("Means by origin")
+statashiny mpgcut, input(num) ///
+    val(20) min(10) max(40) step(1)
+statashiny, build ///
+    export("dashboard.html") open
+\end{verbatim}
+}
+The two \texttt{output(val)} lines are the value cards, each a labeled headline number, and \texttt{prefix("\$")} stamps a dollar sign in front of the price. The \texttt{output(table)} line is the searchable table as before. The one \texttt{input(num)} line is the slider: \texttt{val()} sets where the handle starts and \texttt{min()}, \texttt{max()}, and \texttt{step()} set its range and grain, so the reader drags from 10 to 40 in steps of one and the view filters as they go. The workflow never changes: init, add as many elements as the page needs, build one file. The live \texttt{statashiny} example site shows the finished form, and is itself built with \texttt{statashiny} and \texttt{webdoc2} together, which is the pairing the rest of this chapter assembles.\marginnote{See the live dashboard at \texttt{ericabooth.github.io/} \texttt{StataShiny\_Example\_Site}. It renders entirely from the single HTML file the build step wrote, so viewing the page source shows the data and the interactivity inlined together, with nothing fetched from a server.}
+
+
+The word \enquote{static} is doing quiet work here and deserves unpacking, because it is what separates a portal that survives a firewall from a dashboard that does not. A hosted dashboard is a program running on a server somewhere: it computes a chart when you ask for one, which means it needs a machine that is always on, a network path to it, and someone to keep it patched. A \texttt{statashiny} bundle is the opposite. The filtering and charting logic is compiled down to JavaScript that ships inside the files, and the data ships alongside it, so the \enquote{server} is your own browser reading local files.\marginnote{This is the same client-side shift that let \enquote{single-page apps} replace server round-trips on the web. For a portal it has a security dividend too: with no server accepting requests, there is no endpoint for IT to audit and nothing to patch after you leave.} Nothing is computed on demand by a remote machine, which is exactly why nothing can go down and why the strictest IT department has nothing to block: there is no connection to make.
+
+\section{One folder the client can own}
+Hand the client one folder they fully control, so the evidence outlives your engagement instead of expiring with your server access. That folder assembles the report, the interactive elements, and the figures into a single deliverable: it opens offline, it can be posted to GitHub Pages\index{GitHub Pages} if the client wants a link,\marginnote{GitHub Pages is free but bounded: sites are soft-capped around 1\,GB and a repo push should stay under about 100\,MB, so a portal heavy with raw data or video will not fit. A single self-contained HTML file the client can email around also sidesteps the wary IT department that will never whitelist your server.} and each delivered version is stamped so there is no confusion about which numbers a board saw. Handing over a folder the client owns respects that the evidence is theirs, and it is extensible because next quarter's version is one rerun away.
+
+The folder has a shape worth standardizing, so that any file's job is obvious from where it sits and so that the same layout greets the client every quarter. A landing page names the deliverables and links to them; the compiled report is its own page; the interactive tables and charts live in a \texttt{charts/} subfolder; and the data that feeds them, inlined or bundled, lives in \texttt{data/}. The one arrow that matters points from the whole folder to the browser: double-click the landing page and the portal opens offline, with no server, no login, and no install. Figure~\ref{fig:portal} draws it.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=0.28cm]
+  \node[stage, text width=2.9cm] (root) {\texttt{site-portal/}};
+  \node[substep, below left=0.6cm and -1.2cm of root, text width=4.0cm] (idx)
+    {\texttt{index.html}\\\scriptsize landing page, links to all};
+  \node[substep, below=0.28cm of idx, text width=4.0cm] (rep)
+    {\texttt{report.html}\\\scriptsize compiled \texttt{webdoc2} narrative};
+  \node[substep, below=0.28cm of rep, text width=4.0cm] (chr)
+    {\texttt{charts/}\\\scriptsize \texttt{statashiny} tables \& charts};
+  \node[substep, below=0.28cm of chr, text width=4.0cm] (dat)
+    {\texttt{data/}\\\scriptsize inlined \texttt{.json}, feeds the charts};
+  \draw[flow] (root.south) -- ($(root.south)+(0,-0.25)$) -| (idx.west);
+  \draw[flow] (root.south) -- ($(root.south)+(0,-0.25)$) -| (rep.west);
+  \draw[flow] (root.south) -- ($(root.south)+(0,-0.25)$) -| (chr.west);
+  \draw[flow] (root.south) -- ($(root.south)+(0,-0.25)$) -| (dat.west);
+  \node[stage, right=1.6cm of rep, text width=2.7cm, fill=aeBg] (br)
+    {\sffamily any browser};
+  \draw[flow] (idx.east) to[out=0, in=180] node[midway, above,
+     font=\sffamily\scriptsize] {opens offline} (br.west);
+\end{tikzpicture}
+\caption[The self-contained portal folder]{The self-contained portal folder. A landing page links to the compiled report and the interactive charts, which read their data from an inlined \texttt{data/} folder. The one arrow that matters points to the browser: double-click \texttt{index.html} and the whole portal opens offline, with no server and nothing to install. Because it is only files, it cannot break when a server goes down, and the client can reopen it years later.}
+\label{fig:portal}
+\end{figure}
+
+The virtue of this layout is the same one that made the project folder tree of Chapter~\ref{ch:workshop} worth standardizing: a boring, predictable shape is one nobody has to think about. A steering-committee member who opens the folder next year, long after the engagement ended, finds the landing page where landing pages go and follows it in. An evaluator inheriting the project finds the report, the charts, and the data each in its own named place. Nothing about the folder assumes the person opening it was in the room when it was built, which is exactly the property a deliverable meant to outlive the engagement needs.
+
+\subsection{Choosing a format: a comparison}
+The offline portal is one option among several, and the honest way to justify it is to lay the options side by side against the properties a client actually cares about. Five formats cover almost every delivery: a PDF, an Excel workbook, a Google Sheet, the offline portal of this chapter, and a hosted dashboard. Five properties separate them: whether it opens behind a locked-down firewall, whether it updates itself when the data changes, whether the reader can interact with it, whether the client can edit it themselves, and whether it is replicable in the book's sense of rebuilding from code. Table~\ref{tab:formats} scores each format on each property.
+
+\begin{table*}[htbp]
+\centering
+\footnotesize
+\caption[Delivery formats compared]{Five delivery formats scored on the five properties a client cares about. No format wins everything; the offline portal is the one that clears a strict firewall while staying interactive, self-updating, and replicable. \enquote{Self-updating} means the deliverable rebuilds from the analysis rather than being retyped; \enquote{replicable} means it regenerates from code, not from a screenshot.}
+\label{tab:formats}
+\begin{tabular}{lccccc}
+\hline
+Format & Behind firewall & Self-updating & Interactive & Client-editable & Replicable \\
+\hline
+PDF               & Yes & No  & No  & No  & Yes \\
+Excel workbook    & Yes & No  & No  & Yes & No  \\
+Google Sheet      & No  & No  & Yes & Yes & No  \\
+Offline portal    & Yes & Yes & Yes & No  & Yes \\
+Hosted dashboard  & No  & Yes & Yes & No  & Yes \\
+\hline
+\end{tabular}
+\end{table*}
+
+Read the table by columns and the trade-offs come into focus. Everything opens behind a firewall except the two formats that need a network: a Google Sheet lives on Google's servers, and a hosted dashboard lives on yours, so both fail the moment the client's IT blocks the connection. Only three formats are self-updating, meaning they rebuild from the analysis rather than being retyped: the PDF and the two spreadsheets are hand-assembled snapshots that drift the instant a number changes upstream. Interactivity splits the field between static documents and live ones. Client-editability is the spreadsheets' one clear win, and it is a real one, because a client who wants to reslice the numbers themselves is better served by a workbook than by anything the evaluator locks down. Replicability, the book's throughline, belongs to the formats that come from code: the PDF compiled from a do-file, the portal, and the dashboard.
+
+Now read the table by rows, because the recommendation falls out of one row. No format wins every column, and any honest guide says so. The PDF is the right answer when the deliverable is a fixed record that must look identical everywhere and never change. The spreadsheets are right when the client's own hands-on reslicing matters more than provenance. The hosted dashboard is right when there is no firewall and someone will maintain a server. The offline portal is the only row that clears a strict firewall while staying interactive, self-updating, and replicable at once, and that specific combination is the one an embedded evaluator behind restrictive IT keeps needing. It loses only on client-editability, and the versioning discipline of the next section is how you make that loss survivable.
+
+Table~\ref{tab:formats} scores the options; Figure~\ref{fig:ch12-viz-choose} walks the choice itself, as the sequence of questions that routes a given delivery to exactly one format.
+
+\begin{figure}[htbp]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[node distance=0.8cm and 1.0cm]
+  \node[decision, text width=1.9cm] (fw) {Firewall\\blocks a\\server?};
+  \node[decision, right=1.9cm of fw, text width=1.9cm] (live) {Need live\\refresh?};
+  \node[stage, right=1.9cm of live, text width=2.0cm, fill=aeBg] (host) {Hosted\\dashboard};
+  \node[decision, below=1.0cm of fw, text width=2.0cm] (edit) {Client\\reslices it\\herself?};
+  \node[stage, right=1.9cm of edit, text width=2.0cm, fill=aeBg] (sheet) {Spreadsheet\\(Excel /\\Google)};
+  \node[decision, below=1.0cm of edit, text width=2.0cm] (change) {Must it\\ever change?};
+  \node[stage, right=1.9cm of change, text width=2.0cm, fill=aeBg] (pdf) {PDF\\snapshot};
+  \node[stage, below=1.0cm of change, text width=2.4cm] (portal) {\textbf{Offline portal}\\\scriptsize this chapter};
+  \draw[flow] (fw) -- node[annot,above]{no} (live);
+  \draw[flow] (live) -- node[annot,above]{yes} (host);
+  \draw[flow] (fw) -- node[annot,left]{yes} (edit);
+  \draw[flow] (live) -- node[annot,right]{no}
+      ($(live.south)+(0,-0.15)$) -| (edit.east);
+  \draw[flow] (edit) -- node[annot,above]{yes} (sheet);
+  \draw[flow] (edit) -- node[annot,left]{no} (change);
+  \draw[flow] (change) -- node[annot,above]{no} (pdf);
+  \draw[flow] (change) -- node[annot,left]{yes} (portal);
+\end{tikzpicture}%
+}
+\caption[Choosing a delivery format]{The same choice Table~\ref{tab:formats} scores, read as a decision path. Follow the questions and each answer routes to one format: a live refresh behind no firewall wants a hosted dashboard; hands-on client reslicing wants a spreadsheet; a fixed record that never changes wants a PDF; and the deliverable that must clear a firewall yet still update itself lands on the offline portal. The portal is the only leaf reached by insisting on both a firewall-safe format and one that changes with the data.}
+\label{fig:ch12-viz-choose}
+\end{figure}
+
+\section{Versioning the artifacts you hand over}\label{sec:versioning}
+A portal the client owns raises a question a hosted dashboard never has to answer: which version is this? A dashboard shows whatever the server holds right now, so there is only ever one. A folder the client can copy, email, and archive multiplies, and six months later a board member is looking at a completion rate on a laptop and no one can say whether it is the number the committee approved in the spring or a later revision. The fix is to stamp every artifact you hand over, so that any copy carries its own provenance and can never be mistaken for another.
+
+Stamp three things, and stamp them where they cannot be lost.\marginnote{Borrow the semantic-versioning habit from software: bump the middle number when the numbers change, the last when only wording or layout does. A board that saw \enquote{v1.2} and hears \enquote{v1.3.1} landed knows nothing material moved.} First, put a visible version and date on the landing page itself, so a reader sees at a glance which cut they are holding. Second, name the folder with the same stamp, so a copy on a shared drive is identified before anyone opens it. Third, and most important, record the commit or tag of the code that produced the folder, so \enquote{which numbers did the board see} resolves to \enquote{run the pipeline at this commit and watch them reappear.} The first two are for humans skimming; the third is the one an auditor or a successor evaluator actually needs.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption[What to stamp on a delivered portal]{The three stamps that keep delivered copies from being confused, and the question each one answers. The visible stamp is for a board member skimming; the folder name is for a colleague browsing a shared drive; the code tag is for the auditor who has to reproduce the exact numbers.}
+\label{tab:stamps}
+\begin{tabular}{lll}
+\hline
+Stamp & Where it lives & Question it answers \\
+\hline
+Version \& date & on \texttt{index.html} & \enquote{which cut is this?} \\
+Folder name     & \texttt{site-portal-2026Q1/} & \enquote{which copy is on the drive?} \\
+Code tag        & footer \& \texttt{README} & \enquote{how do I rebuild it?} \\
+\hline
+\end{tabular}
+\end{table}
+
+The mechanics are cheap because you already own the pieces. The date is a system macro, so the report stamps itself at build time rather than relying on anyone to remember; the same \texttt{\$S\_DATE} that dated your logs in Chapter~\ref{ch:workshop} dates the portal.\marginnote{A tag is not a comment. Writing \enquote{v1.3} in the footer by hand is a promise you can break; \texttt{git tag v1.3} on the commit that built the folder is a promise the version-control system keeps. The first tells the reader a story about the version; the second lets an auditor check it.} The version is a string you set once per delivery in the control file. The code tag is a one-line \texttt{git} operation on the commit that produced the build, which the repository workflow of Chapter~\ref{ch:sharing} treats in full. Weave the three into the build so they are produced by the run, not added by hand afterward:
+{\footnotesize
+\begin{verbatim}
+* set once per delivery, at the top of the build:
+global version "v1.3"
+
+* stamp the report footer at build time:
+webdoc put ---
+webdoc put Version $version, built $S_DATE.
+webdoc put Rebuild: git checkout $version, then
+webdoc put run 600_report.do.
+\end{verbatim}
+}
+Because the stamp is produced by the same run that produced the numbers, it cannot drift from them, which is the same structural guarantee that made the \texttt{webdoc} report trustworthy in the first place. A board member holding a laptop reads the footer and knows the cut; a colleague on the shared drive reads the folder name and knows the copy; an auditor reads the tag and rebuilds the exact numbers. That closes the last gap in owning the evidence: not just that the client has the folder, but that everyone can tell, forever, which folder it is.
+
+Whether a discipline of this kind actually changes behavior is an empirical question, and the evidence says it does when the requirement is enforced rather than merely encouraged. \textcite{stodden2018reproducibility} studied journals that adopted policies asking authors to share the code and data behind a result, and found that the policies raised the share of results others could reproduce, but only where the journal checked compliance rather than trusting authors to self-report. The lesson for an embedded evaluator is that a stamping habit works the same way. A version typed by hand into a footer is a policy no one enforces; a \texttt{git} tag on the commit that built the folder is a check the version-control system runs for you, which is why the tag, not the typed string, is the promise worth keeping.
+
+\subsection{Stamp the code commit and the data vintage, not just the version}
+The footer stamp so far records which version the reader holds, but a board that has to defend a number needs two more facts the version string alone does not carry: which code produced it and which data went in. \textcite{blischak2016git} introduce version control to working analysts by making one point an evaluator should borrow: a commit hash is a fingerprint of the exact state of the code, so recording it turns \enquote{roughly this analysis} into \enquote{precisely this analysis, byte for byte.} Stamping the short commit hash into the footer, alongside the human-readable tag, is what lets a successor check out that one commit and watch the same numbers reappear. The tag is the label a board remembers; the hash is the address an auditor resolves.
+
+The data vintage is the second fact, and it is the one evaluators forget most often. A portal built at the same commit against a refreshed extract produces different numbers, so the code hash alone does not pin the result. Record the date the source data was pulled and, where the source gives one, its own release version, so the footer answers not just \enquote{which code} but \enquote{which code against which data.} \textcite{wilkinson2016fair} set out the principle that scholarly data should be findable and its provenance traceable, and a portal footer is where an evaluator makes that principle small and concrete: a board member who reads \enquote{built from the County Health Rankings 2025 release, pulled 12 March} can find the exact extract behind the chart, and a successor can pull the same vintage rather than a newer one that quietly moved the numbers. The two facts together, code hash and data vintage, are what make a delivered folder self-describing.
+
+Seeing the full stamp as one sentence makes the standard concrete for an evaluator writing their own. A self-describing footer reads roughly: \enquote{Version 1.3, built 6 July 2026 from commit \texttt{a1b9c02}, against the County Health Rankings 2025 release pulled 12 March 2026; rebuild with \texttt{git checkout v1.3} then \texttt{run 600\_report.do}.} Every clause in that sentence answers a question a board or an auditor will eventually ask: the version and date say which cut, the commit says which code, the release and pull date say which data, and the rebuild line says how to reproduce it. An evaluator who writes that one sentence into the footer at build time has met the traceability half of \textcite{wilkinson2016fair} for the modest scope of a single report, without any of the infrastructure a full data repository would demand. The point is not to satisfy a standard for its own sake but to make the folder answer for itself, so that a colleague who finds it on a shared drive three years on needs nothing but the footer to know what they are holding and how to rebuild it. Figure~\ref{fig:ch12-viz-footer} takes that one sentence apart clause by clause, so it is plain which reader each clause serves.
+
+\begin{figure}[htbp]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[node distance=0.35cm]
+  \node[stage, text width=11.5cm, minimum height=0.9cm, align=left, font=\sffamily\scriptsize] (bar)
+    {\texttt{Version 1.3, built 6 Jul 2026}~$\mid$~\texttt{commit a1b9c02}~$\mid$~\texttt{CHR 2025, pulled 12 Mar}~$\mid$~\texttt{git checkout v1.3; run 600\_report.do}};
+  \node[substep, below=1.1cm of bar.west, anchor=north west, text width=2.5cm] (n1)
+    {\textbf{version + date}\\\scriptsize which cut?};
+  \node[substep, right=0.35cm of n1, text width=2.5cm] (n2)
+    {\textbf{commit hash}\\\scriptsize which code?};
+  \node[substep, right=0.35cm of n2, text width=2.5cm] (n3)
+    {\textbf{data vintage}\\\scriptsize which data?};
+  \node[substep, right=0.35cm of n3, text width=2.7cm] (n4)
+    {\textbf{rebuild line}\\\scriptsize how to reproduce?};
+  \draw[flow] (n1.north) -- ($(bar.south west)+(1.3,0)$);
+  \draw[flow] (n2.north) -- ($(bar.south west)+(4.6,0)$);
+  \draw[flow] (n3.north) -- ($(bar.south west)+(7.6,0)$);
+  \draw[flow] (n4.north) -- ($(bar.south west)+(10.4,0)$);
+  \node[annot, below=0.3cm of n1, text width=2.5cm] {board member skims};
+  \node[annot, below=0.3cm of n2, text width=2.5cm] {auditor resolves};
+  \node[annot, below=0.3cm of n3, text width=2.5cm] {successor pulls same};
+  \node[annot, below=0.3cm of n4, text width=2.7cm] {anyone rebuilds};
+\end{tikzpicture}%
+}
+\caption[Anatomy of a self-describing footer]{The self-describing footer, read clause by clause. The top bar is the whole stamp as it appears on the page; each box below names one clause, the question it answers, and the reader it serves. The version and date tell a board member which cut they hold, the commit hash gives an auditor the exact code, the data vintage lets a successor pull the same extract rather than a newer one that quietly moved the numbers, and the rebuild line lets anyone regenerate the folder. The stamp is produced by the same run that produced the numbers, so no clause can drift from what it describes.}
+\label{fig:ch12-viz-footer}
+\end{figure}
+
+The caveat is the same one the equity section named, and it belongs in the footer's honesty too. A stamped static portal tells a reader exactly which cut they hold, but it cannot answer a question about a number the cut does not contain, because there is no live query behind it. A board member who wants this quarter's figure re-sliced by a group the report did not break out is holding a snapshot, not a database, and the footer should not pretend otherwise. Naming the vintage is what keeps that limit honest: the stamp says \enquote{these are the numbers as of this pull,} which is a promise a static folder can keep, rather than \enquote{ask this folder anything,} which it cannot.
+
+\section{The whole suite in one folder}\label{sec:capstone}
+Everything in this book that touched the web has been building toward one deliverable, and this section assembles it. The tools introduced across the visualization chapters are not six isolated commands; they are a pipeline, and each owns one link in it. The data comes in through \texttt{webapi}\index{webapi@\texttt{webapi}} from a public API (Chapter~\ref{ch:apis}) or through \texttt{googlesheets}\index{googlesheets@\texttt{googlesheets}} from a live team sheet (Chapter~\ref{ch:sheets}). It becomes charts two ways, because the delivery target decides which: \texttt{googlechart}\index{googlechart@\texttt{googlechart}} for an online interactive page with filter dropdowns, and \texttt{sparkta2}\index{sparkta2@\texttt{sparkta2}} for an offline map that renders without a network, including the county and school-district geography that the online engine cannot draw (both Chapter~\ref{ch:interactive}). The interactive drill-down is a \texttt{statashiny} dashboard. And \texttt{webdoc2} wraps all of it, narrative and charts and dashboard, into one \texttt{index.html}. Data in, charts out, one report around them, one folder the client owns.
+
+The reason to see the whole chain at once, rather than each tool in its own chapter, is that the chain is the product. A reader who has met the tools separately can still miss that they compose, and the composition is what turns a pile of HTML files into a portal. Figure~\ref{fig:suiteflow} draws the pipeline, and the do-file sketch that follows walks the same arrows in code.
+
+\begin{figure*}[htbp]
+\centering
+\begin{tikzpicture}[node distance=0.6cm and 1.1cm]
+  \node[stage, text width=2.5cm] (ingest) {\textbf{Ingest}\\\scriptsize\texttt{webapi}\\\scriptsize\texttt{googlesheets}\\\scriptsize\itshape Ch\,3 / Ch\,11};
+  \node[substep, right=of ingest, text width=2.5cm] (online)
+    {\texttt{googlechart}\\\scriptsize online chart\\\scriptsize\itshape Ch\,10};
+  \node[substep, below=0.5cm of online, text width=2.5cm] (offline)
+    {\texttt{sparkta2}\\\scriptsize offline map\\\scriptsize\itshape Ch\,10};
+  \node[substep, above=0.5cm of online, text width=2.5cm] (dash)
+    {\texttt{statashiny}\\\scriptsize dashboard\\\scriptsize\itshape Ch\,12};
+  \node[stage, right=of online, text width=2.5cm, fill=aeBg] (wrap)
+    {\textbf{Wrap}\\\scriptsize\texttt{webdoc2}\\\scriptsize\itshape Ch\,12};
+  \node[stage, right=of wrap, text width=2.4cm] (out)
+    {\sffamily\textbf{index.html}\\\scriptsize one folder,\\\scriptsize opens offline};
+  \draw[flow] (ingest.east) -- (online.west);
+  \draw[flow] (ingest.east) to[out=20,in=180] (dash.west);
+  \draw[flow] (ingest.east) to[out=-20,in=180] (offline.west);
+  \draw[flow] (dash.east) to[out=0,in=160] (wrap.north west);
+  \draw[flow] (online.east) -- (wrap.west);
+  \draw[flow] (offline.east) to[out=0,in=200] (wrap.south west);
+  \draw[flow] (wrap.east) -- (out.west);
+\end{tikzpicture}
+\caption[The suite pipeline, end to end]{The suite as one pipeline. \texttt{webapi} or \texttt{googlesheets} ingests the data; \texttt{googlechart} renders an online interactive chart, \texttt{sparkta2} an offline map, and \texttt{statashiny} an interactive dashboard; \texttt{webdoc2} wraps all three into one \texttt{index.html} that opens offline from a single folder. Each box names the chapter that teaches it. The companion \texttt{ch12\_portal.do} walks these same arrows in code.}
+\label{fig:suiteflow}
+\end{figure*}
+
+The orchestration is one do-file, and its shape is worth seeing even though the middle of it needs packages and OAuth this build does not assume. The sketch below is display-only; it is the pipeline of Figure~\ref{fig:suiteflow} written as the commands you would actually run, one stage at a time. It begins by pulling data with \texttt{webapi}, the no-key JSON route of Chapter~\ref{ch:apis}:
+{\footnotesize
+\begin{verbatim}
+* 1. INGEST: public JSON in one line, no key
+webapi get using ///
+    "https://data.cdc.gov/resource/bi63-dtpu.json", ///
+    params("year=2017|cause_name=All causes") clear
+\end{verbatim}
+}
+With data in memory, the two chart tools write their HTML into the portal's \texttt{charts/} folder. \texttt{googlechart} draws the online state choropleth; \texttt{sparkta2} draws the offline county map that the online engine cannot. The \texttt{sparkta2} line is commented because its source is still forthcoming (Chapter~\ref{ch:interactive}), so the sketch shows the intended call rather than promising an install:
+{\footnotesize
+\begin{verbatim}
+* 2a. CHART online: googlechart interactive page
+googlechart uninsured, name(geo_code) type(geo) ///
+    georegion("US") georesolution("us-states") ///
+    scheme(blues) download datatable ///
+    title("Uninsured rate by state, 2025") ///
+    noopen export("$charts/geo_uninsured.html")
+
+* 2b. CHART offline: sparkta2 sub-state map (sketch)
+* sparkta2 completed, name(county) ///
+*     type(choropleth) geo(tx-counties) ///
+*     export("$charts/county_map.html")
+\end{verbatim}
+}
+Next the interactive dashboard, built with the init, add, build workflow from earlier in this chapter, exported into the same \texttt{charts/} folder:
+{\footnotesize
+\begin{verbatim}
+* 3. INTERACTIVE: statashiny drill-down dashboard
+statashiny, title("Site Outcomes") replace
+statashiny cards, output(val) ///
+    label("Completion") suffix("%")
+statashiny tbl, output(table) label("By site")
+statashiny cut, input(num) ///
+    val(50) min(0) max(100) step(5)
+statashiny, build export("$charts/dashboard.html")
+\end{verbatim}
+}
+Now the wrap. \texttt{webdoc2} writes \texttt{index.html} with the narrative, embeds the dashboard and the online chart as live panels with \texttt{wdiframe}, drops the offline map with \texttt{wdimg}, and stamps the version and date into the footer at build time so it cannot drift from the numbers (Section~\ref{sec:versioning}):
+{\footnotesize
+\begin{verbatim}
+* 4. WRAP: webdoc2 assembles the one page
+wdinit "$portal/index", replace
+wputh1 Q3 Site Outcomes
+wput   Rebuilt from the analysis on $S_DATE.
+wputh2 Interactive dashboard
+wdiframe "charts/dashboard.html", height(640)
+wputh2 Uninsured by state
+wdiframe "charts/geo_uninsured.html", height(600)
+wputh2 Completion by county (offline map)
+wdimg  "charts/county_map.png", ///
+    caption("Offline county choropleth")
+wput ---
+wput Version $version, built $S_DATE.
+webdoc close
+\end{verbatim}
+}
+That is the whole suite in one file. The folder it produces is already a website, so the optional last step is to hand the client a link: push the folder to a repository and turn on GitHub Pages, which is how both the \texttt{statashiny} and \texttt{webdoc2} example sites are hosted, at no cost and with no server to keep alive. The figures below are real \texttt{googlechart} output from this pipeline on County Health Rankings data, the actual pages a reader opens from the \texttt{charts/} folder.
+
+\begin{figure}[htbp]
+\centering
+{\footnotesize
+\begin{verbatim}
+googlechart uninsured, name(geo_code) ///
+    type(geo) georegion("US") ///
+    georesolution("us-states") ///
+    scheme(blues)
+\end{verbatim}
+}
+\includegraphics[width=\linewidth]{ch10_gc_geo.png}
+\caption[The online chart the pipeline embeds]{The \texttt{googlechart} state choropleth from stage 2a of the pipeline, real output on County Health Rankings uninsured rates. In the portal this page is embedded live by \texttt{wdiframe}, so the reader hovers a state and reads its rate without leaving the report.}
+\label{fig:capgeo}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+{\footnotesize
+\begin{verbatim}
+googlechart, type(table) tablesearch ///
+    tableheadersticky ///
+    tooltipvars(state uninsured ///
+        median_income premature_death)
+\end{verbatim}
+}
+\includegraphics[width=\linewidth]{ch10_gc_table.png}
+\caption[The searchable table the dashboard mirrors]{A \texttt{googlechart} searchable table on the same data: a reader types a state and the rows filter live in the browser. The \texttt{statashiny} dashboard of stage~3 offers the same interaction offline, and \texttt{webdoc2} embeds one of them into the portal by \texttt{wdiframe}.}
+\label{fig:captable}
+\end{figure}
+
+\begin{appliedexample}[One evaluation, one folder]
+\textbf{Scenario.} A client wants one offline folder to share with their steering committee: a narrative report, an interactive dashboard of site outcomes, an online chart, and an offline county map, and they need to know six months from now exactly which cut the committee approved.
+
+\medskip
+\textbf{The build, end to end.} Scaffold the folder following the \texttt{projectbuilder}\index{projectbuilder@\texttt{projectbuilder}} layout, the proposed tool whose folder plan Chapter~\ref{ch:workshop} lays out by hand. Ingest the data with \texttt{webapi} (Chapter~\ref{ch:apis}) or \texttt{googlesheets} (Chapter~\ref{ch:sheets}). Render the online chart with \texttt{googlechart} and the offline county map with \texttt{sparkta2} into \texttt{charts/} (Chapter~\ref{ch:interactive}); build the drill-down dashboard with \texttt{statashiny}; then wrap narrative, dashboard, chart, and map into \texttt{index.html} with \texttt{webdoc2}, embedding the interactive pieces with \texttt{wdiframe} and the map with \texttt{wdimg}. Stamp the version and date into the footer at build time, tag the commit that built the folder, and name the folder to match (Section~\ref{sec:versioning}). The companion \texttt{ch12\_portal.do} sketches this exact sequence and scaffolds the stamped folder. The result is a folder the committee opens on any laptop, with no server and no logins, that the evaluator rebuilds next quarter in one command and that carries its own provenance so no copy is ever mistaken for another. The live example sites show the finished form.
+\end{appliedexample}
+
+\paragraph{Where this leaves you.} You can now publish a self-updating report, add interactivity that needs no server, hand the client a single folder they own and can reopen offline, and stamp each delivery so no one ever confuses which numbers a board saw. You can also defend the choice of format against the alternatives, because Table~\ref{tab:formats} lays out exactly which property each one trades away. Those close the communication loop on all four principles: replicable, extensible, accessible, and actionable delivery. Part~V turns to sustaining the practice over time, beginning with the careful use of AI in Chapter~\ref{ch:ai}.
+
+\section*{Exercises}\addcontentsline{toc}{section}{Exercises}
+\begin{enumerate}
+\item \emph{Try it on your own data.} Take one dataset you already report on each quarter and write a short \texttt{webdoc2} do-file that prints one \texttt{stlog} table of an outcome by group, then confirm the number in your prose matches the number the log printed by reading them off the same page.
+\item Rerun \texttt{ch12\_portal.do} against a second cause of death by changing only the \texttt{cause\_name} value in the stage-1 \texttt{webapi} call, and check that the online \texttt{googlechart} choropleth in \texttt{charts/} redraws with the new rates.
+\item Build the three-move \texttt{statashiny} dashboard from the \texttt{auto} data, then add one \texttt{input(num)} slider that filters price, and confirm the table filters live when you drag the handle in the browser.
+\item Predict how many rows the \texttt{collapse (mean) price mpg weight length (count) n=price, by(foreign)} step leaves, then run it and check that the row count matches your prediction before you feed it to \texttt{statashiny}.
+\item Break the stamp on purpose: hard-code \enquote{v1.3} in the footer text but tag the built commit \texttt{v1.4}, then confirm that \texttt{git checkout v1.3} rebuilds a different folder than the footer claims, showing why the tag, not the typed string, is the promise worth keeping.
+\item Stamp the data vintage: add one \texttt{webdoc put} line to your build that records both the short commit hash and the date you pulled the source data, then rebuild against a second extract of the same source and confirm the footer, not just the numbers, tells the two cuts apart.
+\end{enumerate}

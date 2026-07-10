@@ -1,0 +1,395 @@
+\chapter{Building interactive charts and infographics}\label{ch:interactive}
+
+The board wants \enquote{something like the newspaper does,} an interactive map they can hover, a chart that animates, and they want it Thursday. Static figures are right for a printed report, but a client who will explore the data, or an audience you want to give a toy they keep, calls for something they can touch. The risk is that interactivity leaves the replicable pipeline and becomes a designer's one-off; this chapter keeps it inside Stata.
+
+We cover sparklines for scanning a large portfolio, a single command that emits fourteen interactive chart types, and the judgment of when interactivity actually helps versus when it just adds motion. The through-line is that infographic-quality output should come from a do-file, so the graphic is as replicable and as easily updated as any other output in the book.\marginnote{A quiet failure mode: an interactive chart that loads its plotting library from a live CDN looks fine on your machine and blanks out on the client's, where the firewall blocks the outside request. Prefer libraries you can vendor locally.}
+
+\section{The visualization suite: one toolkit, six tools}\label{sec:suite}
+Before the individual commands, meet the toolkit they belong to. This chapter and the two that follow feature six of the authors' Stata packages that were built to work together, each a single command that takes a Stata dataset one step closer to something a client can open in a browser. Rather than six unrelated tricks, they form one pipeline: two tools bring data \emph{in}, three \emph{render} it as a chart or dashboard, and one \emph{wraps} the results into a finished report or web portal. Learn where each one sits and you can assemble a deliverable from parts instead of hand-building it every time.
+
+Two plain-language definitions carry the whole suite. An \emph{interactive chart}\index{interactive chart} is a picture the reader can act on, hover a state to read its value, type a name into a search box, drag a slider, rather than only look at. \emph{Self-contained HTML}\index{self-contained HTML} means the whole thing, the data and the code that draws it, lives inside one \texttt{.html} file you can email, so \enquote{it renders in the browser} simply means the reader double-clicks that file and the chart draws itself on their screen, no software to install.\marginnote{HTML is the plain-text format web pages are written in; a browser is any program that opens it (Chrome, Safari, Edge). \enquote{Renders} is just the browser's word for \enquote{draws.} If you can open a web page, you can open everything this suite produces.}
+
+These six tools divide the work along two axes. The first axis is \emph{online versus offline}: does the finished page need an internet connection to draw itself, or does it carry everything it needs? The second is \emph{chart versus container}: is the tool drawing a single graphic, or is it a shell that holds many graphics and prose together? Figure~\ref{fig:suite-pipeline} lays out the pipeline, and Table~\ref{tab:suite-matrix} places each tool in the grid those two axes make.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=0.5cm and 0.75cm]
+  \node[stage] (ing) {Ingest};
+  \node[stage, right=of ing] (ren) {Render};
+  \node[stage, right=of ren] (wrap) {Wrap};
+  \draw[flow] (ing) -- (ren);
+  \draw[flow] (ren) -- (wrap);
+  \node[substep, below=0.35cm of ing, text width=2.0cm]
+    {\texttt{webapi} (Ch.\,3)\\\texttt{googlesheets} (Ch.\,11)};
+  \node[substep, below=0.35cm of ren, text width=2.4cm]
+    {\texttt{googlechart} (online)\\\texttt{sparkta2} (offline)\\\texttt{statashiny} (Ch.\,12)};
+  \node[substep, below=0.35cm of wrap, text width=2.0cm]
+    {\texttt{webdoc2} (Ch.\,12)\\one report or portal};
+\end{tikzpicture}
+\caption[The visualization suite pipeline]{The suite as one pipeline. Data comes in through \texttt{webapi} (JSON APIs, Chapter~\ref{ch:apis}) or \texttt{googlesheets} (live Google Sheets, Chapter~\ref{ch:sheets}); it is rendered as a chart by \texttt{googlechart} (online) or \texttt{sparkta2} (offline), or as an interactive dashboard by \texttt{statashiny}; and \texttt{webdoc2} wraps the results into one shippable report or GitHub-Pages portal (both Chapter~\ref{ch:portals}). This chapter owns the render column's two chart tools.}
+\label{fig:suite-pipeline}
+\end{figure}
+
+The grid is the useful part, because it tells you which tool to reach for by asking two questions. Does the page have to work with the internet off? Then you are in the offline row: \texttt{sparkta2}\index{sparkta2@\texttt{sparkta2}} for a chart, \texttt{statashiny}\index{statashiny@\texttt{statashiny}} or \texttt{webdoc2}\index{webdoc2@\texttt{webdoc2}} for a container. Are you drawing one graphic or holding many? That is the chart-versus-container column. Every tool owns exactly one cell, so the choice is rarely ambiguous once you name the venue and the deliverable.
+
+\begin{table*}[htbp]
+\centering
+\caption[The visualization suite at a glance]{The six-tool suite placed on the two axes that decide between them: online versus offline (does the finished page need the internet to draw?) and chart versus container (one graphic, or a shell that holds many?). \texttt{webapi} sits in the ingest column and is shown for completeness; the render and wrap tools are the subject of this chapter and the next two. Read down the \enquote{Best for} column to pick a tool by the job in front of you.}
+\label{tab:suite-matrix}
+{\footnotesize
+\begin{tabular}{lllll}
+\hline
+Tool & Layer & Renders & Net at view & Best for \\
+\hline
+\texttt{webapi}      & Ingest    & (data in)      & n/a  & JSON APIs feeding the suite (Ch.\,3) \\
+\texttt{googlesheets}& Ingest    & (data I/O)     & live & Live Google Sheets as source or surface (Ch.\,11) \\
+\texttt{googlechart} & Chart     & Online (Google)& yes  & Web embeds, filter dropdowns, US-state geo, bubble-with-Play \\
+\texttt{sparkta2}    & Chart     & Offline (D3)   & no   & Air-gapped briefs; TX county / district maps \\
+\texttt{statashiny}  & Container & Offline (JS)   & no   & Single-file dashboards: sliders, search, cards (Ch.\,12) \\
+\texttt{webdoc2}     & Container & Offline (BS-5) & no   & The report/portal shell that embeds the above (Ch.\,12) \\
+\hline
+\end{tabular}
+}
+\end{table*}
+
+This chapter builds out the two chart tools in the render column, \texttt{googlechart}\index{googlechart@\texttt{googlechart}} online and \texttt{sparkta2} offline, because a chart is the atom of every deliverable the suite ships. Chapter~\ref{ch:sheets} covers \texttt{googlesheets}\index{googlesheets@\texttt{googlesheets}}, the live-data connector, and Chapter~\ref{ch:portals} covers the two containers, \texttt{statashiny} and \texttt{webdoc2}, that wrap these charts into a single report or portal. Keep the grid in mind as we go: every command below is an instance of one cell in it.
+
+\section{Sparklines: the word-sized trend}
+When a portfolio has forty sites, forty separate trend charts is not communication, it is a stack no one reads. A sparkline\index{sparkline}, a word-sized line with no axes, solves this by fitting a whole trajectory into a table cell,\marginnote{\textcite{tufte2006beautiful} coined \enquote{sparkline} in \emph{Beautiful Evidence}, defining it as a \enquote{small, intense, word-sized graphic.} The point is that it sits inline with text, at the resolution of the surrounding type.} so a reader scans one column and sees every site's trend at once, the rising ones and the falling ones jumping out. The \texttt{sparkta2} engine generates these inline trends and drops them into dashboard tables, which is density with dignity: every site shown, no site given a page it does not need.
+
+\begin{kaobox}[frametitle=Package Integration: \texttt{sparkta2}]
+\textbf{Integrated command:} \texttt{sparkta2}. The suite's \emph{offline} chart tool (Table~\ref{tab:suite-matrix}): a D3-based engine that generates high-density inline trend sparklines and sub-state maps, rendering fully offline. %TODO-verify: the sparkta2 package source is not yet public; only rendered galleries exist. It must be published to the authors' GitHub before the book can direct readers to install it.
+\end{kaobox}
+
+One honest caveat travels with this tool. As of this writing the \texttt{sparkta2} source is not yet published, only rendered galleries are public, so the book's claim rests on output the reader cannot yet install. Publishing the engine is a prerequisite for this section, and we flag it plainly rather than imply an install that does not exist.
+
+\subsection{The spark wall you can build today}\label{sec:sparkwall}
+You do not have to wait for \texttt{sparkta2} to get the sparkline's payoff, because native Stata already draws small multiples\index{small multiples}, a wall of tiny panels that strip their axes to almost nothing so the shape is all that is left to read. A regional workforce board wants to know whether the wage recovery after 2020 looked the same across its labor markets, or whether some counties bounced and others stalled, because it targets its programs county by county. Six separate wage charts would be six page-turns; a spark wall puts all six side by side so the divergence is one glance.
+
+We build the wall from the same no-key BLS files Chapter~\ref{ch:apis} introduced, so this is a direct callback: one \texttt{import delimited} per county-quarter, looped over six Texas counties and twenty-four quarters. The Quarterly Census of Employment and Wages posts one CSV per county-year-quarter at a stable URL, and we keep the total private-sector line (ownership code~5, industry code~10) from each:
+{\footnotesize
+\begin{verbatim}
+local counties 48453 48201 48113 48029 48439 48141
+tempfile master
+local first 1
+foreach fips of local counties {
+  forvalues yr = 2019/2024 {
+    forvalues q = 1/4 {
+      capture import delimited ///
+        "https://data.bls.gov/cew/data/api" ///
+        + "/`yr'/`q'/area/`fips'.csv", ///
+        clear varnames(1) stringcols(1 3)
+      if _rc continue
+      keep if own_code == 5 & industry_code == "10"
+      keep area_fips year qtr avg_wkly_wage
+      if `first' save `master', replace
+      else       append using `master'
+      save `master', replace
+      local first 0
+    }
+  }
+}
+\end{verbatim}
+}
+Two details earn a comment. The \texttt{capture} before \texttt{import} and the \texttt{if \_rc continue} after it mean a single missing quarter does not abort the whole loop, it just skips, which matters because the newest quarters lag by several months and one county may not have posted yet.\marginnote{Robust loops over live URLs need a skip clause: \texttt{capture} swallows the error and \texttt{continue} moves to the next iteration, so one 404 out of 144 downloads costs you one panel, not the whole run. Check \texttt{\_N} after to see how many landed.} And we again read columns~1 and~3 as strings with \texttt{stringcols(1 3)}, because the FIPS code and the industry code are identifiers, not quantities, the same leading-zero habit that Chapter~\ref{ch:apis} argued prevents silent merge failures.
+
+Once stacked, we build a quarter index and let \texttt{by()} draw the wall. The trick that makes it a spark wall rather than six ordinary charts is stripping the axes: tiny labels, no gridlines, no axis titles, so the eye reads the shape and not the furniture.
+{\footnotesize
+\begin{verbatim}
+gen tq = yq(year, qtr)
+format tq %tq
+twoway line avg_wkly_wage tq, ///
+    lcolor(navy) lwidth(medthin) ///
+    by(county, legend(off) rows(2) ///
+       note("BLS QCEW, no key")) ///
+    ytitle("") xtitle("") ///
+    ylabel(, nogrid labsize(vsmall)) ///
+    xlabel(, nogrid labsize(vsmall))
+graph export "$figures/ch10_sparkwall.png", ///
+    replace width(2400)
+\end{verbatim}
+}
+The panel is real, not simulated: 144 attempted downloads, one row kept per county-quarter, and the six trajectories read at a glance. This makes sense: every panel climbs across the window, and the seasonal sawtooth (a first-quarter bonus spike, then a dip) repeats in all six, which is the shape a shared story leaves in the data. The axis ranges carry the level: the tech-and-corporate markets (Travis, Dallas, Harris) top out near \$2{,}000 a week while El Paso never clears \$900 and Bexar sits in the low \$1{,}200s. A board reading the wall sees in one exhibit that the recovery lifted every county on the same seasonal rhythm without closing the gap between them, which is exactly the kind of portfolio finding a small-multiple tells faster than any single animated chart could.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=\linewidth]{ch10_sparkwall.png}
+\caption[A spark wall of Texas county wages]{Private-sector average weekly wage for six Texas counties, 2019q1--2024q4, built end to end by \texttt{ch10\_smallmult.do} from public BLS QCEW area CSVs with no API key. Each panel is a stripped-down sparkline on its own free y-scale, so the shape of each county's trajectory reads even where the wage level differs; the command that made it is printed above. Add a FIPS code to the \texttt{counties} local and the wall grows a panel. The eye reads six trajectories at once, which is the whole point of the small multiple: portfolio-wide scanning without a stack of pages no one reads.}
+\label{fig:sparkwall}
+\end{figure*}
+
+The whole exhibit is one short do-file (\texttt{ch10\_smallmult.do}) that reruns from the same public URLs, so next quarter's data point arrives by editing the year range in one \texttt{forvalues} line. That is the sparkline's promise made replicable: the density is generated, not hand-placed, so the wall refreshes when the data does rather than drifting out of date in a design file. It is also extensible, add a county and the wall grows, and accessible, because it reports in dollars a week and county names a board already uses.
+
+\subsection{What \texttt{sparkta2} adds: offline maps (source not yet released)}\label{sec:sparkta2}
+The spark wall is native Stata; \texttt{sparkta2} is the suite tool that generalizes it, and it earns its place in the grid by owning the one cell \texttt{googlechart} cannot: an interactive chart that draws with the internet off, and a map below the state level. Where \texttt{googlechart}'s geographic type stops at US states (Section~\ref{sec:gc-geo}), \texttt{sparkta2} renders Texas \emph{county} and even \emph{school-district} choropleths, the sub-state geography an education or workforce evaluator actually reports in. It does this by bundling its drawing engine (D3, a JavaScript charting library) \emph{inside} the HTML file, so there is no live library to fetch and nothing to blank behind a firewall.\marginnote{\enquote{D3} is a widely used JavaScript library for data-driven graphics. The point for us is not the library but where it lives: \texttt{sparkta2} ships it inside the file, so the page is truly self-contained. \texttt{googlechart} instead links out to Google's copy at view time, which is the online-versus-offline split of Table~\ref{tab:suite-matrix}.}
+
+Its planned type list reads like the offline complement to \texttt{googlechart}: multi-series lines, diverging bars, donuts, a bar-race animation, hexbin density maps, bivariate two-variable choropleths, and the sub-state maps that are its signature. The decision between the two siblings comes down to two questions, both drawn straight from Table~\ref{tab:suite-matrix}. Must the page render with no internet, for an air-gapped agency or an embargoed report? Choose \texttt{sparkta2}. Do you need geography finer than the state, a map of Texas counties or independent school districts? Choose \texttt{sparkta2}, because \texttt{googlechart}'s \texttt{geo} type cannot draw it. For everything else, native filter dropdowns, an animated bubble with a Play button, a searchable table, US-state maps, \texttt{googlechart} is the richer tool, and the rest of this chapter is its worked examples. We restate the caveat once so no reader is misled: the \texttt{sparkta2} engine is not yet published, so treat this subsection as a description of what it renders, not an install you can run today.
+
+\section{Fourteen chart types from one command}
+You hand a client a page they can explore rather than a figure they can only look at, and you build it without leaving the do-file. The \texttt{googlechart} command turns a Stata dataset into a self-contained interactive HTML page, with fourteen chart types from one syntax: geographic choropleths, bubbles that animate across a time panel, searchable tables, diverging Likert bars, and the rest. It carries a brand theme and an optional download menu, so a client can export the underlying data or a PNG themselves, which turns a static deliverable into a small tool the audience can use.\marginnote{The catch behind the name: the Google Charts renderer historically loaded from Google's servers, so a page built this way can go blank offline or behind a strict firewall. Confirm the output embeds its own assets before you promise it runs air-gapped, or ship its offline sibling \texttt{sparkta2} instead.}
+
+Because the chart is written by a do-file, it stays inside the replicable pipeline: the interactive graphic rebuilds when the data updates, rather than living as a hand-made artifact in a design file that drifts out of date. That is the key difference from a one-off dashboard, and it is why infographic-quality output belongs in code.\marginnote{A useful test of any \enquote{interactive} deliverable: could you regenerate last quarter's version from scratch if you had to? If the answer is \enquote{only by re-clicking through a design tool,} it is not really in the pipeline yet.} The authors' Stata Journal work documents the command and the general Stata-to-web pattern behind it.
+
+\begin{kaobox}[frametitle=Package Integration: \texttt{googlechart}]
+\textbf{Integrated command:} \texttt{googlechart}. The suite's \emph{online} chart tool (Table~\ref{tab:suite-matrix}). From any dataset, writes a self-contained interactive HTML page (column, bar, line, area, combo, pie, donut, scatter, animated bubble, geo, timeline, searchable table, histogram, and diverging stacked bar), with filter dropdowns, a brand theme, and an optional data/PNG download menu. It writes the file with no key and no network; the browser fetches Google's drawing code only when the page is opened. Install it once from the authors' GitHub:
+{\footnotesize
+\begin{verbatim}
+local gh "https://raw.githubusercontent.com/ericabooth"
+net install googlechart, ///
+    from("`gh'/googlechart-stata-public/main/") replace
+\end{verbatim}
+}
+\end{kaobox}
+
+\subsection{How one command writes an interactive page}\label{sec:gc-how}
+The mechanics are worth one paragraph, because they explain both the \enquote{no key} promise and the \enquote{needs network at view time} caveat that newcomers trip over. When you run \texttt{googlechart}, it does not call any web service. It writes a single text file that holds three things: your data, embedded as JSON (the labeled-box text format of Chapter~\ref{ch:apis}); a small block of styling; and the entire drawing engine, inlined as JavaScript at the bottom of the file. Nothing is fetched while Stata runs, so there is no key, no login, and no network call at build time. The one thing the file does \emph{not} carry is Google's chart-drawing library itself, which its licence forbids redistributing, so the page links out to Google's copy. That link is followed by the reader's browser when they open the page, which is the whole meaning of \enquote{needs network at view time}: the file builds offline but draws online.\marginnote{This is the online cell of Table~\ref{tab:suite-matrix} made concrete. The data and logic are yours and travel in the file; only the last library is Google's and is fetched on open. If the reader's network blocks \texttt{gstatic.com}, the page blanks, which is exactly the failure the offline sibling \texttt{sparkta2} avoids.}
+
+Every example below follows one shape. Load a dataset, call \texttt{googlechart} with a \texttt{type()} and a few options, and it writes one \texttt{.html} file named by \texttt{export()}. The \texttt{noopen} option we use throughout just suppresses the auto-open so a do-file can build a dozen pages without popping a dozen browser tabs. These commands are runnable: the companion \texttt{ch10\_googlechart.do} builds all six pages in this chapter, offline and with no key, and you can open the results in any browser.
+
+\subsection{Worked example 1: a US-state choropleth}\label{sec:gc-geo}
+The geographic choropleth answers the request an evaluator hears most: \enquote{show me my states on a map.} A \emph{choropleth}\index{choropleth} shades each region by a value, so darker means more, and the eye finds the hot spots without reading a single number. We use the County Health Rankings \& Roadmaps 2025 state extract, one row per state, and map the share of residents without health insurance. The geographic key lives in \texttt{geo\_code} as a \enquote{US-XX} code (\texttt{US-TX}, \texttt{US-CA}), and \texttt{name()} points \texttt{googlechart} at it:
+{\footnotesize
+\begin{verbatim}
+import delimited using ///
+    "`DATA'/chr_states_2025.csv", varnames(1) clear
+googlechart uninsured, name(geo_code) type(geo)  ///
+    georegion("US") georesolution("us-states")   ///
+    scheme(blues)                     ///
+    download datatable downloadpos(below)         ///
+    title("Uninsured rate by state, 2025")        ///
+    width(960) height(560) noopen                 ///
+    export("`OUT'/01_geo_uninsured.html")
+\end{verbatim}
+}
+Four options carry the type. The two geography settings, \texttt{georegion("US")} and \texttt{georesolution("us-states")}, tell the renderer to draw the fifty states plus DC rather than a world map. \texttt{scheme(blues)} sets the color ramp, so the darkest state is the highest uninsured rate. And \texttt{download datatable} adds two things a client asks for the moment they see the map: a menu to export the picture as an image, and a \enquote{view data} panel that shows and downloads the numbers behind it. The result is Figure~\ref{fig:gc-geo}: Texas is the darkest state at roughly nineteen percent uninsured, a cluster of southern and mountain-west states trails it, and the northeast is palest.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{ch10_gc_geo.png}
+\caption[A googlechart US-state choropleth]{The \texttt{type(geo)} choropleth of the uninsured rate by state, 2025, written by \texttt{ch10\_googlechart.do} with the command printed above. Darker is higher; the legend runs from 2.9 to 18.8 percent. In the browser this map is interactive: hover a state and its exact value appears. \texttt{googlechart}'s \texttt{geo} type stops at the state level; for a Texas county map, use the offline sibling \texttt{sparkta2} (Section~\ref{sec:sparkta2}).}
+\label{fig:gc-geo}
+\end{figure}
+
+This makes sense: the uninsured map is the well-known coverage gap between states that expanded Medicaid and states that did not, and Texas anchors the dark end every year. The point for the suite is that this map is not a screenshot; it is written by the do-file from the CHR file, so when the 2026 release posts, rerunning the do-file redraws the map with no hand-editing. That is the replicable principle applied to an interactive graphic.\marginnote{The \texttt{geo} type is the one most likely to blank behind a firewall, because it fetches boundary data at render time. Before you promise a client an air-gapped map, open the HTML with your network off and confirm it still draws; if it does not, ship the offline \texttt{sparkta2} choropleth or the static map of Chapter~\ref{ch:graphs}.}
+
+\subsection{Worked example 2: an animated bubble with a Play button}\label{sec:gc-bubble}
+Some stories are trajectories, and a trajectory wants motion. The animated bubble is \texttt{googlechart}'s Rosling-style chart: each state is a circle, and pressing Play walks it through time so the reader watches the whole field move. We switch to the CHR \emph{panel} extract, which has one row per state per year from 2016 to 2025, because animation needs frames: without a row for each time value, there is nothing to animate.\marginnote{This is the one requirement newcomers miss. \texttt{time(year)} adds the Play button, but the button only does something if the data is a \emph{panel}, one row per entity per period. A single cross-section with \texttt{time()} draws a static bubble and no motion. Check that your data is long, not wide, before reaching for \texttt{time()}.} We plot children in poverty against premature death, size each bubble by how rural the state is, and color it by whether its uninsured rate clears ten percent:
+{\footnotesize
+\begin{verbatim}
+import delimited using ///
+    "`DATA'/chr_states_panel.csv", varnames(1) clear
+gen byte highunins = uninsured >= 10
+label define hu 0 "Uninsured < 10%" 1 "Uninsured >= 10%"
+label values highunins hu
+googlechart child_poverty premature_death,       ///
+    name(usps) over(highunins)                    ///
+    sizevar(pct_rural) time(year) type(bubble)    ///
+    tooltipvars(uninsured)                         ///
+    download datatable downloadpos(below) ///
+    title("Child poverty vs premature death"      ///
+          " (press Play: 2016 to 2025)")           ///
+    width(920) height(560) noopen                 ///
+    export("`OUT'/04_bubble.html")
+\end{verbatim}
+}
+Read the roles one at a time, because \texttt{type(bubble)} uses more of them than any other type. The two variables in the varlist are the x and y axes (poverty and premature death). \texttt{name(usps)} labels each bubble with its state postal code. \texttt{over(highunins)} colors the bubbles by group, so the high-uninsured states stand out. \texttt{sizevar(pct\_rural)} scales each circle by rurality. And \texttt{time(year)} is the option that adds the Play button and the year slider. The result is Figure~\ref{fig:gc-bubble}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{ch10_gc_bubble.png}
+\caption[A googlechart animated bubble]{The \texttt{type(bubble)} chart with \texttt{time(year)}, written by \texttt{ch10\_googlechart.do}, shown at one frame. Each circle is a state, sized by how rural it is and colored by whether its uninsured rate clears ten percent. In the browser a Play button walks all fifty states from 2016 to 2025; here we print the final frame. The upward drift, poorer-child states carry higher premature death, is the trajectory that justifies the motion.}
+\label{fig:gc-bubble}
+\end{figure}
+
+This makes sense, and it is the honest test for animation: the story \emph{is} the trajectory, states climbing together up the poverty-mortality diagonal over a decade, so motion carries information a single frame cannot. Note one panel honesty in the do-file: only 2024 and 2025 are the real CHR releases, and the earlier years are simulated to give the Play control frames to move through, which the chart's note says out loud. When you build your own, feed \texttt{time()} a real panel and the animation earns its keep; feed it filler and you have decoration.
+
+\subsection{Worked example 3: a searchable table}\label{sec:gc-table}
+The other request an evaluator hears constantly is the opposite of a map: \enquote{let me find my own row.} The searchable table answers it. \texttt{type(table)} is the one type that usually takes \emph{no} varlist; instead you list the columns you want in \texttt{tooltipvars()}, and two switches turn an ordinary table into a tool: \texttt{tablesearch} adds a search box, and \texttt{tableheadersticky} freezes the header row so it stays visible as the reader scrolls:
+{\footnotesize
+\begin{verbatim}
+import delimited using ///
+    "`DATA'/chr_states_2025.csv", varnames(1) clear
+googlechart, type(table)                          ///
+    tooltipvars(state uninsured median_income     ///
+                premature_death obesity           ///
+                child_poverty unemployment        ///
+                pct_rural)                         ///
+    tablesearch tableheadersticky                 ///
+    download datatable downloadpos(below) ///
+    title("2025 County Health Rankings:"          ///
+          " state measures (searchable)")          ///
+    width(980) height(460) noopen                 ///
+    export("`OUT'/05_table.html")
+\end{verbatim}
+}
+The payoff is in Figure~\ref{fig:gc-table}: a client opens the page, types their state name into the search box, and reads their own row without a spreadsheet, or clicks a column header to sort every state by that measure. This is the accessible principle served directly, the audience finds their own number instead of hunting a printed table, and because the file is written by the do-file it refreshes when the CHR data does.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{ch10_gc_table.png}
+\caption[A googlechart searchable table]{The \texttt{type(table)} output with \texttt{tablesearch} and \texttt{tableheadersticky}, written by \texttt{ch10\_googlechart.do}. All 51 rows (fifty states plus DC) and eight measures; the search box at top filters as the reader types, the sticky header keeps the column names in view, and any column sorts on a click. The columns come from \texttt{tooltipvars()}, not a varlist, which is the one syntax quirk of the table type.}
+\label{fig:gc-table}
+\end{figure}
+
+\subsection{Worked example 4: a diverging stacked bar}\label{sec:gc-divbar}
+The last type is the one survey work needs most and general tools handle worst: the diverging stacked bar\index{diverging stacked bar} for Likert data. A \emph{Likert}\index{Likert scale} item is the familiar strongly-disagree-to-strongly-agree scale, and the honest way to chart it is to center the neutral response on zero, push disagreement left and agreement right, so the balance of opinion reads at a glance. \texttt{type(divbar)} does exactly this. It needs two roles: \texttt{name()} for the question and \texttt{level()} for the response category, plus \texttt{levelorder()} to fix the stack order and \texttt{centerlevel()} to name the neutral level that sits on zero:
+{\footnotesize
+\begin{verbatim}
+googlechart share, name(q) level(response)        ///
+    type(divbar)                                  ///
+    levelorder("Strongly disagree|Disagree"       ///
+        + "|Neutral|Agree|Strongly agree")         ///
+    centerlevel(Neutral)                           ///
+    download datatable downloadpos(below) ///
+    title("Texans on state policy"                ///
+          " (illustrative survey data)")           ///
+    subtitle("Diverging stacked bar;"             ///
+             " neutral centered on zero")          ///
+    width(1040) height(420) noopen                ///
+    export("`OUT'/06_divbar.html")
+\end{verbatim}
+}
+The data here is a small synthetic set, three policy statements each with five Likert levels, written inline in the do-file so the shape is illustrative rather than a real poll. Figure~\ref{fig:gc-divbar} shows the result: each statement is one horizontal bar split at zero, disagreement in reds to the left and agreement in blues to the right, with the neutral slice straddling the center line.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{ch10_gc_divbar.png}
+\caption[A googlechart diverging stacked bar]{The \texttt{type(divbar)} chart, written by \texttt{ch10\_googlechart.do} from illustrative Likert data. \texttt{centerlevel(Neutral)} puts the neutral response on the zero line and sign-flips the disagree side to the left, so the reader sees the balance of opinion per item at a glance. This is the Pew-style diverging bar; the underlying numbers are synthetic and shown only for shape.}
+\label{fig:gc-divbar}
+\end{figure}
+
+Four types, one command, one do-file. Between them the geo map, the animated bubble, the searchable table, and the diverging bar cover most of what a board actually asks for, and every one is written offline with no key. Two options recur across all four and are worth naming once. \texttt{scheme()} sets the color ramp in one word (\texttt{scheme(blues)} for a sequential map, \texttt{scheme(rdbu)} for a diverging one), so every page from your shop can carry the same palette without per-chart color fiddling. And \texttt{download datatable} pairs an image-export menu with a \enquote{view the data} panel, so the client can take both the picture and the numbers, which is what turns a chart into a small tool. The remaining ten types (column, line, area, combo, pie, donut, scatter, timeline, histogram, and the rest) follow the same grammar: a \texttt{type()}, a varlist or a set of role options, and an \texttt{export()}.
+
+\section{Choosing static, interactive, or animated}
+Interactivity is a claim about how the audience will use the evidence, so it should be chosen, not defaulted to. A printed report or a slide wants a clean static figure; a client who will genuinely explore, filter to their county, compare their site, wants interactivity; a change over time that the eye should follow wants animation, but only when the motion carries information rather than decorating it. Animation that adds nothing subtracts, because it makes the reader wait for a story a static small-multiple would have told at once.\sidenote{Rosling's bubble charts are the honorable exception: motion works there because the story \emph{is} the trajectory over time. If your animation would read just as well as a set of before/after panels, ship the panels.}
+
+The cleanest way to frame the choice comes from the narrative-visualization literature, which reads interactivity not as an ornament but as a handoff of control. \textcite{segel2010narrative} place every data graphic on a spectrum from author-driven, where the maker fixes the message and the reader only receives it, to reader-driven, where the reader is handed the controls and free to find their own path. Interactivity is precisely how an evaluator moves a deliverable toward the reader-driven end: a filter dropdown or a search box delegates the drill-down to the stakeholder, letting a board member ask \enquote{what about my county?} without the evaluator anticipating the question in advance. The embedded evaluator's judgment, then, is a judgment about how much of the drill-down to delegate, which maps directly onto the utilization-focused question of who will act on the finding and how. A single-message brief for the full board wants the author-driven static figure; a portal that a dozen program managers each mine for their own site wants the reader-driven interactive one. The form should follow the intended use, not the tool's capacity.
+
+\subsection{Which narrative structure for a board versus an explorer}\label{ch10-sec:structures}
+The spectrum names the two ends; the practitioner's real choice sits between them, and \textcite{segel2010narrative} give it three named shapes worth matching to a venue. The \emph{author-driven} structure fixes one path and one message and hands the reader no controls, which is what a single-slide finding for a full board wants. The \emph{martini-glass} structure walks the reader down the author's path first, the stem, then opens into free exploration at the mouth, which fits a briefing that states its headline before letting a program manager roam. The \emph{drill-down} structure inverts that order: it opens on a general view and lets the reader pick the case to expand, which fits a portal a dozen managers each mine for their own site. Segel and Heer's fourth common shape, the interactive slideshow, keeps the author's ordering across steps while allowing interaction inside each one, which fits a walked-through talk more than a left-alone web page. Figure~\ref{fig:ch10-viz-spectrum} places the three named structures on the spectrum and pairs each with the venue it fits.
+
+\begin{figure}[htbp]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[node distance=0.6cm and 1.5cm]
+  \node[stage] (auth) {Author-\\driven};
+  \node[stage, right=of auth] (mart) {Martini-\\glass};
+  \node[stage, right=of mart] (drill) {Drill-\\down};
+  \draw[flow] (auth) -- (mart);
+  \draw[flow] (mart) -- (drill);
+  \node[annot, left=0.15cm of auth, text width=1.6cm, align=right]
+    {maker fixes\\the message};
+  \node[annot, right=0.15cm of drill, text width=1.6cm, align=left]
+    {reader picks\\the path};
+  \node[substep, below=0.5cm of auth, text width=2.0cm]
+    {One path, no controls\\\emph{Full-board slide}};
+  \node[substep, below=0.5cm of mart, text width=2.0cm]
+    {Headline first,\\then roam\\\emph{Briefing}};
+  \node[substep, below=0.5cm of drill, text width=2.0cm]
+    {Open on all,\\expand one\\\emph{Manager portal}};
+\end{tikzpicture}%
+}
+\caption[Narrative structures on the control spectrum]{The three narrative structures of \textcite{segel2010narrative} arranged left to right as control passes from maker to reader, each tagged with the venue it fits. Read it as a ladder: hand a full board the author-driven slide, a briefing the martini-glass that states the headline before it opens, and a manager portal the drill-down that opens on the whole field. Shipping a structure to the wrong end of this line is the mistake the surrounding text warns against.}
+\label{fig:ch10-viz-spectrum}
+\end{figure}
+
+The judgment, then, is not \enquote{interactive or not} but \enquote{which structure for which reader.} A board that meets for ninety minutes and needs one decision is an author-driven or martini-glass audience: give them the message first and let exploration follow, never precede, the point. An analyst who will live in the data for a week is a drill-down audience: open on the whole field and let them expand their own county without your narration in the way. The mistake an embedded evaluator makes under deadline is to ship a drill-down structure to a board, which buries the finding behind a click the board will not make, or an author-driven figure to an explorer, which locks the analyst out of the question they came to ask. The searchable table of Section~\ref{sec:gc-table} is a drill-down surface; the spark wall of Section~\ref{sec:sparkwall} paired with one interactive map is a martini-glass deliverable, headline first, exploration second. Naming the structure before you build tells you which one you are actually making.
+
+That delegation is never neutral, which is the caution the same literature attaches. \textcite{hullman2011rhetoric} show that the design choices inside a \enquote{story} graphic, the default view, the ordering, what is annotated and what is left implicit, steer interpretation the way framing steers a survey item, so an interactive that opens on a hand-picked county or a pre-filtered year is already making an argument before the reader touches it. The honest move for an embedded evaluator is to make those defaults defensible and to let the reader escape them, which is exactly what the download-and-datatable menu of Section~\ref{sec:gc-table} provides: the reader can leave your framing and pull the underlying numbers. And the payoff of delegation is not guaranteed. \textcite{boy2015storytelling} ran field experiments on live news and gallery sites and found that adding narrative and interactive hooks did not reliably increase how much readers actually explored the data; some framings raised engagement, others did nothing. The lesson for the actionable principle is sober: interactivity is a hypothesis about use, not a delivery of it, so build the drill-down only where you have reason to think the stakeholder will drill.
+
+The decision rule is to match the medium to the audience and the venue, and to prefer the simplest form that carries the finding. Table~\ref{tab:interactive-choice} lays out the three forms against the four questions that actually decide between them: who the audience is, where the deliverable lives, how it updates, and the way each form fails. Reading the failure column is the most useful thing you can do before committing, because every form fails differently and the wrong failure is expensive.
+
+\begin{table*}[htbp]
+\centering
+\caption[Choosing static, interactive, or animated]{A decision table for the three delivery forms. Match the row to your audience and venue, then read the failure column before you commit: each form breaks in a different way, and the cheapest mistake to avoid is shipping motion or interactivity that the venue cannot render.}
+\label{tab:interactive-choice}
+{\footnotesize
+\begin{tabular}{lllll}
+\hline
+Form & Audience & Venue & Update & Failure mode \\
+\hline
+Static & Skimmer & Print, PDF, slide & Rerun do-file & Wrong chart, nothing worse \\
+Interactive & Explorer & Web page, portal & Rebuild HTML & Blanks behind a firewall \\
+Animated & Watcher & Screen, talk & Re-render frames & Motion carries no signal \\
+\hline
+\end{tabular}
+}
+\end{table*}
+
+Read the table as a ladder of risk. Static output has essentially no failure mode: it renders anywhere a reader can open a PDF, and the only way it disappoints is by being the wrong chart. Interactive output buys exploration at the cost of a live rendering dependency, so it fails exactly where Section~\ref{sec:sparkwall}'s margin notes warn, behind a firewall or when a CDN is blocked. Animated output buys a followed-over-time story at the cost of the reader's patience, so it fails when the motion carries no information the eye needed to see move. Choosing deliberately is what keeps interactive output in service of the message instead of showing off the tool, which protects the accessible principle from the temptation to be clever.
+
+This is where the dashboard-design tradition earns its place next to the narrative one. \textcite{few2013dashboard} argues that a monitoring surface should let a reader grasp the state of things at a glance, so every interactive control has to justify the click it costs; a slider or a drill-down that hides the headline number behind an action a busy manager will not take is a subtraction, not an addition. Read alongside \textcite{segel2010narrative}, the two traditions bracket the evaluator's problem: narrative visualization asks how much control to hand the reader, and dashboard design asks whether the reader will spend it. Interactivity that fails both, motion or a menu that no stakeholder will use and that carries no signal a static panel lacked, is the \enquote{motion for its own sake} this chapter warns against. The remedy is to treat presentation as a first-class part of the analysis rather than an afterthought, the shift \textcite{kosara2013storytelling} call for, and to spend interactivity only where a named stakeholder has a drill-down they will actually perform.
+
+A practical corollary follows from the failure column. When you are not sure the venue will render an interactive or animated deliverable, build the static version first and treat the fancier form as an enhancement, not the base case.\marginnote{This is progressive enhancement, borrowed from web design: ship a version that works everywhere, then layer on features for the environments that support them. A dashboard that degrades to a readable table has a floor; one that degrades to a blank page has none.} The spark wall of Section~\ref{sec:sparkwall} is precisely this hedge: it is a static small-multiple that carries the whole finding, so if the interactive map blanks behind the client's firewall, the exhibit that survives still answers the question. And when the venue is offline for good, an air-gapped agency or an embargoed report, the choice inside the interactive row is \texttt{sparkta2} over \texttt{googlechart}, because only the offline sibling carries its drawing engine in the file. That ordering, static as the floor and interactivity as the bonus, is the actionable habit this chapter most wants you to keep.
+
+\section{An accessible chart is the accessible principle, literally}\label{ch10-sec:a11y}
+The suite's accessible principle asks that an audience read the finding without a specialist to translate it, and for interactive output that principle is not a metaphor: a share of your real readers cannot see the chart the way you drew it, so accessibility is a design constraint you either meet or fail. Roughly one man in twelve and one woman in two hundred has a red-green color vision deficiency, which means a board of thirty likely seats one or two members for whom a red-versus-green diverging bar carries no signal at all. The perception research this chapter has leaned on treats color as a channel with limits, not a free variable \parencite{franconeri2021science}; the accessibility literature turns those limits into rules an evaluator can follow before shipping.
+
+The first rule is to pick a palette that survives color vision deficiency, and the field has a settled answer. \textcite{okabeito2008cud} designed the Color Universal Design palette, eight qualitative colors chosen so protanopes, deuteranopes, and tritanopes can still tell them apart, and \textcite{wong2011color} brought it into scientific practice as the Nature Methods default. Table~\ref{tab:ch10-viz-cud} prints the eight colors with the hex codes you paste straight into a \texttt{scheme()} or a style file.
+
+\begin{table}[htbp]
+\centering
+\caption[The Okabe--Ito colorblind-safe palette]{The eight Color Universal Design colors of \textcite{okabeito2008cud}, each with the hex code to hand a chart. Chosen so the three common forms of red--green color vision deficiency can still separate them; use these in place of an arbitrary categorical ramp, and let position or luminance, not hue alone, carry the finding. Viewed in grayscale the swatches still differ in lightness, which is the redundant-channel rule made visible.}
+\label{tab:ch10-viz-cud}
+{\definecolor{cudBlack}{HTML}{000000}%
+\definecolor{cudOrange}{HTML}{E69F00}%
+\definecolor{cudSky}{HTML}{56B4E9}%
+\definecolor{cudGreen}{HTML}{009E73}%
+\definecolor{cudYellow}{HTML}{F0E442}%
+\definecolor{cudBlue}{HTML}{0072B2}%
+\definecolor{cudVermillion}{HTML}{D55E00}%
+\definecolor{cudPurple}{HTML}{CC79A7}%
+\newcommand{\cudswatch}[1]{\fcolorbox{black!30}{#1}%
+  {\phantom{\rule{1.6em}{0.9ex}}}}%
+\footnotesize
+\begin{tabular}{lll}
+\hline
+Swatch & Name & Hex \\
+\hline
+\cudswatch{cudBlack}      & Black          & \texttt{000000} \\
+\cudswatch{cudOrange}     & Orange         & \texttt{E69F00} \\
+\cudswatch{cudSky}        & Sky blue       & \texttt{56B4E9} \\
+\cudswatch{cudGreen}      & Bluish green   & \texttt{009E73} \\
+\cudswatch{cudYellow}     & Yellow         & \texttt{F0E442} \\
+\cudswatch{cudBlue}       & Blue           & \texttt{0072B2} \\
+\cudswatch{cudVermillion} & Vermillion     & \texttt{D55E00} \\
+\cudswatch{cudPurple}     & Reddish purple & \texttt{CC79A7} \\
+\hline
+\end{tabular}}
+\end{table} The practical move for a \texttt{googlechart} or \texttt{sparkta2} page is to feed \texttt{scheme()} a colorblind-safe ramp rather than an arbitrary one, and to prefer a sequential or diverging scheme, a single hue darkening or two hues meeting at a neutral middle, over a rainbow, because a luminance gradient reads even when hue does not. The spark wall of Section~\ref{sec:sparkwall} already banks this hedge by encoding its story in line \emph{position} rather than color; a reader who sees no color still reads six rising trajectories, which is the deeper rule that color should be a redundant channel, never the only one.\marginnote{The test costs nothing: view your finished page through a color-blindness simulator, or desaturate a screenshot to grayscale, and check whether the finding still reads. If the categories collapse into the same gray, hue was doing work that shape, position, or luminance should have shared.}
+
+The second rule is sufficient contrast, and here the web has a published standard the evaluator can cite rather than eyeball. The Web Content Accessibility Guidelines set a floor of a 4.5:1 luminance-contrast ratio for normal text and 3:1 for the graphical objects a reader must see to understand the chart \parencite{w3c2018wcag}, a threshold a free contrast checker measures for you against the two colors that meet. The ratio itself is a simple object:
+\[
+  C \;=\; \frac{L_{\text{light}} + 0.05}{L_{\text{dark}} + 0.05},
+  \qquad 1 \le C \le 21,
+\]
+where $L$ is each color's relative luminance, a weighted sum of its red, green, and blue channels that runs from $0$ for black to $1$ for white, and the lighter color goes on top. The rule is then just $C \ge 4.5$ for text and $C \ge 3$ for chart furniture; the constant $0.05$ keeps two blacks from dividing to infinity, and the ratio maxes at $21{:}1$ for pure black on pure white. For an interactive page this bites in the furniture as much as the data: a pale-gray axis label on white, a light tooltip on a light map, or a legend swatch that fails 3:1 against its background each quietly locks out the low-vision reader the accessible principle means to include. Checking the labels and legend against the 3:1 floor is a five-minute pass that keeps a page's promise to the reader who needs it most.
+
+The third rule is that a chart is more than its pixels, so an interactive page should not strand a reader who navigates by keyboard or hears the page through a screen reader. Two habits carry most of the distance. Ship the numbers alongside the picture, which is what the \texttt{download datatable} panel of Section~\ref{sec:gc-table} already does: a screen-reader user who cannot perceive the map still reads and sorts the underlying table, so the datatable is an accessibility feature, not only a download convenience. And give the page a text alternative that states the finding in a sentence, so a reader who never sees the chart still gets its message. These are not exotic asks; they are the same \enquote{say the finding in words} discipline the rest of the book applies to prose, extended to the graphic. An interactive deliverable that a channel-limited slice of the audience cannot use is not accessible in the suite's sense, however polished it looks, so the accessible principle earns its name only when the chart is built to be read by the readers you actually have.
+
+\section{A live dashboard is a promise to keep the pipeline alive}\label{ch10-sec:maintenance}
+Interactivity carries a cost the static figure does not, and it comes due after you ship rather than before. A printed spark wall is finished the moment the do-file runs; a live interactive page, by contrast, sets an expectation that its data is current, so the day you hand a board a dashboard you have quietly promised to keep feeding it. That promise is the honest caveat this chapter attaches to every interactive deliverable: the graphic is only as trustworthy as the pipeline behind it, and a dashboard that silently shows last year's numbers is worse than a dated PDF, because the PDF wears its date on its face while the dashboard looks live and misleads.
+
+Three failure modes make the promise concrete, and each maps to a suite principle. The first is data staleness. The QCEW loop of Section~\ref{sec:sparkwall} pulls from live URLs, so a page built once and left alone drifts out of date the moment a new quarter posts, and a reader who trusts the freshness the interactivity implies is misled. The remedy is the replicable one this chapter has argued throughout: keep the deliverable a do-file rather than a hand-made artifact, so a refresh is one rerun rather than a rebuild, and schedule the rerun rather than waiting for someone to notice the numbers went old. The second is dependency rot. An online page like \texttt{googlechart}'s links out to a rendering library it does not carry (Section~\ref{sec:gc-how}), and a library that changes its interface, moves its URL, or is withdrawn can blank a page that worked for years. Vendoring the engine inside the file, which is what the offline sibling \texttt{sparkta2} does, trades a live dependency for a frozen one, so the page cannot rot even though it also cannot update itself. The third is orphaned ownership. A dashboard built by an evaluator who then rolls off the contract becomes a liability the agency cannot repair, a broken page carrying the agency's name with no one left who knows the code.
+
+The judgment this forces is sober rather than discouraging: match the deliverable's lifespan to the maintenance you can actually promise. A one-time interactive for a single meeting needs no upkeep and carries no risk, so build it freely. A standing portal a board will consult monthly for two years is a maintenance commitment, so either budget the reruns and the version pins that keep it alive, or ship the offline, frozen \texttt{sparkta2} version that degrades gracefully rather than the online one that decays silently. \textcite{few2013dashboard} frames a monitoring surface as something a reader returns to, which is precisely why its data must stay current to keep faith with that return; a dashboard read once and never refreshed has broken the at-a-glance promise it made. The extensible principle cuts both ways here. The same do-file pipeline that lets you add a county also lets a successor refresh the page after you leave, but only if you shipped the code and the documentation, not just the rendered HTML. Handing over the do-file, the data source, and a one-line \enquote{rerun this each quarter} note is what turns a dashboard from a promise you alone can keep into one the agency can keep without you.
+
+\begin{appliedexample}[One dataset, three deliverables]
+\textbf{Scenario.} The workforce board wants the county wage story in three places: a one-page printed brief, an exploratory portal on the agency website, and a two-minute clip in the director's talk.
+
+\medskip
+\textbf{The build.} From the single \texttt{ch10\_smallmult.do} panel, ship three forms of the same numbers. For the brief, the static spark wall of Figure~\ref{fig:sparkwall}, which needs nothing to render and cannot break. For the portal, the \texttt{googlechart type(geo)} choropleth and \texttt{type(table)} search of Section~\ref{sec:gc-geo}, or their offline \texttt{sparkta2} equivalents if the agency firewall blocks the CDN. For the talk, the animated \texttt{type(bubble)} of Section~\ref{sec:gc-bubble}, used only because the trajectory is the point. Each deliverable is written by the same do-file from the same panel, so all three rebuild when next quarter's QCEW file posts, and Chapter~\ref{ch:portals} shows how \texttt{webdoc2} wraps the portal pieces into one shippable page. That is replicable (one do-file, three outputs), extensible (add a county, all three grow), accessible (each audience gets the form it can use), and actionable (the board plans in the counties and dollars every version reports).
+\end{appliedexample}
+
+\paragraph{Where this leaves you.} You can now build sparkline portfolios and spark walls, interactive charts, and infographics straight from a do-file, and you know when interactivity earns its keep versus when a static small-multiple already told the story. You have also met the suite these commands belong to: \texttt{googlechart} online and \texttt{sparkta2} offline are its two chart tools, fed by \texttt{webapi} and \texttt{googlesheets} and wrapped by \texttt{statashiny} and \texttt{webdoc2}. Because they come from code, these graphics stay replicable and easy to refresh, and because you build the static floor first, a blocked CDN never leaves you with nothing to show. You can also place a deliverable on the author-driven to reader-driven spectrum and decide how much of the drill-down to delegate, treating interactivity as a hypothesis about who will explore rather than a default. That habit keeps the fancier form in service of a named stakeholder's decision instead of the tool's capacity. You can also make the chart accessible in the literal sense, a colorblind-safe palette, a contrast floor, and the numbers shipped beside the picture, so the readers you actually have can read it. And you can weigh interactivity's after-ship cost, treating a live dashboard as a promise to keep its pipeline current rather than a one-time build. Chapter~\ref{ch:sheets} turns to the format most clients actually live in, the spreadsheet, and how to deliver through it without giving up the pipeline.
+
+\section*{Exercises}\addcontentsline{toc}{section}{Exercises}
+\begin{enumerate}
+\item \emph{Try it on your own data.} Take a dataset you already report on that has one outcome measured over time for several sites, build a spark wall with \texttt{twoway line} and \texttt{by()}, strip the axes as Section~\ref{sec:sparkwall} does, and confirm every site's panel actually drew by checking the panel count against your number of sites.
+\item Rerun \texttt{ch10\_smallmult.do} after adding two more Texas counties to the \texttt{counties} local, then report whether the two new panels share the same first-quarter bonus spike the original six show.
+\item Predict, before you run it, how many of the 144 QCEW downloads in Section~\ref{sec:sparkwall} will land for your county set; rerun the loop, check \texttt{\_N} against your prediction, and explain any gap by the newest quarters that have not yet posted.
+\item Break the FIPS loop on purpose: drop the \texttt{capture} and \texttt{if \_rc continue} guard, rerun the download over a range that includes an unposted quarter, and confirm the loop now aborts on the first missing file instead of skipping it.
+\item Rerun \texttt{ch10\_googlechart.do} to rebuild the \texttt{type(geo)} choropleth, open the resulting HTML with your network turned off, and confirm the map blanks; then swap \texttt{scheme(blues)} for \texttt{scheme(rdbu)} and describe how the color ramp changes which states read as extreme.
+\item \emph{Place a deliverable on the control spectrum.} Take one interactive page you built above and locate it on the author-driven to reader-driven spectrum of \textcite{segel2010narrative}: name the default view it opens on, name the drill-down it delegates to the reader, and name the stakeholder who would actually perform that drill-down. If you cannot name that stakeholder, rebuild the finding as a static panel and say what the interactivity was costing without buying.
+\item \emph{Check one page for accessibility.} Take an interactive page you built above, desaturate a screenshot of it to grayscale (or run it through a color-blindness simulator), and say whether the finding still reads once hue is gone; then check the axis labels and legend against the 3:1 contrast floor of Section~\ref{ch10-sec:a11y}, and name one change, a colorblind-safe \texttt{scheme()}, a darker label, or the \texttt{download datatable} panel, that would let a channel-limited reader use the page.
+\end{enumerate}

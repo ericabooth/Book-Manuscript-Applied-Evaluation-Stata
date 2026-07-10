@@ -1,24 +1,29 @@
 v 3
 d projectbuilder: scaffold a data-analysis project folder with a numbered do-file pipeline
 d
-d projectbuilder creates a new project folder with the five-folder
-d layout (raw, clean, code, output, figures), a control file that
-d holds every path in one place and can rebuild the whole pipeline,
-d numbered do-file stubs (100_ingest through 500_report), and a
-d README stamped with the project metadata you pass as options.
-d Metadata does double duty: the source URL seeds the ingest stub,
-d outcome and by-variable lists seed the analysis stub, and a
-d descsave flag seeds a codebook call in the cleaning stub. The
-d program never overwrites an existing folder, is self-contained
-d (no template folder), and uses only Stata's cross-platform file
-d commands.
+d projectbuilder builds a project folder in one command: a raw-data
+d folder, an analytic-data folder, an output folder, a documentation
+d folder, and a numbered do-file pipeline (000_control through
+d 600_analysis). A control file holds every path in one place and can
+d run the whole pipeline. If you already have the data, point data() at
+d local files or url() at a source address and projectbuilder copies it
+d in, converts it, appends it into one analytic file, and writes a
+d documentation page. If the data comes later, scaffold now and rerun
+d with rebuild on every refresh; rebuild never overwrites a do-file you
+d have edited unless you add replace. The tool is self-contained (every
+d file is written by the program, no template folder), uses only Stata's
+d cross-platform file commands, and never overwrites an existing project.
 d
-d Requires: Stata 16.0 or newer. No dependencies.
+d Optional companions add power when installed but are never required:
+d convertanything and combineall (author's GitHub), descsave (SSC),
+d srctag/srcfind (author's GitHub), and webdoc2 (author's GitHub).
+d
+d Requires: Stata 16.0 or newer.
 d
 d Author: Eric A. Booth, Sr Researcher, Texas 2036
 d Support: eric.a.booth@gmail.com
 d
-d Distribution-Date: 20260706
+d Distribution-Date: 20260707
 d
 f projectbuilder.ado
 f projectbuilder.sthlp

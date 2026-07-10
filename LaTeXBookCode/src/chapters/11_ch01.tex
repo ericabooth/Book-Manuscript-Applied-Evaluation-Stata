@@ -1,0 +1,243 @@
+\chapter{The embedded evaluator}\label{ch:embedded}
+
+A foundation officer emails on Thursday afternoon: \enquote{Are we actually reaching the rural students we promised, or mostly the suburban ones near the host sites?} The program team has an enrollment spreadsheet. You have until Monday. This is the ordinary weather of embedded evaluation, and it is the situation this book is built for.
+
+The question this chapter answers is not \enquote{what statistics should I know} but \enquote{what does the work actually look like, start to finish.} We lay out the pipeline the rest of the book follows (Figure~\ref{fig:pipeline}), define the four principles we judge every step against, and describe how an embedded evaluator works alongside a program without being captured by it. By the end you should see the shape of the whole job and know where each later chapter fits into it.
+
+\begin{figure*}
+\centering
+\begin{tikzpicture}[node distance=0.55cm and 0.9cm]
+  \node[stage] (get)  {Get the data};
+  \node[stage, right=of get]   (evi) {Turn it into evidence};
+  \node[stage, right=of evi]   (com) {Communicate it};
+  \node[stage, right=of com]   (sus) {Sustain it};
+  \node[stage, left=of get]    (set) {Set up};
+  \draw[flow] (set) -- (get);
+  \draw[flow] (get) -- (evi);
+  \draw[flow] (evi) -- (com);
+  \draw[flow] (com) -- (sus);
+  % substep captions
+  \node[substep, below=0.35cm of set, text width=1.7cm] {Ch.\,1--2\\control file, folders};
+  \node[substep, below=0.35cm of get, text width=1.9cm] {Ch.\,3--6\\APIs, scrapes, surveys, panels};
+  \node[substep, below=0.35cm of evi, text width=1.7cm] {Ch.\,7--8\\measure, compare, DiD};
+  \node[substep, below=0.35cm of com, text width=1.9cm] {Ch.\,9--12\\graphs, infographics, sheets, portals};
+  \node[substep, below=0.35cm of sus, text width=1.7cm] {Ch.\,13--15\\AI, privacy, tools};
+\end{tikzpicture}
+\caption[The embedded evaluator's pipeline]{The pipeline this book follows, and the map of its parts. Work flows left to right: you set up a project, get the data (from APIs, scraped files, and surveys), turn it into evidence, communicate it, and sustain it for the next cycle. Each later chapter is a tool for one of these stages.}
+\label{fig:pipeline}
+\end{figure*}
+
+\section{Who this book is for, and the week it assumes}
+Learn the constraints this book designs around before you adopt its tools, because those same constraints are what let an evaluator survive its methods on a real deadline. The embedded evaluator\index{embedded evaluation} sits inside or beside a program rather than auditing it from a distance. That proximity buys context, real-time access to how a program runs, and a seat in the operational conversation. It also means the work arrives on the program's schedule, in the program's formats, under the program's political weather. We assume a small team, standard Stata licenses without the multi-processor edition, data that is often protected by law or agreement, and funders who read the first page and skim the rest.\marginnote{Concretely, we target Stata SE and never assume MP. SE caps you at 32{,}767 variables and one compute core; if a method only works on MP's parallelism, it is out of scope here. BE (formerly Small Stata) will run most examples too, though its 2{,}048-variable limit bites on wide survey exports.}
+
+Those constraints decide what counts as a good tool. A method that needs a cluster, a data-science team, or a week of runtime is not a method you can use on a Thursday-to-Monday clock. That is why the chapters are ordered as the work happens (Figure~\ref{fig:pipeline}), not as a statistics syllabus would arrange them.
+
+\section{Four principles: replicable, extensible, accessible, actionable}\label{sec:promises}
+We judge every workflow and tool in this book against four principles\index{four principles}, and we use these four words often. A workflow is \emph{replicable}\index{replicable workflow} when a colleague reruns it from the raw files next month and gets the same numbers; the test is a one-command rebuild, not a memory of which cells you edited.\marginnote{The honest way to prove it: clone the project into a fresh, empty folder on a machine you have never run it on, and rebuild. Anything that only works because a stray file survives in your working directory fails this test loudly, which is exactly what you want.} It is \emph{extensible} when the next survey wave, program year, or client fits by changing a parameter rather than copying a script. It is \emph{accessible} when the people who need the result, front-line staff, funders, community partners, can open it and understand it without a statistics degree or a paid license. It is \emph{actionable} when it tells someone what to do next, in the units they plan in: students served, dollars returned, percentage points gained.
+
+These four are the applied researcher's answer to \enquote{why are we doing it this way?} A slower, coded pipeline beats a fast spreadsheet because it is replicable; a labeled dataset beats a clever one because it is accessible; a stabilized small-site rate beats a raw one because it is actionable for the people who fund those sites.\marginnote{These are not our invention. \enquote{Replicable} echoes the reproducibility push in economics that followed the Reinhart-Rogoff episode; \enquote{accessible} and \enquote{actionable} restate what evaluation associations already ask of a final report. We only insist all four hold at once, on every step.} Each section names the principle it serves, so the reasoning is always on the page.
+
+A principle you cannot test is a slogan. What keeps these four honest is that each one comes with a concrete pass\slash fail check you can run on your own project, and each is taught in a specific later chapter. Table~\ref{tab:promises} lists the checks. If a workflow fails any row, you know which chapter to reopen, which is why we return to this table throughout the book rather than treating the principles as an opening flourish.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption[The four principles, with pass/fail tests]{The four principles, each with a one-sentence test you can run on your own project and the chapter that teaches how to pass it. A workflow that fails a row tells you which chapter to reopen.}
+\label{tab:promises}
+\begin{tabular}{@{}p{1.9cm}p{4.5cm}p{1.0cm}@{}}
+\hline
+\textbf{Principle} & \textbf{Pass/fail test} & \textbf{Ch.} \\
+\hline
+Replicable & Cloned into an empty folder on a fresh machine, it rebuilds every number with one command. & 2 \\
+Extensible & The next program year or client fits by changing a parameter, with no script copied. & 6 \\
+Accessible & A funder with no license or statistics degree can open the result and read it. & 9 \\
+Actionable & It names a next step in the units staff plan in: students, dollars, points. & 8 \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Working embedded: partners, power, and bad news}\label{sec:literacy}
+Embedded evaluation runs on trust, and trust is easiest to keep when the ground rules pre-date the findings. Program managers hope for good news, and that hope can turn into quiet pressure to move a baseline or soften a null. The defense is procedural: agree on data ownership, primary outcomes, and success thresholds in writing before the data is unblinded, and treat a pre-registered analysis plan\index{pre-registered analysis plan} (Section~\ref{sec:prereg}) as something you can point to when the pressure comes.\sidenote{The phrase \enquote{garden of forking paths} comes from \textcite{gelman2013forking}: even with no cheating, an analyst who would have made different choices had the data looked different is implicitly running many tests. Writing the plan down before unblinding closes the garden gate.} None of this requires distrusting your partners; it protects the relationship from the incentives around it.
+
+A pre-registered analysis plan is the concrete form that agreement takes, and it is cheaper than it sounds. Before the outcome data is unblinded you write down, in a dated file, the primary outcome, the comparison, the model, and the threshold that will count as success. The plan does not forbid you from looking at anything else; it only marks which analysis was the one you promised to report, so that a null on the primary outcome cannot be quietly demoted in favor of a subgroup that happened to shine. When a program manager later asks whether you could \enquote{just check} a different cut, the plan lets you say yes to the exploration and still report the pre-specified test as the headline. That is how you keep the relationship and the finding at the same time.
+
+Bad news is the moment the whole arrangement is built for. A null result, a target missed, a site underperforming: this is exactly when the pressure to soften arrives, and exactly when the pre-registered plan earns its keep. The professional move is to deliver the bad number plainly, in the same units and format you would have used for a good one, and paired with the next decision it implies rather than an excuse. A missed rural-reach target is not a failure to hide; it is a finding that tells the program where to place next year's host site. Delivered that way, bad news builds more trust than a string of flattering results, because the funder learns that your good news is worth believing.
+
+Improvement, not just judgment, is often the actual job. Much embedded evaluation runs on the Plan\slash Do\slash Study\slash Act cycle\index{Plan-Do-Study-Act cycle}: the program plans a small change, does it at one site, studies what the data show, and acts by scaling or dropping it, then loops. This is where an embedded evaluator differs most from an outside auditor. You are not delivering one verdict at the end of a grant; you are turning each short cycle's data around fast enough to inform the next one, which means the same figure gets rebuilt every quarter on new rows.\marginnote{The PDSA loop is why the replicable principle is not academic housekeeping. A workflow you can rerun in an afternoon lets you close a cycle in a week; one that needs a day of hand-editing turns a quarterly study into an annual one, and the program stops waiting for you.} A pipeline built for one-time judgment quietly fails here, because a cycle you cannot rerun cheaply is a cycle the program will stop waiting on.
+
+Data quality also depends on the front-line staff who enter it, so part of the job is building their evaluation literacy\index{evaluation literacy}. When staff see data entry as paperwork, they produce blanks and inconsistent categories; when they see how their inputs feed a dashboard they use, they clean up at the source. A plain-language data dictionary\index{data dictionary} generated straight from the data turns documentation into something staff can read,\marginnote{\texttt{labelbook} earns its keep by flagging the traps \texttt{codebook} hides: value labels defined but never attached to a variable, and two labels whose text is identical for the first twelve characters, which is where Stata truncates them in some listings.} which makes the result accessible to the staff who read it and, downstream, keeps the workflow replicable. Two built-in commands do the work: \texttt{codebook, compact}\index{codebook@\texttt{codebook}} for a one-line-per-variable overview and \texttt{labelbook}\index{labelbook@\texttt{labelbook}} for the value-label audit. On Stata's bundled sample of 1988 wage data, the compact codebook is six lines of exactly the summary staff need:
+{\footnotesize
+\begin{verbatim}
+. sysuse nlsw88, clear
+. codebook, compact
+
+Variable   Obs Unique  Mean   Min  Max  Label
+--------------------------------------------------
+idcode    2246   2246  2612    1   5159 NLS id
+age       2246     13  39.15  34     46 age in years
+race      2246      3   1.30   1      3 race
+wage      2246   1782   7.77   1.00  40.7 hourly wage
+\end{verbatim}
+}
+Read one row: \texttt{wage} has 2{,}246 observations, 1{,}782 distinct values, and a mean near \$7.77 an hour, which for 1988 dollars makes sense and tells a staffer at a glance that the column is populated and plausible. Run this the day an export arrives and a half-empty column or a miscoded category shows up before it reaches a funder's table, not after.
+
+\begin{appliedexample}[From a funder's question to a one-page answer]
+\textbf{Scenario.} The Thursday email: are we reaching rural students, or mostly suburban ones near the host sites? You have an enrollment spreadsheet and until Monday.
+
+\medskip
+\textbf{The workflow, and where the book builds each step.}
+\begin{enumerate}
+    \item \textbf{Ingest} the shared-drive folder of enrollment exports into one clean dataset (\texttt{convertanything}\index{convertanything@\texttt{convertanything}}, Chapter~\ref{ch:noapi}).
+    \item \textbf{Classify} students as rural or not by merging a county-rurality crosswalk onto ZIP codes (Chapter~\ref{ch:panels}).
+    \item \textbf{Benchmark} observed rural enrollment against a Census target pulled with \texttt{getcensus}\index{getcensus@\texttt{getcensus}} (Chapter~\ref{ch:apis}).
+    \item \textbf{Communicate} with one bar chart of observed versus targeted rural share, plus two sentences (Chapter~\ref{ch:graphs}).
+\end{enumerate}
+The workflow is the point. It is replicable because it runs from the raw exports, and actionable because it answers the officer's question in her own units. Every step is a later chapter; this scenario is the thread that ties them together.
+\end{appliedexample}
+
+To make the scenario concrete before any real data arrives, Figure~\ref{fig:reach} shows what the Monday exhibit looks like on simulated enrollment. We draw five host sites, each with a target rural share the program committed to (some sit in more rural catchments and promised more) and an observed share, then plot the two side by side. The exact command that builds it is printed above the figure, and the simulated numbers are set with a fixed seed so this exhibit rebuilds identically for any reader:
+{\footnotesize
+\begin{verbatim}
+graph bar (asis) target observed, ///
+    over(site, label(labsize(small))) ///
+    bar(1, color(gs10)) bar(2, color(navy)) ///
+    blabel(bar, format(%3.0f)) ///
+    legend(order(1 "Target" 2 "Observed")) ///
+    title("Rural enrollment share by site" ///
+        " (simulated)", size(medium)) ///
+    note("Simulated data, seed 20260704.", ///
+        size(vsmall))
+graph export "$figures/ch01_reach.png", ///
+    replace width(2400)
+\end{verbatim}
+}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{ch01_reach.png}
+\caption[Rural reach against target, simulated]{Observed versus targeted rural enrollment share across five host sites, on simulated data (seed 20260704), built by \texttt{ch01\_reach.do}. The command that made it is printed above. Two sites clear their target and three fall short, which is precisely the pattern the funder's Thursday email asks about: reach is uneven, and the shortfall is at specific, nameable sites (Cedar and Fork most of all). On real exports the same code answers the real question.}
+\label{fig:reach}
+\end{figure}
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{evalaudit} and \texttt{datadict}]
+\textbf{Proposed programs.} \texttt{evalaudit} writes a project-startup checklist auditing data-sharing agreements and funder mandates. \texttt{datadict} builds a plain-language data dictionary (an HTML page or a spreadsheet tab) from variable labels, value labels, and missingness rates, ordered for program staff. Both are plans, not yet code.
+\end{kaobox}
+
+\section{Embedded evaluation is the researcher-practitioner model, put to work}\label{sec:ch01-rpp}
+The role this chapter describes is not a budget workaround for teams that cannot hire an external evaluator; it is the operational form of a documented research tradition. Two decades of work on how evidence actually moves converge on one finding: research changes practice through relationships, not through publication. \textcite{tseng2012uses}, synthesizing the William T. Grant Foundation's studies of research use, reports that policymakers and practitioners acquire research through trusted colleagues and intermediaries far more often than through journals, and that they use it to reframe a problem at least as often as to pick a program. The embedded evaluator is that trusted intermediary, hired onto the team: you are the channel through which evidence enters the program's decisions, which is why this book spends as many chapters on communicating and sustaining evidence as on producing it.
+
+Naming the ways a finding gets used sharpens why an embedded evaluator is worth the desk they occupy. \textcite{patton2008utilization} separates three payoffs an evaluation can deliver. \emph{Instrumental use}\index{instrumental use} is the visible one: a finding drives a decision, and the program moves a host site or drops a component because of the number you reported. \emph{Conceptual use}\index{conceptual use} is quieter and often larger: the finding changes how staff and funders understand the problem, so a rural-reach shortfall stops reading as a recruitment failure and starts reading as a siting question, even before anyone acts. \emph{Process use}\index{process use} is the one only an embedded evaluator is positioned to capture: staff who help define the outcome, clean the intake form, and read the quarterly figure learn to think evaluatively, so the next program decision is sharper whether or not it cites a report. An external evaluator who arrives, measures, and leaves can deliver instrumental use and sometimes conceptual use; process use accrues to the evaluator who is in the room across cycles, which is the embedded role's distinctive return and the reason this book treats evaluation literacy (Section~\ref{sec:literacy}) as part of the deliverable rather than a side effect.
+
+The research-practice partnership\index{research-practice partnership} literature gives the arrangement a name and a track record. \textcite{coburn2016partnerships} define research-practice partnerships as long-term, mutualistic collaborations organized around problems of practice rather than around a researcher's questions, and they note plainly that the evidence on partnership outcomes is still thinner than the enthusiasm for the model. \textcite{penuel2017creating} turn the model into a working manual: how partners choose a shared problem, divide the labor, and keep both sides at the table when findings disappoint. An embedded evaluator is the smallest viable version of this model: one person inside the organization holding both the problem-of-practice list and the analysis pipeline. What you lack, compared with a university partnership, is redundancy, and that gap is the practical reason this book insists on replicable workflows. A partnership has staff who can rebuild an analysis when someone leaves; you have a do-file that must rebuild it for you.
+
+Embedding also changes what studies find, not just how findings travel. The National Study of Learning Mindsets \parencite{yeager2019mindset} enrolled a nationally representative sample of 65 U.S. public high schools, delivered a short online growth-mindset program to over 12,000 ninth-graders during regular class time under the schools' own conditions rather than a lab team's, and pre-registered its heterogeneity analysis. The average effect was small; the informative result was where the effect lived, concentrated among lower-achieving students and in schools whose peer norms supported seeking challenge. \textcite{walton2020seed} generalize the pattern as seed and soil: whether an intervention takes depends on whether the surrounding context lets the new belief or behavior grow. For an embedded evaluator this is the home question. You are rarely asked \enquote{does this program work on average, somewhere}; you are asked whether it works here, for these students, at these five sites, and proximity to sites and staff is the instrument that answers it. That is why site-level comparison, not a single pooled estimate, recurs through Chapters~\ref{ch:trust} and~\ref{ch:claims}.
+
+Methodologists reached the same conclusion from the causal side, and it backs this book's design. \textcite{deaton2018rcts} argue that a randomized trial, however well run, estimates an average effect for its enrolled sample, and that carrying the number to a new place requires knowledge of the local structures that produced it, knowledge no design supplies by itself. This book therefore teaches careful description and comparison first and holds formal causal designs to one section of Chapter~\ref{ch:claims}: the embedded evaluator's edge is exactly the local knowledge that transport requires, so the book invests where that edge pays. The hedge runs both directions, and it is specific: proximity never licenses causal language on its own, and Chapter~\ref{ch:claims} marks precisely where description ends and a causal claim begins.
+
+The evaluation profession codified the same instincts before the partnership literature named them. \textcite{weiss1998evaluation} taught evaluators to write down the program's theory, the claimed chain from activities to outcomes, so a study tests the link actually in doubt instead of the whole chain at once. \textcite{patton2008utilization} built utilization-focused evaluation\index{utilization-focused evaluation} around a single design question, who will use this finding and for what decision, which is the accessible and actionable principles stated as a method. \textcite{cousins1992participatory} argued that practitioners who help produce findings are the practitioners who use them, an early version of the evaluation-literacy case in Section~\ref{sec:literacy}. And improvement science\index{improvement science} \parencite{bryk2015improve} organizes the Plan-Do-Study-Act loop you met in Section~\ref{sec:literacy} into networked improvement communities whose slogan fits this chapter exactly: learn fast to implement well, by asking what works, for whom, under what conditions.
+
+Professional ethics already anticipates the tension in the role. The AEA Guiding Principles \parencite{aea2018principles} ask every evaluator for systematic inquiry, competence, integrity, respect for people, and attention to the common good, and they draw no line between embedded and external evaluators: the integrity obligations bind identically whether your desk sits inside the program or across town. Read that way, the written agreements of Section~\ref{sec:literacy} are not bureaucratic caution. They are how an embedded evaluator meets the same independence standard an external one meets by distance.
+
+\subsection{A written charter buys independence back after you trade distance for access}\label{sec:ch01-charter}
+The embedded role runs on a trade an external evaluator never makes: you swap physical and reporting distance for daily access, and distance is the classic guarantor of independence. An evaluator down the hall shares the program's lunch table, its budget line, and often its supervisor, so the appearance and sometimes the substance of independence is exactly what proximity spends. The Joint Committee's Program Evaluation Standards \parencite{yarbrough2011standards} name this directly under their propriety and accountability standards, which ask that an evaluation's contractual obligations, conflicts of interest, and formal reporting duties be made explicit up front rather than negotiated once findings are in hand. The standards do not tell the embedded evaluator to manufacture distance they do not have; they tell you to substitute a written record for the distance you traded away.
+
+The instrument that does the substituting is a charter, agreed and dated before the first analysis, and it is the same document Section~\ref{sec:literacy} reached for from the trust angle. A workable charter names four things: who owns the data and who may see it before it is final, which outcomes are primary and what thresholds count as success, who has the right to review a draft and who has the right to release the final number, and the escalation path when the evaluator and the program disagree about what a result means (Table~\ref{tab:ch01-viz-charter}). Each clause converts a relationship that could bend under pressure into a rule someone signed while the stakes were still abstract. A program director who has agreed in writing that the evaluator releases the primary finding cannot, in the week a null lands, recast that release as insubordination.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption[The one-page charter's four clauses]{The four clauses a workable charter names, each paired with the specific pressure it defuses once the data is unblinded. Read the right column to see why each clause is easier to hold when it was signed while the result was still abstract. Exercise~7 asks you to draft these four for a project you are on now.}
+\label{tab:ch01-viz-charter}
+\footnotesize
+\begin{tabular}{@{}p{2.0cm}p{3.6cm}p{3.5cm}@{}}
+\hline
+\textbf{Clause} & \textbf{What it fixes in writing} & \textbf{Pressure it defuses} \\
+\hline
+Data \& access & Who owns the data and who may see it before it is final. & A late request to re-cut a null before release. \\
+Primary outcome & Which outcome is primary and the threshold that counts as success. & Demoting a null in favor of a subgroup that happened to shine. \\
+Review \& release & Who reviews a draft and who releases the final number. & Recasting your release of a bad number as insubordination. \\
+Escalation & The path to follow when the two sides read a result differently. & A disagreement litigated only after the findings have landed. \\
+\hline
+\end{tabular}
+\end{table}
+
+The charter also protects the program from the evaluator, which is the reciprocity the Standards intend and the reason a program agrees to sign one. An embedded evaluator who can quietly redefine success after seeing the data threatens the program as much as a program that leans on the evaluator threatens the finding; the charter binds both parties to the definitions they set in advance. Written this way, the document is not a shield one side holds against the other. It is the shared record that lets an evaluator keep the access proximity buys and the independence the profession requires at the same time, which is the whole balancing act the embedded role asks you to perform.
+
+\subsection{The four principles compress toolkits you already carry}
+If you trained as an evaluator, the four principles will read as restatements of tools you already use, and that is deliberate: the principles do not replace the standard toolkit, they turn it into tests a script can pass or fail. A logic model\index{logic model} in the Kellogg tradition \parencite{kellogg2004logic} already lists activities, outputs, and outcomes in the units staff plan in; the extensible and actionable principles ask you to wire each cell of that model to a named variable in a dataset, so next year's column of the model fills itself when the pipeline reruns. Performance measurement as \textcite{hatry2006performance} describes it asks an agency to track outcome indicators on a regular cycle; the replicable principle is what makes that cycle affordable for a small team, because a tracking regime that needs a day of hand-editing per quarter decays into a stale spreadsheet by year two.
+
+The logic model earns a paragraph of its own because it is the one artifact an embedded evaluator and a program build together, and \textcite{funnell2011purposeful} explain why building it together matters more than drawing it well. A logic model is the picture of a program's theory of change\index{theory of change}: the claimed chain from what the program does to what it hopes will change, with the causal links stated plainly enough to be doubted. Funnell and Rogers press evaluators to write those links as testable propositions rather than as a decorative box-and-arrow diagram, so the model marks exactly which step in the chain a study will put to the test. This is the same discipline \textcite{weiss1998evaluation} called theory-based evaluation, now written as a shared drawing: when the program agrees that a link is the one in doubt, the evaluator knows which number to produce, and the program knows which result would change its mind.
+
+For an embedded evaluator the logic model does a second job that a lone diagram cannot: it aligns two parties who otherwise talk past each other. The program describes its work in activities and beliefs; the evaluator needs outcomes and variables; the shared model is where those two vocabularies meet, one row at a time. A single drawing that names the rural-reach link as the tested step, ties it to a variable in the enrollment export, and states the threshold that would count as success does the alignment work of Section~\ref{sec:literacy}'s written agreements and the measurement work of Chapter~\ref{ch:trust} at once (Figure~\ref{fig:ch01-viz-logic}). Drawn that way, the logic model is not a grant-application formality. It is the standing contract about what the program believes and what the evaluator will check, which is why an embedded evaluator revises it every cycle rather than filing it after the kickoff meeting.
+
+\begin{figure*}
+\centering
+\begin{tikzpicture}[node distance=0.75cm and 1.0cm]
+  \node[stage] (inp) {Inputs\\\scriptsize staff, host sites};
+  \node[stage, right=of inp] (act) {Activities\\\scriptsize recruit, enroll};
+  \node[stage, right=of act] (out) {Outputs\\\scriptsize students enrolled};
+  \node[stage, right=2.4cm of out] (oc)  {Outcome\\\scriptsize rural share};
+  \draw[flow] (inp) -- (act);
+  \draw[flow] (act) -- (out);
+  \draw[flow, draw=vizRule, line width=1.1pt] (out) -- node[annot, above=2pt]{link in doubt} (oc);
+  \node[io, below=0.9cm of oc] (var) {\texttt{rural\_share}\\in the export};
+  \draw[flow] (oc) -- (var);
+  \node[substep, left=1.4cm of var, text width=2.6cm] (thr) {Threshold agreed\\in advance:\\observed $\geq$ target};
+  \draw[flow, draw=vizRule] (var) -- (thr);
+\end{tikzpicture}
+\caption[A logic model wired to a variable and a threshold]{The logic model as an embedded evaluator uses it, not a decorative chain. Read left to right: inputs feed activities, activities produce outputs, outputs are meant to move the outcome. Only one link is in doubt (the heavy arrow), so that is the step a study tests. The outcome cell is wired down to a named column in the enrollment export and to the success threshold both parties agreed before the data was unblinded, so the drawing tells the evaluator exactly which number to produce and the program exactly which result would change its mind.}
+\label{fig:ch01-viz-logic}
+\end{figure*}
+
+Evidence standards fit the same frame. The What Works Clearinghouse handbook \parencite{wwc2022handbook} rates study designs, not findings: a randomized trial with low attrition can meet its top standard, a matched comparison can meet the standard with reservations, and a raw before-after difference meets neither. The discipline for an embedded evaluator is to know which rung your design occupies and to claim no higher, which is the working definition of honest comparison this book builds toward in Chapter~\ref{ch:claims}. A replicable pipeline serves that honesty directly: a reviewer, or a funder's methods consultant, can trace every number to the design that produced it and check the rung for themselves. Table~\ref{tab:promises} is this whole subsection in four rows: the toolkits supply the standards, and the principles turn each standard into a pass\slash fail check on your own files.
+
+\section{The running examples, and how to get them}
+Learn the workflow once on data you can download in a minute, then carry it to your own files unchanged. The book leans on a few named, public datasets, reused across chapters so that the workflow, not a new dataset each time, is what you learn. Naming and shipping them is also what makes the book replicable. Table~\ref{tab:data} lists the anchors; all download in one or two steps, and all but two need no key or login.
+
+\begin{table*}[htbp]
+\centering
+\footnotesize
+\caption[The book's running datasets]{The running datasets. Every one is public; the ``How'' column is the command that gets it. Full setup for the two that need a free key is in Appendix~\ref{app:setup}.}
+\label{tab:data}
+\begin{tabular}{@{}p{2.5cm}p{3.4cm}p{2.1cm}p{3.0cm}@{}}
+\hline
+\textbf{Dataset} & \textbf{What it is} & \textbf{Unit} & \textbf{How to get it} \\
+\hline
+BLS QCEW & County employment and wages, quarterly & County-quarter & \texttt{import delimited} a URL; no key \\
+County Health Rankings & Health and social measures, annual & County-year & \texttt{copy} a URL; no key \\
+Texas STAAR (TAPR) & School test results, 2012--2025 & School-year & scraped files; no key \\
+CDC PRAMS & Maternal-health indicators & State & Excel workbooks; no key \\
+ACS (Census) & Income, poverty, insurance & Any geography & \texttt{getcensus}; free key \\
+FRED & Economic time series & Series-period & \texttt{import fred}; free key \\
+\hline
+\end{tabular}
+\end{table*}
+
+Everything installs and runs from the companion \texttt{code/} folder. Run \texttt{01\_install.do} once to fetch the packages the book uses, then \texttt{00\_control.do} to set your paths (Chapter~\ref{ch:workshop}). As a first taste, here is the entire recipe for the wage figure that opens the data chapter, real numbers, no key, four lines:
+{\footnotesize
+\begin{verbatim}
+local url "https://data.bls.gov/cew/data/api"
+import delimited "`url'/2023/1/area/48453.csv", ///
+    clear varnames(1) stringcols(1 3)
+keep if own_code == 5 & industry_code == "10"
+list area_fips avg_wkly_wage, clean noobs
+\end{verbatim}
+}
+That block downloads Austin's county wage record and prints one number, the average private-sector weekly wage.\marginnote{The QCEW counts jobs, not people: a worker with two jobs is counted twice, and the self-employed and most farm labor are excluded outright. It is a wage-per-job series, not a household-income measure, so never present it as \enquote{what residents earn.}} Chapter~\ref{ch:apis} turns the same four lines into a five-county comparison and the figure on page~\pageref{fig:qcew}.
+
+\section{How the book is organized}
+Read this section once to find the chapter that answers the question in front of you today, then use it as a map back whenever a new deadline lands. The chapters follow the pipeline of Figure~\ref{fig:pipeline}.\marginnote{Public data is not the same as unrestricted data. Even open Census tables carry a citation expectation, and some agency downloads ship with terms of use that bar redistributing the raw file. Ship the \emph{code} that fetches the data, not always the data itself.} Part~I sets up principles and environment. Part~II gets the data: from APIs (Chapter~\ref{ch:apis}), from agencies with no API (Chapter~\ref{ch:noapi}), from survey platforms (Chapter~\ref{ch:surveys}), and into trustworthy longitudinal data (Chapter~\ref{ch:panels}). Part~III turns data into evidence: reliable measurement (Chapter~\ref{ch:trust}) and defensible claims, including the book's one causal section (Chapter~\ref{ch:claims}). Part~IV communicates: static graphics (Chapter~\ref{ch:graphs}), interactive infographics (Chapter~\ref{ch:interactive}), spreadsheet deliverables (Chapter~\ref{ch:sheets}), and self-contained portals (Chapter~\ref{ch:portals}). Part~V sustains the practice: careful AI (Chapter~\ref{ch:ai}), safe sharing (Chapter~\ref{ch:sharing}), and shared tooling with a replication archive (Chapter~\ref{ch:tools}).
+
+\paragraph{Where this leaves you.} You now have the shape of the whole job, the four principles, and the reader paths for your role. You can also name the role's lineage, research-practice partnerships, utilization-focused evaluation, and improvement science, when a funder or board member asks what an embedded evaluator is (Section~\ref{sec:ch01-rpp}). You can say what the role trades and how a written charter buys back the independence that trade costs, and you can name the three uses (instrumental, conceptual, process) that make an embedded evaluator worth the desk. Next we set up a project so the pipeline you build survives a new laptop, a new teammate, and next month's data.
+
+\section*{Exercises}\addcontentsline{toc}{section}{Exercises}
+\begin{enumerate}
+\item \emph{Try it on your own data.} Load an export you already work with and run \texttt{codebook, compact} on it. Read the row for one variable you thought was complete, and confirm its observation count matches the dataset's, so a half-empty column shows itself now rather than in a funder's table.
+\item Before you run anything, predict how many distinct values \texttt{wage} holds in Stata's \texttt{nlsw88} sample. Then load the data with \texttt{sysuse nlsw88, clear}, run \texttt{codebook, compact}, and compare your guess to the \texttt{Unique} column the chapter prints.
+\item Rerun the four-line BLS QCEW block from this chapter for two more Texas counties by swapping the \texttt{48453} FIPS code for two others. Confirm each run prints one average weekly wage, and note which county pays the most.
+\item Attach a value label to a variable but leave one of its codes unlabeled, then run \texttt{labelbook} on that dataset. Confirm the audit flags the gap, so you learn to catch a miscoded category before it reaches a chart.
+\item Take one workflow you already maintain and grade it against the four principles in Table~\ref{tab:promises}. Name the single row it most clearly fails, and write the one change that would let it pass.
+\item Write a half-page researcher-practitioner map for your own role: name the intended users of your next deliverable and the decision they face, the problem of practice your work is organized around, and the one logic-model link your next analysis will test. Section~\ref{sec:ch01-rpp} names the tradition behind each part, so you can point a skeptical funder to the literature that describes your job.
+\item Draft the four clauses of a one-page charter (Section~\ref{sec:ch01-charter}) for a project you are on now: who owns and may pre-view the data, which outcome is primary and its success threshold, who reviews the draft and who releases the final number, and the escalation path for a disagreement. Then mark which clause would have been hardest to hold had you written it after seeing the results.
+\end{enumerate}
+

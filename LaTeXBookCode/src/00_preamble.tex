@@ -1,0 +1,118 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Embedded Evaluation: Stata Tools for Applied Research and Evaluation
+% Eric Booth & Elizabeth Teas
+% 2026 Edition
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[
+    a4paper,
+    fontsize=10pt,
+    twoside=true,
+    numbers=noenddot,
+]{kaobook}
+
+% --- Geometry Adjustments (5% wider narrative, narrower margins) ---
+\addtolength{\textwidth}{0.05\textwidth}
+\addtolength{\marginparwidth}{-0.05\textwidth}
+
+% --- Language & Typography ---
+\ifxetexorluatex
+    \usepackage{polyglossia}
+    \setmainlanguage{english}
+\else
+    \usepackage[english]{babel}
+\fi
+\usepackage[english=american]{csquotes}
+
+% --- Essential Packages ---
+\usepackage{kaobiblio}
+\IfFileExists{main.bib}{\addbibresource{main.bib}}{} 
+\usepackage[framed=true]{kaotheorems}
+\usepackage{kaorefs}
+
+% --- Fallback Definitions for Custom kaobook Commands ---
+\providecommand{\Environment}[1]{\texttt{#1}}
+\providecommand{\Command}[1]{\texttt{\textbackslash#1}}
+\providecommand{\Option}[1]{\textsf{#1}}
+
+% --- Custom asides: "Applied Example" pull-out + "Visualization" callout ---
+% Built on mdframed (already loaded by kao.sty/kaotheorems) so they compile
+% with the rest of the book. Applied Example = a standalone, colored, boxed
+% deep-dive that breaks the chapter narrative. Visualization = a smaller
+% prompt suggesting a chart/figure to build around.
+\definecolor{aeBg}{HTML}{FBF1DF}      % warm sand background
+\definecolor{aeRule}{HTML}{B5651D}    % terracotta rule
+\definecolor{aeTitle}{HTML}{7A3E0E}   % dark brown title text
+\definecolor{vizBg}{HTML}{E6F3EF}     % pale teal background
+\definecolor{vizRule}{HTML}{14776A}   % deep teal rule
+
+\newcounter{appliedexample}
+\counterwithin{appliedexample}{chapter}
+
+\newmdenv[
+    skipabove=1.2\topskip, skipbelow=0.8\topskip,
+    innertopmargin=8pt, innerbottommargin=8pt,
+    innerleftmargin=11pt, innerrightmargin=11pt,
+    linewidth=1.1pt, roundcorner=5pt,
+    linecolor=aeRule, backgroundcolor=aeBg,
+    frametitlerule=true,
+    frametitlefont=\sffamily\bfseries\color{aeTitle},
+    frametitlebackgroundcolor=aeBg,
+]{appliedexamplebox}
+
+\newenvironment{appliedexample}[1][]{%
+    \refstepcounter{appliedexample}%
+    \begin{appliedexamplebox}[frametitle={Applied Example~\theappliedexample.~~#1}]%
+}{%
+    \end{appliedexamplebox}%
+}
+
+\newmdenv[
+    skipabove=1\topskip, skipbelow=0.6\topskip,
+    innertopmargin=6pt, innerbottommargin=6pt,
+    innerleftmargin=10pt, innerrightmargin=10pt,
+    linewidth=0.9pt, roundcorner=4pt,
+    leftline=true, rightline=true, topline=true, bottomline=true,
+    linecolor=vizRule, backgroundcolor=vizBg,
+    frametitlerule=true,
+    frametitlefont=\sffamily\bfseries\color{vizRule},
+    frametitlebackgroundcolor=vizBg,
+]{vizbox}
+
+\newenvironment{vizcallout}[1][Visualization to build]{%
+    \begin{vizbox}[frametitle={#1}]%
+}{%
+    \end{vizbox}%
+}
+
+% Narrow text column (kaobook reserves a wide margin) means long monospace
+% command names and compound terms occasionally overrun. emergencystretch lets
+% TeX relax spacing as a last resort instead of producing overfull lines.
+\setlength{\emergencystretch}{3em}
+
+% Paths for figures
+\graphicspath{{images/}}
+
+% Display equations (align/aligned/cases); amssymb already loaded by kao.sty
+\usepackage{amsmath}
+
+% Flow diagrams (workflow pipelines, decision trees)
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit, backgrounds, calc}
+% Reusable node styles for the book's pipeline diagrams
+\tikzset{
+    stage/.style={rectangle, rounded corners=3pt, draw=vizRule, line width=0.9pt,
+        fill=vizBg, text width=1.7cm, align=center, minimum height=1.0cm, font=\sffamily\footnotesize},
+    substep/.style={rectangle, rounded corners=2pt, draw=aeRule, line width=0.6pt,
+        fill=aeBg, align=left, font=\sffamily\scriptsize, inner sep=3pt},
+    flow/.style={-{Stealth[length=2mm]}, line width=0.9pt, draw=aeRule},
+    decision/.style={diamond, aspect=1.6, draw=vizRule, line width=0.8pt,
+        fill=vizBg, align=center, inner sep=2pt, font=\sffamily\scriptsize},
+    io/.style={trapezium, trapezium left angle=70, trapezium right angle=110,
+        draw=aeRule, line width=0.7pt, fill=aeBg, align=center, font=\sffamily\scriptsize, inner sep=3pt},
+    annot/.style={draw=none, fill=none, align=left, font=\itshape\scriptsize, text=black!70},
+}
+
+% Index & Glossary
+\makeindex[columns=3, title=Alphabetical Index, intoc]
+\makeglossaries

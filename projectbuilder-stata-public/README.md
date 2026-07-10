@@ -1,15 +1,16 @@
 # projectbuilder
 
-Scaffold a data-analysis project folder in Stata with one command: a
-five-folder layout, a control file that holds every path in one place, a
-numbered do-file pipeline, and a README stamped with the project's
-metadata.
+Scaffold a data-analysis project in Stata with one command: a raw-data
+folder, an analytic-data folder, an output folder, a documentation folder,
+and a numbered do-file pipeline. If the data already exists, `projectbuilder`
+also copies it in, converts it, appends it into one analytic file, and writes
+a documentation page. If the data comes later, scaffold now and rerun with
+`rebuild` on every refresh.
 
-Companion package to *Applied Program Evaluation Using Stata* (Booth &
-Teas); the scaffold is the project layout the book uses throughout. The
-design grew out of the authors' production scaffolding tool, generalized
-here so it runs anywhere: no organization-specific paths and no template
-folders required.
+Companion package to *Applied Program Evaluation Using Stata* (Booth & Teas).
+It is a generalization of the author's production project-scaffolding tool,
+rewritten so it runs anywhere: no organization-specific paths, no template
+folders, no shell calls, same behavior on macOS, Windows, and Linux.
 
 ## Install
 
@@ -25,95 +26,109 @@ From a local folder (a clone or download of this repository):
 net install projectbuilder, from("/path/to/projectbuilder-stata-public/") replace
 ```
 
-Requires Stata 16.0 or newer. No dependencies.
+Requires Stata 16.0 or newer. No hard dependencies.
 
 ## Quick start
 
+**Workflow A — the data already exists.** Point `data()` at a folder of files
+(and/or `url()` at a source address). `projectbuilder` copies the files into
+`01_raw/`, converts them into `01_raw/_converted/`, appends them into
+`02_cleaned/<project>_analytic.dta`, and builds the documentation:
+
 ```stata
 cd "~/projects"
-projectbuilder LaborDept/UnempClaims,                        ///
-    description("Monthly county unemployment claims")       ///
-    url("https://example.gov/data/claims.csv")               ///
-    outcomes(claims_rate claims_n) over(county year)         ///
-    descsave topic("labor markets") publicfacing(yes)        ///
-    timeline(monthly)
+projectbuilder CountyBudgets,                                     ///
+    data("~/Desktop/budget_drop")                                ///
+    description("County budget CSVs, one row per dept per FY")   ///
+    topic("local government, budgets") publicfacing(unsure)      ///
+    timeline("annual") outcomes(total_budget) over(year dept) descsave
+```
+
+**Workflow B — data later.** Scaffold now with no `data()`/`url()`, drop files
+into `01_raw/` when they arrive, then rebuild. Every refresh is another
+`rebuild`; it never overwrites a do-file you have edited unless you add
+`replace`:
+
+```stata
+projectbuilder VendorFeed, description("Monthly vendor extract")
+* ... later, after dropping files into VendorFeed/01_raw/ ...
+projectbuilder VendorFeed, rebuild
 ```
 
 This creates:
 
 ```
-LaborDept/UnempClaims/
-├── README.md          project name, date, author, metadata, this tree
-├── raw/               untouched downloads (write-once; never edited)
-├── clean/             analysis-ready .dta files
-├── code/
-│   ├── 00_control.do      every path in one place; run-all block
-│   ├── 100_ingest.do      fetch raw source files into $raw
-│   ├── 200_clean.do       raw -> analysis-ready .dta in $clean
-│   ├── 300_analyze.do     clean -> tables in $output
-│   ├── 400_visualize.do   graphs exported to $figures
-│   └── 500_report.do      assemble the deliverable in $output
-├── output/            logs and tables
-└── figures/           exported graphs
+VendorFeed/
+├── 01_raw/                raw source files (write-once)
+│   ├── _archive/
+│   └── _converted/        one .dta per raw file (convertanything)
+├── 02_cleaned/            <project>_analytic.dta lives here
+│   └── _archive/
+├── 03_output/             logs, tables, exhibits
+│   └── _archive/
+├── _code/
+│   ├── 000_control.do         every path in one place; run-all block
+│   ├── 100_data_download.do
+│   ├── 200_data_management.do convertanything -> combineall
+│   ├── 300_labels.do
+│   ├── 400_data_profiler.do
+│   ├── 500_aggregation.do
+│   ├── 600_analysis.do
+│   └── _archive/
+├── _documentation/
+│   ├── index.do           webdoc2 source
+│   ├── _runall.do          renders website/index.html
+│   ├── Readme.md
+│   ├── website/index.html
+│   └── _archive/
+└── _archive/
 ```
 
-`00_control.do` pins the Stata version, stamps `$root` with the absolute
-path of the new folder (one loudly commented line to edit if the project
-ever moves), derives `$raw`, `$clean`, `$code`, `$output`, and `$figures`
-from it, and ends with a run-all block: flip `local run_all` to `1` and
-the whole pipeline rebuilds in order.
+`000_control.do` pins the Stata version, stamps `$root` with the absolute path
+of the new folder (one loudly commented line to edit if the project moves),
+derives `$raw`, `$converted`, `$cleaned`, `$output`, `$code`, and `$docs` from
+it, and ends with a run-all block over the numbered pipeline.
 
-The metadata options do double duty. Everything you pass is stamped into
-the project README, and three options also seed the stubs: `url()` becomes
-the download-target comment in `100_ingest.do`, `outcomes()` and `over()`
-become suggested locals in `300_analyze.do`, and `descsave` adds a
-commented codebook-export call (via `descsave` from SSC) to
-`200_clean.do`.
+## Optional dependencies
 
-## Design notes
+None are required. Each is detected with `capture which`; if it is missing,
+the generated do-file still contains the call (a working example), the
+automatic pass skips that step, and a one-line note names the install command.
 
-- **Refuses to clobber.** If the target folder already exists,
-  `projectbuilder` stops with error 602 and changes nothing.
-- **Write-once raw.** The layout's one load-bearing distinction: raw
-  files are downloaded and never edited, so a cleaning bug is always one
-  rerun away from repair.
-- **Numbered by hundreds.** The folder listing is the run order, and the
-  gaps are on purpose: a new step slots in as `150_` without renaming
-  the rest.
-- **Self-contained and cross-OS.** Every scaffold file is written by the
-  ado itself using Stata's `mkdir` and `file` commands; no template
-  folder, no shell calls, same behavior on macOS, Windows, and Linux.
-- **Stored results.** `r(path)` and `r(project)` let a calling do-file
-  pick up where the scaffold left off.
+| Package | What it adds | Install |
+|---------|--------------|---------|
+| `convertanything` | bulk-convert `01_raw/` to `.dta` in `01_raw/_converted/` | `net install convertanything, from("https://raw.githubusercontent.com/ericabooth/convertanything-stata-public/main/")` |
+| `combineall` | append/merge the converted files into the analytic file | `net install combineall, from("https://raw.githubusercontent.com/ericabooth/combineall-stata-public/main/")` |
+| `descsave` | Excel codebook from `300_labels.do` | `ssc install descsave` |
+| `srctag` / `srcfind` | tag and search each variable's source lineage | author's GitHub |
+| `webdoc2` | render a richer `index.html` | `ssc install webdoc`, then `net install webdoc2` (author's GitHub) |
 
-## Syntax
+When `webdoc2` is absent, `projectbuilder` writes a plain but complete
+`index.html` and `Readme.md` directly, so the documentation always exists.
 
-```
-projectbuilder Source[/Subsource] [, description(string) url(string)
-    path(string) topic(string) publicfacing(yes|no|unsure)
-    timeline(string) othernotes(string) outcomes(varlist) over(varlist)
-    descsave]
-```
+## Stored results
 
-`path()` sets the base directory (default: current working directory).
-`Source/Subsource` nests the project one level under the base.
-`outcomes()` and `over()` are capped at 10 items each, with a note when
-trimmed. See `help projectbuilder` after installing for the full option
-descriptions and three worked workflows (local files only; refreshing
-with a new data vintage; source with a public URL).
+`projectbuilder` is `rclass` and stores:
+
+- `r(project)` — project label (slashes become underscores)
+- `r(path)` — absolute path of the project folder
+- `r(nraw)` — number of files in `01_raw/`
+- `r(nconverted)` — number of `.dta` files in `01_raw/_converted/`
+- `r(rebuilt)` — `1` if this call refreshed an existing project, else `0`
 
 ## Testing
 
-`test_projectbuilder.do` scaffolds into a temporary directory and checks
-the full file tree, runs the generated control file, and exercises the
-clobber refusal, nesting, metadata stamping, and name validation. Run it
-from any scratch directory:
+`test_projectbuilder.do` scaffolds into a temporary directory and checks both
+workflows, the rebuild idempotence and edit-preservation guarantee, the clobber
+refusal (602), name and option validation (198), nesting, and the generated
+control file. Synthetic data only; nothing is committed. Run it from any
+scratch directory:
 
 ```
 stata-mp -b do test_projectbuilder.do
 ```
 
-## Authors
+## Author
 
 Eric A. Booth, Sr Researcher, Texas 2036
 

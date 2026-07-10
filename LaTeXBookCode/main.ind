@@ -25,7 +25,8 @@
   \item \texttt{coefplot}, \hyperpage{115}
   \item \texttt{collapse}, \hyperpage{25}
   \item \texttt{collect}, \hyperpage{140}, \hyperpage{195}
-  \item \texttt{combineall}, \hyperpage{42}, \hyperpage{47}
+  \item \texttt{combineall}, \hyperpage{22}, \hyperpage{42}, 
+		\hyperpage{47}
   \item complementary suppression, \hyperpage{196}
   \item conceptual use, \hyperpage{10}
   \item \texttt{confirm}, \hyperpage{72}
@@ -34,7 +35,8 @@
   \item control chart, \hyperpage{57}, \hyperpage{116}
   \item control file, \hyperpage{21}
   \item convergence delta, \hyperpage{181}
-  \item \texttt{convertanything}, \hyperpage{8}, \hyperpage{52}
+  \item \texttt{convertanything}, \hyperpage{8}, \hyperpage{22}, 
+		\hyperpage{52}
   \item \texttt{copy}, \hyperpage{49}
   \item Cronbach's alpha, \hyperpage{61}, \hyperpage{82}
   \item crosswalk, \hyperpage{71}
@@ -228,7 +230,8 @@
   \item \texttt{sparkta2}, \hyperpage{121}, \hyperpage{163}
   \item spreadsheet errors, \hyperpage{139}
   \item \texttt{srcfind}, \hyperpage{71}
-  \item \texttt{srctag}, \hyperpage{71}, \hyperpage{174}
+  \item \texttt{srctag}, \hyperpage{22}, \hyperpage{71}, 
+		\hyperpage{174}
   \item \texttt{ssc install}, \hyperpage{19}
   \item \texttt{statashiny}, \hyperpage{121}, \hyperpage{155}
   \item \texttt{statplot}, \hyperpage{114}

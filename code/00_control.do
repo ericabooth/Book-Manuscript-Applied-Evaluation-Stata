@@ -44,6 +44,8 @@ if `run_all' {
     do "$code/01_install.do"
     do "$code/ch01_reach.do"
     do "$code/ch02_benchmark.do"
+    * ch02_projectbuilder.do scaffolds real folders; run it on its own:
+    * do "$code/ch02_projectbuilder.do"
     do "$code/20_ch03_apis.do"
     do "$code/ch03_webapi.do"
     do "$code/ch03_educationdata.do"

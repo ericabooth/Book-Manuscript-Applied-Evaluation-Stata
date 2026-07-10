@@ -1,0 +1,332 @@
+\chapter{Making numbers trustworthy}\label{ch:trust}
+
+A five-person site ranks worst in the state this quarter because one family moved away. The number is real, the ranking is nonsense, and a funder who reads it may cut the site's budget. Before any comparison or model, the numbers themselves have to be trustworthy: the scales have to measure what they claim, the sample has to stand in for the population, and small-denominator rates have to be kept from shouting.
+
+This chapter covers those four safeguards: building reliable scales, weighting for representativeness, stabilizing noisy small-site rates, and sizing a study so it can find the effect it was funded to find. Each one protects a downstream claim from a predictable way of being wrong, which is why they come before the analysis rather than after the reviewer catches the problem. Each is worked here on real or clearly labeled simulated data, in one do-file (\texttt{ch07\_trust.do}) that reruns end to end, so the safeguard is not just described but demonstrated.
+
+For an evaluator embedded in a program team, these safeguards are the price of admission to the conversation practitioners already trust. Performance-measurement systems, logic-model indicators, and What Works Clearinghouse evidence tiers all assume the numbers feeding them mean what they say, and each safeguard here answers a question a skeptical program officer will ask out loud: does this scale hold together, do these respondents stand in for our clients, is this small site's rate real or an accident of its size, and could this study have found the effect at all. The AEA Guiding Principles name systematic inquiry and competence as obligations an evaluator owes the people the program serves, and these checks are where those obligations become arithmetic rather than aspiration. The chapter also sets two ideas the field is moving toward alongside the shipped tools: distribution-free prediction intervals and model-based small-area estimation. Table~\ref{tab:ch07-viz-map} is the chapter's map: each safeguard, the skeptical question it answers, and the Stata command that does the work.
+
+\begin{table}[htbp]
+\centering
+\caption[The four safeguards and the question each answers]{The chapter's spine: read down the middle column for the skeptical program officer's question, then across to the safeguard that answers it and the tool that does the work. The last two rows are the forward-looking additions, prediction intervals and variance partitioning, that the shipped safeguards set up.}
+\label{tab:ch07-viz-map}
+{\footnotesize
+\begin{tabular}{p{2.3cm}p{4.7cm}p{2.4cm}}
+\hline
+Safeguard & The question it answers & Stata tool \\
+\hline
+Reliable scales & Do these items measure one thing? & \texttt{alpha}, \texttt{factor} \\
+Survey weights & Do respondents stand in for the population? & \texttt{svyset}, \texttt{svy:} \\
+Rate shrinkage & Is a small site's rate real or an accident of its size? & \texttt{rateshrink} \\
+Study power & Could the study find the effect at all? & \texttt{power} \\
+Conformal bands & Where will the \emph{next} case land? & \texttt{conformalpred} \\
+Variance split & How much of the spread is the site vs.\ the person? & \texttt{mixed}, \texttt{hlmr2} \\
+\hline
+\end{tabular}
+}
+\end{table}
+
+\section{From items to reliable scales}
+Before you average six survey items into one score, confirm they measure the same thing, because a scale that does not hold together will not replicate across waves and every comparison built on it inherits that instability. We check reliability before we model. Cronbach's alpha\index{Cronbach's alpha} (\texttt{alpha}\index{alpha@\texttt{alpha}}) summarizes internal consistency;\sidenote{Alpha is not a fixed target: it rises mechanically with the number of items, so a long scale can clear 0.80 on padding alone. The conventional floor is 0.70 for research and 0.80 for high-stakes decisions, but a value above 0.95 usually signals redundant items, not virtue.} an exploratory factor check\index{factor analysis} (\texttt{factor}\index{factor@\texttt{factor}}) tests whether the items really track one dimension or several; and where item quality varies enough to matter, item response theory\index{item response theory} (\texttt{irt}\index{irt@\texttt{irt}}) models each item's difficulty and information. The aim is not psychometric perfection but a defensible answer to \enquote{does this scale measure one thing?}
+
+The question a program manager brings is blunt: can I add these six survey items into one \enquote{engagement} score, or is one of them dead weight? To answer it we build a simulated six-item scale for 400 caregivers, five items driven by a shared latent trait and a sixth that barely tracks it, then read \texttt{alpha}:
+{\footnotesize
+\begin{verbatim}
+* simulated: 400 caregivers, one weak item (item6)
+set seed 20260704
+set obs 400
+gen latent = rnormal()
+forvalues j = 1/5 {
+    gen item`j' = round(3 + latent + rnormal(0, 1))
+    replace item`j' = 1 if item`j' < 1
+    replace item`j' = 5 if item`j' > 5
+}
+gen item6 = round(3 + 0.15*latent + rnormal(0, 1))
+alpha item1-item6, item
+\end{verbatim}
+}
+The \texttt{item} option hands the analyst a diagnosis rather than a single coefficient, printing one row per item:
+{\footnotesize
+\begin{verbatim}
+Test scale = mean(unstandardized items)
+                    Item-test  Item-rest  interitem
+Item     Obs  Sign  corr       corr       cov       alpha
+item1    400   +     0.7155     0.5475    .4687989  0.7086
+item2    400   +     0.7470     0.5961    .4522575  0.6950
+item3    400   +     0.6954     0.5266    .4847419  0.7147
+item4    400   +     0.7299     0.5777    .4664480  0.7009
+item5    400   +     0.7290     0.5656    .4598596  0.7034
+item6    400   +     0.3821     0.1760    .6639919  0.7939
+Test scale                                .4993496  0.7576
+\end{verbatim}
+}
+The whole-scale alpha is 0.7576, just over the 0.70 floor, so a manager glancing at the bottom line would ship all six items. The item rows say do not. Item~6 correlates only 0.18 with the rest of the scale where the others sit near 0.55, and the last column reports the payoff: drop item~6 and alpha rises to 0.7939. Dropping any of the other five would lower it. Refitting on the five good items confirms the number:
+{\footnotesize
+\begin{verbatim}
+. alpha item1-item5
+Number of items in the scale:            5
+Scale reliability coefficient:      0.7939
+\end{verbatim}
+}
+This makes sense: item~6 was built to carry only 15\% of the shared signal the others share, so it adds noise, not information, and the \enquote{alpha if item dropped} column caught it exactly.\marginnote{Read the item-rest correlation before the alpha column: it is the honest signal, since it correlates each item against the \emph{other} items only, not against a total the item helped build. Anything under about 0.30 is a candidate for the cut.} Reliability matters here for a practical reason: a scale that does not hold together produces findings that will not replicate across waves, so this year's engagement score and next year's are not comparable. Checking reliability once, and pruning the one bad item, is what makes the construct extensible across the waves Chapter~\ref{ch:surveys} taught you to collect.
+
+\section{Weights that restore the population}\label{sec:weights}
+Report what your population is like, not just what your respondents said, by weighting the sample back into the population's shape before you quote a rate. When the responding sample does not look like the population it is meant to represent, that correction is what closes the gap. We declare the sampling design with \texttt{svyset}\index{svyset@\texttt{svyset}} so that standard errors respect it, then adjust the weights to match known population margins through post-stratification\index{post-stratification} or raking\index{raking}.\marginnote{Raking (iterative proportional fitting) matches several margins at once, e.g. age, sex, and region, when you lack the full joint distribution the cells of post-stratification would need. Watch the extreme weights it can produce: a handful of respondents carrying weights of 40 or more will quietly wreck your effective sample size.} This is the correction that consumes the nonresponse diagnostics of Chapter~\ref{ch:surveys}: the imbalance those tests detect is the imbalance these weights repair.
+
+The question is whether weighting changes the headline number enough to matter. Stata ships the NHANES~II survey, which deliberately oversampled older adults, so it is the cleanest place to see the gap.\marginnote{Once you \texttt{svyset} the design, let Stata carry it: prefixing an estimation command with \texttt{svy:} propagates the strata and weights into every standard error. Reaching back for \texttt{[pweight=]} on individual commands is the usual way an analyst gets the point estimate right and the uncertainty wrong.} We take the raw sample mean of a hypertension flag, then declare the design and take the design-based mean:
+{\footnotesize
+\begin{verbatim}
+webuse nhanes2f, clear
+mean highbp
+svyset psuid [pweight=finalwgt], strata(stratid)
+svy: mean highbp
+\end{verbatim}
+}
+The two estimates are not close. The unweighted mean is 0.4229 and the design-based mean is 0.3687, a gap of 5.4 percentage points on the same 10{,}337 respondents. The reason is visible in a second variable: mean age falls from 47.6 unweighted to 42.2 once the weights are applied, because the survey drew extra older adults and hypertension climbs with age. Table~\ref{tab:weights} lays the two columns side by side.
+
+\begin{table}[htbp]
+\centering
+\caption[Weighted versus unweighted means, NHANES~II]{Unweighted sample means versus design-based (weighted) means, NHANES~II, $N=10{,}337$. The survey oversampled older adults, so the raw sample skews old and hypertensive; the weights restore the population age structure and the hypertension rate falls with it.}
+\label{tab:weights}
+{\footnotesize
+\begin{tabular}{lccc}
+\hline
+Measure & Unweighted & Weighted & Gap \\
+\hline
+High blood pressure (share) & 0.4229 & 0.3687 & $-0.054$ \\
+Age (years)                 & 47.56  & 42.24  & $-5.33$ \\
+\hline
+\end{tabular}
+}
+\end{table}
+
+This makes sense: the oversampled older adults carry more hypertension, so the raw average overstates the population rate, and the weights pull it back down. In policy units the gap is not academic. A state health office reporting \enquote{42\% of adults have high blood pressure} when the weighted figure is 37\% overstates the rate by five percentage points, the kind of gap that misdirects a screening budget when it is applied to a population of millions. Representativeness is the difference between \enquote{our respondents said} and \enquote{our participants are}, and funders and boards quote the second. Weighting is what lets an evaluator make a population claim honestly, so the reported number describes the program's people rather than the subset who happened to answer.
+
+\section{Small sites, noisy rates}\label{sec:shrink}
+Rates computed on tiny denominators are wild by construction, and in an evaluation those wild rates drive real funding and blame. A single failure at a five-person clinic can drop it to the bottom of a ranking that decides its budget, even though the estimate carries almost no information. Empirical Bayes shrinkage\index{empirical Bayes shrinkage} is the fix:\marginnote{The statistician's name for this is \enquote{borrowing strength}: each small site quietly leans on the whole distribution of sites to estimate its own rate. It is the same machinery behind Stein's paradox, the 1950s result that shrinking several noisy estimates toward a common center beats taking each at face value.} it pulls extreme low-$N$ rates toward the regional mean in proportion to how little data supports them, so a site with five cases is nudged hard toward the average while a site with five hundred barely moves. The data still speaks, but it stops shouting where it has nothing to say.
+
+We simulate 50 sites with caseloads from 5 to 500, most of them small, and true completion rates centered near 0.20. A beta-binomial moment estimator gives each site a shrunken rate that is a caseload-weighted blend of its own raw rate and the grand mean. Written out, that blend is
+\begin{equation}
+  \hat p_i \;=\; \frac{y_i + M\bar p}{n_i + M}
+           \;=\; w_i\,\frac{y_i}{n_i} + (1-w_i)\,\bar p,
+  \qquad
+  w_i \;=\; \frac{n_i}{n_i + M},
+  \label{eq:ch07-viz-shrink}
+\end{equation}
+where $y_i$ is the site's successes, $n_i$ its caseload, $\bar p$ the grand mean across sites, $M$ the prior sample size the estimator fits, and $w_i$ the weight the site's own data earns. The weight is the whole story: a five-person site has $w_i$ near zero and is nearly all prior, while a $500$-person site has $w_i$ near one and barely moves. The Stata block below computes exactly this, with \texttt{M*pbar} standing in for the numerator's $M\bar p$:
+{\footnotesize
+\begin{verbatim}
+* simulated: 50 sites, caseloads 5-500, rates ~ 0.20
+set seed 20260704
+set obs 50
+gen n     = 5 + int(495*runiform()^2)
+gen ptrue = rbeta(8, 32)
+gen y     = rbinomial(n, ptrue)
+gen praw  = y/n
+quietly summarize praw
+scalar pbar = r(mean)
+scalar s2   = r(Var)
+gen sampv   = pbar*(1 - pbar)/n
+quietly summarize sampv
+scalar tau2 = max(s2 - r(mean), 1e-6)
+scalar M    = pbar*(1 - pbar)/tau2 - 1
+gen pshrunk = (y + M*pbar)/(n + M)
+\end{verbatim}
+}
+The two constants that drive the blend print as a grand mean of 0.195 and a prior sample size $M$ of 32.4, meaning every site is treated as if it carries an extra 32 cases pinned at the grand mean. A five-person site is therefore mostly prior; a 500-person site is almost all its own data. Sorting by how far each site moved shows the mechanism at its most extreme:
+{\footnotesize
+\begin{verbatim}
+. list site n praw pshrunk move in 1/3, noobs
+  site    n    praw   pshrunk     move
+    26    7   0.000     0.160    0.160
+    11   15   0.400     0.260   -0.140
+     3    6   0.333     0.217   -0.117
+\end{verbatim}
+}
+This makes sense: site~26 recorded zero successes out of seven and would rank dead last on the raw rate, but seven cases cannot support a claim of \enquote{never,} so shrinkage lifts it to 0.160, near the pack. Site~11 posted a flashy 0.400 on 15 cases and is pulled down to 0.260. In every case the move is large precisely because the denominator is small; no site with a caseload in the hundreds appears in this list. Figure~\ref{fig:shrink} plots all 50 at once.
+
+\begin{figure*}[htbp]
+\centering
+{\footnotesize
+\begin{verbatim}
+twoway (function y = x, range(0 `pmax')                   ///
+            lcolor(gs10) lpattern(dash))                  ///
+       (scatter pshrunk praw [aweight=n],                 ///
+            msymbol(Oh) mcolor(navy)),                    ///
+    yline(`pb', lcolor(cranberry) lpattern(shortdash))
+\end{verbatim}
+}
+\includegraphics[width=\linewidth]{ch07_shrink.png}
+\caption[Empirical-Bayes shrinkage of small-site rates]{Raw versus empirical-Bayes rates for 50 simulated sites; marker area is caseload. Points on the dashed 45-degree line did not move; the vertical distance from that line to each marker is the shrinkage. Small markers (tiny caseloads) sit far off the line and are pulled hard toward the grand-mean line at 0.195; the large markers barely budge. The three most-moved sites listed above are all small denominators. Built by \texttt{ch07\_trust.do}.}
+\label{fig:shrink}
+\end{figure*}
+
+The moment estimator above is the teaching version, written out so the blend is visible. The \texttt{rateshrink}\index{rateshrink@\texttt{rateshrink}} package does the same empirical-Bayes fit in one command, adds a posterior interval, and reports a per-unit reliability that is the same shrinkage factor under a different name.
+
+\begin{kaobox}[frametitle=Package Integration: \texttt{rateshrink}]
+\texttt{rateshrink} fits empirical-Bayes (Beta-binomial or Poisson-gamma) shrinkage estimates for local rates, turning noisy administrative fractions into stable metrics for dashboards and benchmarking. Install it from the book's public repository:
+{\footnotesize
+\begin{verbatim}
+local gh "https://raw.githubusercontent.com/ericabooth"
+net install rateshrink, ///
+    from("`gh'/rateshrink-stata-public/main/") replace
+\end{verbatim}
+}
+Give it the successes, the denominator, and a name for the shrunken column; \texttt{ci()} adds a posterior interval and \texttt{rel()} writes each unit's reliability.
+\end{kaobox}
+
+On a fresh 50-site draw, the one-line call reproduces the manual blend and adds the two extras the by-hand code did not:
+{\footnotesize
+\begin{verbatim}
+* simulated: 50 sites, seed 20260706
+set obs 50
+gen n = 5 + int(495*runiform()^2)
+gen y = rbinomial(n, rbeta(8, 32))
+rateshrink, success(y) denominator(n) ///
+    generate(pshrunk) ci(95) rel(reliab)
+\end{verbatim}
+}
+The header prints the fitted prior as $\alpha=24.4$, $\beta=89.1$, a prior sample size of 113.5, and the most-moved site as a raw 0.000 pulled to 0.206, the same hard lift a zero-out-of-seven site received earlier. The \texttt{rel()} column is the new payoff: it reports each site's reliability as $n/(n+\alpha+\beta)$, and on this draw the mean is 0.48, so across these mostly small sites the raw rate carries under half the information a fully reliable measure would.
+
+That reliability column is the shrinkage of this section written another way. \textcite{field2026betabin} prove that a unit's Beta-binomial reliability equals the empirical-Bayes weight placed on its own data, so the fraction $n/(n+M)$ that decides how far a site is pulled toward the mean \emph{is} that site's reliability:
+\begin{equation}
+  \operatorname{rel}_i
+    \;=\; \frac{n_i}{n_i + \alpha + \beta}
+    \;=\; \frac{n_i}{n_i + M}
+    \;=\; w_i,
+  \qquad M = \alpha + \beta,
+  \label{eq:ch07-viz-relid}
+\end{equation}
+with $\alpha,\beta$ the fitted Beta prior's two parameters (so their sum is the prior sample size $M$) and $w_i$ the same shrinkage weight as in Eq.~\eqref{eq:ch07-viz-shrink}. A site pulled halfway to the grand mean has a raw rate that is exactly 50\% reliable. Shrinkage and the reliability a measurement report demands are one number, computed once. The authors frame this as a more coherent alternative to the Adams signal-to-noise reliability long used for healthcare quality measures, and the empirical-Bayes tradition running back to \textcite{efron1975data} and Stein's paradox makes it intuitive: borrowing strength and discounting for unreliability are one move.\marginnote{\texttt{rateshrink}'s \texttt{rel()} is defined for the Beta-binomial model only. The prior is estimated by moments from the same sites being shrunk, so with fewer than about ten sites it is noisy, and the command says so and falls back to a uniform prior. Covariate-adjusted shrinkage is not supported here; when covariates matter, reach for a multilevel model.}
+
+This is one of the most directly actionable safeguards in the book, and its beneficiaries are the small sites themselves. Stabilized rates protect a five-person program from a statistical accident, which is what makes a public dashboard fair enough to publish. Shrinkage, in other words, is accessibility and fairness expressed as arithmetic.
+
+\section{Uncertainty without the model's permission}\label{sec:conformal}
+A regression's confidence interval trusts the regression, and when a program director asks where the next client will land, that trust is often the weak link. The interval a fitted model reports assumes the model is right about its own error distribution, so if the residuals are skewed or the form is off, the interval is confidently the wrong width. Split-conformal prediction\index{conformal prediction} gives an evaluator a prediction interval whose coverage holds no matter how wrong the model is, the guarantee a practitioner planning for one site or one caseworker needs.
+
+\emph{The problem.} A model-based prediction interval inherits every assumption of the model, so a director who reads \enquote{we expect the next participant's wage between \$8 and \$14} is trusting the regression's error model, not just its point estimate. \emph{What we see.} When the outcome is skewed or heteroskedastic, those intervals miss their nominal coverage, and the evaluator learns it only after checking predictions against reality. \emph{The key fact.} Conformal prediction \parencite{shafer2008tutorial,angelopoulos2023conformal} turns any point predictor into an interval with finite-sample coverage guaranteed under only exchangeability: fit on part of the data, measure how large the residuals get on a held-out calibration part, and use the appropriate residual quantile as the half-width:
+\begin{equation}
+  Q \;=\; \widehat{Q}_{1-\alpha}\!\bigl(\,\lvert y_j - \hat f(x_j)\rvert : j \in \mathcal{C}\,\bigr),
+  \qquad
+  \text{interval} \;=\; \hat f(x_{\text{new}}) \pm Q,
+  \label{eq:ch07-viz-conformal}
+\end{equation}
+where $\hat f$ is the point predictor fit on the training half, $\mathcal{C}$ is the calibration set, $\lvert y_j-\hat f(x_j)\rvert$ its absolute residuals, and $\widehat{Q}_{1-\alpha}$ their empirical $(1-\alpha)$ quantile; $\alpha$ is the miscoverage rate, so $\alpha=0.1$ targets 90\% coverage. \emph{The move.} Because the calibration residuals stand in for the errors the model will make on new cases, the band covers the truth at the target rate whether or not the model is correctly specified \parencite{lei2018distribution}. \emph{The caveat.} The basic band has constant width, honest about average coverage but not widening where the model is locally uncertain; adaptive variants exist for evaluators who need site-specific widths.
+
+The \texttt{conformalpred}\index{conformalpred@\texttt{conformalpred}} package wraps this around an ordinary Stata estimation command.
+
+\begin{kaobox}[frametitle=Package Integration: \texttt{conformalpred}]
+\texttt{conformalpred} builds split-conformal prediction intervals around a \texttt{regress} or \texttt{poisson} fit, splitting the sample into a training half and a calibration half and writing lower and upper bounds for every observation. Install it from the book's public repository:
+{\footnotesize
+\begin{verbatim}
+local gh "https://raw.githubusercontent.com/ericabooth"
+net install conformalpred, ///
+    from("`gh'/conformalpred-stata-public/main/") replace
+\end{verbatim}
+}
+Pass the estimation command through \texttt{command()} and set the miscoverage rate with \texttt{alpha()} (\texttt{alpha(0.1)} targets 90\% coverage).
+\end{kaobox}
+
+On Stata's \texttt{nlsw88} extract, one call produces a distribution-free 90\% band around each predicted wage:
+{\footnotesize
+\begin{verbatim}
+sysuse nlsw88, clear
+conformalpred, command(regress wage grade tenure) ///
+    alpha(0.1) seed(20260706)
+\end{verbatim}
+}
+The command splits the 2{,}229 respondents into 1{,}144 training and 1{,}085 calibration cases, fits on the training half, and reads the half-width off the calibration residuals as $Q=5.77$ wage-dollars. Every predicted wage then carries a $\pm 5.77$ band, so the first respondent's arrives as an interval from 1.04 to 12.58. Across new respondents from the same population, 90\% of such bands contain the true wage, confirmed by the package's held-out coverage of 0.90.\marginnote{\texttt{conformalpred} supports \texttt{regress} and \texttt{poisson}; \texttt{logit} is excluded by design, since a $\pm$ band around a predicted probability is not meaningful for a 0/1 outcome. After the call \texttt{e()} holds the training-half fit, so refit on the full sample before quoting coefficients.}
+
+For an embedded evaluator this closes the confidence-interval-versus-prediction-interval gap the chapter's closer flags: the confidence interval brackets the average, the conformal band brackets where the next case lands, without trusting the model's error assumptions. When a funder wants the range a single new clinic might post, this is the interval to quote.
+
+\section{How much of the variation is the site, and how much the person?}\label{sec:icc}
+When clients are nested inside sites, an evaluator's first structural question is how much of the outcome's spread lives between sites versus within them, because the answer decides whether site-level comparisons carry any signal at all. If nearly all the variation is between individuals and almost none between sites, ranking sites is ranking noise. The intraclass correlation\index{intraclass correlation} (ICC), the share of total variance sitting between clusters, answers the question directly. A multilevel model estimates it, and the same model's marginal and conditional $R^2$ \parencite{nakagawa2013general} report how much of the variance the fixed predictors explain alone versus with the site random effects added.
+
+Fitting a wage model with an \texttt{industry} random intercept on \texttt{nlsw88} shows the reading:
+{\footnotesize
+\begin{verbatim}
+sysuse nlsw88, clear
+mixed wage grade age || industry:
+estat icc
+\end{verbatim}
+}
+The ICC comes back as 0.089, so about 9\% of the variance in wages sits between industries and 91\% within them: industry comparisons are possible but modest, and most of what moves wages is individual. The \texttt{hlmr2}\index{hlmr2@\texttt{hlmr2}} package then turns the same fitted model into the Nakagawa variance-explained pair without a second estimation step.
+
+\begin{kaobox}[frametitle=Package Integration: \texttt{hlmr2}]
+\texttt{hlmr2} reports Nakagawa and Schielzeth's marginal and conditional $R^2$ for the multilevel model most recently fit by \texttt{mixed}. Install it from the book's public repository:
+{\footnotesize
+\begin{verbatim}
+local gh "https://raw.githubusercontent.com/ericabooth"
+net install hlmr2, ///
+    from("`gh'/hlmr2-stata-public/main/") replace
+\end{verbatim}
+}
+Run it with no arguments straight after \texttt{mixed}; it reads the stored variance components and prints both.
+\end{kaobox}
+
+Called on the model just fit, \texttt{hlmr2} reports marginal $R^2$ 0.107 and conditional $R^2$ 0.186:
+{\footnotesize
+\begin{verbatim}
+mixed wage grade age || industry:
+hlmr2
+\end{verbatim}
+}
+Grade and age explain about 11\% of the wage variance, and adding the industry random effect lifts the explained share to about 19\%. The gap is the industry structure the fixed predictors miss, and it lines up with the ICC: industries matter, but not much, so the number keeps a site-ranking honest by saying up front how much of the story sites can carry.\marginnote{\texttt{hlmr2} covers linear mixed models fit by \texttt{mixed}; \texttt{melogit} and other generalized mixed models are out of scope. For random-slope models it sums the variance components and ignores their covariances, printing a note when it detects slopes, so treat that figure as an approximation.}
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{bayessae}]
+\textbf{Proposed program:} \texttt{bayessae}. The empirical-Bayes shrinkage of \S\ref{sec:shrink} borrows strength across sites but ignores anything you know about them. The model-based next step is small-area estimation: a Fay-Herriot area-level model \parencite{fay1979estimates,rao2015small} that shrinks each site's direct estimate toward a \emph{regression} prediction built from site covariates, so a small rural clinic is pulled toward what similar rural clinics do rather than toward the global mean. \texttt{bayessae} would fit that model, return estimates with mean-squared-error intervals, and combine survey estimates with administrative predictors the way statistics agencies do for county poverty and health rates. Planned, not built; the design would report each site's shrinkage weight so the borrowing stays auditable.
+\end{kaobox}
+
+Fay-Herriot estimation is where the field goes when plain empirical Bayes is not enough: where \S\ref{sec:shrink} pulls every small site toward one common mean, the small-area model pulls each toward the mean of sites like it, closer to how statistics offices produce the small-area numbers policymakers already cite. The cost is honest: the estimate is only as good as the covariate model behind it, trading assumption-light shrinkage for a stronger estimate that leans on a specification a reviewer can question.
+
+\section{Power and the smallest effect you can see}\label{sec:mde}
+The most expensive mistake in evaluation is the study too small to detect the effect it was designed to find, which then reports a null that a funder reads as program failure. We size studies before data collection by asking what minimum detectable effect\index{minimum detectable effect} (MDE) the design can see: the smallest true effect the sample could reliably distinguish from zero. For clustered designs, students within schools, patients within clinics, power depends on the number of clusters far more than the number of individuals,\marginnote{Why clusters and not bodies? Because responses inside a cluster are correlated, adding the fiftieth pupil to a classroom buys almost no new information. Doubling the classrooms does. A common rule of thumb: below roughly 30--40 clusters, the cluster-robust variance is itself unreliable and you should reach for a small-sample correction such as \texttt{wild bootstrap}.} so the calculation uses \texttt{power}\index{power@\texttt{power}} with the design effect\index{design effect} built in.
+
+Before spending a dollar, a program director wants to know what a planned study can and cannot see. Suppose a job-readiness program scores participants on a 0--100 scale with a control mean of 50 and a standard deviation of 10, and the budget affords 300 people split across two arms. What size gain can that design detect? One \texttt{power} call answers it:
+{\footnotesize
+\begin{verbatim}
+power twomeans 50 (52 53 54), sd(10) n(300) ///
+    table(N delta power)
+\end{verbatim}
+}
+The table reads the design at the budgeted sample size for three candidate effects:
+{\footnotesize
+\begin{verbatim}
+       N   delta   power
+     300       2   .4078
+     300       3   .7356
+     300       4   .9323
+\end{verbatim}
+}
+This makes sense: at $N=300$ the study has only a 41\% chance of detecting a 2-point gain, so it would miss a real two-point effect more often than it caught it, and a null result would be uninformative. A 3-point gain reaches 74\% power, still short of the 0.80 convention, and only a 4-point gain is comfortably detectable at 93\%. The honest sentence to the director is therefore: this study can find a large effect, might find a medium one, and will probably miss a small one. Figure~\ref{fig:power} traces the same calculation across sample sizes so the budget line becomes visible.
+
+{\footnotesize
+\begin{verbatim}
+power twomeans 50 (52 53 54), sd(10) n(100(20)500) ///
+    graph(xline(300, lcolor(cranberry) lpattern(shortdash)))
+\end{verbatim}
+}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{ch07_power.png}
+\caption[Power curves and the budget line]{Power to detect a 2-, 3-, or 4-point gain (control mean 50, sd~10, $\alpha=0.05$) as total sample size grows. The horizontal dashed line marks the 0.80 convention; the vertical line marks the budgeted $N=300$. Read where each curve crosses the vertical line to see what the affordable design can detect: the 4-point curve clears 0.80, the 3-point curve sits just below it, and the 2-point curve is far under. Built by \texttt{ch07\_trust.do}.}
+\label{fig:power}
+\end{figure}
+
+\begin{vizcallout}[Visualization to build: the power curve]
+Plot statistical power on the $y$-axis against sample size or number of clusters on the $x$-axis, one line per candidate effect size, with a reference line at 0.80. Mark the design the budget can actually afford. Stakeholders grasp \enquote{here is where our budget lands on this curve} far faster than a table of sample sizes.
+\end{vizcallout}
+
+When an evaluator frames the design in MDE terms, she manages stakeholder expectations honestly and up front, so a program director learns before spending a dollar what size of effect the study can and cannot find. That is the actionable principle pointed at the design stage: the most useful thing you can tell a funder about a small study is what it will not be able to see.
+
+\paragraph{Where this leaves you.} Your scales measure one thing, with the dead-weight item pruned; your sample stands in for its population, so the reported rate is 0.37 and not the sample's 0.42; your small-site rates are stable, so a zero out of seven does not rank last; and your studies are sized to their questions, so a 41\%-power design is caught on the whiteboard rather than in the final report.\marginnote{One distinction worth carrying into the next chapter: a confidence interval brackets the \emph{average} effect, a prediction interval brackets where the \emph{next} site or person will land. The second is always wider, and a program director planning for one clinic wants the prediction interval, not the confidence interval you will be tempted to quote.} Those four safeguards make the numbers trustworthy enough to compare, which is what Chapter~\ref{ch:claims} does next, turning trustworthy numbers into defensible claims. You can now also quote a prediction interval whose coverage does not depend on the model being right, and say how much of an outcome's variation a site can even carry before you rank sites at all.
+
+\section*{Exercises}\addcontentsline{toc}{section}{Exercises}
+\begin{enumerate}
+  \item \emph{Try it on your own data.} Pick a multi-item scale you already collect, run \texttt{alpha} with the \texttt{item} option, and read the item-rest correlations: flag every item below 0.30 and confirm that dropping the worst one raises the whole-scale alpha in the \enquote{alpha if item dropped} column.
+  \item Rerun \texttt{ch07\_trust.do} on the NHANES~II example, but before the weighted line predict, out loud, whether \texttt{svy: mean highbp} will land above or below the unweighted 0.4229; then run it and check your call against the 0.3687 the chapter reports.
+  \item Break the shrinkage code on purpose: change the caseload for one site to a negative number, rerun the beta-binomial block, and confirm that the resulting \texttt{pshrunk} becomes nonsensical, then add an \texttt{assert n > 0} tripwire that catches the bad input before the estimator runs.
+  \item Using \texttt{power twomeans} with the chapter's control mean of 50 and \texttt{sd(10)}, find the total sample size that first pushes the 3-point effect to 0.80 power, and report whether it falls above or below the budgeted $N=300$.
+  \item Simulate a single five-person site with three successes, place it among the 50 simulated sites, and compare its raw rate of 0.60 against its shrunken rate: explain in one sentence why empirical Bayes pulls it so far toward the grand mean of 0.195.
+  \item Run \texttt{rateshrink} with \texttt{rel()} on the 50-site draw and confirm the reliability identity by hand: for the most-shrunken site, check that its reliability equals $n/(n+\alpha+\beta)$ from the header's $\alpha$ and $\beta$, and say in one sentence why a site pulled halfway to the grand mean has a reliability near 0.5.
+\end{enumerate}

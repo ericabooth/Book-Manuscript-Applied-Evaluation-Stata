@@ -1,0 +1,281 @@
+\chapter{Sharing data and results safely}\label{ch:sharing}
+
+A partner wants the analytic file, the lawyer wants it de-identified, and both want it by Friday. Sharing data and publishing tables are where an evaluation meets its duty to the people it studied, and \enquote{we removed the names} is not nearly enough. This chapter is how to share and publish without re-identifying anyone.
+
+We cover the quasi-identifiers that make removing names insufficient, how to suppress small cells without lying with the totals, how to generate synthetic stand-ins for the real records, and how to gate raw intake files so protected information never sneaks into the pipeline in the first place. Each protects the people behind the data, which is the precondition for being allowed to do the work at all. Throughout, the analyst measures rather than asserts: re-identification risk is a number you can compute, not a feeling you argue about, and once it is a number a lawyer and an evaluator can agree on a threshold and check it.
+
+\section{Quasi-identifiers and re-identification}\label{sec:qid}
+Removing direct identifiers leaves a dataset far more exposed than it looks, because combinations of ordinary variables can single a person out. The classic trap is that ZIP code, birth date, and sex together identify a large share of the population, so a \enquote{de-identified} file with those three is not de-identified.\sidenote{\textcite{sweeney2002kanon} put a number on it: roughly 87\% of Americans are uniquely identifiable from five-digit ZIP, full date of birth, and sex alone. She famously re-identified the Massachusetts governor's health record from a \enquote{de-identified} release using nothing more.} We measure the exposure with $k$-anonymity\index{k-anonymity@$k$-anonymity} (how many people share each combination of quasi-identifiers\index{quasi-identifiers}) and $l$-diversity\index{l-diversity@$l$-diversity} (how varied the sensitive values are within each such group), and we suppress or coarsen until the risk is acceptable.\sidenote{The exposure is not hypothetical. \textcite{narayanan2008deanon} re-identified named individuals in the \enquote{anonymized} Netflix Prize ratings by matching a handful of public movie ratings against the release, showing that sparse, high-dimensional records stay linkable even after every direct identifier is stripped. For an evaluator whose caseload is exactly that shape, a few hundred people rated across many program touchpoints, the lesson is direct: the columns you kept for analysis are the columns an outsider can match on.} These metrics give an embedded evaluator a defensible, replicable standard that a practitioner and a lawyer can both check, and the health-informatics literature has shown they can be operationalized as a working de-identification method rather than a theoretical ideal \parencite{elemam2008kanon}.
+
+Both metrics are a single number the release script can compute. A file satisfies $k$-anonymity at threshold $k_{\min}$ when the \emph{smallest} quasi-identifier group is still at least that big,
+\[
+  k \;=\; \min_{g \in G}\, \bigl|\{\, i : q_i = g \,\}\bigr| \;\ge\; k_{\min},
+\]
+where $G$ is the set of distinct quasi-identifier combinations, $q_i$ is record $i$'s quasi-identifier tuple, and $\lvert\cdot\rvert$ counts the records sharing a combination; a cell with $k=1$ is one person standing alone. The $l$-diversity check adds a second condition, that every group carry at least $l$ distinct sensitive values,
+\[
+  \min_{g \in G}\, \bigl|\{\, s_i : q_i = g \,\}\bigr| \;\ge\; l,
+\]
+where $s_i$ is record $i$'s sensitive value, so a group can be large in $k$ yet still leak if all its members share one diagnosis ($l=1$).
+
+\begin{kaobox}[frametitle=Package Integration: \texttt{riskscan}]
+\textbf{Install and run:} \texttt{riskscan}\index{riskscan@\texttt{riskscan}} scans a dataset for the quasi-identifiers you name, computes $k$-anonymity across their combinations, and flags the records at highest re-identification risk, so the exposure is measured rather than assumed away. Install it once from the book's public repository:
+{\footnotesize
+\begin{verbatim}
+local gh "https://raw.githubusercontent.com/ericabooth"
+net install riskscan, ///
+    from("`gh'/riskscan-stata-public/main/") replace
+\end{verbatim}
+}
+The syntax is \texttt{riskscan varlist [if] [in], [k(\#) flag(newvar) sensitive(varname) detail]}. It returns \texttt{r(cells)}, \texttt{r(k1)}, and \texttt{r(below)} (the count under the threshold), so a release script can branch on the number rather than a human's read of a table. Pass \texttt{sensitive()} to add the $l$-diversity check; pass \texttt{detail} for the highest-risk cells (the listing caps at 30, and it never prints the sensitive values themselves).
+\end{kaobox}
+
+The metrics give the evaluator and the lawyer a shared, defensible standard, which is what turns \enquote{is this safe to share?} from an argument into a measurement.\marginnote{HIPAA's Safe Harbor rule takes the blunt route and simply names 18 identifiers to strip; its Expert Determination path is the one that reasons about residual risk the way $k$-anonymity does. Knowing which standard your data-use agreement invokes tells you whether a checklist or a computation is what you owe.} Measuring re-identification\index{re-identification} risk is the accessible, checkable version of a duty that is otherwise left to intuition.
+
+\subsection{A worked example: how many people are one of a kind?}\label{sec:kanon}
+A data steward about to release a file wants a blunt answer before signing off: once the names are stripped, how many people are still unique on the columns that remain, and so still findable by anyone holding those few facts? We answer it on \texttt{sysuse nlsw88}\index{sysuse@\texttt{sysuse}}, the 1988 wage survey that ships with Stata, treated here as a stand-in for an administrative caseload of 2{,}246 records. Nothing in it is secret, which is exactly why it is safe to demonstrate on; the arithmetic is identical when the records are real clients. We pick four quasi-identifiers that any partner file would plausibly carry, race, marital status, college-graduate status, and industry, and count how many people share each combination:
+{\footnotesize
+\begin{verbatim}
+sysuse nlsw88, clear
+egen cell = group(race married collgrad ///
+    industry), missing
+bysort cell: gen k = _N
+label var k "people sharing this quasi-id cell"
+\end{verbatim}
+}
+The variable \texttt{cell} is one number per distinct combination of the four columns, and \texttt{k} is how many people fall in that combination. A person with \texttt{k}${}=1$ is unique on those four columns: strip their name and they are still findable by anyone who knows their race, marital status, degree, and industry, four facts a coworker or a nosy neighbor could supply. We bin the records by cell size and count both cells and people in each bin:
+{\footnotesize
+\begin{verbatim}
+gen kbin = 1 + (k>1) + (k>4) + (k>10)
+label define kb 1 "k=1 (unique)" 2 "k=2-4" ///
+    3 "k=5-10" 4 "k>10", replace
+label values kbin kb
+tabulate kbin            // people per bin
+bysort cell: keep if _n==1
+tabulate kbin            // cells per bin
+\end{verbatim}
+}
+Read the result in cells and in people, because the two tell different stories. Table~\ref{tab:kanon} reports both: the number of distinct quasi-identifier cells in each size band, and the number of people those cells hold.
+
+\begin{table}[htbp]
+\centering
+{\footnotesize
+\begin{tabular}{lrr}
+\hline
+Cell size ($k$) & Cells & People \\
+\hline
+$k=1$ (unique)   &  24 &    24 \\
+$k=2$--$4$        &  25 &    63 \\
+$k=5$--$10$       &  11 &    74 \\
+$k>10$            &  43 & 2{,}085 \\
+\hline
+Total            & 103 & 2{,}246 \\
+\hline
+\end{tabular}
+}
+\caption[$k$-anonymity of four ordinary columns]{Re-identification exposure of \texttt{nlsw88} (an administrative stand-in, $N=2{,}246$) on four quasi-identifiers: race, married, collgrad, industry. The four columns carve the file into just 103 distinct cells. Twenty-four people are unique on these four columns alone, and another 63 sit in cells of four or fewer, so 87 of the 2{,}246 people, spread across 49 of the 103 cells, sit in thin cells. Built by \texttt{ch14\_kanon.do}.}
+\label{tab:kanon}
+\end{table}
+
+The count that matters is the first row, and it is worth printing on its own:
+{\footnotesize
+\begin{verbatim}
+count if k==1
+\end{verbatim}
+}
+{\footnotesize
+\begin{verbatim}
+  24
+\end{verbatim}
+}
+The whole scan collapses to one command, and it reproduces exactly the table above so you can trust that the tool and the hand-computation agree:
+{\footnotesize
+\begin{verbatim}
+riskscan race married collgrad industry
+\end{verbatim}
+}
+prints the same four bins, reports 103 distinct cells and 24 unique records, and leaves \texttt{r(below)} holding 87, the count of people in cells thinner than five. Because the danger lives in a return scalar, a release script can gate on it without a person eyeballing a table: \texttt{if r(below) > 0} then hold the release. That is the practical payoff of turning re-identification risk into a number \parencite{elemam2008kanon}, and it is the same discipline the metrics were built for.
+
+Twenty-four people in this file are re-identifiable by four ordinary columns. No names, no ID numbers, no addresses, just race, marital status, whether they finished college, and what industry they work in, and each of those twenty-four stands alone. Another 63 sit in cells of two to four, thin enough that a single extra fact, an age or a city, would isolate them. This makes sense: the four columns have $3\times2\times2\times12$ possible combinations, but only 103 of them are actually occupied, so the average occupied cell holds about 22 people while the distribution is lumpy, and the rare combinations (a college graduate in a small industry, say) collapse to one. The lesson generalizes directly: the more columns a partner keeps, the finer the mesh, and the fewer people it takes to be caught in a cell of one.
+
+\begin{figure}[htbp]
+\centering
+{\footnotesize
+\begin{verbatim}
+bysort cell: keep if _n==1
+gen kplot = min(k, 30)   // pool cells of 30+ at the right
+histogram kplot, discrete frequency ///
+    xtitle("Cell size k")
+\end{verbatim}
+}
+\includegraphics[width=\linewidth]{ch14_kdist.png}
+\caption[Distribution of quasi-identifier cell sizes]{How many cells have each size, over race, married, collgrad, and industry in the \texttt{nlsw88} stand-in. The tall spike at the left is the danger: 24 cells hold a single person and 15 more hold just two, so dozens of records are uniquely or nearly-uniquely identified by four ordinary columns. Cells of 30 or more people are pooled at the right, where re-identification is not a concern. The mass on the left is what coarsening and suppression exist to move rightward. Built by \texttt{ch14\_kanon.do}.}
+\label{fig:kdist}
+\end{figure}
+
+\subsection{Coarsening: the cheapest way to raise \texorpdfstring{$k$}{k}}\label{sec:coarsen}
+The fastest way to empty the $k=1$ bin is to make the mesh coarser, because a record is unique only relative to the resolution of its columns.\marginnote{Coarsen the highest-cardinality column first: the singletons cluster in the rare combinations, and those almost always involve the variable with the most categories. Age in single years, five-digit ZIP, and detailed occupation codes are the usual culprits; bin them before you reach for anything more elaborate.} Industry is the finest of our four quasi-identifiers, twelve categories, so it does the most damage; collapsing it to three broad groups (goods-producing, services, and public administration) merges many singleton cells into populated ones without touching the other three columns:
+{\footnotesize
+\begin{verbatim}
+recode industry (1/4=1 "Goods") ///
+    (5/11=2 "Services") (12=3 "Public"), ///
+    gen(ind3)
+egen cell3 = group(race married collgrad ind3), ///
+    missing
+bysort cell3: gen k3 = _N
+count if k3==1
+\end{verbatim}
+}
+Coarsening\index{coarsening} one column moves people off the singleton spike wholesale. Table~\ref{tab:coarsen} shows the before-and-after: the same four quasi-identifiers, but with industry at twelve categories and then at three.
+
+\begin{table}[htbp]
+\centering
+{\footnotesize
+\begin{tabular}{lrr}
+\hline
+                       & $k=1$ people & Distinct cells \\
+\hline
+Industry, 12 groups    & 24 & 103 \\
+Industry, 3 groups     &  3 &  39 \\
+\hline
+\end{tabular}
+}
+\caption[Coarsening industry collapses unique records]{Collapsing industry from twelve categories to three, holding race, married, and collgrad fixed, cuts the number of one-of-a-kind people from 24 to 3 and the number of distinct cells from 103 to 39. The other three columns are untouched; the whole gain comes from one coarser variable. Built by \texttt{ch14\_kanon.do}.}
+\label{tab:coarsen}
+\end{table}
+
+Coarsening industry from twelve groups to three cuts the unique records from 24 to 3, an eight-fold reduction, at the cost of some analytic resolution. This makes sense: a coarser column is a wider net, so more people share each combination, so fewer stand alone. The trade is explicit and it is the analyst's to make: three industry groups may be plenty for a report that only ever compares goods to services, in which case the coarsening costs nothing the reader would have used. When it does cost something, coarsening and suppression combine, coarsen until the remaining singletons are few, then suppress those. The value here is that the trade is visible and defensible: you can tell a lawyer exactly how many people the release protects and exactly what analytic detail that protection cost.
+
+\section{Suppressing small cells without lying}\label{sec:suppress}
+Public tables and small subgroups collide constantly: a cell of two people is a disclosure, and blanking it is not enough if the row and column totals let a reader back out the hidden value. Principled suppression handles both, blanking the primary small cells and then blanking enough complementary cells that the totals no longer reveal them, and enforcing a minimum denominator before a rate is shown at all.\marginnote{The same failure mode explains why $k$-anonymity alone is not enough: a group of 20 that all share one diagnosis leaks it to anyone who knows a person is in the group. That is what $l$-diversity guards against, ensuring the sensitive value varies within each group, just as complementary suppression keeps a blanked cell from being reconstructed.} Integrating this with \texttt{collect}\index{collect@\texttt{collect}} means a table is secured before it is ever exported.
+
+\begin{kaobox}[frametitle=Package Integration: \texttt{suppress}]
+\textbf{Install and run:} \texttt{suppress}\index{suppress@\texttt{suppress}} automates public-release QA for a table: primary small-cell suppression, complementary suppression so totals do not reveal the hidden cells, and a marked output column an analyst can publish. Install it from the book's public repository:
+{\footnotesize
+\begin{verbatim}
+local gh "https://raw.githubusercontent.com/ericabooth"
+net install suppress, ///
+    from("`gh'/suppress-stata-public/main/") replace
+\end{verbatim}
+}
+The syntax is \texttt{suppress countvar [if] [in], threshold(\#) [by(varlist) gens(newvar) complementary]}. It protects one grouping dimension per run, so a two-way table published with both row and column totals needs one run in each direction with the union of the flags blanked. It returns \texttt{r(n\_primary)} and \texttt{r(n\_complementary)}, and \texttt{gens()} writes a display column that prints the primary blanks as \texttt{<\#} and the complementary blanks as \texttt{*}, so the two kinds of suppression stay legible in the released table rather than collapsing to indistinguishable holes.
+\end{kaobox}
+
+\subsection{A worked example: blanking a cell without leaking it}\label{sec:supexample}
+The problem is easiest to see in a two-way table small enough to hold in your head. Staying in the stand-in file, cross college-graduate status against the four goods-producing industries, where the thin cells live, and count people. Suppose the release rule is the common one: blank any cell with fewer than five people. Here is the raw count:
+{\footnotesize
+\begin{verbatim}
+tabulate collgrad industry if industry<=4
+\end{verbatim}
+}
+{\footnotesize
+\begin{verbatim}
+          |            Industry
+  College |    Ag  Mining  Constr  Manuf |  Total
+----------+------------------------------+-------
+ not grad |    14       4      26    334 |    378
+     grad |     3       0       3     33 |     39
+----------+------------------------------+-------
+    Total |    17       4      29    367 |    417
+\end{verbatim}
+}
+Four cells break the rule: three college graduates in agriculture, none in mining, three in construction, and four non-graduates in mining. Those are the \emph{primary} suppressions, blank each because it is below the threshold of five. But blanking them alone leaks them, because the reader has the column totals. The agriculture column totals 17 and its other cell is 14, so the hidden graduate cell is exactly $17-14=3$, recovered by subtraction; construction leaks the same way ($29-26=3$). Suppressing a cell while leaving the arithmetic that reconstructs it is not suppression, it is a puzzle with one missing piece and all the clues.
+
+The fix is \emph{complementary} suppression\index{complementary suppression}: in any column that has just one blank left visible against its total, blank the surviving cell too, so the total can no longer be differenced back. Agriculture and construction each have one primary blank and one visible cell, so the algorithm blanks the visible non-graduate cell in both (14 and 26). Mining needs nothing more, both its cells were already primary blanks. Table~\ref{tab:suppress} shows the published version.
+
+\begin{table}[htbp]
+\centering
+{\footnotesize
+\begin{tabular}{lrrrrr}
+\hline
+College   & Ag & Mining & Constr & Manuf & Total \\
+\hline
+not grad  & \textbf{--} & \textbf{--} & \textbf{--} & 334 & 378 \\
+grad      & \textbf{--} & \textbf{--} & \textbf{--} &  33 &  39 \\
+\hline
+Total     & 17 &  4 & 29 & 367 & 417 \\
+\hline
+\end{tabular}
+}
+\caption[Primary and complementary suppression]{The same cross-tabulation after suppression. The primary blanks are the four cells below the threshold of five (grad/Ag, grad/Mining, grad/Construction, and notgrad/Mining). The complementary blanks are the two surviving cells in the agriculture and construction columns (notgrad/Ag and notgrad/Construction): without them, each column total would reveal the graduate cell by subtraction. Only manufacturing, where both cells are comfortably large, prints numbers. The totals are published unchanged, so the table still adds up honestly. Built by \texttt{ch14\_kanon.do}.}
+\label{tab:suppress}
+\end{table}
+
+Now every column with a small cell has both of its cells hidden, so no total can be differenced to a single value: the agriculture column shows only its total of 17 split between two blanks, and a reader cannot tell whether the graduate cell is 1, 2, or 3. The hidden threes are safe because neither is the only unknown in its column. This makes sense: a single missing number in a line of knowns is not hidden at all, and the only way to hide one small cell is to hide a second so the equation has more unknowns than it can solve. The totals stay truthful, which is the whole point, a suppressed table that still adds up is publishable, and one that quietly alters totals to hide a cell has crossed from suppression into fabrication.
+
+\begin{vizcallout}[Suppression that leaks: the single-blank trap]
+The most common disclosure error in a published table is a single suppressed cell in a fully-totaled row or column. If every other cell in the line is visible and the total is visible, the blank is not hidden, it is defined: it equals the total minus the visible cells. Any release with row and column totals needs at least two blanks in every line that has one, and a quick audit, for each suppressed cell, confirm a second suppression exists in both its row and its column, catches the leak before it ships. This is exactly the QA the \texttt{suppress} program automates.
+\end{vizcallout}
+
+The walk-through is worth stating as a rule, because it is the step analysts most often skip: hiding one cell is not enough when the total is printed. A single blank in a line of visible numbers against a visible total is not hidden, it is defined, because the reader recovers it by subtraction. The only way to hide one small cell is to hide a second in the same line, so the total no longer pins the first to a single value. That is the whole of complementary suppression, and \texttt{suppress} does it by looping over each \texttt{by()} group and, while the group still holds exactly one suppressed cell, blanking the next-smallest surviving cell until at least two are hidden. Figure~\ref{fig:ch14-viz-suppress} traces that decision for a single cell.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=10mm and 16mm]
+\node[io] (cell) {each cell};
+\node[decision, right=of cell] (d1) {cell \\ $< t$?};
+\node[stage, right=24mm of d1] (prim) {primary\\suppress};
+\node[decision, below=16mm of prim] (d2) {one blank\\left in\\its line?};
+\node[stage, left=24mm of d2] (comp) {blank next-\\smallest cell};
+\node[io, below=12mm of d2] (pub) {publish\\line};
+
+\draw[flow] (cell) -- (d1);
+\draw[flow] (d1) -- node[annot,above]{yes} (prim);
+\draw[flow] (d1) |- node[annot,pos=0.22,left]{no} (pub);
+\draw[flow] (prim) -- (d2);
+\draw[flow] (d2) -- node[annot,above]{yes} (comp);
+\draw[flow] (comp) -- ($(comp.north)+(0,6mm)$) -| node[annot,pos=0.25,above]{recheck} (d2.north);
+\draw[flow] (d2) -- node[annot,right]{no} (pub);
+\end{tikzpicture}
+\caption[The suppression decision, cell by cell]{What the routine decides for each cell. A cell below the threshold $t$ is a primary suppression; then the line is re-checked, and while it holds exactly \emph{one} blank against a visible total, the next-smallest surviving cell is blanked too, so the total can no longer be differenced back to the hidden value. A cell at or above $t$, and any line already carrying two blanks, publishes unchanged. The \texttt{recheck} loop is why a very thin group can consume several complementary blanks before it is safe.}
+\label{fig:ch14-viz-suppress}
+\end{figure}
+
+Run against the goods-producing cross-tabulation, it reproduces the table above by hand-computed cell:
+{\footnotesize
+\begin{verbatim}
+contract collgrad industry if industry<=4, ///
+    zero freq(n)
+suppress n, threshold(5) by(industry) ///
+    complementary gens(n_pub)
+\end{verbatim}
+}
+reports three primary suppressions and three complementary ones, marks agriculture, mining, and construction as protected, and leaves manufacturing clean, exactly the published version in Table~\ref{tab:suppress}. The zero cell (no college graduates in mining) is not itself a primary suppression, since a publicly known zero reveals nothing, but the routine can still draw it as complementary cover. One caveat travels with the method and the tool alike: if a group's blanked cells sum to exactly one, a reader deduces the split must be $\{1,0\}$, so a very thin group is not fully protected by suppression and needs coarsening or a higher threshold instead.
+
+Principled suppression is what keeps a public dashboard both publishable and safe, so an evaluator can report at the small-area level that policy audiences want without exposing the few people in a thin cell.\marginnote{Federal statistical agencies have moved past cell suppression toward differential privacy, which adds calibrated random noise so no single person's presence changes a published number by much, for exactly this reason: suppression protects against differencing one table, but a determined analyst who combines many overlapping released tables can still triangulate. For a single report, principled suppression is enough; for an open data portal that publishes cut after cut, ask whether it is.} It is the discipline that lets accessibility and privacy coexist in the same table.
+
+\subsection{Where the field is going: formal guarantees beyond \texorpdfstring{$k$}{k}-anonymity}\label{sec:frontier-dp}
+Suppression and $k$-anonymity protect against differencing one table, but they make no promise once many overlapping releases pile up, which is where the field has moved. \textcite{dwork2006diffpriv} introduced differential privacy to close exactly that gap: rather than reasoning about which columns an adversary might hold, it adds calibrated random noise so that no single person's presence changes any published number by more than a bounded amount, a guarantee that holds no matter what outside data an attacker brings \parencite{dworkroth2014found}. The practical signal that this is not just theory is that the U.S.\ Census Bureau adopted it for the 2020 census after internal research showed the old cell-suppression rules could be reverse-engineered to reconstruct individual records \parencite{abowd2018census}. For an evaluator, the gain is a defensible bound an evaluator can state to a lawyer, a privacy budget spent per release, in place of the case-by-case argument that suppression requires; the cost is that the added noise degrades the very small-area estimates a program audience most wants, so the method fits an open data portal that publishes cut after cut better than a single report where suppression is already enough.
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{dpprivacy}]
+\textbf{Proposed program:} \texttt{dpprivacy}\index{dpprivacy@\texttt{dpprivacy}}. A thin Stata wrapper over the OpenDP library \parencite{gaboardi2020opendp} that would let an evaluator request a differentially private count, mean, or histogram under a stated privacy budget, so a release carries a formal guarantee rather than a suppression argument. The plan is bindings, not an implementation: the differential-privacy machinery would stay in the vetted OpenDP core, with the ado-file managing the budget accounting and returning the noised estimate alongside the epsilon it cost. This is where the book would go next; it is described here as a direction, not a shipped tool.
+\end{kaobox}
+
+\section{Synthetic stand-ins}\label{sec:synth}
+When the real records cannot travel at all, a synthetic dataset\index{synthetic data} that preserves the structure lets collaborators work anyway. Generated data that reproduces the covariance and the non-linear relationships of the original lets an outside partner write and test their code against realistic data while the actual participant records never leave the secure environment. The synthetic file is a development surface, not a substitute for the real analysis, and it is labeled as such.\marginnote{Synthetic does not automatically mean safe: a generator that overfits can memorize and reproduce a real outlier verbatim. If the release matters, measure it, run a nearest-neighbour distance check between synthetic and real records, and treat any exact match as a leak.}
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{synthgen}]
+\textbf{Proposed program:} \texttt{synthgen}\index{synthgen@\texttt{synthgen}}. Integrates Stata with Python synthesis libraries to generate synthetic cohorts that preserve the statistical properties of sensitive data, so code can be developed and shared without moving the real records.
+\end{kaobox}
+
+The value is collaboration without exposure: partners build against data that behaves like the truth, and the truth stays put. This widens who can help: an outside team gets to contribute to the analysis without ever touching a real participant record, so the work reaches further while the privacy duty stays intact. Synthesis and the suppression of Section~\ref{sec:suppress} solve two ends of the same problem: suppression lets a real table go out with the thin cells hidden, synthesis lets a whole file go out with no real record in it at all, and the choice between them is how much fidelity the collaborator actually needs.
+
+\section{Sanitizing raw files with a human in the loop}\label{sec:rawsweep}
+Protected information most often sneaks in at intake, in the raw files a partner drops in the shared drive, so the gate belongs there. The pattern that works is a human-in-the-loop sweep: scan each incoming file, emit a review workbook listing the fields it thinks should be removed, let a person confirm, then execute the removals with a dry-run mode and an audit receipt recording exactly what was stripped and when.\marginnote{Keep the human in the loop deliberately: an auto-redactor that silently drops a column is the fastest way to lose the one field you needed. The reviewer's confirmation is also what makes the receipt meaningful, since it records a decision, not just a script's guess.} This exact workflow has existed in the authors' production practice, though only in deleted version-control history, which is precisely why it is worth rebuilding as a shareable tool before it is lost for good.
+
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{rawsweep}]
+\textbf{Proposed program:} \texttt{rawsweep}\index{rawsweep@\texttt{rawsweep}}. Scans incoming raw files, emits a for-human-review workbook of flagged fields, executes removals with confirmation and dry-run modes, and writes an audit receipt, so intake sanitization is demonstrable rather than asserted.
+\end{kaobox}
+
+A receipt-producing gate makes compliance something you can show rather than something you claim, which is what an auditor or a data-use agreement actually requires. Catching protected data at intake is cheaper and safer than finding it three merges later, and the receipt is the replicable proof that it was caught. The gate closes the loop the rest of the chapter opens: the same protected fields that make a person unique in Section~\ref{sec:qid} are the ones \texttt{rawsweep} is watching for at the door, so the risk you measured downstream is a risk you can stop upstream.
+
+\paragraph{Where this leaves you.} You can now measure re-identification risk, coarsen and suppress to bring it down, ship synthetic stand-ins, and gate raw intake with an auditable receipt. The worked example made the danger concrete: in an ordinary two-thousand-record file, twenty-four people were unique on four plain columns and another sixty-three sat in cells of four or fewer, and coarsening one of those columns cut the unique count from twenty-four to three. Those tools let you share data and publish results without exposing the people behind them, the duty that permits the whole enterprise. Two of those steps are now installable commands rather than hand-built do-files: \texttt{riskscan} puts the re-identification count in a return scalar a release script can gate on, and \texttt{suppress} enforces primary and complementary blanking so a published table stays both safe and honest. Where those tools stop, at the boundary where many overlapping releases can still be triangulated, the field turns to differentially private methods, which is where a future \texttt{dpprivacy} wrapper would take an evaluator next. Chapter~\ref{ch:tools} closes the book by turning the do-files you have written, this chapter's \texttt{ch14\_kanon.do} among them, into shared tools and a lasting archive.
+
+\section*{Exercises}\addcontentsline{toc}{section}{Exercises}
+\begin{enumerate}
+\item \emph{Try it on your own data.} Take a de-identified file you plan to share, pick four quasi-identifiers a partner would plausibly hold, and build the cell size \texttt{k} the way the worked example does. Run \texttt{count if k==1} and report how many people in your file are one of a kind on those four columns.
+\item Rerun \texttt{ch14\_kanon.do} on \texttt{nlsw88}, but swap the four quasi-identifiers for race, married, collgrad, and \texttt{occupation} in place of industry. Report the new count of unique records and say whether occupation is a finer or coarser mesh than industry.
+\item Before you run anything, predict how many one-of-a-kind people remain if you coarsen industry to two groups (goods versus everything else) rather than three. Then compute it with \texttt{recode} and compare your guess to the actual count.
+\item Break the complementary-suppression audit on purpose: take the agriculture column of the worked example, blank only the graduate cell, and leave the non-graduate cell visible against its total of 17. Confirm by hand that a reader recovers the hidden three by subtraction, then blank the second cell and confirm the leak closes.
+\item Coarsen a single high-cardinality column in your own file until the $k=1$ bin is empty, and write one sentence naming exactly which analytic comparison the coarsening costs the reader and whether any planned table still needs that detail.
+\item Install \texttt{riskscan} and run it on \texttt{nlsw88} with the four quasi-identifiers of the worked example, then read \texttt{r(below)} and write the one-line release gate (\texttt{if r(below) > 0}) you would put at the top of a publication do-file. Add \texttt{sensitive(union)} and report how many cells have $l=1$, then say in one sentence what an $l=1$ cell would leak that a large $k$ alone would not.
+\end{enumerate}

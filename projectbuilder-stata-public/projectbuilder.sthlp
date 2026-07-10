@@ -1,15 +1,16 @@
 {smcl}
-{* *! version 1.0.0 06jul2026 Eric A. Booth, Sr Researcher, Texas 2036}{...}
-{viewerjumpto "Syntax"          "projectbuilder##syntax"}{...}
-{viewerjumpto "Description"     "projectbuilder##description"}{...}
-{viewerjumpto "Options"         "projectbuilder##options"}{...}
-{viewerjumpto "Examples"        "projectbuilder##examples"}{...}
-{viewerjumpto "Workflow A"      "projectbuilder##wfA"}{...}
-{viewerjumpto "Workflow B"      "projectbuilder##wfB"}{...}
-{viewerjumpto "Workflow C"      "projectbuilder##wfC"}{...}
-{viewerjumpto "What gets built" "projectbuilder##scaffold"}{...}
-{viewerjumpto "Stored results"  "projectbuilder##results"}{...}
-{viewerjumpto "Author"          "projectbuilder##author"}{...}
+{* *! version 2.0.0 07jul2026 Eric A. Booth}{...}
+{vieweralsosee "[P] file" "help file"}{...}
+{vieweralsosee "[D] copy" "help copy"}{...}
+{viewerjumpto "Syntax"            "projectbuilder##syntax"}{...}
+{viewerjumpto "Description"       "projectbuilder##description"}{...}
+{viewerjumpto "Options"           "projectbuilder##options"}{...}
+{viewerjumpto "Workflow A"        "projectbuilder##wfA"}{...}
+{viewerjumpto "Workflow B"        "projectbuilder##wfB"}{...}
+{viewerjumpto "Optional dependencies" "projectbuilder##deps"}{...}
+{viewerjumpto "What gets built"   "projectbuilder##scaffold"}{...}
+{viewerjumpto "Stored results"    "projectbuilder##results"}{...}
+{viewerjumpto "Author"            "projectbuilder##author"}{...}
 {hline}
 {pstd}help for {hi:projectbuilder}{p_end}
 {hline}
@@ -18,8 +19,8 @@
 
 {p 4 8 2}
 {bf:projectbuilder} {hline 2} scaffold a data-analysis project folder with a
-numbered do-file pipeline, a control file that holds every path in one
-place, and a metadata-stamped README.{p_end}
+numbered do-file pipeline, then optionally ingest data, convert it, combine it
+into one analytic file, and build a documentation page.{p_end}
 
 
 {marker syntax}{...}
@@ -28,19 +29,24 @@ place, and a metadata-stamped README.{p_end}
 {p 8 17 2}
 {cmd:projectbuilder} {it:Source}[{cmd:/}{it:Subsource}] [{cmd:,} {it:options}]
 
-{synoptset 25 tabbed}{...}
+{synoptset 27 tabbed}{...}
 {synopthdr}
 {synoptline}
-{synopt:{opt des:cription(string)}}one-line description of the project; stamped into the README{p_end}
-{synopt:{opt url(string)}}source URL; lands as the download-target comment in {cmd:100_ingest.do}{p_end}
 {synopt:{opt path(string)}}base directory; default is the current working directory{p_end}
+{synopt:{opt des:cription(string)}}one-line description of the project{p_end}
+{synopt:{opt url(string)}}source URL; recorded, and fetched now if reachable{p_end}
+{synopt:{opt data(string)}}local file or folder to copy into {cmd:01_raw/} now{p_end}
 {synopt:{opt topic(string)}}free-text topic tag(s){p_end}
 {synopt:{opt pub:licfacing(string)}}must be {cmd:yes}, {cmd:no}, or {cmd:unsure}{p_end}
-{synopt:{opt time:line(string)}}refresh cadence (e.g., {cmd:monthly}){p_end}
-{synopt:{opt other:notes(string)}}free-text caveats / provenance notes{p_end}
-{synopt:{opt out:comes(varlist)}}up to 10 outcome variables; suggested local in {cmd:300_analyze.do}{p_end}
-{synopt:{opt ov:er(varlist)}}up to 10 by-variables; suggested local in {cmd:300_analyze.do}{p_end}
-{synopt:{opt descsave}}add a commented {cmd:descsave} (SSC) codebook call to {cmd:200_clean.do}{p_end}
+{synopt:{opt time:line(string)}}refresh cadence (for example, {cmd:monthly}){p_end}
+{synopt:{opt other:notes(string)}}free-text caveats or provenance{p_end}
+{synopt:{opt out:comes(varlist)}}up to 10 outcome variables for the profiler{p_end}
+{synopt:{opt ov:er(varlist)}}up to 10 by-variables for the profiler{p_end}
+{synopt:{opt descsave}}seed a codebook-export call in {cmd:300_labels.do}{p_end}
+{synopt:{opt rebuild}}refresh an existing project (re-ingest, re-document){p_end}
+{synopt:{opt replace}}with {cmd:rebuild}, also overwrite edited code files{p_end}
+{synopt:{opt builddocs}}render the documentation with {cmd:webdoc2} if installed{p_end}
+{synopt:{opt noauto:convert}}skip the automatic convert/combine pass{p_end}
 {synoptline}
 
 
@@ -48,239 +54,227 @@ place, and a metadata-stamped README.{p_end}
 {title:Description}
 
 {pstd}
-{cmd:projectbuilder} creates a new project folder named {it:Source} (or
-{it:Source/Subsource}, nested one level) under the current working
-directory or under {opt path()}, populated with:{p_end}
-
-{p 8 11 2}• the five-folder tree: {cmd:raw/} (untouched downloads,
-write-once), {cmd:clean/} (analysis-ready {cmd:.dta} files), {cmd:code/}
-(the do-files), {cmd:output/} (logs and tables), and {cmd:figures/}
-(exported graphs){p_end}
-
-{p 8 11 2}• {cmd:code/00_control.do} {hline 2} the control file. It pins
-the Stata {help version}, sets {cmd:$root} to the scaffolded absolute path
-(one loudly commented line to edit if the project ever moves), derives
-{cmd:$raw}, {cmd:$clean}, {cmd:$code}, {cmd:$output}, and {cmd:$figures}
-from it, and ends with an optional run-all block that rebuilds the whole
-pipeline in order when you flip {cmd:local run_all} to {cmd:1}{p_end}
-
-{p 8 11 2}• the numbered pipeline stubs in {cmd:code/}:
-{cmd:100_ingest.do}, {cmd:200_clean.do}, {cmd:300_analyze.do},
-{cmd:400_visualize.do}, {cmd:500_report.do}. Each states its single job
-in a header comment and notes that the globals come from
-{cmd:00_control.do}. Numbering by hundreds leaves gaps on purpose, so a
-new step slots in as {cmd:150_} without renaming the rest{p_end}
-
-{p 8 11 2}• {cmd:README.md} at the project root, stamped with the project
-name, date, author, and every metadata option you passed, plus the tree
-diagram.{p_end}
+{cmd:projectbuilder} creates a project folder under the current working
+directory (or under {opt path()}) and fills it with a numbered do-file
+pipeline, an analytic-data folder, an output folder, and a documentation
+folder. Everything is written by the command itself with {help file:file
+write}; there is no template folder and no shell call, so it behaves the same
+on macOS, Windows, and Linux.{p_end}
 
 {pstd}
-The metadata options do double duty: they document the project in the
-README and seed the stubs. {opt url()} becomes the download-target
-comment in {cmd:100_ingest.do}; {opt outcomes()} and {opt over()} become
-suggested locals in {cmd:300_analyze.do}; {opt descsave} adds a commented
-codebook-export call to {cmd:200_clean.do}.{p_end}
+There are two ways to use it. In {bf:Workflow A} the data exists now, so you
+point {opt data()} at local files and/or {opt url()} at a source address;
+{cmd:projectbuilder} copies the files in, converts them, combines them into one
+analytic file, and builds the documentation. In {bf:Workflow B} you scaffold
+first and add data later, then rerun with {opt rebuild} on every refresh. Both
+are shown below.{p_end}
 
 {pstd}
-{cmd:projectbuilder} never overwrites an existing folder: if the target
-already exists, it stops with error 602 and tells you so. It is
-self-contained (every scaffold file is written by the program itself; no
-template folder is needed) and cross-OS (it uses Stata's built-in
-{help mkdir} and {help file} commands; no shell calls).{p_end}
-
-{pstd}
-This package accompanies the book {it:Applied Program Evaluation Using
-Stata} by Booth & Teas; the scaffold is the project layout that book uses
-throughout. The design grew out of the authors' production scaffolding
-tool.{p_end}
+{cmd:projectbuilder} never overwrites an existing project: a plain call on a
+folder that already exists stops with error 602. Use {opt rebuild} to opt in to
+working on an existing project. A {opt rebuild} preserves any do-file in
+{cmd:_code/} you have edited unless you also give {opt replace}; the
+documentation, being a derived artifact, is regenerated on every {opt rebuild}.{p_end}
 
 
 {marker options}{...}
 {title:Options}
 
 {phang}
-{opt description(string)} provides a one-line description of the project.
-It is stamped into {cmd:README.md}; if omitted, the README carries an
-edit-me placeholder.{p_end}
+{opt path(string)} sets the base directory under which the project folder is
+created. The default is the current working directory. The project is created
+at {it:path}{cmd:/}{it:Source} (or {it:path}{cmd:/}{it:Source}{cmd:/}{it:Subsource}).{p_end}
 
 {phang}
-{opt url(string)} records the source URL. It lands in
-{cmd:100_ingest.do} as the download-target comment, next to a commented
-{help copy} call ready to be uncommented. Omit it for a
-local-files-only project (see Workflow A).{p_end}
+{opt description(string)} is a one-line description of the project. It is
+stamped into the documentation and the pipeline headers.{p_end}
 
 {phang}
-{opt path(string)} sets the base directory the project folder is created
-under. The default is the current working directory,
-{cmd:c(pwd)}.{p_end}
+{opt url(string)} records a source URL. The fetch is written into
+{cmd:100_data_download.do} so it is reproducible, and it is attempted once at
+scaffold time; if the address is reachable the file lands in {cmd:01_raw/}.{p_end}
 
 {phang}
-{opt topic(string)} sets free-text topic tag(s) for the README.{p_end}
+{opt data(string)} names a local file, or a folder of files, to copy into
+{cmd:01_raw/} now. This is the Workflow A entry point for data you already
+have on disk.{p_end}
 
 {phang}
-{opt publicfacing(string)} must be {cmd:yes}, {cmd:no}, {cmd:unsure}, or
-omitted. Recorded in the README.{p_end}
+{opt topic(string)}, {opt publicfacing(string)}, {opt timeline(string)}, and
+{opt othernotes(string)} are metadata stamped into the documentation.
+{opt publicfacing()} must be {cmd:yes}, {cmd:no}, {cmd:unsure}, or empty.{p_end}
 
 {phang}
-{opt timeline(string)} records the refresh cadence (e.g.,
-{cmd:monthly}, {cmd:annual; each October}).{p_end}
+{opt outcomes(varlist)} and {opt over(varlist)} seed the suggested locals in
+{cmd:400_data_profiler.do}. Each is capped at 10 items, with a note when
+trimmed.{p_end}
 
 {phang}
-{opt othernotes(string)} records free-text caveats or provenance notes
-(who sent the files, when, under what terms).{p_end}
+{opt descsave} adds a codebook-export call (via {cmd:descsave} from SSC) to
+{cmd:300_labels.do}, writing an Excel codebook into {cmd:_documentation/}.{p_end}
 
 {phang}
-{opt outcomes(varlist)} names up to 10 outcome variables. They are
-written into {cmd:300_analyze.do} as the suggested {cmd:local outcomes}.
-More than 10 are trimmed to the first 10, with a note.{p_end}
+{opt rebuild} refreshes an existing project: it re-runs the convert/combine
+pass over {cmd:01_raw/} and regenerates the documentation. Every data refresh
+is just another {opt rebuild}.{p_end}
 
 {phang}
-{opt over(varlist)} names up to 10 by-variables for breakdowns, written
-into {cmd:300_analyze.do} as the suggested {cmd:local over}. Same
-10-item cap.{p_end}
+{opt replace} has effect only with {opt rebuild}: it allows the numbered
+do-files to be overwritten. Without it, a {opt rebuild} leaves your edited
+do-files untouched.{p_end}
 
 {phang}
-{opt descsave} adds a commented codebook-export call via {cmd:descsave}
-(from SSC: {cmd:ssc install descsave}) to {cmd:200_clean.do}.{p_end}
+{opt builddocs} renders {cmd:_documentation/website/index.html} with
+{cmd:webdoc2} if it is installed. Documentation is always built either way; this
+option only makes it prettier.{p_end}
 
-
-{marker examples}{...}
-{title:Examples}
-
-{pstd}Minimal {hline 2} a project named {cmd:CountyBudgets} under the current directory:{p_end}
-
-{phang2}{cmd:. projectbuilder CountyBudgets}{p_end}
-
-{pstd}Nested under a source, with a base path:{p_end}
-
-{phang2}{cmd:. projectbuilder LaborDept/UnempClaims, path("~/projects")}{p_end}
-
-{pstd}Metadata-rich:{p_end}
-
-{phang2}{cmd:. projectbuilder LaborDept/UnempClaims, desc("Monthly county unemployment claims") url("https://example.gov/data/claims.csv") outcomes(claims_rate claims_n) over(county year) descsave topic("labor markets") publicfacing(yes) timeline(monthly)}{p_end}
+{phang}
+{opt noautoconvert} skips the automatic {cmd:convertanything} and
+{cmd:combineall} pass. The calls still appear in {cmd:200_data_management.do} so
+you can run them yourself.{p_end}
 
 
 {marker wfA}{...}
-{title:Workflow A {hline 2} new project from local files only (no URL)}
+{title:Workflow A -- the data already exists (local files or a source URL)}
 
 {pstd}
-You have three CSV files someone emailed you and want a project built
-around them. There is no public URL.{p_end}
+You have a folder of CSV or Excel files on disk (or a public download URL), and
+you want a project built around them in one command.{p_end}
 
 {pstd}
-{bf:Step 1.} Scaffold the folder. Omit {cmd:url()}; use
-{cmd:othernotes()} to capture provenance:{p_end}
+{bf:Step 1.} Scaffold and ingest in a single call. Point {opt data()} at the
+folder of files (and/or {opt url()} at the source):{p_end}
 
-{phang2}{cmd:. projectbuilder CountyBudgets, desc("County budget CSVs, one row per dept per FY") othernotes("Files received from M. Smith on 2026-05-20") outcomes(total_budget) over(year department)}{p_end}
-
-{pstd}
-{bf:Step 2.} Drag the files into the new {cmd:CountyBudgets/raw/}. Raw
-files are write-once: they are never edited, only read.{p_end}
-
-{pstd}
-{bf:Step 3.} Open {cmd:code/100_ingest.do} and replace the placeholder
-comment with a note on where the files came from (or, if they refresh at
-a known local path, a {help copy} command from that path into
-{cmd:$raw}).{p_end}
+{p 8 8 2}{cmd:. cd "~/projects"}{p_end}
+{p 8 8 2}{cmd:. projectbuilder CountyBudgets,                                   ///}{p_end}
+{p 8 8 2}{cmd:        data("~/Desktop/budget_drop")                            ///}{p_end}
+{p 8 8 2}{cmd:        description("County budget CSVs, one row per dept per FY") ///}{p_end}
+{p 8 8 2}{cmd:        topic("local government, budgets") publicfacing(unsure)  ///}{p_end}
+{p 8 8 2}{cmd:        timeline("annual") outcomes(total_budget) over(year dept) descsave}{p_end}
 
 {pstd}
-{bf:Step 4.} Run {cmd:00_control.do}, then write the import in
-{cmd:200_clean.do} (e.g., {cmd:import delimited "$raw/..."} ...
-{cmd:save "$clean/...dta"}) and work down the pipeline.{p_end}
+This copies every file from {cmd:budget_drop/} into {cmd:CountyBudgets/01_raw/},
+runs {cmd:convertanything} over {cmd:01_raw/} into {cmd:01_raw/_converted/},
+appends the converted files with {cmd:combineall} into
+{cmd:02_cleaned/CountyBudgets_analytic.dta}, and writes the documentation page.
+(If a source lives online, add {cmd:url("https://.../data.csv")}; it is fetched
+now and the fetch is recorded in {cmd:100_data_download.do}.){p_end}
+
+{pstd}
+{bf:Step 2.} Open {cmd:_code/000_control.do}, run it to set the path globals,
+then work down the pipeline from {cmd:300_labels.do} onward.{p_end}
 
 
 {marker wfB}{...}
-{title:Workflow B {hline 2} refreshing a project with new files}
+{title:Workflow B -- scaffold now, data later, rebuild on every refresh}
 
 {pstd}
-The project already exists and a new vintage of the data arrives.
-{cmd:projectbuilder} is not involved (it refuses to touch an existing
-folder); the scaffold is built for exactly this moment:{p_end}
-
-{p 8 11 2}{bf:Case B1 {hline 2} same filenames, new contents.} Drop the
-new files into {cmd:raw/}, flip {cmd:local run_all} to {cmd:1} in
-{cmd:00_control.do}, and rerun it. The whole pipeline rebuilds in
-order.{p_end}
-
-{p 8 11 2}{bf:Case B2 {hline 2} new filenames.} Update the filename(s)
-in {cmd:100_ingest.do} and {cmd:200_clean.do}, then rebuild as in
-B1.{p_end}
-
-{p 8 11 2}{bf:Case B3 {hline 2} you want to keep the old vintage.} Make
-a subfolder such as {cmd:raw/2025/} for the prior files before dropping
-in the new ones, and point {cmd:200_clean.do} at the current
-vintage.{p_end}
-
-
-{marker wfC}{...}
-{title:Workflow C {hline 2} new project, source has a public URL}
+You want the project structure now, before the data has arrived.{p_end}
 
 {pstd}
-Pass the URL at scaffold time and it is waiting for you in
-{cmd:100_ingest.do}:{p_end}
+{bf:Step 1.} Scaffold with no {opt data()} and no {opt url()}. You get the full
+tree, an empty {cmd:01_raw/}, and printed next steps:{p_end}
 
-{phang2}{cmd:. projectbuilder LaborDept/UnempClaims, url("https://example.gov/data/claims.csv") desc("Monthly county unemployment claims")}{p_end}
+{p 8 8 2}{cmd:. projectbuilder VendorFeed, description("Monthly vendor extract")}{p_end}
 
 {pstd}
-Open {cmd:code/100_ingest.do}, uncomment the {help copy} line, fix the
-local filename, and run it. The raw file lands in {cmd:$raw} and the
-rest of the pipeline proceeds as in Workflow A.{p_end}
+{bf:Step 2.} When the files arrive, drop them into
+{cmd:VendorFeed/01_raw/}.{p_end}
+
+{pstd}
+{bf:Step 3.} Rerun with {opt rebuild}. {cmd:projectbuilder} detects the new
+files, re-runs the convert/combine pass, and regenerates the documentation:{p_end}
+
+{p 8 8 2}{cmd:. projectbuilder VendorFeed, rebuild}{p_end}
+
+{pstd}
+Every later refresh is the same {opt rebuild}. It is idempotent, and it will not
+overwrite a do-file you have edited in {cmd:_code/} unless you add {opt replace}.{p_end}
+
+
+{marker deps}{...}
+{title:Optional dependencies}
+
+{pstd}
+{cmd:projectbuilder} has no hard dependencies. A few companion tools make it do
+more when installed; each is detected with {help capture:capture which}. If a
+tool is missing, the generated do-file still {it:contains} the call (so it is a
+working example), the automatic pass skips that step, and a one-line note names
+the package and its install command.{p_end}
+
+{p2colset 8 26 28 2}{...}
+{p2col:{bf:convertanything}}bulk-convert mixed formats in {cmd:01_raw/} to {cmd:.dta} in {cmd:01_raw/_converted/} (author's GitHub){p_end}
+{p2col:{bf:combineall}}append or merge the converted files into the analytic file (author's GitHub){p_end}
+{p2col:{bf:descsave}}write an Excel codebook from {cmd:300_labels.do} (SSC: {cmd:ssc install descsave}){p_end}
+{p2col:{bf:srctag} / {bf:srcfind}}tag and search each variable's source lineage (author's GitHub){p_end}
+{p2col:{bf:webdoc2}}render a richer {cmd:index.html} (author's GitHub; needs {cmd:ssc install webdoc}){p_end}
+{p2colreset}{...}
+
+{pstd}
+The convert-then-combine chain is the heart of {cmd:200_data_management.do}:
+{cmd:convertanything} turns every raw file into a cleaned {cmd:.dta}, then
+{cmd:combineall} with {cmd:cmethod(append)} stacks those into one analytic file.
+When {cmd:webdoc2} is absent, {cmd:projectbuilder} writes a plain but complete
+{cmd:index.html} and {cmd:Readme.md} directly, so the documentation always
+exists.{p_end}
 
 
 {marker scaffold}{...}
 {title:What gets built}
 
 {pstd}
-After {cmd:projectbuilder LaborDept/UnempClaims, ...} you will have:{p_end}
+After {cmd:projectbuilder MyProject} you have:{p_end}
 
-{hline}
-{cmd}
-LaborDept/UnempClaims/
-├── README.md          project name, date, author, metadata, this tree
-├── raw/               untouched downloads (write-once; never edited)
-├── clean/             analysis-ready .dta files
-├── code/
-│   ├── 00_control.do      every path in one place; run-all block
-│   ├── 100_ingest.do      fetch raw source files into $raw
-│   ├── 200_clean.do       raw -> analysis-ready .dta in $clean
-│   ├── 300_analyze.do     clean -> tables in $output
-│   ├── 400_visualize.do   graphs exported to $figures
-│   └── 500_report.do      assemble the deliverable in $output
-├── output/            logs and tables
-└── figures/           exported graphs
-{txt}{hline}
+{p 8 8 2}{cmd}{...}
+MyProject/
++-- 01_raw/                raw source files (write-once)
+|   +-- _archive/
+|   +-- _converted/        convertanything output (one .dta per raw file)
++-- 02_cleaned/            <project>_analytic.dta lives here
+|   +-- _archive/
++-- 03_output/             logs, tables, exhibits
+|   +-- _archive/
++-- _code/
+|   +-- 000_control.do     every path in one place; run-all block
+|   +-- 100_data_download.do
+|   +-- 200_data_management.do   convertanything -> combineall
+|   +-- 300_labels.do
+|   +-- 400_data_profiler.do
+|   +-- 500_aggregation.do
+|   +-- 600_analysis.do
+|   +-- _archive/
++-- _documentation/
+|   +-- index.do           webdoc2 source
+|   +-- _runall.do         renders website/index.html
+|   +-- Readme.md
+|   +-- website/index.html
+|   +-- _archive/
++-- _archive/
+{txt}{...}
+{p_end}
 
 {pstd}
-{cmd:00_control.do} stamps {cmd:$root} with the absolute path of the
-scaffolded folder, so the pipeline runs immediately; when the project
-moves, edit that one line and nothing else.{p_end}
+{cmd:000_control.do} pins the Stata version, stamps {cmd:$root} with the
+absolute path of the new folder (one loudly commented line to edit if the
+project ever moves), derives {cmd:$raw}, {cmd:$converted}, {cmd:$cleaned},
+{cmd:$output}, {cmd:$code}, and {cmd:$docs} from it, and ends with a run-all
+block over the numbered pipeline.{p_end}
 
 
 {marker results}{...}
 {title:Stored results}
 
-{pstd}{cmd:projectbuilder} stores the following in {cmd:r()}:{p_end}
+{pstd}{cmd:projectbuilder} is {help return:rclass} and stores:{p_end}
 
-{synoptset 15 tabbed}{...}
-{p2col 5 15 19 2: Macros}{p_end}
-{synopt:{cmd:r(project)}}the project label ({it:Source} or {it:Source_Subsource}){p_end}
-{synopt:{cmd:r(path)}}the absolute path of the scaffolded folder{p_end}
-
-
-{title:Notes}
-
-{p 8 11 2}• The target folder must not already exist; if it does,
-{cmd:projectbuilder} exits with error 602 and changes nothing.{p_end}
-
-{p 8 11 2}• Names may nest at most one level ({it:Source/Subsource}) and
-may not contain {cmd:..} or backslashes.{p_end}
-
-{p 8 11 2}• Metadata strings are stamped into generated files verbatim;
-avoid backtick and dollar-sign characters in them.{p_end}
-
-{p 8 11 2}• Requires Stata 16.0 or newer. No dependencies. The optional
-{cmd:descsave} codebook call requires {cmd:ssc install descsave}.{p_end}
+{synoptset 16 tabbed}{...}
+{p2col 5 16 20 2: Scalars}{p_end}
+{synopt:{cmd:r(nraw)}}number of files in {cmd:01_raw/}{p_end}
+{synopt:{cmd:r(nconverted)}}number of {cmd:.dta} files in {cmd:01_raw/_converted/}{p_end}
+{synopt:{cmd:r(rebuilt)}}1 if this call refreshed an existing project, else 0{p_end}
+{p2col 5 16 20 2: Macros}{p_end}
+{synopt:{cmd:r(project)}}project label (slashes become underscores){p_end}
+{synopt:{cmd:r(path)}}absolute path of the project folder{p_end}
+{p2colreset}{...}
 
 
 {marker author}{...}
@@ -288,7 +282,8 @@ avoid backtick and dollar-sign characters in them.{p_end}
 
 {pstd}
 Eric A. Booth, Sr Researcher, Texas 2036{break}
-Support: eric.a.booth@gmail.com{break}
-Companion package to {it:Applied Program Evaluation Using Stata}.{p_end}
+Support: {browse "mailto:eric.a.booth@gmail.com":eric.a.booth@gmail.com}{break}
+A generalization of the author's production project-scaffolding tool; companion
+to {it:Applied Program Evaluation Using Stata}.{p_end}
 
 {hline}
