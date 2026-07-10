@@ -4,11 +4,11 @@ A five-person site ranks worst in the state this quarter because one family move
 
 This chapter covers those four safeguards: building reliable scales, weighting for representativeness, stabilizing noisy small-site rates, and sizing a study so it can find the effect it was funded to find. Each one protects a downstream claim from a predictable way of being wrong, which is why they come before the analysis rather than after the reviewer catches the problem. Each is worked here on real or clearly labeled simulated data, in one do-file (\texttt{ch07\_trust.do}) that reruns end to end, so the safeguard is not just described but demonstrated.
 
-For an evaluator embedded in a program team, these safeguards are the price of admission to the conversation practitioners already trust. Performance-measurement systems, logic-model indicators, and What Works Clearinghouse evidence tiers all assume the numbers feeding them mean what they say, and each safeguard here answers a question a skeptical program officer will ask out loud: does this scale hold together, do these respondents stand in for our clients, is this small site's rate real or an accident of its size, and could this study have found the effect at all. The AEA Guiding Principles name systematic inquiry and competence as obligations an evaluator owes the people the program serves, and these checks are where those obligations become arithmetic rather than aspiration. The chapter also sets two ideas the field is moving toward alongside the shipped tools: distribution-free prediction intervals and model-based small-area estimation. Table~\ref{tab:ch07-viz-map} is the chapter's map: each safeguard, the skeptical question it answers, and the Stata command that does the work.
+For an evaluator embedded in a program team, these safeguards are the price of admission to the conversation practitioners already trust. Performance-measurement systems, logic-model indicators, and What Works Clearinghouse evidence tiers all assume the numbers feeding them mean what they say, and each safeguard here answers a question a skeptical program officer will ask out loud: does this scale hold together, do these respondents stand in for our clients, is this small site's rate real or an accident of its size, and could this study have found the effect at all. The AEA Guiding Principles name systematic inquiry and competence as obligations an evaluator owes the people the program serves, and these checks are where those obligations become arithmetic rather than aspiration. The chapter also works two methods newer to evaluation practice: distribution-free prediction intervals, and splitting the variance between the site and the person. Table~\ref{tab:ch07-viz-map} is the chapter's map: each safeguard, the skeptical question it answers, and the Stata command that does the work.
 
 \begin{table}[htbp]
 \centering
-\caption[The four safeguards and the question each answers]{The chapter's spine: read down the middle column for the skeptical program officer's question, then across to the safeguard that answers it and the tool that does the work. The last two rows are the forward-looking additions, prediction intervals and variance partitioning, that the shipped safeguards set up.}
+\caption[The chapter's safeguards and the question each answers]{The chapter's spine: read down the middle column for the skeptical program officer's question, then across to the safeguard that answers it and the tool that does the work. The last two rows are newer to evaluation practice, prediction intervals and variance partitioning, and both ship as commands here; model-based small-area estimation, the proposed tool this chapter also names, is not yet one of them.}
 \label{tab:ch07-viz-map}
 {\footnotesize
 \begin{tabular}{p{2.3cm}p{4.7cm}p{2.4cm}}
@@ -143,7 +143,7 @@ The two constants that drive the blend print as a grand mean of 0.195 and a prio
      3    6   0.333     0.217   -0.117
 \end{verbatim}
 }
-This makes sense: site~26 recorded zero successes out of seven and would rank dead last on the raw rate, but seven cases cannot support a claim of \enquote{never,} so shrinkage lifts it to 0.160, near the pack. Site~11 posted a flashy 0.400 on 15 cases and is pulled down to 0.260. In every case the move is large precisely because the denominator is small; no site with a caseload in the hundreds appears in this list. Figure~\ref{fig:shrink} plots all 50 at once.
+This makes sense: site~26 recorded zero successes out of seven and would rank dead last on the raw rate, but seven cases cannot support a claim of \enquote{never,} so shrinkage lifts it to 0.160, near the pack. Site~11 posted 0.400 on only 15 cases and is pulled down to 0.260. In every case the move is large precisely because the denominator is small; no site with a caseload in the hundreds appears in this list. Figure~\ref{fig:shrink} plots all 50 at once.
 
 \begin{figure*}[htbp]
 \centering
@@ -199,7 +199,47 @@ That reliability column is the shrinkage of this section written another way. \t
 \end{equation}
 with $\alpha,\beta$ the fitted Beta prior's two parameters (so their sum is the prior sample size $M$) and $w_i$ the same shrinkage weight as in Eq.~\eqref{eq:ch07-viz-shrink}. A site pulled halfway to the grand mean has a raw rate that is exactly 50\% reliable. Shrinkage and the reliability a measurement report demands are one number, computed once. The authors frame this as a more coherent alternative to the Adams signal-to-noise reliability long used for healthcare quality measures, and the empirical-Bayes tradition running back to \textcite{efron1975data} and Stein's paradox makes it intuitive: borrowing strength and discounting for unreliability are one move.\marginnote{\texttt{rateshrink}'s \texttt{rel()} is defined for the Beta-binomial model only. The prior is estimated by moments from the same sites being shrunk, so with fewer than about ten sites it is noisy, and the command says so and falls back to a uniform prior. Covariate-adjusted shrinkage is not supported here; when covariates matter, reach for a multilevel model.}
 
-This is one of the most directly actionable safeguards in the book, and its beneficiaries are the small sites themselves. Stabilized rates protect a five-person program from a statistical accident, which is what makes a public dashboard fair enough to publish. Shrinkage, in other words, is accessibility and fairness expressed as arithmetic.
+This safeguard is directly actionable, and its beneficiaries are the small sites themselves. Stabilized rates protect a five-person program from a statistical accident, which is what makes a public dashboard fair enough to publish. Shrinkage, in other words, is fairness expressed as arithmetic.
+
+\section{Power and the smallest effect you can see}\label{sec:mde}
+The most expensive mistake in evaluation is the study too small to detect the effect it was designed to find, which then reports a null that a funder reads as program failure. We size studies before data collection by asking what minimum detectable effect\index{minimum detectable effect} (MDE) the design can see: the smallest true effect the sample could reliably distinguish from zero. For clustered designs, students within schools, patients within clinics, power depends on the number of clusters far more than the number of individuals,\marginnote{Why clusters rather than individuals? Because responses inside a cluster are correlated, adding the fiftieth pupil to a classroom buys almost no new information. Doubling the classrooms does. A common rule of thumb: below roughly 30--40 clusters, the cluster-robust variance is itself unreliable; reach for a small-sample correction such as the \texttt{wild bootstrap}.} so the calculation uses \texttt{power}\index{power@\texttt{power}} with the design effect\index{design effect} built in.
+
+Before spending a dollar, a program director wants to know what a planned study can and cannot see. Suppose a job-readiness program scores participants on a 0--100 scale with a control mean of 50 and a standard deviation of 10, and the budget affords 300 people split across two arms. What size gain can that design detect? One \texttt{power} call answers it:
+{\footnotesize
+\begin{verbatim}
+power twomeans 50 (52 53 54), sd(10) n(300) ///
+    table(N delta power)
+\end{verbatim}
+}
+The table reads the design at the budgeted sample size for three candidate effects:
+{\footnotesize
+\begin{verbatim}
+       N   delta   power
+     300       2   .4078
+     300       3   .7356
+     300       4   .9323
+\end{verbatim}
+}
+This makes sense: at $N=300$ the study has only a 41\% chance of detecting a 2-point gain, so it would miss a real two-point effect more often than it caught it, and a null result would be uninformative. A 3-point gain reaches 74\% power, still short of the 0.80 convention, and only a 4-point gain is comfortably detectable at 93\%. The honest sentence to the director is therefore: this study can find a large effect, might find a medium one, and will probably miss a small one. Figure~\ref{fig:power} traces the same calculation across sample sizes so the budget line becomes visible.
+
+{\footnotesize
+\begin{verbatim}
+power twomeans 50 (52 53 54), sd(10) n(100(20)500) ///
+    graph(xline(300, lcolor(cranberry) lpattern(shortdash)))
+\end{verbatim}
+}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{ch07_power.png}
+\caption[Power curves and the budget line]{Power to detect a 2-, 3-, or 4-point gain (control mean 50, sd~10, $\alpha=0.05$) as total sample size grows. The horizontal dashed line marks the 0.80 convention; the vertical line marks the budgeted $N=300$. Read where each curve crosses the vertical line to see what the affordable design can detect: the 4-point curve clears 0.80, the 3-point curve sits just below it, and the 2-point curve is far under. Built by \texttt{ch07\_trust.do}.}
+\label{fig:power}
+\end{figure}
+
+\begin{vizcallout}[Visualization to build: the power curve]
+Plot statistical power on the $y$-axis against sample size or number of clusters on the $x$-axis, one line per candidate effect size, with a reference line at 0.80. Mark the design the budget can actually afford. Stakeholders grasp \enquote{here is where our budget lands on this curve} far faster than a table of sample sizes.
+\end{vizcallout}
+
+When an evaluator frames the design in MDE terms, she manages stakeholder expectations honestly and up front, so a program director learns before data collection begins what size of effect the study can and cannot find. That is the actionable principle pointed at the design stage: the most useful thing you can tell a funder about a small study is what it will not be able to see.
 
 \section{Uncertainty without the model's permission}\label{sec:conformal}
 A regression's confidence interval trusts the regression, and when a program director asks where the next client will land, that trust is often the weak link. The interval a fitted model reports assumes the model is right about its own error distribution, so if the residuals are skewed or the form is off, the interval is confidently the wrong width. Split-conformal prediction\index{conformal prediction} gives an evaluator a prediction interval whose coverage holds no matter how wrong the model is, the guarantee a practitioner planning for one site or one caseworker needs.
@@ -278,46 +318,6 @@ Grade and age explain about 11\% of the wage variance, and adding the industry r
 \end{kaobox}
 
 Fay-Herriot estimation is where the field goes when plain empirical Bayes is not enough: where \S\ref{sec:shrink} pulls every small site toward one common mean, the small-area model pulls each toward the mean of sites like it, closer to how statistics offices produce the small-area numbers policymakers already cite. The cost is honest: the estimate is only as good as the covariate model behind it, trading assumption-light shrinkage for a stronger estimate that leans on a specification a reviewer can question.
-
-\section{Power and the smallest effect you can see}\label{sec:mde}
-The most expensive mistake in evaluation is the study too small to detect the effect it was designed to find, which then reports a null that a funder reads as program failure. We size studies before data collection by asking what minimum detectable effect\index{minimum detectable effect} (MDE) the design can see: the smallest true effect the sample could reliably distinguish from zero. For clustered designs, students within schools, patients within clinics, power depends on the number of clusters far more than the number of individuals,\marginnote{Why clusters and not bodies? Because responses inside a cluster are correlated, adding the fiftieth pupil to a classroom buys almost no new information. Doubling the classrooms does. A common rule of thumb: below roughly 30--40 clusters, the cluster-robust variance is itself unreliable and you should reach for a small-sample correction such as \texttt{wild bootstrap}.} so the calculation uses \texttt{power}\index{power@\texttt{power}} with the design effect\index{design effect} built in.
-
-Before spending a dollar, a program director wants to know what a planned study can and cannot see. Suppose a job-readiness program scores participants on a 0--100 scale with a control mean of 50 and a standard deviation of 10, and the budget affords 300 people split across two arms. What size gain can that design detect? One \texttt{power} call answers it:
-{\footnotesize
-\begin{verbatim}
-power twomeans 50 (52 53 54), sd(10) n(300) ///
-    table(N delta power)
-\end{verbatim}
-}
-The table reads the design at the budgeted sample size for three candidate effects:
-{\footnotesize
-\begin{verbatim}
-       N   delta   power
-     300       2   .4078
-     300       3   .7356
-     300       4   .9323
-\end{verbatim}
-}
-This makes sense: at $N=300$ the study has only a 41\% chance of detecting a 2-point gain, so it would miss a real two-point effect more often than it caught it, and a null result would be uninformative. A 3-point gain reaches 74\% power, still short of the 0.80 convention, and only a 4-point gain is comfortably detectable at 93\%. The honest sentence to the director is therefore: this study can find a large effect, might find a medium one, and will probably miss a small one. Figure~\ref{fig:power} traces the same calculation across sample sizes so the budget line becomes visible.
-
-{\footnotesize
-\begin{verbatim}
-power twomeans 50 (52 53 54), sd(10) n(100(20)500) ///
-    graph(xline(300, lcolor(cranberry) lpattern(shortdash)))
-\end{verbatim}
-}
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\linewidth]{ch07_power.png}
-\caption[Power curves and the budget line]{Power to detect a 2-, 3-, or 4-point gain (control mean 50, sd~10, $\alpha=0.05$) as total sample size grows. The horizontal dashed line marks the 0.80 convention; the vertical line marks the budgeted $N=300$. Read where each curve crosses the vertical line to see what the affordable design can detect: the 4-point curve clears 0.80, the 3-point curve sits just below it, and the 2-point curve is far under. Built by \texttt{ch07\_trust.do}.}
-\label{fig:power}
-\end{figure}
-
-\begin{vizcallout}[Visualization to build: the power curve]
-Plot statistical power on the $y$-axis against sample size or number of clusters on the $x$-axis, one line per candidate effect size, with a reference line at 0.80. Mark the design the budget can actually afford. Stakeholders grasp \enquote{here is where our budget lands on this curve} far faster than a table of sample sizes.
-\end{vizcallout}
-
-When an evaluator frames the design in MDE terms, she manages stakeholder expectations honestly and up front, so a program director learns before spending a dollar what size of effect the study can and cannot find. That is the actionable principle pointed at the design stage: the most useful thing you can tell a funder about a small study is what it will not be able to see.
 
 \paragraph{Where this leaves you.} Your scales measure one thing, with the dead-weight item pruned; your sample stands in for its population, so the reported rate is 0.37 and not the sample's 0.42; your small-site rates are stable, so a zero out of seven does not rank last; and your studies are sized to their questions, so a 41\%-power design is caught on the whiteboard rather than in the final report.\marginnote{One distinction worth carrying into the next chapter: a confidence interval brackets the \emph{average} effect, a prediction interval brackets where the \emph{next} site or person will land. The second is always wider, and a program director planning for one clinic wants the prediction interval, not the confidence interval you will be tempted to quote.} Those four safeguards make the numbers trustworthy enough to compare, which is what Chapter~\ref{ch:claims} does next, turning trustworthy numbers into defensible claims. You can now also quote a prediction interval whose coverage does not depend on the model being right, and say how much of an outcome's variation a site can even carry before you rank sites at all.
 

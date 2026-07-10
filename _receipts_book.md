@@ -117,3 +117,24 @@ Any figure or table number in a caption traces to the same do-file as the panel 
 ## Source durability fix (2026-07-07)
 - The modular manuscript source lived ONLY in /private/tmp, which the OS prunes: assemble.sh, ASSEMBLY_ORDER.txt, and the 4 part-divider .tex files were silently lost mid-session. Reconstructed them from main_assembled.tex and verified byte-identical assembly.
 - MITIGATION: durable copy now at LaTeXBookCode/src/ (21 chapters + ASSEMBLY_ORDER + preamble + 19 bib fragments + a path-independent assemble.sh + README). Self-tested: assembles byte-identical. EDIT THERE from now on, or re-sync after editing the scratch copy.
+
+## Clearwriter full pass 2 (2026-07-07, in progress)
+- Scope: all 15 chapters + frontmatter + appendices, editing the DURABLE source (LaTeXBookCode/src/chapters/). Focus per Eric: tone (professional/crisp, no informal/boastful/moralizing/amateurish), consistency, order, redundancy/orphans.
+- BASELINE SWEEP: hard prohibitions essentially clean (0 hype, 0 plain-english, 0 prose em-dashes; "very/should" hits reviewed = legitimate quantitative/quoted uses). KEY FINDING: patton2008utilization cited 11x across 8 files, "utilization-focused" in 9 files — the parallel expansion agents each re-explained UFE's central claim (~6 re-teachings). DEDUP PLAN: Ch1 owns the framework (3-uses treatment, ~line 129 = keeper); ch02/ch03/ch05/ch06/ch11(2x)/ch12 compress to their genuinely-new angle + cite + pointer to Ch1; ch11 also de-doubles the boundary-object frame (~309 vs ~8).
+- Workflow wj4zb0oar (run wf_855ec001-eed): 16 per-chapter editors (batched 4, EDIT_SCHEMA reports + flag-dont-fix for structure) -> 1 cross-book reviewer (xhigh; residual redundancy incl. Thursday-motif audit, orphans/order, tone drift, terminology). Fixer = main loop, then reassemble from src/, compile, verify frozen numbers, sync scratch copy.
+- FROZEN: all claims-ledger numbers, code, equations, labels/cites, captions' numerics.
+
+## Clearwriter full pass 2 — COMPLETE (2026-07-07)
+- 16 per-chapter editors + 1 cross-book reviewer (workflow wf_855ec001-eed; reviewer resumed after a session-limit death, editors replayed from cache).
+- EDITORS: 86 substantive edits, 47 tone fixes, 42 flags raised (flag-don't-fix contract honored). Frozen numbers/code untouched (all 16 reported frozen_confirmed).
+- DEDUP EXECUTED (the pass's biggest win): Patton/utilization-focused evaluation was independently re-explained in 6 chapters by the parallel expansion agents. Ch1 kept as the framework's home; ch02/ch03/ch05/ch06/ch11/ch12 compressed to their distinct angle + pointer. Also de-doubled: ch11 boundary-object frame, ch02 RPP redefinition (-> Ch1 ref), ch08 Yeager result re-narration (-> Ch1 ref), ch15 empirical-Bayes re-derivation (-> Ch7 sec:shrink ref) and its verbatim 0.65/0.07 repeat, ch13 citation-recap paragraph (all 7 works already cited inline).
+- FIXER (main loop) — verified each before acting:
+  * CITATION-INTEGRITY BUG: wilson2017good vs wilson2017goodenough were duplicate bib entries for the same paper (compile passed since both keys existed). Repointed ch15, deleted the dup. Bib now has zero duplicate keys, 0 biber warnings.
+  * ORPHAN: ch08 carried an unlabeled duplicate of the csdid/estat verbatim block between the prose and fig:event. Removed.
+  * ORDER: ch07's spine table listed power 4th while power was the LAST section (after the two newer methods), contradicting the intro's "four safeguards" framing. Moved the power section to 4th; table, intro, and closer enumeration now all agree. Also fixed the caption mislabeling the SHIPPED conformalpred/hlmr2 as "forward-looking additions".
+  * BROKEN PROMISE: ch03 said "two traps ... (see the box below)" but only one box followed; repointed to sec:webapi where the $-sign trap is boxed.
+  * UNCITED SELF-REFERENCE: removed ch10's claim to an unpublished "authors' Stata Journal work" (citing it would have fabricated a reference).
+  * TONE: ch14's "existed ... only in deleted version-control history" confession recast; ch10's "Thursday" hook changed (Thursday is Ch1's signature motif); ch10 leftover %TODO-verify author note deleted.
+  * CONSISTENCY: "analysis file" -> "analytic file" (ch12 x2, ch15); Part I title's doubled "Principles"; sec:promises/tab:promises labels renamed to principles; ch01 closer's over-claim of "reader paths for your role" (that table lives in the preface); ch02 table row repointed to a new \label{sec:ch02-install}; ch13 bare "the model" -> "the targeting model" (predictive, not the LLM).
+- JUDGMENT (not changed, per "do not over-rewrite clean prose"): ch05/ch09 PDSA mentions APPLY improvement science rather than redefine it; ch03/ch09 "This makes sense" is the book's deliberate Gelman sense-check motif.
+- FINAL: 246pp (was 248; removals), 0 TeX errors, 0 undefined cites/refs, 0 multiply-defined, 0 overfull >=15pt, 0 duplicate bib keys. All claims-ledger numbers verified present in the assembled main.tex.

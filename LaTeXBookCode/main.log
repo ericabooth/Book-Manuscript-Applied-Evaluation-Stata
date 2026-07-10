@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.27)  9 JUL 2026 22:22
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.27)  10 JUL 2026 08:40
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -3695,10 +3695,6 @@ chapter 2.
 
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
  [19] (./main.mw)
 \openout4 = `main.mw'.
 
@@ -3857,7 +3853,7 @@ Underfull \hbox (badness 1112) in paragraph at lines 747--747
  (+20) widens
  []
 
-<images//ch02_benchmark.png, id=1161, 1806.75pt x 1053.9375pt>
+<images//ch02_benchmark.png, id=1163, 1806.75pt x 1053.9375pt>
 File: images//ch02_benchmark.png Graphic file (type png)
 <use images//ch02_benchmark.png>
 Package pdftex.def Info: images//ch02_benchmark.png  used on input line 763.
@@ -3993,7 +3989,7 @@ Underfull \hbox (badness 2790) in paragraph at lines 860--860
 
 \openout4 = `main.mw'.
 
-<images//ch03_ccd_enrollment.png, id=1243, 1806.75pt x 1337.74782pt>
+<images//ch03_ccd_enrollment.png, id=1245, 1806.75pt x 1337.74782pt>
 File: images//ch03_ccd_enrollment.png Graphic file (type png)
 <use images//ch03_ccd_enrollment.png>
 Package pdftex.def Info: images//ch03_ccd_enrollment.png  used on input line 90
@@ -4022,7 +4018,7 @@ Package pdftex.def Info: images//ch03_ccd_enrollment.png  used on input line 90
 
 \openout4 = `main.mw'.
 
-<images//ch03_qcew_wages.png, id=1255, 1806.75pt x 903.375pt>
+<images//ch03_qcew_wages.png, id=1256, 1806.75pt x 903.375pt>
 File: images//ch03_qcew_wages.png Graphic file (type png)
 <use images//ch03_qcew_wages.png>
 Package pdftex.def Info: images//ch03_qcew_wages.png  used on input line 966.
@@ -4138,12 +4134,20 @@ Package mdframed Info: mdframed detected package amsthm
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 1081.
+
+
+Package mdframed Warning: You got a bad break
+(mdframed)                because the last box will be empty
+(mdframed)                you have to change it manually
+(mdframed)                by changing the text, the space
+(mdframed)                or something else on input line 1081.
+
 Package mdframed Info: Box was splittet wrong
  starting loop to iterate the splitting point
 (mdframed)              on input line 1081.
 \openout4 = `main.mw'.
 
- [41] (./main.mw)
+[41] (./main.mw)
 \openout4 = `main.mw'.
 
 Package mdframed Info: mdframed works in twoside mode on input line 1085.
@@ -4263,13 +4267,13 @@ Underfull \hbox (badness 10000) in paragraph at lines 1137--1137
 
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 1150.
+Package mdframed Info: mdframed works in twoside mode on input line 1152.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 1150.
+(mdframed)              on input line 1152.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 1160.
+(mdframed)              on input line 1162.
 \openout4 = `main.mw'.
 
  [47
@@ -4281,13 +4285,13 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 1176.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 1176.
+Package mdframed Info: mdframed works in twoside mode on input line 1178.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 1178.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 1180.
 \openout4 = `main.mw'.
 
  [48] (./main.mw)
@@ -4326,13 +4330,13 @@ Package mdframed Info: mdframed detected package amsthm
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 
-Underfull \hbox (badness 3439) in paragraph at lines 1217--1218
+Underfull \hbox (badness 3439) in paragraph at lines 1219--1220
 []\T1/zplLF/m/n/10 (+20) The before-and-after is the whole point. What im-porte
 d as
  []
 
 
-Underfull \hbox (badness 1342) in paragraph at lines 1217--1218
+Underfull \hbox (badness 1342) in paragraph at lines 1219--1220
 \T1/fvm/m/n/10 prematuredeathrawvalue\T1/zplLF/m/n/10 (+20) , stored \T1/fvm/m/
 n/10 str12\T1/zplLF/m/n/10 (+20) , is now \T1/fvm/m/n/10 yrslost\T1/zplLF/m/n/1
 0 (+20) , stored
@@ -4357,10 +4361,10 @@ n/10 str12\T1/zplLF/m/n/10 (+20) , is now \T1/fvm/m/n/10 yrslost\T1/zplLF/m/n/1
 
 \openout4 = `main.mw'.
 
-<images//ch04_chr_scatter.png, id=1350, 1806.75pt x 1003.49907pt>
+<images//ch04_chr_scatter.png, id=1352, 1806.75pt x 1003.49907pt>
 File: images//ch04_chr_scatter.png Graphic file (type png)
 <use images//ch04_chr_scatter.png>
-Package pdftex.def Info: images//ch04_chr_scatter.png  used on input line 1282.
+Package pdftex.def Info: images//ch04_chr_scatter.png  used on input line 1284.
 
 (pdftex.def)             Requested size: 457.80666pt x 254.27344pt.
 \openout4 = `main.mw'.
@@ -4377,7 +4381,7 @@ Package pdftex.def Info: images//ch04_chr_scatter.png  used on input line 1282.
 \openout4 = `main.mw'.
 
 
-Overfull \hbox (3.63844pt too wide) in paragraph at lines 1307--1314
+Overfull \hbox (3.63844pt too wide) in paragraph at lines 1309--1316
  [][] 
  []
 
@@ -4394,13 +4398,13 @@ Overfull \hbox (3.63844pt too wide) in paragraph at lines 1307--1314
 
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 1325.
+Package mdframed Info: mdframed works in twoside mode on input line 1327.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 1325.
+(mdframed)              on input line 1327.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 1339.
+(mdframed)              on input line 1341.
 \openout4 = `main.mw'.
 
  [52] (./main.mw)
@@ -4410,13 +4414,13 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 1362.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 1362.
+Package mdframed Info: mdframed works in twoside mode on input line 1364.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 1364.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 1366.
 \openout4 = `main.mw'.
 
  [53]
@@ -4436,17 +4440,17 @@ Package mdframed Info: mdframed detected package amsthm
 \openout4 = `main.mw'.
 
 LaTeX Font Info:    Font shape `T1/fvm/m/it' in size <10> not available
-(Font)              Font shape `T1/fvm/m/sl' tried instead on input line 1397.
+(Font)              Font shape `T1/fvm/m/sl' tried instead on input line 1399.
 LaTeX Font Info:    Font shape `T1/fvm/m/sl' will be
-(Font)              scaled to size 8.50006pt on input line 1397.
+(Font)              scaled to size 8.50006pt on input line 1399.
 
-Underfull \hbox (badness 1867) in paragraph at lines 1397--1407
+Underfull \hbox (badness 1867) in paragraph at lines 1399--1409
 \T1/fvm/m/n/10 cars_-2019.csv \T1/zplLF/m/n/10 (+20) and, af-ter \T1/fvm/m/n/10
  rename price price_-usd\T1/zplLF/m/n/10 (+20) , \T1/fvm/m/n/10 cars_-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1397--1407
+Underfull \hbox (badness 10000) in paragraph at lines 1399--1409
 \T1/fvm/m/n/10 "built/cars_-panel", cmethod(append) directory("raw/")
  []
 
@@ -4489,16 +4493,16 @@ chapter 5.
 
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 1434.
+Package mdframed Info: mdframed works in twoside mode on input line 1436.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 1434.
+(mdframed)              on input line 1436.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 1453.
+(mdframed)              on input line 1455.
 Package mdframed Info: Box was splittet wrong
  starting loop to iterate the splitting point
-(mdframed)              on input line 1453.
+(mdframed)              on input line 1455.
 \openout4 = `main.mw'.
 
  [56] (./main.mw)
@@ -4520,13 +4524,13 @@ Package mdframed Info: Box was splittet wrong
 
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 1460.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 1460.
+Package mdframed Info: mdframed works in twoside mode on input line 1462.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 1462.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 1464.
 \openout4 = `main.mw'.
 
  [57] (./main.mw)
@@ -4537,40 +4541,40 @@ Package mdframed Info: mdframed detected package amsthm
 \openout4 = `main.mw'.
 
 LaTeX Font Info:    Font shape `OT1/zplTLF/b/n' will be
-(Font)              scaled to size 9.70001pt on input line 1496.
+(Font)              scaled to size 9.70001pt on input line 1498.
 LaTeX Font Info:    Font shape `OT1/zplTLF/b/n' will be
-(Font)              scaled to size 7.08101pt on input line 1496.
+(Font)              scaled to size 7.08101pt on input line 1498.
 LaTeX Font Info:    Font shape `OT1/zplTLF/b/n' will be
-(Font)              scaled to size 5.335pt on input line 1496.
+(Font)              scaled to size 5.335pt on input line 1498.
 \openout4 = `main.mw'.
 
  [58] (./main.mw)
 \openout4 = `main.mw'.
 
-<images//ch05_monitor.png, id=1421, 1806.75pt x 1084.05pt>
+<images//ch05_monitor.png, id=1423, 1806.75pt x 1084.05pt>
 File: images//ch05_monitor.png Graphic file (type png)
 <use images//ch05_monitor.png>
-Package pdftex.def Info: images//ch05_monitor.png  used on input line 1532.
+Package pdftex.def Info: images//ch05_monitor.png  used on input line 1534.
 (pdftex.def)             Requested size: 457.80666pt x 274.68399pt.
 \openout4 = `main.mw'.
 
  [59 <./images//ch05_monitor.png>] (./main.mw)
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 1578.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 1578.
+Package mdframed Info: mdframed works in twoside mode on input line 1580.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 1580.
-Package mdframed Info: mdframed works in twoside mode on input line 1587.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 1587.
+(mdframed)              on input line 1582.
+Package mdframed Info: mdframed works in twoside mode on input line 1589.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 1589.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 1591.
 \openout4 = `main.mw'.
 
  [60] (./main.mw)
@@ -4589,9 +4593,9 @@ Package mdframed Info: mdframed detected package amsthm
 \openout4 = `main.mw'.
 
 LaTeX Font Info:    Font shape `OT1/zplTLF/b/n' will be
-(Font)              scaled to size 7.76001pt on input line 1611.
+(Font)              scaled to size 7.76001pt on input line 1613.
 LaTeX Font Info:    Font shape `OT1/zplTLF/b/n' will be
-(Font)              scaled to size 6.01399pt on input line 1611.
+(Font)              scaled to size 6.01399pt on input line 1613.
 \openout4 = `main.mw'.
 
  [61] (./main.mw)
@@ -4609,13 +4613,13 @@ LaTeX Font Info:    Font shape `OT1/zplTLF/b/n' will be
 
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 1636.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 1636.
+Package mdframed Info: mdframed works in twoside mode on input line 1638.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 1638.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 1640.
 \openout4 = `main.mw'.
 
  [62]
@@ -4666,14 +4670,7 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 1648.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 1648.
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
+Package mdframed Info: mdframed works in twoside mode on input line 1650.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 1650.
@@ -4681,17 +4678,24 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 1652.
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 1657.
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+Package mdframed Info: mdframed works in twoside mode on input line 1659.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 1657.
+(mdframed)              on input line 1659.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 1678.
+(mdframed)              on input line 1680.
 \openout4 = `main.mw'.
 
  [63
@@ -4727,14 +4731,13 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
-Package mdframed Info: Not enough space on this page on input line 1678.
-Package mdframed Info: mdframed works in twoside mode on input line 1682.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 1682.
+Package mdframed Info: mdframed works in twoside mode on input line 1684.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 1684.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 1686.
 \openout4 = `main.mw'.
 
  [64] (./main.mw)
@@ -4822,7 +4825,7 @@ chapter 6.
 \openout4 = `main.mw'.
 
 LaTeX Font Info:    Font shape `T1/zplLF/m/it' will be
-(Font)              scaled to size 5.335pt on input line 1760.
+(Font)              scaled to size 5.335pt on input line 1762.
 \openout4 = `main.mw'.
 
  [68] (./main.mw)
@@ -4945,15 +4948,15 @@ pdfTeX warning (ext4): destination with the same identifier (name{appliedexampl
 e.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1799 ...}[Proving lineage to a skeptical agency]
+l.1801 ...}[Proving lineage to a skeptical agency]
                                                   
-Package mdframed Info: mdframed works in twoside mode on input line 1799.
+Package mdframed Info: mdframed works in twoside mode on input line 1801.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 1799.
+(mdframed)              on input line 1801.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 1804.
+(mdframed)              on input line 1806.
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -4975,15 +4978,15 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 1810.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 1810.
+Package mdframed Info: mdframed works in twoside mode on input line 1812.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 1812.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 1814.
 LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
-(Font)              scaled to size 12.24008pt on input line 1838.
+(Font)              scaled to size 12.24008pt on input line 1840.
 \openout4 = `main.mw'.
 
  [72]
@@ -5064,21 +5067,21 @@ LaTeX Font Info:    Font shape `T1/fvm/b/n' will be
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package mdframed Info: mdframed works in twoside mode on input line 1909.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 1909.
+Package mdframed Info: mdframed works in twoside mode on input line 1911.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 1911.
-Package mdframed Info: mdframed works in twoside mode on input line 1913.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 1913.
+Package mdframed Info: mdframed works in twoside mode on input line 1915.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 1915.
-Package mdframed Info: Not enough space on this page on input line 1915.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 1917.
+Package mdframed Info: Not enough space on this page on input line 1917.
 \openout4 = `main.mw'.
 
  [75
@@ -5090,23 +5093,23 @@ Package mdframed Info: Not enough space on this page on input line 1915.
 
 \openout4 = `main.mw'.
 
-Package mdframed Info: Not enough space on this page on input line 1915.
+Package mdframed Info: Not enough space on this page on input line 1917.
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
-<images//ch06_missmap.png, id=1556, 1806.75pt x 1254.18562pt>
+<images//ch06_missmap.png, id=1560, 1806.75pt x 1254.18562pt>
 File: images//ch06_missmap.png Graphic file (type png)
 <use images//ch06_missmap.png>
-Package pdftex.def Info: images//ch06_missmap.png  used on input line 1955.
+Package pdftex.def Info: images//ch06_missmap.png  used on input line 1957.
 (pdftex.def)             Requested size: 304.4417pt x 211.33328pt.
-Package mdframed Info: mdframed works in twoside mode on input line 1960.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 1960.
+Package mdframed Info: mdframed works in twoside mode on input line 1962.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 1962.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 1964.
 \openout4 = `main.mw'.
 
  [76] (./main.mw)
@@ -5138,7 +5141,7 @@ Package mdframed Info: mdframed detected package amsthm
 part without number
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\newline' on input line 1982.
+(hyperref)                removing `\newline' on input line 1984.
 
 \openout4 = `main.mw'.
 
@@ -5156,7 +5159,7 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 
 chapter 7.
 
-Underfull \vbox (badness 5417) has occurred while \output is active []
+Underfull \vbox (badness 3713) has occurred while \output is active []
 
 \openout4 = `main.mw'.
 
@@ -5213,10 +5216,10 @@ Underfull \vbox (badness 5417) has occurred while \output is active []
 
 \openout4 = `main.mw'.
 
-<images//ch07_shrink.png, id=1612, 1806.75pt x 903.375pt>
+<images//ch07_shrink.png, id=1616, 1806.75pt x 903.375pt>
 File: images//ch07_shrink.png Graphic file (type png)
 <use images//ch07_shrink.png>
-Package pdftex.def Info: images//ch07_shrink.png  used on input line 2142.
+Package pdftex.def Info: images//ch07_shrink.png  used on input line 2144.
 (pdftex.def)             Requested size: 457.80666pt x 228.90332pt.
 \openout4 = `main.mw'.
 
@@ -5227,24 +5230,16 @@ Package pdftex.def Info: images//ch07_shrink.png  used on input line 2142.
 
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 2149.
+Package mdframed Info: mdframed works in twoside mode on input line 2151.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 2149.
+(mdframed)              on input line 2151.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 2159.
+(mdframed)              on input line 2161.
 \openout4 = `main.mw'.
 
  [85 <./images//ch07_shrink.png>] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -5268,62 +5263,60 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+<images//ch07_power.png, id=1639, 1806.75pt x 1297.84875pt>
+File: images//ch07_power.png Graphic file (type png)
+<use images//ch07_power.png>
+Package pdftex.def Info: images//ch07_power.png  used on input line 2218.
+(pdftex.def)             Requested size: 304.4417pt x 218.69061pt.
+Package mdframed Info: mdframed works in twoside mode on input line 2223.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 2223.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 2225.
+\openout4 = `main.mw'.
+
+ [87 <./images//ch07_power.png>]
+(./main.mw)
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
 LaTeX Font Info:    Font shape `U/BOONDOX-calo/m/n' will be
-(Font)              scaled to size 10.0pt on input line 2192.
+(Font)              scaled to size 10.0pt on input line 2234.
 LaTeX Font Info:    Font shape `U/BOONDOX-calo/m/n' will be
-(Font)              scaled to size 7.3pt on input line 2192.
+(Font)              scaled to size 7.3pt on input line 2234.
 LaTeX Font Info:    Font shape `U/BOONDOX-calo/m/n' will be
-(Font)              scaled to size 5.5pt on input line 2192.
+(Font)              scaled to size 5.5pt on input line 2234.
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 2201.
+Package mdframed Info: mdframed works in twoside mode on input line 2243.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 2201.
+(mdframed)              on input line 2243.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 2211.
-LaTeX Font Info:    Font shape `U/BOONDOX-calo/m/n' will be
-(Font)              scaled to size 8.0pt on input line 2221.
-LaTeX Font Info:    Font shape `U/BOONDOX-calo/m/n' will be
-(Font)              scaled to size 6.2pt on input line 2221.
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
- [87] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-Package mdframed Info: mdframed works in twoside mode on input line 2238.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 2238.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 2248.
-Package mdframed Info: mdframed works in twoside mode on input line 2259.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 2259.
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 2261.
+(mdframed)              on input line 2253.
+Package mdframed Info: Box was splittet wrong
+ starting loop to iterate the splitting point
+(mdframed)              on input line 2253.
 \openout4 = `main.mw'.
 
  [88] (./main.mw)
@@ -5337,38 +5330,54 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
-
-[89] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
+LaTeX Font Info:    Font shape `U/BOONDOX-calo/m/n' will be
+(Font)              scaled to size 8.0pt on input line 2263.
+LaTeX Font Info:    Font shape `U/BOONDOX-calo/m/n' will be
+(Font)              scaled to size 6.2pt on input line 2263.
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-<images//ch07_power.png, id=1663, 1806.75pt x 1297.84875pt>
-File: images//ch07_power.png Graphic file (type png)
-<use images//ch07_power.png>
-Package pdftex.def Info: images//ch07_power.png  used on input line 2294.
-(pdftex.def)             Requested size: 304.4417pt x 218.69061pt.
-Package mdframed Info: mdframed works in twoside mode on input line 2299.
+Package mdframed Info: mdframed works in twoside mode on input line 2280.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 2299.
+(mdframed)              on input line 2280.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 2290.
+Package mdframed Info: Not enough space on this page on input line 2290.
+\openout4 = `main.mw'.
+
+ [89] (./main.mw)
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+Package mdframed Info: Not enough space on this page on input line 2290.
+Package mdframed Info: mdframed works in twoside mode on input line 2301.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 2301.
 \openout4 = `main.mw'.
 
- [90 <./images//ch07_power.png>] (./main.mw)
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 2303.
+\openout4 = `main.mw'.
+
+ [90] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -5377,7 +5386,6 @@ Package mdframed Info: mdframed detected package amsthm
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
-
 
 [92
 
@@ -5421,24 +5429,24 @@ chapter 8.
 
 \openout4 = `main.mw'.
 
-<images/ch08_oaxaca.png, id=1706, 1806.75pt x 1070.49937pt>
+<images/ch08_oaxaca.png, id=1710, 1806.75pt x 1070.49937pt>
 File: images/ch08_oaxaca.png Graphic file (type png)
 <use images/ch08_oaxaca.png>
-Package pdftex.def Info: images/ch08_oaxaca.png  used on input line 2355.
+Package pdftex.def Info: images/ch08_oaxaca.png  used on input line 2357.
 (pdftex.def)             Requested size: 304.4417pt x 180.3817pt.
-Package mdframed Info: mdframed works in twoside mode on input line 2360.
+Package mdframed Info: mdframed works in twoside mode on input line 2362.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 2360.
+(mdframed)              on input line 2362.
 LaTeX Font Info:    Font shape `OT1/zplTLF/m/n' will be
-(Font)              scaled to size 8.73001pt on input line 2363.
+(Font)              scaled to size 8.73001pt on input line 2365.
 LaTeX Font Info:    Font shape `OT1/zplTLF/b/n' will be
-(Font)              scaled to size 8.73001pt on input line 2363.
+(Font)              scaled to size 8.73001pt on input line 2365.
 LaTeX Font Info:    Font shape `U/BOONDOX-calo/m/n' will be
-(Font)              scaled to size 9.0pt on input line 2363.
+(Font)              scaled to size 9.0pt on input line 2365.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 2368.
+(mdframed)              on input line 2370.
 \openout4 = `main.mw'.
 
  [95 <./images/ch08_oaxaca.png>] (./main.mw)
@@ -5457,12 +5465,12 @@ Package mdframed Info: mdframed detected package amsthm
 \openout4 = `main.mw'.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2386--2386
+Underfull \hbox (badness 10000) in paragraph at lines 2388--2388
 []\T1/zplLF/m/n/8 (+20) Simulated data with \T1/fvm/m/n/8 set seed
  []
 
 
-Underfull \hbox (badness 1048) in paragraph at lines 2386--2386
+Underfull \hbox (badness 1048) in paragraph at lines 2388--2388
 \T1/zplLF/m/n/8 (+20) roll-out usu-ally has one, and when
  []
 
@@ -5484,13 +5492,13 @@ Underfull \hbox (badness 1048) in paragraph at lines 2386--2386
  [97] (./main.mw)
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 2468.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 2468.
+Package mdframed Info: mdframed works in twoside mode on input line 2470.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 2470.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 2472.
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -5508,10 +5516,10 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
-<images//ch08_event.png, id=1739, 1806.75pt x 1084.05pt>
+<images//ch08_event.png, id=1743, 1806.75pt x 1084.05pt>
 File: images//ch08_event.png Graphic file (type png)
 <use images//ch08_event.png>
-Package pdftex.def Info: images//ch08_event.png  used on input line 2497.
+Package pdftex.def Info: images//ch08_event.png  used on input line 2491.
 (pdftex.def)             Requested size: 304.4417pt x 182.66502pt.
 \openout4 = `main.mw'.
 
@@ -5580,32 +5588,32 @@ Package pdftex.def Info: images//ch08_event.png  used on input line 2497.
  [101] (./main.mw)
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 2562.
+Package mdframed Info: mdframed works in twoside mode on input line 2556.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 2562.
+(mdframed)              on input line 2556.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 2558.
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+Package mdframed Info: mdframed works in twoside mode on input line 2564.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 2564.
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-Package mdframed Info: mdframed works in twoside mode on input line 2570.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 2570.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 2572.
+(mdframed)              on input line 2566.
 \openout4 = `main.mw'.
 
  [102] (./main.mw)
@@ -5619,6 +5627,13 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
+Package mdframed Info: mdframed works in twoside mode on input line 2607.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 2607.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 2609.
 \openout4 = `main.mw'.
 
  [103]
@@ -5633,35 +5648,31 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 2613.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 2613.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 2615.
-<images//ch08_tornado.png, id=1788, 1806.75pt x 903.375pt>
+Package mdframed Info: Not enough space on this page on input line 2609.
+<images//ch08_tornado.png, id=1793, 1806.75pt x 903.375pt>
 File: images//ch08_tornado.png Graphic file (type png)
 <use images//ch08_tornado.png>
-Package pdftex.def Info: images//ch08_tornado.png  used on input line 2631.
+Package pdftex.def Info: images//ch08_tornado.png  used on input line 2625.
 (pdftex.def)             Requested size: 304.4417pt x 152.22084pt.
-Package mdframed Info: mdframed works in twoside mode on input line 2636.
+Package mdframed Info: mdframed works in twoside mode on input line 2630.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 2636.
+(mdframed)              on input line 2630.
 Package marginnote Info: Margin note 116.1 is on absolute page 117 on input lin
-e 2658.
-Package marginnote Info: xpos seems to be 368.00536pt on input line 2658.
+e 2652.
+Package marginnote Info: xpos seems to be 368.00536pt on input line 2652.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 2658.
-Package mdframed Info: Not enough space on this page on input line 2658.
+(mdframed)              on input line 2652.
 \openout4 = `main.mw'.
 
  [104 <./images//ch08_tornado.png>] (./main.mw)
 \openout4 = `main.mw'.
 
-Package mdframed Info: Not enough space on this page on input line 2658.
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
 \openout4 = `main.mw'.
 
  [105] (./main.mw)
@@ -5671,18 +5682,14 @@ Package mdframed Info: Not enough space on this page on input line 2658.
 
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2676--2677
+Underfull \hbox (badness 10000) in paragraph at lines 2670--2671
 \T1/zplLF/m/n/10 (+20) worked ROI with \T1/fvm/m/n/10 effect(3000) se(900) cost
 low(3800)
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2676--2677
+Underfull \hbox (badness 10000) in paragraph at lines 2670--2671
 \T1/fvm/m/n/10 costhigh(4600) discountrange(0.02 0.07) horizonrange(3
  []
 
@@ -5691,33 +5698,23 @@ Underfull \hbox (badness 10000) in paragraph at lines 2676--2677
 [106] (./main.mw)
 \openout4 = `main.mw'.
 
+
+part without number
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\newline' on input line 2677.
+
 \openout4 = `main.mw'.
 
- [107] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
- [108
+[107
 
 
 ] (./main.mw)
 \openout4 = `main.mw'.
 
-
-part without number
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\newline' on input line 2683.
-
 \openout4 = `main.mw'.
 
-[109] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
- [110] (./main.mw)
+ [108] (./main.mw)
 \openout4 = `main.mw'.
 
 
@@ -5736,7 +5733,7 @@ chapter 9.
 
 \openout4 = `main.mw'.
 
-[111
+[109
 
 
 ] (./main.mw)
@@ -5746,14 +5743,14 @@ chapter 9.
 
 \openout4 = `main.mw'.
 
-<images//ch09_ink.png, id=1846, 1806.75pt x 950.80219pt>
+<images//ch09_ink.png, id=1843, 1806.75pt x 950.80219pt>
 File: images//ch09_ink.png Graphic file (type png)
 <use images//ch09_ink.png>
-Package pdftex.def Info: images//ch09_ink.png  used on input line 2719.
+Package pdftex.def Info: images//ch09_ink.png  used on input line 2713.
 (pdftex.def)             Requested size: 457.80666pt x 240.92075pt.
 \openout4 = `main.mw'.
 
- [112] (./main.mw)
+ [110] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -5774,7 +5771,7 @@ Package pdftex.def Info: images//ch09_ink.png  used on input line 2719.
 
 \openout4 = `main.mw'.
 
- [113 <./images//ch09_ink.png>] (./main.mw)
+ [111 <./images//ch09_ink.png>] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -5789,13 +5786,13 @@ Package pdftex.def Info: images//ch09_ink.png  used on input line 2719.
 
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 2762.
+Package mdframed Info: mdframed works in twoside mode on input line 2756.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 2762.
+(mdframed)              on input line 2756.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 2764.
+(mdframed)              on input line 2758.
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -5803,15 +5800,7 @@ Package mdframed Info: mdframed detected package amsthm
 \openout4 = `main.mw'.
 
 
-[114] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
+[112] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -5822,25 +5811,29 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
-<images//ch09_coefplot.png, id=1880, 1806.75pt x 1003.49907pt>
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+<images//ch09_coefplot.png, id=1877, 1806.75pt x 1003.49907pt>
 File: images//ch09_coefplot.png Graphic file (type png)
 <use images//ch09_coefplot.png>
-Package pdftex.def Info: images//ch09_coefplot.png  used on input line 2793.
+Package pdftex.def Info: images//ch09_coefplot.png  used on input line 2787.
 (pdftex.def)             Requested size: 304.4417pt x 169.092pt.
-Package mdframed Info: mdframed works in twoside mode on input line 2798.
+Package mdframed Info: mdframed works in twoside mode on input line 2792.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 2798.
+(mdframed)              on input line 2792.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 2800.
+(mdframed)              on input line 2794.
 \openout4 = `main.mw'.
 
- [115] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
+ [113] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -5849,7 +5842,11 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
- [116 <./images//ch09_coefplot.png>]
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+ [114 <./images//ch09_coefplot.png>]
 (./main.mw)
 \openout4 = `main.mw'.
 
@@ -5865,14 +5862,14 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
-<images//ch09_runchart.png, id=1894, 1806.75pt x 1003.49907pt>
+<images//ch09_runchart.png, id=1890, 1806.75pt x 1003.49907pt>
 File: images//ch09_runchart.png Graphic file (type png)
 <use images//ch09_runchart.png>
-Package pdftex.def Info: images//ch09_runchart.png  used on input line 2828.
+Package pdftex.def Info: images//ch09_runchart.png  used on input line 2822.
 (pdftex.def)             Requested size: 304.4417pt x 169.092pt.
 \openout4 = `main.mw'.
 
- [117 <./images//ch09_runchart.png>] (./main.mw)
+ [115 <./images//ch09_runchart.png>] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -5885,18 +5882,18 @@ Package pdftex.def Info: images//ch09_runchart.png  used on input line 2828.
 
 \openout4 = `main.mw'.
 
- [118] (./main.mw)
+ [116] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
 
-[119] (./main.mw)
+[117] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
- [120
+ [118
 
 
 ] (./main.mw)
@@ -5906,7 +5903,7 @@ Package pdftex.def Info: images//ch09_runchart.png  used on input line 2828.
 chapter 10.
 \openout4 = `main.mw'.
 
-[121] (./main.mw)
+[119] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -5933,20 +5930,16 @@ chapter 10.
 
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 2956.
+Package mdframed Info: mdframed works in twoside mode on input line 2950.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 2956.
+(mdframed)              on input line 2950.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 2958.
+(mdframed)              on input line 2952.
 \openout4 = `main.mw'.
 
- [122] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
+ [120] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -5959,82 +5952,86 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
- [123] (./main.mw)
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+ [121] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
-<images//ch10_sparkwall.png, id=1960, 1806.75pt x 1084.05pt>
+<images//ch10_sparkwall.png, id=1957, 1806.75pt x 1084.05pt>
 File: images//ch10_sparkwall.png Graphic file (type png)
 <use images//ch10_sparkwall.png>
-Package pdftex.def Info: images//ch10_sparkwall.png  used on input line 3012.
+Package pdftex.def Info: images//ch10_sparkwall.png  used on input line 3006.
 (pdftex.def)             Requested size: 457.80666pt x 274.68399pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 \openout4 = `main.mw'.
 
- [124 <./images//ch10_sparkwall.png>] (./main.mw)
+ [122 <./images//ch10_sparkwall.png>] (./main.mw)
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 3029.
+Package mdframed Info: mdframed works in twoside mode on input line 3023.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 3029.
+(mdframed)              on input line 3023.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 3038.
+(mdframed)              on input line 3032.
 \openout4 = `main.mw'.
 
- [125] (./main.mw)
+ [123] (./main.mw)
 \openout4 = `main.mw'.
 
 
-Overfull \hbox (3.0417pt too wide) in paragraph at lines 3060--3061
+Overfull \hbox (3.0417pt too wide) in paragraph at lines 3054--3055
 []\T1/zplLF/m/n/10 (-20) Four op-tions carry the type. The two ge-og-ra-phy set
 -tings, \T1/fvm/m/n/10 georegion("US")
  []
 
 \openout4 = `main.mw'.
 
-[126] (./main.mw)
+[124] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
-<images//ch10_gc_geo.png, id=1981, 2007.5pt x 1445.4pt>
+<images//ch10_gc_geo.png, id=1978, 2007.5pt x 1445.4pt>
 File: images//ch10_gc_geo.png Graphic file (type png)
 <use images//ch10_gc_geo.png>
-Package pdftex.def Info: images//ch10_gc_geo.png  used on input line 3064.
+Package pdftex.def Info: images//ch10_gc_geo.png  used on input line 3058.
 (pdftex.def)             Requested size: 304.42026pt x 219.18259pt.
 \openout4 = `main.mw'.
 
- [127 <./images//ch10_gc_geo.png (PNG copy)>] (./main.mw)
+ [125 <./images//ch10_gc_geo.png (PNG copy)>] (./main.mw)
 \openout4 = `main.mw'.
 
-<images//ch10_gc_bubble.png, id=1990, 1927.2pt x 1284.8pt>
+<images//ch10_gc_bubble.png, id=1986, 1927.2pt x 1284.8pt>
 File: images//ch10_gc_bubble.png Graphic file (type png)
 <use images//ch10_gc_bubble.png>
-Package pdftex.def Info: images//ch10_gc_bubble.png  used on input line 3095.
+Package pdftex.def Info: images//ch10_gc_bubble.png  used on input line 3089.
 (pdftex.def)             Requested size: 304.41782pt x 202.9452pt.
 \openout4 = `main.mw'.
 
 
-[128 <./images//ch10_gc_bubble.png (PNG copy)>] (./main.mw)
+[126 <./images//ch10_gc_bubble.png (PNG copy)>] (./main.mw)
 \openout4 = `main.mw'.
 
-<images//ch10_gc_table.png, id=1996, 3212.0pt x 1324.95pt>
+<images//ch10_gc_table.png, id=1992, 3212.0pt x 1324.95pt>
 File: images//ch10_gc_table.png Graphic file (type png)
 <use images//ch10_gc_table.png>
-Package pdftex.def Info: images//ch10_gc_table.png  used on input line 3125.
+Package pdftex.def Info: images//ch10_gc_table.png  used on input line 3119.
 (pdftex.def)             Requested size: 304.408pt x 125.5683pt.
 \openout4 = `main.mw'.
 
- [129 <./images//ch10_gc_table.png (PNG copy)>] (./main.mw)
+ [127 <./images//ch10_gc_table.png (PNG copy)>] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -6045,10 +6042,10 @@ Package pdftex.def Info: images//ch10_gc_table.png  used on input line 3125.
 
 \openout4 = `main.mw'.
 
-<images//ch10_gc_divbar.png, id=2002, 2248.4pt x 943.525pt>
+<images//ch10_gc_divbar.png, id=1999, 2248.4pt x 943.525pt>
 File: images//ch10_gc_divbar.png Graphic file (type png)
 <use images//ch10_gc_divbar.png>
-Package pdftex.def Info: images//ch10_gc_divbar.png  used on input line 3152.
+Package pdftex.def Info: images//ch10_gc_divbar.png  used on input line 3146.
 (pdftex.def)             Requested size: 304.4129pt x 127.74469pt.
 \openout4 = `main.mw'.
 
@@ -6056,7 +6053,7 @@ Package pdftex.def Info: images//ch10_gc_divbar.png  used on input line 3152.
 
 \openout4 = `main.mw'.
 
- [130 <./images//ch10_gc_divbar.png (PNG copy)>] (./main.mw)
+ [128 <./images//ch10_gc_divbar.png (PNG copy)>] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -6064,7 +6061,53 @@ Package pdftex.def Info: images//ch10_gc_divbar.png  used on input line 3152.
 \openout4 = `main.mw'.
 
 LaTeX Font Info:    Font shape `T1/qhv/m/it' will be
-(Font)              scaled to size 6.31459pt on input line 3187.
+(Font)              scaled to size 6.31459pt on input line 3181.
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+ [129] (./main.mw)
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+ [130] (./main.mw)
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -6080,54 +6123,38 @@ LaTeX Font Info:    Font shape `T1/qhv/m/it' will be
 
 \openout4 = `main.mw'.
 
+
+[132] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
- [132] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
+pdfTeX warning (ext4): destination with the same identifier (name{appliedexampl
+e.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.3267 ...xample}[One dataset, three deliverables]
+                                                  
+Package mdframed Info: mdframed works in twoside mode on input line 3267.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 3267.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 3272.
 \openout4 = `main.mw'.
 
  [133] (./main.mw)
 \openout4 = `main.mw'.
 
+Package mdframed Info: Not enough space on this page on input line 3272.
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-
-[134] (./main.mw)
+ [134]
+(./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -6139,41 +6166,9 @@ LaTeX Font Info:    Font shape `T1/qhv/m/it' will be
  [135] (./main.mw)
 \openout4 = `main.mw'.
 
-
-pdfTeX warning (ext4): destination with the same identifier (name{appliedexampl
-e.1}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.3273 ...xample}[One dataset, three deliverables]
-                                                  
-Package mdframed Info: mdframed works in twoside mode on input line 3273.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 3273.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 3278.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
 \openout4 = `main.mw'.
 
- [136]
-(./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
- [137] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
- [138
+ [136
 
 
 ] (./main.mw)
@@ -6195,7 +6190,7 @@ chapter 11.
 
 \openout4 = `main.mw'.
 
-[139] (./main.mw)
+[137] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -6227,10 +6222,10 @@ chapter 11.
 \openout4 = `main.mw'.
 
 LaTeX Font Info:    Font shape `T1/zplLF/m/n' will be
-(Font)              scaled to size 6.01399pt on input line 3312.
+(Font)              scaled to size 6.01399pt on input line 3306.
 \openout4 = `main.mw'.
 
- [140] (./main.mw)
+ [138] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -6242,19 +6237,19 @@ LaTeX Font Info:    Font shape `T1/zplLF/m/n' will be
 \openout4 = `main.mw'.
 
 LaTeX Font Info:    Font shape `T1/fvm/m/it' in size <7> not available
-(Font)              Font shape `T1/fvm/m/sl' tried instead on input line 3321.
+(Font)              Font shape `T1/fvm/m/sl' tried instead on input line 3315.
 LaTeX Font Info:    Font shape `T1/fvm/m/sl' will be
-(Font)              scaled to size 5.95004pt on input line 3321.
+(Font)              scaled to size 5.95004pt on input line 3315.
 LaTeX Font Info:    Font shape `T1/qhv/m/n' will be
-(Font)              scaled to size 5.59291pt on input line 3322.
+(Font)              scaled to size 5.59291pt on input line 3316.
 
-Overfull \hbox (0.75395pt too wide) in paragraph at lines 3324--3324
+Overfull \hbox (0.75395pt too wide) in paragraph at lines 3318--3318
  []\T1/fvm/m/n/8 googlesheets 
  []
 
 \openout4 = `main.mw'.
 
-[141] (./main.mw)
+[139] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -6266,13 +6261,13 @@ Overfull \hbox (0.75395pt too wide) in paragraph at lines 3324--3324
 \openout4 = `main.mw'.
 
  (./ch11_wage_table.tex)
-Package mdframed Info: mdframed works in twoside mode on input line 3372.
+Package mdframed Info: mdframed works in twoside mode on input line 3366.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 3372.
+(mdframed)              on input line 3366.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 3374.
+(mdframed)              on input line 3368.
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -6287,7 +6282,39 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
- [142] (./main.mw)
+ [140] (./main.mw)
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+ [141] (./main.mw)
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+
+Underfull \hbox (badness 2142) in paragraph at lines 3419--3419
+[]\T1/zplLF/m/n/8 (+20) The \T1/fvm/m/n/8 numfmt() \T1/zplLF/m/n/8 (+20) string
+s are or-di-nary
+ []
+
+\openout4 = `main.mw'.
+
+[142] (./main.mw)
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -6299,66 +6326,26 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
+Package mdframed Info: mdframed works in twoside mode on input line 3546.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 3546.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 3556.
+\openout4 = `main.mw'.
+
+ [144] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
-
-
-Underfull \hbox (badness 2142) in paragraph at lines 3425--3425
-[]\T1/zplLF/m/n/8 (+20) The \T1/fvm/m/n/8 numfmt() \T1/zplLF/m/n/8 (+20) string
-s are or-di-nary
- []
-
-\openout4 = `main.mw'.
-
-[144] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
+Package mdframed Info: Not enough space on this page on input line 3556.
 \openout4 = `main.mw'.
 
  [145] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-Package mdframed Info: mdframed works in twoside mode on input line 3552.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 3552.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 3562.
-\openout4 = `main.mw'.
-
- [146] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-Package mdframed Info: Not enough space on this page on input line 3562.
-\openout4 = `main.mw'.
-
- [147] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -6370,30 +6357,22 @@ pdfTeX warning (ext4): destination with the same identifier (name{appliedexampl
 e.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.3590 ...enrollment tracker the field team keeps]
+l.3584 ...enrollment tracker the field team keeps]
                                                   
-Package mdframed Info: mdframed works in twoside mode on input line 3590.
+Package mdframed Info: mdframed works in twoside mode on input line 3584.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 3590.
+(mdframed)              on input line 3584.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 3598.
+(mdframed)              on input line 3592.
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
- [148] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
+ [146] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -6406,13 +6385,17 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
- [149]
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+ [147]
 (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
- [150] (./main.mw)
+ [148] (./main.mw)
 \openout4 = `main.mw'.
 
 
@@ -6443,7 +6426,7 @@ chapter 12.
 
 \openout4 = `main.mw'.
 
-[151
+[149
 
 
 ] (./main.mw)
@@ -6453,83 +6436,102 @@ chapter 12.
 
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 3633.
+Package mdframed Info: mdframed works in twoside mode on input line 3627.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 3633.
+(mdframed)              on input line 3627.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 3645.
+(mdframed)              on input line 3639.
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
+\openout4 = `main.mw'.
+
+ [150] (./main.mw)
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+ [151] (./main.mw)
+\openout4 = `main.mw'.
+
+Package mdframed Info: mdframed works in twoside mode on input line 3672.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 3672.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 3674.
 \openout4 = `main.mw'.
 
  [152] (./main.mw)
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
- [153] (./main.mw)
-\openout4 = `main.mw'.
-
-Package mdframed Info: mdframed works in twoside mode on input line 3678.
+Package mdframed Info: mdframed works in twoside mode on input line 3716.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 3678.
+(mdframed)              on input line 3716.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 3680.
+(mdframed)              on input line 3725.
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+
+[153] (./main.mw)
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
 \openout4 = `main.mw'.
 
  [154] (./main.mw)
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 3722.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 3722.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 3731.
+\openout4 = `main.mw'.
+
+ [155] (./main.mw)
+\openout4 = `main.mw'.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 3778--3778
+[]\T1/zplLF/m/n/8 (+20) See the live dash-board at
+ []
+
+\openout4 = `main.mw'.
+
+[156] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
-
-
-[155] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
- [156] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -6537,14 +6539,13 @@ Package mdframed Info: mdframed detected package amsthm
  [157] (./main.mw)
 \openout4 = `main.mw'.
 
+\openout4 = `main.mw'.
 
-Underfull \hbox (badness 10000) in paragraph at lines 3784--3784
-[]\T1/zplLF/m/n/8 (+20) See the live dash-board at
- []
+ [158] (./main.mw)
+\openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
-[158] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -6558,11 +6559,18 @@ Underfull \hbox (badness 10000) in paragraph at lines 3784--3784
 
 \openout4 = `main.mw'.
 
- [160] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
+\openout4 = `main.mw'.
+
+LaTeX Font Info:    Font shape `T1/qhv/b/n' will be
+(Font)              scaled to size 6.31459pt on input line 3937.
+\openout4 = `main.mw'.
+
+
+[160] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -6582,29 +6590,46 @@ Underfull \hbox (badness 10000) in paragraph at lines 3784--3784
 
 \openout4 = `main.mw'.
 
-LaTeX Font Info:    Font shape `T1/qhv/b/n' will be
-(Font)              scaled to size 6.31459pt on input line 3943.
-\openout4 = `main.mw'.
-
-
-[162] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
- [163] (./main.mw)
+File: images//ch10_gc_geo.png Graphic file (type png)
+<use images//ch10_gc_geo.png>
+Package pdftex.def Info: images//ch10_gc_geo.png  used on input line 4044.
+(pdftex.def)             Requested size: 304.42026pt x 219.18259pt.
 \openout4 = `main.mw'.
 
+ [162] (./main.mw)
 \openout4 = `main.mw'.
 
+File: images//ch10_gc_table.png Graphic file (type png)
+<use images//ch10_gc_table.png>
+Package pdftex.def Info: images//ch10_gc_table.png  used on input line 4059.
+(pdftex.def)             Requested size: 304.408pt x 125.5683pt.
+
+pdfTeX warning (ext4): destination with the same identifier (name{appliedexampl
+e.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.4064 ...liedexample}[One evaluation, one folder]
+                                                  
+Package mdframed Info: mdframed works in twoside mode on input line 4064.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4064.
+
+Underfull \hbox (badness 1028) in paragraph at lines 4068--4069
+[]\T1/zplLF/b/n/10 (+20) The build, end to end. \T1/zplLF/m/n/10 (+20) Scaf-fol
+d the folder fol-low-ing the
+ []
+
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4069.
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
+[163] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -6616,56 +6641,14 @@ LaTeX Font Info:    Font shape `T1/qhv/b/n' will be
  [164] (./main.mw)
 \openout4 = `main.mw'.
 
-File: images//ch10_gc_geo.png Graphic file (type png)
-<use images//ch10_gc_geo.png>
-Package pdftex.def Info: images//ch10_gc_geo.png  used on input line 4050.
-(pdftex.def)             Requested size: 304.42026pt x 219.18259pt.
-File: images//ch10_gc_table.png Graphic file (type png)
-<use images//ch10_gc_table.png>
-Package pdftex.def Info: images//ch10_gc_table.png  used on input line 4065.
-(pdftex.def)             Requested size: 304.408pt x 125.5683pt.
-
-pdfTeX warning (ext4): destination with the same identifier (name{appliedexampl
-e.1}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.4070 ...liedexample}[One evaluation, one folder]
-                                                  
-Package mdframed Info: mdframed works in twoside mode on input line 4070.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 4070.
-
-Underfull \hbox (badness 1028) in paragraph at lines 4074--4075
-[]\T1/zplLF/b/n/10 (+20) The build, end to end. \T1/zplLF/m/n/10 (+20) Scaf-fol
-d the folder fol-low-ing the
- []
-
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 4075.
 \openout4 = `main.mw'.
 
-[165] (./main.mw)
+ [165] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
- [166] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
- [167] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
- [168
+ [166
 
 
 ] (./main.mw)
@@ -6675,23 +6658,23 @@ Package mdframed Info: mdframed detected package amsthm
 part without number
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\newline' on input line 4093.
+(hyperref)                removing `\newline' on input line 4087.
 
 \openout4 = `main.mw'.
 
-[169] (./main.mw)
+[167] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
- [170] (./main.mw)
+ [168] (./main.mw)
 \openout4 = `main.mw'.
 
 
 chapter 13.
 \openout4 = `main.mw'.
 
-[171
+[169
 
 
 ] (./main.mw)
@@ -6725,6 +6708,44 @@ chapter 13.
 
 \openout4 = `main.mw'.
 
+\openout4 = `main.mw'.
+
+ [170] (./main.mw)
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+LaTeX Font Info:    Font shape `T1/qhv/m/it' will be
+(Font)              scaled to size 7.21667pt on input line 4117.
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+ [171] (./main.mw)
+\openout4 = `main.mw'.
+
+Package mdframed Info: mdframed works in twoside mode on input line 4143.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4143.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4155.
+Package mdframed Info: mdframed works in twoside mode on input line 4160.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4160.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4162.
 \openout4 = `main.mw'.
 
  [172] (./main.mw)
@@ -6748,49 +6769,14 @@ chapter 13.
 
 \openout4 = `main.mw'.
 
+
+[173] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-LaTeX Font Info:    Font shape `T1/qhv/m/it' will be
-(Font)              scaled to size 7.21667pt on input line 4125.
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
- [173] (./main.mw)
-\openout4 = `main.mw'.
-
-Package mdframed Info: mdframed works in twoside mode on input line 4151.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 4151.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 4163.
-Package mdframed Info: mdframed works in twoside mode on input line 4168.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 4168.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 4170.
 \openout4 = `main.mw'.
 
  [174] (./main.mw)
@@ -6800,83 +6786,98 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-
-[175] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
- [176] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-Package mdframed Info: mdframed works in twoside mode on input line 4268.
+Package mdframed Info: mdframed works in twoside mode on input line 4260.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 4268.
+(mdframed)              on input line 4260.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 4270.
+(mdframed)              on input line 4262.
 
 pdfTeX warning (ext4): destination with the same identifier (name{appliedexampl
 e.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.4274 ...analysis that survives the LLM changing]
+l.4266 ...analysis that survives the LLM changing]
                                                   
-Package mdframed Info: mdframed works in twoside mode on input line 4274.
+Package mdframed Info: mdframed works in twoside mode on input line 4266.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 4274.
+(mdframed)              on input line 4266.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 4279.
+(mdframed)              on input line 4271.
+\openout4 = `main.mw'.
+
+ [175] (./main.mw)
+\openout4 = `main.mw'.
+
+Package mdframed Info: mdframed works in twoside mode on input line 4278.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4278.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4280.
+\openout4 = `main.mw'.
+
+ [176]
+(./main.mw)
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+Package mdframed Info: mdframed works in twoside mode on input line 4309.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4309.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4311.
+<images//ch13_agreement.png, id=2401, 1806.75pt x 1084.05pt>
+File: images//ch13_agreement.png Graphic file (type png)
+<use images//ch13_agreement.png>
+Package pdftex.def Info: images//ch13_agreement.png  used on input line 4324.
+(pdftex.def)             Requested size: 304.4417pt x 182.66502pt.
 \openout4 = `main.mw'.
 
  [177] (./main.mw)
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 4286.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 4286.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 4288.
 \openout4 = `main.mw'.
 
- [178]
-(./main.mw)
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 4317.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 4317.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 4319.
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+
+Underfull \vbox (badness 4316) has occurred while \output is active []
+
+\openout4 = `main.mw'.
+
+ [178 <./images//ch13_agreement.png>] (./main.mw)
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
 \openout4 = `main.mw'.
 
  [179] (./main.mw)
@@ -6888,6 +6889,7 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
+ [180] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -6898,32 +6900,25 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
+
+Underfull \hbox (badness 2245) in paragraph at lines 4437--4437
+\T1/zplLF/m/n/8 (+20) point non-associativity across GPU
+ []
 
 \openout4 = `main.mw'.
-
-<images//ch13_agreement.png, id=2414, 1806.75pt x 1084.05pt>
-File: images//ch13_agreement.png Graphic file (type png)
-<use images//ch13_agreement.png>
-Package pdftex.def Info: images//ch13_agreement.png  used on input line 4332.
-(pdftex.def)             Requested size: 304.4417pt x 182.66502pt.
-\openout4 = `main.mw'.
-
- [180 <./images//ch13_agreement.png>] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
 
 [181] (./main.mw)
+\openout4 = `main.mw'.
+
+Package mdframed Info: mdframed works in twoside mode on input line 4439.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4439.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4441.
+\openout4 = `main.mw'.
+
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -6943,33 +6938,9 @@ Package pdftex.def Info: images//ch13_agreement.png  used on input line 4332.
 
 \openout4 = `main.mw'.
 
-
-Underfull \hbox (badness 2245) in paragraph at lines 4445--4445
-\T1/zplLF/m/n/8 (+20) point non-associativity across GPU
- []
-
-
-Underfull \vbox (badness 7722) has occurred while \output is active []
-
 \openout4 = `main.mw'.
 
- [183]
-(./main.mw)
-\openout4 = `main.mw'.
-
-Package mdframed Info: mdframed works in twoside mode on input line 4447.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 4447.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 4449.
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
+ [183] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -6985,75 +6956,57 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
+Package mdframed Info: mdframed works in twoside mode on input line 4547.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4547.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4549.
 \openout4 = `main.mw'.
 
- [185] (./main.mw)
 \openout4 = `main.mw'.
 
+\openout4 = `main.mw'.
+
+
+[185] (./main.mw)
+\openout4 = `main.mw'.
+
+Package mdframed Info: mdframed works in twoside mode on input line 4558.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4558.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4577.
+Package mdframed Info: mdframed works in twoside mode on input line 4581.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4581.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4595.
 \openout4 = `main.mw'.
 
  [186] (./main.mw)
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-Package mdframed Info: mdframed works in twoside mode on input line 4555.
+Package mdframed Info: mdframed works in twoside mode on input line 4597.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 4555.
+(mdframed)              on input line 4597.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 4557.
+(mdframed)              on input line 4599.
 \openout4 = `main.mw'.
 
+ [187] (./main.mw)
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
-
- [187]
-(./main.mw)
-\openout4 = `main.mw'.
-
-Package mdframed Info: mdframed works in twoside mode on input line 4566.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 4566.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 4585.
-Package mdframed Info: mdframed works in twoside mode on input line 4589.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 4589.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 4603.
 \openout4 = `main.mw'.
 
  [188] (./main.mw)
-\openout4 = `main.mw'.
-
-Package mdframed Info: mdframed works in twoside mode on input line 4605.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 4605.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 4607.
-\openout4 = `main.mw'.
-
- [189] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
- [190] (./main.mw)
 \openout4 = `main.mw'.
 
 
@@ -7070,16 +7023,16 @@ chapter 14.
 
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 4638.
+Package mdframed Info: mdframed works in twoside mode on input line 4630.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 4638.
+(mdframed)              on input line 4630.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 4648.
+(mdframed)              on input line 4640.
 \openout4 = `main.mw'.
 
-[191
+[189
 
 
 ] (./main.mw)
@@ -7097,14 +7050,10 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
-Package mdframed Info: Not enough space on this page on input line 4648.
+Package mdframed Info: Not enough space on this page on input line 4640.
 \openout4 = `main.mw'.
 
- [192] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
+ [190] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -7119,82 +7068,130 @@ Package mdframed Info: Not enough space on this page on input line 4648.
 
 \openout4 = `main.mw'.
 
-<images//ch14_kdist.png, id=2513, 1806.75pt x 1003.49907pt>
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+<images//ch14_kdist.png, id=2504, 1806.75pt x 1003.49907pt>
 File: images//ch14_kdist.png Graphic file (type png)
 <use images//ch14_kdist.png>
-Package pdftex.def Info: images//ch14_kdist.png  used on input line 4728.
+Package pdftex.def Info: images//ch14_kdist.png  used on input line 4720.
 (pdftex.def)             Requested size: 304.4417pt x 169.092pt.
 LaTeX Font Info:    Font shape `OT1/zplTLF/m/n' will be
-(Font)              scaled to size 11.64001pt on input line 4733.
+(Font)              scaled to size 11.64001pt on input line 4725.
 LaTeX Font Info:    Font shape `OT1/zplTLF/m/n' will be
-(Font)              scaled to size 8.53601pt on input line 4733.
+(Font)              scaled to size 8.53601pt on input line 4725.
 LaTeX Font Info:    Font shape `OT1/zplTLF/m/n' will be
-(Font)              scaled to size 6.40201pt on input line 4733.
+(Font)              scaled to size 6.40201pt on input line 4725.
 LaTeX Font Info:    Font shape `OT1/zplTLF/b/n' will be
-(Font)              scaled to size 11.64001pt on input line 4733.
+(Font)              scaled to size 11.64001pt on input line 4725.
 LaTeX Font Info:    Font shape `OT1/zplTLF/b/n' will be
-(Font)              scaled to size 8.53601pt on input line 4733.
+(Font)              scaled to size 8.53601pt on input line 4725.
 LaTeX Font Info:    Font shape `OT1/zplTLF/b/n' will be
-(Font)              scaled to size 6.40201pt on input line 4733.
+(Font)              scaled to size 6.40201pt on input line 4725.
 LaTeX Font Info:    Font shape `U/BOONDOX-calo/m/n' will be
-(Font)              scaled to size 12.0pt on input line 4733.
+(Font)              scaled to size 12.0pt on input line 4725.
 LaTeX Font Info:    Font shape `U/BOONDOX-calo/m/n' will be
-(Font)              scaled to size 8.8pt on input line 4733.
+(Font)              scaled to size 8.8pt on input line 4725.
 LaTeX Font Info:    Font shape `U/BOONDOX-calo/m/n' will be
-(Font)              scaled to size 6.6pt on input line 4733.
+(Font)              scaled to size 6.6pt on input line 4725.
 \openout4 = `main.mw'.
 
- [193] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
- [194 <./images//ch14_kdist.png>] (./main.mw)
+ [191] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
+ [192 <./images//ch14_kdist.png>] (./main.mw)
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 4769.
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+Package mdframed Info: mdframed works in twoside mode on input line 4761.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 4769.
+(mdframed)              on input line 4761.
 
-Underfull \hbox (badness 5637) in paragraph at lines 4778--4779
+Underfull \hbox (badness 5637) in paragraph at lines 4770--4771
 []\T1/zplLF/m/n/10 (+20) The syn-tax is \T1/fvm/m/n/10 suppress countvar [if] [
 in], threshold(#)
  []
 
 
-Underfull \hbox (badness 3291) in paragraph at lines 4778--4779
+Underfull \hbox (badness 3291) in paragraph at lines 4770--4771
 \T1/fvm/m/n/10 [by(varlist) gens(newvar) complementary]\T1/zplLF/m/n/10 (+20) .
  It pro-tects one
  []
 
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 4779.
+(mdframed)              on input line 4771.
 \openout4 = `main.mw'.
 
-[195] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
+[193] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 4823.
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+Package mdframed Info: mdframed works in twoside mode on input line 4815.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 4823.
+(mdframed)              on input line 4815.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 4825.
+(mdframed)              on input line 4817.
+\openout4 = `main.mw'.
+
+ [194] (./main.mw)
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+ [195] (./main.mw)
+\openout4 = `main.mw'.
+
+Package mdframed Info: mdframed works in twoside mode on input line 4859.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4859.
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4861.
+Package mdframed Info: mdframed works in twoside mode on input line 4866.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4866.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4868.
 \openout4 = `main.mw'.
 
  [196] (./main.mw)
@@ -7212,70 +7209,29 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
- [197] (./main.mw)
-\openout4 = `main.mw'.
-
-Package mdframed Info: mdframed works in twoside mode on input line 4867.
+Package mdframed Info: mdframed works in twoside mode on input line 4875.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 4867.
+(mdframed)              on input line 4875.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4877.
+
+Underfull \vbox (badness 3623) has occurred while \output is active []
+
+\openout4 = `main.mw'.
+
+ [197]
+(./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 4869.
-Package mdframed Info: mdframed works in twoside mode on input line 4874.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 4874.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 4876.
+\openout4 = `main.mw'.
+
 \openout4 = `main.mw'.
 
  [198] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-Package mdframed Info: mdframed works in twoside mode on input line 4883.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 4883.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 4885.
-\openout4 = `main.mw'.
-
-
-[199] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
- [200] (./main.mw)
 \openout4 = `main.mw'.
 
 
@@ -7285,18 +7241,18 @@ pdfTeX warning (ext4): destination with the same identifier (name{appliedexampl
 e.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.4909 ...ing a one-off script into a shared tool]
+l.4901 ...ing a one-off script into a shared tool]
                                                   
-Package mdframed Info: mdframed works in twoside mode on input line 4909.
+Package mdframed Info: mdframed works in twoside mode on input line 4901.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 4909.
+(mdframed)              on input line 4901.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 4921.
+(mdframed)              on input line 4913.
 \openout4 = `main.mw'.
 
- [201
+ [199
 
 
 ] (./main.mw)
@@ -7320,7 +7276,7 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
- [202]
+ [200]
 (./main.mw)
 \openout4 = `main.mw'.
 
@@ -7336,20 +7292,20 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 4964.
+Package mdframed Info: mdframed works in twoside mode on input line 4956.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 4964.
+(mdframed)              on input line 4956.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 4966.
+(mdframed)              on input line 4958.
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
- [203] (./main.mw)
+ [201] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -7358,6 +7314,40 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+ [202] (./main.mw)
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+
+Overfull \hbox (4.16127pt too wide) in paragraph at lines 5020--5033
+ [][] 
+ []
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+Package mdframed Info: mdframed works in twoside mode on input line 5045.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 5045.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 5072.
+\openout4 = `main.mw'.
+
+[203] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -7373,35 +7363,54 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
+\openout4 = `main.mw'.
 
-Overfull \hbox (4.16127pt too wide) in paragraph at lines 5028--5041
+ [205] (./main.mw)
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+Package mdframed Info: mdframed works in twoside mode on input line 5124.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 5124.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 5126.
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+
+Overfull \hbox (1.41106pt too wide) in paragraph at lines 5139--5153
  [][] 
  []
 
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
-
-Package mdframed Info: mdframed works in twoside mode on input line 5053.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 5053.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 5080.
-\openout4 = `main.mw'.
-
-[205] (./main.mw)
+[206] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
-
-Package mdframed Info: Not enough space on this page on input line 5080.
-\openout4 = `main.mw'.
-
- [206] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -7415,68 +7424,14 @@ Package mdframed Info: Not enough space on this page on input line 5080.
 
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-Package mdframed Info: mdframed works in twoside mode on input line 5132.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 5132.
-Package mdframed Info: mdframed detected package amsthm 
- changed the theorem header of amsthm
-(mdframed)              on input line 5134.
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-
-Overfull \hbox (1.41106pt too wide) in paragraph at lines 5147--5161
- [][] 
- []
-
-\openout4 = `main.mw'.
-
-[208] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
- [209] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
- [210] (./main.mw)
+ [208] (./main.mw)
 \openout4 = `main.mw'.
 
 
 part without number
 \openout4 = `main.mw'.
 
-[211
+[209
 
 
 ] (./main.mw)
@@ -7484,7 +7439,7 @@ part without number
 
 \openout4 = `main.mw'.
 
- [212] (./main.mw)
+ [210] (./main.mw)
 \openout4 = `main.mw'.
 
 *geometry* verbose mode - [ newgeometry ] result:
@@ -7523,7 +7478,7 @@ part without number
 chapter A.
 \openout4 = `main.mw'.
 
-[213
+[211
 
 
 
@@ -7532,7 +7487,7 @@ chapter A.
 
 \openout4 = `main.mw'.
 
- [214] (./main.mw)
+ [212] (./main.mw)
 \openout4 = `main.mw'.
 
 *geometry* verbose mode - [ newgeometry ] result:
@@ -7570,7 +7525,7 @@ chapter A.
 
 chapter B.
 
-Underfull \hbox (badness 3219) in paragraph at lines 5214--5215
+Underfull \hbox (badness 3219) in paragraph at lines 5206--5207
 []\T1/zplLF/m/n/10 (+20) When many co-vari-ates threaten
  []
 
@@ -7588,7 +7543,7 @@ Underfull \hbox (badness 3219) in paragraph at lines 5214--5215
 
 \openout4 = `main.mw'.
 
-[215
+[213
 
 
 
@@ -7597,7 +7552,7 @@ Underfull \hbox (badness 3219) in paragraph at lines 5214--5215
 
 \openout4 = `main.mw'.
 
- [216] (./main.mw)
+ [214] (./main.mw)
 \openout4 = `main.mw'.
 
 *geometry* verbose mode - [ newgeometry ] result:
@@ -7636,7 +7591,7 @@ Underfull \hbox (badness 3219) in paragraph at lines 5214--5215
 chapter C.
 \openout4 = `main.mw'.
 
-[217
+[215
 
 
 
@@ -7645,7 +7600,7 @@ chapter C.
 
 \openout4 = `main.mw'.
 
- [218] (./main.mw)
+ [216] (./main.mw)
 \openout4 = `main.mw'.
 
 *geometry* verbose mode - [ newgeometry ] result:
@@ -7682,40 +7637,40 @@ chapter C.
 
 
 chapter D.
-Package mdframed Info: mdframed works in twoside mode on input line 5275.
+Package mdframed Info: mdframed works in twoside mode on input line 5267.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 5275.
+(mdframed)              on input line 5267.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 5279.
+(mdframed)              on input line 5271.
 \openout4 = `main.mw'.
 
-[219
+[217
 
 
 
 ] (./main.mw)
 \openout4 = `main.mw'.
 
-Package mdframed Info: mdframed works in twoside mode on input line 5299.
+Package mdframed Info: mdframed works in twoside mode on input line 5291.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 5299.
+(mdframed)              on input line 5291.
 
-Underfull \hbox (badness 1194) in paragraph at lines 5300--5303
+Underfull \hbox (badness 1194) in paragraph at lines 5292--5295
 []\T1/zplLF/b/n/10 (+20) Data: \T1/zplLF/m/n/10 (+20) Texas school per-for-manc
 e (STAAR), 2012--2025, school
  []
 
 
-Underfull \hbox (badness 1960) in paragraph at lines 5300--5303
+Underfull \hbox (badness 1960) in paragraph at lines 5292--5295
 \T1/zplLF/m/n/10 (+20) level (TEA via the ED-C/Zelma ex-port; large pub-lic CSV
 s,
  []
 
 
-Underfull \hbox (badness 1721) in paragraph at lines 5300--5303
+Underfull \hbox (badness 1721) in paragraph at lines 5292--5295
 \LMS/npxsy/m/n/10 ^^Y$\T1/zplLF/m/n/10 (+20) 400MB per year). \T1/zplLF/b/n/10 
 (+20) Run: \T1/fvm/m/n/10 analyze_-performance.do\T1/zplLF/m/n/10 (+20) . \T1/z
 plLF/b/n/10 (+20) Out-puts:
@@ -7723,20 +7678,20 @@ plLF/b/n/10 (+20) Out-puts:
 
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 5303.
+(mdframed)              on input line 5295.
 \openout4 = `main.mw'.
 
-[220] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
- [221] (./main.mw)
+[218] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
- [222
+ [219] (./main.mw)
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+ [220
 
 
 ] (./main.mw)
@@ -7744,45 +7699,45 @@ Package mdframed Info: mdframed detected package amsthm
 
 
 chapter E.
-Package mdframed Info: mdframed works in twoside mode on input line 5330.
+Package mdframed Info: mdframed works in twoside mode on input line 5322.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 5330.
+(mdframed)              on input line 5322.
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 5332.
+(mdframed)              on input line 5324.
 \openout4 = `main.mw'.
 
-[223] (./main.mw)
+[221] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
-<images/cap_ypll_poverty.png, id=2814, 1806.75pt x 1181.16281pt>
+<images/cap_ypll_poverty.png, id=2804, 1806.75pt x 1181.16281pt>
 File: images/cap_ypll_poverty.png Graphic file (type png)
 <use images/cap_ypll_poverty.png>
-Package pdftex.def Info: images/cap_ypll_poverty.png  used on input line 5362.
+Package pdftex.def Info: images/cap_ypll_poverty.png  used on input line 5354.
 (pdftex.def)             Requested size: 304.4417pt x 199.02876pt.
 \openout4 = `main.mw'.
 
- [224 <./images/cap_ypll_poverty.png>] (./main.mw)
+ [222 <./images/cap_ypll_poverty.png>] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
- [225]
+ [223]
 (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
- [226
+ [224
 
 
 ] (./main.mw)
@@ -7855,13 +7810,13 @@ Package pdftex.def Info: images/cap_ypll_poverty.png  used on input line 5362.
 
 chapter without number
 LaTeX Font Info:    Font shape `T1/zplLF/m/sc' will be
-(Font)              scaled to size 9.70001pt on input line 5377.
+(Font)              scaled to size 9.70001pt on input line 5369.
 Package microtype Info: Character `029' is missing
 (microtype)             in font `T1/zplLF/m/sc/10'.
 (microtype)             Ignoring protrusion settings for this character.
 \openout4 = `main.mw'.
 
-[227
+[225
 
 
 
@@ -7871,12 +7826,23 @@ Package microtype Info: Character `029' is missing
 
 \openout4 = `main.mw'.
 
+ [226] (./main.mw)
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
+ [227] (./main.mw)
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
  [228] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
- [229] (./main.mw)
+
+[229] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -7886,23 +7852,12 @@ Package microtype Info: Character `029' is missing
 
 \openout4 = `main.mw'.
 
-
-[231] (./main.mw)
+ [231] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
- [232] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
- [233] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
- [234
+ [232
 
 
 ] (./main.mw)
@@ -7916,7 +7871,7 @@ runsystem(makeindex main.idx)...executed.
 (./main.ind
 \openout4 = `main.mw'.
 
- [235
+ [233
 
 
 ] (./main.mw)
@@ -7930,11 +7885,7 @@ This document will not have a glossary.
 
 \openout4 = `main.mw'.
 
-[236] (./main.mw)
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
+[234] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -10563,14 +10514,6 @@ This document will not have a glossary.
 \openout4 = `main.mw'.
 
 )
-
-LaTeX Warning: There were undefined references.
-
-
-Package biblatex Warning: Please (re)run Biber on the file:
-(biblatex)                main
-(biblatex)                and rerun LaTeX afterwards.
-
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -10590,11 +10533,11 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 64094 strings out of 478268
- 1278751 string characters out of 5846347
- 2471334 words of memory out of 5000000
- 79285 multiletter control sequences out of 15000+600000
- 691758 words of font info for 532 fonts, out of 8000000 for 9000
+ 64074 strings out of 478268
+ 1278392 string characters out of 5846347
+ 2468085 words of memory out of 5000000
+ 79272 multiletter control sequences out of 15000+600000
+ 691740 words of font info for 532 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  133i,20n,159p,10600b,2364s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/newtx/ntx-ec-lf-pc.enc}{/
@@ -10619,10 +10562,10 @@ e1/public/txfonts/txsya.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/pub
 lic/newpx/zplb.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/newpx
 /zplr.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/newpx/zplri.pf
 b></usr/local/texlive/2022/texmf-dist/fonts/type1/public/boondox/zxxrw8a.pfb>
-Output written on main.pdf (248 pages, 4290876 bytes).
+Output written on main.pdf (246 pages, 4287478 bytes).
 PDF statistics:
- 4598 PDF objects out of 5155 (max. 8388607)
- 4222 compressed objects within 43 object streams
- 893 named destinations out of 1000 (max. 500000)
+ 4577 PDF objects out of 5155 (max. 8388607)
+ 4203 compressed objects within 43 object streams
+ 890 named destinations out of 1000 (max. 500000)
  97120 words of extra memory for PDF output out of 106986 (max. 10000000)
 

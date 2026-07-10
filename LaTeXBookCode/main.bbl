@@ -5947,74 +5947,8 @@
       \strng{authorbibnamehash}{4996f01033f1e72efe036963c2f02dac}
       \strng{authornamehash}{4996f01033f1e72efe036963c2f02dac}
       \strng{authorfullhash}{dab138b482fe11ec8f4505195cc57670}
-      \field{extraname}{1}
       \field{sortinit}{W}
       \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
-      \field{extradate}{1}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{PLOS Computational Biology}
-      \field{number}{6}
-      \field{title}{Good Enough Practices in Scientific Computing}
-      \field{volume}{13}
-      \field{year}{2017}
-      \field{pages}{e1005510}
-      \range{pages}{-1}
-      \verb{doi}
-      \verb 10.1371/journal.pcbi.1005510
-      \endverb
-    \endentry
-    \entry{wilson2017goodenough}{article}{}
-      \name{author}{6}{}{%
-        {{un=0,uniquepart=base,hash=fda30198609a1ab29a82b93d4e8f347b}{%
-           family={Wilson},
-           familyi={W\bibinitperiod},
-           given={Greg},
-           giveni={G\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=0f88b724c9f070dbceda00a5027d25bb}{%
-           family={Bryan},
-           familyi={B\bibinitperiod},
-           given={Jennifer},
-           giveni={J\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=a79fa4e0923b252a711a37310ed57253}{%
-           family={Cranston},
-           familyi={C\bibinitperiod},
-           given={Karen},
-           giveni={K\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=43698c36b205bdd65e89df3e8a106621}{%
-           family={Kitzes},
-           familyi={K\bibinitperiod},
-           given={Justin},
-           giveni={J\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=fd85e07eb8018cd89be388380c4df3cf}{%
-           family={Nederbragt},
-           familyi={N\bibinitperiod},
-           given={Lex},
-           giveni={L\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=920e9ef87c538906e1fdf4450d18c319}{%
-           family={Teal},
-           familyi={T\bibinitperiod},
-           given={Tracy\bibnamedelima K.},
-           giveni={T\bibinitperiod\bibinitdelim K\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{4996f01033f1e72efe036963c2f02dac}
-      \strng{fullhash}{dab138b482fe11ec8f4505195cc57670}
-      \strng{bibnamehash}{4996f01033f1e72efe036963c2f02dac}
-      \strng{authorbibnamehash}{4996f01033f1e72efe036963c2f02dac}
-      \strng{authornamehash}{4996f01033f1e72efe036963c2f02dac}
-      \strng{authorfullhash}{dab138b482fe11ec8f4505195cc57670}
-      \field{extraname}{2}
-      \field{sortinit}{W}
-      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
-      \field{extradate}{2}
       \field{extradatescope}{labelyear}
       \field{labeldatesource}{year}
       \field{labelnamesource}{author}
