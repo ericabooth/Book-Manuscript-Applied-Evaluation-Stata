@@ -1,288 +1,289 @@
 \begin{theindex}
 
-  \item \texttt{addchart}, \hyperpage{143}
-  \item adverse impact, \hyperpage{184}
-  \item \texttt{alpha}, \hyperpage{82}
-  \item American Community Survey (ACS), \hyperpage{34}
+  \item \texttt{addchart}, \hyperpage{159}
+  \item adverse impact, \hyperpage{204}
+  \item \texttt{alpha}, \hyperpage{88}
+  \item American Community Survey (ACS), \hyperpage{38}
   \item API
-    \subitem survey platforms, \hyperpage{56}
-  \item API (application programming interface), \hyperpage{31}
-  \item API quota, \hyperpage{142}
-  \item \texttt{assert}, \hyperpage{72}, \hyperpage{173}
+    \subitem survey platforms, \hyperpage{62}
+  \item API (application programming interface), \hyperpage{35}
+  \item API quota, \hyperpage{157}
+  \item \texttt{assert}, \hyperpage{78}, \hyperpage{191}
 
   \indexspace
 
-  \item Blinder-Oaxaca decomposition, \hyperpage{94}
+  \item Blinder-Oaxaca decomposition, \hyperpage{102}
 
   \indexspace
 
-  \item capstone, \hyperpage{221}
-  \item \texttt{catplot}, \hyperpage{112}
-  \item \texttt{char define}, \hyperpage{60}
-  \item choropleth, \hyperpage{124}
-  \item coarsening, \hyperpage{192}
+  \item capstone, \hyperpage{245}
+  \item \texttt{catplot}, \hyperpage{125}
+  \item \texttt{char define}, \hyperpage{67}
+  \item choropleth, \hyperpage{137}
+  \item coarsening, \hyperpage{212}
   \item \texttt{codebook}, \hyperpage{8}
-  \item \texttt{coefplot}, \hyperpage{113}
-  \item \texttt{collapse}, \hyperpage{25}
-  \item \texttt{collect}, \hyperpage{138}, \hyperpage{193}
-  \item \texttt{combineall}, \hyperpage{22}, \hyperpage{42}, 
-		\hyperpage{47}
-  \item complementary suppression, \hyperpage{194}
-  \item conceptual use, \hyperpage{10}
-  \item \texttt{confirm}, \hyperpage{72}
-  \item conformal prediction, \hyperpage{88}
-  \item \texttt{conformalpred}, \hyperpage{88}
-  \item control chart, \hyperpage{57}, \hyperpage{114}
-  \item control file, \hyperpage{21}
-  \item convergence delta, \hyperpage{179}
-  \item \texttt{convertanything}, \hyperpage{8}, \hyperpage{22}, 
+  \item \texttt{coefplot}, \hyperpage{125}
+  \item \texttt{collapse}, \hyperpage{29}
+  \item \texttt{collect}, \hyperpage{153}, \hyperpage{213}
+  \item \texttt{combineall}, \hyperpage{25}, \hyperpage{47}, 
 		\hyperpage{52}
-  \item \texttt{copy}, \hyperpage{49}
-  \item Cronbach's alpha, \hyperpage{61}, \hyperpage{82}
-  \item crosswalk, \hyperpage{71}
-  \item \texttt{csdid}, \hyperpage{96}
-  \item \texttt{cxchangelog}, \hyperpage{63, 64}
+  \item complementary suppression, \hyperpage{214}
+  \item conceptual use, \hyperpage{11}
+  \item \texttt{confirm}, \hyperpage{78}
+  \item conformal prediction, \hyperpage{95}
+  \item \texttt{conformalpred}, \hyperpage{96}
+  \item control chart, \hyperpage{63}, \hyperpage{127}
+  \item control file, \hyperpage{24}
+  \item convergence delta, \hyperpage{198}
+  \item \texttt{convertanything}, \hyperpage{9}, \hyperpage{25}, 
+		\hyperpage{57}
+  \item \texttt{copy}, \hyperpage{54}
+  \item Cronbach's alpha, \hyperpage{68}, \hyperpage{88}
+  \item crosswalk, \hyperpage{77}
+  \item \texttt{csdid}, \hyperpage{104}
+  \item \texttt{cxchangelog}, \hyperpage{70, 71}
 
   \indexspace
 
   \item data dictionary, \hyperpage{8}
-  \item data-ink ratio, \hyperpage{109}
-  \item \texttt{datadict}, \hyperpage{146}, \hyperpage{172}
-  \item design effect, \hyperpage{86}
-  \item \texttt{destring}, \hyperpage{49}
-  \item difference-in-differences, \hyperpage{95}
-  \item diverging bar chart, \hyperpage{112}
-  \item diverging stacked bar, \hyperpage{127}
-  \item \texttt{dpprivacy}, \hyperpage{196}
-  \item \texttt{dsload}, \hyperpage{199}
+  \item data-ink ratio, \hyperpage{121}
+  \item \texttt{datadict}, \hyperpage{162}, \hyperpage{191}
+  \item design effect, \hyperpage{93}
+  \item \texttt{destring}, \hyperpage{54}
+  \item difference-in-differences, \hyperpage{104}
+  \item disclosure-review checklist, \hyperpage{218}
+  \item diverging bar chart, \hyperpage{125}
+  \item diverging stacked bar, \hyperpage{140}
+  \item \texttt{dpprivacy}, \hyperpage{217}
+  \item \texttt{dsload}, \hyperpage{221}
 
   \indexspace
 
-  \item \texttt{editanything}, \hyperpage{200}
-  \item \texttt{educationdata}, \hyperpage{34}
-  \item \texttt{egen}, \hyperpage{25}
-  \item embarrassingly parallel, \hyperpage{174}
+  \item \texttt{editanything}, \hyperpage{223}
+  \item \texttt{educationdata}, \hyperpage{39}
+  \item \texttt{egen}, \hyperpage{29}
+  \item embarrassingly parallel, \hyperpage{193}
   \item embedded evaluation, \hyperpage{6}
-  \item empirical Bayes shrinkage, \hyperpage{84}, \hyperpage{203}
-  \item \texttt{esttab}, \hyperpage{139}
+  \item empirical Bayes shrinkage, \hyperpage{90}, \hyperpage{226}
+  \item \texttt{esttab}, \hyperpage{154}
   \item evaluation literacy, \hyperpage{8}
-  \item event study, \hyperpage{98}
+  \item event study, \hyperpage{107}
 
   \indexspace
 
-  \item \texttt{factor}, \hyperpage{82}
-  \item factor analysis, \hyperpage{82}
-  \item Fellegi-Sunter framework, \hyperpage{68}
-  \item FIPS codes, \hyperpage{37}
-  \item flattening (JSON), \hyperpage{40}
+  \item \texttt{factor}, \hyperpage{88}
+  \item factor analysis, \hyperpage{88}
+  \item Fellegi-Sunter framework, \hyperpage{75}
+  \item FIPS codes, \hyperpage{42}
+  \item flattening (JSON), \hyperpage{45}
   \item four principles, \hyperpage{6}
-  \item four-fifths rule, \hyperpage{184}
-  \item FRED (Federal Reserve Economic Data), \hyperpage{36}
-  \item \texttt{ftools}, \hyperpage{25}
+  \item four-fifths rule, \hyperpage{204}
+  \item FRED (Federal Reserve Economic Data), \hyperpage{41}
+  \item \texttt{ftools}, \hyperpage{29}
 
   \indexspace
 
-  \item \texttt{gcollapse}, \hyperpage{25}
-  \item \texttt{gegen}, \hyperpage{25}
-  \item \texttt{getcensus}, \hyperpage{8}, \hyperpage{34}
-  \item GitHub Pages, \hyperpage{156}
-  \item \texttt{googlechart}, \hyperpage{39}, \hyperpage{120}, 
-		\hyperpage{141}, \hyperpage{161}
-  \item \texttt{googlesheets}, \hyperpage{39}, \hyperpage{120}, 
-		\hyperpage{141}, \hyperpage{161}
-  \item graphical perception, \hyperpage{111}
-  \item \texttt{gtools}, \hyperpage{25}
+  \item \texttt{gcollapse}, \hyperpage{29}
+  \item \texttt{gegen}, \hyperpage{29}
+  \item \texttt{getcensus}, \hyperpage{9}, \hyperpage{38}
+  \item GitHub Pages, \hyperpage{173}
+  \item \texttt{googlechart}, \hyperpage{44}, \hyperpage{132}, 
+		\hyperpage{157}, \hyperpage{178}
+  \item \texttt{googlesheets}, \hyperpage{44}, \hyperpage{132}, 
+		\hyperpage{156}, \hyperpage{178}
+  \item graphical perception, \hyperpage{124}
+  \item \texttt{gtools}, \hyperpage{29}
 
   \indexspace
 
-  \item \texttt{hlmr2}, \hyperpage{89}
-  \item \texttt{honestdid}, \hyperpage{102}
+  \item \texttt{hlmr2}, \hyperpage{97}
+  \item \texttt{honestdid}, \hyperpage{111}
 
   \indexspace
 
-  \item \texttt{import delimited}, \hyperpage{49}
-  \item \texttt{import excel}, \hyperpage{53}
-  \item \texttt{import fred}, \hyperpage{36}
-  \item \texttt{importR}, \hyperpage{53}
-  \item improvement science, \hyperpage{11}
-  \item instrumental use, \hyperpage{10}
-  \item inter-rater reliability, \hyperpage{176}
-  \item interactive chart, \hyperpage{119}
-  \item intraclass correlation, \hyperpage{89}
-  \item \texttt{irt}, \hyperpage{82}
-  \item \texttt{isid}, \hyperpage{72}
-  \item item response theory, \hyperpage{82}
+  \item \texttt{import delimited}, \hyperpage{54}
+  \item \texttt{import excel}, \hyperpage{58}
+  \item \texttt{import fred}, \hyperpage{41}
+  \item \texttt{importR}, \hyperpage{58}
+  \item improvement science, \hyperpage{12}
+  \item instrumental use, \hyperpage{11}
+  \item inter-rater reliability, \hyperpage{196}
+  \item interactive chart, \hyperpage{131}
+  \item intraclass correlation, \hyperpage{97}
+  \item \texttt{irt}, \hyperpage{88}
+  \item \texttt{isid}, \hyperpage{78}
+  \item item response theory, \hyperpage{88}
 
   \indexspace
 
-  \item Jaro-Winkler distance, \hyperpage{67}
-  \item \texttt{joinby}, \hyperpage{67}
-  \item JSON (JavaScript Object Notation), \hyperpage{40}
+  \item Jaro-Winkler distance, \hyperpage{73}
+  \item \texttt{joinby}, \hyperpage{74}
+  \item JSON (JavaScript Object Notation), \hyperpage{45}
 
   \indexspace
 
-  \item $k$-anonymity, \hyperpage{189}
-  \item \texttt{kap}, \hyperpage{177}
+  \item $k$-anonymity, \hyperpage{209}
+  \item \texttt{kap}, \hyperpage{196}
   \item kappa
-    \subitem Cohen's and Fleiss', \hyperpage{176}
-    \subitem formula, \hyperpage{176}
-  \item \texttt{kbal}, \hyperpage{102}
+    \subitem Cohen's and Fleiss', \hyperpage{196}
+    \subitem formula, \hyperpage{196}
+  \item \texttt{kbal}, \hyperpage{112}
 
   \indexspace
 
-  \item $l$-diversity, \hyperpage{189}
+  \item $l$-diversity, \hyperpage{209}
   \item \texttt{labelbook}, \hyperpage{8}
-  \item level-of-effort, \hyperpage{63}
-  \item Likert scale, \hyperpage{112}, \hyperpage{127}
-  \item \texttt{likertscale}, \hyperpage{61}
-  \item linkage error, \hyperpage{70}
-  \item literate programming, \hyperpage{150}
-  \item \texttt{llmsieve}, \hyperpage{177}
-  \item \texttt{loebias}, \hyperpage{63}
-  \item logic model, \hyperpage{12}
-  \item lost in the middle, \hyperpage{170}
-  \item \texttt{lstrfun}, \hyperpage{205}
+  \item level-of-effort, \hyperpage{70}
+  \item Likert scale, \hyperpage{125}, \hyperpage{140}
+  \item \texttt{likertscale}, \hyperpage{68}
+  \item linkage error, \hyperpage{76}
+  \item literate programming, \hyperpage{166}
+  \item \texttt{llmsieve}, \hyperpage{196}
+  \item \texttt{loebias}, \hyperpage{70}
+  \item logic model, \hyperpage{14}
+  \item lost in the middle, \hyperpage{188}
+  \item \texttt{lstrfun}, \hyperpage{228}
 
   \indexspace
 
-  \item Mahalanobis distance, \hyperpage{100}
-  \item Mata, \hyperpage{205}
-  \item match weight, \hyperpage{68}
-  \item minimum detectable effect, \hyperpage{86}
-  \item \texttt{misstable}, \hyperpage{76}
-  \item Monte Carlo simulation, \hyperpage{103}
-  \item multiple imputation, \hyperpage{76}
+  \item Mahalanobis distance, \hyperpage{110}
+  \item Mata, \hyperpage{228}
+  \item match weight, \hyperpage{75}
+  \item minimum detectable effect, \hyperpage{93}
+  \item \texttt{misstable}, \hyperpage{82}
+  \item Monte Carlo simulation, \hyperpage{112}
+  \item multiple imputation, \hyperpage{82}
 
   \indexspace
 
-  \item \texttt{nearmrg}, \hyperpage{69}
-  \item need index, \hyperpage{50}
-  \item \texttt{net install}, \hyperpage{199}
+  \item \texttt{nearmrg}, \hyperpage{75}
+  \item need index, \hyperpage{55}
+  \item \texttt{net install}, \hyperpage{221}
   \item nonresponse
-    \subitem item, \hyperpage{63}
-    \subitem unit, \hyperpage{63}
-  \item \texttt{nonresponse}, \hyperpage{63}
-  \item numbered pipeline, \hyperpage{17}
+    \subitem item, \hyperpage{70}
+    \subitem unit, \hyperpage{70}
+  \item \texttt{nonresponse}, \hyperpage{70}
+  \item numbered pipeline, \hyperpage{19}
 
   \indexspace
 
-  \item OAuth, \hyperpage{141}
-  \item \texttt{oaxaca}, \hyperpage{94}
-  \item openICPSR, \hyperpage{206}
+  \item OAuth, \hyperpage{156}
+  \item \texttt{oaxaca}, \hyperpage{102}
+  \item openICPSR, \hyperpage{229}
 
   \indexspace
 
-  \item paradata, \hyperpage{63}
-  \item parallel trends, \hyperpage{98}
-  \item Plan-Do-Study-Act cycle, \hyperpage{7}
-  \item post-stratification, \hyperpage{83}
-  \item \texttt{power}, \hyperpage{86}
+  \item paradata, \hyperpage{70}
+  \item parallel trends, \hyperpage{107}
+  \item Plan-Do-Study-Act cycle, \hyperpage{8}
+  \item post-stratification, \hyperpage{89}
+  \item \texttt{power}, \hyperpage{93}
   \item pre-registered analysis plan, \hyperpage{7}
-  \item pre-registration, \hyperpage{105}
-  \item price transparency files, \hyperpage{51}
-  \item probabilistic record linkage, \hyperpage{67}
-  \item process use, \hyperpage{10}
-  \item program-aided language models, \hyperpage{170}
-  \item \texttt{projectbuilder}, \hyperpage{22}, \hyperpage{163}, 
-		\hyperpage{172}
-  \item prompt injection, \hyperpage{182}
-  \item \texttt{putexcel}, \hyperpage{138}
+  \item pre-registration, \hyperpage{115}
+  \item price transparency files, \hyperpage{56}
+  \item probabilistic record linkage, \hyperpage{73}
+  \item process use, \hyperpage{11}
+  \item program-aided language models, \hyperpage{188}
+  \item \texttt{projectbuilder}, \hyperpage{24}, \hyperpage{181}, 
+		\hyperpage{191}
+  \item prompt injection, \hyperpage{202}
+  \item \texttt{putexcel}, \hyperpage{153}
 
   \indexspace
 
-  \item Qualtrics, \hyperpage{56}
-  \item Quarterly Census of Employment and Wages (QCEW), \hyperpage{36}
-  \item quasi-identifiers, \hyperpage{189}
+  \item Qualtrics, \hyperpage{62}
+  \item Quarterly Census of Employment and Wages (QCEW), \hyperpage{41}
+  \item quasi-identifiers, \hyperpage{209}
 
   \indexspace
 
-  \item raking, \hyperpage{83}
-  \item \texttt{rateshrink}, \hyperpage{85}, \hyperpage{202}, 
-		\hyperpage{204}
-  \item \texttt{rawsweep}, \hyperpage{197}
-  \item \texttt{rdrobust}, \hyperpage{99}
-  \item re-identification, \hyperpage{190}
-  \item read-back verification, \hyperpage{144}
-  \item \texttt{reclink}, \hyperpage{68}
-  \item record linkage, \hyperpage{53}
-  \item REDCap, \hyperpage{56}
-  \item \texttt{reghdfe}, \hyperpage{25}
-  \item regression discontinuity, \hyperpage{99}
+  \item raking, \hyperpage{89}
+  \item \texttt{rateshrink}, \hyperpage{91}, \hyperpage{225, 226}
+  \item \texttt{rawsweep}, \hyperpage{218}
+  \item \texttt{rdrobust}, \hyperpage{108}
+  \item re-identification, \hyperpage{210}
+  \item read-back verification, \hyperpage{160}
+  \item \texttt{reclink}, \hyperpage{74}
+  \item record linkage, \hyperpage{59}
+  \item REDCap, \hyperpage{62}
+  \item \texttt{reghdfe}, \hyperpage{29}
+  \item regression discontinuity, \hyperpage{108}
   \item replicable workflow, \hyperpage{6}
-  \item replication archive, \hyperpage{206}
-  \item reproducible reporting, \hyperpage{139}
-  \item research-practice partnership, \hyperpage{10}
-  \item return on investment, \hyperpage{103}
-  \item \texttt{riskscan}, \hyperpage{190}
-  \item \texttt{roisim}, \hyperpage{104}
-  \item run chart, \hyperpage{114}
+  \item replication archive, \hyperpage{229}
+  \item reproducible reporting, \hyperpage{154}
+  \item research-practice partnership, \hyperpage{11}
+  \item return on investment, \hyperpage{112}
+  \item \texttt{riskscan}, \hyperpage{210}
+  \item \texttt{roisim}, \hyperpage{114}
+  \item run chart, \hyperpage{127}
 
   \indexspace
 
-  \item schema drift, \hyperpage{72}
-  \item \texttt{ScrapeSSC}, \hyperpage{201}
-  \item self-contained HTML, \hyperpage{119}
-  \item small multiples, \hyperpage{113}, \hyperpage{121}
-  \item SMCL, \hyperpage{200}
-  \item Socrata, \hyperpage{38}
-  \item \texttt{soundex}, \hyperpage{67}
-  \item sparkline, \hyperpage{120}
-  \item \texttt{sparkta2}, \hyperpage{119}, \hyperpage{161}
-  \item spreadsheet errors, \hyperpage{137}
-  \item \texttt{srcfind}, \hyperpage{71}
-  \item \texttt{srctag}, \hyperpage{22}, \hyperpage{71}, 
-		\hyperpage{172}
-  \item \texttt{ssc install}, \hyperpage{19}
-  \item \texttt{statashiny}, \hyperpage{119}, \hyperpage{153}
-  \item \texttt{statplot}, \hyperpage{112}
-  \item streaming large files, \hyperpage{51}
-  \item \texttt{suppress}, \hyperpage{193}
-  \item \texttt{surveytracker}, \hyperpage{60}
-  \item \texttt{svyset}, \hyperpage{83}
-  \item \texttt{syntax}, \hyperpage{199}
-  \item \texttt{synth}, \hyperpage{99}
-  \item synthetic control, \hyperpage{99}
-  \item synthetic data, \hyperpage{196}
-  \item \texttt{synthgen}, \hyperpage{196}
-  \item \texttt{sysuse}, \hyperpage{190}
+  \item schema drift, \hyperpage{78}
+  \item \texttt{ScrapeSSC}, \hyperpage{224}
+  \item self-contained HTML, \hyperpage{131}
+  \item small multiples, \hyperpage{126}, \hyperpage{133}
+  \item SMCL, \hyperpage{223}
+  \item Socrata, \hyperpage{44}
+  \item \texttt{soundex}, \hyperpage{74}
+  \item sparkline, \hyperpage{132}
+  \item \texttt{sparkta2}, \hyperpage{131}, \hyperpage{178}
+  \item spreadsheet errors, \hyperpage{152}
+  \item \texttt{srcfind}, \hyperpage{77}
+  \item \texttt{srctag}, \hyperpage{25}, \hyperpage{77}, 
+		\hyperpage{191}
+  \item \texttt{ssc install}, \hyperpage{21}
+  \item \texttt{statashiny}, \hyperpage{131}, \hyperpage{169}
+  \item \texttt{statplot}, \hyperpage{125}
+  \item streaming large files, \hyperpage{56}
+  \item \texttt{suppress}, \hyperpage{213}
+  \item \texttt{surveytracker}, \hyperpage{67}
+  \item \texttt{svyset}, \hyperpage{89}
+  \item \texttt{syntax}, \hyperpage{222}
+  \item \texttt{synth}, \hyperpage{108}
+  \item synthetic control, \hyperpage{108}
+  \item synthetic data, \hyperpage{217}
+  \item \texttt{synthgen}, \hyperpage{217}
+  \item \texttt{sysuse}, \hyperpage{210}
 
   \indexspace
 
-  \item theory of change, \hyperpage{13}
-  \item \texttt{timer}, \hyperpage{205}
-  \item top-two-box, \hyperpage{61}
-  \item total survey error, \hyperpage{55}
-  \item transition matrix, \hyperpage{75}
-  \item \texttt{twinmatch}, \hyperpage{100}
-  \item two-way fixed effects, \hyperpage{96}
+  \item theory of change, \hyperpage{14}
+  \item \texttt{timer}, \hyperpage{228}
+  \item top-two-box, \hyperpage{68}
+  \item total survey error, \hyperpage{61}
+  \item tracking spine, \hyperpage{28}
+  \item transition matrix, \hyperpage{81}
+  \item \texttt{twinmatch}, \hyperpage{109}
+  \item two-way fixed effects, \hyperpage{104}
 
   \indexspace
 
-  \item unbalanced panel, \hyperpage{73}
-  \item \texttt{undummy}, \hyperpage{56}
-  \item \texttt{usepackage}, \hyperpage{19}
-  \item utilization-focused evaluation, \hyperpage{11}
+  \item unbalanced panel, \hyperpage{79}
+  \item \texttt{undummy}, \hyperpage{62}
+  \item \texttt{usepackage}, \hyperpage{21}
+  \item utilization-focused evaluation, \hyperpage{12}
 
   \indexspace
 
-  \item \texttt{varabbrev}, \hyperpage{22}
-  \item \texttt{version}, \hyperpage{22}, \hyperpage{200}
+  \item \texttt{varabbrev}, \hyperpage{24}
+  \item \texttt{version}, \hyperpage{24}, \hyperpage{222}
 
   \indexspace
 
-  \item \texttt{webapi}, \hyperpage{39}, \hyperpage{161}
-  \item \texttt{webdoc}, \hyperpage{150}
-  \item \texttt{webdoc2}, \hyperpage{119}, \hyperpage{150}, 
-		\hyperpage{172}
-  \item \texttt{writeinput}, \hyperpage{19}, \hyperpage{201}
+  \item \texttt{webapi}, \hyperpage{44}, \hyperpage{178}
+  \item \texttt{webdoc}, \hyperpage{166}
+  \item \texttt{webdoc2}, \hyperpage{131}, \hyperpage{166}, 
+		\hyperpage{191}
+  \item \texttt{writeinput}, \hyperpage{22}, \hyperpage{223}
 
   \indexspace
 
-  \item \texttt{xline()}, \hyperpage{114}
-  \item \texttt{xtset}, \hyperpage{73}
+  \item \texttt{xline()}, \hyperpage{127}
+  \item \texttt{xtset}, \hyperpage{79}
 
   \indexspace
 
-  \item \emph{z}-score, \hyperpage{50}
+  \item \emph{z}-score, \hyperpage{55}
 
 \end{theindex}

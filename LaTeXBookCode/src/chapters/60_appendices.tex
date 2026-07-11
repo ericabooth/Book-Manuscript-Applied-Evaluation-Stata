@@ -9,7 +9,7 @@
 \pagelayout{wide}
 \setchapterstyle{lines}
 \chapter{The Setup Guide}\label{app:setup}
-Do the blocks below once and every example in the book runs, so the chapters themselves stay about evaluation rather than configuration. Setup lives here, in one place, precisely so no chapter body has to carry the friction of keys, environments, and credentials.
+Do the blocks below once and every example in the book runs. Keys, environments, and credentials are startup friction, not evaluation, so we collected them here in one place; work through them now and the chapters never make you stop mid-example to configure anything.
 
 \paragraph{Packages.} Running \texttt{01\_install.do} from the companion folder once fetches everything: the community packages from SSC (\texttt{estout}, \texttt{coefplot}, \texttt{gtools}, \texttt{ftools}, \texttt{reghdfe}, \texttt{getcensus}, \texttt{educationdata}) and the authors' suite packages from GitHub, each of which also installs on its own with the one-line \texttt{net install} shown in its Package Integration box (the pattern is collected in Appendix~\ref{app:toolkit}).
 
@@ -26,10 +26,12 @@ Do the blocks below once and every example in the book runs, so the chapters the
 
 \paragraph{LLM setup, hosted and local.} For hosted LLMs, install the vendor's SDK (for example \texttt{pip install google-genai}) and store the API key in an environment variable, never in a do-file. For protected data that cannot leave the building, install Ollama locally, pull an LLM (\texttt{ollama pull llama3} or a Gemma model), and confirm the local server is running before Stata calls it. Budget for the download: a quantized 7B LLM is 4--5\,GB and a laptop with 16\,GB of RAM can run it, but the larger LLMs that rival hosted quality need a GPU. Ollama serves on \texttt{localhost:11434} by default, so a \texttt{curl} to that port is the fastest check that the server is running. The LLM-agnostic wrapper of Chapter~\ref{ch:ai} lets you switch between the two by changing one macro.
 
+\paragraph{Setup as a team artifact.} Once the blocks above work on your machine, get them out of your head and into the project repository as a checklist. A habit that pays: commit a \texttt{SETUP.md} (or a commented header in \texttt{01\_install.do}) listing each block in order, and have every new team member run it top to bottom on their first day, noting where it stalls. The notes repay the hour twice over: the new hire is running the book's examples by lunch, and the stall points show which step's instructions have drifted since the last machine was configured.
+
 \pagelayout{margin}
 \setchapterstyle{kao}
 \chapter{The Causal Quick-Reference Toolbox}\label{app:causal}
-Chapter~\ref{ch:claims} teaches one causal method in full, difference-in-differences (Section~\ref{sec:did}), because it is the design an applied evaluator meets most often. This appendix is the quick reference for the neighboring designs: it gives an evaluator enough to recognize which design a situation calls for, points to the Stata command that implements it, and says where to read more. It is a map, not a manual; each design rewards the deeper treatment in the specialist texts at the end.
+Chapter~\ref{ch:claims} teaches one causal method in full, difference-in-differences (Section~\ref{sec:did}), because it is the design an applied evaluator meets most often. This appendix is the quick reference for the neighboring designs: it gives an evaluator enough to recognize which design a situation calls for, points to the Stata command that implements it, and says where to read more. It is a map, not a manual; each design rewards the deeper treatment in the specialist texts at the end. When two designs both seem to fit, write the claim sentence first and let it choose: the sentence names the units, the comparison, and the timing, and usually only one design can deliver all three (Chapter~\ref{ch:claims}). A staggered rollout across districts points down the first row below; a single flagship site points to synthetic control; the sentence decides before the estimator does.
 
 \begin{description}
     \item[Staggered treatment timing.] When units adopt a policy at different times, use \texttt{csdid} (Callaway and Sant'Anna) or \texttt{jwdid} (Wooldridge) rather than plain two-way fixed effects, which can weight already-treated units as controls and mislead. Check pre-trends with an event-study plot. \emph{Caveat:} the design still rests on parallel trends, which the plot supports but cannot prove.\marginnote{Goodman-Bacon (2021) is why plain TWFE misleads here: the estimate is a weighted average of all $2\times2$ comparisons, and the ones that use already-treated units as controls can carry negative weights. Econometricians sometimes call the naive fix, throwing lags and leads into one regression, the \enquote{forbidden regression}.}
@@ -46,7 +48,7 @@ Chapter~\ref{ch:claims} teaches one causal method in full, difference-in-differe
 \pagelayout{wide}
 \setchapterstyle{lines}
 \chapter{The Book's Toolkit}\label{app:toolkit}
-Use this appendix to find any tool the book uses and jump straight to the chapter that puts it to work. It lists every package and proposed tool in one place so a reader who remembers a capability but not its name can recover both. Published packages install from the authors' GitHub with \texttt{net install}; proposed tools are plans, not yet code. The split matters when you cite the book: the published packages are runnable today and safe to build a workflow on, whereas the proposed tools mark gaps the authors intend to fill, so treat them as a roadmap rather than a dependency. The suite packages follow one pattern, each installing with a single command from its own repository:
+Use this appendix to find any tool the book uses and jump straight to the chapter that puts it to work. It lists every package and proposed tool in one place so a reader who remembers a capability but not its name can recover both. Published packages install from the authors' GitHub with \texttt{net install}; proposed tools are plans, not yet code. The split matters when you cite the book: the published packages are runnable today and safe to build a workflow on, whereas the proposed tools mark gaps the authors intend to fill, so treat them as a roadmap rather than a dependency. When you adopt one of these into a live project, consider copying its install line into the project's own \texttt{01\_install.do}, so the toolkit travels with the analysis rather than living on one machine (Appendix~\ref{app:setup}). The suite packages follow one pattern, each installing with a single command from its own repository:
 {\footnotesize
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
@@ -105,6 +107,8 @@ The one exception is \texttt{sparkta2}, whose source is not yet released. The co
 
 \paragraph{The question.} Do state-level rates of being uninsured before pregnancy predict pre-pregnancy depression among postpartum women? It is a clean ecological question with an obvious-seeming hypothesis, and, as it turns out, a useful lesson in why the obvious hypothesis is not always the one the data support.
 
+\paragraph{How you would plan this.} Three decisions preceded any code. The unit of analysis is the state, not the woman: PRAMS publishes weighted jurisdiction estimates, so the claim can only ever rank states ($N=32$). The join map is one master file keyed on state name, with each indicator block reduced to two columns and merged in one at a time. And the good-enough bar was set low on purpose: with 32 observations, a three-model OLS progression is the ceiling, so nothing fancier was budgeted.
+
 \paragraph{Why it is a good teaching case.} The PRAMS workbook is exactly the kind of \enquote{published-for-humans, hostile-to-code} spreadsheet evaluators face constantly: each health indicator sits in its own stacked block (title row, label row, header row, then 32 jurisdictions), several blocks per sheet. There is no clean rectangle to import. The do-file meets this honestly, a sequence of targeted \texttt{import excel} calls with an explicit \texttt{cellrange()} per block, each reduced to state $+$ the weighted estimate, then merged on state name into one analytic file:
 {\footnotesize
 \begin{verbatim}
@@ -128,6 +132,8 @@ This is the counterpoint to \texttt{convertanything} (Chapter~\ref{ch:noapi}): w
 \end{kaobox}
 
 \paragraph{The question.} How did Grade~4 and Grade~8 proficiency shift after the 2023 STAAR redesign (HB~3906), and did the shift differ for reading versus math? This is a real, contested Texas policy question, the kind an embedded evaluator gets asked.
+
+\paragraph{How you would plan this.} The analyst settled three things before touching the CSVs. The unit is the school-grade-subject-year, chosen because the redesign question turns on grade and subject, not campus totals. The join map is an append, not a merge: the yearly files share a column layout, so the plan is filter on import, stack, and build the panel ID afterward. The good-enough bar is a defensible pre/post contrast with school fixed effects plus one sensitivity check on the baseline, agreed before estimation so a shrinking coefficient reads as diligence rather than retreat.
 
 \paragraph{Why it is a good teaching case.} This is the large-administrative-data workflow from Chapters~\ref{ch:embedded} and~\ref{ch:workshop} at full scale: a dozen multi-hundred-megabyte CSVs that must be appended without exhausting memory. The do-file loops the yearly files and filters aggressively \emph{on import} (school level, Grades 4/8, \enquote{All Students}, English assessment) so only the needed slice ever lands in memory, then collapses to one row per school-grade-subject-year and builds a panel ID:
 {\footnotesize
@@ -157,6 +163,8 @@ The two examples in Appendix~\ref{app:walkthroughs} teach the workflow on data t
 \end{kaobox}
 
 \paragraph{The question.} Do higher-poverty counties lose more years of life, and does health-insurance coverage explain part of the gap? The outcome is years of potential life lost before age~75 per 100,000 residents (YPLL), the standard premature-death measure. This is the kind of descriptive, comparison-first question Section~\ref{sec:did} argues most evaluations should start with and often stay at.
+
+\paragraph{How you would plan this.} The same three decisions open this capstone. The unit is the county row, so the state roll-up codes get dropped first. No join map is needed, one file supplies everything, so the planning effort shifts to identifiers: FIPS codes read as strings or the leading zeros vanish. And the good-enough bar is descriptive, a within-state gradient that survives state fixed effects rather than a causal claim, which is why the guard stage gets more lines than the regression.
 
 \paragraph{Stage 1, ingest (Chapter~\ref{ch:noapi}).} There is no API here, just a file at a stable URL, so the do-file copies it and reads it, the pattern from the no-API chapter. It reads the first three columns as strings so the county FIPS identifiers keep their leading zeros, the habit from Chapter~\ref{ch:panels}, and lower-cases the variable names so the munged column names are predictable:
 {\footnotesize

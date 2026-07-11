@@ -90,6 +90,12 @@
 % TeX relax spacing as a last resort instead of producing overfull lines.
 \setlength{\emergencystretch}{3em}
 
+% Disable microtype font EXPANSION (keep protrusion). With the narrow column
+% and unbreakable inline \texttt{} tokens, expansion hits its compression
+% limit and whole paragraphs render visibly condensed, reading as a typeface
+% change next to code blocks; it also garbles text extraction from the PDF.
+\microtypesetup{expansion=false}
+
 % Paths for figures
 \graphicspath{{images/}}
 
