@@ -5,7 +5,7 @@
 \contentsline {paragraph}{\nonumberline A word on AI.}{1}{paragraph*.8}%
 \contentsline {paragraph}{\nonumberline Everything here runs.}{1}{paragraph*.10}%
 \contentsline {paragraph}{\nonumberline Who this book is for.}{1}{paragraph*.12}%
-\contentsline {paragraph}{\nonumberline The arc of the book.}{2}{paragraph*.14}%
+\contentsline {paragraph}{\nonumberline The arc of the book.}{1}{paragraph*.14}%
 \contentsline {paragraph}{\nonumberline How to read it.}{2}{paragraph*.16}%
 \contentsline {part}{\nonumberline Part I: The Embedded Evaluator Workflow \newline Foundations, Environment, and the Four Principles}{3}{part*.19}%
 \contentsline {chapter}{\numberline {1}The embedded evaluator}{5}{chapter.1}%
