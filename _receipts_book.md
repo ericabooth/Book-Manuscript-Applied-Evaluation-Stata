@@ -167,3 +167,62 @@ Any figure or table number in a caption traces to the same do-file as the panel 
 - Ported ALL hunks verbatim into src/chapters/10_frontmatter.tex (3 mechanical typos fixed: its/empowered/principles). Framing lessons RECORDED in memory (writing-style-preferences.md) to persist in all later writing.
 - PAGE 5 FILLED: new lineage paragraph on the Ch1 opener — the book as continuation of Long 2009 (Workflow of Data Analysis Using Stata): master do-file -> control file, replication standard -> four principles; what changed since 2009 (data behind APIs/scrapes/refreshing surveys; deliverables as spreadsheets/dashboards/portals; LLM summarization); "If his book taught the workflow of analysis, this one tries to teach the workflow of the working evaluator." Cites existing long2009workflow key.
 - Compile clean: 270pp, 0 errors, 0 undefined, 0 overfull >=15pt; all Eric phrasings verified present in assembled main.tex; page 5 rendered full. SYNCED: repo main.tex+pdf+src -> Drive mirror; scratch synced. WORKFLOW NOTE: canonical editing home is repo LaTeXBookCode/src/chapters/; Drive main.tex edits must be ported before any reassembly (add this check to future session starts).
+
+## Pass: dashboardbuilder integration (2026-07-14)
+
+New claims:
+
+| # | Claim / number | Value | Source | Verified how | Date |
+|---|---|---|---|---|---|
+| 19 | US 1980 total population (state_explorer reference row) | 225,907,472 | sysuse census | `sysuse census, clear; collapse (rawsum) pop [aw=pop]; di %20.0fc pop` → 225,907,472; asserted in code/ch12_dashboardbuilder.do | 2026-07-14 |
+| 20 | The collapse-aweight bug value quoted in ch12 tripwire para | 467,012,262 | scratchpad/dashb_test/diag_467.log | `collapse (sum) pop [aw=pop]` → 467,012,262; equals N×Σ(pop²)/Σ(pop) exactly (same log) | 2026-07-14 |
+| 21 | US reference tiles: medage 30.1, deaths/1,000 8.7 (figure ch12_dashb_explorer) | 30.1 / 8.7 | same run | asserts abs(medage−30.1)<.05, abs(death_rt−8.7)<.05 in ch12_dashboardbuilder.do; marriages 10.6 & divorces 5.2 visible in figure match 1980 US vital statistics | 2026-07-14 |
+| 22 | auto_quick figure values | Domestic $6,072 / Foreign $6,385 mean price | sysuse auto | rendered table in ch12_dashb_quick.png; standard sysuse auto means | 2026-07-14 |
+| 23 | Suite count | seven tools (2 ingest, 4 render, 1 wrap) | ch10 §sec:suite | grep sweep: no stale "six-tool/six tools" remain bound to the suite in ch10–12/App C | 2026-07-14 |
+
+Fix log:
+- 44_ch12.tex: NEW §"The dashboard you rebuild instead of maintain" (label sec:dashboardbuilder) after statashiny section: LLM-blackbox/CDN/model-drift motivation, Package Integration box (GitHub net install), two-minute build walkthrough + fig:dashbquick, benchmark-explorer applied build + fig:dashbexplorer, (rawsum) tripwire paragraph (frozen: 467,012,262 vs 225,907,472), embed subsection (iframe snippet w/ title+lazy, CMS blocks, wdiframe route, update-path = overwrite hosted file). wdiframe sentence (L~91) + capstone prose + exercises gained dashboardbuilder mentions; capstone "six isolated commands" → count dropped.
+- 42_ch10.tex: suite recount six→seven everywhere (§title, intro, sort sentence, pipeline TikZ node, both captions, matrix row added, containers sentence); "every tool owns exactly one cell" reworked honestly: offline-container cell shared, reader's verb (explore rows vs scan tiles vs benchmark) splits statashiny/dashboardbuilder.
+- 60_appendices.tex: install-bullet list +dashboardbuilder-stata-public ("other four"→"other five"); showcased list +dashboardbuilder row.
+- code/ch12_dashboardbuilder.do NEW (2 dashboards → code/dashboards/, tripwires incl. pop==225907472; float-tolerance asserts, not round()==x). Run green: 0 r(N)/assertion hits; outputs auto_quick.html 26,711 B, state_explorer.html 44,178 B (2026-07-14 build).
+- code/01_install.do: +commented dashboardbuilder net install (verified 2026-07-14). code/README.md: +ch12_dashboardbuilder.do row.
+- images: ch12_dashb_quick.png, ch12_dashb_explorer.png (headless-Chrome captures of the companion file's exact outputs; explorer shows corrected 225.9M).
+- Upstream issues found for Eric (repo dashboardbuilder-stata-public), NOT fixed by us: (1) example_dashboardbuilder.do uses collapse (sum) [aw=pop] → US pop tile 467.0M; fix is (rawsum); (2) README has no embed/iframe section; (3) empty controls card renders when no selector/tabs/pdf; (4) value label on tallest bar clips at plot top (auto_quick "6,385" — visible in our fig:dashbquick; regenerate figure after upstream fix).
+
+## Pass: datadictionary package + Ch5 integration (2026-07-14)
+
+New claims:
+
+| # | Claim / number | Value | Source | Verified how | Date |
+|---|---|---|---|---|---|
+| 24 | Demo survey per-wave N / vars | 2019: 180/8; 2021: 210/8; 2023: 195/9 (25 codebook rows) | datadictionary-stata-public/test_datadictionary.do (seed 20260714) | battery asserts row counts; `cd datadictionary-stata-public && stata-mp -b do test_datadictionary.do; grep -E 'r\([0-9]+\);' test_datadictionary.log` clean | 2026-07-14 |
+| 25 | Changes detected on demo waves | 6 (q4 dropped '21; q6 added '21; q7 added '23; q1 label '23; q2 agree4→agree5 '23; q2 format '23) | same battery | each individually asserted; r(nchanges)=6 (6th = genuine format-widening side effect of relabel, kept deliberately) | 2026-07-14 |
+| 26 | hours % missing by wave (Ch5 prose + figure) | 7.8 / 15.2 / 9.2 | same battery | Missingness sheet asserted; figure rendered from actual xlsx via openpyxl | 2026-07-14 |
+| 27 | q2 distinct values | 4 (agree4, 2019) → 5 (agree5, 2023) | same battery | Variables sheet round-trip assert (vallab agree5 in 2023) | 2026-07-14 |
+| 28 | Package count | twelve built-for-book packages | App C / code README / 01_install.do | grep: no stale "eleven" bound to packages | 2026-07-14 |
+
+Fix log:
+- NEW package datadictionary-stata-public v1.0.0 (ado/sthlp/test/README/LICENSE/toc/pkg/.gitignore): files-mode cross-wave codebook + change detection, in-memory mode with wave(), 5-sheet Excel via putexcel, saving() dta, r(nvars)/r(nchanges)/r(xlsx)/r(dta). Battery green (files, folder/pattern, Excel round-trip, stitched wave(), 7 edge cases); net install verified from colon-free copy; machine left clean. Related work cited: descsave (Newson), codebookout (Das).
+- 23_ch05.tex: NEW §sec:datadictionary "The data-side codebook" after cxchangelog (handoff scene w/ verified Ns; files-mode call block; six-changes walkthrough; fig:datadictionaryxlsx wide figure; stitching-destroys-labels honesty para + "absent or never answered"; Package Integration box w/ install idiom + descsave/codebookout positioning); "Where this leaves you" gains cxchangelog/datadictionary two-sides sentence.
+- images/ch05_datadictionary_xlsx.png NEW: composed from the REAL battery workbook (openpyxl → HTML → headless Chrome); shows Changes (full), Missingness (excerpt), Variables (q2 across waves) + sheet-tab strip.
+- 11_ch01.tex box: evalaudit stays proposed; datadictionary noted as graduated to package (→ ch:surveys). 43_ch11.tex: datadictionary pointer repointed ch:embedded→ch:surveys. 51_ch13.tex box: proposed-wrapper → Package Integration (living codebook in the LLM scaffold; in-memory excel() call; diff successive saving() codebooks to halt loop — r(nchanges) claim deliberately NOT made for in-memory mode).
+- 60_appendices.tex: eleven→twelve + datadictionary added to survey group; datadictionary removed from proposed list (evalaudit rewritten solo). code/README.md: twelve + datadictionary entry. 01_install.do: twelve + datadictionary in BOOKPKG loop.
+- Cross-ref accuracy fix (dashboardbuilder section): tripwire-discipline citation corrected ch:workshop→ch:panels (ch02 has zero assert content; ch06 teaches the assert contract).
+
+Build record (2026-07-14, both passes installed):
+- Full cycle pdflatex→biber→makeindex→pdflatex×2 + one extra pass: 0 TeX errors, 0 specific undefined ref/cite warnings, 0 "??" in page text/bookmarks/ToC/LoF/LoT, 0 multiply-defined, biber clean, all overfulls < 8pt (suite table fixed via tabcolsep 6→4pt), 276 pages (270 → 276: ch12 dashboardbuilder section +4pp incl. 2 figs; ch05 datadictionary subsection +2pp incl. 1 wide fig).
+- KNOWN BENIGN: one generic "LaTeX Warning: There were undefined references." latch with NO specific warning and NO rendered ?? anywhere. Bisect-verified NOT introduced today: July-11 accepted main.tex trips the identical latch under the same aux state; neither new section causes it (each removed → latch persists). Environmental (index/margin-toc interplay). Track, don't chase.
+- Synced: repo main.tex+main.pdf installed; Drive mirror (main.tex, main.pdf, 7 changed chapter files, 3 new images); scratch newtex mirror (7 chapters). Drive-diff checked BEFORE reassembly (identical — no Eric edits to port this round).
+
+QA pass on the two new pieces (2026-07-14, Opus 4.8):
+- Clearwriter style sweep on 44_ch12 / 23_ch05 / 42_ch10: 0 real hits (all "very " matches were substrings of "every"); 0 em-dashes; 0 word-boundary intensifiers; 0 moralizing "you must/should" in the new prose.
+- datadictionary package personally re-certified: battery re-run → "ALL TESTS PASSED", 0 r(NNN), files-mode r(nvars)=25 r(nchanges)=6. Folder cleaned to match sibling convention (no xlsx/log/smcl artifacts committed; .gitignore covers them anyway).
+- FIXED subagent hallucination: README.md + datadictionary.sthlp credited codebookout to "Alexander Das"; true SSC author is Kishor K. Das (book Ch5 box was already correct). Corrected both files. pkg/toc/sthlp-header otherwise clean; no other invented proper-name claims found.
+
+Rename: datadict -> datadictionary (2026-07-14, user request "everywhere"):
+- Guarded global token replace (skip-if-already-present) over 14 files, 146 tokens: package (ado/sthlp/pkg/toc/README/test), book chapters (11_ch01, 23_ch05, 43_ch11, 51_ch13, 60_appendices), code/01_install.do, code/README.md, and this ledger.
+- Renamed: folder datadict-stata-public -> datadictionary-stata-public; datadict.ado/.sthlp/.pkg -> datadictionary.*; test_datadict.do -> test_datadictionary.do; images/ch05_datadict_xlsx.png -> ch05_datadictionary_xlsx.png (includegraphics ref updated by the token replace; fig label datadictxlsx -> datadictionaryxlsx in both \label and \ref).
+- ado internal helpers (_dd_rows, _dd_bold) untouched (never carried the "datadict" token); program define datadictionary, rclass.
+- Battery re-run under new name: ALL TESTS PASSED, 0 r(NNN), r(nvars)=25 r(nchanges)=6.
+- Compile: 0 TeX errors, 276 pages, 0 overfull>8pt, 5 index entries, figure resolves (0 "??"), image renders. NOTE for future pushes: the GitHub repo must be created as "datadictionary-stata-public" (the README/appendix/install URLs now point there); the old "datadict-stata-public" name is retired.
+- NOT touched (intentional): _archive/*.tex snapshots, main.tex.bak_preD, generated build files (regenerated by assemble+compile).

@@ -16,13 +16,15 @@ figures in the book are produced by these files.
    `webdoc2`) sit in a commented block in the same file — uncomment the ones
    you want; each installs from its public GitHub repo with one `net` command.
 
-## The eleven book packages
+## The twelve book packages
 
-Eleven tools the book teaches were built alongside it, each in its own
+Twelve tools the book teaches were built alongside it, each in its own
 `<name>-stata-public/` folder one level up from this one: `projectbuilder`
 (scaffold a project, ingest data, rebuild docs on every refresh),
 `combineall` (append/merge/convert a whole folder, with vintage-aware
-harmonization), `cxchangelog` (cross-wave survey codebooks), `undummy`
+harmonization), `cxchangelog` (cross-wave survey codebooks), `datadictionary`
+(over-time codebook: per-wave stats, missingness, value-label diffs,
+five-sheet Excel export), `undummy`
 (recombine one-hot columns into one categorical), `rateshrink`
 (empirical-Bayes rate stabilization), `conformalpred` (split-conformal
 prediction intervals), `hlmr2` (Nakagawa multilevel R-squared), `twinmatch`
@@ -69,6 +71,7 @@ Launch Stata in the project folder, then either:
 | `ch10_smallmult.do` | 10 | QCEW quarterly wage small-multiples ("spark wall") for six Texas counties. |
 | `ch10_googlechart.do` | 10 | Six `googlechart` interactive HTML charts (geo, bar, scatter, animated bubble, searchable table, divbar) on CHR&R 2025 state data; no key, builds offline. |
 | `ch11_tables.do` | 11 | Builds a real LaTeX earnings table the manuscript ingests via `\input`; putexcel. |
+| `ch12_dashboardbuilder.do` | 12 | Two `dashboardbuilder` KPI dashboards (two-minute build; benchmark explorer with selector/refvalue) into `dashboards/`; self-contained HTML, no CDN; tripwires guard the (rawsum) reference row. |
 | `ch12_portal.do` | 12 | Suite capstone: chains webapi/googlesheets → googlechart/statashiny → webdoc2 into one offline portal. |
 | `ch11_googlesheets.do` | 11 | `googlesheets` workflow on CHR data (export, format, put matrix, native live charts); display-only (OAuth). |
 | `ch13_backbone.do` | 13 | The Stata-as-backbone loop: an LLM-proposed step made trustworthy by `assert` tripwires and a batch log. |

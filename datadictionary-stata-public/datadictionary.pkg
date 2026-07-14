@@ -1,0 +1,24 @@
+v 3
+d datadictionary: enhanced, over-time-ready codebook generator for multi-wave data
+d
+d A modern descsave. datadictionary documents the dataset in memory or a set
+d of wave files: one codebook row per variable (per variable-wave in
+d files mode) with storage type, display format, variable label, value
+d label, missingness, distinct values, summary statistics, example
+d values, top categories, notes, and characteristics (including the
+d srctag char written by combineall/projectbuilder). In files mode it
+d detects changes across waves -- variables added or dropped, storage
+d types, variable labels, value-label sets, display formats -- which is
+d only possible before waves are stitched into one file, because
+d stitching destroys per-wave value labels. Results go to the screen, a
+d machine-readable .dta, and a multi-sheet Excel workbook.
+d
+d Requires: Stata 16.0 or newer
+d
+d Author: Eric A. Booth, Sr Researcher, Texas 2036
+d Support: eric.a.booth@gmail.com
+d
+d Distribution-Date: 20260714
+d
+f datadictionary.ado
+f datadictionary.sthlp

@@ -35,6 +35,7 @@ if _rc net install webapi, from("https://raw.githubusercontent.com/ericabooth/we
 * net install googlechart, from("https://raw.githubusercontent.com/ericabooth/googlechart-stata-public/main/") replace
 * net install googlesheets, from("https://raw.githubusercontent.com/ericabooth/googlesheets-stata-public/main/") replace
 * net install statashiny, from("https://raw.githubusercontent.com/ericabooth/StataShiny-public/main/") replace
+* net install dashboardbuilder, from("https://raw.githubusercontent.com/ericabooth/dashboardbuilder-stata-public/main/") replace  // needs Python 3 (stdlib only); install verified 2026-07-14; required by ch12_dashboardbuilder.do
 * net install convertanything, from("https://raw.githubusercontent.com/ericabooth/convertanything-stata-public/main/") replace
 * net install importR, from("https://raw.githubusercontent.com/ericabooth/importR-stata/main/") replace  // needs R (haven) or python pyreadstat to run
 * webdoc2 needs Ben Jann's webdoc first, and a separate net get for its
@@ -44,7 +45,7 @@ if _rc net install webapi, from("https://raw.githubusercontent.com/ericabooth/we
 * net get webdoc2, from("https://raw.githubusercontent.com/ericabooth/webdoc2-stata-public/main/")
 * (sparkta2 is not yet published; its examples in the book are display-only.)
 
-*--- The eleven packages built FOR this book -----------------------------------*
+*--- The twelve packages built FOR this book -----------------------------------*
 * Each lives in a <name>-stata-public folder that publishes to the authors'
 * GitHub with the book. Until those repos are live, install from the local
 * folders that ship beside this project (edit BOOKPKG to your copy's path);
@@ -55,7 +56,7 @@ if _rc net install webapi, from("https://raw.githubusercontent.com/ericabooth/we
 * colon-free first (or wait for the GitHub repos).
 local BOOKPKG ""   // e.g. "/path/to/book-repo" ; leave empty to skip
 if "`BOOKPKG'" != "" {
-    foreach pkg in projectbuilder combineall cxchangelog ///
+    foreach pkg in projectbuilder combineall cxchangelog datadictionary ///
         rateshrink conformalpred hlmr2 twinmatch roisim suppress riskscan undummy {
         capture which `pkg'
         if _rc net install `pkg', from("`BOOKPKG'/`pkg'-stata-public/") replace

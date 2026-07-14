@@ -88,7 +88,7 @@ buttonclose
 webdoc close
 \end{verbatim}
 }
-The value of \texttt{webdoc2} for a portal, though, is not the styling but two embed commands that let one page hold the whole suite. \texttt{wdimg} drops a static image into the report, which is how an offline \texttt{sparkta2} map (Chapter~\ref{ch:interactive}) lands in the narrative. \texttt{wdiframe} embeds an entire other HTML file inside a framed panel, which is how a \texttt{statashiny} dashboard or a \texttt{googlechart} page becomes a live section of the report rather than a separate link.\marginnote{An \emph{iframe} is a webpage embedded inside another webpage, shown in its own panel. It is the mechanism that lets one report scroll past a paragraph, then a fully interactive dashboard, then another paragraph, with the dashboard behaving exactly as it would on its own.} With those two lines, \texttt{webdoc2} stops being a report writer and becomes the container that wraps every other tool in the suite:
+The value of \texttt{webdoc2} for a portal, though, is not the styling but two embed commands that let one page hold the whole suite. \texttt{wdimg} drops a static image into the report, which is how an offline \texttt{sparkta2} map (Chapter~\ref{ch:interactive}) lands in the narrative. \texttt{wdiframe} embeds an entire other HTML file inside a framed panel, which is how a \texttt{statashiny} dashboard, a \texttt{dashboardbuilder} KPI page (Section~\ref{sec:dashboardbuilder}), or a \texttt{googlechart} page becomes a live section of the report rather than a separate link.\marginnote{An \emph{iframe} is a webpage embedded inside another webpage, shown in its own panel. It is the mechanism that lets one report scroll past a paragraph, then a fully interactive dashboard, then another paragraph, with the dashboard behaving exactly as it would on its own.} With those two lines, \texttt{webdoc2} stops being a report writer and becomes the container that wraps every other tool in the suite:
 {\footnotesize
 \begin{verbatim}
 wdinit "$portal/report", replace
@@ -175,6 +175,103 @@ Each control the page carries has to earn its place, and the test is the decisio
 
 
 Why does a static portal survive the firewall that kills a hosted dashboard? The word \enquote{static} is doing quiet work here, and it deserves unpacking. A hosted dashboard is a program running on a server somewhere: it computes a chart when you ask for one, which means it needs a machine that is always on, a network path to it, and someone to keep it patched. A \texttt{statashiny} bundle is the opposite. The filtering and charting logic is compiled down to JavaScript that ships inside the files, and the data ships alongside it, so the \enquote{server} is your own browser reading local files.\marginnote{This is the same client-side shift that let \enquote{single-page apps} replace server round-trips on the web. For a portal it has a security dividend too: with no server accepting requests, there is no endpoint for IT to audit and nothing to patch after you leave.} Nothing is computed on demand by a remote machine, which is exactly why nothing can go down and why the strictest IT department has nothing to block: there is no connection to make.
+
+\section{The dashboard you rebuild instead of maintain}\label{sec:dashboardbuilder}
+Ask an AI assistant for \enquote{a quick dashboard for the board} and you will get one, usually a working page assembled from a JavaScript framework and two or three chart libraries fetched from content-delivery networks, several hundred lines of code the assistant wrote and nobody on your team has read. The demo goes fine. The trap springs at the first data refresh. You paste the new numbers into a fresh request and, because hosted LLMs drift under a fixed product name (Chapter~\ref{ch:ai}), the assistant that rebuilds the page is no longer quite the one that built it: the code comes back almost the same, the diff runs to hundreds of lines nobody wrote by hand, and reviewing it costs more than the dashboard saved. Meanwhile the page's libraries live on servers you do not control, so a vendor's breaking release can blank a page you shipped months ago. Without ever deciding to, the team has become the maintainer of a small web application in a stack nobody chose.
+
+The escape is to demote the dashboard from application to artifact. Every figure in this book is an artifact: a do-file builds it from data, and when the data change, you rerun the do-file rather than editing the picture. \texttt{dashboardbuilder}\index{dashboardbuilder@\texttt{dashboardbuilder}} extends that discipline to the interactive dashboard. You describe the page in Stata, panel by panel, and the command writes one self-contained HTML file: the data inlined as JSON, the charts drawn by a small vanilla-JavaScript-and-SVG engine embedded in the same file, no framework, no build chain, and no content-delivery network at build time or at view time.\marginnote{One opt-in exception: the \texttt{truepdf} build option adds a one-click PDF button that does pull a JS library from a CDN when clicked, and the build receipt says so whenever you use it. The default \texttt{pdf} button drives the browser's own print dialog and stays offline.} A refresh is a rerun. A review is a \texttt{git diff} of the do-file, a dozen lines a colleague reads in a minute, not nine hundred nobody does. And when you do hand work to an LLM here, the jig of Chapter~\ref{ch:ai} holds: the assistant proposes a change to the panel spec in your do-file, you read the dozen lines, run them, and the page that results is still one your code built.
+
+Its cell in the suite grid (Table~\ref{tab:suite-matrix}) is the offline container, which it shares with \texttt{statashiny}, and the reader's verb picks between them. Readers who \emph{explore rows}, searching a table, dragging a slider, filtering to their county, want \texttt{statashiny}. Readers who \emph{read headline numbers against a benchmark}, tiles on top, this-unit-versus-the-reference bars below, want \texttt{dashboardbuilder}: its native furniture is KPI tiles, tabs, and a unit selector with a declared reference unit. Boards, funders, and steering committees are usually the second kind of reader.
+
+\begin{kaobox}[frametitle=Package Integration: \texttt{dashboardbuilder}]
+\textbf{Integrated command:} \texttt{dashboardbuilder}. Builds self-contained interactive KPI dashboards (tiles; line, bar, horizontal-bar, bullet-compare, and table panels; tabs; a unit selector with a reference benchmark; per-panel CSV and PNG downloads) from a panel-by-panel grammar: \texttt{init}, then \texttt{tab} and \texttt{panel} calls, then \texttt{build}. Requires Stata~16+ and a Python~3 visible to Stata (standard library only). Install once from the authors' GitHub:
+{\footnotesize
+\begin{verbatim}
+local gh "https://raw.githubusercontent.com/ericabooth"
+net install dashboardbuilder, ///
+    from("`gh'/dashboardbuilder-stata-public/main/") replace
+\end{verbatim}
+}
+\end{kaobox}
+
+\subsection{Three moves, one file}
+The grammar mirrors the \texttt{statashiny} shape you just learned: initialize, add, build. Initialize the dashboard with a title, add one panel per exhibit, and build to a single file. The smallest useful dashboard is a chart and the numbers behind it:
+{\footnotesize
+\begin{verbatim}
+sysuse auto, clear
+collapse (mean) price mpg weight, by(foreign)
+
+dashboardbuilder init , title("Auto quick look") ///
+    subtitle("mean price, mileage, and weight by origin")
+dashboardbuilder panel bar , x(foreign) y(price) ///
+    title("Domestic cars cost less on average") ///
+    ytitle("mean price (USD)")
+dashboardbuilder panel table , ///
+    title("The numbers behind the chart")
+dashboardbuilder build using ///
+    "dashboards/auto_quick.html", replace
+di "built: " r(file) " (" r(bytes) " bytes)"
+\end{verbatim}
+}
+Each \texttt{panel} call embeds a snapshot of whatever is in memory at that moment, so you shape the data between calls exactly as you would between graphs. The last line prints the \emph{build receipt}, and it matters more than it looks: \texttt{r(file)} and \texttt{r(bytes)} give your control file something to log and assert on, which extends the book's receipts discipline to a webpage. Figure~\ref{fig:dashbquick} is the result, and the buttons in its corners are furniture you did not have to ask for: every chart panel carries its own CSV and PNG download, the \enquote{ship the numbers alongside the picture} habit of Chapter~\ref{ch:interactive} built in as a default.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{ch12_dashb_quick.png}
+\caption[The two-minute dashboard]{The two-minute build: one \texttt{init}, two \texttt{panel} calls, one \texttt{build}, and the result is a single HTML file with the data inlined. The CSV and PNG buttons on each panel are defaults, so every chart ships its own numbers. Built by the companion \texttt{ch12\_dashboardbuilder.do}.}
+\label{fig:dashbquick}
+\end{figure}
+
+\subsection{An applied build: every unit against the benchmark}
+The request behind half the dashboards an evaluator ships is one sentence with the nouns swapped: how does \emph{this county} compare with the state, \emph{this campus} with the district, \emph{this site} with the portfolio. \texttt{dashboardbuilder} treats the pattern as first class. Declare a \texttt{selector()} column and a \texttt{refvalue()} at init, and every panel whose data carry that column becomes filterable, with the reference unit drawn as a marker the selected unit is read against.\marginnote{The inverse trick is just as useful: a panel whose data do \emph{not} carry the selector column stays static. The companion do-file's top-ten ranking renames \texttt{state} to \texttt{stname} before its \texttt{panel hbar} call, so the ranking holds still while the tiles and bars above it update.} The companion \texttt{ch12\_dashboardbuilder.do} builds Figure~\ref{fig:dashbexplorer} from the 1980 census extract that ships with Stata: a synthetic \enquote{United States} row appended as the reference, KPI tiles and bullet-compare bars on one tab, a top-ten ranking and a full searchable table on another.
+{\footnotesize
+\begin{verbatim}
+* the reference row, then the dashboard registration
+preserve
+    collapse (rawsum) pop death marriage divorce ///
+        (mean) medage [aw=pop]
+    gen str28 state = "United States"
+    tempfile us
+    save `us'
+restore
+append using `us'
+
+dashboardbuilder init , title("State explorer") ///
+    selector(state) sellabel("Choose a state") ///
+    refvalue("United States")
+dashboardbuilder tab , name(today) label("Where states stand")
+dashboardbuilder tab , name(rank)  label("Rankings")
+dashboardbuilder panel kpi , tab(today) ///
+    values(pop medage death_rt) title("Headline numbers")
+dashboardbuilder panel compare , tab(today) x(metric) y(v) ///
+    title("Vital rates vs. the United States")
+dashboardbuilder build using ///
+    "dashboards/state_explorer.html", replace pdf
+\end{verbatim}
+}
+
+One line of that block earns a warning, because it cost us a debugging session while we built the figure. The obvious aggregation, \texttt{collapse (sum) pop [aw=pop]}, silently returns 467{,}012{,}262 for the 1980 United States, more than double the true 225{,}907{,}472: with analytic weights, \texttt{collapse} rescales every \texttt{(sum)} to the sample count times the weighted mean. \texttt{(rawsum)} is the statistic that leaves totals unweighted while \texttt{medage} keeps its population weighting, which is exactly what a reference row needs. A dashboard is the worst place for that mistake to surface, because KPI tiles are the largest type on the page, so the companion file guards the row with the contract discipline of Chapter~\ref{ch:panels}: state what must be true, then \texttt{assert} it. The assert on 225{,}907{,}472 is what caught the wrong total before it reached a tile.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{ch12_dashb_explorer.png}
+\caption[The benchmark explorer dashboard]{The benchmark pattern: a unit selector with \enquote{United States} declared as the reference. Picking a state updates the KPI tiles and draws the state's bars against the national reference markers; the Rankings tab holds a static top ten. One self-contained file, built and rebuilt by \texttt{ch12\_dashboardbuilder.do}.}
+\label{fig:dashbexplorer}
+\end{figure}
+
+\subsection{Put the dashboard where the readers already are}
+The build step hands you a file, and the file is the deliverable, so delivery is a decision about where readers already look rather than a technical step. Three routes cover nearly every case. The first is the file itself: attach it to the email the committee already expects, and it opens by double-click, because the data ride inside the HTML and the \texttt{file://} pitfall in this chapter's margin never bites. The second is the organization's existing website, and the mechanism is the \emph{iframe}, the same embed-a-page-in-a-page element \texttt{webdoc2} wraps in \texttt{wdiframe}. Host the built file anywhere static, GitHub Pages or the web root the organization already rents, and paste four lines into the page where readers should meet it:
+{\footnotesize
+\begin{verbatim}
+<iframe src="https://your.org/dash/state_explorer.html"
+        width="100%" height="720" loading="lazy"
+        style="border:none"
+        title="State explorer dashboard"></iframe>
+\end{verbatim}
+}
+Every mainstream content-management system, WordPress and Squarespace included, accepts that snippet in its embed or custom-HTML block, so the web team's role shrinks to pasting it once. Two of the four lines are there for the reader rather than the layout: \texttt{title()} names the frame for screen-reader users, the same accessibility duty a figure's alt text carries, and \texttt{loading="lazy"} keeps the host page fast by loading the dashboard only when scrolled into view. The third route is inside your own \texttt{webdoc2} portal, where the embed is one line, \texttt{wdiframe "charts/state\_explorer.html", height(720)}, and the dashboard becomes a live section of the quarterly report.
+
+The embed is also the update path, and this is where the artifact discipline pays off a second time. The iframe points at a URL; the do-file rebuilds the file behind that URL. Next quarter you rerun the build against the refreshed data, overwrite one hosted file, and every page that embeds it is current, with the embed line itself never edited. Stamp the build the way Section~\ref{sec:versioning} stamps every artifact, version and date in the page footer, and a screenshot of the dashboard in a board deck can always be traced to the build that produced it.
 
 \section{One folder the client can own}
 Hand the client one folder they fully control, so the evidence outlives your engagement instead of expiring with your server access. That folder assembles the report, the interactive elements, and the figures into a single deliverable: it opens offline, it can be posted to GitHub Pages\index{GitHub Pages} if the client wants a link,\marginnote{GitHub Pages is free but bounded: sites are soft-capped around 1\,GB and a repo push should stay under about 100\,MB, so a portal heavy with raw data or video will not fit. A single self-contained HTML file the client can email around also sidesteps the wary IT department that will never whitelist your server.} and each delivered version is stamped so there is no confusion about which numbers a board saw. Handing over a folder the client owns respects that the evidence is theirs, and it is extensible because next quarter's version is one rerun away.
@@ -345,7 +442,7 @@ The stamps travel on the artifact; a checklist governs the moment it leaves your
 The sign-off list is deliberately short, and keeping it short is the craft. Three names cover a portal release: the analyst who built it confirms the build ran clean from the top; the evaluator who owns the narrative confirms the prose says only what the numbers support; and the program director whose name the board attaches to the figures confirms they are willing to be asked about any number on the page. Each signer answers one question no one else can answer. A fourth or fifth reviewer does not add a fourth question; they add a queue, and portals that wait in queues ship stale, which is its own kind of error in a deliverable whose value is being current. If a stakeholder wants visibility without holding the release, send them the shipped folder the same hour it ships rather than a draft the week before.
 
 \section{The whole suite in one folder}\label{sec:capstone}
-Everything in this book that touched the web has been building toward one deliverable, and this section assembles it. The tools introduced across the visualization chapters are not six isolated commands; they are a pipeline, and each owns one link in it. The data comes in through \texttt{webapi}\index{webapi@\texttt{webapi}} from a public API (Chapter~\ref{ch:apis}) or through \texttt{googlesheets}\index{googlesheets@\texttt{googlesheets}} from a live team sheet (Chapter~\ref{ch:sheets}). It becomes charts two ways, because the delivery target decides which: \texttt{googlechart}\index{googlechart@\texttt{googlechart}} for an online interactive page with filter dropdowns, and \texttt{sparkta2}\index{sparkta2@\texttt{sparkta2}} for an offline map that renders without a network, including the county and school-district geography that the online engine cannot draw (both Chapter~\ref{ch:interactive}). The interactive drill-down is a \texttt{statashiny} dashboard. And \texttt{webdoc2} wraps all of it, narrative and charts and dashboard, into one \texttt{index.html}. Data in, charts out, one report around them, one folder the client owns.
+Everything in this book that touched the web has been building toward one deliverable, and this section assembles it. The tools introduced across the visualization chapters are not isolated commands; they are a pipeline, and each owns one link in it. The data comes in through \texttt{webapi}\index{webapi@\texttt{webapi}} from a public API (Chapter~\ref{ch:apis}) or through \texttt{googlesheets}\index{googlesheets@\texttt{googlesheets}} from a live team sheet (Chapter~\ref{ch:sheets}). It becomes charts two ways, because the delivery target decides which: \texttt{googlechart}\index{googlechart@\texttt{googlechart}} for an online interactive page with filter dropdowns, and \texttt{sparkta2}\index{sparkta2@\texttt{sparkta2}} for an offline map that renders without a network, including the county and school-district geography that the online engine cannot draw (both Chapter~\ref{ch:interactive}). The interactive drill-down is a \texttt{statashiny} dashboard; when the committee wants headline tiles against a benchmark instead, a \texttt{dashboardbuilder} page (Section~\ref{sec:dashboardbuilder}) fills the same slot with the same one-line embed. And \texttt{webdoc2} wraps all of it, narrative and charts and dashboard, into one \texttt{index.html}. Data in, charts out, one report around them, one folder the client owns.
 
 The reason to see the whole chain at once, rather than each tool in its own chapter, is that the chain is the product. A reader who has met the tools separately can still miss that they compose, and composition, not any single tool, turns a pile of HTML files into a portal. Figure~\ref{fig:suiteflow} draws the pipeline, and the do-file sketch that follows walks the same arrows in code.
 
@@ -480,6 +577,7 @@ googlechart, type(table) tablesearch ///
 \item \emph{Try it on your own data.} Take one dataset you already report on each quarter and write a short \texttt{webdoc2} do-file that prints one \texttt{stlog} table of an outcome by group, then confirm the number in your prose matches the number the log printed by reading them off the same page.
 \item Rerun \texttt{ch12\_portal.do} against a second cause of death by changing only the \texttt{cause\_name} value in the stage-1 \texttt{webapi} call, and check that the online \texttt{googlechart} choropleth in \texttt{charts/} redraws with the new rates.
 \item Build the three-move \texttt{statashiny} dashboard from the \texttt{auto} data, then add one \texttt{input(num)} slider that filters price, and confirm the table filters live when you drag the handle in the browser.
+\item Extend the benchmark explorer of Section~\ref{sec:dashboardbuilder}: add the marriage rate as a fourth KPI tile in \texttt{ch12\_dashboardbuilder.do}, predict what the United States tile will read before you rebuild (the receipts habit), then rebuild and embed the refreshed page in a one-page \texttt{webdoc2} report with a single \texttt{wdiframe} line.
 \item Predict how many rows the \texttt{collapse (mean) price mpg weight length (count) n=price, by(foreign)} step leaves, then run it and check that the row count matches your prediction before you feed it to \texttt{statashiny}.
 \item Break the stamp on purpose: hard-code \enquote{v1.3} in the footer text but tag the built commit \texttt{v1.4}, then confirm that \texttt{git checkout v1.3} rebuilds a different folder than the footer claims, showing why the tag, not the typed string, is the promise worth keeping.
 \item Stamp the data vintage: add one \texttt{webdoc put} line to your build that records both the short commit hash and the date you pulled the source data, then rebuild against a second extract of the same source and confirm the footer, not just the numbers, tells the two cuts apart.

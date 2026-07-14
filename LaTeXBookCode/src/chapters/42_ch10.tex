@@ -4,12 +4,12 @@ The board wants \enquote{something like the newspaper does,} an interactive map 
 
 We cover sparklines for scanning a large portfolio, a single command that emits fourteen interactive chart types, and the judgment of when interactivity actually helps versus when it just adds motion. The through-line is that infographic-quality output should come from a do-file, so the graphic is as replicable and as easily updated as any other output in the book.\marginnote{A quiet failure mode: an interactive chart that loads its plotting library from a live CDN looks fine on your machine and blanks out on the client's, where the firewall blocks the outside request. Prefer libraries you can vendor locally.}
 
-\section{The visualization suite: one toolkit, six tools}\label{sec:suite}
-Where does a deliverable like the board's interactive map actually come from? In this book, from a short chain of commands: this chapter and the two that follow feature six of the authors' Stata packages, built to work together, each a single command that takes a Stata dataset one step closer to something a client can open in a browser. They are not six unrelated tricks. Two of them bring data \emph{in}, three \emph{render} it as a chart or dashboard, and one \emph{wraps} the results into a finished report or web portal. Once you know where each tool sits in that pipeline, you assemble the next deliverable from parts instead of hand-building it every time.
+\section{The visualization suite: one toolkit, seven tools}\label{sec:suite}
+Where does a deliverable like the board's interactive map actually come from? In this book, from a short chain of commands: this chapter and the two that follow feature seven of the authors' Stata packages, built to work together, each a single command that takes a Stata dataset one step closer to something a client can open in a browser. They are not seven unrelated tricks. Two of them bring data \emph{in}, four \emph{render} it as a chart or dashboard, and one \emph{wraps} the results into a finished report or web portal. Once you know where each tool sits in that pipeline, you assemble the next deliverable from parts instead of hand-building it every time.
 
 Two terms will come up on every page of this chapter, so pin them down now. An \emph{interactive chart}\index{interactive chart} is a picture the reader can act on, hover a state to read its value, type a name into a search box, drag a slider, rather than only look at. \emph{Self-contained HTML}\index{self-contained HTML} means the whole thing, the data and the code that draws it, lives inside one \texttt{.html} file you can email, so \enquote{it renders in the browser} simply means the reader double-clicks that file and the chart draws itself on their screen, no software to install.\marginnote{HTML is the plain-text format web pages are written in; a browser is any program that opens it (Chrome, Safari, Edge). \enquote{Renders} is just the browser's word for \enquote{draws.} If you can open a web page, you can open everything this suite produces.}
 
-Two questions sort the six tools. \emph{Online versus offline}: does the finished page need an internet connection to draw itself, or does it carry everything it needs? \emph{Chart versus container}: is the tool drawing a single graphic, or is it a shell that holds many graphics and prose together? Figure~\ref{fig:suite-pipeline} lays out the pipeline, and Table~\ref{tab:suite-matrix} places each tool in the grid those two axes make.
+Two questions sort the seven tools. \emph{Online versus offline}: does the finished page need an internet connection to draw itself, or does it carry everything it needs? \emph{Chart versus container}: is the tool drawing a single graphic, or is it a shell that holds many graphics and prose together? Figure~\ref{fig:suite-pipeline} lays out the pipeline, and Table~\ref{tab:suite-matrix} places each tool in the grid those two axes make.
 
 \begin{figure}[htbp]
 \centering
@@ -21,24 +21,25 @@ Two questions sort the six tools. \emph{Online versus offline}: does the finishe
   \draw[flow] (ren) -- (wrap);
   \node[substep, below=0.35cm of ing, text width=2.0cm]
     {\texttt{webapi} (Ch.\,3)\\\texttt{googlesheets} (Ch.\,11)};
-  \node[substep, below=0.35cm of ren, text width=2.4cm]
-    {\texttt{googlechart} (online)\\\texttt{sparkta2} (offline)\\\texttt{statashiny} (Ch.\,12)};
+  \node[substep, below=0.35cm of ren, text width=3.0cm]
+    {\texttt{googlechart} (online)\\\texttt{sparkta2} (offline)\\\texttt{statashiny} (Ch.\,12)\\\texttt{dashboardbuilder} (Ch.\,12)};
   \node[substep, below=0.35cm of wrap, text width=2.0cm]
     {\texttt{webdoc2} (Ch.\,12)\\one report or portal};
 \end{tikzpicture}
-\caption[The visualization suite pipeline]{The suite as one pipeline. Data comes in through \texttt{webapi} (JSON APIs, Chapter~\ref{ch:apis}) or \texttt{googlesheets} (live Google Sheets, Chapter~\ref{ch:sheets}); it is rendered as a chart by \texttt{googlechart} (online) or \texttt{sparkta2} (offline), or as an interactive dashboard by \texttt{statashiny}; and \texttt{webdoc2} wraps the results into one shippable report or GitHub-Pages portal (both Chapter~\ref{ch:portals}). This chapter owns the render column's two chart tools.}
+\caption[The visualization suite pipeline]{The suite as one pipeline. Data comes in through \texttt{webapi} (JSON APIs, Chapter~\ref{ch:apis}) or \texttt{googlesheets} (live Google Sheets, Chapter~\ref{ch:sheets}); it is rendered as a chart by \texttt{googlechart} (online) or \texttt{sparkta2} (offline), or as an interactive dashboard by \texttt{statashiny} or \texttt{dashboardbuilder}; and \texttt{webdoc2} wraps the results into one shippable report or GitHub-Pages portal (all Chapter~\ref{ch:portals}). This chapter owns the render column's two chart tools.}
 \label{fig:suite-pipeline}
 \end{figure}
 
-Faced with a tool choice, ask the grid's two questions and let the answers pick for you. Does the page have to work with the internet off? Then you are in the offline row: \texttt{sparkta2}\index{sparkta2@\texttt{sparkta2}} for a chart, \texttt{statashiny}\index{statashiny@\texttt{statashiny}} or \texttt{webdoc2}\index{webdoc2@\texttt{webdoc2}} for a container. Are you drawing one graphic or holding many? That is the chart-versus-container column. Every tool owns exactly one cell, so the choice is rarely ambiguous once you name the venue and the deliverable.
+Faced with a tool choice, ask the grid's two questions and let the answers pick for you. Does the page have to work with the internet off? Then you are in the offline row: \texttt{sparkta2}\index{sparkta2@\texttt{sparkta2}} for a chart, \texttt{statashiny}\index{statashiny@\texttt{statashiny}}, \texttt{dashboardbuilder}\index{dashboardbuilder@\texttt{dashboardbuilder}}, or \texttt{webdoc2}\index{webdoc2@\texttt{webdoc2}} for a container. Are you drawing one graphic or holding many? That is the chart-versus-container column. The grid settles every choice but one: the offline-container cell holds two dashboard tools, and the reader's verb splits them, \texttt{statashiny} when readers explore rows with a search box or slider, \texttt{dashboardbuilder} when readers scan headline tiles against a benchmark (Chapter~\ref{ch:portals} works both). Name the venue and the deliverable, and the cell, then the verb, picks the tool.
 
 Spend one more minute with the grid before any command runs. Ahead of the build, write the deliverable in one sentence that answers both axis questions, something like \enquote{a county wage map for the agency website, refreshed quarterly, firewall status unconfirmed}: the venue clause picks the row, the refresh clause warns you the page is a standing commitment (Section~\ref{ch10-sec:maintenance}), and the unconfirmed firewall tells you to test with the network off before promising the online tool. One sentence, written where the team can see it, settles a tool choice that otherwise gets relitigated at every revision.
 
 \begin{table*}[htbp]
 \centering
-\caption[The visualization suite at a glance]{The six-tool suite placed on the two axes that decide between them: online versus offline (does the finished page need the internet to draw?) and chart versus container (one graphic, or a shell that holds many?). \texttt{webapi} sits in the ingest column and is shown for completeness; the render and wrap tools are the subject of this chapter and the next two. Read down the \enquote{Best for} column to pick a tool by the job in front of you.}
+\caption[The visualization suite at a glance]{The seven-tool suite placed on the two axes that decide between them: online versus offline (does the finished page need the internet to draw?) and chart versus container (one graphic, or a shell that holds many?). \texttt{webapi} sits in the ingest column and is shown for completeness; the render and wrap tools are the subject of this chapter and the next two. Read down the \enquote{Best for} column to pick a tool by the job in front of you.}
 \label{tab:suite-matrix}
 {\footnotesize
+\setlength{\tabcolsep}{4pt}
 \begin{tabular}{lllll}
 \hline
 Tool & Layer & Renders & Net at view & Best for \\
@@ -48,13 +49,14 @@ Tool & Layer & Renders & Net at view & Best for \\
 \texttt{googlechart} & Chart     & Online (Google)& yes  & Web embeds, filter dropdowns, US-state geo, bubble-with-Play \\
 \texttt{sparkta2}    & Chart     & Offline (D3)   & no   & Air-gapped briefs; TX county / district maps \\
 \texttt{statashiny}  & Container & Offline (JS)   & no   & Single-file dashboards: sliders, search, cards (Ch.\,12) \\
+\texttt{dashboardbuilder} & Container & Offline (SVG) & no & KPI tiles, tabs, benchmark selector (Ch.\,12) \\
 \texttt{webdoc2}     & Container & Offline (BS-5) & no   & The report/portal shell that embeds the above (Ch.\,12) \\
 \hline
 \end{tabular}
 }
 \end{table*}
 
-This chapter builds out the two chart tools in the render column, \texttt{googlechart}\index{googlechart@\texttt{googlechart}} online and \texttt{sparkta2} offline, because a chart is the atom of every deliverable the suite ships. Chapter~\ref{ch:sheets} covers \texttt{googlesheets}\index{googlesheets@\texttt{googlesheets}}, the live-data connector, and Chapter~\ref{ch:portals} covers the two containers, \texttt{statashiny} and \texttt{webdoc2}, that wrap these charts into a single report or portal. Keep the grid in mind as we go: every command below is an instance of one cell in it.
+This chapter builds out the two chart tools in the render column, \texttt{googlechart}\index{googlechart@\texttt{googlechart}} online and \texttt{sparkta2} offline, because a chart is the atom of every deliverable the suite ships. Chapter~\ref{ch:sheets} covers \texttt{googlesheets}\index{googlesheets@\texttt{googlesheets}}, the live-data connector, and Chapter~\ref{ch:portals} covers the three containers, \texttt{statashiny}, \texttt{dashboardbuilder}, and \texttt{webdoc2}, that wrap these charts into a single dashboard, report, or portal. Keep the grid in mind as we go: every command below is an instance of one cell in it.
 
 \section{Sparklines: the word-sized trend}
 When a portfolio has forty sites, forty separate trend charts is not communication, it is a stack no one reads. A sparkline\index{sparkline}, a word-sized line with no axes, solves this by fitting a whole trajectory into a table cell,\marginnote{\textcite{tufte2006beautiful} coined \enquote{sparkline} in \emph{Beautiful Evidence}, defining it as a \enquote{small, intense, word-sized graphic.} The point is that it sits inline with text, at the resolution of the surrounding type.} so a reader scans one column and sees every site's trend at once, the rising ones and the falling ones jumping out. The \texttt{sparkta2} engine generates these inline trends and drops them into dashboard tables: every site shown, no site given a page it does not need, and no reader asked to turn forty of them.

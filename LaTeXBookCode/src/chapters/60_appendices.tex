@@ -56,11 +56,12 @@ net install webapi, ///
     from("`gh'/webapi-stata-public/main/") replace
 \end{verbatim}
 }
-The same line installs the other four; swap in the repository name:
+The same line installs the other five; swap in the repository name:
 \begin{itemize}
     \item \texttt{googlechart-stata-public}
     \item \texttt{googlesheets-stata-public}
     \item \texttt{StataShiny-public}
+    \item \texttt{dashboardbuilder-stata-public}
     \item \texttt{webdoc2-stata-public} (also needs \texttt{ssc install webdoc} and a follow-up \texttt{net get webdoc2} for its header template; its Chapter~\ref{ch:portals} box shows all three lines)
 \end{itemize}
 The one exception is \texttt{sparkta2}, whose source is not yet released. The companion \texttt{01\_install.do} carries every one of these lines ready to run.
@@ -68,10 +69,11 @@ The one exception is \texttt{sparkta2}, whose source is not yet released. The co
 \paragraph{Published packages showcased.}
 \begin{itemize}
     \item \texttt{webapi} -- fetch an authenticated JSON web API into Stata as a dataset, standard-library Python only (Chapter~\ref{ch:apis}).
-    \item \textbf{The eleven packages built for this book}, each in its own \texttt{-stata-public} repository with tests and help: \texttt{projectbuilder} (scaffold the Chapter~\ref{ch:workshop} project layout), \texttt{combineall} (append, merge, or convert a whole folder, with vintage-aware harmonization; Chapters~\ref{ch:apis} and~\ref{ch:noapi}), \texttt{cxchangelog} (cross-wave survey codebooks) and \texttt{undummy} (recombine one-hot columns into one categorical), both Chapter~\ref{ch:surveys}; \texttt{rateshrink} (empirical-Bayes rate stabilization), \texttt{conformalpred} (distribution-free prediction intervals), and \texttt{hlmr2} (Nakagawa multilevel $R^2$), all Chapter~\ref{ch:trust}; \texttt{twinmatch} (Mahalanobis policy twins) and \texttt{roisim} (Monte Carlo ROI), both Chapter~\ref{ch:claims}; and \texttt{suppress} (small-cell and complementary suppression) and \texttt{riskscan} ($k$-anonymity scan), both Chapter~\ref{ch:sharing}.
+    \item \textbf{The twelve packages built for this book}, each in its own \texttt{-stata-public} repository with tests and help: \texttt{projectbuilder} (scaffold the Chapter~\ref{ch:workshop} project layout), \texttt{combineall} (append, merge, or convert a whole folder, with vintage-aware harmonization; Chapters~\ref{ch:apis} and~\ref{ch:noapi}), \texttt{cxchangelog} (cross-wave survey codebooks), \texttt{datadictionary} (the over-time data codebook: per-wave stats, missingness, value-label diffs, Excel export), and \texttt{undummy} (recombine one-hot columns into one categorical), all Chapter~\ref{ch:surveys}; \texttt{rateshrink} (empirical-Bayes rate stabilization), \texttt{conformalpred} (distribution-free prediction intervals), and \texttt{hlmr2} (Nakagawa multilevel $R^2$), all Chapter~\ref{ch:trust}; \texttt{twinmatch} (Mahalanobis policy twins) and \texttt{roisim} (Monte Carlo ROI), both Chapter~\ref{ch:claims}; and \texttt{suppress} (small-cell and complementary suppression) and \texttt{riskscan} ($k$-anonymity scan), both Chapter~\ref{ch:sharing}.
     \item \texttt{googlechart} -- 14 interactive chart types from one command (Chapter~\ref{ch:interactive}).
     \item \texttt{googlesheets} -- read, write, format, and chart Google Sheets from Stata (Chapters~\ref{ch:sheets}, \ref{ch:surveys}, \ref{ch:apis}).
     \item \texttt{statashiny} -- serverless interactive HTML dashboards (Chapter~\ref{ch:portals}).
+    \item \texttt{dashboardbuilder} -- self-contained KPI dashboards: tiles, tabs, benchmark selector, per-panel CSV/PNG, no CDN (Chapter~\ref{ch:portals}).
     \item \texttt{webdoc2} -- Bootstrap-5 dynamic HTML reports over \texttt{webdoc} (Chapter~\ref{ch:portals}).
     \item \texttt{sparkta2} -- inline sparklines and offline graphics (Chapter~\ref{ch:interactive}; source publication pending).
     \item \texttt{statplot} -- high-density categorical plots, with N. Cox (Chapter~\ref{ch:graphs}).
@@ -85,7 +87,7 @@ The one exception is \texttt{sparkta2}, whose source is not yet released. The co
 
 \paragraph{Proposed tools (plans in this edition).}
 \begin{itemize}
-    \item \texttt{evalaudit}, \texttt{datadict} -- startup audit and plain-language data dictionary (Chapter~\ref{ch:embedded}).
+    \item \texttt{evalaudit} -- a project-startup checklist auditing data-sharing agreements and funder mandates (Chapter~\ref{ch:embedded}).
     \item \texttt{gtools\_audit} -- a speed audit of a project's heaviest data steps (Chapter~\ref{ch:workshop}).
     \item \texttt{surveypull}, \texttt{reachcheck} -- scheduled survey download/monitor and a reach check (Chapter~\ref{ch:surveys}).
     \item \texttt{fastmatch}, \texttt{trackflow} -- EM-based probabilistic record linkage and flow shaping (Chapter~\ref{ch:panels}).
