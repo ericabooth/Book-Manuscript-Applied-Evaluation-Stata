@@ -48,7 +48,7 @@ gen item6 = round(3 + 0.15*latent + rnormal(0, 1))
 alpha item1-item6, item
 \end{verbatim}
 }
-The \texttt{item} option hands the analyst a diagnosis rather than a single coefficient, printing one row per item:
+The \texttt{item} option hands you a diagnosis rather than a single coefficient, printing one row per item:
 \par
 {\footnotesize
 \begin{verbatim}
@@ -77,6 +77,7 @@ This makes sense: item~6 was built to carry only 15\% of the shared signal the o
 
 Translated for the program officer who owns the survey, 0.79 licenses group-level use: comparing this quarter's average engagement to last quarter's, or one cohort to another. It does not license decisions about individual caregivers, where the working floor sits closer to 0.90. Hand the officer both halves in one sentence, the finding and its license: \enquote{the five-item scale is reliable enough for cohort comparisons, and we will not use it to flag individuals.}
 
+\subsection{Fixing a low alpha before the wave closes}\label{sec:alpha-fix}
 What do you do with a low alpha? Usually the calendar decides. When the item-rest column shows a single offender and the remaining items still cover the construct, as here, drop the weak item; that fix is the cheapest. When every item limps, or the scale is already too short to prune, rewrite the items and re-field them, which you can only do while a wave remains, the lead-time argument for running \texttt{alpha} on the pilot. When the data are final, all that is left is to report with a caveat, and that caveat then travels with every table the scale feeds.
 
 \section{Weights that restore the population}\label{sec:weights}
@@ -157,7 +158,7 @@ The two constants that drive the blend print as a grand mean of 0.195 and a prio
      3    6   0.333     0.217   -0.117
 \end{verbatim}
 }
-This makes sense: site~26 recorded zero successes out of seven and would rank dead last on the raw rate, but seven cases cannot support a claim of \enquote{never,} so shrinkage lifts it to 0.160, near the pack. Site~11 posted 0.400 on only 15 cases and is pulled down to 0.260. In every case the move is large precisely because the denominator is small; no site with a caseload in the hundreds appears in this list. Figure~\ref{fig:shrink} plots all 50 at once.
+This makes sense: site~26 recorded zero successes out of seven and would rank dead last on the raw rate, but seven cases cannot support a claim of \enquote{never,} so shrinkage lifts it to 0.160, near the pack. Site~11 posted 0.400 on only 15 cases and is pulled down to 0.260. In every case the move is large precisely because the denominator is small; no site with a caseload in the hundreds appears in this list. Figure~\ref{fig:shrink} plots all 50 at once, and the smallest markers are the ones that moved farthest.
 
 \begin{figure*}[htbp]
 \centering
@@ -176,6 +177,7 @@ twoway (function y = x, range(0 `pmax')                   ///
 \label{fig:shrink}
 \end{figure*}
 
+\subsection{Reliability and shrinkage are one number}\label{sec:relid}
 The moment estimator above is the teaching version, written out so the blend is visible. The \texttt{rateshrink}\index{rateshrink@\texttt{rateshrink}} package does the same empirical-Bayes fit in one command, adds a posterior interval, and reports a per-unit reliability that is the same shrinkage factor under a different name.
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{rateshrink}]
@@ -231,7 +233,7 @@ power twomeans 50 (52 53 54), sd(10) n(300) ///
     table(N delta power)
 \end{verbatim}
 }
-The table reads the design at the budgeted sample size for three candidate effects:
+The table fixes the sample size at the budget and lists power for three candidate effects:
 \par
 {\footnotesize
 \begin{verbatim}
@@ -308,7 +310,7 @@ For an embedded evaluator this closes the confidence-interval-versus-prediction-
 \section{How much of the variation is the site, and how much the person?}\label{sec:icc}
 When clients are nested inside sites, an evaluator's first structural question is how much of the outcome's spread lives between sites versus within them, because the answer decides whether site-level comparisons carry any signal at all. If nearly all the variation is between individuals and almost none between sites, ranking sites is ranking noise. The intraclass correlation\index{intraclass correlation} (ICC), the share of total variance sitting between clusters, answers the question directly. A multilevel model estimates it, and the same model's marginal and conditional $R^2$ \parencite{nakagawa2013general} report how much of the variance the fixed predictors explain alone versus with the site random effects added.
 
-Fitting a wage model with an \texttt{industry} random intercept on \texttt{nlsw88} shows the reading:
+Fit a wage model with an \texttt{industry} random intercept on \texttt{nlsw88}, then ask \texttt{estat icc} for the between-site share:
 \par
 {\footnotesize
 \begin{verbatim}

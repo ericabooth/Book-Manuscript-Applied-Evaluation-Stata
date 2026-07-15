@@ -11,7 +11,7 @@
 *
 * PREREQUISITE (once; public repo):
 *   net install reshapehelper, ///
-*     from("https://raw.githubusercontent.com/ericabooth/reshapehelper-stata-public/main/") replace
+*     from("https://raw.githubusercontent.com/ericabooth/reshapehelper-stata-public/master/") replace
 *==============================================================================*
 version 16
 clear all

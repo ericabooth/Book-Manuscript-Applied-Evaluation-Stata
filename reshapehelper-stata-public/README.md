@@ -41,19 +41,22 @@ so and points at `xpose` (`sxpose` for strings).
 
 ## Install
 
-```stata
-net install reshapehelper, from("https://raw.githubusercontent.com/ericabooth/reshapehelper-stata-public/main/") replace
-```
-
-Or from a local copy of this folder:
+`reshapehelper` is self-contained — the command and its help file, with no
+external Stata dependencies.
 
 ```stata
-net install reshapehelper, from("/path/to/reshapehelper-stata-public/") replace
+net install reshapehelper, from("https://raw.githubusercontent.com/ericabooth/reshapehelper-stata-public/master/") replace
+which reshapehelper
+help reshapehelper
 ```
 
-**Colon-path warning:** Stata's `net install` fails when the `from()` path
-contains a colon (`:`), as some macOS folder names do. Copy the folder to a
-colon-free location first, or use the GitHub URL above.
+The package ships `reshapehelper.pkg` and `stata.toc`, so Stata's installer
+picks up every file in one call; no manual `adopath` step is needed. To pull a
+local copy of the worked examples, `net get` the ancillary do-file:
+
+```stata
+net get reshapehelper, from("https://raw.githubusercontent.com/ericabooth/reshapehelper-stata-public/master/")
+```
 
 ## Quick start
 

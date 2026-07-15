@@ -101,6 +101,8 @@ The one exception is \texttt{sparkta2}, whose source is not yet released. The co
 \setchapterstyle{kao}
 \chapter{Two Hands-On Worked Examples}\label{app:walkthroughs}
 
+The chapters lay out the workflow one piece at a time; the two examples here run it end to end on real files, so you can watch the pieces connect. They bracket the two kinds of trouble an embedded evaluator meets most. Example D.1 is small but messy: a set of human-formatted PRAMS workbooks that fight every import. Example D.2 is large but clean: a stack of multi-hundred-megabyte STAAR files that will not fit in memory at once. Both walk the same path from raw ingest to an honest finding, and both end the way this book ends every analysis, on a claim pitched at the level of rigor the data can actually support.
+
 \section*{Example D.1: Maternal Health, a Messy Workbook to an Ecological Regression}
 \begin{kaobox}[frametitle=Get the files: \texttt{221043-V2/}]
 \textbf{Data:} CDC PRAMS Maternal and Child Health Indicators, 2016--2022 (public; eight Excel workbooks; openICPSR study 221043).
@@ -204,13 +206,13 @@ This is the predict-then-check discipline in one block. Writing the capstone, th
 \label{fig:capstone}
 \end{figure}
 
-\paragraph{Stage 5, visualize (Chapter~\ref{ch:graphs}).} One picture carries the result better than the coefficient does. The do-file bins counties by poverty rate, averages YPLL within each bin, and plots the means (Figure~\ref{fig:capstone}). Binning is an honest simplification here: it shows the gradient the regression summarizes without asking the reader to trust a single slope, and dropping the thin top bins keeps a handful of tiny counties from reading as a trend.
+\paragraph{Stage 5, visualize (Chapter~\ref{ch:graphs}).} The regression gives one slope; you see the shape behind it more clearly in a picture. The do-file bins counties by poverty rate, averages YPLL within each bin, and plots the means (Figure~\ref{fig:capstone}), and the binned means climb in a near-straight line from the lowest-poverty counties to the highest. Binning is an honest simplification here: it shows the gradient the regression summarizes without asking the reader to trust a single slope, and dropping the thin top bins keeps a handful of tiny counties from reading as a trend.
 
 \paragraph{Stage 6, deliver (Chapters~\ref{ch:sheets}--\ref{ch:portals}).} The do-file ends by shipping the small cleaned extract, not the raw file: it labels the data with the do-file that made it, \texttt{compress}es, and saves \texttt{chr\_2024\_clean.dta}. A collaborator who opens that file can see where it came from and rerun the do-file to remake the figure. That is the replicable principle from Chapter~\ref{ch:embedded} closed in one line.
 
 \paragraph{The honest caveat.} This is a correlation across counties, not a causal claim about people, and not a claim about any one resident. Beware the ecological fallacy: a pattern across counties need not hold across individuals, the same warning attached to Example D.1. What the capstone earns is narrower and still useful, a defensible, reproducible description of how premature death tracks child poverty across US counties, built the way this book builds everything: guarded, traced to its source, and handed off in a form someone else can run.
 
-\paragraph{Make it yours.} Swap the outcome for a different CHR measure (say, the uninsured-adults rate), or add a third predictor, and rerun. If the county count changes, the \texttt{assert} in Stage~3 will tell you before the regression does. That edit-and-rerun loop, on data you chose, is the whole point.
+\paragraph{Make it yours.} Swap the outcome for a different CHR measure (say, the uninsured-adults rate), or add a third predictor, and rerun. If the county count changes, the \texttt{assert} in Stage~3 will tell you before the regression does. That edit-and-rerun loop, on data you chose, is what keeps the workflow extensible: the structure survives a new outcome or predictor without a rewrite.
 
 \backmatter
 \pagelayout{wide}
