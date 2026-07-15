@@ -1,26 +1,27 @@
 # datadictionary
 
-Enhanced, over-time-ready codebook generator for Stata — a modern `descsave`.
+Build an Excel codebook that lets a researcher size up a dataset at a glance —
+a modern `descsave`.
 
-A codebook answers "what is in this file?"; a longitudinal codebook has to
-answer "what was in this file in each wave, and what changed?" `datadictionary`
-does both. It writes one codebook row per variable — storage type, display
-format, variable label, value-label name, N nonmissing, % missing, distinct
-values, numeric summary statistics, example values (top categories with
-frequencies for labeled variables), stored `notes`, and characteristics,
-including the `srctag` char written by the author's
-`combineall`/`projectbuilder` tools — to the screen, to a machine-readable
-`.dta`, and to a multi-sheet Excel workbook.
+Point `datadictionary` at the data in memory and it writes one row per
+variable that puts the statistics, **% missing**, distinct count, common
+values, variable and value labels, and stored `notes` side by side in a
+`Variables` worksheet. Read one screen and you know each variable's type, how
+complete it is, what its codes mean, and what it typically holds — the
+meta-information you otherwise reconstruct by hand from `describe`, `summarize`,
+`codebook`, and `tab`. Everything goes to the screen, to a machine-readable
+`.dta`, and to the Excel workbook, and every value it reports (including the
+`srctag` char written by the author's `combineall`/`projectbuilder` tools) is
+one command away.
 
-The headline feature is files mode: point `datadictionary` at the original wave
-files (`files()` or `folder()`), and it harvests per-wave metadata and
-detects changes across waves — variables added or dropped, storage types,
-variable labels, value-label sets (categories added, removed, or relabeled),
-and display formats. This is only possible in files mode, because stitching
-waves into one file destroys per-wave value labels: after `append` only one
-definition per label name survives, so wave-specific category sets can no
-longer be compared. Files mode exists for exactly this reason — run it over
-the original wave files, before or alongside stitching, to keep that history.
+That works on any cross-sectional dataset. When a study runs in waves, point
+`datadictionary` at the wave files (`files()` or `folder()`) and it stacks a
+per-wave row for every variable and adds a `changed` column that flags a
+variable whose label was reworded or whose categories shifted since the
+previous wave — the signal that a variable may no longer mean the same thing.
+Change detection needs the original wave files: stitching waves into one file
+destroys per-wave value labels (after `append` only one definition per label
+name survives), so run it before or alongside stitching to keep that history.
 
 In-memory mode documents the dataset in memory (optionally restricted by
 `varlist`/`if`/`in`), and with `wave(varname)` adds a per-wave missingness
@@ -29,6 +30,15 @@ reported as `absent`, meaning *absent or never answered* — the two cannot be
 distinguished in a stitched file. The caller's data are preserved and
 restored untouched in both modes. There are no dependencies beyond
 Stata 16.0.
+
+In-memory mode also writes a **relabel do-file** (`dofile()`) — the classic
+`descsave` idea — that re-applies every variable label, value label, format,
+storage type, note, and characteristic after a dataset has been round-tripped
+through CSV/Excel and another package (R, Python, a collaborator's
+spreadsheet). It is `capture`-guarded and prints a re-ingestion receipt, so a
+renamed or dropped column is skipped and reported rather than silently
+mislabeled. An optional `dictionary()` writes a legacy `infile` dictionary
+(`.dct`) for a typed whitespace-delimited read.
 
 ## Install
 
@@ -53,12 +63,19 @@ URL above.
 ## Quick start
 
 ```stata
-* one dataset, full codebook to screen, .dta, and Excel
+* CROSS-SECTIONAL (the simple case): one dataset -> one codebook row per
+* variable, statistics and % missing side by side, to screen + .dta + Excel
 sysuse auto, clear
+datadictionary
 datadictionary, excel(auto_codebook) saving(auto_codebook) replace
 return list
 
-* three wave files: per-wave codebook + change detection
+* a varlist and an if restriction work as usual
+datadictionary price mpg rep78 foreign if foreign == 1, excel(imports) replace
+
+* OVER TIME: three wave files -> per-wave rows + change detection; the Variables
+* sheet gains a "changed" column flagging any variable whose label or category
+* set shifted from the previous wave
 datadictionary, files("staff_w1.dta staff_w2.dta staff_w3.dta") ///
     wavenames("2019 2021 2023")                           ///
     excel(staff_codebook) saving(staff_codebook) replace
@@ -66,17 +83,73 @@ datadictionary, files("staff_w1.dta staff_w2.dta staff_w3.dta") ///
 * the same, taking every matching file in a folder (sorted by filename)
 datadictionary, folder("waves") pattern("staff_*.dta") excel(staff_codebook) replace
 
-* a stitched long file: per-wave presence and missingness
+* an already-stitched panel: per-wave statistics and missingness
 datadictionary, wave(wave) excel(stitched_codebook) replace
+
+* portability: also write a do-file that re-applies labels/formats/notes/chars
+* after a CSV round-trip, and a dictionary for a typed infile read
+datadictionary, excel(auto_codebook) dofile(auto_relabel) dictionary(auto) replace
+```
+
+After each run, `datadictionary` prints clickable links to open the workbook,
+the other outputs, and their containing folder.
+
+### Round-tripping data through R, Python, or Excel
+
+A CSV or Excel file carries values but not the labels, formats, notes, and
+characteristics Stata attaches to them. `dofile()` writes those as runnable
+code, so a dataset can leave Stata and come back fully re-dressed:
+
+```stata
+* 1. document + generate the relabel do-file
+use staff_w1, clear
+datadictionary, excel(staff_codebook) dofile(staff_relabel) replace
+
+* 2. export the NUMERIC CODES (nolabel) so value labels reattach cleanly,
+*    then share staff.csv + staff_codebook.xlsx with a collaborator
+export delimited using staff.csv, nolabel replace
+
+* 3. ...collaborator edits staff.csv in R / Python / Excel and returns it...
+
+* 4. re-import and restore every label, format, note, and characteristic
+import delimited using staff.csv, varnames(1) case(preserve) clear
+do staff_relabel
+```
+
+The generated do-file sets `varabbrev off` and `capture`-prefixes every
+command, so a column the collaborator renamed or dropped is **skipped, not
+fuzzily relabeled**, and a *receipt* at the foot lists which expected variables
+went missing and which extra columns appeared. Export with `nolabel` (numeric
+codes) — exporting the text labels instead turns the column into a string the
+do-file cannot re-encode.
+
+The optional `dictionary()` writes a legacy free-format `infile` dictionary
+(`.dct`) that reads a **whitespace-delimited** export in one typed step. It
+carries storage type + variable label only (no value labels, notes, or chars),
+so the do-file is the complete tool; the dictionary is there for teams that
+want one:
+
+```stata
+export delimited using staff.txt, delimiter(tab) nolabel quote replace
+infile using staff.dct, clear
 ```
 
 The Excel workbook contains an `Overview` sheet (sources, N and variable
-count per wave, generation date, notes count), a `Variables` sheet (the
-codebook rows; with a `wave` column in files mode), a `ValueLabels` sheet
-(label name, value, text; per wave in files mode), and — in files mode — a
-`Changes` sheet (one row per detected change: wave-pair, variable, change
-type, before, after) plus a `Missingness` sheet (variable × wave grid of
-% missing; also written in in-memory `wave()` mode). Header rows are bold.
+count per wave, generation date, notes count), a `Variables` sheet — **the
+codebook**: one row per variable (per variable-wave over time) with statistics,
+**% missing**, distinct count, common values, labels, and notes side by side —
+a `ValueLabels` sheet (label name, value, text), and, in files mode, a
+`Changes` sheet (one row per detected change: wave-pair, variable, change type,
+before, after). Header rows are bold.
+
+There is **no separate Missingness sheet**: `% missing` is a column in the
+`Variables` codebook, so over time you read a variable's missingness down its
+wave rows. Over-time modes also add a **`changed`** column that flags any
+variable whose label was reworded or whose value-label categories shifted from
+the previous wave — a signal that the variable may no longer mean the same
+thing. (A stitched panel keeps only one label set per variable, so in-memory
+`wave()` mode leaves `changed` blank; run files mode over the original wave
+files to populate it.)
 
 ## Syntax
 
@@ -88,6 +161,8 @@ files mode: datadictionary, files("w1.dta w2.dta ...") [wavenames("n1 n2 ...") s
 
 shared_options: excel(filename) saving(filename) replace
                 examples(#) top(#) nochars nonotes
+
+in-memory only: dofile(filename) dictionary(filename) norecast
 ```
 
 See `help datadictionary` for details on every option.
@@ -102,6 +177,8 @@ See `help datadictionary` for details on every option.
 | `r(nchanges)` | number of changes detected across waves (0 outside files mode)        |
 | `r(xlsx)`     | path of the Excel workbook written (only with `excel()`)              |
 | `r(dta)`      | path of the codebook dataset written (only with `saving()`)           |
+| `r(dofile)`   | path of the relabel do-file written (only with `dofile()`)            |
+| `r(dct)`      | path of the dictionary written (only with `dictionary()`)             |
 
 ## Related work
 
@@ -124,6 +201,13 @@ See `help datadictionary` for details on every option.
   limit); truncation is identical in every wave, so detection is unaffected.
 - Example values and top categories are truncated to 2,000 characters per
   cell.
+- `dofile()` reattaches value labels only when the data was exported with
+  `nolabel` (numeric codes); a column exported as its text labels comes back
+  as a string it cannot re-encode.
+- `dictionary()` produces a free-format `infile` dictionary, which is
+  whitespace-delimited and carries storage type + variable label only; for a
+  general comma-delimited CSV round-trip with labels, notes, and chars, use
+  `dofile()`.
 
 ## License
 

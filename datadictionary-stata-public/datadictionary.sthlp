@@ -23,7 +23,10 @@
 
 {p 8 16 2}
 {cmd:datadictionary} [{varlist}] {ifin} [{cmd:,}
-{cmd:wave(}{varname}{cmd:)} {it:shared_options}]
+{cmd:wave(}{varname}{cmd:)}
+{cmd:dofile(}{it:filename}{cmd:)}
+{cmd:dictionary(}{it:filename}{cmd:)}
+{cmd:norecast} {it:shared_options}]
 
 {pstd}Files mode (documents a set of wave files and detects changes across
 waves):{p_end}
@@ -42,6 +45,9 @@ waves):{p_end}
 {synoptline}
 {syntab :In-memory mode}
 {synopt :{cmd:wave(}{varname}{cmd:)}}wave identifier in a stitched file; adds per-wave presence and per-wave missingness{p_end}
+{synopt :{cmd:dofile(}{it:filename}{cmd:)}}write a do-file that re-applies labels, value labels, formats, types, notes, and chars after a CSV/Excel round-trip{p_end}
+{synopt :{cmd:dictionary(}{it:filename}{cmd:)}}write a free-format {help infile} dictionary (.dct): storage type + variable label only{p_end}
+{synopt :{cmd:norecast}}omit the {cmd:recast} lines from {cmd:dofile()} (keep whatever storage type the re-import produced){p_end}
 
 {syntab :Files mode}
 {synopt :{cmd:files(}{it:"f1 f2 ..."}{cmd:)}}space-separated list of wave .dta files, in wave order{p_end}
@@ -98,15 +104,46 @@ longer be compared.  Files mode exists for exactly this reason.
 {dlgtab:In-memory mode}
 
 {phang}{cmd:wave(}{varname}{cmd:)} names the wave identifier of a stitched
-multi-wave file (numeric or string).  {cmd:datadictionary} adds a per-wave
-missingness grid (variable {c 215} wave, % missing) to the display and, with
-{cmd:excel()}, a {cmd:Missingness} sheet.  Presence in a wave means the
-variable has at least one nonmissing value in that wave.  A variable that is
-all-missing within a wave is reported as {cmd:absent}, meaning
-{it:absent or never answered}: in a stitched file the two cannot be
-distinguished, because a variable that was not fielded in a wave and a
-variable that was fielded but never answered both appear as all-missing
-rows.{p_end}
+multi-wave file (numeric or string).  {cmd:datadictionary} then writes one
+codebook row per variable per wave, with per-wave statistics and % missing, so
+you compare a variable across waves by reading down its rows.  A variable
+all-missing within a wave shows 100% missing that wave; in a stitched file a
+variable not fielded that wave and one fielded but never answered both look
+all-missing and cannot be told apart.  Label and category changes are not
+detectable in a stitched file (only one label set per variable survives the
+append), so the {cmd:changed} flag stays blank; use files mode over the
+original wave files to detect and flag those.{p_end}
+
+{phang}{cmd:dofile(}{it:filename}{cmd:)} writes a do-file that re-applies the
+current metadata - variable labels, value labels, display formats, storage
+types, {help notes}, and characteristics (including {cmd:srctag}) - to a
+dataset after it has been exported to CSV/Excel and re-imported.  This is the
+portability tool: export the data with {help export_delimited:export delimited},
+{cmd:nolabel} (so value-labeled variables travel as their numeric codes), hand
+it to a collaborator working in R, Python, or Excel, and when the edited file
+comes back, {help import_delimited:import delimited} it and {cmd:do} the
+generated file to restore everything Stata knew.  Each command is prefixed with
+{help capture}, and the file sets {cmd:varabbrev off}, so a column the
+collaborator renamed or dropped is skipped rather than fuzzily relabeled; a
+{it:receipt} at the foot of the file reports which expected variables were not
+found and which extra columns appeared.  {cmd:.do} is appended when no
+extension is given.  In-memory mode only.{p_end}
+
+{phang}{cmd:dictionary(}{it:filename}{cmd:)} writes a free-format
+{help infile} dictionary ({cmd:.dct}) giving each variable's storage type and
+variable label.  A dictionary is legacy and narrower than {cmd:dofile()}:
+free-format {help infile} is {it:whitespace}- (not comma-) delimited, and a
+dictionary carries storage type and variable label only (no value labels,
+notes, or chars).  Prepare the data file with {cmd:export delimited},
+{cmd:delimiter(tab)} {cmd:nolabel} {cmd:quote} and read it back with
+{cmd:infile using} {it:filename}.  For a general comma-delimited CSV round-trip
+use {cmd:dofile()} instead.  {cmd:.dct} is appended when no extension is given.
+In-memory mode only.{p_end}
+
+{phang}{cmd:norecast} drops the {cmd:recast} lines from the {cmd:dofile()}
+output, leaving whatever storage type the re-import produced.  Use it when the
+collaborator may legitimately change a variable's type (for example turning an
+integer code into a decimal).{p_end}
 
 {dlgtab:Files mode}
 
@@ -162,18 +199,32 @@ written by the author's {cmd:combineall}/{cmd:projectbuilder} tools) nor the
 {marker output}{...}
 {title:Output}
 
-{pstd}The default output is a compact formatted display: a per-variable table
-(grouped by wave in files mode), the list of detected changes (files mode),
-and the per-wave missingness grid (files mode, or in-memory mode with
-{cmd:wave()}).  {cmd:excel(}{it:filename}{cmd:)} writes:{p_end}
+{pstd}The default output is a compact formatted display: the per-variable
+codebook table (grouped by wave in over-time modes) and, in files mode, the
+list of detected changes.  When any output file is written, clickable links to
+open each file and its containing folder are printed at the end.
+{cmd:excel(}{it:filename}{cmd:)} writes:{p_end}
 
 {p2colset 8 26 28 2}{...}
 {p2col :{cmd:Overview}}source file(s), N and variable count per wave, generation date, notes count, changes count{p_end}
-{p2col :{cmd:Variables}}the per-variable codebook rows; in files mode includes a {cmd:wave} column{p_end}
-{p2col :{cmd:ValueLabels}}label name, value, label text; per wave in files mode{p_end}
+{p2col :{cmd:Variables}}the codebook: one row per variable (per variable-wave in over-time modes), with statistics, {bf:% missing}, distinct count, common values, labels, and notes side by side.  Over-time modes add a {cmd:wave} column and a {cmd:changed} flag (see below){p_end}
+{p2col :{cmd:ValueLabels}}label name, value, label text; per wave in over-time modes{p_end}
 {p2col :{cmd:Changes}}files mode only; one row per detected change: wave-pair, variable, change type, before, after{p_end}
-{p2col :{cmd:Missingness}}files mode or {cmd:wave()}; variable {c 215} wave grid of % missing ({cmd:absent} = not present, or never answered){p_end}
 {p2colreset}{...}
+
+{pstd}
+Missingness is not a separate sheet: the {cmd:% missing} column lives in the
+{cmd:Variables} codebook beside the statistics, and in over-time modes you read
+it down a variable's wave rows.  A variable absent in a wave (dropped, or not
+yet fielded) shows 100% missing that wave.{p_end}
+
+{pstd}
+The {cmd:changed} column (files mode) flags a variable whose {cmd:label} was
+reworded or whose value-label {cmd:categories} changed from the previous wave -
+a signal that the variable may no longer mean the same thing.  A stitched panel
+keeps only one label set per variable, so in-memory {cmd:wave()} mode cannot
+detect this and leaves {cmd:changed} blank; use files mode over the original
+wave files to populate it.{p_end}
 
 {pstd}Header rows are written in bold via {help putexcel}.  Value-label text
 longer than 80 characters is truncated in the {cmd:ValueLabels} sheet and in
@@ -190,30 +241,65 @@ applied identically in every wave, so change detection is unaffected.{p_end}
 {synopt :{cmd:r(nchanges)}}number of changes detected across waves (0 outside files mode){p_end}
 {synopt :{cmd:r(xlsx)}}path of the Excel workbook written (only with {cmd:excel()}){p_end}
 {synopt :{cmd:r(dta)}}path of the codebook dataset written (only with {cmd:saving()}){p_end}
+{synopt :{cmd:r(dofile)}}path of the relabel do-file written (only with {cmd:dofile()}){p_end}
+{synopt :{cmd:r(dct)}}path of the dictionary written (only with {cmd:dictionary()}){p_end}
 {p2colreset}{...}
 
 
 {marker examples}{...}
 {title:Examples}
 
-{pstd}Document the dataset in memory:{p_end}
+{pstd}Cross-sectional data (the simple case): one codebook row per variable,
+statistics and % missing side by side, printed and written to Excel:{p_end}
 
 {phang2}{cmd:. sysuse auto}{p_end}
 {phang2}{cmd:. datadictionary}{p_end}
 {phang2}{cmd:. datadictionary, excel(auto_codebook) saving(auto_codebook) replace}{p_end}
 {phang2}{cmd:. return list}{p_end}
 
-{pstd}Document a stitched three-wave file, with per-wave missingness:{p_end}
+{pstd}Document part of a dataset (a varlist and an {cmd:if} restriction work as
+usual):{p_end}
 
-{phang2}{cmd:. datadictionary, wave(wave) excel(stitched_codebook) replace}{p_end}
+{phang2}{cmd:. datadictionary price mpg rep78 foreign if foreign == 1, excel(imports) replace}{p_end}
 
-{pstd}Document three wave files and detect what changed across waves:{p_end}
+{pstd}Over time: document three wave files and flag what changed across waves:{p_end}
 
 {phang2}{cmd:. datadictionary, files("staff_w1.dta staff_w2.dta staff_w3.dta") wavenames("2019 2021 2023") excel(staff_codebook) saving(staff_codebook) replace}{p_end}
 
 {pstd}The same, taking every .dta in a folder (sorted by filename):{p_end}
 
 {phang2}{cmd:. datadictionary, folder("waves") pattern("staff_*.dta") excel(staff_codebook) replace}{p_end}
+
+{pstd}An already-stitched panel (per-wave statistics and missingness; label
+changes are not detectable once stitched - use files mode for those):{p_end}
+
+{phang2}{cmd:. datadictionary, wave(wave) excel(stitched_codebook) replace}{p_end}
+
+{pstd}Send data to a collaborator in another package and get it back with the
+labels intact.  Generate a relabel do-file (and, optionally, a dictionary)
+alongside the codebook:{p_end}
+
+{phang2}{cmd:. use staff_w1, clear}{p_end}
+{phang2}{cmd:. datadictionary, excel(staff_codebook) dofile(staff_relabel) dictionary(staff) replace}{p_end}
+
+{pstd}Export the data as its numeric codes (so value labels reattach cleanly),
+share {cmd:staff.csv} plus {cmd:staff_codebook.xlsx}, and let a collaborator
+edit in R, Python, or Excel:{p_end}
+
+{phang2}{cmd:. export delimited using staff.csv, nolabel replace}{p_end}
+
+{pstd}When the edited file comes back, re-import it and run the relabel do-file
+to restore every label, format, note, and characteristic; read its receipt to
+see what did not line up:{p_end}
+
+{phang2}{cmd:. import delimited using staff.csv, varnames(1) case(preserve) clear}{p_end}
+{phang2}{cmd:. do staff_relabel}{p_end}
+
+{pstd}The optional dictionary reads a whitespace-delimited export in one typed
+{help infile} step (storage type and variable label only):{p_end}
+
+{phang2}{cmd:. export delimited using staff.txt, delimiter(tab) nolabel quote replace}{p_end}
+{phang2}{cmd:. infile using staff.dct, clear}{p_end}
 
 
 {marker remarks}{...}
@@ -248,6 +334,20 @@ row in the {cmd:Changes} output, with the before and after values.
 rows excluded by {cmd:if}/{cmd:in} do not contribute to N, missingness,
 statistics, or examples.  Selecting an empty sample stops the command with
 error 2000.
+
+{pstd}
+{bf:Round-tripping through other packages.}  {cmd:dofile()} exists because a
+CSV or Excel file carries values but not the metadata Stata attaches to them:
+export a labeled dataset and the labels, formats, notes, and characteristics
+stay behind.  The relabel do-file is that metadata written as runnable code, so
+a dataset can leave Stata for R, Python, or a collaborator's spreadsheet and
+return fully re-dressed.  Two rules keep the round-trip honest.  Export with
+{cmd:nolabel} so value-labeled variables travel as their numeric codes, which
+the {cmd:label values} lines in the do-file reattach; exporting the text labels
+instead turns the column into a string the do-file cannot re-encode.  And leave
+the {help capture} prefixes in place: they turn a renamed or dropped column
+into a skipped line and a receipt entry rather than a failed run, which is what
+lets the do-file survive a collaborator who reorganizes the file.
 
 
 {marker related}{...}

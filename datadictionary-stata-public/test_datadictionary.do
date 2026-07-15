@@ -223,6 +223,13 @@ assert n == 195 if name == "id" & wave == "2023"
 assert !missing(mean) if name == "hours"
 assert missing(mean) & missing(sd) if name == "occupation"
 assert examples != "" if name == "occupation" | name == "q2"
+* the "changed since previous wave" flag: q1's label reworded and q2's
+* value-label set replaced, both in 2023; everything else blank
+assert changed == "label"      if name == "q1" & wave == "2023"
+assert changed == "categories" if name == "q2" & wave == "2023"
+assert changed == "" if name == "q1" & wave == "2019"
+assert changed == "" if name == "q2" & wave == "2021"
+assert changed == "" if name == "id"                       // never changes
 
 * ---------------------------------------------------------------------------
 * 1b. folder()/pattern() mode: same waves, same answers
@@ -255,30 +262,153 @@ replace wave = 2023 if missing(wave)
 label variable wave "Survey wave (year)"
 assert _N == 585
 
-datadictionary, wave(wave) excel("$ddout/datadictionary_stitched.xlsx") replace
-* union of variables plus the wave variable itself
-assert r(nvars) == 11
+datadictionary, wave(wave) excel("$ddout/datadictionary_stitched.xlsx") ///
+    saving("$ddtmp/dd_stitched.dta") replace
+* 10 data variables (the wave identifier is excluded) x 3 waves = 30 rows
+assert r(nvars) == 30
 assert r(nchanges) == 0
 assert `"`r(xlsx)'"' == "$ddout/datadictionary_stitched.xlsx"
 * the stitched data came back untouched
 assert _N == 585
 assert c(k) == 11
 
-* per-wave missingness grid: q4 absent after 2019, q6/q7 absent before they
-* were fielded (absent = not present, or never answered)
-import excel using "$ddout/datadictionary_stitched.xlsx", sheet("Missingness") clear
-assert _N == 11
-assert A[1] == "variable" & B[1] == "2019" & C[1] == "2021" & D[1] == "2023"
-quietly count if A == "q4" & C == "absent" & D == "absent" & B != "absent"
-assert r(N) == 1
-quietly count if A == "q6" & B == "absent" & C != "absent" & D != "absent"
-assert r(N) == 1
-quietly count if A == "q7" & B == "absent" & C == "absent" & D != "absent"
-assert r(N) == 1
-quietly count if A == "hours" & B != "absent" & C != "absent" & D != "absent"
-assert r(N) == 1
-quietly count if A == "wave"
+* Missingness now lives INSIDE the Variables sheet as the pctmiss column, one
+* row per variable-wave; there is no separate Missingness sheet.  A variable
+* absent in a wave (dropped, or not yet fielded) shows 100% missing that wave.
+use "$ddtmp/dd_stitched.dta", clear
+assert _N == 30
+capture confirm string variable wave
+if _rc tostring wave, replace
+assert pctmiss <  100 if name == "q4" & wave == "2019"
+assert pctmiss == 100 if name == "q4" & wave == "2021"
+assert pctmiss == 100 if name == "q4" & wave == "2023"
+assert pctmiss == 100 if name == "q6" & wave == "2019"
+assert pctmiss <  100 if name == "q6" & wave == "2021"
+assert pctmiss == 100 if name == "q7" & wave == "2019"
+assert pctmiss == 100 if name == "q7" & wave == "2021"
+assert pctmiss <  100 if name == "q7" & wave == "2023"
+quietly count if name == "hours" & pctmiss < 100
+assert r(N) == 3
+* the wave identifier is not documented as a data column
+quietly count if name == "wave"
 assert r(N) == 0
+* in-memory wave mode cannot detect label changes, so changed is always blank
+quietly count if changed != ""
+assert r(N) == 0
+* no separate Missingness sheet is written
+import excel using "$ddout/datadictionary_stitched.xlsx", describe
+local hasmiss 0
+forvalues s = 1/`r(N_worksheet)' {
+    if "`r(worksheet_`s')'" == "Missingness" local hasmiss 1
+}
+assert `hasmiss' == 0
+
+* ---------------------------------------------------------------------------
+* 3b. Relabel do-file and dictionary: the export / edit / re-import round-trip
+*     (both are in-memory features; run on wave 1, which has value labels,
+*      notes, and srctag/module chars)
+* ---------------------------------------------------------------------------
+cd "$ddtmp"
+use "staff_survey_w1.dta", clear
+datadictionary, dofile("w1_relabel.do") dictionary("w1.dct") replace
+assert `"`r(dofile)'"' == "w1_relabel.do"
+assert `"`r(dct)'"'    == "w1.dct"
+confirm file "w1_relabel.do"
+confirm file "w1.dct"
+
+* --- do-file round-trip: strip labels via CSV, rename + add a column, relabel -
+use "staff_survey_w1.dta", clear
+export delimited using "w1.csv", nolabel replace
+import delimited using "w1.csv", varnames(1) case(preserve) clear
+rename q4 q4_manage                 // renamed -> flagged, never fuzzily relabeled
+gen newcol = 1                      // added   -> flagged as extra
+do "w1_relabel.do"
+* variable label, value label, format-bearing chars, and notes restored
+local ll2 : value label q2
+assert "`ll2'" == "agree4"
+local vl2 : variable label q2
+assert `"`vl2'"' == "I feel supported by my supervisor"
+local st : char q2[srctag]
+assert "`st'" == "staff_survey_w1.dta"
+local mod : char q2[module]
+assert "`mod'" == "core"
+local k0 : char q2[note0]
+assert "`k0'" == "1"
+* the renamed column must NOT have received q4's label (exact matching on)
+local vlq4 : variable label q4_manage
+assert `"`vlq4'"' == ""
+* reproduce the receipt logic and assert the diagnostics it reports
+local expected "id q1 q2 q3 q4 q5 occupation hours"
+local missing ""
+foreach v of local expected {
+    capture confirm variable `v', exact
+    if _rc local missing "`missing' `v'"
+}
+assert strtrim("`missing'") == "q4"
+unab present : _all
+local extra : list present - expected
+assert "`extra'" == "q4_manage newcol"
+
+* --- norecast: the generated file carries no -recast- lines -------------------
+use "staff_survey_w1.dta", clear
+datadictionary, dofile("w1_norecast.do") norecast replace
+tempname fh
+file open `fh' using "w1_norecast.do", read text
+local nrecast 0
+file read `fh' line
+while r(eof) == 0 {
+    if strpos(`"`macval(line)'"', "capture recast") local ++nrecast
+    file read `fh' line
+}
+file close `fh'
+assert `nrecast' == 0
+
+* --- dictionary round-trip: tab-delimited quoted export, infile via .dct ------
+use "staff_survey_w1.dta", clear
+export delimited using "w1.txt", delimiter(tab) nolabel quote replace
+infile using "w1.dct", clear
+assert _N == 180
+assert c(k) == 8
+local tq2 : type q2
+assert "`tq2'" == "byte"
+local to : type occupation
+assert substr("`to'", 1, 3) == "str"
+local vlo : variable label occupation
+assert `"`vlo'"' == "Occupation (free text)"
+count if occupation == "Counselor"
+assert r(N) > 0
+
+* --- files mode rejects dofile()/dictionary() and norecast -------------------
+capture datadictionary, files("staff_survey_w1.dta") dofile("x.do")
+assert _rc == 198
+capture datadictionary, files("staff_survey_w1.dta") dictionary("x.dct")
+assert _rc == 198
+capture datadictionary, files("staff_survey_w1.dta") norecast
+assert _rc == 198
+
+* ---------------------------------------------------------------------------
+* 3c. Cross-sectional (non-wave) data: the simple case on sysuse auto.
+*     One row per variable; % missing sits beside the statistics; no wave or
+*     changed columns; three sheets only (Overview, Variables, ValueLabels).
+* ---------------------------------------------------------------------------
+sysuse auto, clear
+datadictionary, excel("$ddtmp/dd_auto.xlsx") saving("$ddtmp/dd_auto.dta") replace
+assert r(nvars) == 12
+assert r(nchanges) == 0
+use "$ddtmp/dd_auto.dta", clear
+assert _N == 12
+capture confirm variable wave
+assert _rc != 0
+capture confirm variable changed
+assert _rc != 0
+* rep78 has 5 missing of 74; price has none -> % missing computed inline
+assert abs(pctmiss - 100*5/74) < 0.01 if name == "rep78"
+assert pctmiss == 0 if name == "price"
+* foreign carries its value label and its categories show up in examples
+assert vallab == "origin" if name == "foreign"
+assert strpos(examples, "Domestic") if name == "foreign"
+import excel using "$ddtmp/dd_auto.xlsx", describe
+assert r(N_worksheet) == 3
 
 * ---------------------------------------------------------------------------
 * 4. Edge cases: graceful errors and label-free data

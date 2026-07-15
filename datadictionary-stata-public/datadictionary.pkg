@@ -1,17 +1,19 @@
 v 3
 d datadictionary: enhanced, over-time-ready codebook generator for multi-wave data
 d
-d A modern descsave. datadictionary documents the dataset in memory or a set
-d of wave files: one codebook row per variable (per variable-wave in
-d files mode) with storage type, display format, variable label, value
-d label, missingness, distinct values, summary statistics, example
-d values, top categories, notes, and characteristics (including the
-d srctag char written by combineall/projectbuilder). In files mode it
-d detects changes across waves -- variables added or dropped, storage
-d types, variable labels, value-label sets, display formats -- which is
-d only possible before waves are stitched into one file, because
-d stitching destroys per-wave value labels. Results go to the screen, a
-d machine-readable .dta, and a multi-sheet Excel workbook.
+d A modern descsave. datadictionary builds an Excel codebook that puts each
+d variable's statistics, % missing, distinct count, common values, labels, and
+d notes side by side (one row per variable, or per variable-wave over time),
+d including the srctag char written by combineall/projectbuilder. Results go to
+d the screen, a machine-readable .dta, and a multi-sheet workbook, with clickable
+d links to open them. For a study run in waves, files() / folder() stack a
+d per-wave row per variable and add a "changed" column flagging any variable
+d whose label or category set shifted since the previous wave (only detectable
+d from the original wave files, since stitching destroys per-wave value labels).
+d In-memory mode can also write a capture-guarded relabel do-file (dofile()) that
+d re-applies labels, formats, notes, and chars after a CSV/Excel round-trip
+d through another package, with a re-ingestion receipt, plus an optional infile
+d dictionary (dictionary()).
 d
 d Requires: Stata 16.0 or newer
 d
