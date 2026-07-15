@@ -71,6 +71,7 @@ One honest caveat travels with this tool. As of this writing the \texttt{sparkta
 You do not have to wait for \texttt{sparkta2} to get the sparkline's payoff, because native Stata already draws small multiples\index{small multiples}, a wall of tiny panels that strip their axes to almost nothing so the shape is all that is left to read. A regional workforce board wants to know whether the wage recovery after 2020 looked the same across its labor markets, or whether some counties bounced and others stalled, because it targets its programs county by county. Six separate wage charts would be six page-turns; a spark wall puts all six side by side so the divergence is one glance.
 
 We build the wall from the same no-key BLS files Chapter~\ref{ch:apis} introduced, so this is a direct callback: one \texttt{import delimited} per county-quarter, looped over six Texas counties and twenty-four quarters. The Quarterly Census of Employment and Wages posts one CSV per county-year-quarter at a stable URL, and we keep the total private-sector line (ownership code~5, industry code~10) from each:
+\par
 {\footnotesize
 \begin{verbatim}
 local counties 48453 48201 48113 48029 48439 48141
@@ -98,6 +99,7 @@ foreach fips of local counties {
 Before you adapt this loop, notice two details. The \texttt{capture} before \texttt{import} and the \texttt{if \_rc continue} after it mean a single missing quarter does not abort the whole loop, it just skips, which matters because the newest quarters lag by several months and one county may not have posted yet.\marginnote{Robust loops over live URLs need a skip clause: \texttt{capture} swallows the error and \texttt{continue} moves to the next iteration, so one 404 out of 144 downloads costs you one panel, not the whole run. Check \texttt{\_N} after to see how many landed.} And we again read columns~1 and~3 as strings with \texttt{stringcols(1 3)}, because the FIPS code and the industry code are identifiers, not quantities, the same leading-zero habit that Chapter~\ref{ch:apis} argued prevents silent merge failures. When you adapt this loop, a short pilot pays for itself: run it first with one county and one year, confirm four rows land with the wage column populated, and only then widen the locals to the full list.
 
 Once stacked, we build a quarter index and let \texttt{by()} draw the wall. The trick that makes it a spark wall rather than six ordinary charts is stripping the axes: tiny labels, no gridlines, no axis titles, so the eye reads the shape and not the furniture.
+\par
 {\footnotesize
 \begin{verbatim}
 gen tq = yq(year, qtr)
@@ -138,6 +140,7 @@ Because the chart is written by a do-file, it stays inside the replicable pipeli
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{googlechart}]
 \textbf{Integrated command:} \texttt{googlechart}. The suite's \emph{online} chart tool (Table~\ref{tab:suite-matrix}). From any dataset, writes a self-contained interactive HTML page (column, bar, line, area, combo, pie, donut, scatter, animated bubble, geo, timeline, searchable table, histogram, and diverging stacked bar), with filter dropdowns, a brand theme, and an optional data/PNG download menu. It writes the file with no key and no network; the browser fetches Google's drawing code only when the page is opened. Install it once from the authors' GitHub:
+\par
 {\footnotesize
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
@@ -154,6 +157,7 @@ Every example below follows one shape. Load a dataset, call \texttt{googlechart}
 
 \subsection{Worked example 1: a US-state choropleth}\label{sec:gc-geo}
 The geographic choropleth answers the request an evaluator hears most: \enquote{show me my states on a map.} A \emph{choropleth}\index{choropleth} shades each region by a value, so darker means more, and the eye finds the hot spots without reading a single number. We use the County Health Rankings \& Roadmaps 2025 state extract, one row per state, and map the share of residents without health insurance. The geographic key lives in \texttt{geo\_code} as a \enquote{US-XX} code (\texttt{US-TX}, \texttt{US-CA}), and \texttt{name()} points \texttt{googlechart} at it:
+\par
 {\footnotesize
 \begin{verbatim}
 import delimited using ///
@@ -180,6 +184,7 @@ This makes sense: the uninsured map is the well-known coverage gap between state
 
 \subsection{Worked example 2: an animated bubble with a Play button}\label{sec:gc-bubble}
 Some stories are trajectories, and a trajectory wants motion. The animated bubble is \texttt{googlechart}'s Rosling-style chart: each state is a circle, and pressing Play walks it through time so the reader watches the whole field move. We switch to the CHR \emph{panel} extract, which has one row per state per year from 2016 to 2025, because animation needs frames: without a row for each time value, there is nothing to animate.\marginnote{This is the one requirement newcomers miss. \texttt{time(year)} adds the Play button, but the button only does something if the data is a \emph{panel}, one row per entity per period. A single cross-section with \texttt{time()} draws a static bubble and no motion. Check that your data is long, not wide, before reaching for \texttt{time()}.} We plot children in poverty against premature death, size each bubble by how rural the state is, and color it by whether its uninsured rate clears ten percent:
+\par
 {\footnotesize
 \begin{verbatim}
 import delimited using ///
@@ -211,6 +216,7 @@ This makes sense, and it is the honest test for animation: the story \emph{is} t
 
 \subsection{Worked example 3: a searchable table}\label{sec:gc-table}
 The other request an evaluator hears constantly is the opposite of a map: \enquote{let me find my own row.} The searchable table answers it. \texttt{type(table)} is the one type that usually takes \emph{no} varlist; instead you list the columns you want in \texttt{tooltipvars()}, and two switches turn an ordinary table into a tool: \texttt{tablesearch} adds a search box, and \texttt{tableheadersticky} freezes the header row so it stays visible as the reader scrolls:
+\par
 {\footnotesize
 \begin{verbatim}
 import delimited using ///
@@ -239,6 +245,7 @@ The payoff is in Figure~\ref{fig:gc-table}: a client opens the page, types their
 
 \subsection{Worked example 4: a diverging stacked bar}\label{sec:gc-divbar}
 The last type is the one survey work needs most and general tools handle worst: the diverging stacked bar\index{diverging stacked bar} for Likert data. A \emph{Likert}\index{Likert scale} item is the familiar strongly-disagree-to-strongly-agree scale, and the honest way to chart it is to center the neutral response on zero, push disagreement left and agreement right, so the balance of opinion reads at a glance. \texttt{type(divbar)} does exactly this. It needs two roles: \texttt{name()} for the question and \texttt{level()} for the response category, plus \texttt{levelorder()} to fix the stack order and \texttt{centerlevel()} to name the neutral level that sits on zero:
+\par
 {\footnotesize
 \begin{verbatim}
 googlechart share, name(q) level(response)        ///

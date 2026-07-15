@@ -24,6 +24,7 @@ One command, one behavior, one answer. The consistency problem was a packaging p
 A habit that pays before any of those steps: write the help file's syntax block first, as if the command already existed. Sketch \texttt{dsload using \textit{datafile}, controls(\textit{file}) verify} on paper, read it aloud, and ask whether a colleague could guess what each piece does from the line alone. If the line needs six options to say one thing, or the option names only make sense to the person who wrote them, the design is wrong before any code exists, and revising a sentence is cheaper than revising a program. The \texttt{syntax} line in the ado then becomes a transcription of a decision already made rather than a decision made while typing.
 
 The skeleton of the command is short, and it is worth seeing once because every shared tool has the same four bones. A program is named and version-locked, a \texttt{syntax}\index{syntax@\texttt{syntax}} line parses what the caller typed into named locals, the body does the work, and \texttt{end} closes it. Everything else is elaboration on these lines:
+\par
 {\footnotesize
 \begin{verbatim}
 *! dsload 1.0.0  load project controls + verify paths
@@ -49,6 +50,7 @@ Once you package a habit, the team inherits it: colleagues can now extend your w
 A tool without documentation dies with its author's memory, so every shared command gets a help file. Stata help files are written in SMCL\index{SMCL}, the Viewer's markup, and one rule keeps them useful: give every command a runnable example, because most people learn a tool by running its example and adapting it.\sidenote{SMCL (\enquote{smickle}, Stata Markup and Control Language) is directive-based: \texttt{\{cmd:...\}} for commands, \texttt{\{help name\}} for cross-links, \texttt{\{synoptset\}} for the options table. It renders only in the Viewer, so a \texttt{.sthlp} file read as plain text looks like tag soup; that is expected.} The \texttt{editanything}\index{editanything@\texttt{editanything}} command, which opens any text file, an ado, a help file, a do-file, from the command line, is the small convenience that lowers the friction of writing and maintaining that documentation.
 
 A help file does not have to be long to be complete. Eight lines carry the parts a reader needs: a title, a syntax line, one sentence of description, and one example they can run. The SMCL below is the whole spine of \texttt{dsload.sthlp}, and it renders in the Viewer as a formatted, cross-linked page:
+\par
 {\footnotesize
 \begin{verbatim}
 {smcl}
@@ -78,6 +80,7 @@ Hand a colleague a help file with a working example and they can use the tool wi
 How does a personal fix become the team standard? Colleagues have to be able to install it, and Stata's package machinery makes that a one-line affair. A \texttt{.pkg} manifest and a \texttt{stata.toc} in a GitHub repository let colleagues and clients install and update a tool with a single \texttt{net install} line they can paste, and versioning the repository means everyone can pin to, or upgrade from, a known release.\marginnote{Adopt semantic versioning for the \texttt{.pkg}: bump the major number only when you break an existing call, the minor for backward-compatible features, the patch for fixes. A user who installed \texttt{net install ..., from(...)} at v1.2 then knows a jump to v2.0 may need their do-files revised, while v1.3 will not.} For machines with no internet, a local SSC catalog (\texttt{ScrapeSSC}\index{ScrapeSSC@\texttt{ScrapeSSC}}) lets an air-gapped analyst still find and install community packages.
 
 Two small text files carry the whole distribution. The \texttt{stata.toc} is the table of contents Stata reads first: it lists which packages a repository offers. The \texttt{.pkg} is the manifest for one package: a title line, a distribution date, and a \texttt{f} line for each file to copy. Together they are what a \texttt{net install} obeys:
+\par
 {\footnotesize
 \begin{verbatim}
 * --- stata.toc ---
@@ -166,6 +169,7 @@ where $\bar p$ is the pooled mean, $w_i$ the per-unit reliability that \texttt{r
 
 \medskip
 \textbf{Install (house idiom).}
+\par
 {\footnotesize
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
@@ -175,6 +179,7 @@ net install rateshrink, ///
 }
 
 \textbf{Worked passage.} Fifty sites, each with a small and uneven number of observations, report a raw success rate. The command shrinks those rates and returns a per-unit reliability with \texttt{rel()}:
+\par
 {\footnotesize
 \begin{verbatim}
 clear
@@ -199,6 +204,7 @@ When should you leave Stata's main language? An evaluator needs the seams betwee
 
 \subsection{A worked example: three ways to build one variable}\label{sec:bench}
 The advice to reach for a loop last is easy to give and easy to ignore, so it is worth measuring. The task is deliberately plain: compute a new variable, the squared value of \texttt{x}, on a simulated one-million-row dataset, three ways. The first way is a vectorized \texttt{gen}, Stata's native idiom. The second drops into Mata, reads the column into a matrix, squares it, and writes it back. The third is the anti-pattern: an explicit \texttt{forvalues} loop that touches one observation at a time with \texttt{replace ... in}. We time each with Stata's \texttt{timer}\index{timer@\texttt{timer}}, which is the honest way to settle a speed argument:
+\par
 {\footnotesize
 \begin{verbatim}
 set seed 20260704

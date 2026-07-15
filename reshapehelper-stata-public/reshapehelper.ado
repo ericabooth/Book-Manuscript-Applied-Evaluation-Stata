@@ -1,4 +1,4 @@
-*! version 0.9.0  20260715  Eric A. Booth, Sr Researcher, Texas 2036
+*! version 1.0.0  20260715  Eric A. Booth, Sr Researcher, Texas 2036
 *! reshapehelper: diagnose the data and SUGGEST (never run) the likely reshape
 *
 *  reshapehelper never reshapes the caller's data.  It scans variable names
@@ -86,14 +86,18 @@ program define reshapehelper, rclass
     }
 
     * =========================================================================
-    * 2. Name scans on the full variable list (names only, no data touched)
+    * 2. Name scans (names only, no data touched).  A varlist restricts which
+    *    variables the PATTERN SCAN considers (stub discovery going long, the
+    *    measure list going wide); the i/j hunt always sees every variable, so
+    *    typing "reshapehelper inc80 inc81" does not hide the id.
     * =========================================================================
-    if "`scanvars'" != "" local allv `scanvars'
-    else unab allv : _all
+    unab allv : _all
+    if "`scanvars'" != "" local scanv `scanvars'
+    else                  local scanv `allv'
 
     * ---- 2a. trailing-numeric suffix groups:  inc80 inc81 inc82 -------------
     local nng 0
-    foreach v of local allv {
+    foreach v of local scanv {
         if regexm("`v'", "^(.*[^0-9])([0-9]+)$") {
             local s = regexs(1)
             local x = regexs(2)
@@ -124,7 +128,7 @@ program define reshapehelper, rclass
 
     * ---- 2b. doubly-wide: two digit runs:  ht_k1_t2 --------------------------
     local ndb 0
-    foreach v of local allv {
+    foreach v of local scanv {
         if regexm("`v'", "^(.*[^0-9])([0-9]+)([^0-9]+)([0-9]+)$") {
             local p1 = regexs(1)
             local d1 = regexs(2)
@@ -159,7 +163,7 @@ program define reshapehelper, rclass
 
     * ---- 2c. @ mid-name: digits inside, letters after:  inc80r ---------------
     local nat 0
-    foreach v of local allv {
+    foreach v of local scanv {
         if regexm("`v'", "^([a-zA-Z_]+)([0-9]+)([a-zA-Z_]+)$") {
             local pre = regexs(1)
             local dig = regexs(2)
@@ -188,7 +192,7 @@ program define reshapehelper, rclass
 
     * ---- 2d. string suffix after last underscore:  bp_before bp_after --------
     local nsg 0
-    foreach v of local allv {
+    foreach v of local scanv {
         if regexm("`v'", "^(.+_)([a-zA-Z][a-zA-Z0-9]*)$") {
             local s = regexs(1)
             local x = regexs(2)
@@ -216,7 +220,7 @@ program define reshapehelper, rclass
     * ---- 2e. prefix-as-j: qld_p nsw_p vic_p (the j sits in FRONT) -------------
     *      group by the trailing token; the prefixes are the j values
     local npg 0
-    foreach v of local allv {
+    foreach v of local scanv {
         if regexm("`v'", "^([a-zA-Z][a-zA-Z0-9]*)(_[a-zA-Z][a-zA-Z0-9]*)$") {
             local pfx = regexs(1)
             local tail = regexs(2)
@@ -272,18 +276,23 @@ program define reshapehelper, rclass
     if _N > `sample' quietly keep in 1/`sample'
     local NS = _N
 
-    * distinct counts for candidate scoring (skip strL, cap at 80 vars)
-    local nv 0
+    * distinct counts for candidate scoring, stored POSITIONALLY (dist1...)
+    * and looked up through dvlist with posof: a variable name near Stata's
+    * 32-char limit would make a name-keyed local ("dist_<name>") illegal.
+    * Skips strL; caps at 80 vars.  A variable absent from dvlist simply has
+    * no distinct-count info and drops out of i/j candidacy.
+    local dvlist ""
     foreach v of local allv {
         local ty : type `v'
         if "`ty'" == "strL" continue
-        local ++nv
-        if `nv' > 80 continue, break
+        if `: word count `dvlist'' >= 80 continue, break
         tempvar f
         quietly bysort `v': gen byte `f' = (_n == 1)
         quietly count if `f'
-        local dist_`v' = r(N)
+        local dd = r(N)          // grab r(N) before anything can clear it
         drop `f'
+        local dvlist `dvlist' `v'
+        local dist`: word count `dvlist'' = `dd'
     }
 
     * ---- i candidates: unique in sample, or declared, or name-prior ----------
@@ -292,10 +301,11 @@ program define reshapehelper, rclass
     else {
         if "`xtpanel'" != "" local icands `xtpanel'
         foreach v of local allv {
-            if "`dist_`v''" == "" continue
+            local dpos : list posof "`v'" in dvlist
+            if `dpos' == 0 continue
             local nm = lower("`v'")
             local prior = regexm("`nm'", "(^|_)(id|code|fips|ssn|key)$|^id|id$|county|state|dist|inst|firm|person|hh|fam|stu|patient")
-            if `dist_`v'' == `NS' local icands `icands' `v'
+            if `dist`dpos'' == `NS' local icands `icands' `v'
             else if `prior' local icands `icands' `v'
         }
         if "`svypsu'" != "" local icands `icands' `svypsu'
@@ -311,9 +321,10 @@ program define reshapehelper, rclass
     if "`jcands'" == "" {
         if "`xttime'" != "" local jcands `xttime'
         foreach v of local allv {
-            if "`dist_`v''" == "" continue
-            if `dist_`v'' < 2 continue
-            if `dist_`v'' > min(60, ceil(`NS'/2)) continue
+            local dpos : list posof "`v'" in dvlist
+            if `dpos' == 0 continue
+            if `dist`dpos'' < 2 continue
+            if `dist`dpos'' > min(60, ceil(`NS'/2)) continue
             local nm = lower("`v'")
             if regexm("`nm'", "year|^yr|wave|time|round|visit|period|qtr|quarter|month|week|grade|term|semester|^j$|^t$") {
                 local jcands `jcands' `v'
@@ -322,8 +333,9 @@ program define reshapehelper, rclass
         * fall back: any small-cardinality integer var not already an i cand
         if "`jcands'" == "" {
             foreach v of local allv {
-                if "`dist_`v''" == "" continue
-                if `dist_`v'' < 2 | `dist_`v'' > 30 continue
+                local dpos : list posof "`v'" in dvlist
+                if `dpos' == 0 continue
+                if `dist`dpos'' < 2 | `dist`dpos'' > 30 continue
                 local isi : list v in icands
                 if `isi' continue
                 capture confirm numeric variable `v'
@@ -356,16 +368,31 @@ program define reshapehelper, rclass
     foreach v of local allv {
         if `: word count `ipool2'' >= 12 continue, break
         local in1 : list v in ipool2
-        if !`in1' & "`dist_`v''" != "" local ipool2 `ipool2' `v'
+        local dpos : list posof "`v'" in dvlist
+        if !`in1' & `dpos' > 0 local ipool2 `ipool2' `v'
     }
+    local sparsecand ""
+    local sparsej ""
     foreach jv of local jcands {
         foreach iv of local ipool2 {
             if "`iv'" == "`jv'" continue
-            if "`dist_`iv''" != "" {
-                if `dist_`iv'' == `NS' continue
-            }
             capture isid `iv' `jv'
             if !_rc {
+                * plausibility: in real long data each i repeats across j, so
+                * an i with (nearly) one row per value is an accident of the
+                * data (auto's weight+mpg), not a design.  Record such a
+                * would-be i so the checklist can flag a genuinely sparse panel
+                * (most units seen once, a few repeated) rather than stay mute.
+                local dpos : list posof "`iv'" in dvlist
+                if `dpos' > 0 {
+                    if `dist`dpos'' > `NS'/2 {
+                        if "`sparsecand'" == "" {
+                            local sparsecand `iv'
+                            local sparsej `jv'
+                        }
+                        continue
+                    }
+                }
                 local longi `iv'
                 local longj `jv'
                 continue, break
@@ -377,15 +404,17 @@ program define reshapehelper, rclass
         * make any isid trivially true (the measure would end up inside i).
         local ppool ""
         foreach v of local icands {
-            if "`dist_`v''" == "" continue
-            if `dist_`v'' < `NS' & "`v'" != "`jv'" local ppool `ppool' `v'
+            local dpos : list posof "`v'" in dvlist
+            if `dpos' == 0 continue
+            if `dist`dpos'' < `NS' & "`v'" != "`jv'" local ppool `ppool' `v'
         }
         foreach v of local allv {
             if `: word count `ppool'' >= 6 continue, break
             local in1 : list v in ppool
             if `in1' | "`v'" == "`jv'" continue
-            if "`dist_`v''" == "" continue
-            if `dist_`v'' < `NS' local ppool `ppool' `v'
+            local dpos : list posof "`v'" in dvlist
+            if `dpos' == 0 continue
+            if `dist`dpos'' < `NS' local ppool `ppool' `v'
         }
         local np : word count `ppool'
         forvalues a = 1/`= min(`np', 6)' {
@@ -394,6 +423,12 @@ program define reshapehelper, rclass
                 local ivb : word `b' of `ppool'
                 capture isid `iva' `ivb' `jv'
                 if !_rc {
+                    tempvar gg
+                    quietly bysort `iva' `ivb': gen byte `gg' = (_n == 1)
+                    quietly count if `gg'
+                    local ngrp = r(N)
+                    drop `gg'
+                    if `ngrp' > `NS'/2 continue
                     local longi `iva' `ivb'
                     local longj `jv'
                     continue, break
@@ -714,7 +749,14 @@ program define reshapehelper, rclass
 
     * ---------- 5c. LONG -> WIDE ----------------------------------------------
     if "`direction'" == "long2wide" {
-        if "`j'" != "" local usej `j'
+        if "`j'" != "" {
+            capture confirm variable `j'
+            if _rc {
+                di as err "j(`j') not found: going wide, j() must name an EXISTING variable (going long it names the variable to create)"
+                exit 111
+            }
+            local usej `j'
+        }
         else if "`longj'" != "" local usej `longj'
         else local usej : word 1 of `jcands'
         if "`i'" != "" local usei `i'
@@ -727,19 +769,31 @@ program define reshapehelper, rclass
             local ipool3 ""
             foreach v of local icands {
                 if "`v'" == "`usej'" continue
-                if "`dist_`v''" == "" continue
-                if `dist_`v'' < `NS' local ipool3 `ipool3' `v'
+                local dpos : list posof "`v'" in dvlist
+                if `dpos' == 0 continue
+                if `dist`dpos'' < `NS' local ipool3 `ipool3' `v'
             }
             foreach v of local allv {
                 if `: word count `ipool3'' >= 8 continue, break
                 local in1 : list v in ipool3
                 if `in1' | "`v'" == "`usej'" continue
-                if "`dist_`v''" == "" continue
-                if `dist_`v'' < `NS' local ipool3 `ipool3' `v'
+                local dpos : list posof "`v'" in dvlist
+                if `dpos' == 0 continue
+                if `dist`dpos'' < `NS' local ipool3 `ipool3' `v'
             }
             foreach iv of local ipool3 {
                 capture isid `iv' `usej'
                 if !_rc {
+                    local dpos : list posof "`iv'" in dvlist
+                    if `dpos' > 0 {
+                        if `dist`dpos'' > `NS'/2 {
+                            if "`sparsecand'" == "" {
+                                local sparsecand `iv'
+                                local sparsej `usej'
+                            }
+                            continue
+                        }
+                    }
                     local usei `iv'
                     continue, break
                 }
@@ -752,6 +806,12 @@ program define reshapehelper, rclass
                         local ivb : word `b' of `ipool3'
                         capture isid `iva' `ivb' `usej'
                         if !_rc {
+                            tempvar gg
+                            quietly bysort `iva' `ivb': gen byte `gg' = (_n == 1)
+                            quietly count if `gg'
+                            local ngrp = r(N)
+                            drop `gg'
+                            if `ngrp' > `NS'/2 continue
                             local usei `iva' `ivb'
                             continue, break
                         }
@@ -765,7 +825,7 @@ program define reshapehelper, rclass
             * stubs = variables that VARY within i (across j); constants ride along
             local usestubs ""
             local consts ""
-            foreach v of local allv {
+            foreach v of local scanv {
                 local ini : list v in usei
                 if `ini' | "`v'" == "`usej'" continue
                 tempvar w
@@ -806,41 +866,63 @@ program define reshapehelper, rclass
                 if !`badj' {
                     local cmd "reshape wide `usestubs', i(`usei') j(`usej')`jstring'"
                     local status ok
-                    * a low-cardinality factor left inside i() means the data
-                    * can widen FURTHER: rerun reshapehelper, or fold factors
-                    foreach iv of local usei {
-                        if "`dist_`iv''" == "" continue
-                        if `dist_`iv'' >= 2 & `dist_`iv'' <= 12 {
-                            local note "i() still contains the factor `iv'; this reshape widens one dimension - rerun reshapehelper on the result to widen the next, or fold factors into one j: egen newj = concat(`usej' `iv'), p(_)"
+                    * a COMPOUND i() that still holds a low-cardinality factor
+                    * means the data can widen FURTHER (the long-long case).  A
+                    * single-variable i() is just the identifier, so the note
+                    * must not fire there - it would call the id a "factor".
+                    if `: word count `usei'' >= 2 {
+                        foreach iv of local usei {
+                            local dpos : list posof "`iv'" in dvlist
+                            if `dpos' == 0 continue
+                            if `dist`dpos'' >= 2 & `dist`dpos'' <= 12 {
+                                local note "i() still contains the factor `iv'; this reshape widens one dimension - rerun reshapehelper on the result to widen the next, or fold factors into one j: egen newj = concat(`usej' `iv'), p(_)"
+                            }
                         }
                     }
-                    * long stub names + suffix may exceed 32 chars
-                    foreach s of local usestubs {
-                        local maxlen 0
-                        quietly levelsof `usej' in 1/`= min(_N, 200)', local(jl) clean
-                        foreach lv of local jl {
-                            if strlen("`s'`lv'") > 32 local maxlen 1
+                    * long stub names + suffix may exceed 32 chars.  The j value
+                    * is spliced into a string for length only.  It is compound-
+                    * quoted and read with -macval- so a value carrying a " does
+                    * not unbalance the quotes, and the whole probe is wrapped in
+                    * -capture- so an exotic value (a backtick, say) can never
+                    * escape to the caller; the caution is advisory, so on any
+                    * failure it is simply skipped.
+                    local maxlen 0
+                    capture {
+                        foreach s of local usestubs {
+                            quietly levelsof `usej' in 1/`= min(_N, 200)', ///
+                                local(jl) clean
+                            foreach lv of local jl {
+                                if strlen(`"`s'`macval(lv)'"') > 32 local maxlen 1
+                            }
                         }
-                        if `maxlen' local caution "some new names (stub+j) would exceed 32 characters; shorten stubs or j values first"
                     }
+                    if `maxlen' local caution "some new names (stub+j) would exceed 32 characters; shorten stubs or j values first"
                 }
             }
         }
         else if "`usej'" != "" {
             local status needinfo
-            local topi : word 1 of `icands'
-            if "`topi'" != "" & "`topi'" != "`usej'" {
-                tempvar dtag
-                capture duplicates tag `topi' `usej', generate(`dtag')
-                local ndup 0
-                if !_rc {
-                    quietly count if `dtag' > 0
-                    local ndup = r(N)
-                    drop `dtag'
-                }
-                local diagmsg "no i() makes i+j unique with j(`usej'); with i(`topi'), `ndup' of `NS' sample rows share an (i, j) pair. Remedies: duplicates report `topi' `usej' then drop true duplicates; collapse repeated measures; sequence them: bysort `topi' `usej': gen seq = _n and use i(`topi' seq); or fold a second factor into j: egen newj = concat(`usej' otherfactor), p(_) then reshape on j(newj) string"
+            * if a candidate DID make i+j unique but was set aside as sparse, the
+            * cause is sparseness, not duplicates; the dedicated sparse note (in
+            * the checklist) carries the advice, so keep this diagnosis short.
+            if "`sparsecand'" != "" {
+                local diagmsg "no i() both identifies the rows and repeats enough to widen (see the sparse-units note below)"
             }
-            else local diagmsg "j(`usej') looks right but no i makes i+j unique; run: duplicates report <yourid> `usej'"
+            else {
+                local topi : word 1 of `icands'
+                if "`topi'" != "" & "`topi'" != "`usej'" {
+                    tempvar dtag
+                    capture duplicates tag `topi' `usej', generate(`dtag')
+                    local ndup 0
+                    if !_rc {
+                        quietly count if `dtag' > 0
+                        local ndup = r(N)
+                        drop `dtag'
+                    }
+                    local diagmsg "no i() makes i+j unique with j(`usej'); with i(`topi'), `ndup' of `NS' sample rows share an (i, j) pair. Remedies: duplicates report `topi' `usej' then drop true duplicates; collapse repeated measures; sequence them: bysort `topi' `usej': gen seq = _n and use i(`topi' seq); or fold a second factor into j: egen newj = concat(`usej' otherfactor), p(_) then reshape on j(newj) string"
+                }
+                else local diagmsg "j(`usej') looks right but no i makes i+j unique; run: duplicates report <yourid> `usej'"
+            }
         }
     }
 
@@ -1018,7 +1100,7 @@ program define reshapehelper, rclass
     * 7. Emit
     * =========================================================================
     di as txt _n "{hline 70}"
-    di as txt "reshapehelper 0.9.0 " as txt "{c |} " as res `NFULL' as txt " obs, " ///
+    di as txt "reshapehelper 1.0.0 " as txt "{c |} " as res `NFULL' as txt " obs, " ///
         as res `KFULL' as txt " vars" _c
     if "`xtpanel'`xttime'" != "" di as txt " {c |} xtset: " as res "`xtpanel' `xttime'" _c
     if "`svypsu'" != "" di as txt " {c |} svy psu: " as res "`svypsu'" _c
@@ -1073,9 +1155,13 @@ program define reshapehelper, rclass
         if "`caution'" != "" di as txt "  caution: `caution'"
         if "`diagmsg'" != "" & "`status'" == "blocked" di as txt _n "  what to check: `diagmsg'"
 
-        * global + smcl + links
+        * global + smcl + links.  The globals always mirror THIS run: a run
+        * with no second step clears the stale `global'2 from a previous run
+        * (a pipeline testing "$reshapehelper_cmd2" != "" must not fire on the
+        * prior dataset's chained step).
         global `global' `"`cmd'"'
         if "`cmd2'" != "" global `global'2 `"`cmd2'"'
+        else              global `global'2
         if `"`smcl'"' == "" {
             local smclout = c(tmpdir)
             if substr(`"`smclout'"', -1, .) != "/" & substr(`"`smclout'"', -1, .) != "\" ///
@@ -1096,18 +1182,50 @@ program define reshapehelper, rclass
             file write `fh' "{txt}also stored in r(cmd) and " _char(36) "`global'" _n
             file close `fh'
         }
+        * only advertise the file if it was actually written (smcl() can name an
+        * unwritable directory; the write above is captured)
+        capture confirm file `"`smclout'"'
+        local haveout = (_rc == 0)
         di as txt ""
-        if strpos(`"`cmd'"', `"""') == 0 & "`cmd2'" == "" & `"`preline'"' == "" {
+        * click-to-RUN links.  A link is emitted only when it is safe to click:
+        * the command carries no double-quote, and there is no pre-clean line it
+        * would skip.  A chained (doubly-wide) suggestion gets one link per step.
+        local safe1 = (strpos(`"`cmd'"', `"""') == 0 & `"`preline'"' == "")
+        if `safe1' & "`cmd2'" == "" {
             di as smcl `"  {stata `"`cmd'"':>> click to RUN this on the full data}"'
         }
-        di as smcl `"  {view `"`smclout'"':>> click to VIEW/copy the unwrapped syntax}"'
+        else if `safe1' & "`cmd2'" != "" & strpos(`"`cmd2'"', `"""') == 0 {
+            di as smcl `"  {stata `"`cmd'"':>> click to RUN step 1}"'
+            di as smcl `"  {stata `"`cmd2'"':>> click to RUN step 2 (after step 1)}"'
+        }
+        if `haveout' {
+            di as smcl `"  {view `"`smclout'"':>> click to VIEW/copy the unwrapped syntax}"'
+        }
         di as txt  `"  stored: r(cmd)  and  "' _char(36) `"`global'"'
-        return local smcl `"`smclout'"'
+        if `haveout' return local smcl `"`smclout'"'
     }
     else {
-        * ---- needinfo: the checklist ------------------------------------------
+        * ---- needinfo: no suggestion, so the mirror globals are cleared too ---
+        global `global'
+        global `global'2
         di as txt _n "reshapehelper could not settle on a single command."
         if "`diagmsg'" != "" di as txt "  diagnosis: `diagmsg'"
+        * sparse-panel note: a candidate DID make i+j unique but was set aside
+        * because it barely repeats (near one row per unit).  Say so plainly and
+        * give advice even though no command is offered.
+        if "`sparsecand'" != "" & "`usei'" == "" {
+            di as txt _n "  {bf:possible cause: sparse units.}  " as res "`sparsecand'" ///
+                as txt " together with " as res "`sparsej'" as txt " does uniquely"
+            di as txt "  identify the rows, but each unit appears only about once, so it was"
+            di as txt "  set aside as an unlikely identifier.  If this is a genuinely sparse"
+            di as txt "  panel (most units observed once, a few repeated), that is a valid but"
+            di as txt "  unusual design.  Then either:"
+            di as txt "    - force it: " as res "reshapehelper, to(wide) i(`sparsecand') j(`sparsej')"
+            di as txt "    - or confirm there are repeats to widen at all: " ///
+                as res "duplicates report `sparsecand'"
+            di as txt "  If instead most rows should share an id, the real identifier may be"
+            di as txt "  missing or mis-typed (e.g. a name with trailing spaces); clean it first."
+        }
         di as txt _n "  Things to check or supply, then rerun reshapehelper:"
         local k 1
         if "`icands'" == "" {
@@ -1167,8 +1285,12 @@ program define reshapehelper, rclass
     di as txt "{hline 70}"
 
     * ---- returns -----------------------------------------------------------------
+    * none_for_long / none_for_wide are internal "you asked for X but the
+    * evidence is not there" states; collapse them to the documented -unknown-
+    local retdir "`direction'"
+    if inlist("`retdir'", "none_for_long", "none_for_wide") local retdir unknown
     return local  status    "`status'"
-    return local  direction "`direction'"
+    return local  direction "`retdir'"
     return local  cmd       `"`cmd'"'
     return local  cmd2      `"`cmd2'"'
     return local  preclean  `"`preline'"'
@@ -1180,6 +1302,8 @@ program define reshapehelper, rclass
     return local  note      "`note'"
     return local  caution   "`caution'"
     return local  diagnosis "`diagmsg'"
+    if "`status'" == "needinfo" & "`usei'" == "" & "`sparsecand'" != "" ///
+        return local sparse "`sparsecand'"
     return scalar tested    = `tested'
     return scalar rc        = cond(`finalrc' == ., 0, `finalrc')
     return scalar xpose     = `xposeflag'
@@ -1208,19 +1332,26 @@ program define _rh_snap, rclass
         local line ""
         foreach v of local vars {
             capture confirm string variable `v'
-            if !_rc local cell = substr(`v'[`r'], 1, 8)
+            if !_rc {
+                local cell = substr(`v'[`r'], 1, 8)
+                * a cell value can carry a " or ` (inch marks, coded text);
+                * scrub the quote characters so re-expansion of the assembled
+                * line cannot unbalance quotes or start a phantom macro
+                local cell : subinstr local cell `"""' "'", all
+                local cell : subinstr local cell "`=char(96)'" "'", all
+            }
             else {
                 local cell = strofreal(`v'[`r'], "%8.0g")
                 local cell = strtrim("`cell'")
             }
-            local line `"`line'`cell'"'
-            local pad = 9 - strlen(`"`cell'"')
+            local line `"`macval(line)'`macval(cell)'"'
+            local pad = 9 - strlen(`"`macval(cell)'"')
             if `pad' < 1 local pad 1
             forvalues p = 1/`pad' {
-                local line `"`line' "'
+                local line `"`macval(line)' "'
             }
         }
-        return local l`r' `"`line'"'
+        return local l`r' `"`macval(line)'"'
     }
     return local hdr `"`hdr'"'
     return scalar n = `n'

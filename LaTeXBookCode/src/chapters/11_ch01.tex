@@ -70,6 +70,7 @@ A short routine keeps that delivery disciplined, and it applies to good findings
 Improvement, not just judgment, is often the actual job. Much embedded evaluation runs on the Plan\slash Do\slash Study\slash Act cycle\index{Plan-Do-Study-Act cycle}: the program plans a small change, does it at one site, studies what the data show, and acts by scaling or dropping it, then loops. This is where an embedded evaluator differs most from an outside auditor. You are not delivering one verdict at the end of a grant; you are turning each short cycle's data around fast enough to inform the next one, which means the same figure gets rebuilt every quarter on new rows.\marginnote{The PDSA loop is why the replicable principle is not academic housekeeping. A workflow you can rerun in an afternoon lets you close a cycle in a week; one that needs a day of hand-editing turns a quarterly study into an annual one, and the program stops waiting for you.} A pipeline built for one-time judgment quietly fails here, because a cycle you cannot rerun cheaply is a cycle the program will stop waiting on.
 
 Data quality also depends on the front-line staff who enter it, so part of the job is building their evaluation literacy\index{evaluation literacy}. When staff see data entry as paperwork, they produce blanks and inconsistent categories; when they see how their inputs feed a dashboard they use, they clean up at the source. A plain-language data dictionary\index{data dictionary} generated straight from the data turns documentation into something staff can read,\marginnote{\texttt{labelbook} catches the traps \texttt{codebook} hides: value labels defined but never attached to a variable, and two labels whose text is identical for the first twelve characters, which is where Stata truncates them in some listings.} which makes the result accessible to the staff who read it and, downstream, keeps the workflow replicable. Two built-in commands do the work: \texttt{codebook, compact}\index{codebook@\texttt{codebook}} for a one-line-per-variable overview and \texttt{labelbook}\index{labelbook@\texttt{labelbook}} for the value-label audit. On Stata's bundled sample of 1988 wage data, the compact codebook is six lines of exactly the summary staff need:
+\par
 {\footnotesize
 \begin{verbatim}
 . sysuse nlsw88, clear
@@ -100,6 +101,7 @@ The workflow is the point. It is replicable because it runs from the raw exports
 \end{appliedexample}
 
 To make the scenario concrete before any real data arrives, Figure~\ref{fig:reach} shows what the Monday exhibit looks like on simulated enrollment. We draw five host sites, each with a target rural share the program committed to (some sit in more rural catchments and promised more) and an observed share, then plot the two side by side. The exact command that builds it is printed above the figure, and the simulated numbers are set with a fixed seed so this exhibit rebuilds identically for any reader:
+\par
 {\footnotesize
 \begin{verbatim}
 graph bar (asis) target observed, ///
@@ -225,6 +227,7 @@ FRED & Economic time series & Series-period & \texttt{import fred}; free key \\
 \end{table*}
 
 Everything installs and runs from the companion \texttt{code/} folder. Run \texttt{01\_install.do} once to fetch the packages the book uses, then \texttt{00\_control.do} to set your paths (Chapter~\ref{ch:workshop}). As a first example, here is the entire recipe for the wage figure that opens the data chapter (real numbers, no key, four lines):
+\par
 {\footnotesize
 \begin{verbatim}
 local url "https://data.bls.gov/cew/data/api"

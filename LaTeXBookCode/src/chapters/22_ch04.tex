@@ -53,6 +53,7 @@ The honest lesson lives in the combine step, not the download. Element names mut
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{combineall}]
 \textbf{Shipped tool:} \texttt{combineall} v2.0.0, an engine the first author has used since 2011 to combine every file in a directory (append, merge, joinby, or convert-only), extended for this book with a vintage-aware harmonization layer. Point it at the \texttt{raw/} tree the download loop filled, and it stacks the files into the panel the chapter promised. Install it the house way:
+\par
 {\footnotesize
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
@@ -64,6 +65,7 @@ Under \texttt{cmethod(append)}, three options do the combine half. The \texttt{y
 \end{kaobox}
 
 A two-vintage sketch shows the pattern the full TAPR walk scales up. Two files land in \texttt{raw/}, one per year, and the 2020 file renamed \texttt{price} to \texttt{price\_usd}; a one-row map heals the split, and the stack carries a \texttt{year} variable and a source characteristic for free:
+\par
 {\footnotesize
 \begin{verbatim}
 * map.csv rows: oldname,newname,firstyear,lastyear
@@ -84,6 +86,7 @@ The harmonization table confirms \texttt{price} is present in both vintages rath
 \pagelayout{margin}
 \section{A file behind a download button: County Health Rankings}\label{sec:chr}
 Not every no-API source is a scrape. Some agencies post a single flat file at a stable web address, and the whole job is to pull it down cleanly and survive the header. County Health Rankings publishes one national analytic file per year, one row per county, covering premature death, child poverty, insurance, and clinical-care measures, at a URL that changes only in the year. A plain \texttt{copy}\index{copy@\texttt{copy}} then \texttt{import delimited}\index{import delimited@\texttt{import delimited}} pulls all 3{,}143 counties with no key and no login. The one habit worth keeping is to split the address across a couple of local macros so the year is the only thing you edit next January:
+\par
 {\footnotesize
 \begin{verbatim}
 local site "https://www.countyhealthrankings.org"
@@ -98,6 +101,7 @@ The copy is a real download of roughly 3{,}200 rows and several hundred columns.
 Give even a one-file pull the triage read before any cleaning: the byte size in last year's neighborhood (a ninety percent drop means an error page, not a smaller country), the row count near the counties plus summary rows you expect, and the column count steady, because CHR adds and retires measures between vintages. A failed check is a fork, not a footnote: a wrong size means re-download; a changed column set means the rename list below needs a fresh look before it runs.
 
 The header is where the honest work starts, and it fails in two ways at once. First, the file's actual first data row is a second, machine-readable label row, so every column imports as a string and the numbers do not exist until you drop that row. Second, the real column names are long human phrases like \texttt{Premature Death raw value} that Stata munges into one lowercase token. You inspect the damage before you touch it:
+\par
 {\footnotesize
 \begin{verbatim}
 . describe prematuredeathrawvalue childreninpovertyrawvalue
@@ -110,6 +114,7 @@ childreninpo~e  str11   %11s
 \end{verbatim}
 }
 Both are strings, both names are truncated to junk in the middle, and \texttt{prematuredea\textasciitilde e} is not a name anyone will read in six months. The cure is two lines: drop the label row, then rename the handful of columns you actually need into short, honest names and \texttt{destring}\index{destring@\texttt{destring}} them.
+\par
 {\footnotesize
 \begin{verbatim}
 drop in 1                                  // the label row
@@ -123,6 +128,7 @@ destring yrslost childpov, replace
 The before-and-after is the whole point. What imported as \texttt{prematuredeathrawvalue}, stored \texttt{str12}, is now \texttt{yrslost}, stored as a number; \texttt{childreninpovertyrawvalue} is now \texttt{childpov}. Because you wrote the rename down, rather than clicking through a point-and-click cleanup, the next analyst can reproduce the file without you in the room. This is a small preview of the harmonization work of Chapter~\ref{ch:panels}; here it is two renames, there it is a rename map across fourteen vintages, but the instinct is identical.\marginnote{Child poverty and the uninsured rate arrive as proportions in \texttt{[0,1]}, not percents. Multiply by 100 once, right after \texttt{destring}, and label the units, or a board reads \enquote{0.34} and hears a third of a percent instead of a third of the children.}
 
 With Texas counties kept (254 of them, county rows only), we can ask the question a health foundation actually asks: where is the need highest? We combine two standardized measures, premature death and child poverty, into a simple need index\index{need index} (the mean of the two \emph{z}-scores\index{z-score@\emph{z}-score}), sort, and read off the top five:
+\par
 {\footnotesize
 \begin{verbatim}
 egen zd = std(yrslost)
@@ -170,6 +176,7 @@ Texas     &  7{,}900 & 19.0 & 17.5 \\
 \end{table}
 
 The figure turns the table into the exhibit a board can act on. The exact command that made it is a single \texttt{scatter} with the statewide values drawn as dashed reference lines, so every county lands in one of four quadrants and the high-need corner reads at a glance:
+\par
 {\footnotesize
 \begin{verbatim}
 scatter yrslost childpov, msymbol(Oh)      ///
@@ -234,6 +241,7 @@ The mirrored tree is also where the triage read happens for a shared-drive drop.
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{convertanything}]
 \textbf{Integrated command:} \texttt{convertanything}. Converts a single file or a whole directory tree of mixed formats into clean \texttt{.dta} in one pass. Install it from the authors' GitHub, then convert a drop:
+\par
 {\footnotesize
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
@@ -249,6 +257,7 @@ Every \texttt{.csv}, \texttt{.xlsx}, and \texttt{.dta} under \texttt{partner\_dr
 \end{kaobox}
 
 The one dialect \texttt{convertanything} does not read is R's own. When a partner works in R and hands you an \texttt{.Rdata} or \texttt{.rds} file, \texttt{importR}\index{importR@\texttt{importR}} bridges it: it prefers a local R installation (calling \texttt{Rscript} with the \texttt{haven} package) and falls back to Stata's Python integration with \texttt{pyreadstat}, so it works whichever of the two the machine has. That keeps an R-shop collaborator inside the same reproducible pipeline instead of forcing a manual export through CSV, which is one more place a value can silently change.
+\par
 {\footnotesize
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
@@ -259,6 +268,7 @@ importR using "partner_model_frame.Rdata", clear
 }
 
 Some workbooks resist any general tool because they were built for human eyes, with stacked blocks, title rows, and several tables per sheet. The CDC PRAMS workbooks are the standing example: each indicator sits in its own block of a title row, a label row, a header row, then the jurisdictions, several blocks to a sheet, with no clean rectangle to import. The honest response is a hand-crafted \texttt{import excel}\index{import excel@\texttt{import excel}} with an explicit \texttt{cellrange()} per block, and a do-file header that documents the geometry you assumed:
+\par
 {\footnotesize
 \begin{verbatim}
 import excel using "$fname", ///

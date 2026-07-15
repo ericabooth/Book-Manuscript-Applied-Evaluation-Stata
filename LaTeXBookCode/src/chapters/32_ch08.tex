@@ -23,6 +23,7 @@ The Blinder--Oaxaca decomposition\index{Blinder-Oaxaca decomposition} is the sta
 where $\bar Y$ and $\bar X$ are group means, $\beta_A,\beta_B$ each group's own returns, and $\beta^\ast$ the pooled reference the pooled regression supplies \parencite{jann2008oaxaca}. The first term is the gap you would still see if both groups were paid by the same rules but kept their own characteristics; the second is what is left once composition is netted out. One honest caveat before anyone quotes the split: the unexplained term is \emph{not} a discrimination estimate. It absorbs every wage-relevant thing you did not measure, school quality, field of study, unrecorded experience, so read it as \enquote{the gap left after the controls I have,} never as a number to label.
 
 The command that runs it is \texttt{oaxaca}\index{oaxaca@\texttt{oaxaca}} \parencite{jann2008oaxaca}. On the built-in \texttt{nlsw88} sample, decompose the white--Black gap in log hourly wages, using education, experience, tenure, hours, and union status as the characteristics:
+\par
 {\footnotesize
 \begin{verbatim}
 sysuse nlsw88, clear
@@ -77,6 +78,7 @@ where $Y_t(g)$ is the outcome under treatment and $Y_t(0)$ the untreated counter
 The cleanest way to see the problem is to build a world where you already know the answer, then ask each estimator to recover it. We simulate a staggered adoption: 60 units followed over 12 periods, with one cohort switching the policy on at period~5, a second cohort at period~9, and a third group never treated at all.\marginnote{Simulated data with \texttt{set seed 20260704}, so the do-file \texttt{ch08\_did.do} reproduces every number here exactly. A never-treated group is the cleanest possible comparison; a well-behaved rollout usually has one, and when it does not, \texttt{csdid} falls back to the not-yet-treated units.} The treatment effect is deliberately \emph{dynamic}: it starts at 2 units in the first period of exposure and grows by one unit each period after, so a unit five periods into treatment carries an effect of~7. Because we built it, we can state the truth exactly: averaged over all treated unit-periods in this panel, the true average treatment effect on the treated is~\textbf{4.83}. The early cohort is exposed longer, so it spends more periods at the high end of the ramp, which is why the panel-wide average sits above the mid-point of the 2-to-9 range. Any honest estimator should land near 4.83.
 
 The data are generated in a few lines. Each unit gets its own baseline level and each period a common shock, so that both fixed effects are real, and the dynamic effect is added only to treated unit-periods:
+\par
 {\footnotesize
 \begin{verbatim}
 set seed 20260704
@@ -97,12 +99,14 @@ The \texttt{effect} line is where the truth lives: on the first treated period \
 
 \subsection{The naive regression, and why it misleads}
 The instinct is to throw the panel at a two-way fixed-effects regression with a single treatment dummy, which reads as one line and reports one number:
+\par
 {\footnotesize
 \begin{verbatim}
 reghdfe y treated, absorb(unit period) vce(cluster unit)
 \end{verbatim}
 }
 Here is the coefficient that comes back, next to the truth:
+\par
 {\footnotesize
 \begin{verbatim}
 -----------------------------------------------------------
@@ -119,6 +123,7 @@ Why we care: a one-third undercount is the difference between a program that cle
 
 \subsection{The Callaway--Sant'Anna estimator, and the truth recovered}
 The fix is to stop pooling and instead estimate a clean effect for every cohort at every period, comparing treated units only to units not yet treated or never treated, then aggregate those honest pieces. The \texttt{csdid} command does this in one call, and the overall aggregation is the number to report:
+\par
 {\footnotesize
 \begin{verbatim}
 csdid y, ivar(unit) time(period) gvar(cohort) ///
@@ -127,6 +132,7 @@ estat simple
 \end{verbatim}
 }
 The \texttt{method(dripw)} option asks for doubly-robust inverse-probability weighting, which is the safe default: it models both the outcome and the treatment odds, so the estimate stays consistent if either model is right. The aggregated effect lands on the truth:
+\par
 {\footnotesize
 \begin{verbatim}
 -----------------------------------------------------------
@@ -162,6 +168,7 @@ Relative time on the $x$-axis (negative is pre-treatment), the estimated effect 
 
 \subsection{The event study: read the pre-trend before the headline}
 The single aggregated number hides the shape of the effect, and the shape is where the credibility lives. Aggregating \texttt{csdid} by time since treatment, rather than into one figure, gives the event study\index{event study}, which we always plot before quoting the headline:
+\par
 {\footnotesize
 \begin{verbatim}
 csdid y, ivar(unit) time(period) gvar(cohort) ///
@@ -223,6 +230,7 @@ The \texttt{twinmatch}\index{twinmatch@\texttt{twinmatch}} command ranks \emph{p
 d(i,t)=\sqrt{\,(\mathbf{x}_i-\mathbf{x}_t)^{\!\top}\,S^{-1}\,(\mathbf{x}_i-\mathbf{x}_t)\,},
 \]
 where $\mathbf{x}_i$ and $\mathbf{x}_t$ are the two units' covariate vectors and $S^{-1}$ is the inverse covariance matrix, which rescales each covariate by its spread and de-correlates them so no single wide-ranging variable dominates the ranking. It is a donor-selection helper, not an estimator, so it hands the evaluator a defensible shortlist to reason about rather than a number to report. Install it alongside the other book tools:
+\par
 {\footnotesize
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
@@ -231,6 +239,7 @@ net install twinmatch, ///
 \end{verbatim}
 }
 The mechanics are quickest to see on the built-in \texttt{auto} data, treating one car as the \enquote{treated} unit and asking which others most resemble it on mileage, price, and weight:
+\par
 {\footnotesize
 \begin{verbatim}
 sysuse auto, clear
@@ -266,6 +275,7 @@ Answer the money question with a range a board can plan against, not a single ra
 
 \subsection{A worked ROI: from point estimate to a distribution}
 Take the training program from the DiD example and price it. Suppose the effect we just estimated translates to an annual earnings gain per participant, that the program costs a fixed amount per seat, and that the gain persists for several years but is discounted back to today. The naive ROI is a single ratio of discounted benefits to costs. The honest ROI draws each uncertain input from a distribution ten thousand times and reports the spread:
+\par
 {\footnotesize
 \begin{verbatim}
 set seed 20260704
@@ -286,6 +296,7 @@ summarize roi, detail
 \end{verbatim}
 }
 The Monte Carlo returns not one ROI but ten thousand, and the summary is what you report:
+\par
 {\footnotesize
 \begin{verbatim}
 -----------------------------------------------------------
@@ -309,6 +320,7 @@ A tornado diagram showing how the ROI estimate moves as each key assumption vari
 \subsection{The tornado: which assumption is driving the answer}
 The distribution tells a board how confident to be; the tornado tells them \emph{what to argue about}. We hold every input at its central value, then swing one input at a time to the low and high ends of its plausible range and record how far the ROI moves. Sorting those swings longest-first produces Figure~\ref{fig:tornado}, and the sort is the whole message: the annual earnings gain and the persistence horizon move the ROI by far more than the discount rate or the per-seat cost do. A board that reads this stops litigating the discount rate, which barely matters here, and concentrates its scrutiny on the earnings-gain estimate, which is both the longest bar and the one our DiD design was built to pin down.
 
+\par
 {\footnotesize
 \begin{verbatim}
 graph hbar (asis) swing, over(input, sort(1)) ///
@@ -327,6 +339,7 @@ graph export "$figures/ch08_tornado.png", ///
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{roisim}]
 The hand-coded loop above is the transparent version, worth writing once so a reader sees the machinery, but an evaluator who prices programs monthly wants the same result in one line. \texttt{roisim}\index{roisim@\texttt{roisim}} takes the effect estimate and its standard error, a cost range, and the discount and horizon ranges, draws each input ten thousand times, and returns the ROI percentiles, the break-even probability, and the tornado sweep as saved results. Install it from the book's repository:
+\par
 {\footnotesize
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
@@ -335,6 +348,7 @@ net install roisim, ///
 \end{verbatim}
 }
 Feed it the same effect, cost, discount, and horizon assumptions the hand-coded loop used:
+\par
 {\footnotesize
 \begin{verbatim}
 roisim, effect(3000) se(900)      ///

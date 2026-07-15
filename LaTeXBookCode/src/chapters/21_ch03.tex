@@ -58,6 +58,7 @@ The stewardship habit has three concrete moves, none of them costly. First, filt
 
 \section{Census data with getcensus}
 The American Community Survey (ACS)\index{American Community Survey (ACS)} is the evaluator's standing source for community context: income, poverty, insurance, education, and dozens more, at geographies from the nation down to the census tract. The community package \texttt{getcensus}\index{getcensus@\texttt{getcensus}} turns an ACS query into one Stata command. It needs a Census API key, which is free and takes a minute: request one at \texttt{api.census.gov/data/key\_signup.html}, and the Census Bureau emails it to you. Store it once in your \texttt{profile.do} as \texttt{global censuskey "YOUR\_KEY"} (the full setup is in Appendix~\ref{app:setup}) so it loads at startup and never lands in a shared do-file. With that key in your profile, a county income panel is four lines:
+\par
 {\footnotesize
 \begin{verbatim}
 * one-time, in profile.do:  global censuskey "YOUR_KEY"
@@ -69,6 +70,7 @@ The command \texttt{getcensus catalog, search(poverty)} searches the data dictio
 
 \section{Education panels with educationdata}
 The Urban Institute's Education Data Portal harmonizes federal education data (the Common Core of Data on schools and districts, IPEDS on colleges, and the Civil Rights Data Collection) so that variable names stay consistent across years; without that consistency, every panel build opens with a renaming project. The portal's builders set out to solve the exact problem an embedded evaluator hits at the start of every education project: the raw federal files are public but scattered across formats and inconsistent codings, so the difficulty of assembling them slows evidence-based decisions to a crawl \parencite{chingos2018portal}. The portal absorbs that assembly cost once, on behalf of everyone, so the analyst inherits a clean panel rather than a cleaning project. The official \texttt{educationdata}\index{educationdata@\texttt{educationdata}} package needs no key:
+\par
 {\footnotesize
 \begin{verbatim}
 educationdata using "school ccd enrollment", ///
@@ -80,6 +82,7 @@ The \texttt{sub()} option subsets on the server so you download only what you ne
 
 \subsection{A worked example: did Texas enrollment dip with COVID?}\label{sec:ccd}
 A school-finance analyst in 2023 wants to know how far the pandemic pushed enrollment down, and by how much, because the district's per-pupil funding follows the headcount. The Common Core of Data has the answer at the district level for every year, and \texttt{educationdata} pulls the Texas panel with one filtered request. We ask the server for district totals only (\texttt{grade=99} is the all-grades line) across 2015 through 2022, so only the rows we need cross the wire:
+\par
 {\footnotesize
 \begin{verbatim}
 educationdata using "district ccd enrollment", ///
@@ -92,6 +95,7 @@ list year enrollment n_dist, clean noobs
 \end{verbatim}
 }
 The \texttt{collapse} sums the district counts into one state total per year and, in the same pass, counts how many districts reported, which is the denominator you want before trusting any state number. The result is an eight-row series, and the numbers are real:
+\par
 {\footnotesize
 \begin{verbatim}
     year    enrollment    n_dist
@@ -111,6 +115,7 @@ Before this series reaches a finance office, the two-benchmark habit from the AC
 
 \begin{figure}[htbp]
 \centering
+\par
 {\footnotesize
 \begin{verbatim}
 twoway connected enroll_m year, ///
@@ -128,6 +133,7 @@ The whole example, download to figure, is one short do-file (\texttt{ch03\_educa
 
 \section{Economic series with import fred}
 Economic context, unemployment and wages, is what nearly every workforce or place-based evaluation needs for its comparison story. Stata reads the Federal Reserve's FRED\index{import fred@\texttt{import fred}}\index{FRED (Federal Reserve Economic Data)} database natively, no package required:
+\par
 {\footnotesize
 \begin{verbatim}
 set fredkey YOUR_KEY, permanently
@@ -138,6 +144,7 @@ FRED returns wide data, one column per series, so a \texttt{reshape long} is the
 
 \section{A worked example: county wages from the BLS, no key}\label{sec:qcew}
 A workforce board asks a concrete question: what does a job pay here, compared with the metros we compete with? The Bureau of Labor Statistics answers it through the Quarterly Census of Employment and Wages (QCEW)\index{Quarterly Census of Employment and Wages (QCEW)}, and it posts the data as plain CSV files, one per county-year, that Stata reads directly from a URL with no key.\marginnote{The QCEW counts jobs, not people: a worker with two jobs is counted twice, and it covers only employment subject to unemployment insurance, so the self-employed and most agricultural labor are excluded. For a headcount of residents, reach for the Census ACS instead.} Each file is downloaded by a single \texttt{import delimited}. This pull ran on the extraction contract of Section~\ref{ch03-sc-contract}: five counties, one quarter, two variables, tested first on Travis County alone before any loop existed. To compare five Texas metros we loop over their county FIPS codes and keep the one row we want, the total private-sector line (ownership code~5, industry code~10):
+\par
 {\footnotesize
 \begin{verbatim}
 * Travis, Harris, Dallas, Bexar, Tarrant:
@@ -160,6 +167,7 @@ foreach fips of local counties {
 One detail deserves a comment. We force columns~1 and~3 (the county FIPS code\index{FIPS codes} and the industry code) to import as strings with \texttt{stringcols(1 3)}, because they are identifiers, not quantities: read as numbers, \texttt{"48453"} would keep its value but \texttt{"10"} could collide with other codes, and leading zeros in smaller FIPS codes would vanish. Reading identifiers as text is a habit that prevents a whole class of silent merge failures later.\marginnote{The classic failure: a five-digit FIPS like \texttt{01001} (Autauga, Alabama) loses its leading zero as a number, becomes \texttt{1001}, and fails to merge against a crosswalk that stored it as a string. Every FIPS below Colorado is at risk.}
 
 After labeling each county for a client-readable chart, the extract is five rows, and the numbers are real:
+\par
 {\footnotesize
 \begin{verbatim}
     county                 month3_emplvl   avg_wkly_wage
@@ -171,6 +179,7 @@ After labeling each county for a client-readable chart, the extract is five rows
 \end{verbatim}
 }
 This makes sense: Houston, Austin, and Dallas anchor the state's corporate and technology payrolls, while Fort Worth and San Antonio sit several hundred dollars a week lower, a gap of roughly a third. A workforce board reading this sees immediately that a training program aiming at the regional wage will look different in Bexar than in Harris. The two benchmarks are quick here: the BLS publishes county QCEW summaries as web tables, so Harris County's weekly wage can be eyeballed against the published page in under a minute, and rerunning last year's do-file gives the prior-vintage comparison for free, since revised quarters shift by dollars, not hundreds. Only after both checks pass does the extract earn its place in the exhibit. One \texttt{graph hbar} turns the extract into it:
+\par
 {\footnotesize
 \begin{verbatim}
 graph hbar (asis) avg_wkly_wage, ///
@@ -193,6 +202,7 @@ The whole example, download to figure, is one short do-file (\texttt{20\_ch03\_a
 
 \section{Health and community context: County Health Rankings and PLACES}
 Small-area health estimates make community need visible to a funder who thinks in counties. County Health Rankings, produced annually since 2010 by the University of Wisconsin Population Health Institute and the Robert Wood Johnson Foundation, ranks every county in a state against its peers on health outcomes and the factors behind them, and its authors describe it as a \enquote{population health checkup} built to spur local action rather than to settle a research debate \parencite{remington2015rankings}. That framing suits an embedded evaluator exactly: the file is designed to be acted on, and its model of health factors maps cleanly onto the community-level outcomes a logic model already names. County Health Rankings publishes an annual analytic file, one row per county, at a stable per-year URL, so a plain \texttt{copy} then \texttt{import} pulls a national county dataset of premature death, child poverty, and clinical-care measures with no key and no login:
+\par
 {\footnotesize
 \begin{verbatim}
 local site "https://www.countyhealthrankings.org"
@@ -246,6 +256,7 @@ The moment an evaluator hits an API that answers in JSON rather than a tidy CSV,
 Start with the format, because the word scares people more than the thing does. \emph{JSON}\index{JSON (JavaScript Object Notation)} (JavaScript Object Notation) is just text that stores data as labeled boxes inside labeled boxes. A record for one person might read \texttt{\{"id":1, "name":"Leanne Graham", "address":\{"city":"Gwenborough"\}\}}: three fields, and the third, \texttt{address}, is itself a small box holding \texttt{city}. That nesting is the only thing that makes JSON harder to read than a spreadsheet, because a spreadsheet cannot put a box inside a cell. The fix is \emph{flattening}\index{flattening (JSON)}: turning \texttt{address.city} into a plain column named \texttt{addresscity}, so the nested box becomes an ordinary variable.
 
 The \texttt{webapi} command does the request, the authentication, and the flattening in one line, and it leans only on the Python that ships inside Stata, so there is nothing to \texttt{pip install}. Ask a public endpoint for its data and \texttt{webapi} hands you a dataset:
+\par
 {\footnotesize
 \begin{verbatim}
 webapi get using ///
@@ -254,6 +265,7 @@ list id name addresscity in 1/3, noobs
 \end{verbatim}
 }
 The reply is ten records with nested addresses, and the flattening has already happened, so \texttt{address.city} arrives as the column \texttt{addresscity} with no work on your part:
+\par
 {\footnotesize
 \begin{verbatim}
   +------------------------------------------+
@@ -268,6 +280,7 @@ The reply is ten records with nested addresses, and the flattening has already h
 That is the whole idea: you name the URL, and the nested reply lands as flat variables. This makes sense once you see it, and it is why an evaluator can treat a JSON API as just another data source rather than a programming detour.
 
 The same one line reaches real health data. The CDC serves national mortality through a JSON endpoint, and a field filter keeps the request to the rows you want, still with no key:
+\par
 {\footnotesize
 \begin{verbatim}
 webapi get using ///
@@ -278,6 +291,7 @@ webapi get using ///
 That returns 52 rows (one per state, plus the District of Columbia and the national total) over HTTP~200, ready to \texttt{destring} and rank. The \texttt{params()} option takes pipe-separated \texttt{key=value} pairs and encodes them into the query string for you, so you never hand-build a URL.
 
 When an endpoint does need a key, \texttt{webapi} carries it without ever putting it in your do-file. Store the token once as a global in \texttt{profile.do}, then pass it by reference:
+\par
 {\footnotesize
 \begin{verbatim}
 * one-time, in profile.do:  global API_TOKEN "your_token"
@@ -294,6 +308,7 @@ Socrata endpoints (data.cdc.gov and many state portals) offer query options that
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{webapi}]
 \textbf{Integrated command:} \texttt{webapi get}/\texttt{post}. Fetches a JSON (or CSV) web reply, optionally with a bearer token, basic auth, or an API key, and flattens the nested reply into a Stata dataset, using only Stata's built-in Python. It also polls an endpoint on a timer (\texttt{every()}, \texttt{times()}) to build a live panel, which is the survey-monitoring pattern of Chapter~\ref{ch:surveys}. Install it once from the authors' GitHub:
+\par
 {\footnotesize
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"

@@ -43,6 +43,7 @@ Consider rehearsing the handoff before it is real: midway through the project, o
 
 \section{Install once: the packages the book uses}\label{sec:ch02-install}
 The rest of the chapter builds the setup that passes the handoff test, starting with the environment. Before anything else, install the community packages the examples call. Doing this in a single, rerunnable do-file (rather than by hand, one \texttt{ssc install}\index{ssc install@\texttt{ssc install}} at a time) means a new teammate reproduces your environment by running one file. The companion \texttt{01\_install.do} does exactly this; its core is a loop that skips anything already present:
+\par
 {\footnotesize
 \begin{verbatim}
 foreach pkg in estout coefplot gtools reghdfe getcensus {
@@ -59,6 +60,7 @@ Installing the packages in a rerunnable file solves who has them; it does not so
 The size of this risk is not hypothetical, and computational scientists have measured it. When \textcite{perkel2020code} organized a challenge to rerun decade-old analysis code, participants found that obsolete dependencies and vanished package versions, more than the authors' own logic, were what broke the reruns, and some pipelines could not be revived at all. The lesson for an evaluator is that the language version you already pin with \texttt{version} is only half the environment; the community commands your results lean on are the other half, and they drift on their authors' schedules rather than yours.
 
 The fix is to freeze the toolchain inside the project, the same way you froze the language. Copy the \texttt{.ado} files your pipeline calls into a folder under the project root, then point Stata at that folder first with \texttt{adopath ++} in the control file, so the project runs against its own stashed copies before it ever consults the machine's shared install:
+\par
 {\footnotesize
 \begin{verbatim}
 adopath ++ "$root/ado"   // project ados win first
@@ -102,6 +104,7 @@ Two naming refinements keep the layout working once files multiply. When an outp
 
 \section{One control file for every path and preference}\label{sec:control}
 The single most useful file in a project is the control file\index{control file}. It does three jobs: it sets every path in one place, so moving the project to a new machine means editing one line; it sets project-wide preferences once, so every do-file behaves the same; and it can run the whole pipeline in order. Here is the heart of the companion \texttt{00\_control.do}:
+\par
 {\footnotesize
 \begin{verbatim}
 clear all
@@ -131,6 +134,7 @@ Paths are not the only values worth hoisting to the top; parameterize what chang
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{projectbuilder}]
 \texttt{projectbuilder}\index{projectbuilder@\texttt{projectbuilder}} scaffolds a project in one command: the folder tree, a starter control file, the numbered pipeline, and a documentation site. It builds the same shape this chapter teaches, numbered so a folder listing sorts in pipeline order: \texttt{01\_raw/} (holding \texttt{\_converted/}), \texttt{02\_cleaned/}, \texttt{03\_output/}, a \texttt{\_code/} folder with \texttt{000\_control.do} and the \texttt{100}--\texttt{600} stubs, and a \texttt{\_documentation/} folder whose site is rebuilt on every run. It generalizes the production tool the authors open every engagement with, so later chapters that mention \enquote{the \texttt{projectbuilder} scaffold} mean this shipped command, not a plan. Install it once:
+\par
 {\footnotesize
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
@@ -140,6 +144,7 @@ net install projectbuilder, ///
 \end{verbatim}
 }
 Projects start one of two ways and the command handles both. \textbf{When the data already exists}, point at the folder (or a source URL) and the scaffold ingests it: \texttt{convertanything}\index{convertanything@\texttt{convertanything}} turns every raw file into \texttt{.dta} under \texttt{01\_raw/\_converted/}, then \texttt{combineall}\index{combineall@\texttt{combineall}} appends those into the analytic file in \texttt{02\_cleaned/}, both of them the Chapter~\ref{ch:noapi} tools doing the work they were built for:
+\par
 {\footnotesize
 \begin{verbatim}
 cd "~/projects"
@@ -151,6 +156,7 @@ projectbuilder CountyBudgets,                ///
 \end{verbatim}
 }
 \textbf{More often the folder comes before the data.} Scaffold the empty shell now, and when the first extract lands in \texttt{01\_raw/}, rerun with \texttt{rebuild}. That one call re-converts, re-appends, and regenerates the documentation, and every later refresh is the same call again:
+\par
 {\footnotesize
 \begin{verbatim}
 projectbuilder VendorFeed,                   ///
@@ -191,6 +197,7 @@ The first three failures the control file and install file close directly, and t
 
 \section{The numbered pipeline}
 Name your do-files so the folder listing itself tells anyone the order to run them, and so the whole project rebuilds with one command instead of tribal knowledge. Give the project's do-files numbered names that sort into the order they run: \texttt{100\_ingest}, \texttt{200\_clean}, \texttt{300\_analyze}, up to \texttt{600\_report} (Figure~\ref{fig:numbered}). Numbering by hundreds leaves gaps, so a new step slots in as \texttt{250\_} without renaming the rest. The control file ends with an optional block that runs them all:
+\par
 {\footnotesize
 \begin{verbatim}
 local run_all 0     // flip to 1 to rebuild everything
@@ -226,12 +233,14 @@ Build loops small before you build them wide. A loop that will eventually cover 
 
 \section{Leave a paper trail: logging every run}\label{sec:logging}
 A pipeline that rebuilds silently gives you no evidence of what it did. A log file fixes that: it captures every command and every line of output to a text file, so weeks later you can answer \enquote{what did the January run actually print?} without rerunning anything. Open a log at the top of each do-file and close it at the bottom, and stamp the filename with the date so runs never overwrite each other:
+\par
 {\footnotesize
 \begin{verbatim}
 log using "$output/clean_$S_DATE.log", replace text
 \end{verbatim}
 }
 The \texttt{\$S\_DATE} system macro expands to today's date, so yesterday's log survives today's run and you keep a dated trail rather than a single file that is only ever as old as your last mistake. Ask for \texttt{text} rather than Stata's default \texttt{smcl} markup so the log opens in any editor and greps cleanly. Close it explicitly at the end, guarding the close so a half-open log from a crashed run does not stop the next one:
+\par
 {\footnotesize
 \begin{verbatim}
 capture log close
@@ -243,6 +252,7 @@ The habit costs two lines per do-file and pays off the first time a client asks 
 A log records what the code did; it does not record what you decided, what surprised you, or what you still owe. Those belong in the tracking spine\index{tracking spine}: one small external file, a CSV or a modest Excel sheet the pipeline can append to, with one row per decision, finding, anomaly, or bug, and columns for the date, the pipeline stage, the item, the decision or finding, the evidence file that backs it, and a status of open or closed. When the cleaning step reveals duplicate IDs and you resolve to keep the latest record per person, that resolution is a spine row, dated and pointed at the log that shows the duplicates. The code carries out the decision, the log proves the code ran, and the spine is the only place the decision itself is written down.
 
 Appending a row costs five lines, and because \texttt{file write} with \texttt{append} creates the file when it is missing, the same fragment works on day one and day two hundred:
+\par
 {\footnotesize
 \begin{verbatim}
 file open spine using "$output/spine.csv", write append
@@ -291,6 +301,7 @@ This makes sense: the payoff scales with how much work the operation does per ro
 \]
 where $t_{\text{native}}$ and $t_{\text{gtools}}$ are the mean seconds per run in Table~\ref{tab:bench}, $c_{0}$ is the command's fixed startup cost, $n$ is the number of rows, $k$ a constant, and $w$ the work done per row. A speedup above~$1$ means \texttt{gtools} was faster; below~$1$, its fixed cost $c_{0}$ outweighed the per-row saving, which is exactly what a fast \texttt{collapse} shows and a slow \texttt{egen} does not. The practical rule falls out of the table. Reach for \texttt{gtools} when a step is slow and you run it often; leave the fast steps alone, because a half-second job optimized to a quarter-second saves nothing a human will notice. Benchmark first, on your data, then optimize the step the clock actually flags.\marginnote{These are Mauricio Caceres Bravo's \texttt{gtools} and Sergio Correia's \texttt{ftools}/\texttt{reghdfe}. The speedups here are modest because the file is only two million rows and the operations are simple; on tens of millions of rows, or with string-keyed groups, the gap between native and \texttt{gtools} widens sharply.}
 
+\par
 {\footnotesize
 \begin{verbatim}
 graph hbar (asis) native gtools, ///

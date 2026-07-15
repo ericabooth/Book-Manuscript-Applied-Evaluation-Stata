@@ -21,6 +21,7 @@ where $s_i$ is record $i$'s sensitive value, so a group can be large in $k$ yet 
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{riskscan}]
 \textbf{Install and run:} \texttt{riskscan}\index{riskscan@\texttt{riskscan}} scans a dataset for the quasi-identifiers you name, computes $k$-anonymity across their combinations, and flags the records at highest re-identification risk, so the exposure is measured rather than assumed away. Install it once from the book's public repository:
+\par
 {\footnotesize
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
@@ -35,6 +36,7 @@ Once both sides hold the same number, \enquote{is this safe to share?} stops bei
 
 \subsection{A worked example: how many people are one of a kind?}\label{sec:kanon}
 A data steward about to release a file wants a blunt answer before signing off: once the names are stripped, how many people are still unique on the columns that remain, and so still findable by anyone holding those few facts? We answer it on \texttt{sysuse nlsw88}\index{sysuse@\texttt{sysuse}}, the 1988 wage survey that ships with Stata, treated here as a stand-in for an administrative caseload of 2{,}246 records. Nothing in it is secret, which is exactly why it is safe to demonstrate on; the arithmetic is identical when the records are real clients. We pick four quasi-identifiers that any partner file would plausibly carry, race, marital status, college-graduate status, and industry, and count how many people share each combination:
+\par
 {\footnotesize
 \begin{verbatim}
 sysuse nlsw88, clear
@@ -45,6 +47,7 @@ label var k "people sharing this quasi-id cell"
 \end{verbatim}
 }
 The variable \texttt{cell} is one number per distinct combination of the four columns, and \texttt{k} is how many people fall in that combination. A person with \texttt{k}${}=1$ is unique on those four columns: strip their name and they are still findable by anyone who knows their race, marital status, degree, and industry, four facts a coworker or a neighbor could supply. We bin the records by cell size and count both cells and people in each bin:
+\par
 {\footnotesize
 \begin{verbatim}
 gen kbin = 1 + (k>1) + (k>4) + (k>10)
@@ -79,17 +82,20 @@ Total            & 103 & 2{,}246 \\
 \end{table}
 
 The count that matters is the first row, and it is worth printing on its own:
+\par
 {\footnotesize
 \begin{verbatim}
 count if k==1
 \end{verbatim}
 }
+\par
 {\footnotesize
 \begin{verbatim}
   24
 \end{verbatim}
 }
 The whole scan collapses to one command, and it reproduces exactly the table above so you can trust that the tool and the hand-computation agree:
+\par
 {\footnotesize
 \begin{verbatim}
 riskscan race married collgrad industry
@@ -103,6 +109,7 @@ The count is only useful once it becomes a sentence a non-technical partner can 
 
 \begin{figure}[htbp]
 \centering
+\par
 {\footnotesize
 \begin{verbatim}
 bysort cell: keep if _n==1
@@ -118,6 +125,7 @@ histogram kplot, discrete frequency ///
 
 \subsection{Coarsening: the cheapest way to raise \texorpdfstring{$k$}{k}}\label{sec:coarsen}
 The fastest way to empty the $k=1$ bin is to make the mesh coarser, because a record is unique only relative to the resolution of its columns.\marginnote{Coarsen the highest-cardinality column first: the singletons cluster in the rare combinations, and those almost always involve the variable with the most categories. Age in single years, five-digit ZIP, and detailed occupation codes are the usual culprits; bin them before you reach for anything more elaborate.} Industry is the finest of our four quasi-identifiers, twelve categories, so it does the most damage; collapsing it to three broad groups (goods-producing, services, and public administration) merges many singleton cells into populated ones without touching the other three columns:
+\par
 {\footnotesize
 \begin{verbatim}
 recode industry (1/4=1 "Goods") ///
@@ -158,6 +166,7 @@ The threshold itself is not the analyst's to invent: most data-use agreements na
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{suppress}]
 \textbf{Install and run:} \texttt{suppress}\index{suppress@\texttt{suppress}} automates public-release QA for a table: primary small-cell suppression, complementary suppression so totals do not reveal the hidden cells, and a marked output column an analyst can publish. Install it from the book's public repository:
+\par
 {\footnotesize
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
@@ -170,11 +179,13 @@ The syntax is \texttt{suppress countvar [if] [in], threshold(\#) [by(varlist) ge
 
 \subsection{A worked example: blanking a cell without leaking it}\label{sec:supexample}
 The problem is easiest to see in a two-way table small enough to hold in your head. Staying in the stand-in file, cross college-graduate status against the four goods-producing industries, where the thin cells live, and count people. Suppose the release rule is the common one: blank any cell with fewer than five people. Here is the raw count:
+\par
 {\footnotesize
 \begin{verbatim}
 tabulate collgrad industry if industry<=4
 \end{verbatim}
 }
+\par
 {\footnotesize
 \begin{verbatim}
           |            Industry
@@ -239,6 +250,7 @@ The walk-through is worth stating as a rule, because it is the step analysts mos
 \end{figure}
 
 Run against the goods-producing cross-tabulation, it reproduces the hand-computed table above cell by cell:
+\par
 {\footnotesize
 \begin{verbatim}
 contract collgrad industry if industry<=4, ///

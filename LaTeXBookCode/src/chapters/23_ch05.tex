@@ -14,6 +14,7 @@ Make your responses download themselves, so the data that lives behind a vendor'
 A first pull deserves a small rehearsal. Before scripting the full download, pick two respondents you can identify on the platform's dashboard, pull only their records, and check the export against the screen; multi-selects, timestamps, and anything with an accented character are where the export and the dashboard most often disagree. Ten minutes on two known cases settles the export options while the stakes are still zero.
 
 The quickest payoff needs no platform API at all. If a Google Form's response sheet is link-shared, one line pulls it into Stata:
+\par
 {\footnotesize
 \begin{verbatim}
 local sheet "https://docs.google.com/spreadsheets/d/KEY"
@@ -27,6 +28,7 @@ The pull is only the first surprise the platform hands you. Qualtrics and Google
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{undummy}]
 \textbf{Integrated command:} \texttt{undummy} recombines a set of mutually exclusive dummy variables into one labeled categorical, mapping labels from the value each dummy carries (or, with \texttt{varnames}, from the dummy names themselves). Install with the house idiom:
+\par
 {\footnotesize
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
@@ -35,6 +37,7 @@ net install undummy, ///
 \end{verbatim}
 }
 The inverse of \texttt{tabulate, generate()}. On the classic \texttt{auto} data the round trip is one split and one recombine:
+\par
 {\footnotesize
 \begin{verbatim}
 sysuse auto, clear
@@ -51,13 +54,14 @@ A note on ordering saves a later surprise: for numeric dummies the first-listed 
 \section{Watching response rates while the survey is alive}\label{sec:monitor}
 A survey you can only assess after it closes is a survey you cannot steer, so the highest-value move in this chapter is watching response while there is still time to act. A scheduled do-file, run daily by the operating system, pulls the current responses, counts them against the enrollment roster to get a response rate by site, and flags sites drifting below target.\marginnote{On macOS or Linux this is a \texttt{cron} entry calling \texttt{stata -b do monitor.do}; on Windows it is a Task Scheduler action. Have the do-file set a non-zero exit code when a site trips a limit, so the scheduler itself can fire the alert email.} Whether a dip is noise or news is exactly the question a control chart\index{control chart} answers, so we borrow its logic: a centerline at the expected rate and limits a few standard deviations out, with points outside the limits read as alarms rather than worries.
 
-The chart only earns its keep if the response to it was decided before launch. In the week before the survey opens, sit with the program team and fix three things in writing: the target rate and the $k$ that sets the limits, the cadence of the pull, and the response plan: who calls whom when a site trips the lower limit, and within how many days. The cadence follows the decision cadence, not the data: if the team meets Tuesday mornings and reminders go out Wednesdays, a Monday-night pull is worth more than a daily feed nobody reads. Settle the threshold in advance and an alarm is a trigger; settle it after the field opens and it is a debate, because a limit negotiated after site~3 has already tripped it will be negotiated in site~3's favor.
+The chart is only worth building if you decide, before launch, what to do when it fires. In the week before the survey opens, sit with the program team and fix three things in writing: the target rate and the $k$ that sets the limits, the cadence of the pull, and the response plan: who calls whom when a site trips the lower limit, and within how many days. The cadence follows the decision cadence, not the data: if the team meets Tuesday mornings and reminders go out Wednesdays, a Monday-night pull is worth more than a daily feed nobody reads. Settle the threshold in advance and an alarm is a trigger; settle it after the field opens and it is a debate, because a limit negotiated after site~3 has already tripped it will be negotiated in site~3's favor.
 
 \begin{vizcallout}[Visualization to build: the response-rate control chart]
 Plot each site's cumulative response rate over the field period, with three reference lines via \texttt{yline()}: the target centerline and upper and lower control limits. Color out-of-limit points as alarms. A small-multiples version (\texttt{by(site)}) turns a forty-site survey into one scannable dashboard, so a program manager sees at a glance which sites need a phone call this week.
 \end{vizcallout}
 
 To make the dashboard concrete we simulate a small evaluation exactly as it would arrive from the platform: eight sites, six weekly pulls each, with a weekly response rate that centers on a target of 70 percent but wanders as reminders go out and rosters churn. The seed is fixed so the figure rebuilds identically:
+\par
 {\footnotesize
 \begin{verbatim}
 set seed 20260704
@@ -72,6 +76,7 @@ replace rate = min(max(rate,0),100)
 The two edits after the draw are the interesting part: sites~3 and~6 are pushed fourteen points down from week~4 on, so the simulated data carries two genuine laggards for the chart to catch. Everything else is noise around the target, which is what a healthy site looks like.
 
 The control limits come from the process itself, not from a textbook constant. We set the centerline at the 70 percent target and the limits at two standard deviations of the observed weekly rates, then flag any site-week that falls below the lower limit:
+\par
 {\footnotesize
 \begin{verbatim}
 summarize rate
@@ -92,6 +97,7 @@ Those five locals are one small piece of statistical machinery. The centerline s
   \text{alarm}_{it}=\mathbf{1}\!\left\{\,r_{it}<\text{LCL}\,\right\}.
 \]
 Here $\mu$ is the target response rate (the centerline, \texttt{cl}$=70$), $\sigma$ the standard deviation of the observed weekly rates (\texttt{sd}), $k$ the number of standard deviations to the limits ($k=2$ here), $r_{it}$ the rate for site~$i$ in week~$t$, and $\mathbf{1}\{\cdot\}$ the indicator that turns on when the rate falls below the lower limit. Reading the limits in policy units is the whole point: a site-week below the lower line is not \enquote{a bit low,} it is far enough below target that noise alone rarely explains it, and that is the moment a worry becomes a phone call. With the observed weekly rates the lower limit lands at 53.7 percent, and the flagged points print as a plain alert list a program manager can act on Monday morning:
+\par
 {\footnotesize
 \begin{verbatim}
     site   week   rate    lcl=53.7
@@ -109,6 +115,7 @@ This makes sense: the alarm list names sites~3 and~6 and no others, which is exa
 An alarm names a site; it does not name a cause, and the cause decides the remedy. Three explanations cover most dips. Instrument fatigue shows up as a synchronized sag, every panel drifting down in the same field week, and its remedy is a shorter reminder or a trimmed instrument, not a phone call to one site. Site turnover shows up as one panel falling off a cliff, and a single call to the site liaison, asking whether the coordinator who championed the survey left, usually confirms it. Seasonality shows up when the dip lands on the same calendar week as last wave's, spring break or end-of-quarter, which the prior wave's monitoring output confirms in a minute. The working rule is to spend one day sorting a dip into one of these bins before escalating, because a misdiagnosed alarm spends goodwill the next one will need.
 
 The command that draws the dashboard is a small-multiples control chart, one panel per site, with the centerline and both limits carried as reference lines:
+\par
 {\footnotesize
 \begin{verbatim}
 twoway (line rate week, sort)                        ///
@@ -137,6 +144,7 @@ Of everything in this book, the monitor is the piece a program team can act on m
 One monitoring dataset feeds three products; the craft is cutting it three ways rather than sending everyone the same chart. Field staff need the names-to-call list: merge the alarm sites back against the enrollment roster, keep the nonrespondents, and hand each coordinator a short list with contact columns, because \enquote{site~3 is below the limit} is not actionable at a site and \enquote{these eleven enrollees have not responded} is. The director needs the trend and the alert, the small-multiples chart plus the four-row alarm list. The funder sees none of the mid-field churn, only the final response-rate narrative: the closing rate, the two sites that lagged, and the calls that recovered them, which presents monitoring as stewardship rather than trouble. The cut is chosen by what its reader can act on.
 
 The last piece is the part no chart shows: something has to run the do-file every morning without anyone remembering to. On macOS or Linux one \texttt{cron} line does it, and the equivalent Windows one-liner registers a Task Scheduler job (display-only here; the paths are yours):
+\par
 {\footnotesize
 \begin{verbatim}
 # crontab -e  (runs 7:00 every weekday, logs output)
@@ -194,6 +202,7 @@ Across waves, the same idea scales into an instrument history. The \texttt{surve
 Most survey constructs arrive as a battery of Likert items, and turning them into something reportable is repetitive enough to invite quiet errors. The \texttt{likertscale}\index{likertscale@\texttt{likertscale}} command automates the whole path: encoding text responses to numbers off the platform's value labels, reverse-coding the items that need it, computing a row-wise index, running Cronbach's alpha\index{Cronbach's alpha} \parencite{cronbach1951alpha} for reliability, and building the top-two-box\index{top-two-box} \enquote{percent agree} indicators that program boards actually read.\marginnote{Rule of thumb on alpha: below 0.70 the items are not hanging together as one scale; above 0.95 they may be redundant, several ways of asking the same question. And alpha climbs mechanically with item count, so a high value on a 30-item battery proves less than it looks.} Do this by hand across thirty items and a miscoded reverse item slips through; do it with one command and the scale rebuilds identically every wave.
 
 To show the output a program board actually receives, we simulate a five-item coaching-satisfaction battery for the same eight sites, drawing correlated Likert responses so the items behave like one scale, then reduce each item to its top-two-box percent agree (the share answering \enquote{agree} or \enquote{strongly agree}) by site:
+\par
 {\footnotesize
 \begin{verbatim}
 set seed 20260704
@@ -262,6 +271,7 @@ The codebook also serves readers beyond the analyst who runs it. The per-wave su
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{cxchangelog}]
 \textbf{Integrated command:} \texttt{cxchangelog}\index{cxchangelog@\texttt{cxchangelog}} regenerates a cross-wave survey codebook from a long-format crosswalk of the instrument, one row per concept per wave. Install with the house idiom:
+\par
 {\footnotesize
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
@@ -270,6 +280,7 @@ net install cxchangelog, ///
 \end{verbatim}
 }
 Point it at the crosswalk and name the columns:
+\par
 {\footnotesize
 \begin{verbatim}
 cxchangelog using crosswalk_w3.xlsx, wave(wave)  ///
@@ -286,16 +297,18 @@ On the demo crosswalk this reports \enquote{concepts: 12\quad waves: 3} and a pe
 When a new analyst asks \enquote{did we change this question in 2024?}, the codebook answers in seconds, and the answer is the same no matter who runs it; that is extensibility across time and staff turnover. The synthetic multi-wave crosswalk used above, three waves and twelve concepts with one item reworded, one added, and one dropped, is generated by the package's own test battery, so the example ships with \texttt{cxchangelog} and reproduces from a clean install.
 
 \subsection{A codebook you can read at a glance: \texttt{datadictionary}}\label{sec:datadictionary}
-Before you model a dataset, you size it up. Which variables are in it? How complete is each one? What do its codes mean, and what values does it usually take? Native Stata answers those questions one command at a time, \texttt{describe} for types, \texttt{summarize} for statistics, \texttt{codebook} for a fuller read, \texttt{tabulate} for categories, and you keep the picture in your head or a scratch file. \texttt{datadictionary}\index{datadictionary@\texttt{datadictionary}} builds the whole picture in one worksheet. Run it on the data in memory and it writes one row per variable that sets the statistics, percent missing, distinct count, common values, labels, and stored notes side by side, prints them to the screen, and exports them to an Excel workbook a colleague can open:
+When a new dataset lands on your desk, you spend the first hour learning it. You run \texttt{describe} to see the types, \texttt{summarize} to see the ranges, \texttt{codebook} to read the value labels, and \texttt{tabulate} to see how the categories fall, and you carry the answers in your head or a scratch file while you work. \texttt{datadictionary}\index{datadictionary@\texttt{datadictionary}} gathers those answers into one place. Point it at the data in memory and you read the whole file off a single worksheet, one row per variable, with the statistics, percent missing, distinct count, common values, labels, and stored notes in adjacent columns, printed to the screen and saved to an Excel file you can hand a colleague:
+\par
 {\footnotesize
 \begin{verbatim}
 sysuse auto, clear
 datadictionary, excel(auto_codebook) replace
 \end{verbatim}
 }
-Read one screen and you know the file. The percent-missing column flags \texttt{rep78} at 6.8\,percent while every other variable is complete; the common-values column shows that \texttt{foreign} splits into Domestic and Foreign and that \texttt{make} takes 74 distinct string values; the statistics sit in the same row as the label that explains them. A varlist and an \texttt{if} narrow the codebook the usual way, \texttt{datadictionary price mpg rep78 if foreign == 1}, and each run ends by printing a clickable link that opens the workbook and its folder, so the file you just built is one click away.
+From that one worksheet you can see the shape of the \texttt{auto} data at a glance. You find \texttt{rep78} missing on 6.8\,percent of the cars where the other variables are complete, \texttt{foreign} taking just two values (Domestic and Foreign), and \texttt{make} running to 74 distinct strings, and each figure sits in the same row as the label that names the variable it describes. To document only part of the data, add a varlist or an \texttt{if} the way you would to any command. When the run finishes, you click the link it prints rather than hunt for where the workbook landed.
 
-That much works on any cross-sectional file. A survey that runs for years asks more: not just what this file contains, but what changed since last time. Return to the staff-wellbeing survey, fielded in 2019, 2021, and 2023 (180, 210, and 195 responses). Point \texttt{datadictionary} at the three wave files and it stacks a row for every variable in every wave and adds a \texttt{changed} column that flags any variable whose label or categories shifted from the wave before:
+That covers any single file. A survey you field year after year raises a harder question: not only what this wave holds, but what moved since the last one. Take the staff-wellbeing survey again, run in 2019, 2021, and 2023 (180, 210, and 195 responses). Hand \texttt{datadictionary} the three wave files and you get a row for every variable in every wave, plus a \texttt{changed} column that marks any variable whose label or categories moved from the wave before:
+\par
 {\footnotesize
 \begin{verbatim}
 datadictionary, files("staff_w1.dta staff_w2.dta staff_w3.dta")  ///
@@ -304,7 +317,7 @@ datadictionary, files("staff_w1.dta staff_w2.dta staff_w3.dta")  ///
 return list
 \end{verbatim}
 }
-Figure~\ref{fig:datadictionaryxlsx} shows the result, and reading down the columns tells the study's story. The percent-missing column tracks the self-reported \texttt{hours} item across waves, 5.0\,percent missing in 2019, 16.7 in the pandemic wave of 2021, back to 8.7 in 2023, the kind of wave-specific nonresponse to weigh before reading a trend as real. The common-values column shows \texttt{q2} holding four categories under \texttt{agree4} in 2019 and five under \texttt{agree5} in 2023, so the recode shows up in the data, not just the label name. And the \texttt{changed} column earns its place: it flags \texttt{q1} in 2023, whose label was reworded, and \texttt{q2} in 2023, whose category set was replaced, each a warning that the variable may no longer mean what it meant in 2019. The \texttt{Changes} sheet lists every such difference in full, with the before and after side by side; here \texttt{r(nchanges)} returns 4.
+Figure~\ref{fig:datadictionaryxlsx} is the workbook you get back, and you read the study's history down its columns. Follow \texttt{hours} across the waves and you watch nonresponse move with field conditions: 5.0\,percent missing in 2019, 16.7 in the pandemic wave of 2021, 8.7 in 2023, a wave-specific gap to account for before you read any trend as real. Follow \texttt{q2} and you find four categories under \texttt{agree4} in 2019 but five under \texttt{agree5} in 2023, so you can see the recode in the data itself, not just in the label. Scan the \texttt{changed} column first, because it saves you the comparison: it marks \texttt{q1} in 2023, whose label was reworded, and \texttt{q2} in 2023, whose categories were replaced, warning you that neither variable is guaranteed to mean in 2023 what it meant in 2019. When a flag makes you want the exact wording, you read it off the \texttt{Changes} sheet, which holds the four before-and-after rows that \texttt{r(nchanges)} counts.
 
 \begin{figure*}[htbp]
 \centering
@@ -319,6 +332,7 @@ The \texttt{changed} column works only over the wave files, not a stitched panel
 Evaluation rarely happens inside one program. A statistician does the modeling in R, a data engineer builds the pipeline in Python, and the program officer only opens spreadsheets, so a dataset that starts in Stata will spend part of its life somewhere else and then come home. The trouble is that the file formats everyone shares, CSV and Excel, carry the \emph{values} but drop everything Stata knows about them. Export a labeled survey extract and the variable labels, the value labels that turn a \texttt{2} into \enquote{Disagree}, the display formats, the stored notes, and the \texttt{srctag} lineage all stay behind; what lands in the collaborator's inbox is a grid of bare numbers. When the edited file comes back, someone has to redress it by hand, and that hand-relabeling is both tedious and the exact place a value-label mapping gets silently transposed.
 
 Roger Newson's \texttt{descsave} solved this for a single file; \texttt{datadictionary} extends it to the round-trip. Add \texttt{dofile()} and, alongside the codebook, it writes a do-file that re-applies every label, format, note, and characteristic the export dropped, so you relabel a returned file with one \texttt{do} instead of an afternoon of \texttt{label define} lines:
+\par
 {\footnotesize
 \begin{verbatim}
 use staff_survey_w1, clear
@@ -326,7 +340,7 @@ datadictionary, excel(staff_codebook) dofile(staff_relabel) replace
 export delimited using staff.csv, nolabel replace
 \end{verbatim}
 }
-Two details in that block carry the whole method. The do-file the command writes is not a black box; it is readable Stata that a reviewer can open, and every line is wrapped in \texttt{capture} with \texttt{varabbrev} turned off at the top, so a column the collaborator renamed or dropped is skipped rather than fuzzily matched to the wrong variable. And the export uses \texttt{nolabel}, which sends the numeric codes rather than the label text, so the \texttt{label values} lines in the do-file have codes to reattach to; export the words \enquote{Disagree} instead and the column comes back as a string that can no longer be re-encoded. Figure~\ref{fig:datadictionary-roundtrip} traces the full loop.
+The round-trip depends on two choices in that block. The do-file is readable Stata, not a black box: you or a reviewer can open it, and because every line runs under \texttt{capture} with \texttt{varabbrev} turned off, a column the collaborator renamed or dropped is skipped rather than matched to the wrong variable. The \texttt{nolabel} on the export matters as much, because it sends the numeric codes rather than the label text, and the \texttt{label values} lines need those codes to reattach to; send the word \enquote{Disagree} instead and the column comes back as a string you can no longer re-encode. Figure~\ref{fig:datadictionary-roundtrip} traces the full loop.
 
 \begin{figure}[htbp]
 \centering
@@ -352,6 +366,7 @@ Two details in that block carry the whole method. The do-file the command writes
 \end{figure}
 
 The receipt is the part that makes the loop safe to trust. Because a collaborator working in another tool may rename a header, drop a column they thought was junk, or add a derived one, the do-file ends by comparing the columns it expected against the columns it found and printing what did not line up:
+\par
 {\footnotesize
 \begin{verbatim}
 import delimited using staff.csv, varnames(1) case(preserve) clear
@@ -370,6 +385,7 @@ That receipt turns a silent mislabeling into a line you read before you trust th
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{datadictionary}]
 \textbf{Integrated command:} \texttt{datadictionary}\index{datadictionary@\texttt{datadictionary}} builds a side-by-side Excel codebook (statistics, percent missing, distinct count, common values, labels, and notes in one \texttt{Variables} sheet) from the dataset in memory or from wave files (\texttt{files()} or \texttt{folder()/pattern()}). Over the wave files it stacks a per-wave row for every variable, detects cross-wave changes (variables added or dropped, types, labels, value-label sets, formats) into a \texttt{Changes} sheet, and adds a \texttt{changed} column flagging any variable whose meaning may have shifted. It writes the workbook (\texttt{Overview}, \texttt{Variables}, \texttt{ValueLabels}, and, over time, \texttt{Changes}) plus a \texttt{saving()} dataset, and prints clickable links to open them. In-memory mode also writes a \texttt{dofile()} that re-applies labels, formats, notes, and characteristics after a CSV/Excel round-trip (Section~\ref{sec:datadictionary-roundtrip}), and an optional \texttt{dictionary()} \texttt{infile} dictionary. Returns \texttt{r(nvars)}, \texttt{r(nchanges)}, \texttt{r(xlsx)}, \texttt{r(dofile)}, and \texttt{r(dct)} for scripting, so a control file can halt when \texttt{r(nchanges)} is not zero and someone has to look. Install with the house idiom:
+\par
 {\footnotesize
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"

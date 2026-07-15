@@ -49,6 +49,7 @@ Chapter~\ref{ch:claims} teaches one causal method in full, difference-in-differe
 \setchapterstyle{lines}
 \chapter{The Book's Toolkit}\label{app:toolkit}
 Use this appendix to find any tool the book uses and jump straight to the chapter that puts it to work. It lists every package and proposed tool in one place so a reader who remembers a capability but not its name can recover both. Published packages install from the authors' GitHub with \texttt{net install}; proposed tools are plans, not yet code. The split matters when you cite the book: the published packages are runnable today and safe to build a workflow on, whereas the proposed tools mark gaps the authors intend to fill, so treat them as a roadmap rather than a dependency. When you adopt one of these into a live project, consider copying its install line into the project's own \texttt{01\_install.do}, so the toolkit travels with the analysis rather than living on one machine (Appendix~\ref{app:setup}). The suite packages follow one pattern, each installing with a single command from its own repository:
+\par
 {\footnotesize
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
@@ -69,7 +70,7 @@ The one exception is \texttt{sparkta2}, whose source is not yet released. The co
 \paragraph{Published packages showcased.}
 \begin{itemize}
     \item \texttt{webapi} -- fetch an authenticated JSON web API into Stata as a dataset, standard-library Python only (Chapter~\ref{ch:apis}).
-    \item \textbf{The twelve packages built for this book}, each in its own \texttt{-stata-public} repository with tests and help: \texttt{projectbuilder} (scaffold the Chapter~\ref{ch:workshop} project layout), \texttt{combineall} (append, merge, or convert a whole folder, with vintage-aware harmonization; Chapters~\ref{ch:apis} and~\ref{ch:noapi}), \texttt{cxchangelog} (cross-wave survey codebooks), \texttt{datadictionary} (the over-time data codebook: per-wave stats, missingness, value-label diffs, Excel export), and \texttt{undummy} (recombine one-hot columns into one categorical), all Chapter~\ref{ch:surveys}; \texttt{rateshrink} (empirical-Bayes rate stabilization), \texttt{conformalpred} (distribution-free prediction intervals), and \texttt{hlmr2} (Nakagawa multilevel $R^2$), all Chapter~\ref{ch:trust}; \texttt{twinmatch} (Mahalanobis policy twins) and \texttt{roisim} (Monte Carlo ROI), both Chapter~\ref{ch:claims}; and \texttt{suppress} (small-cell and complementary suppression) and \texttt{riskscan} ($k$-anonymity scan), both Chapter~\ref{ch:sharing}.
+    \item \textbf{The thirteen packages built for this book}, each in its own \texttt{-stata-public} repository with tests and help: \texttt{projectbuilder} (scaffold the Chapter~\ref{ch:workshop} project layout), \texttt{combineall} (append, merge, or convert a whole folder, with vintage-aware harmonization; Chapters~\ref{ch:apis} and~\ref{ch:noapi}), \texttt{cxchangelog} (cross-wave survey codebooks), \texttt{datadictionary} (the over-time data codebook: per-wave stats, missingness, value-label diffs, Excel export), and \texttt{undummy} (recombine one-hot columns into one categorical), all Chapter~\ref{ch:surveys}; \texttt{reshapehelper} (diagnose the data and suggest the likely \texttt{reshape} command, Chapter~\ref{ch:panels}); \texttt{rateshrink} (empirical-Bayes rate stabilization), \texttt{conformalpred} (distribution-free prediction intervals), and \texttt{hlmr2} (Nakagawa multilevel $R^2$), all Chapter~\ref{ch:trust}; \texttt{twinmatch} (Mahalanobis policy twins) and \texttt{roisim} (Monte Carlo ROI), both Chapter~\ref{ch:claims}; and \texttt{suppress} (small-cell and complementary suppression) and \texttt{riskscan} ($k$-anonymity scan), both Chapter~\ref{ch:sharing}.
     \item \texttt{googlechart} -- 14 interactive chart types from one command (Chapter~\ref{ch:interactive}).
     \item \texttt{googlesheets} -- read, write, format, and chart Google Sheets from Stata (Chapters~\ref{ch:sheets}, \ref{ch:surveys}, \ref{ch:apis}).
     \item \texttt{statashiny} -- serverless interactive HTML dashboards (Chapter~\ref{ch:portals}).
@@ -112,6 +113,7 @@ The one exception is \texttt{sparkta2}, whose source is not yet released. The co
 \paragraph{How you would plan this.} Three decisions preceded any code. The unit of analysis is the state, not the woman: PRAMS publishes weighted jurisdiction estimates, so the claim can only ever rank states ($N=32$). The join map is one master file keyed on state name, with each indicator block reduced to two columns and merged in one at a time. And the good-enough bar was set low on purpose: with 32 observations, a three-model OLS progression is the ceiling, so nothing fancier was budgeted.
 
 \paragraph{Why it is a good teaching case.} The PRAMS workbook is exactly the kind of \enquote{published-for-humans, hostile-to-code} spreadsheet evaluators face constantly: each health indicator sits in its own stacked block (title row, label row, header row, then 32 jurisdictions), several blocks per sheet. There is no clean rectangle to import. The do-file meets this honestly, a sequence of targeted \texttt{import excel} calls with an explicit \texttt{cellrange()} per block, each reduced to state $+$ the weighted estimate, then merged on state name into one analytic file:
+\par
 {\footnotesize
 \begin{verbatim}
 import excel using "$fname", ///
@@ -138,6 +140,7 @@ This is the counterpoint to \texttt{convertanything} (Chapter~\ref{ch:noapi}): w
 \paragraph{How you would plan this.} The analyst settled three things before touching the CSVs. The unit is the school-grade-subject-year, chosen because the redesign question turns on grade and subject, not campus totals. The join map is an append, not a merge: the yearly files share a column layout, so the plan is filter on import, stack, and build the panel ID afterward. The good-enough bar is a defensible pre/post contrast with school fixed effects plus one sensitivity check on the baseline, agreed before estimation so a shrinking coefficient reads as diligence rather than retreat.
 
 \paragraph{Why it is a good teaching case.} This is the large-administrative-data workflow from Chapters~\ref{ch:embedded} and~\ref{ch:workshop} at full scale: a dozen multi-hundred-megabyte CSVs that must be appended without exhausting memory. The do-file loops the yearly files and filters aggressively \emph{on import} (school level, Grades 4/8, \enquote{All Students}, English assessment) so only the needed slice ever lands in memory, then collapses to one row per school-grade-subject-year and builds a panel ID:
+\par
 {\footnotesize
 \begin{verbatim}
 local files : dir . files "edc-3.0-texas-*.csv"
@@ -169,6 +172,7 @@ The two examples in Appendix~\ref{app:walkthroughs} teach the workflow on data t
 \paragraph{How you would plan this.} The same three decisions open this capstone. The unit is the county row, so the state roll-up codes get dropped first. No join map is needed, one file supplies everything, so the planning effort shifts to identifiers: FIPS codes read as strings or the leading zeros vanish. And the good-enough bar is descriptive, a within-state gradient that survives state fixed effects rather than a causal claim, which is why the guard stage gets more lines than the regression.
 
 \paragraph{Stage 1, ingest (Chapter~\ref{ch:noapi}).} There is no API here, just a file at a stable URL, so the do-file copies it and reads it, the pattern from the no-API chapter. It reads the first three columns as strings so the county FIPS identifiers keep their leading zeros, the habit from Chapter~\ref{ch:panels}, and lower-cases the variable names so the munged column names are predictable:
+\par
 {\footnotesize
 \begin{verbatim}
 copy "`site'/`path'/analytic_data2024.csv" "chr_2024.csv", replace
@@ -180,6 +184,7 @@ import delimited "chr_2024.csv", clear varnames(1) ///
 \paragraph{Stage 2, clean (Chapters~\ref{ch:noapi}--\ref{ch:panels}).} The CHR file ships a second header row of human-readable labels; the do-file drops it, then keeps only true county rows (the codes ending in \texttt{000} are state roll-ups that would double-count if left in). It renames four munged columns to working names and rescales the two rates from proportions to percentage points so the coefficients later read in units people plan in.
 
 \paragraph{Stage 3, guard (Chapter~\ref{ch:trust}).} Before trusting a single number, the do-file sets tripwires that fail loudly if the file drifts. It predicts the county count and asserts it, and bounds each variable to a sane range:
+\par
 {\footnotesize
 \begin{verbatim}
 count

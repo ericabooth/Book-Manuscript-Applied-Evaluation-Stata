@@ -18,6 +18,7 @@ A report written by hand from analysis output drifts the moment a number changes
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{webdoc2}]
 \textbf{Integrated command:} \texttt{webdoc2}. Wraps \texttt{webdoc} with Bootstrap-5 templates, collapsible code, a navbar, and a responsive layout, turning a do-file into a polished HTML report whose numbers come from the data it just analyzed. Install Ben Jann's \texttt{webdoc} first, then \texttt{webdoc2} from the authors' GitHub; the third line fetches the Bootstrap header template, which \texttt{net} drops in the current directory:
+\par
 {\footnotesize
 \begin{verbatim}
 ssc install webdoc, replace
@@ -36,6 +37,7 @@ The connection to the evaluator's own toolkit is direct. A quarterly report a pr
 
 \subsection{The shape of a \texttt{webdoc} do-file}
 The promise is easier to trust after you have seen the file that keeps it, so here are the mechanics once. A \texttt{webdoc} do-file is an ordinary do-file with a few extra commands that mark which parts become prose, which parts become printed code, and which parts become embedded results. You open a document with \texttt{webdoc init}, drop headings and paragraphs with \texttt{webdoc put}, run analysis inside a \texttt{webdoc stlog} block so both the command and its output land in the page, drop a figure with \texttt{webdoc graph}, and close the document with \texttt{webdoc close}. The skeleton below is display-only; it is the smallest complete report that still tells the whole story.\marginnote{Each verbatim line here stays under about sixty-six characters on purpose. The longest real risk in a book like this is a code line that runs off the page and forces an ugly overflow; the same discipline that keeps a do-file readable in a narrow editor keeps it inside the margin here.}
+\par
 {\footnotesize
 \begin{verbatim}
 webdoc init report, replace ///
@@ -69,6 +71,7 @@ A report this cheap to rebuild is also cheap to plan badly, so sketch the page b
 
 \subsection{The \texttt{webdoc2} quickstart, and pulling the pieces in}
 The skeleton above is Jann's \texttt{webdoc}; the \texttt{webdoc2} wrapper keeps that shape but renames the verbs for readability and adds the Bootstrap styling for free. You \emph{init} with \texttt{wdinit}, write a heading with \texttt{wputh1}, a paragraph with \texttt{wput}, and a logged code block by opening \texttt{wd} and closing it with \texttt{wdclose}. A \texttt{button} block does the same but ships the code collapsed behind a \enquote{click to view} panel, so a report can carry its full provenance without cluttering the page. The quickstart below is the smallest \texttt{webdoc2} report, verbatim from the package, and display-only because it needs the \texttt{webdoc2} package:
+\par
 {\footnotesize
 \begin{verbatim}
 wdinit quickstart, replace
@@ -89,6 +92,7 @@ webdoc close
 \end{verbatim}
 }
 The value of \texttt{webdoc2} for a portal, though, is not the styling but two embed commands that let one page hold the whole suite. \texttt{wdimg} drops a static image into the report, which is how an offline \texttt{sparkta2} map (Chapter~\ref{ch:interactive}) lands in the narrative. \texttt{wdiframe} embeds an entire other HTML file inside a framed panel, which is how a \texttt{statashiny} dashboard, a \texttt{dashboardbuilder} KPI page (Section~\ref{sec:dashboardbuilder}), or a \texttt{googlechart} page becomes a live section of the report rather than a separate link.\marginnote{An \emph{iframe} is a webpage embedded inside another webpage, shown in its own panel. It is the mechanism that lets one report scroll past a paragraph, then a fully interactive dashboard, then another paragraph, with the dashboard behaving exactly as it would on its own.} With those two lines, \texttt{webdoc2} stops being a report writer and becomes the container that wraps every other tool in the suite:
+\par
 {\footnotesize
 \begin{verbatim}
 wdinit "$portal/report", replace
@@ -109,6 +113,7 @@ Clients behind strict IT still deserve interactivity, and \texttt{statashiny}\in
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{statashiny}]
 \textbf{Integrated command:} \texttt{statashiny}. Compiles a Stata dataset into self-contained interactive HTML (searchable tables via DataTables, charts via Chart.js, filters, and value cards) that runs offline in any browser with no server. Install it once from the authors' GitHub (note the repo name differs from the command name):
+\par
 {\footnotesize
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
@@ -135,6 +140,7 @@ The honest boundary on the claim is that a static folder trades away one thing a
 The \texttt{statashiny} command builds a dashboard in three moves, and learning the shape once is enough to build any of them. You \emph{init} the dashboard to open an empty page and name it, you \emph{add} elements one at a time until the page holds what you want, and you \emph{build} to write the finished HTML. Each added element is one line: an \texttt{output()} option drops a widget the reader looks at, such as a searchable table or a headline number, and an \texttt{input()} option drops a control the reader touches, such as a slider. It is the same discipline as assembling a graph one \texttt{addplot} at a time, except the pieces are interactive and the finished object is a webpage.\marginnote{The phrase \enquote{searchable table} means a table with a search box above it: the reader types \enquote{Travis} and every row without that word vanishes, all in the browser with no query sent anywhere. A \enquote{value card} is a single headline number in a box, the kind a dashboard puts at the top so the one figure that matters is read before anything else.}
 
 The smallest complete dashboard is the three moves and nothing else. Collapse a dataset to the rows you want to show, init the page, add one table, and build. The block is display-only because it needs the \texttt{statashiny} package, but it is the whole workflow:
+\par
 {\footnotesize
 \begin{verbatim}
 sysuse auto, clear
@@ -149,7 +155,8 @@ statashiny, build export("dashboard.html") open
 }
 Read the three moves in order. The first \texttt{statashiny} line with \texttt{title()} is \emph{init}: it opens the page and names it. The middle line is one \emph{add}: \texttt{autotab} is the element's id, and \texttt{output(table)} says draw a searchable table of the data in memory. The last line is \emph{build}: \texttt{export()} names the file and \texttt{open} opens it in your browser. That single HTML file is the whole dashboard, data and interactivity together, ready to email or drop in a portal folder.
 
-Most real dashboards add a few more elements before they build, and the two that earn their place first are value cards and a slider. A \emph{value card} puts one headline number in a box at the top of the page, so the figure that matters is read before the table below it. A \emph{slider} is a control the reader drags to filter the view live, in the browser, with nothing recomputed on a server. Both are still one line each, added between init and build:
+Most real dashboards add a few more elements before they build, and the two worth adding first are value cards and a slider. A \emph{value card} puts one headline number in a box at the top of the page, so the figure that matters is read before the table below it. A \emph{slider} is a control the reader drags to filter the view live, in the browser, with nothing recomputed on a server. Both are still one line each, added between init and build:
+\par
 {\footnotesize
 \begin{verbatim}
 sysuse auto, clear
@@ -171,7 +178,7 @@ statashiny, build ///
 }
 The two \texttt{output(val)} lines are the value cards, each a labeled headline number, and \texttt{prefix("\$")} stamps a dollar sign in front of the price. The \texttt{output(table)} line is the searchable table as before. The one \texttt{input(num)} line is the slider: \texttt{val()} sets where the handle starts and \texttt{min()}, \texttt{max()}, and \texttt{step()} set its range and grain, so the reader drags from 10 to 40 in steps of one and the view filters as they go. The workflow never changes: init, add as many elements as the page needs, build one file. The live \texttt{statashiny} example site shows the finished form, and is itself built with \texttt{statashiny} and \texttt{webdoc2} together, which is the pairing the rest of this chapter assembles.\marginnote{See the live dashboard at \texttt{ericabooth.github.io/} \texttt{StataShiny\_Example\_Site}. It renders entirely from the single HTML file the build step wrote, so viewing the page source shows the data and the interactivity inlined together, with nothing fetched from a server.}
 
-Each control the page carries has to earn its place, and the test is the decision it enables. A director dragging the price slider is answering a live question, roughly \enquote{how many sites clear the threshold we are debating,} and the slider exists because that question gets argued in meetings. If no such question exists, the control is decoration that slows the page and the reader. The working rule is one control per question the steering committee actually argues about; a dashboard with six sliders answers five questions nobody asked, and the reader who cannot tell which control matters trusts none of them.
+Every control on the page has to justify itself, and the test is the decision it enables. A director dragging the price slider is answering a live question, roughly \enquote{how many sites clear the threshold we are debating,} and the slider exists because that question gets argued in meetings. If no such question exists, the control is decoration that slows the page and the reader. The working rule is one control per question the steering committee actually argues about; a dashboard with six sliders answers five questions nobody asked, and the reader who cannot tell which control matters trusts none of them.
 
 
 Why does a static portal survive the firewall that kills a hosted dashboard? The word \enquote{static} is doing quiet work here, and it deserves unpacking. A hosted dashboard is a program running on a server somewhere: it computes a chart when you ask for one, which means it needs a machine that is always on, a network path to it, and someone to keep it patched. A \texttt{statashiny} bundle is the opposite. The filtering and charting logic is compiled down to JavaScript that ships inside the files, and the data ships alongside it, so the \enquote{server} is your own browser reading local files.\marginnote{This is the same client-side shift that let \enquote{single-page apps} replace server round-trips on the web. For a portal it has a security dividend too: with no server accepting requests, there is no endpoint for IT to audit and nothing to patch after you leave.} Nothing is computed on demand by a remote machine, which is exactly why nothing can go down and why the strictest IT department has nothing to block: there is no connection to make.
@@ -185,6 +192,7 @@ Its cell in the suite grid (Table~\ref{tab:suite-matrix}) is the offline contain
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{dashboardbuilder}]
 \textbf{Integrated command:} \texttt{dashboardbuilder}. Builds self-contained interactive KPI dashboards (tiles; line, bar, horizontal-bar, bullet-compare, and table panels; tabs; a unit selector with a reference benchmark; per-panel CSV and PNG downloads) from a panel-by-panel grammar: \texttt{init}, then \texttt{tab} and \texttt{panel} calls, then \texttt{build}. Requires Stata~16+ and a Python~3 visible to Stata (standard library only). Install once from the authors' GitHub:
+\par
 {\footnotesize
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
@@ -196,6 +204,7 @@ net install dashboardbuilder, ///
 
 \subsection{Three moves, one file}
 The grammar mirrors the \texttt{statashiny} shape you just learned: initialize, add, build. Initialize the dashboard with a title, add one panel per exhibit, and build to a single file. The smallest useful dashboard is a chart and the numbers behind it:
+\par
 {\footnotesize
 \begin{verbatim}
 sysuse auto, clear
@@ -224,6 +233,7 @@ Each \texttt{panel} call embeds a snapshot of whatever is in memory at that mome
 
 \subsection{An applied build: every unit against the benchmark}
 The request behind half the dashboards an evaluator ships is one sentence with the nouns swapped: how does \emph{this county} compare with the state, \emph{this campus} with the district, \emph{this site} with the portfolio. \texttt{dashboardbuilder} treats the pattern as first class. Declare a \texttt{selector()} column and a \texttt{refvalue()} at init, and every panel whose data carry that column becomes filterable, with the reference unit drawn as a marker the selected unit is read against.\marginnote{The inverse trick is just as useful: a panel whose data do \emph{not} carry the selector column stays static. The companion do-file's top-ten ranking renames \texttt{state} to \texttt{stname} before its \texttt{panel hbar} call, so the ranking holds still while the tiles and bars above it update.} The companion \texttt{ch12\_dashboardbuilder.do} builds Figure~\ref{fig:dashbexplorer} from the 1980 census extract that ships with Stata: a synthetic \enquote{United States} row appended as the reference, KPI tiles and bullet-compare bars on one tab, a top-ten ranking and a full searchable table on another.
+\par
 {\footnotesize
 \begin{verbatim}
 * the reference row, then the dashboard registration
@@ -261,6 +271,7 @@ One line of that block earns a warning, because it cost us a debugging session w
 
 \subsection{Put the dashboard where the readers already are}
 The build step hands you a file, and the file is the deliverable, so delivery is a decision about where readers already look rather than a technical step. Three routes cover nearly every case. The first is the file itself: attach it to the email the committee already expects, and it opens by double-click, because the data ride inside the HTML and the \texttt{file://} pitfall in this chapter's margin never bites. The second is the organization's existing website, and the mechanism is the \emph{iframe}, the same embed-a-page-in-a-page element \texttt{webdoc2} wraps in \texttt{wdiframe}. Host the built file anywhere static, GitHub Pages or the web root the organization already rents, and paste four lines into the page where readers should meet it:
+\par
 {\footnotesize
 \begin{verbatim}
 <iframe src="https://your.org/dash/state_explorer.html"
@@ -330,7 +341,7 @@ Read the table by columns and the trade-offs come into focus. Everything opens b
 
 Now read the table by rows, because the recommendation falls out of one row. No format wins every column, and any honest guide says so. The PDF is the right answer when the deliverable is a fixed record that must look identical everywhere and never change. The spreadsheets are right when the client's own hands-on reslicing matters more than provenance. The hosted dashboard is right when there is no firewall and someone will maintain a server. The offline portal is the only row that clears a strict firewall while staying interactive, self-updating, and replicable at once, and that specific combination is the one an embedded evaluator behind restrictive IT keeps needing. It loses only on client-editability, and the versioning discipline of the next section is how you make that loss survivable.
 
-When the table feels like too much apparatus, there is a one-question shortcut that resolves most deliveries before any column is consulted: will the reader act inside the artifact, or just read it? A funder who reads the completion rate, files the document, and moves on is served by a PDF, or often by a two-paragraph email with the number in the first sentence; a director who will filter sites, drag a threshold, and argue over the live view in a meeting needs the portal; an analyst who will reslice the data herself needs the workbook. The question earns its keep in the other direction too. Catching yourself building a portal for a reader who will only ever read page one means the email was the right deliverable all along, and the portal is a week of effort the four principles never asked for.
+When the table feels like too much apparatus, there is a one-question shortcut that resolves most deliveries before any column is consulted: will the reader act inside the artifact, or just read it? A funder who reads the completion rate, files the document, and moves on is served by a PDF, or often by a two-paragraph email with the number in the first sentence; a director who will filter sites, drag a threshold, and argue over the live view in a meeting needs the portal; an analyst who will reslice the data herself needs the workbook. The question helps in the other direction too. Catching yourself building a portal for a reader who will only ever read page one means the email was the right deliverable all along, and the portal is a week of effort the four principles never asked for.
 
 Table~\ref{tab:formats} scores the options; Figure~\ref{fig:ch12-viz-choose} walks the choice itself, as the sequence of questions that routes a given delivery to exactly one format.
 
@@ -383,6 +394,7 @@ Code tag        & footer \& \texttt{README} & \enquote{how do I rebuild it?} \\
 \end{table}
 
 The mechanics are cheap because you already own the pieces. The date is a system macro, so the report stamps itself at build time rather than relying on anyone to remember; the same \texttt{\$S\_DATE} that dated your logs in Chapter~\ref{ch:workshop} dates the portal.\marginnote{A tag is not a comment. Writing \enquote{v1.3} in the footer by hand is a promise you can break; \texttt{git tag v1.3} on the commit that built the folder is a promise the version-control system keeps. The first tells the reader a story about the version; the second lets an auditor check it.} The version is a string you set once per delivery in the control file. The code tag is a one-line \texttt{git} operation on the commit that produced the build, which the repository workflow of Chapter~\ref{ch:sharing} treats in full. Weave the three into the build so they are produced by the run, not added by hand afterward:
+\par
 {\footnotesize
 \begin{verbatim}
 * set once per delivery, at the top of the build:
@@ -473,6 +485,7 @@ The reason to see the whole chain at once, rather than each tool in its own chap
 \end{figure*}
 
 The orchestration is one do-file, and its shape is worth seeing even though the middle of it needs packages and OAuth this build does not assume. The sketch below is display-only; it is the pipeline of Figure~\ref{fig:suiteflow} written as the commands you would actually run, one stage at a time. It begins by pulling data with \texttt{webapi}, the no-key JSON route of Chapter~\ref{ch:apis}:
+\par
 {\footnotesize
 \begin{verbatim}
 * 1. INGEST: public JSON in one line, no key
@@ -482,6 +495,7 @@ webapi get using ///
 \end{verbatim}
 }
 With data in memory, the two chart tools write their HTML into the portal's \texttt{charts/} folder. \texttt{googlechart} draws the online state choropleth; \texttt{sparkta2} draws the offline county map that the online engine cannot. The \texttt{sparkta2} line is commented because its source is still forthcoming (Chapter~\ref{ch:interactive}), so the sketch shows the intended call rather than promising an install:
+\par
 {\footnotesize
 \begin{verbatim}
 * 2a. CHART online: googlechart interactive page
@@ -498,6 +512,7 @@ googlechart uninsured, name(geo_code) type(geo) ///
 \end{verbatim}
 }
 Next the interactive dashboard, built with the init, add, build workflow from earlier in this chapter, exported into the same \texttt{charts/} folder:
+\par
 {\footnotesize
 \begin{verbatim}
 * 3. INTERACTIVE: statashiny drill-down dashboard
@@ -511,6 +526,7 @@ statashiny, build export("$charts/dashboard.html")
 \end{verbatim}
 }
 Now the wrap. \texttt{webdoc2} writes \texttt{index.html} with the narrative, embeds the dashboard and the online chart as live panels with \texttt{wdiframe}, drops the offline map with \texttt{wdimg}, and stamps the version and date into the footer at build time so it cannot drift from the numbers (Section~\ref{sec:versioning}):
+\par
 {\footnotesize
 \begin{verbatim}
 * 4. WRAP: webdoc2 assembles the one page
@@ -535,6 +551,7 @@ The last step before the folder goes anywhere is a rebuild rehearsal. Clone the 
 
 \begin{figure}[htbp]
 \centering
+\par
 {\footnotesize
 \begin{verbatim}
 googlechart uninsured, name(geo_code) ///
@@ -550,6 +567,7 @@ googlechart uninsured, name(geo_code) ///
 
 \begin{figure}[htbp]
 \centering
+\par
 {\footnotesize
 \begin{verbatim}
 googlechart, type(table) tablesearch ///

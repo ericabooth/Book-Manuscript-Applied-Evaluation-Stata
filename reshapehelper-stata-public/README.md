@@ -57,26 +57,51 @@ colon-free location first, or use the GitHub URL above.
 
 ## Quick start
 
+Each block below loads its own data, so you can paste any one of them on its
+own.
+
 ```stata
-* just ask:
+* just ask -- suggests and dry-runs, then run the suggestion:
 sysuse bpwide, clear
 reshapehelper
-* -> suggests and dry-runs: reshape long bp_, i(patient) j(period) string
-
-* run the suggestion:
+* -> reshape long bp_, i(patient) j(period) string
 $reshapehelper_cmd
+```
 
-* tell it what you know; the dry run figures out the rest
-* (here it discovers the string option by iterating on reshape's r(498)):
+```stata
+* tell it what you know; the dry run figures out the rest (here it discovers
+* the string option by iterating on reshape's r(498)):
+clear
+input id kids incm incf
+1 0 5000 5500
+2 1 2000 2200
+end
 reshapehelper, to(long) stubs(inc) i(id) j(sex)
+$reshapehelper_cmd
+```
 
+```stata
 * going wide, with a messy string j ("New York"): the pre-clean line is
-* written for you and returned in r(preclean)
+* written for you and returned in r(preclean):
+clear
+input year str12 state pop
+2020 "New York" 20.2
+2020 "Texas" 29.1
+2021 "New York" 19.8
+2021 "Texas" 29.5
+end
 reshapehelper, to(wide) j(state)
 `r(preclean)'
 $reshapehelper_cmd
+```
 
-* doubly wide (ht_k1_t1 ... ht_k2_t2): two chained commands, both tested
+```stata
+* doubly wide (ht_k1_t1 ... ht_k2_t2): two chained commands, both tested:
+clear
+input famid ht_k1_t1 ht_k1_t2 ht_k2_t1 ht_k2_t2
+1 3.1 3.6 4.0 4.4
+2 3.3 3.8 4.1 4.6
+end
 reshapehelper
 $reshapehelper_cmd
 $reshapehelper_cmd2
@@ -92,10 +117,14 @@ reshapehelper [long|wide] [varlist] [, to(long|wide) i(varlist)
 
 Everything is optional; a bare `reshapehelper` diagnoses the data in memory.
 See `help reshapehelper` for every option, and run
-`example_reshapehelper.do` for a fourteen-tier tour from the textbook case
-to inconsistent stubs, the `inc2` trap, prefix-j names, crossed factors,
-duplicate (i, j) pairs, wide-long panels, long-long → wide-wide, and the
-transpose case.
+`example_reshapehelper.do` for a seventeen-scenario tour (five tiers) from
+the textbook case to inconsistent stubs, the `inc2` trap, prefix-j names,
+crossed factors, duplicate (i, j) pairs, wide-long panels, doubly-wide
+names, long-long → wide-wide, and the transpose case.
+
+The globals mirror the **last run**: a run with no second step clears
+`$reshapehelper_cmd2`, and a run that ends in the checklist clears both, so
+a stale command from an earlier dataset can never fire in a pipeline.
 
 ## Stored results
 
@@ -110,8 +139,9 @@ transpose case.
 | `r(tested)`, `r(rc)` | dry-run verdict and final return code |
 | `r(smcl)` | path of the unwrapped-suggestion SMCL file |
 | `r(xpose)` | 1 when the layout smells like a transpose job |
+| `r(sparse)` | a would-be identifier set aside as too sparse (returned only when that is why no command was found) |
 
-## Design limits (v0.9.0, deliberate)
+## Design limits (v1.0.0, deliberate)
 
 - **Suggestions are advisory.** A dry run proves the command *runs* on a
   sample; only you can say the result *means* what you need. Cautions flag

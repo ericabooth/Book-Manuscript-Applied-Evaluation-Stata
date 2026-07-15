@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.9.0  2026-07-15}{...}
+{* *! version 1.0.0  2026-07-15}{...}
 {viewerjumpto "Syntax" "reshapehelper##syntax"}{...}
 {viewerjumpto "Description" "reshapehelper##description"}{...}
 {viewerjumpto "What you get back" "reshapehelper##output"}{...}
@@ -186,10 +186,11 @@ columns hide a second long dimension (note that i() keeps year):{p_end}
 {phang2}{txt:step 1} {cmd:reshape long ht_k1_t ht_k2_t, i(famid) j(time)}{p_end}
 {phang2}{txt:step 2} {cmd:reshape long ht_k@_t, i(famid time) j(grp)}{p_end}
 
-{pstd}The bundled {cmd:example_reshapehelper.do} walks fourteen tiers, from
-the textbook case through inconsistent stubs, the {cmd:inc2} trap, prefix-j
-names, crossed factors, spaces in a string j, long-long to wide-wide, and
-the transpose case.{p_end}
+{pstd}The bundled {cmd:example_reshapehelper.do} walks seventeen scenarios
+across five tiers, from the textbook case through inconsistent stubs, the
+{cmd:inc2} trap, prefix-j names, crossed factors, spaces in a string j,
+duplicate (i, j) pairs, doubly-wide names, long-long to wide-wide, and the
+transpose case.{p_end}
 
 
 {marker results}{...}
@@ -208,10 +209,14 @@ the transpose case.{p_end}
 {synopt :{cmd:r(tested)}}1 if the dry run passed, else 0{p_end}
 {synopt :{cmd:r(rc)}}the final dry-run return code{p_end}
 {synopt :{cmd:r(xpose)}}1 when the layout smells like a transpose job{p_end}
+{synopt :{cmd:r(sparse)}}a would-be identifier that was set aside as too sparse (returned only when that is why no command was found){p_end}
 {p2colreset}{...}
 
 {pstd}The suggestion also lands in {cmd:$reshapehelper_cmd} (and
-{cmd:$reshapehelper_cmd2}); rename with {cmd:global()}.{p_end}
+{cmd:$reshapehelper_cmd2}); rename with {cmd:global()}.  The globals mirror
+the LAST run: a run with no second step clears the {cmd:2} global, and a
+run that ends in the checklist clears both, so a stale command from an
+earlier dataset can never fire.{p_end}
 
 
 {marker remarks}{...}
@@ -219,20 +224,41 @@ the transpose case.{p_end}
 
 {pstd}{bf:Suggestions are advisory.}  A dry run proves the command RUNS on a
 sample; only you can say whether the result MEANS what you need.  Two
-built-in skepticisms help: small consecutive suffixes (1{c 45}4) draw a
+built-in skepticisms help: small numeric suffixes (none above 12) draw a
 caution that they may be item numbers rather than repeats over time, and
 mixed suffix widths (a stray {cmd:inc2} beside {cmd:inc80}{c 45}{cmd:inc82})
 draw a caution to restrict j explicitly or rename the stray {c 45} a case
 where reshape itself runs happily and silently builds a mostly-missing j
 group.{p_end}
 
-{pstd}{bf:What it deliberately does not guess.}  Bare string suffixes with
-no separator ({cmd:incm}/{cmd:incf}) are only handled through {cmd:stubs()},
-because any automatic split of such names is the greedy matching the
-{help reshape} manual itself warns about.  Triple-nested single commands are
-never suggested; doubly-wide names get the two-step chain, and deeper
-nesting gets the chain plus a rerun of {cmd:reshapehelper} on the
-intermediate result.{p_end}
+{pstd}{bf:Why a stub is sometimes refused (name coincidences).}  A program
+reading only variable names cannot reliably tell a real stub from a
+coincidence.  With variables {cmd:incm} {cmd:incf} {cmd:uem} {cmd:uef}
+{cmd:agem} {cmd:agef} plus an unrelated {cmd:agenda}, an automatic split
+would decide the repeated values are {cmd:m}, {cmd:f}, and {cmd:nda} and
+read a stub {cmd:age} out of {cmd:agenda} {c 45} the greedy match the
+{help reshape} manual itself warns about.  To avoid confidently-wrong
+suggestions, {cmd:reshapehelper} does not auto-detect bare letter-suffix
+stubs; you name the stub with {cmd:stubs()} and it works out the rest,
+including the {cmd:string} option, from the dry run.  Triple-nested single
+commands are likewise never suggested; doubly-wide names get the two-step
+chain, and deeper nesting gets the chain plus a rerun of
+{cmd:reshapehelper} on the intermediate result.{p_end}
+
+{pstd}{bf:The identifier plausibility bar (and sparse panels).}  When it
+hunts for the row identifier, {cmd:reshapehelper} requires that a candidate
+{it:repeat}: each unit should appear in more than one row (once per year,
+wave, or condition), so a candidate that splits the sample into nearly as
+many groups as there are rows is set aside as an accident of the data rather
+than a design.  Concretely, the distinct groups must number at most half the
+rows examined.  This is what stops it proposing a technically-valid but
+meaningless {cmd:i(weight) j(mpg)} on {cmd:sysuse auto}.  The one trade-off:
+a {it:genuinely sparse} panel {c 45} most units observed once, only a few
+repeated {c 45} can be sent to the checklist instead of getting a
+suggestion.  When that happens the checklist says so by name and offers to
+force the identifier ({cmd:reshapehelper, i(}{it:thatvar}{cmd:) ...}); if
+most rows really should share an id, the true identifier may be missing or
+mis-typed (for example a name with trailing spaces), so clean it first.{p_end}
 
 {pstd}{bf:Rerun it.}  {cmd:reshapehelper} is built to be run again on its own
 output: a wide-long panel widens one dimension per pass, and the note tells

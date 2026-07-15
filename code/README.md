@@ -16,16 +16,18 @@ figures in the book are produced by these files.
    `webdoc2`) sit in a commented block in the same file — uncomment the ones
    you want; each installs from its public GitHub repo with one `net` command.
 
-## The twelve book packages
+## The thirteen book packages
 
-Twelve tools the book teaches were built alongside it, each in its own
+Thirteen tools the book teaches were built alongside it, each in its own
 `<name>-stata-public/` folder one level up from this one: `projectbuilder`
 (scaffold a project, ingest data, rebuild docs on every refresh),
 `combineall` (append/merge/convert a whole folder, with vintage-aware
 harmonization), `cxchangelog` (cross-wave survey codebooks), `datadictionary`
 (over-time codebook: per-wave stats, missingness, value-label diffs,
 five-sheet Excel export), `undummy`
-(recombine one-hot columns into one categorical), `rateshrink`
+(recombine one-hot columns into one categorical), `reshapehelper`
+(diagnose the data and suggest the likely `reshape` command, never running
+it), `rateshrink`
 (empirical-Bayes rate stabilization), `conformalpred` (split-conformal
 prediction intervals), `hlmr2` (Nakagawa multilevel R-squared), `twinmatch`
 (Mahalanobis policy twins), `roisim` (Monte Carlo ROI with tornado export),
@@ -65,6 +67,7 @@ Launch Stata in the project folder, then either:
 | `ch05_monitoring.do` | 5 | Simulated survey response monitoring; control chart + alert list + Likert alpha. |
 | `ch05_datadictionary.do` | 5 | The label round-trip across languages: `datadictionary, dofile()` writes a relabel do-file; export `nolabel` → edit elsewhere → re-import → `do` it back with a re-ingestion receipt; also the `dictionary()` infile read. |
 | `ch06_longitudinal.do` | 6 | `nlswork` panel description; missingness map; wage-quartile transition matrix; fuzzy merge. |
+| `ch06_reshapehelper.do` | 6 | `reshapehelper` on a grant file (reproduces the chapter figure), a duplicate-blocked widening, and a doubly-wide two-step reshape; runs each suggestion via `$reshapehelper_cmd`. |
 | `ch07_trust.do` | 7 | Reliability alpha; NHANES II weighting; empirical-Bayes shrinkage; power curve. |
 | `ch08_did.do` | 8 | Simulated staggered adoption; naive TWFE vs `csdid`; event study; ROI Monte Carlo. |
 | `ch08_oaxaca.do` | 8 | Blinder-Oaxaca decomposition of the white-Black wage gap in `nlsw88` (no key); `oaxaca` + `coefplot`; explained vs unexplained with tripwires. |

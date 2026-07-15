@@ -51,6 +51,7 @@ Which of the three formats does a given audience get? Two questions settle it ea
 \end{figure}
 
 Consider a workforce program that pays participants to complete training and wants to report what the training is associated with in later earnings. We simulate 900 participants across three enrollment cohorts (labeled simulated, seed \texttt{20260704}), where post-program quarterly earnings rise with training hours and prior experience. One do-file estimates a dose-only model and then a model with controls:
+\par
 {\footnotesize
 \begin{verbatim}
 eststo clear
@@ -61,6 +62,7 @@ eststo m2: regress earn hours exper female i.cohort
 Reading the second model in the client's own units, each training hour is worth about \$20 more in quarterly earnings, and a year of prior experience about \$148, both estimated precisely (standard errors of 1.7 and 7.8). The 2024 cohort earns roughly \$428 more per quarter than the 2022 cohort, while the 2023 cohort's \$67 gap is within noise. This makes sense: a training dose and prior work history are exactly the two things a job-readiness program expects to move earnings, and the later cohort entered a stronger labor market.
 
 The reproducible-reporting\index{reproducible reporting} thesis stops being a slogan the moment that table is not typed but generated. The next command hands \texttt{esttab}\index{esttab@\texttt{esttab}} the two stored models and writes a \LaTeX{} table fragment to disk, in the book's own plain-\texttt{\textbackslash hline} style with no \texttt{booktabs}, which the manuscript then \texttt{\textbackslash input}s directly:
+\par
 {\footnotesize
 \begin{verbatim}
 esttab m1 m2 using "$output/ch11_wage_table.tex", ///
@@ -89,6 +91,7 @@ Table~\ref{tab:wage} is not a screenshot and not hand-set numbers. It is the fil
 A sequencing habit that pays on any workbook a client will see: build the skeleton before the numbers. Run the \texttt{putexcel} layout lines first, the tab names, header rows, labels, and formats, with every value cell left empty, and send that shell to the client for sign-off on structure. A program manager can react to an empty workbook in ten minutes (\enquote{move the cohort column left, add a notes column}) and the changes cost nothing, because no wiring exists yet. Once the structure is agreed, wiring the numbers is the easy half: each empty cell becomes one \texttt{putexcel} line reading a stored result.
 
 The same stored estimates that wrote the \LaTeX{} table also write the Excel tab a program manager opens, and \texttt{putexcel} places each value and its formatting cell by cell:
+\par
 {\footnotesize
 \begin{verbatim}
 putexcel set "$output/summary.xlsx", replace
@@ -115,6 +118,7 @@ A live Sheet needs the same deliverable spec as the workbook, plus one extra agr
 
 \subsection{The workflow, one command at a time}
 The worked example writes a real dataset to a real Sheet: the County Health Rankings 2025 state file, one row per state, the same data the \texttt{googlechart}\index{googlechart@\texttt{googlechart}} charts of Chapter~\ref{ch:interactive} render offline. Because these commands touch a live Google account, they are shown as a copy-pasteable recipe rather than run at book-build time; point \texttt{\$SS} at a Sheet you can open, complete the Appendix~\ref{app:setup} sign-in once, and they execute as printed. We load the extract and confirm the connection first, because a \texttt{ping} that fails now saves a confusing error three commands later:
+\par
 {\footnotesize
 \begin{verbatim}
 import delimited using ///
@@ -123,6 +127,7 @@ googlesheets ping, spreadsheet("$SS")
 \end{verbatim}
 }
 A tab has to exist before you can write to it, so the next pair deletes any stale copy and makes a fresh one. The \texttt{capture} in front of \texttt{deletesheet} swallows the error on the first run, when there is nothing to delete yet:
+\par
 {\footnotesize
 \begin{verbatim}
 capture googlesheets deletesheet, spreadsheet("$SS") ///
@@ -132,6 +137,7 @@ googlesheets addsheet, spreadsheet("$SS") ///
 \end{verbatim}
 }
 Now the dataset lands in one bulk write. Export the whole frame in a single call rather than a row-by-row loop and you stay under the per-minute API quota\index{API quota}; \texttt{firstrow(variables)} writes the variable names as the header row:
+\par
 {\footnotesize
 \begin{verbatim}
 googlesheets export using "$SS", ///
@@ -142,6 +148,7 @@ The columns arrive in the dataset's order, so the header sits in row~1 and the 5
 
 \subsection{Formatting cells from code}
 Delivering in the client's format means it should look finished, not like a raw dump. The \texttt{format} subcommand is the Sheets analog of \texttt{putexcel}'s cell formatting: give it a range and the styling you want. Here the header row gets a navy fill, white bold text, and Montserrat at 12 point, the kind of house look any shop can standardize on, and two data columns get number formats so income reads as dollars and the uninsured rate carries one decimal:\marginnote{The \texttt{numfmt()} strings are ordinary spreadsheet format codes, the same ones the Excel \enquote{Custom} number-format box takes. \texttt{"\$"\#,\#\#0} is dollars with a thousands separator; \texttt{0.0} is one decimal place. If you know the Excel codes, you already know these.}
+\par
 {\footnotesize
 \begin{verbatim}
 googlesheets format using "$SS", ///
@@ -159,6 +166,7 @@ The formatting is set once in the do-file, so the header stays navy and the doll
 
 \subsection{Writing single values, formulas, and a matrix}
 Alongside the exported table you often want a few computed cells: a title, a build stamp, a summary statistic, a live formula the sheet recomputes, even a whole matrix. The \texttt{put} subcommand is the \texttt{putexcel} analog and takes exactly one of \texttt{string()}, \texttt{value()}, \texttt{formula()}, or \texttt{matrix()} per call. A title and a dated build stamp go off to the side in column~M:
+\par
 {\footnotesize
 \begin{verbatim}
 googlesheets put using "$SS", sheet("CHR states 2025") ///
@@ -168,6 +176,7 @@ googlesheets put using "$SS", sheet("CHR states 2025") ///
 \end{verbatim}
 }
 A computed number is written the same way. We summarize in Stata and \texttt{put} the rounded mean as a \texttt{value()}, which lands as a real number the sheet can chart, not text:
+\par
 {\footnotesize
 \begin{verbatim}
 quietly summarize uninsured
@@ -178,6 +187,7 @@ googlesheets put using "$SS", sheet("CHR states 2025") ///
 \end{verbatim}
 }
 Pause on the difference between \texttt{value()} and \texttt{formula()}, because it is the difference between a snapshot and a link. A \texttt{value()} writes the number Stata computed and freezes it. A \texttt{formula()} writes a spreadsheet expression that Google recomputes in the browser, so it tracks the cells it points at even after the team edits them:
+\par
 {\footnotesize
 \begin{verbatim}
 googlesheets put using "$SS", sheet("CHR states 2025") ///
@@ -187,6 +197,7 @@ googlesheets put using "$SS", sheet("CHR states 2025") ///
 \end{verbatim}
 }
 The most useful \texttt{put} for an evaluator is \texttt{matrix()}, which drops a whole Stata matrix into the sheet as a rectangular block anchored at one cell. A correlation matrix is the natural case: compute it in Stata, grab it from \texttt{r(C)}, and write it starting at M6, where it fills a four-by-four block:
+\par
 {\footnotesize
 \begin{verbatim}
 correlate uninsured median_income ///
@@ -216,6 +227,7 @@ That single call makes the case for \texttt{matrix()}: a correlation table a cli
 
 \subsection{Native Sheets charts that stay live}
 The step with no \texttt{putexcel} equivalent is \texttt{addchart}\index{addchart@\texttt{addchart}}. It inserts a real Google Sheets chart object, not a static image: the team can hover it for tooltips, resize it, recolor it in the browser, and it redraws when the cells it reads change. It is the interactive-chart idea, a chart that responds when the reader points at it, delivered natively inside the tool the client already uses. The first chart ranks the fifteen states with the highest uninsured rate. We build that top-fifteen block on its own tab, then point a bar chart at it:\marginnote{\texttt{domain()} is the category axis (here the state names) and \texttt{series()} is the values plotted against it (the uninsured rate). \texttt{anchor()} is the top-left cell the chart floats over. \texttt{targetsheet()} lets a chart built from one tab's data appear on another, which is how a dashboard tab collects charts drawn from several data tabs.}
+\par
 {\footnotesize
 \begin{verbatim}
 preserve
@@ -241,6 +253,7 @@ googlesheets addchart using "$SS", ///
 \end{verbatim}
 }
 The second chart is a scatter that puts each state's median income against its premature-death rate, drawn straight from columns~E and~F of the main tab and anchored beside the summary block:
+\par
 {\footnotesize
 \begin{verbatim}
 googlesheets addchart using "$SS", ///
@@ -258,6 +271,7 @@ These two charts stay live inside the Sheet. When next quarter's do-file overwri
 
 \subsection{Reading back to confirm the write}
 The last step closes the loop by reading the tab back into Stata. This is not ceremony: an evaluator who writes to a shared sheet and never reads it back is trusting that the API, the tab name, and the range all behaved, and any one of those can be quietly wrong. We re-import the block we wrote and assert the row count we expect\index{read-back verification}:\marginnote{The nastiest silent failure is a partial write: the API returns success after landing the first few hundred rows, then the connection drops. The tab looks written, the row count is wrong, and only a read-back \texttt{count} catches it.}
+\par
 {\footnotesize
 \begin{verbatim}
 googlesheets import using "$SS", ///
@@ -270,6 +284,7 @@ Reading the sheet back and comparing it against what you exported catches the si
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{googlesheets}]
 \textbf{Integrated command:} \texttt{googlesheets}. Reads, writes, formats, and charts Google Sheets from Stata (\texttt{import}, \texttt{export}, \texttt{put}, \texttt{format}, \texttt{addchart}, and tab management), authenticating through a one-time Google sign-in. Install it once from the authors' GitHub:
+\par
 {\footnotesize
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
@@ -282,6 +297,7 @@ The one-time OAuth setup is covered in Appendix~\ref{app:setup}, with a credenti
 
 \subsection{Google Forms as a live monitoring feed}
 The same \texttt{import} that reads a data tab reads a Google Form's responses, and with that one step a Sheet stops being a delivery surface and becomes a monitoring feed. A Form writes every submission as a new row on a tab named \enquote{Form Responses 1,} with the submission time in the first column. Reading that tab on a schedule is the survey-monitoring pattern of Chapter~\ref{ch:surveys}, now pointed at a live sheet instead of a static extract. Two options keep each scheduled pull small and quota-cheap. The \texttt{tail()} option keeps only the last \texttt{N} rows, which is all a running dashboard needs:
+\par
 {\footnotesize
 \begin{verbatim}
 googlesheets import using "$SS", ///
@@ -289,6 +305,7 @@ googlesheets import using "$SS", ///
 \end{verbatim}
 }
 The \texttt{since()} option keeps only rows at or after a cutoff in a named column, so a cron job pulls just what arrived since it last ran. It parses dates and numbers as such, so it is robust to Google's unpadded timestamps like \texttt{2026-07-04 9:00:00}:
+\par
 {\footnotesize
 \begin{verbatim}
 googlesheets import using "$SS", ///

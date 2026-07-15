@@ -45,7 +45,7 @@ if _rc net install webapi, from("https://raw.githubusercontent.com/ericabooth/we
 * net get webdoc2, from("https://raw.githubusercontent.com/ericabooth/webdoc2-stata-public/main/")
 * (sparkta2 is not yet published; its examples in the book are display-only.)
 
-*--- The twelve packages built FOR this book -----------------------------------*
+*--- The thirteen packages built FOR this book ---------------------------------*
 * Each lives in a <name>-stata-public folder that publishes to the authors'
 * GitHub with the book. Until those repos are live, install from the local
 * folders that ship beside this project (edit BOOKPKG to your copy's path);
@@ -57,7 +57,8 @@ if _rc net install webapi, from("https://raw.githubusercontent.com/ericabooth/we
 local BOOKPKG ""   // e.g. "/path/to/book-repo" ; leave empty to skip
 if "`BOOKPKG'" != "" {
     foreach pkg in projectbuilder combineall cxchangelog datadictionary ///
-        rateshrink conformalpred hlmr2 twinmatch roisim suppress riskscan undummy {
+        reshapehelper rateshrink conformalpred hlmr2 twinmatch roisim ///
+        suppress riskscan undummy {
         capture which `pkg'
         if _rc net install `pkg', from("`BOOKPKG'/`pkg'-stata-public/") replace
     }

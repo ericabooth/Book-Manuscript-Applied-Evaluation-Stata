@@ -1,5 +1,5 @@
 * ===========================================================================
-* test_reshapehelper.do -- test battery for reshapehelper v0.9.0
+* test_reshapehelper.do -- test battery for reshapehelper v1.0.0
 * Run in batch from the package directory:
 *     stata-mp -b do test_reshapehelper.do
 * Judge the run by the log: no r(NNN) errors, no "assertion is false".
@@ -363,5 +363,283 @@ while r(eof) == 0 {
 file close fh
 assert `found' == 1
 erase "$pkgroot/scratch_suggestion.smcl"
+
+* ---------------------------------------------------------------------------
+* T21. Edge sweep: hostile small/weird data must never crash, never touch
+*      the data, and never leave a stale global
+* ---------------------------------------------------------------------------
+* (a) one observation, one variable -> graceful checklist
+clear
+set obs 1
+gen x = 1
+reshapehelper
+assert inlist("`r(status)'", "needinfo", "ok")
+assert _N == 1 & c(k) == 1
+
+* (b) all-string dataset -> graceful
+clear
+input str5 a str5 b
+"x" "y"
+"z" "w"
+end
+reshapehelper
+assert inlist("`r(status)'", "needinfo", "ok")
+assert _N == 2 & c(k) == 2
+
+* (c) strL beside wide stubs -> still suggests, strL skipped in probes
+clear
+input id inc80 inc81
+1 5000 5500
+2 2000 2200
+end
+gen strL comment = "free text " + string(id)
+reshapehelper
+assert "`r(status)'" == "ok"
+assert r(tested) == 1
+assert strpos(`"`r(cmd)'"', "reshape long inc, i(id)") > 0
+assert c(k) == 4
+
+* (d) a variable named year already exists beside inc80-inc82: the proposed
+*     j must dodge the collision and the dry run must still pass
+clear
+input id year inc80 inc81 inc82
+1 1999 5000 5500 6000
+2 1999 2000 2200 3300
+end
+reshapehelper
+assert "`r(status)'" == "ok"
+assert r(tested) == 1
+assert strpos(`"`r(cmd)'"', "j(year)") == 0
+
+* (e) bare stub variable v beside v1-v3 (reshape r(110) territory): composed
+*     but honestly reported as blocked after the dry run cannot fix it
+clear
+input id v v1 v2 v3
+1 9 10 11 12
+2 8 20 21 22
+end
+reshapehelper
+assert inlist("`r(status)'", "blocked", "needinfo")
+assert _N == 2 & c(k) == 5
+
+* (f) widening would build names longer than 32 chars: caution + honest fail
+clear
+input id year abcdefghijklmnopqrstuvwxyzabcde
+1 2018 1.1
+1 2019 1.2
+2 2018 2.1
+2 2019 2.2
+end
+reshapehelper, to(wide)
+assert inlist("`r(status)'", "blocked", "ok")
+if "`r(status)'" == "blocked" assert `"`r(caution)'"' != ""
+
+* (g) missing values in the j candidate -> no crash, data untouched
+clear
+input id year x
+1 2018 1
+1 2019 2
+1    . 3
+2 2018 4
+2 2019 5
+end
+reshapehelper, to(wide)
+assert inlist("`r(status)'", "ok", "blocked", "needinfo")
+assert _N == 5 & c(k) == 3
+
+* (h) an all-missing variable beside normal stubs -> still ok
+clear
+input id inc80 inc81
+1 5000 5500
+2 2000 2200
+end
+gen ghost = .
+reshapehelper
+assert "`r(status)'" == "ok"
+
+* (i) mixed-case stubs Inc_80/Inc_81: case preserved in the suggestion
+clear
+input id Inc_80 Inc_81
+1 5000 5500
+2 2000 2200
+end
+reshapehelper
+assert "`r(status)'" == "ok"
+assert strpos(`"`r(cmd)'"', "Inc_") > 0
+
+* (j) value-labeled integer j -> to(wide) works
+clear
+input id year x
+1 1 10
+1 2 11
+2 1 20
+2 2 21
+end
+label define yl 1 "wave one" 2 "wave two"
+label values year yl
+reshapehelper, to(wide)
+assert "`r(status)'" == "ok"
+assert r(tested) == 1
+
+* (k) REGRESSION (adversarial finding): a chained run followed by a
+*     single-step run must CLEAR the stale second-step global
+clear
+input famid ht_k1_t1 ht_k1_t2 ht_k2_t1 ht_k2_t2
+1 3.1 3.6 4.0 4.4
+2 3.3 3.8 4.1 4.6
+end
+reshapehelper
+assert `"$reshapehelper_cmd2"' != ""
+clear
+input id inc80 inc81
+1 5000 5500
+2 2000 2200
+end
+reshapehelper
+assert `"`r(cmd2)'"' == ""
+assert `"$reshapehelper_cmd2"' == ""
+* ... and a checklist run clears the first global too
+sysuse auto, clear
+reshapehelper
+assert "`r(status)'" == "needinfo"
+assert `"$reshapehelper_cmd"' == ""
+
+* (l) varlist restriction scopes the SCAN but not the id hunt
+clear
+input id inc80 inc81 ue80 ue81
+1 5000 5500 0 1
+2 2000 2200 1 0
+end
+reshapehelper inc80 inc81
+assert "`r(status)'" == "ok"
+assert strpos(`"`r(cmd)'"', "reshape long inc, i(id)") > 0
+assert strpos(`"`r(cmd)'"', "ue") == 0
+
+* (m) user errors arrive as clean return codes
+capture reshapehelper, i(no_such_var)
+assert _rc == 111
+capture reshapehelper, to(wide) j(no_such_var)
+assert _rc == 111
+clear
+input id z1 z2
+1 1 2
+2 3 4
+end
+reshapehelper, to(long) stubs(qqq) i(id)
+assert inlist("`r(status)'", "blocked", "needinfo")
+
+* ---------------------------------------------------------------------------
+* T22. REGRESSION (adversarial round 2): a double-quote inside a string j
+*      VALUE must not crash the caller (it broke the 32-char length test)
+* ---------------------------------------------------------------------------
+clear
+input id str8 size measure
+1 "5in" 10
+1 "6in" 20
+2 "5in" 11
+2 "6in" 21
+end
+replace size = subinstr(size, "in", char(34), .)   // values become  5"  6"
+capture reshapehelper, to(wide) j(size)
+assert _rc == 0                                     // no escaped r(132)/r(198)
+assert inlist("`r(status)'", "ok", "blocked", "needinfo")
+assert _N == 4 & c(k) == 3                          // data untouched
+* a backtick in a j value must also be safe
+clear
+input id str8 code measure
+1 "a" 10
+1 "b" 20
+2 "a" 11
+2 "b" 21
+end
+replace code = "a" + char(96) + "b" if code == "a"
+capture reshapehelper, to(wide) j(code)
+assert _rc == 0
+assert inlist("`r(status)'", "ok", "blocked", "needinfo")
+
+* ---------------------------------------------------------------------------
+* T23. REGRESSION: the "i() still contains the factor" note must NOT fire on a
+*      terminal single-id panel (it was misreading the id as a leftover factor)
+* ---------------------------------------------------------------------------
+clear
+input id year inc
+1 80 5000
+1 81 5500
+2 80 2000
+2 81 2200
+3 80 3000
+3 81 3300
+end
+reshapehelper, to(wide)
+assert "`r(status)'" == "ok"
+assert strpos(`"`r(cmd)'"', "reshape wide inc, i(id) j(year)") > 0
+assert `"`r(note)'"' == ""                          // no spurious factor note
+* but a genuine compound-i leftover factor STILL earns the note (T14 shape)
+clear
+input hid str1 sex year inc
+1 "f" 90 3200
+1 "f" 91 4700
+1 "m" 90 4500
+1 "m" 91 4600
+2 "f" 90 3600
+2 "f" 91 3800
+2 "m" 90 5100
+2 "m" 91 5300
+end
+reshapehelper, to(wide)
+assert "`r(status)'" == "ok"
+assert `"`r(note)'"' != ""
+
+* ---------------------------------------------------------------------------
+* T24. REGRESSION: r(direction) only ever returns a DOCUMENTED value
+* ---------------------------------------------------------------------------
+clear
+input a b c
+1 2 3
+4 5 6
+end
+reshapehelper, to(long)
+assert inlist("`r(direction)'", "wide2long", "long2wide", "doubly", "unknown")
+clear
+input id x y
+1 1 2
+2 3 4
+end
+reshapehelper, to(wide)
+assert inlist("`r(direction)'", "wide2long", "long2wide", "doubly", "unknown")
+
+* ---------------------------------------------------------------------------
+* T25. Sparse panel: an id that DOES uniquely identify rows with year but
+*      barely repeats is set aside by the plausibility bar; the checklist must
+*      name it as a possible sparse-units cause and expose it in r(sparse)
+* ---------------------------------------------------------------------------
+clear
+input id year x
+1 2019 10
+2 2019 20
+3 2019 30
+4 2019 40
+5 2020 50
+1 2020 11
+end
+reshapehelper, to(wide)
+assert "`r(status)'" == "needinfo"
+assert "`r(sparse)'" == "id"
+assert `"`r(cmd)'"' == ""
+* forcing the flagged id makes it resolve
+reshapehelper, to(wide) i(id) j(year)
+assert "`r(status)'" == "ok"
+assert strpos(`"`r(cmd)'"', "reshape wide x, i(id) j(year)") > 0
+* a normal (non-sparse) panel must NOT set r(sparse)
+clear
+input id year x
+1 80 5
+1 81 6
+2 80 7
+2 81 8
+end
+reshapehelper, to(wide)
+assert "`r(status)'" == "ok"
+assert "`r(sparse)'" == ""
 
 di as res _n "test_reshapehelper.do: ALL TESTS PASSED"

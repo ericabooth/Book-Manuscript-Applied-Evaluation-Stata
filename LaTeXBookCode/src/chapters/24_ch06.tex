@@ -10,6 +10,7 @@ When two files share no identifier, we link them probabilistically\index{probabi
 The linkage deserves a plan before it deserves code, and the plan fits on one page: a merge map listing every pair of files the project will join, the key that joins each pair, the match rate you expect, and the fallback if the key underperforms. The expected rates come from the data owners, not from hope. Ask the workforce agency what share of school leavers typically appears in their wage records and they will name something near three quarters, because federal workers, the self-employed, and out-of-state movers are structurally absent from the ledger. Write that number into the map, because it turns a later surprise into a signal you can read: a 74 percent match against a 75 percent expectation is a pass, while the same 74 percent against a supposedly near-universal file is a stopped line. You will thank yourself for the fallback column the day a primary key fails, because \enquote{if identifier coverage collapses, fall back to name plus birth date and this section's fuzzy machinery} is a decision better made in a planning meeting than the night before a deliverable.
 
 Blocking makes the whole thing tractable, and it is worth seeing concretely. Comparing every pair of two 100{,}000-row files is ten billion comparisons; blocking on birth year splits the files into roughly a hundred small pools and cuts the work by two orders of magnitude. The gamble is that a true match never disagrees on the blocking key, so you block on your most reliable field. To make the mechanics visible, here are two tiny simulated rosters of the same six people, with names entered inconsistently and one birth year mistyped. We clean the names, compute Stata's built-in \texttt{soundex}\index{soundex@\texttt{soundex}} phonetic code so \enquote{Smith} can meet \enquote{Smythe}, block on birth year with \texttt{joinby}\index{joinby@\texttt{joinby}}, and flag the pairs whose codes agree:
+\par
 {\footnotesize
 \begin{verbatim}
 gen sdx_a = soundex(lname_a)          // in roster A
@@ -21,6 +22,7 @@ gen soundex_hit = (sdx_a == sdx_b)
 \end{verbatim}
 }
 Birth-year blocking is doing real work here: it forms only 8 candidate pairs out of the 36 that a full cross-product would compare, and within each block the soundex codes decide the match. Three accepted pairs read like this:
+\par
 {\footnotesize
 \begin{verbatim}
     lname_a   lname_b   byear   sdx_a   sdx_b   soundex_hit
@@ -123,6 +125,7 @@ The scene is the utilization-focused standard of Chapter~\ref{ch:embedded} at wo
 
 \section{Schema drift and the polluted year}
 A pipeline should refuse bad data loudly rather than average over it quietly. Administrative extracts drift\index{schema drift}: a variable changes type, a code that was never legal appears, an ID that should be unique repeats. The defense is a validation step that checks each new extract against a rulebook of required variables, legal values, and uniqueness constraints, and stops with a clear message when the data violates them. Native Stata already carries everything that rulebook needs: \texttt{confirm}\index{confirm@\texttt{confirm}} verifies that a variable exists with the expected type, \texttt{isid}\index{isid@\texttt{isid}} halts if the identifier is not unique, and \texttt{assert}\index{assert@\texttt{assert}} halts if any observation violates a stated condition. Placed at the top of the do-file that ingests an extract, four lines become a contract the data must satisfy before a single analysis line runs:
+\par
 {\footnotesize
 \begin{verbatim}
 * --- the rulebook: refuse bad data loudly ---
@@ -133,6 +136,7 @@ assert wage > 0 & wage < 500000 if !missing(wage)
 \end{verbatim}
 }
 On a clean 200-row extract this block runs silently and the pipeline proceeds. Change one status code to an illegal value and \texttt{assert} refuses:
+\par
 {\footnotesize
 \begin{verbatim}
 . assert inlist(status, 1, 2, 3)
@@ -147,6 +151,7 @@ Sometimes the data is bad for a known reason, and the honest move is to flag the
 
 \section{Declaring the panel: \texttt{xtset} and \texttt{xtdescribe}}\label{sec:xtset}
 Before any panel method runs, Stata has to know two things: which variable identifies a unit and which variable orders time. One command, \texttt{xtset id time}\index{xtset@\texttt{xtset}}, declares both, and from that point on the whole \texttt{xt} family (fixed effects, lagged terms, transition counts) knows how to walk the data. Getting this declaration right is not bookkeeping; it is the difference between a lag that reaches back one survey wave and one that silently reaches across two different people. We use the National Longitudinal Survey of Young Women (\texttt{nlswork}), which ships with Stata, so this runs on any machine with no download:
+\par
 {\footnotesize
 \begin{verbatim}
 webuse nlswork, clear
@@ -155,6 +160,7 @@ xtdescribe
 \end{verbatim}
 }
 The \texttt{xtdescribe} output is a shape report for the panel, and reading it is the first thing you do with any new longitudinal file:
+\par
 {\footnotesize
 \begin{verbatim}
   idcode:  1, 2, ..., 5159              n =     4711
@@ -173,6 +179,7 @@ The imbalance is not a nuisance to be normalized away; it is information about w
 
 \subsection{Asking whether attrition is selective}\label{sec:ch06-attrition}
 You can go one step past describing the imbalance and test whether it looks selective, using nothing beyond a \texttt{by} prefix and a t-test. The standard first move, formalized for the Panel Study of Income Dynamics by \textcite{fitzgerald1998attrition}, is attrition on observables: compare the baseline characteristics of units who leave the panel early against those who stay, because if leavers already differ at entry on things you can see, you should doubt that they match on things you cannot. In \texttt{nlswork}, call a woman a leaver if she appears three or fewer times, then compare first-observation outcomes across the two groups:
+\par
 {\footnotesize
 \begin{verbatim}
 bysort idcode: gen T_i = _N
@@ -185,9 +192,110 @@ The comparison is informative in both directions here. Leavers are a third of th
 
 \pagelayout{margin}
 \section{Reshaping into analysis-ready panels}
-Shape your data into the one structure every later method assumes, and answer the director's first question in the same move: where do people go? The panel is the central data structure of this book, and you reach it by reshaping the raw extracts with discipline. Build a stable panel identifier, keep the wide-versus-long distinction deliberate rather than accidental, and, when the question is about movement, code the transitions: how many participants went from intake to active to graduated, and how many stalled or left.\marginnote{\texttt{reshape} fails loudly when the \texttt{i} and \texttt{j} pair is not unique, which is a gift: the error is really telling you two rows claim the same unit-period. Fix the duplicate at the source rather than forcing the reshape, or the panel inherits a phantom observation.} A transition matrix\index{transition matrix} turns that movement into a table, and the same information becomes a picture that answers the program director's first question, \emph{where do people go?} A reshape also deserves its own tiny contract: count distinct units before, \texttt{assert} the same count after, and confirm the row total squares with the \texttt{xtdescribe} accounting. A reshape that runs clean but changes who is in the data has still failed, and the two-line check is how you notice.
+Every method in the chapters ahead assumes a panel: one row per unit per period, in long form. Getting there is two jobs, and this section does both. First you reshape the raw extracts into that long shape without losing anyone along the way. Then, once the data is long, you read the movement in it, because the program director's standing question, \emph{where do people go?}, is a question about movement.\marginnote{\texttt{reshape} fails loudly when the \texttt{i} and \texttt{j} pair is not unique, which is a gift: the error is telling you two rows claim the same unit-period. Fix the duplicate at the source rather than forcing the reshape, or the panel inherits a phantom observation.} One habit guards the first job. A reshape deserves its own small contract: count the distinct units before, \texttt{assert} the same count after, and check that the row total squares with the \texttt{xtdescribe} accounting. A reshape that runs clean but quietly changes who is in the data has still failed, and that two-line check is how you catch it.
 
-To make a transition matrix concrete, we ask where workers land in the wage distribution from one observation to the next. Cut log wage into within-year quartiles, look each worker's next quartile up with a one-period lead, and cross-tabulate now against next as row percentages:
+\subsection{Getting the reshape command right without the guesswork}\label{sec:ch06-reshapehelper}
+Ask a room of Stata users which command they most often get wrong, and \texttt{reshape} wins. The trouble is not that it is complicated; it is that it asks you to describe your data's shape from memory. Which columns repeat over time? Which variable names the unit? What should the new time variable be called? Miss any one of those and Stata answers with an error that reads like a riddle, \enquote{no xij variables found} or \enquote{values of variable not unique within,} and you are back to squinting at the variable list. A grant file arrives with columns \texttt{served2021}, \texttt{served2022}, and \texttt{served2023}, and before you can build a panel you have to work out by eye that \texttt{served} is the repeating measure, \texttt{site} is the unit, and the years buried in the column names should become a variable called something like \texttt{year}.
+
+\texttt{reshapehelper}\index{reshapehelper@\texttt{reshapehelper}} does that reading for you, and it never touches the file in front of you. You type the command with no options; it reads the variable names, works out the unit and the repeating dimension, writes the \texttt{reshape} command it believes you want, and runs that command on a throwaway copy to make sure it works. What comes back is a picture rather than a lecture: a sketch of the data now, an arrow labeled with the proposed command, and a sketch of the data after (Figure~\ref{fig:reshapehelper}). You compare the two shapes, decide the arrow does what you meant, and run the command it saved.
+
+\begin{figure}[htbp]
+\centering
+{\footnotesize
+\begin{mdframed}[backgroundcolor=aeBg,linecolor=aeRule,linewidth=0.6pt,%
+roundcorner=3pt,innertopmargin=5pt,innerbottommargin=5pt,%
+innerleftmargin=7pt,innerrightmargin=7pt,nobreak=true]
+\begin{verbatim}
+. reshapehelper
+
+reshapehelper 1.0.0 | 3 obs, 4 vars
+----------------------------------------------------------------
+  NOW (wide): 3 sample obs
+  +--------------------------------------+
+  | site     ser~2021 ser~2022 ser~2023  |
+  | 101      120      145      168       |
+  | 102      90       110      132       |
+  | 103      210      205      240       |
+  +--------------------------------------+
+        |
+        |  reshape long served, i(site) j(year)
+        v
+  AFTER (long): 9 obs, 3 vars  [dry run: OK]
+  +-----------------------------+
+  | site     year     served    |
+  | 101      2021     120       |
+  | 101      2022     145       |
+  | 101      2023     168       |
+  | ...                         |
+  +-----------------------------+
+
+suggested command (dry-run PASSED on 3 sample obs):
+  reshape long served, i(site) j(year)
+
+  >> click to RUN this on the full data
+  >> click to VIEW/copy the unwrapped syntax
+\end{verbatim}
+\end{mdframed}
+}
+\caption[The reshapehelper diagnosis and suggestion]{The \texttt{reshapehelper} output on a grant file that records one outcome column per year. The tool reads \texttt{served2021}--\texttt{served2023} as the stub \texttt{served}, picks \texttt{site} as the row identifier and \texttt{year} as the new time variable, and shows the before-and-after shape from an actual dry run of the command it suggests. The suggestion is also stored in \texttt{r(cmd)} and the global \texttt{\$reshapehelper\_cmd}, and offered as click-to-run and click-to-view links. Reproduced by \texttt{ch06\_reshapehelper.do}.}
+\label{fig:reshapehelper}
+\end{figure}
+
+Start with the two boxes. The top one is your data as it sits: one row per site, a column per year. The bottom one is what you would get if you ran the command on the arrow: one row per site-year, the three \texttt{served} columns folded into a single column. The bottom box is not a mock-up; it comes from the trial run, so the green \enquote{dry run: OK} means the command actually worked on your data. Had it failed, you would read the failure here, on the copy, rather than discover it on your live file. When the two shapes match your intent, one click runs the command, or you copy \texttt{\$reshapehelper\_cmd}, the line it stored, into your do-file so the decision is on the record with everything else.
+
+Learning the tool is mostly learning which situations it settles on its own and which it hands back to you with advice. Table~\ref{tab:reshapehelper} sorts the common cases. The pattern across the top rows is that a consistent naming scheme, a shared stub with the period on the end, the front, or the middle, is enough for \texttt{reshapehelper} to write and test the command unaided. The bottom rows are the situations where the shape alone does not settle the question, and there the tool's job changes from answering to advising: it tells you what it found and what to decide.
+
+\begin{table*}[htbp]
+\centering
+\caption[What reshapehelper settles and what it hands back]{What \texttt{reshapehelper} settles on its own, and what it hands back for you to decide. The top group is the everyday wide-to-long and long-to-wide work, where a consistent naming scheme lets the tool write and dry-run the command. The bottom group is where the data's shape is genuinely ambiguous or blocked; there it returns a diagnosis and the specific next step rather than a guess.}
+\label{tab:reshapehelper}
+{\footnotesize
+\begin{tabular}{@{}p{4.5cm}p{4.0cm}p{6.2cm}@{}}
+\toprule
+\textbf{The situation} & \textbf{What the columns look like} & \textbf{What \texttt{reshapehelper} does} \\
+\midrule
+One column per period & \texttt{served2021 served2022} & Writes and tests \texttt{reshape long}, naming the new period variable \\
+\addlinespace
+Periods labeled with text & \texttt{bp\_before bp\_after} & Same, and adds the \texttt{string} option the text labels need \\
+\addlinespace
+Period in the middle or front of the name & \texttt{inc2021r}; \texttt{qld\_p nsw\_p} & Reads the period wherever it sits and writes the matching command \\
+\addlinespace
+Two periods packed into one name & \texttt{ht\_k1\_t2} (child, then time) & Writes the two chained reshapes and tests both steps \\
+\addlinespace
+Already long, going the other way & one row per site-year & Suggests the \texttt{reshape wide} that puts the periods back across columns \\
+\midrule
+Two rows for the same unit-period & two \texttt{site} 101 rows in 2021 & Stops, counts the clashes, and lists the ways out (drop, average, or sequence) \\
+\addlinespace
+Two factors define the column & a level and a delay per row & Widens one factor and shows how to fold both into a single new column \\
+\addlinespace
+Ambiguous letter suffixes & \texttt{incm incf} (sex? or two fields?) & Will not guess; asks you to name the stub \\
+\addlinespace
+Columns are really rows & metrics down the side & Points you to \texttt{xpose}, since this is a transpose, not a reshape \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+
+The bottom group is where the dry run matters most, because it fails on the copy instead of your file, and \texttt{reshapehelper} turns that failure into a numbered checklist. Two rows claim the same site and the same year, so a widening would have two values fighting for one cell: it counts the collisions and shows you the three ways out. The columns nearly form a family but one is spelled \texttt{Served2022} with a stray capital: it flags the odd one out to rename. The unit repeats so seldom that the data may be too thin to widen at all: it says so, names the variable, and offers to proceed if you insist the design is right. The one case it refuses outright is the genuinely ambiguous one. Columns \texttt{incm} and \texttt{incf} might be a single measure \texttt{inc} split by sex, or two unrelated fields that happen to end in \texttt{m} and \texttt{f}; rather than flip a coin, \texttt{reshapehelper} asks you to name the stub, on the view that a confident wrong answer costs you more than an honest question.
+
+\begin{kaobox}[frametitle=Package Integration: \texttt{reshapehelper}]
+\textbf{Integrated command:} \texttt{reshapehelper} diagnoses the dataset in memory and suggests the likely \texttt{reshape} command without ever reshaping the data. It scans variable names for wide patterns, honors any \texttt{xtset}/\texttt{tsset}/\texttt{svyset} declaration when choosing \texttt{i} and \texttt{j}, composes the command, and dry-runs it on a sample inside \texttt{preserve}/\texttt{restore}. Install with the house idiom:
+\par
+{\footnotesize
+\begin{verbatim}
+local gh "https://raw.githubusercontent.com/ericabooth"
+net install reshapehelper, ///
+    from("`gh'/reshapehelper-stata-public/main/") replace
+\end{verbatim}
+}
+The suggestion returns in \texttt{r(cmd)} and the global \texttt{\$reshapehelper\_cmd}, so a control file can capture it, and the tool prints click-to-run and click-to-view links for interactive work. For a doubly-wide layout, where two indices are packed into each name, it writes the two chained reshapes and tests both. Where it cannot settle on a command, it returns a diagnosis and a numbered checklist instead. The bundled \texttt{example\_reshapehelper.do} walks seventeen scenarios from the textbook case to the ones that fill discussion boards.
+\end{kaobox}
+
+\subsection{Coding the transitions: where do people go?}\label{sec:ch06-transitions}
+With the data in long form, the director's question from the top of this section, where do people go, turns into something you can count. A transition matrix answers it directly. Take each unit's state now and its state at the next observation, and tabulate one against the other, so every row reads as a sentence: given where a participant is this period, here is where she is next. For a program that tracks people through phases, the states are intake, active, and graduated; the matrix then shows how many advanced, how many stalled, and how many left.
+
+We build one on \texttt{nlswork} by asking a smaller version of the same question: where does a worker land in the wage distribution from one observation to the next? Cut log wage into within-year quartiles, look each worker's next quartile up with a one-period lead, and cross-tabulate now against next as row percentages:
+\par
 {\footnotesize
 \begin{verbatim}
 xtile wq = ln_wage, nq(4)
@@ -226,6 +334,7 @@ A Sankey diagram of participant movement through program phases (Intake $\righta
 
 \section{Missing data honestly}
 Dropping a row is an analytic decision made in silence, so make the decision visible. Missing values are rarely missing at random, so casewise deletion can quietly bias an estimate; we first diagnose the pattern with \texttt{misstable patterns}\index{misstable@\texttt{misstable}}, then decide. That command tabulates which combinations of variables go missing together, and on a 200-row sample of the panel it prints a compact map of the structure:
+\par
 {\footnotesize
 \begin{verbatim}
 misstable patterns ln_wage hours tenure ///
@@ -249,6 +358,7 @@ misstable patterns ln_wage hours tenure ///
 The table already tells the story: \texttt{ln\_wage} and \texttt{msp} never go missing (they are dropped from the pattern list because they are complete), while the gaps concentrate in \texttt{union} and \texttt{wks\_ue}, sometimes together and sometimes alone. The missingness map in Figure~\ref{fig:missmap} makes that same structure legible at a glance, which is what you want before choosing a remedy. Only when missingness is substantial and plausibly related to observed covariates do we reach for multiple imputation\index{multiple imputation} \parencite{rubin1987imputation}, which propagates the added uncertainty into the standard errors rather than pretending the gaps were never there.\marginnote{Rubin's old rule of thumb was that five imputations suffice, but with 30 to 50 percent missing you want closer to the missing-fraction as a percentage, so 40 imputations, to keep the standard errors stable. And impute inside \texttt{mi estimate}, never by filling in a single \enquote{best guess} that hides the uncertainty you just admitted to.}
 
 The command that draws the map is a two-color tile plot: one \texttt{scatter} of the missing cells in maroon over another of the present cells in gray, with rows sorted so missingness clusters at the bottom of the frame:
+\par
 {\footnotesize
 \begin{verbatim}
 twoway (scatter rowid col if m==1, mcolor(maroon) ///

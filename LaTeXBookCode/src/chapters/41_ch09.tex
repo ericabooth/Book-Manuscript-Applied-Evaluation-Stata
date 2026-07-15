@@ -12,6 +12,7 @@ Get one finding into a busy reader's head in a few seconds, and you do it by spe
 A graph this disciplined starts before Stata opens. Sketch the figure on paper and write its one message under the sketch as a full sentence: \enquote{managers earn the most, laborers the least, and the gap is large.} If the sentence will not come, there is no figure yet, only data looking for an argument. The sketch settles the expensive choices while they are still cheap: which comparison the reader must make, whether the categories need sorting, what gets a direct label. Ten minutes with a pencil routinely saves an afternoon of option-twiddling.
 
 The difference is easiest to see side by side, on data every Stata user has. Mean hourly wage by occupation from the 1988 NLSW extract is a five-second finding: managers and professionals at the top, service and laborers at the bottom. The left panel of Figure~\ref{fig:ink} draws that finding badly on purpose and the right panel draws it well, from the same numbers. We build the cluttered version with a filled background, gridlines, a heavy legend, and a rainbow of bar colors, then the clean version by stripping every one of those marks and sorting the bars so the ranking reads itself:
+\par
 {\footnotesize
 \begin{verbatim}
 * cluttered (everything on): saved as g_bad
@@ -92,6 +93,7 @@ A program board reads a diverging Likert bar in seconds and a stacked one not at
 A regression table is a wall of numbers that invites no comparison; the same estimates drawn as a coefficient plot invite the eye to compare them at once. We use \texttt{coefplot}\index{coefplot@\texttt{coefplot}}\marginnote{Ben Jann's \texttt{coefplot} reads stored estimates straight from \texttt{e()}, so you can plot several models side by side without retyping a single number. Its \texttt{keep()} and \texttt{rename()} options are what tame a busy plot.} to show effects with their confidence intervals as points and whiskers, and for models across several outcomes or subgroups, small multiples\index{small multiples} put each on a shared scale so the reader can see instantly where an effect is large, where it is null, and where the uncertainty is wide.
 
 The small multiple is the version worth building, because a stakeholder's real question is comparative: where is the effect, and where is it not? Figure~\ref{fig:coefplot} answers it for one predictor, union membership, across three outcomes from the NLSW extract, each a separate regression on the same controls. We store each model under its own name and let \texttt{coefplot} draw all three in one frame, one panel per outcome, on a shared zero line:
+\par
 {\footnotesize
 \begin{verbatim}
 foreach y in wage hours ttl_exp {
@@ -130,6 +132,7 @@ One figure rarely serves every audience, and the coefficient plot is where that 
 The program officer's native question is \emph{did the line move after we acted?}, so the trend graph should answer exactly that. A run chart\index{run chart} of the metric over time with an annotated reference line at the moment of the policy change (\texttt{xline()}\index{xline()@\texttt{xline()}}) puts the intervention and its aftermath in one frame,\sidenote{Pass \texttt{xline()} a date if your x-axis is a Stata date variable, not the raw integer; the value must be on the same scale as the axis or the line lands in the wrong place. Label it with a \texttt{text()} annotation so the reader knows what the line marks.} and the control charts\index{control chart} from the survey-monitoring section (Section~\ref{sec:monitor}) return here not as alarms but as communication, showing a stakeholder what normal variation looks like and where this program departed from it.
 
 Figure~\ref{fig:runchart} is that chart on a simulated series so the shift is unambiguous and the code is yours to reuse. We generate 36 months of a monthly service metric, average days-to-placement for a workforce program, as noise around a flat baseline, then apply a step improvement of four days starting the month a new intake process goes live. The \texttt{xline()} marks go-live and a \texttt{text()} annotation names it:
+\par
 {\footnotesize
 \begin{verbatim}
 set seed 20260704
