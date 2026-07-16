@@ -187,7 +187,7 @@ The moment estimator above is the teaching version, written out so the blend is 
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
 net install rateshrink, ///
-    from("`gh'/rateshrink-stata-public/main/") replace
+    from("`gh'/rateshrink-stata-public/main/") replace force
 \end{verbatim}
 }
 Give it the successes, the denominator, and a name for the shrunken column; \texttt{ci()} adds a posterior interval and \texttt{rel()} writes each unit's reliability.
@@ -288,7 +288,7 @@ The \texttt{conformalpred}\index{conformalpred@\texttt{conformalpred}} package w
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
 net install conformalpred, ///
-    from("`gh'/conformalpred-stata-public/main/") replace
+    from("`gh'/conformalpred-stata-public/main/") replace force
 \end{verbatim}
 }
 Pass the estimation command through \texttt{command()} and set the miscoverage rate with \texttt{alpha()} (\texttt{alpha(0.1)} targets 90\% coverage).
@@ -328,7 +328,7 @@ The ICC comes back as 0.089, so about 9\% of the variance in wages sits between 
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
 net install hlmr2, ///
-    from("`gh'/hlmr2-stata-public/main/") replace
+    from("`gh'/hlmr2-stata-public/main/") replace force
 \end{verbatim}
 }
 Run it with no arguments straight after \texttt{mixed}; it reads the stored variance components and prints both.

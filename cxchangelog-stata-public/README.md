@@ -30,13 +30,8 @@ are no dependencies beyond Stata 16.0.
 From GitHub:
 
 ```stata
-net install cxchangelog, from("https://raw.githubusercontent.com/ericabooth/cxchangelog-stata-public/main/") replace
-```
-
-Or from a local copy of this folder:
-
-```stata
-net install cxchangelog, from("/path/to/cxchangelog-stata-public/") replace
+net install cxchangelog, from("https://raw.githubusercontent.com/ericabooth/cxchangelog-stata-public/main/") replace force
+help cxchangelog
 ```
 
 ## Quick start

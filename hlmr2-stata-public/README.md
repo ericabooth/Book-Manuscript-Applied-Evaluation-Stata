@@ -30,13 +30,8 @@ the command easy to sanity-check against `estat icc`.
 From GitHub (once the repository is public):
 
 ```stata
-net install hlmr2, from("https://raw.githubusercontent.com/ericabooth/hlmr2-stata-public/main/") replace
-```
-
-From a local copy of this folder:
-
-```stata
-net install hlmr2, from("/path/to/hlmr2-stata-public/") replace
+net install hlmr2, from("https://raw.githubusercontent.com/ericabooth/hlmr2-stata-public/main/") replace force
+help hlmr2
 ```
 
 Requires Stata 16 or newer. No dependencies beyond official Stata.

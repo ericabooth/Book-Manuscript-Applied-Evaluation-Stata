@@ -60,7 +60,7 @@ The honest lesson lives in the combine step, not the download. Element names mut
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
 net install combineall, ///
-    from("`gh'/combineall-stata-public/main/") replace
+    from("`gh'/combineall-stata-public/main/") replace force
 \end{verbatim}
 }
 Under \texttt{cmethod(append)}, three options do the combine half. The \texttt{year()} option reads a four-digit year out of each filename and writes it into a \texttt{year} variable, so the files sort and stack in vintage order. The \texttt{map()} option takes a small CSV, one row per rename (\texttt{oldname,newname,firstyear,lastyear}), and applies each rename to the vintages it names before the append, which is how a column split in 2020 lands in the same variable as its 2015 self. And a \texttt{varname[source]} characteristic on each harmonized variable records which file and year the values came from, so provenance survives into the built \texttt{.dta}. The command writes a harmonization table (which variable is present in which year) and reports \texttt{r(n\_files)}, \texttt{r(years)}, and \texttt{r(n\_missing)} for a quick sanity check. Keep the map CSV outside the \texttt{directory()} you point at, or it is swept up as an input file; and because the 2011 engine appends with \texttt{force}, a variable that is a string in one vintage and numeric in another coerces to missing rather than erroring, so read the harmonization table before you trust the stack.
@@ -249,7 +249,7 @@ The mirrored tree is also where the triage read happens for a shared-drive drop.
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
 net install convertanything, ///
-    from("`gh'/convertanything-stata-public/main/") replace
+    from("`gh'/convertanything-stata-public/main/") replace force
 
 convertanything using "$raw/partner_drop", recursive ///
     saving("$raw/_converted") replace clear         ///
@@ -265,7 +265,7 @@ The one dialect \texttt{convertanything} does not read is R's own. When a partne
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
 net install importR, ///
-    from("`gh'/importR-stata/main/") replace
+    from("`gh'/importR-stata/main/") replace force
 importR using "partner_model_frame.Rdata", clear
 \end{verbatim}
 }

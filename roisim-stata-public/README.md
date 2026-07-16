@@ -28,13 +28,8 @@ network calls. Everything is left in `r()` for programmatic use.
 From GitHub:
 
 ```stata
-net install roisim, from("https://raw.githubusercontent.com/ericabooth/roisim-stata-public/main/") replace
-```
-
-From a local folder (a clone or download of this repository):
-
-```stata
-net install roisim, from("/path/to/roisim-stata-public/") replace
+net install roisim, from("https://raw.githubusercontent.com/ericabooth/roisim-stata-public/main/") replace force
+help roisim
 ```
 
 ## Quick start

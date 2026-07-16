@@ -293,7 +293,7 @@ Reading the sheet back and comparing it against what you exported catches the si
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
 net install googlesheets, ///
-    from("`gh'/googlesheets-stata-public/main/") replace
+    from("`gh'/googlesheets-stata-public/main/") replace force
 \end{verbatim}
 }
 The one-time OAuth setup is covered in Appendix~\ref{app:setup}, with a credential-free path for readers who only need to read a link-shared sheet. The whole workflow above is collected in \texttt{ch11\_googlesheets.do}, marked display-only because it needs that sign-in and a live Sheet.

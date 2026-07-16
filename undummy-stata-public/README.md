@@ -27,13 +27,8 @@ default the original dummies are dropped; `keepdummies` keeps them.
 From GitHub:
 
 ```stata
-net install undummy, from("https://raw.githubusercontent.com/ericabooth/undummy-stata-public/main/") replace
-```
-
-From a local copy of this folder:
-
-```stata
-net install undummy, from("/path/to/undummy-stata-public/") replace
+net install undummy, from("https://raw.githubusercontent.com/ericabooth/undummy-stata-public/main/") replace force
+help undummy
 ```
 
 Requires Stata 16.0 or later. No dependencies.

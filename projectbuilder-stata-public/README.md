@@ -17,13 +17,8 @@ folders, no shell calls, same behavior on macOS, Windows, and Linux.
 From GitHub:
 
 ```stata
-net install projectbuilder, from("https://raw.githubusercontent.com/ericabooth/projectbuilder-stata-public/main/") replace
-```
-
-From a local folder (a clone or download of this repository):
-
-```stata
-net install projectbuilder, from("/path/to/projectbuilder-stata-public/") replace
+net install projectbuilder, from("https://raw.githubusercontent.com/ericabooth/projectbuilder-stata-public/main/") replace force
+help projectbuilder
 ```
 
 Requires Stata 16.0 or newer. No hard dependencies.

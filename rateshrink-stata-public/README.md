@@ -35,13 +35,8 @@ small-N noise drive the ordering.
 From GitHub (once the repo is public):
 
 ```stata
-net install rateshrink, from("https://raw.githubusercontent.com/ericabooth/rateshrink-stata-public/main/") replace
-```
-
-From a local folder:
-
-```stata
-net install rateshrink, from("/path/to/rateshrink-stata-public/") replace
+net install rateshrink, from("https://raw.githubusercontent.com/ericabooth/rateshrink-stata-public/main/") replace force
+help rateshrink
 ```
 
 Requires Stata 16.0 or newer. No dependencies.

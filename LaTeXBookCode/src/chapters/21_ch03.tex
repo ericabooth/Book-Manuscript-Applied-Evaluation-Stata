@@ -179,7 +179,7 @@ After labeling each county for a client-readable chart, the extract is five rows
     Bexar (San Antonio)          764432            1,270
 \end{verbatim}
 }
-This makes sense: Houston, Austin, and Dallas anchor the state's corporate and technology payrolls, while Fort Worth and San Antonio sit several hundred dollars a week lower, a gap of roughly a third. A workforce board reading this sees immediately that a training program aiming at the regional wage will look different in Bexar than in Harris. The two benchmarks are quick here: the BLS publishes county QCEW summaries as web tables, so Harris County's weekly wage can be eyeballed against the published page in under a minute, and rerunning last year's do-file gives the prior-vintage comparison for free, since revised quarters shift by dollars, not hundreds. Only after both checks pass does the extract earn its place in the exhibit. One \texttt{graph hbar} turns the extract into it:
+This makes sense: Houston, Austin, and Dallas anchor the state's corporate and technology payrolls, while Fort Worth and San Antonio sit several hundred dollars a week lower, a gap of roughly a third. A workforce board reading this sees immediately that a training program aiming at the regional wage will look different in Bexar than in Harris. The two benchmarks are quick here: the BLS publishes county QCEW summaries as web tables, so Harris County's weekly wage can be eyeballed against the published page in under a minute, and rerunning last year's do-file gives the prior-vintage comparison for free, since revised quarters shift by dollars, not hundreds. Only after both checks pass does the extract belong in the exhibit. One \texttt{graph hbar} turns the extract into it:
 \par
 {\footnotesize
 \begin{verbatim}
@@ -250,7 +250,7 @@ Write-out & you send data up & \texttt{googlesheets}, \texttt{googlechart} & you
 Keep one working template per route and the skill extends past the agencies named here on its own. When a state agency stands up a new endpoint next year, you will not need a new chapter; you will recognize which route applies and reuse the template. That is the difference between learning five APIs and learning how APIs work.
 
 \subsection{The source inventory: one row per endpoint}\label{ch03-sc-inventory}
-Once a project draws on more than two endpoints, the details stop fitting in anyone's head, and the fix is this chapter's instance of the tracking spine that Chapter~\ref{ch:workshop} sets up for the project as a whole: a source-inventory sheet with one row per source and five columns, the endpoint URL, whether a key is needed and where it lives, the refresh cadence, the date last pulled, and the owner who confirmed the pull. The Texas panel in the applied example below needs three rows: ACS through \texttt{getcensus}, key in \texttt{profile.do}, new release each fall; FRED, key, monthly and subject to revision; QCEW, no key, quarterly, published about five months after the quarter closes. The sheet earns its keep at hand-off and at rebuild, because a colleague who inherits the project reads five columns instead of reverse-engineering a do-file, and next year's update starts by scanning the cadence column for whatever has gone stale.
+Once a project draws on more than two endpoints, the details stop fitting in anyone's head, and the fix is this chapter's instance of the tracking spine that Chapter~\ref{ch:workshop} sets up for the project as a whole: a source-inventory sheet with one row per source and five columns, the endpoint URL, whether a key is needed and where it lives, the refresh cadence, the date last pulled, and the owner who confirmed the pull. The Texas panel in the applied example below needs three rows: ACS through \texttt{getcensus}, key in \texttt{profile.do}, new release each fall; FRED, key, monthly and subject to revision; QCEW, no key, quarterly, published about five months after the quarter closes. The sheet matters most at hand-off and at rebuild, because a colleague who inherits the project reads five columns instead of reverse-engineering a do-file, and next year's update starts by scanning the cadence column for whatever has gone stale.
 
 \subsection{JSON and the \texttt{webapi} command}\label{sec:webapi}
 The moment an evaluator hits an API that answers in JSON rather than a tidy CSV, the twenty-minute job threatens to become a Python project. This section is the shortcut: what JSON is, in one paragraph, and the one command that turns it into a Stata dataset.
@@ -315,7 +315,7 @@ Socrata endpoints (data.cdc.gov and many state portals) offer query options that
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
 net install webapi, ///
-    from("`gh'/webapi-stata-public/main/") replace
+    from("`gh'/webapi-stata-public/main/") replace force
 \end{verbatim}
 }
 The companion \texttt{ch03\_webapi.do} runs every example here against live public endpoints with no key.

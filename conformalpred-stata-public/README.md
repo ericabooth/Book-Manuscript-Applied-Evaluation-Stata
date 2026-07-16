@@ -32,13 +32,8 @@ you need reproducible bounds.
 From GitHub:
 
 ```stata
-net install conformalpred, from("https://raw.githubusercontent.com/ericabooth/conformalpred-stata-public/main/") replace
-```
-
-From a local copy of this folder:
-
-```stata
-net install conformalpred, from("/path/to/conformalpred-stata-public/") replace
+net install conformalpred, from("https://raw.githubusercontent.com/ericabooth/conformalpred-stata-public/main/") replace force
+help conformalpred
 ```
 
 ## Quick start

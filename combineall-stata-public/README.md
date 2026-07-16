@@ -19,19 +19,7 @@ Every rename is written down twice. The map CSV is the human-readable record of 
 From GitHub:
 
 ```stata
-net install combineall, from("https://raw.githubusercontent.com/ericabooth/combineall-stata-public/main/") replace
-```
-
-Or from a local copy of this folder:
-
-```stata
-net install combineall, from("/path/to/combineall-stata-public/") replace
-```
-
-Then:
-
-```stata
-which combineall
+net install combineall, from("https://raw.githubusercontent.com/ericabooth/combineall-stata-public/main/") replace force
 help combineall
 ```
 

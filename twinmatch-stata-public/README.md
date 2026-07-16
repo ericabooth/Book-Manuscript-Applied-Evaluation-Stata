@@ -31,13 +31,8 @@ pool, not as an estimator.
 From GitHub (once the repository is public):
 
 ```stata
-net install twinmatch, from("https://raw.githubusercontent.com/ericabooth/twinmatch-stata-public/main/") replace
-```
-
-From a local copy of this folder:
-
-```stata
-net install twinmatch, from("/path/to/twinmatch-stata-public/") replace
+net install twinmatch, from("https://raw.githubusercontent.com/ericabooth/twinmatch-stata-public/main/") replace force
+help twinmatch
 ```
 
 ## Quick start

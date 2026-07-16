@@ -45,20 +45,9 @@ mislabeled. An optional `dictionary()` writes a legacy `infile` dictionary
 From GitHub:
 
 ```stata
-net install datadictionary, from("https://raw.githubusercontent.com/ericabooth/datadictionary-stata-public/main/") replace
+net install datadictionary, from("https://raw.githubusercontent.com/ericabooth/datadictionary-stata-public/main/") replace force
+help datadictionary
 ```
-
-Or from a local copy of this folder:
-
-```stata
-net install datadictionary, from("/path/to/datadictionary-stata-public/") replace
-```
-
-**Colon-path warning:** Stata's `net install` fails when the `from()` path
-contains a colon (`:`), as some macOS folder names do. If this folder lives
-under such a path, copy it to a colon-free location (for example
-`/tmp/datadictionary-stata-public/`) and install from there — or use the GitHub
-URL above.
 
 ## Quick start
 

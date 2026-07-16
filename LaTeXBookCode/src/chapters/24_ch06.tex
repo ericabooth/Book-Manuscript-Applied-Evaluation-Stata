@@ -289,7 +289,7 @@ The bottom group is where the dry run matters most, because it fails on the copy
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
 net install reshapehelper, ///
-    from("`gh'/reshapehelper-stata-public/main/") replace
+    from("`gh'/reshapehelper-stata-public/main/") replace force
 \end{verbatim}
 }
 The suggestion returns in \texttt{r(cmd)} and the global \texttt{\$reshapehelper\_cmd}, so a control file can capture it, and the tool prints click-to-run and click-to-view links for interactive work. For a doubly-wide layout, where two indices are packed into each name, it writes the two chained reshapes and tests both. Where it cannot settle on a command, it returns a diagnosis and a numbered checklist instead. The bundled \texttt{example\_reshapehelper.do} walks seventeen scenarios from the textbook case to the ones that fill discussion boards.

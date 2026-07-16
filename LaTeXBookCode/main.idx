@@ -25,7 +25,7 @@
 \indexentry{control file|hyperpage}{24}
 \indexentry{version@\texttt{version}|hyperpage}{24}
 \indexentry{varabbrev@\texttt{varabbrev}|hyperpage}{24}
-\indexentry{projectbuilder@\texttt{projectbuilder}|hyperpage}{24}
+\indexentry{projectbuilder@\texttt{projectbuilder}|hyperpage}{25}
 \indexentry{convertanything@\texttt{convertanything}|hyperpage}{25}
 \indexentry{combineall@\texttt{combineall}|hyperpage}{25}
 \indexentry{srctag@\texttt{srctag}|hyperpage}{25}
@@ -41,9 +41,9 @@
 \indexentry{American Community Survey (ACS)|hyperpage}{38}
 \indexentry{getcensus@\texttt{getcensus}|hyperpage}{38}
 \indexentry{educationdata@\texttt{educationdata}|hyperpage}{39}
-\indexentry{import fred@\texttt{import fred}|hyperpage}{41}
-\indexentry{FRED (Federal Reserve Economic Data)|hyperpage}{41}
-\indexentry{Quarterly Census of Employment and Wages (QCEW)|hyperpage}{41}
+\indexentry{import fred@\texttt{import fred}|hyperpage}{42}
+\indexentry{FRED (Federal Reserve Economic Data)|hyperpage}{42}
+\indexentry{Quarterly Census of Employment and Wages (QCEW)|hyperpage}{42}
 \indexentry{FIPS codes|hyperpage}{42}
 \indexentry{Socrata|hyperpage}{44}
 \indexentry{webapi@\texttt{webapi}|hyperpage}{45}
@@ -51,7 +51,7 @@
 \indexentry{googlechart@\texttt{googlechart}|hyperpage}{45}
 \indexentry{JSON (JavaScript Object Notation)|hyperpage}{46}
 \indexentry{flattening (JSON)|hyperpage}{46}
-\indexentry{combineall@\texttt{combineall}|hyperpage}{47}
+\indexentry{combineall@\texttt{combineall}|hyperpage}{48}
 \indexentry{combineall@\texttt{combineall}|hyperpage}{54}
 \indexentry{copy@\texttt{copy}|hyperpage}{56}
 \indexentry{import delimited@\texttt{import delimited}|hyperpage}{56}
@@ -71,7 +71,7 @@
 \indexentry{undummy@\texttt{undummy}|hyperpage}{64}
 \indexentry{control chart|hyperpage}{65}
 \indexentry{char define@\texttt{char define}|hyperpage}{69}
-\indexentry{surveytracker@\texttt{surveytracker}|hyperpage}{69}
+\indexentry{surveytracker@\texttt{surveytracker}|hyperpage}{70}
 \indexentry{likertscale@\texttt{likertscale}|hyperpage}{70}
 \indexentry{Cronbach's alpha|hyperpage}{70}
 \indexentry{top-two-box|hyperpage}{70}
@@ -92,7 +92,7 @@
 \indexentry{reclink@\texttt{reclink}|hyperpage}{80}
 \indexentry{Fellegi-Sunter framework|hyperpage}{81}
 \indexentry{match weight|hyperpage}{81}
-\indexentry{nearmrg@\texttt{nearmrg}|hyperpage}{81}
+\indexentry{nearmrg@\texttt{nearmrg}|hyperpage}{82}
 \indexentry{linkage error|hyperpage}{83}
 \indexentry{crosswalk|hyperpage}{84}
 \indexentry{srctag@\texttt{srctag}|hyperpage}{84}
@@ -116,10 +116,10 @@
 \indexentry{post-stratification|hyperpage}{99}
 \indexentry{raking|hyperpage}{99}
 \indexentry{empirical Bayes shrinkage|hyperpage}{100}
-\indexentry{rateshrink@\texttt{rateshrink}|hyperpage}{101}
+\indexentry{rateshrink@\texttt{rateshrink}|hyperpage}{102}
 \indexentry{minimum detectable effect|hyperpage}{103}
-\indexentry{power@\texttt{power}|hyperpage}{103}
-\indexentry{design effect|hyperpage}{103}
+\indexentry{power@\texttt{power}|hyperpage}{104}
+\indexentry{design effect|hyperpage}{104}
 \indexentry{conformal prediction|hyperpage}{105}
 \indexentry{conformalpred@\texttt{conformalpred}|hyperpage}{106}
 \indexentry{intraclass correlation|hyperpage}{107}
@@ -137,7 +137,7 @@
 \indexentry{synth@\texttt{synth}|hyperpage}{118}
 \indexentry{twinmatch@\texttt{twinmatch}|hyperpage}{120}
 \indexentry{Mahalanobis distance|hyperpage}{120}
-\indexentry{honestdid@\texttt{honestdid}|hyperpage}{121}
+\indexentry{honestdid@\texttt{honestdid}|hyperpage}{122}
 \indexentry{kbal@\texttt{kbal}|hyperpage}{122}
 \indexentry{return on investment|hyperpage}{122}
 \indexentry{Monte Carlo simulation|hyperpage}{122}
@@ -149,7 +149,7 @@
 \indexentry{statplot@\texttt{statplot}|hyperpage}{135}
 \indexentry{Likert scale|hyperpage}{135}
 \indexentry{diverging bar chart|hyperpage}{135}
-\indexentry{coefplot@\texttt{coefplot}|hyperpage}{135}
+\indexentry{coefplot@\texttt{coefplot}|hyperpage}{136}
 \indexentry{small multiples|hyperpage}{136}
 \indexentry{run chart|hyperpage}{137}
 \indexentry{xline()@\texttt{xline()}|hyperpage}{137}
@@ -158,11 +158,11 @@
 \indexentry{self-contained HTML|hyperpage}{141}
 \indexentry{sparkta2@\texttt{sparkta2}|hyperpage}{141}
 \indexentry{statashiny@\texttt{statashiny}|hyperpage}{141}
-\indexentry{dashboardbuilder@\texttt{dashboardbuilder}|hyperpage}{141}
-\indexentry{webdoc2@\texttt{webdoc2}|hyperpage}{141}
+\indexentry{dashboardbuilder@\texttt{dashboardbuilder}|hyperpage}{142}
+\indexentry{webdoc2@\texttt{webdoc2}|hyperpage}{142}
 \indexentry{googlechart@\texttt{googlechart}|hyperpage}{142}
 \indexentry{googlesheets@\texttt{googlesheets}|hyperpage}{142}
-\indexentry{sparkline|hyperpage}{142}
+\indexentry{sparkline|hyperpage}{143}
 \indexentry{small multiples|hyperpage}{143}
 \indexentry{choropleth|hyperpage}{147}
 \indexentry{diverging stacked bar|hyperpage}{150}
@@ -231,11 +231,11 @@
 \indexentry{writeinput@\texttt{writeinput}|hyperpage}{237}
 \indexentry{ScrapeSSC@\texttt{ScrapeSSC}|hyperpage}{238}
 \indexentry{rateshrink@\texttt{rateshrink}|hyperpage}{239}
-\indexentry{empirical Bayes shrinkage|hyperpage}{240}
+\indexentry{empirical Bayes shrinkage|hyperpage}{241}
 \indexentry{rateshrink@\texttt{rateshrink}|hyperpage}{241}
 \indexentry{Mata|hyperpage}{242}
 \indexentry{lstrfun@\texttt{lstrfun}|hyperpage}{242}
 \indexentry{timer@\texttt{timer}|hyperpage}{242}
-\indexentry{openICPSR|hyperpage}{243}
+\indexentry{openICPSR|hyperpage}{244}
 \indexentry{replication archive|hyperpage}{244}
 \indexentry{capstone|hyperpage}{259}

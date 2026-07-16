@@ -236,7 +236,7 @@ where $\mathbf{x}_i$ and $\mathbf{x}_t$ are the two units' covariate vectors and
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
 net install twinmatch, ///
-    from("`gh'/twinmatch-stata-public/main/") replace
+    from("`gh'/twinmatch-stata-public/main/") replace force
 \end{verbatim}
 }
 The mechanics are quickest to see on the built-in \texttt{auto} data, treating one car as the \enquote{treated} unit and asking which others most resemble it on mileage, price, and weight:
@@ -345,7 +345,7 @@ The hand-coded loop above is the transparent version, worth writing once so a re
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
 net install roisim, ///
-    from("`gh'/roisim-stata-public/main/") replace
+    from("`gh'/roisim-stata-public/main/") replace force
 \end{verbatim}
 }
 Feed it the same effect, cost, discount, and horizon assumptions the hand-coded loop used:

@@ -24,7 +24,7 @@ A report written by hand from analysis output drifts the moment a number changes
 ssc install webdoc, replace
 local gh "https://raw.githubusercontent.com/ericabooth"
 net install webdoc2, ///
-    from("`gh'/webdoc2-stata-public/main/") replace
+    from("`gh'/webdoc2-stata-public/main/") replace force
 net get webdoc2, ///
     from("`gh'/webdoc2-stata-public/main/")
 \end{verbatim}
@@ -118,7 +118,7 @@ Clients behind strict IT still deserve interactivity, and \texttt{statashiny}\in
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
 net install statashiny, ///
-    from("`gh'/StataShiny-public/main/") replace
+    from("`gh'/StataShiny-public/main/") replace force
 \end{verbatim}
 }
 \end{kaobox}
@@ -197,7 +197,7 @@ When should you reach for \texttt{dashboardbuilder} rather than \texttt{statashi
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
 net install dashboardbuilder, ///
-    from("`gh'/dashboardbuilder-stata-public/main/") replace
+    from("`gh'/dashboardbuilder-stata-public/main/") replace force
 \end{verbatim}
 }
 \end{kaobox}

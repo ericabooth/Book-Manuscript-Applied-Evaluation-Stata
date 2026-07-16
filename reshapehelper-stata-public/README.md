@@ -45,8 +45,7 @@ so and points at `xpose` (`sxpose` for strings).
 external Stata dependencies.
 
 ```stata
-net install reshapehelper, from("https://raw.githubusercontent.com/ericabooth/reshapehelper-stata-public/master/") replace
-which reshapehelper
+net install reshapehelper, from("https://raw.githubusercontent.com/ericabooth/reshapehelper-stata-public/main/") replace force
 help reshapehelper
 ```
 
@@ -55,7 +54,7 @@ picks up every file in one call; no manual `adopath` step is needed. To pull a
 local copy of the worked examples, `net get` the ancillary do-file:
 
 ```stata
-net get reshapehelper, from("https://raw.githubusercontent.com/ericabooth/reshapehelper-stata-public/master/")
+net get reshapehelper, from("https://raw.githubusercontent.com/ericabooth/reshapehelper-stata-public/main/")
 ```
 
 ## Quick start

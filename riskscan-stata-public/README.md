@@ -32,13 +32,8 @@ ask for a flag.
 From GitHub:
 
 ```stata
-net install riskscan, from("https://raw.githubusercontent.com/ericabooth/riskscan-stata-public/main/") replace
-```
-
-From a local folder (a clone or download of this repository):
-
-```stata
-net install riskscan, from("/path/to/riskscan-stata-public/") replace
+net install riskscan, from("https://raw.githubusercontent.com/ericabooth/riskscan-stata-public/main/") replace force
+help riskscan
 ```
 
 ## Quick start

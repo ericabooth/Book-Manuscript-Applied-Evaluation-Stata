@@ -29,13 +29,8 @@ file discusses the edge cases).
 From GitHub:
 
 ```stata
-net install suppress, from("https://raw.githubusercontent.com/ericabooth/suppress-stata-public/main/") replace
-```
-
-From a local copy of this folder:
-
-```stata
-net install suppress, from("/path/to/suppress-stata-public/") replace
+net install suppress, from("https://raw.githubusercontent.com/ericabooth/suppress-stata-public/main/") replace force
+help suppress
 ```
 
 Requires Stata 16.0 or later. No dependencies.

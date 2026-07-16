@@ -26,7 +26,7 @@ where $s_i$ is record $i$'s sensitive value, so a group can be large in $k$ yet 
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
 net install riskscan, ///
-    from("`gh'/riskscan-stata-public/main/") replace
+    from("`gh'/riskscan-stata-public/main/") replace force
 \end{verbatim}
 }
 The syntax is \texttt{riskscan varlist [if] [in], [k(\#) flag(newvar) sensitive(varname) detail]}. It returns \texttt{r(cells)}, \texttt{r(k1)}, and \texttt{r(below)} (the count under the threshold), so a release script can branch on the number rather than a human's read of a table. Pass \texttt{sensitive()} to add the $l$-diversity check; pass \texttt{detail} for the highest-risk cells (the listing caps at 30, and it never prints the sensitive values themselves).
@@ -171,7 +171,7 @@ The threshold itself is not the analyst's to invent: most data-use agreements na
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
 net install suppress, ///
-    from("`gh'/suppress-stata-public/main/") replace
+    from("`gh'/suppress-stata-public/main/") replace force
 \end{verbatim}
 }
 The syntax is \texttt{suppress countvar [if] [in], threshold(\#) [by(varlist) gens(newvar) complementary]}. It protects one grouping dimension per run, so a two-way table published with both row and column totals needs one run in each direction with the union of the flags blanked. It returns \texttt{r(n\_primary)} and \texttt{r(n\_complementary)}, and \texttt{gens()} writes a display column that prints the primary blanks as \texttt{<\#} and the complementary blanks as \texttt{*}, so the two kinds of suppression stay legible in the released table rather than collapsing to indistinguishable holes.

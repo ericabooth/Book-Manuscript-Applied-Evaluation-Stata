@@ -30,18 +30,18 @@ if _rc ssc install libjson, replace            // educationdata dependency
 * webapi is required by ch03_webapi.do (and the guarded ch12 portal build);
 * the others are optional. Each installs with one net command (verified 2026-07).
 capture which webapi
-if _rc net install webapi, from("https://raw.githubusercontent.com/ericabooth/webapi-stata-public/main/") replace
+if _rc net install webapi, from("https://raw.githubusercontent.com/ericabooth/webapi-stata-public/main/") replace force
 * Uncomment the ones you want:
-* net install googlechart, from("https://raw.githubusercontent.com/ericabooth/googlechart-stata-public/main/") replace
-* net install googlesheets, from("https://raw.githubusercontent.com/ericabooth/googlesheets-stata-public/main/") replace
-* net install statashiny, from("https://raw.githubusercontent.com/ericabooth/StataShiny-public/main/") replace
-* net install dashboardbuilder, from("https://raw.githubusercontent.com/ericabooth/dashboardbuilder-stata-public/main/") replace  // needs Python 3 (stdlib only); install verified 2026-07-14; required by ch12_dashboardbuilder.do
-* net install convertanything, from("https://raw.githubusercontent.com/ericabooth/convertanything-stata-public/main/") replace
-* net install importR, from("https://raw.githubusercontent.com/ericabooth/importR-stata/main/") replace  // needs R (haven) or python pyreadstat to run
+* net install googlechart, from("https://raw.githubusercontent.com/ericabooth/googlechart-stata-public/main/") replace force
+* net install googlesheets, from("https://raw.githubusercontent.com/ericabooth/googlesheets-stata-public/main/") replace force
+* net install statashiny, from("https://raw.githubusercontent.com/ericabooth/StataShiny-public/main/") replace force
+* net install dashboardbuilder, from("https://raw.githubusercontent.com/ericabooth/dashboardbuilder-stata-public/main/") replace force  // needs Python 3 (stdlib only); install verified 2026-07-14; required by ch12_dashboardbuilder.do
+* net install convertanything, from("https://raw.githubusercontent.com/ericabooth/convertanything-stata-public/main/") replace force
+* net install importR, from("https://raw.githubusercontent.com/ericabooth/importR-stata/main/") replace force  // needs R (haven) or python pyreadstat to run
 * webdoc2 needs Ben Jann's webdoc first, and a separate net get for its
 * Bootstrap header.html (net get drops ancillary files in the current dir):
 * ssc install webdoc, replace
-* net install webdoc2, from("https://raw.githubusercontent.com/ericabooth/webdoc2-stata-public/main/") replace
+* net install webdoc2, from("https://raw.githubusercontent.com/ericabooth/webdoc2-stata-public/main/") replace force
 * net get webdoc2, from("https://raw.githubusercontent.com/ericabooth/webdoc2-stata-public/main/")
 * (sparkta2 is not yet published; its examples in the book are display-only.)
 
@@ -60,7 +60,7 @@ if "`BOOKPKG'" != "" {
         reshapehelper rateshrink conformalpred hlmr2 twinmatch roisim ///
         suppress riskscan undummy {
         capture which `pkg'
-        if _rc net install `pkg', from("`BOOKPKG'/`pkg'-stata-public/") replace
+        if _rc net install `pkg', from("`BOOKPKG'/`pkg'-stata-public/") replace force
     }
 }
 
