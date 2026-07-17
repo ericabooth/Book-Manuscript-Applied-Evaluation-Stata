@@ -66,7 +66,7 @@ Launch Stata in the project folder, then either:
 | `ch04_chr.do` | 4 | Downloads the County Health Rankings analytic CSV; cleans the label row; county scatter. |
 | `ch05_monitoring.do` | 5 | Simulated survey response monitoring; control chart + alert list + Likert alpha. |
 | `ch05_datadictionary.do` | 5 | The label round-trip across languages: `datadictionary, dofile()` writes a relabel do-file; export `nolabel` → edit elsewhere → re-import → `do` it back with a re-ingestion receipt; also the `dictionary()` infile read. |
-| `ch06_longitudinal.do` | 6 | `nlswork` panel description; missingness map; wage-quartile transition matrix; fuzzy merge. |
+| `ch06_longitudinal.do` | 6 | `nlswork` panel description; percent-missing-by-variable bar chart; wage-quartile transition matrix; fuzzy merge. |
 | `ch06_reshapehelper.do` | 6 | `reshapehelper` on a grant file (reproduces the chapter figure), a duplicate-blocked widening, and a doubly-wide two-step reshape; runs each suggestion via `$reshapehelper_cmd`. |
 | `ch07_trust.do` | 7 | Reliability alpha; NHANES II weighting; empirical-Bayes shrinkage; power curve. |
 | `ch08_did.do` | 8 | Simulated staggered adoption; naive TWFE vs `csdid`; event study; ROI Monte Carlo. |

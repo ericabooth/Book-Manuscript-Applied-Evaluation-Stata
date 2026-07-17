@@ -3,7 +3,7 @@
 * Builds three things the chapter needs from real/simulated data:
 *   (1) xtset / xtdescribe on the shipped nlswork panel  (verbatim excerpt)
 *   (2) a wage-quartile transition matrix                (real numbers -> table)
-*   (3) a missingness heatmap on ~200 sampled obs        (ch06_missmap.png)
+*   (3) percent-missing-by-variable bar chart, ~200 obs  (ch06_missmap.png)
 *   (4) a tiny fuzzy-merge demo: soundex + birth-year blocking on two
 *       simulated rosters, with an honest note that Jaro-Winkler lives in SSC.
 *
@@ -47,9 +47,9 @@ tab wq wq_next, row nofreq
 *=============================================================================*
 * (3) Missingness heatmap on ~200 sampled observations                         *
 *=============================================================================*
-* misstable reports the pattern; a tile plot makes it legible. Sample ~200
-* rows so individual cells are visible, order rows by how much they are
-* missing so the structure clusters.
+* misstable reports the pattern (which variables go missing together); a
+* sorted bar chart of percent missing per variable shows the magnitude at a
+* glance. Sample ~200 rows so the percentages are stable but cheap to draw.
 preserve
     keep idcode year ln_wage hours ///
          tenure union wks_ue msp
@@ -57,51 +57,39 @@ preserve
     misstable patterns ln_wage hours ///
         tenure union wks_ue msp, frequency
 
-    * one indicator column per variable, then reshape to
-    * long so each cell is one (row, variable) pair
-    egen nmiss = rowmiss(ln_wage hours ///
-        tenure union wks_ue msp)
-    gsort -nmiss
-    gen long rowid = _n
-    local vars ln_wage hours tenure ///
-        union wks_ue msp
-    local j = 0
+    * The pattern table above shows which variables go missing TOGETHER; this
+    * bar chart shows how MUCH each is missing, the magnitude the pattern table
+    * leaves off a common scale. Percent missing per variable -> a tiny dataset
+    * -> a sorted horizontal bar.
+    local vars ln_wage hours tenure union wks_ue msp
+    tempname M
+    tempfile mm
+    postfile `M' str12 varname double pctmiss using `mm', replace
     foreach v of local vars {
-        local ++j
-        gen m`j' = missing(`v')
+        quietly count if missing(`v')
+        post `M' ("`v'") (100*r(N)/_N)
     }
-    reshape long m, i(rowid) j(col)
-    label define VN 1 "ln_wage" 2 "hours" ///
-        3 "tenure" 4 "union" 5 "wks_ue" ///
-        6 "msp"
-    label values col VN
-    twoway (scatter rowid col if m==1, ///
-            msymbol(square) msize(1.1) ///
-            mcolor(maroon)) ///
-           (scatter rowid col if m==0, ///
-            msymbol(square) msize(1.1) ///
-            mcolor(gs14)), ///
-        legend(order(1 "missing" 2 "present") ///
-            size(vsmall) region(lstyle(none))) ///
-        ytitle("Observations (200 sampled," ///
-            "sorted by missingness)", ///
+    postclose `M'
+    use `mm', clear
+    list varname pctmiss, clean noobs        // canonical numbers for the caption
+    graph hbar (mean) pctmiss, ///
+        over(varname, sort(1) descending) ///
+        bar(1, color(maroon)) ///
+        blabel(bar, format(%3.0f) size(small)) ///
+        ytitle("percent of 200 sampled rows missing", ///
             size(small)) ///
-        xtitle("") ///
-        xlabel(1 "ln_wage" 2 "hours" ///
-            3 "tenure" 4 "union" ///
-            5 "wks_ue" 6 "msp", ///
-            labsize(small) angle(45)) ///
-        ylabel(, labsize(vsmall)) ///
-        title("Missingness map: nlswork, 200" ///
-            "sampled observations", ///
-            size(medium)) ///
-        note("Simulated sample from the shipped" ///
-            "nlswork panel; seed 20260704. Each" ///
-            "row is one observation, each column" ///
-            "one variable; maroon = missing.", ///
-            size(vsmall)) ///
-        graphregion(margin(l=2 r=6)) ///
-        ysize(5) xsize(7.2)
+        ylabel(0(10)30, labsize(small)) ///
+        title("Where the gaps are: percent missing" ///
+            "by variable", size(medium)) ///
+        subtitle("nlswork panel, 200 sampled rows", ///
+            size(small)) ///
+        note("A 200-row sample (seed 20260704). The gaps" ///
+            "concentrate in union and wks_ue; the other" ///
+            "variables are complete or nearly so, so" ///
+            "casewise deletion would drop rows on those" ///
+            "two, not at random.", size(vsmall)) ///
+        graphregion(margin(l=2 r=4)) ///
+        ysize(4.2) xsize(7.2)
     graph export "$figures/ch06_missmap.png", ///
         replace width(2400)
     di "MISSMAP_SAVED"

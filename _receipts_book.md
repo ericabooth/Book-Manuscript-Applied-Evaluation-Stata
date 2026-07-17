@@ -358,3 +358,47 @@ BUILD (final): reassemble → pdflatex→biber→pdflatex×2 → 0 errors, 0 spe
 SYNC: main.tex + main.pdf + all 21 chapter sources + preamble → Drive mirror (diffed every file first: 0 Drive-only deletions, all strict subsets — safe) + scratch newtex mirror. Drive main.tex now == repo main.tex.
 
 UNCOMMITTED in working tree (Eric commits himself). LOOSE ENDS flagged to Eric: (a) stray committed `LaTeXBookCode/src/chapters/53_ch15.tex.engbak` — a redundant backup identical to live ch15, safe to `git rm` (not removed unprompted since it's committed content); (b) remote-only repos with no local clone (StataShiny-public, webdoc2-stata-public, convertanything-stata-public, sparkta2, dashboardbuilder already canonical) — their README/toc install lines can't be edited locally; (c) projectbuilder README has 3 table-cell install refs (convertanything/combineall/webdoc2) lacking `force` — low priority.
+
+## Pass: ch06 missingness figure redesign + "Where this leaves you" transition (2026-07-15)
+
+User flagged: (1) the "Missingness map for 200 observations" figure shows nothing clearly; (2) the ch06 "Where this leaves you" section reads stale / needs a transition.
+
+Fix log:
+- FIGURE: old ch06_missmap.png was a 2-color scatter tile (200 rows x 6 vars) = 6 wide gray columns with a couple barely-visible maroon specks; sparse missingness (concentrated in union/wks_ue) made a cell-map mostly empty. REPLACED with a sorted horizontal bar chart of % missing per variable (graph hbar). Canonical numbers (via ch06_longitudinal.do, seed 20260704, matches the misstable patterns table shown in book): union 30%, wks_ue 23%, hours 1%, tenure 1%, ln_wage 0%, msp 0%. Division of labor stated in text: misstable patterns = co-occurrence, bar chart = magnitude on one scale.
+- code/ch06_longitudinal.do part (3): reshape+twoway-scatter block replaced with postfile per-var pctmiss → graph hbar; comment + header updated. Ran do-file clean (0 r(NNN), MISSMAP_SAVED); regenerated canonical PNG, installed to images/.
+- 24_ch06.tex: intro sentence ("The missingness map...makes that same structure legible") → "Read the table two ways...Figure 6.3 answers it" (reader-active); code block (scatter→hbar); figure caption retitled "Percent missing by variable" w/ real numbers; vizcallout retitled "percent missing by variable"; stale "The maroon cells are a symptom" → "A gap in a variable is a symptom".
+- "Where this leaves you" (ch06): added transition opener ("This chapter began with a stack of separate files and ends with one panel you could hand to an auditor. Getting there, you learned to...") and reframed the flat capability list as a narrative arc; clean forward transition to Ch7.
+- code/README.md ch06 row updated (missingness map → percent-missing-by-variable bar chart).
+- NOTE: user added a new section 6.7 "Reshaping into analysis-ready panels" (reshapehelper) to 24_ch06.tex in parallel — accounts for the 278→284 page jump, NOT my edits; my targeted edits to §6.8 landed cleanly alongside it (compile 0 errors).
+- Compile: 0 TeX errors, 0 overfull>8pt, 284 pages, no undefined refs. Figure renders clean on p105; clearwriter sweep on §6.8 clean. Synced main.tex/pdf + 24_ch06.tex + new image to Drive + scratch.
+
+## Pass: six Stata-and-AI diagrams moved from the lab into the book (2026-07-17)
+
+User asked to move the curated diagram lineup (built and reviewed 2026-07-16/17 in `_ai_diagram_lab/`) into the manuscript, introduce each figure plainly and without jargon, argue the case for the approach with a justification attached to every claim, then delete the staged files and tidy the folder.
+
+Placements (all TikZ inlined in main.tex, matching the book's existing inline-tikz convention; no `\input` of external fragments):
+- Fig 2.4 `fig:provenance` (p30) — §2.8, new subsection `sec:ch02-trail` "Why the trail is worth its small daily cost". Text-column `figure` (natural width 263pt), no scaling.
+- Fig 13.1 `fig:aijig` (p204) — Ch13 opener. Jig metaphor glossed (woodworking fixture) before use.
+- Fig 13.2 `fig:division` (p205) — §13.1 at the opposite-strengths paragraph.
+- Fig 13.3 `fig:drift` (p208) — §13.1.1 at the "it drifts" property; pointer added to that paragraph.
+- Fig 13.5 `fig:extmemory` (p210) — §13.1.3 Step 1.
+- Fig 13.6 `fig:harvest` (p212) — §13.1.4 Step 2, + `\paragraph{Closing the seam...}` + Ado-file Idea box.
+
+Preamble: added namespaced styles (llmnode/statanode/filenode/ghostnode/okflow/dangerflow/banner/gatenode + aiDanger #9E2B25, aiGhost #8C8C8C) beside the existing `\tikzset`. All names new; no collision with stage/substep/flow/decision/io/annot.
+
+New labels added so fig:aijig's station tags are live `\ref`s rather than hard-coded numbers: `sec:ch13-privacy` (13.2), `sec:ch13-repro` (13.4), `sec:ch13-injection` (13.5), `sec:ch06-rulebook` (6.5, the confirm/isid/assert rulebook — NOT sec:ch06-pollutedyear, which is the narrower subsection).
+
+Honesty checks:
+- `docharvest` DOES NOT EXIST. Presented as an Ado-file Idea box; the figure caption says the sweep is a proposal. The tag convention it rests on is shipped as a TESTED `grep -rn "//@decision:" code/` with real captured output (58–60 char lines; book's existing verbatim max is 68, so no overflow). Tested in scratchpad on two scratch do-files.
+- Drift figure prose does NOT attribute the version-drift claim to Ouyang 2025 (per the standing citation-honesty note: Ouyang supports nondeterminism only). The vendor-swap claim stays uncited, as the surrounding book prose already does.
+- liu2024lost reused for the U-shaped recall curve; already cited in §13.1.1.
+
+Fixes made during the pass:
+- Restored fig:backbone's opening 4 lines, which an over-broad Edit had removed.
+- Two new full-width tikzpictures ran 12.86pt / 8.95pt past `\linewidth`; wrapped both in `\resizebox{\linewidth}{!}{...}` rather than nudging coordinates, preserving the reviewed layouts. Both overfulls resolved.
+- `\subsubsection` I introduced was the ONLY one in the book → converted to `\paragraph` (the book's established device at that level). subsubsection count back to 0.
+- clearwriter sweep on new prose: 0 em dashes; killed "earns its place" (banned marketing-punch shape); replaced 4 bare uses of "the model" for the LLM with "the LLM" (bare "model" collides with statistical models). "very" hits were false positives inside "every".
+
+Compile: pdflatex→biber→pdflatex→pdflatex, 0 errors, 0 real undefined refs/cites, 292 pages (was 284). 6 overfull boxes remain, ALL pre-existing and outside these edits (lines 706, 1492, 3602, 3886, 6206, 6333). Visually inspected every figure page at 105dpi: no overlaps, no clipped labels, all cross-refs resolved on the page. Root main.pdf refreshed.
+
+Cleanup: deleted staged `diagram*.tex`, `wrap_*.tex/pdf`, `*.png`, `00_view_all.tex/pdf`, `styles_shared.tex` from `_ai_diagram_lab/` (main.tex is now the single home — duplicates would drift). KEPT both PROPOSAL .md files (5 of 6 anchor tools + the spine package/skill are still unbuilt and unmentioned in the book) and rewrote README.md to say where each figure went and what is still open.
