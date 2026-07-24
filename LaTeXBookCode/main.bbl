@@ -238,6 +238,62 @@
       \verb 10.1561/2200000101
       \endverb
     \endentry
+    \entry{angelopoulos2023ppi}{article}{}
+      \name{author}{5}{ul=2}{%
+        {{un=0,uniquepart=base,hash=f4d2f42e0342b9eff9fae3b5f334c64d}{%
+           family={Angelopoulos},
+           familyi={A\bibinitperiod},
+           given={Anastasios\bibnamedelima N.},
+           giveni={A\bibinitperiod\bibinitdelim N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5bedf42bce17b8dfd1813d85cc06234a}{%
+           family={Bates},
+           familyi={B\bibinitperiod},
+           given={Stephen},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=f476973b8543750d60d7704faf606dc2}{%
+           family={Fannjiang},
+           familyi={F\bibinitperiod},
+           given={Clara},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8a36116840c7ee55901618c95fd08a58}{%
+           family={Jordan},
+           familyi={J\bibinitperiod},
+           given={Michael\bibnamedelima I.},
+           giveni={M\bibinitperiod\bibinitdelim I\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0862fbd7af4e54a7fdb8251cad31b181}{%
+           family={Zrnic},
+           familyi={Z\bibinitperiod},
+           given={Tijana},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{a2559a9948ee7cd0bd271a153bab8a3d}
+      \strng{fullhash}{ab62407efc3a015d242b14ee4ad67cd3}
+      \strng{bibnamehash}{a2559a9948ee7cd0bd271a153bab8a3d}
+      \strng{authorbibnamehash}{a2559a9948ee7cd0bd271a153bab8a3d}
+      \strng{authornamehash}{a2559a9948ee7cd0bd271a153bab8a3d}
+      \strng{authorfullhash}{ab62407efc3a015d242b14ee4ad67cd3}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Science}
+      \field{number}{6671}
+      \field{title}{Prediction-powered inference}
+      \field{volume}{382}
+      \field{year}{2023}
+      \field{pages}{669\bibrangedash 674}
+      \range{pages}{6}
+      \verb{doi}
+      \verb 10.1126/science.adi6000
+      \endverb
+    \endentry
     \entry{athey2016recursive}{article}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=cab7b4f39472e6c01dc0fc30a32c6d89}{%
@@ -1048,14 +1104,54 @@
       \verb 10.1080/01621459.2021.1979561
       \endverb
     \endentry
+    \entry{chen2023drift}{misc}{}
+      \name{author}{3}{}{%
+        {{un=1,uniquepart=given,hash=4722d1c517fb1393cd8f82862ffc9746}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Lingjiao},
+           giveni={L\bibinitperiod},
+           givenun=1}}%
+        {{un=0,uniquepart=base,hash=00dc518b94dfa6349c86e70661a1a5ef}{%
+           family={Zaharia},
+           familyi={Z\bibinitperiod},
+           given={Matei},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1b868d50048a635fa27ffa744323fa41}{%
+           family={Zou},
+           familyi={Z\bibinitperiod},
+           given={James},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{a4e726228d1a1c5296ab3556cae89810}
+      \strng{fullhash}{a4e726228d1a1c5296ab3556cae89810}
+      \strng{bibnamehash}{a4e726228d1a1c5296ab3556cae89810}
+      \strng{authorbibnamehash}{a4e726228d1a1c5296ab3556cae89810}
+      \strng{authornamehash}{a4e726228d1a1c5296ab3556cae89810}
+      \strng{authorfullhash}{a4e726228d1a1c5296ab3556cae89810}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{arXiv:2307.09009}
+      \field{title}{How Is {ChatGPT}'s Behavior Changing Over Time?}
+      \field{year}{2023}
+      \verb{doi}
+      \verb 10.48550/arXiv.2307.09009
+      \endverb
+    \endentry
     \entry{chen2023pot}{article}{}
       \name{author}{4}{}{%
-        {{un=0,uniquepart=base,hash=63d99bafe6679fb5e11e960687f909b1}{%
+        {{un=1,uniquepart=given,hash=63d99bafe6679fb5e11e960687f909b1}{%
            family={Chen},
            familyi={C\bibinitperiod},
            given={Wenhu},
            giveni={W\bibinitperiod},
-           givenun=0}}%
+           givenun=1}}%
         {{un=0,uniquepart=base,hash=61ddc97b5427ab1c3b0e6d1e56a0ea79}{%
            family={Ma},
            familyi={M\bibinitperiod},
@@ -2330,6 +2426,44 @@
       \verb https://proceedings.mlr.press/v202/gao23f.html
       \endverb
     \endentry
+    \entry{gelman2014power}{article}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=1e1eb60e3b6e222217bf8e9b24070b28}{%
+           family={Gelman},
+           familyi={G\bibinitperiod},
+           given={Andrew},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=f34f8d7beadb3b443b64e32d7bfe9421}{%
+           family={Carlin},
+           familyi={C\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{8dfc0ba09672da6c3db67c012f3dd252}
+      \strng{fullhash}{8dfc0ba09672da6c3db67c012f3dd252}
+      \strng{bibnamehash}{8dfc0ba09672da6c3db67c012f3dd252}
+      \strng{authorbibnamehash}{8dfc0ba09672da6c3db67c012f3dd252}
+      \strng{authornamehash}{8dfc0ba09672da6c3db67c012f3dd252}
+      \strng{authorfullhash}{8dfc0ba09672da6c3db67c012f3dd252}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Perspectives on Psychological Science}
+      \field{number}{6}
+      \field{title}{Beyond Power Calculations: Assessing Type {S} (Sign) and Type {M} (Magnitude) Errors}
+      \field{volume}{9}
+      \field{year}{2014}
+      \field{pages}{641\bibrangedash 651}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1177/1745691614551642
+      \endverb
+    \endentry
     \entry{gelman2013forking}{unpublished}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=1e1eb60e3b6e222217bf8e9b24070b28}{%
@@ -2391,6 +2525,50 @@
       \field{note}{Manual, University of Chicago and Stanford University}
       \field{title}{Code and Data for the Social Sciences: A Practitioner's Guide}
       \field{year}{2014}
+    \endentry
+    \entry{gilardi2023annotation}{article}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=42a4e15ad87c60bc88a71df1348bd4e2}{%
+           family={Gilardi},
+           familyi={G\bibinitperiod},
+           given={Fabrizio},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=56ea0634b107a7ddd6896367aef2ada5}{%
+           family={Alizadeh},
+           familyi={A\bibinitperiod},
+           given={Meysam},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0e52669eb7da2e5579871c93f8c8129b}{%
+           family={Kubli},
+           familyi={K\bibinitperiod},
+           given={Maël},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{0cb15cf82c954c430d43b8c515e70bbd}
+      \strng{fullhash}{0cb15cf82c954c430d43b8c515e70bbd}
+      \strng{bibnamehash}{0cb15cf82c954c430d43b8c515e70bbd}
+      \strng{authorbibnamehash}{0cb15cf82c954c430d43b8c515e70bbd}
+      \strng{authornamehash}{0cb15cf82c954c430d43b8c515e70bbd}
+      \strng{authorfullhash}{0cb15cf82c954c430d43b8c515e70bbd}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Proceedings of the National Academy of Sciences}
+      \field{number}{30}
+      \field{title}{{ChatGPT} outperforms crowd workers for text-annotation tasks}
+      \field{volume}{120}
+      \field{year}{2023}
+      \field{pages}{e2305016120}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1073/pnas.2305016120
+      \endverb
     \endentry
     \entry{gilbert2018guild}{article}{}
       \name{author}{8}{}{%
@@ -3402,6 +3580,38 @@
       \range{pages}{15}
       \verb{doi}
       \verb 10.1093/comjnl/27.2.97
+      \endverb
+    \endentry
+    \entry{korinek2023genai}{article}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=dab33930c422a83048a3f5a13722b8eb}{%
+           family={Korinek},
+           familyi={K\bibinitperiod},
+           given={Anton},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{dab33930c422a83048a3f5a13722b8eb}
+      \strng{fullhash}{dab33930c422a83048a3f5a13722b8eb}
+      \strng{bibnamehash}{dab33930c422a83048a3f5a13722b8eb}
+      \strng{authorbibnamehash}{dab33930c422a83048a3f5a13722b8eb}
+      \strng{authornamehash}{dab33930c422a83048a3f5a13722b8eb}
+      \strng{authorfullhash}{dab33930c422a83048a3f5a13722b8eb}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Economic Literature}
+      \field{number}{4}
+      \field{title}{Generative {AI} for Economic Research: Use Cases and Implications for Economists}
+      \field{volume}{61}
+      \field{year}{2023}
+      \field{pages}{1281\bibrangedash 1317}
+      \range{pages}{37}
+      \verb{doi}
+      \verb 10.1257/jel.20231736
       \endverb
     \endentry
     \entry{kosara2013storytelling}{article}{}
@@ -6165,6 +6375,68 @@
       \range{pages}{6}
       \verb{doi}
       \verb 10.1038/s41586-019-1466-y
+      \endverb
+    \endentry
+    \entry{ziems2024css}{article}{}
+      \name{author}{6}{}{%
+        {{un=0,uniquepart=base,hash=130d482f66f76db8906aa1d3d9810264}{%
+           family={Ziems},
+           familyi={Z\bibinitperiod},
+           given={Caleb},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=94d98de930bc7962557df1e121f3d25f}{%
+           family={Held},
+           familyi={H\bibinitperiod},
+           given={William},
+           giveni={W\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9c002e158d321191baa5437e11482dd9}{%
+           family={Shaikh},
+           familyi={S\bibinitperiod},
+           given={Omar},
+           giveni={O\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=719873368af3060ec9f44bd7ae6cfa08}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Jiaao},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c828d190a230f95eca8aec49a043326b}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Zhehao},
+           giveni={Z\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6ff611991cba7ee48521ab941158ac2f}{%
+           family={Yang},
+           familyi={Y\bibinitperiod},
+           given={Diyi},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{fe5bdafc0193592adaf4a6792aa9bd86}
+      \strng{fullhash}{7a6915f27ab9ab4b960129ae3aaf0a5d}
+      \strng{bibnamehash}{fe5bdafc0193592adaf4a6792aa9bd86}
+      \strng{authorbibnamehash}{fe5bdafc0193592adaf4a6792aa9bd86}
+      \strng{authornamehash}{fe5bdafc0193592adaf4a6792aa9bd86}
+      \strng{authorfullhash}{7a6915f27ab9ab4b960129ae3aaf0a5d}
+      \field{sortinit}{Z}
+      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Computational Linguistics}
+      \field{number}{1}
+      \field{title}{Can Large Language Models Transform Computational Social Science?}
+      \field{volume}{50}
+      \field{year}{2024}
+      \field{pages}{237\bibrangedash 291}
+      \range{pages}{55}
+      \verb{doi}
+      \verb 10.1162/coli_a_00502
       \endverb
     \endentry
   \enddatalist

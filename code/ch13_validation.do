@@ -5,6 +5,7 @@
 * (c) fairness audit: simulated risk scores + group offset, cutoff,
 *     selection rates and the four-fifths ratio (faircheck's logic in 12 lines)
 * (d) optional ch13_agreement.png: per-category agreement bar
+* (e) prediction-powered inference: correct a biased machine-label prevalence
 * ALL blocks are SIMULATED with seed 20260704 and labeled simulated in text.
 *==============================================================================*
 * Globals defined locally so this file runs standalone; in the full book
@@ -103,5 +104,50 @@ graph bar (mean) agree, over(truth, label(labsize(small))) ///
     bar(1, color(navy)) blabel(bar, format(%4.2f)) ///
     graphregion(margin(l=2 r=6))
 graph export "$figures/ch13_agreement.png", replace width(2400)
+
+*--- (e) Prediction-powered inference: correct the downstream estimate -------*
+* Validation (a) certifies the LABELS; this block corrects the ESTIMATE built
+* from them. 5,000 notes, true transport prevalence 0.30; the LLM under-detects
+* transport (sensitivity 0.70) and rarely invents it (specificity 0.95), so the
+* naive machine-label prevalence is biased low even though agreement looks high.
+* The fix (Angelopoulos et al. 2023, Science): estimate on ALL machine labels,
+* then add back the human-minus-machine gap measured on a RANDOM gold subset.
+clear
+set seed 20260704
+set obs 5000
+gen byte transport = runiform() < 0.30           // truth (human coding)
+gen byte ml = cond(transport, runiform() < 0.70, runiform() >= 0.95)
+gen byte gold = _n <= 150                         // random: obs order is random
+                                                  // by construction here; in
+                                                  // practice draw with sample
+
+* naive: treat 5,000 machine labels as if they were the data
+quietly summarize ml
+local p_naive = r(mean)
+local se_naive = sqrt(`p_naive'*(1-`p_naive')/_N)
+
+* PPI: machine mean on all N, plus the human-machine gap on the gold n
+quietly summarize ml
+local p_ml_all = r(mean)
+gen diff = transport - ml if gold
+quietly summarize diff
+local rect    = r(mean)                           // the "rectifier"
+local se_rect = r(sd)/sqrt(r(N))
+local p_corr  = `p_ml_all' + `rect'
+local se_corr = sqrt(`se_naive'^2 + `se_rect'^2)
+
+quietly summarize transport
+di as txt "true prevalence (all 5,000, for reference): " as res %5.3f r(mean)
+di as txt "naive ML estimate:  " as res %5.3f `p_naive' ///
+    as txt "  95% CI [" as res %5.3f `p_naive'-1.96*`se_naive' ///
+    as txt ", " as res %5.3f `p_naive'+1.96*`se_naive' as txt "]"
+di as txt "PPI corrected:      " as res %5.3f `p_corr' ///
+    as txt "  95% CI [" as res %5.3f `p_corr'-1.96*`se_corr' ///
+    as txt ", " as res %5.3f `p_corr'+1.96*`se_corr' as txt "]"
+
+* tripwires: the naive CI misses the truth; the corrected CI covers it
+assert `p_naive' + 1.96*`se_naive' < 0.30
+assert (`p_corr'-1.96*`se_corr') < 0.30 & 0.30 < (`p_corr'+1.96*`se_corr')
+assert abs(`p_corr' - 0.30) < 0.06
 
 di "DONE"

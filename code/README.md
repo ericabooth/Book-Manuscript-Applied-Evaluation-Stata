@@ -80,7 +80,7 @@ Launch Stata in the project folder, then either:
 | `ch11_googlesheets.do` | 11 | `googlesheets` workflow on CHR data (export, format, put matrix, native live charts); display-only (OAuth). |
 | `ch13_backbone.do` | 13 | The Stata-as-backbone loop: an LLM-proposed step made trustworthy by `assert` tripwires and a batch log. |
 | `ch13_parallel.do` | 13 | Parallel patterns: a 4-way bootstrap split across instances, and a fan-out QC harness (judge by log, not exit code). |
-| `ch13_validation.do` | 13 | Simulated AI validation: kappa, multi-model consensus, four-fifths fairness check. |
+| `ch13_validation.do` | 13 | Simulated AI validation: kappa, multi-model consensus, four-fifths fairness check, and the prediction-powered correction of a biased machine-label prevalence. |
 | `ch14_kanon.do` | 14 | k-anonymity on `nlsw88` as an admin stand-in; coarsening; small-cell suppression. |
 | `ch15_bench.do` | 15 | Mata vs loop vs vectorized timing benchmark. |
 

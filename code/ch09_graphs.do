@@ -104,4 +104,19 @@ di "BEFORE mean = " %4.1f `pre'
 di "AFTER  mean = " %4.1f `post'
 di "DIFF        = " %4.1f `post' - `pre'
 
+*==============================================================================*
+* (4) High-density categorical summary with statplot: 13 occupations, ranked,
+*     with 95% CIs. statplot (Booth & Cox, SSC) collapses to the statistic and
+*     draws the ranked hbar in one call; sort/ci/wrap are 1.3.0 options.
+*==============================================================================*
+sysuse nlsw88, clear
+statplot wage, over(occ) ci sort wrap(14) ///
+    ytitle("mean hourly wage (1988 dollars)") ///
+    name(statplot_occ, replace) ///
+    note("NLSW88 extract; bars are means, whiskers 95% CIs.", size(vsmall))
+graph export "$figures/ch09_statplot.png", replace width(2400)
+* plotted numbers for the caption (top, bottom, and the widest-CI category)
+statplot wage, over(occ) ci sort listdata
+di "STATPLOT_OK"
+
 di "DONE"

@@ -103,7 +103,7 @@ type "$output/`frag'"
 putexcel set "$output/ch11_earnings_summary.xlsx", replace
 putexcel A1 = "Program earnings model (simulated)", bold
 putexcel A2 = "Term"        B2 = "Dose only"  C2 = "Dose + controls", bold
-putexcel A3 = "Training hours ($/hr equiv)"
+putexcel A3 = "Training hours ($ per qtr each)"
 putexcel B3 = (_b[hours])   C3 = (0)     // filled from stored estimates
 putexcel A4 = "Participants"
 putexcel B4 = (e(N))
