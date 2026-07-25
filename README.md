@@ -1,7 +1,7 @@
 # Beyond Analysis: Strategic Evaluation with Stata
 ### Data Modernization, Modern Causal Inference, and AI-Integrated Workflows
 
-**Authors:** Eric Booth & Elizabeth Teas  
+**Authors:** Eric A. Booth (Sr Researcher, Texas 2036) & Elizabeth Teas (Far Harbor, LLC)  
 **Status:** 🚧 *Preprint Draft in Progress* 🚧
 
 ---
@@ -38,9 +38,9 @@ This GitHub repository serves as the digital companion to the book. At this stag
 ## Citation & Contact
 If you are interested in reviewing early drafts or collaborating on specific implementation science modules, please contact:
 
-*Eric Booth*  eric.a.booth@gmail.com  Texas2036.org
+*Eric A. Booth*, Sr Researcher, Texas 2036 — eric.a.booth@gmail.com
     and
-*Elizabeth Teas* Far Harbor, LLC
+*Elizabeth Teas*, Far Harbor, LLC
 
 ---
 *This work is released under the terms provided in the [LICENSE](LICENSE) file.*
