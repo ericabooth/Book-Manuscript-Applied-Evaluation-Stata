@@ -123,6 +123,14 @@ histogram kplot, discrete frequency ///
 \label{fig:kdist}
 \end{figure}
 
+\begin{restson}[What the $k$-anonymity number rests on]
+\begin{enumerate}
+\item The attacker holds only the quasi-identifiers you counted. \emph{Noticed by:} a partner file arriving with columns your scan never named.
+\item $k$ is counted on the released file, not the population. \emph{Noticed by:} a subset release, where a cell of five in your full file can be a cell of one in the extract.
+\item Every release of the same records is counted together. \emph{Noticed by:} two safe-looking cuts that intersect to a cell of one.
+\end{enumerate}
+\end{restson}
+
 \subsection{Coarsening: the cheapest way to raise \texorpdfstring{$k$}{k}}\label{sec:coarsen}
 The fastest way to empty the $k=1$ bin is to make the mesh coarser, because a record is unique only relative to the resolution of its columns.\marginnote{Coarsen the highest-cardinality column first: the singletons cluster in the rare combinations, and those almost always involve the variable with the most categories. Age in single years, five-digit ZIP, and detailed occupation codes are the usual culprits; bin them before you reach for anything more elaborate.} Industry is the finest of our four quasi-identifiers, twelve categories, so it does the most damage; collapsing it to three broad groups (goods-producing, services, and public administration) merges many singleton cells into populated ones without touching the other three columns:
 \par

@@ -95,6 +95,14 @@ ATT(g,t)=\mathbb{E}\!\left[\,Y_t(g)-Y_t(0)\;\middle|\;G=g\,\right],
 \]
 where $Y_t(g)$ is the outcome under treatment and $Y_t(0)$ the untreated counterfactual for the same units; only after estimating these clean pieces does the command average them into the single headline number.\sidenote{\textcite{callaway2021did} is the paper \texttt{csdid} implements; it estimates group-time average treatment effects $ATT(g,t)$ and only then aggregates. Install it and its dependency \texttt{drdid} from SSC, and note that with no never-treated units you must pass a not-yet-treated comparison group explicitly.}
 
+\begin{restson}[What the DiD claim rests on]
+\begin{enumerate}
+\item Parallel trends: absent the policy, treated and comparison groups would have moved together. \emph{Noticed by:} a pre-period gap in the event-study plot.
+\item No anticipation: units did not change behavior ahead of their own adoption. \emph{Noticed by:} effects appearing in the periods just before treatment.
+\item Clean comparisons: treated units are compared only to not-yet-treated or never-treated units. \emph{Noticed by:} construction, if the estimator is \texttt{csdid}; by nothing, if it is plain two-way fixed effects.
+\end{enumerate}
+\end{restson}
+
 \subsection{A staggered rollout you can check against the truth}
 The cleanest way to see the problem is to build a world where you already know the answer, then ask each estimator to recover it. We simulate a staggered adoption: 60 units followed over 12 periods, with one cohort switching the policy on at period~5, a second cohort at period~9, and a third group never treated at all.\marginnote{Simulated data with \texttt{set seed 20260704}, so the do-file \texttt{ch08\_did.do} reproduces every number here exactly. A never-treated group is the cleanest possible comparison; a well-behaved rollout usually has one, and when it does not, \texttt{csdid} falls back to the not-yet-treated units.} The treatment effect is deliberately \emph{dynamic}: it starts at 2 units in the first period of exposure and grows by one unit each period after, so a unit five periods into treatment carries an effect of~7. Because we built it, we can state the truth exactly: averaged over all treated unit-periods in this panel, the true average treatment effect on the treated is~\textbf{4.83}. The early cohort climbs the ramp all the way to 9 and contributes two thirds of the treated unit-periods, while the late cohort never gets past 5; weight the two cohorts' own averages, 5.5 and 3.5, by that two-to-one exposure and you get the 4.83. Any honest estimator should land near it.
 

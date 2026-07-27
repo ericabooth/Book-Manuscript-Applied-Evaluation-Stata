@@ -85,6 +85,27 @@
     \end{vizbox}%
 }
 
+% "What this rests on": the short list of conditions a statistical guarantee
+% depends on, stated at the point where the guarantee is handed to the reader,
+% each condition paired with the symptom you would see if it failed.
+\definecolor{roBg}{HTML}{E9EEF5}      % pale slate background
+\definecolor{roRule}{HTML}{1A476F}    % navy rule
+\newmdenv[
+    skipabove=1\topskip, skipbelow=0.6\topskip,
+    innertopmargin=6pt, innerbottommargin=6pt,
+    innerleftmargin=10pt, innerrightmargin=10pt,
+    linewidth=0.9pt, roundcorner=4pt,
+    linecolor=roRule, backgroundcolor=roBg,
+    frametitlerule=true,
+    frametitlefont=\sffamily\bfseries\color{roRule},
+    frametitlebackgroundcolor=roBg,
+]{restsonbox}
+\newenvironment{restson}[1][What this rests on]{%
+    \begin{restsonbox}[frametitle={#1}]%
+}{%
+    \end{restsonbox}%
+}
+
 % Narrow text column (kaobook reserves a wide margin) means long monospace
 % command names and compound terms occasionally overrun. emergencystretch lets
 % TeX relax spacing as a last resort instead of producing overfull lines.
@@ -234,7 +255,7 @@ the research-shop tool-builder & code the rest of the team will reuse & \ref{ch:
 \end{tabular}
 \end{table}
 
-\noindent Three kinds of pull-out recur so you can recognize them at a glance. An \emph{Applied Example} works one scenario end to end with runnable code; a \emph{Visualization to build} callout specifies a chart and the story it has to tell; and an \emph{ado-file idea} box flags a tool available via SSC (or authors' GitHub).
+\noindent Four kinds of pull-out recur so you can recognize them at a glance. An \emph{Applied Example}, numbered within each chapter so later text can point back to it exactly, works one scenario end to end with runnable code. A \emph{What this rests on} box appears wherever the book hands you a statistical guarantee: it lists the few conditions the guarantee depends on, each paired with the symptom you would see if that condition failed. A \emph{Visualization to build} callout specifies a chart and the story it has to tell. And an \emph{ado-file idea} box flags a tool available via SSC (or the authors' GitHub).
 
 %----------------------------------------------------------------------------------------
 % PART I
@@ -332,7 +353,7 @@ wage      2246   1782   7.77   1.00  40.7 hourly wage
 }
 Read one row: \texttt{wage} has 2{,}246 observations, 1{,}782 distinct values, and a mean near \$7.77 an hour, which is credible for 1988 dollars and tells a staffer at a glance that the column is populated and plausible. Run this the day an export arrives and a half-empty column or a miscoded category shows up before it reaches a funder's table, not after.
 
-\begin{appliedexample}[From a funder's question to a one-page answer]
+\begin{appliedexample}[From a funder's question to a one-page answer]\label{ae:ch01-funder}
 \textbf{Scenario.} The Thursday email: are we reaching rural students, or mostly suburban ones near the host sites? You have an enrollment spreadsheet and until Monday.
 
 \medskip
@@ -782,6 +803,15 @@ A log records what the code did; the companion rule keeps work from happening ou
 
 Every step from the raw CSV to the final figure runs in code, where it can be read, reviewed, and rerun. That is the difference between telling a skeptical client \enquote{trust me} and telling them \enquote{rerun me,} and it is the foundation the rest of the book's replicability stands on.
 
+\begin{restson}[What a green rerun rests on]
+\begin{enumerate}
+\item Every path is relative to the project root. \emph{Noticed by:} a loud path error the first time any other machine runs it.
+\item Every community package is named in the install file. \emph{Noticed by:} an unrecognized-command error that names the missing piece.
+\item The version line pins Stata's behavior. \emph{Noticed by:} nothing, which is the danger: the rerun is clean and the numbers differ. Table~\ref{tab:ch02-worksonmine} is the triage order.
+\item No step lives outside a do-file. \emph{Noticed by:} nothing at all, until a successor cannot rebuild the result.
+\end{enumerate}
+\end{restson}
+
 \section{Speed you will actually notice}\label{sec:speed}
 An analyst reruns a pipeline only when a rerun is quick, so speed is a replicability feature, not a luxury. On files with millions of rows, the community packages \texttt{gtools}\index{gtools@\texttt{gtools}} and \texttt{ftools}\index{ftools@\texttt{ftools}} turn \texttt{collapse}\index{collapse@\texttt{collapse}} into \texttt{gcollapse}\index{gcollapse@\texttt{gcollapse}} and \texttt{egen}\index{egen@\texttt{egen}} into \texttt{gegen}\index{gegen@\texttt{gegen}}, and \texttt{reghdfe}\index{reghdfe@\texttt{reghdfe}} handles regressions with many fixed effects, the thousands of group indicators it absorbs without ever creating them as variables, that would otherwise stall. The honest question is when the swap is worth it, and the only way to answer it is to time both on your own data rather than trust a slogan.
 
@@ -1186,7 +1216,7 @@ Consider what this one command changes. Once JSON is no harder than CSV, a deadl
 \textbf{Integrated command:} \texttt{combineall}\index{combineall@\texttt{combineall}}. The \enquote{combine} half of the download loops above: point it at a folder and it appends (or merges, or converts) every file inside, and with a rename-map CSV (old name, new name, first year, last year) it applies vintage-aware renames, stamps each variable's source into a characteristic, and reports what failed to match, so a multi-year panel becomes one command instead of a fragile copy-and-edit. Chapter~\ref{ch:noapi} works it in full.
 \end{kaobox}
 
-\begin{appliedexample}[A Texas county panel from three APIs]
+\begin{appliedexample}[A Texas county panel from three APIs]\label{ae:ch03-countypanel}
 \textbf{Scenario.} A county workforce board wants a one-page context exhibit: income, child poverty, and unemployment for its counties, 2015--2023, next to the state.
 
 \medskip
@@ -2080,6 +2110,14 @@ Two defenses fit inside an ordinary evaluation workflow, and neither requires ne
 
 Both defenses work better with a trip wire attached, agreed before the merge runs rather than negotiated after, and the working rule is a stop rule in both directions. When the match rate lands more than a few points below what the data owner led you to expect, stop and investigate the keys before any analysis proceeds: leading zeros stripped by a careless import, a string identifier read as numeric, a key vintage that changed mid-year. Loosening the acceptance threshold to buy the rate back is the one move never on the table, because it converts a visible key problem into invisible measurement error. A merge that improves suspiciously stops the line just as hard: a rate that jumps from last year's 78 percent to 96 usually means duplicated keys on one side are inflating matches through a many-to-many join, and \texttt{isid} on both files is the first check.
 
+\begin{restson}[What a trusted merge rests on]
+\begin{enumerate}
+\item Keys are unique on both sides before the join. \emph{Noticed by:} a match rate that jumps implausibly, the many-to-many signature.
+\item The key's vintage and format are stable across refreshes. \emph{Noticed by:} a concordance row that slips a dozen points with no announcement.
+\item Acceptance thresholds were agreed before the merge ran. \emph{Noticed by:} the urge to loosen them afterward to buy the rate back.
+\end{enumerate}
+\end{restson}
+
 The linkage report describes one link at one moment; its cumulative sibling is the match-rate concordance, the merge pipeline's version of the tracking spine Chapter~\ref{ch:workshop} sets up for the project as a whole. One row per merge per vintage: the two files, the key, the row count on each side, the matched count, the resulting rate, and the threshold decision that produced it. When next year's refresh arrives, the new row lands under last year's, and the question every refresh raises, did this year's data merge like last year's, is answered by reading down a single column. A rate that slips from 83 to 71 between vintages is often the earliest visible symptom of a key change nobody announced, and the concordance surfaces it weeks before any estimate would.
 
 \section{Crosswalks as first-class files}
@@ -2090,7 +2128,7 @@ This is a small habit with a large payoff for extensibility. When next year's da
 \section{Where did this number come from?}\label{sec:lineage}
 The most dangerous question in policy research is also the simplest: \emph{where did this number come from?} If an evaluator cannot trace a variable back to its source table and vintage within seconds, trust with an agency client evaporates. We store that lineage directly in the data, using \texttt{srctag}\index{srctag@\texttt{srctag}} to write the source agency, table, and vintage into each variable's characteristics, so the provenance travels with the dataset through every subsequent merge, and \texttt{srcfind}\index{srcfind@\texttt{srcfind}} to search a warehouse of \texttt{.dta} files for variables matching a given source.
 
-\begin{appliedexample}[Proving lineage to a skeptical agency]
+\begin{appliedexample}[Proving lineage to a skeptical agency]\label{ae:ch06-lineage}
 \textbf{Scenario.} A state workforce commission doubts a report showing that program graduates earn less than the state average. They suspect the wage data was joined wrong or came from a stale ledger.
 
 \medskip
@@ -2662,7 +2700,15 @@ Frame the design in MDE terms and you manage stakeholder expectations honestly a
 \section{Uncertainty without the model's permission}\label{sec:conformal}
 A regression's confidence interval trusts the regression, and when a program director asks where the next client will land, that trust is often the weak link. The interval a fitted model reports assumes the model is right about its own error distribution, so if the residuals are skewed or the form is off, the interval is confidently the wrong width. Split-conformal prediction\index{conformal prediction} gives an evaluator a prediction interval whose coverage holds no matter how wrong the model is: a bad model costs interval width, never the promised coverage rate. The guarantee is an average over cases like the calibration ones, a limit the caveat at the end of this section makes concrete.
 
-\emph{The problem.} A model-based prediction interval inherits every assumption of the model, so a director who reads \enquote{we expect the next participant's wage between \$8 and \$14} is trusting the regression's error model, not just its point estimate. \emph{What we see.} When the outcome is skewed or heteroskedastic, those intervals miss their nominal coverage, and the evaluator learns it only after checking predictions against reality. \emph{The key fact.} Conformal prediction \parencite{shafer2008tutorial,angelopoulos2023conformal} turns any point predictor into an interval with finite-sample coverage guaranteed under only exchangeability, the assumption that the new observation could have been shuffled in with the calibration ones without changing anything. The recipe is three steps: fit on part of the data, measure how large the residuals get on a held-out calibration part, and use the appropriate residual quantile as the half-width:
+\begin{restson}[What the conformal guarantee rests on]
+\begin{enumerate}
+\item Exchangeability: the next case could have been shuffled in with the calibration cases. \emph{Noticed by:} a policy change or an intake shift between calibration and use.
+\item The calibration set is drawn from the same flow the predictions will serve. \emph{Noticed by:} calibrating on one program year and predicting another.
+\item The promise is average coverage, not per-site coverage. \emph{Noticed by:} a small site asking what the band means for it alone.
+\end{enumerate}
+\end{restson}
+
+\emph{The problem.} A model-based prediction interval inherits every assumption of the model, so a director who reads \enquote{we expect the next participant's wage between \$8 and \$14} is trusting the regression's error model, not just its point estimate. \emph{What we see.} When the outcome is skewed or heteroskedastic, those intervals miss their nominal coverage, and the evaluator learns it only after checking predictions against reality. \emph{The key fact.} Conformal prediction \parencite{shafer2008tutorial,angelopoulos2023conformal} turns any point predictor into an interval with finite-sample coverage guaranteed under only exchangeability, the assumption that the new observation could have been shuffled in with the calibration ones without changing anything. The recipe is three steps, each with a named product. Split the data once, producing a fitting half and a calibration half. Fit the model on the fitting half and predict the calibration half, producing residuals measured where the truth is known. Take the appropriate quantile of those residuals, producing the half-width the interval will use from then on:
 \begin{equation}
   Q \;=\; \widehat{Q}_{1-\alpha}\!\bigl(\,\lvert y_j - \hat f(x_j)\rvert : j \in \mathcal{C}\,\bigr),
   \qquad
@@ -2744,7 +2790,7 @@ The ICC also carries a fork worth agreeing on before anyone builds a site rankin
 
 Fay-Herriot estimation is where the field goes when plain empirical Bayes is not enough: where \S\ref{sec:shrink} pulls every small site toward one common mean, the small-area model pulls each toward the mean of sites like it, closer to how statistics offices produce the small-area numbers policymakers already cite. The cost is honest: the estimate is only as good as the covariate model behind it, trading assumption-light shrinkage for a stronger estimate that leans on a specification a reviewer can question.
 
-\begin{appliedexample}[One quarterly scorecard, four safeguards]
+\begin{appliedexample}[One quarterly scorecard, four safeguards]\label{ae:ch07-scorecard}
 \textbf{Scenario.} A caregiver-support program runs at fifty sites, most of them small. Each quarter the evaluator ships one scorecard: an engagement score from a six-item survey scale, a completion rate per site, and a population claim about the families served. The board wants a site ranking; the director wants to know whether next year's evaluation can detect the improvement the program hopes for.
 
 \medskip
@@ -2859,6 +2905,14 @@ The modern caution fits in one paragraph and no algebra. When different units ad
 ATT(g,t)=\mathbb{E}\!\left[\,Y_t(g)-Y_t(0)\;\middle|\;G=g\,\right],
 \]
 where $Y_t(g)$ is the outcome under treatment and $Y_t(0)$ the untreated counterfactual for the same units; only after estimating these clean pieces does the command average them into the single headline number.\sidenote{\textcite{callaway2021did} is the paper \texttt{csdid} implements; it estimates group-time average treatment effects $ATT(g,t)$ and only then aggregates. Install it and its dependency \texttt{drdid} from SSC, and note that with no never-treated units you must pass a not-yet-treated comparison group explicitly.}
+
+\begin{restson}[What the DiD claim rests on]
+\begin{enumerate}
+\item Parallel trends: absent the policy, treated and comparison groups would have moved together. \emph{Noticed by:} a pre-period gap in the event-study plot.
+\item No anticipation: units did not change behavior ahead of their own adoption. \emph{Noticed by:} effects appearing in the periods just before treatment.
+\item Clean comparisons: treated units are compared only to not-yet-treated or never-treated units. \emph{Noticed by:} construction, if the estimator is \texttt{csdid}; by nothing, if it is plain two-way fixed effects.
+\end{enumerate}
+\end{restson}
 
 \subsection{A staggered rollout you can check against the truth}
 The cleanest way to see the problem is to build a world where you already know the answer, then ask each estimator to recover it. We simulate a staggered adoption: 60 units followed over 12 periods, with one cohort switching the policy on at period~5, a second cohort at period~9, and a third group never treated at all.\marginnote{Simulated data with \texttt{set seed 20260704}, so the do-file \texttt{ch08\_did.do} reproduces every number here exactly. A never-treated group is the cleanest possible comparison; a well-behaved rollout usually has one, and when it does not, \texttt{csdid} falls back to the not-yet-treated units.} The treatment effect is deliberately \emph{dynamic}: it starts at 2 units in the first period of exposure and grows by one unit each period after, so a unit five periods into treatment carries an effect of~7. Because we built it, we can state the truth exactly: averaged over all treated unit-periods in this panel, the true average treatment effect on the treated is~\textbf{4.83}. The early cohort climbs the ramp all the way to 9 and contributes two thirds of the treated unit-periods, while the late cohort never gets past 5; weight the two cohorts' own averages, 5.5 and 3.5, by that two-to-one exposure and you get the 4.83. Any honest estimator should land near it.
@@ -3840,7 +3894,7 @@ The operational form of that handover is a refresh calendar decided at ship time
 
 When the trigger is a calendar date, consider taking the rerun out of human memory entirely. The same scheduler that pulled survey responses every morning in Chapter~\ref{ch:surveys} can run a chart build: one \texttt{cron} line on macOS or Linux, or one Task Scheduler job on Windows, runs the do-file in batch on the expected posting date, writes the rebuilt pages, and leaves a dated log. The named person's job then shrinks from remembering the rerun to reading the log and clicking through the refreshed pages once, ten minutes on a known morning instead of a task that competes with everything else for attention. Keep the human in that last step rather than automating it away: the scheduler can rebuild a page, but only a person notices that a county's wage series suddenly halved because the source revised its history, and a dashboard that republishes bad data on schedule is automation working against you. The scheduler moves the work; the log-and-look keeps the judgment.
 
-\begin{appliedexample}[One dataset, three deliverables]
+\begin{appliedexample}[One dataset, three deliverables]\label{ae:ch10-threedeliv}
 \textbf{Scenario.} The workforce board wants the county wage story in three places: a one-page printed brief, an exploratory portal on the agency website, and a two-minute clip in the director's talk.
 
 \medskip
@@ -4189,7 +4243,7 @@ The live Sheet is also where two arguments of this chapter collide. Section~\ref
 \section{Toolkits program teams keep using}\label{sec:teamtoolkit}
 The best deliverable is often not a report at all but a tool the program team keeps using after the evaluator has moved on. Build one such tool well and you are holding the book's thesis in a single artifact.\marginnote{The blunt test of embedded work: a year after you leave, is the artifact still in weekly use, or is it a PDF in an inbox? Tools that the team can edit and rerun themselves survive; reports that only you could regenerate do not.}
 
-\begin{appliedexample}[An enrollment tracker the field team keeps]
+\begin{appliedexample}[An enrollment tracker the field team keeps]\label{ae:ch11-tracker}
 \textbf{Scenario.} A field team enters enrollments all year and needs to see their own progress, without waiting on the evaluator and without breaking the data.
 
 \medskip
@@ -4806,7 +4860,7 @@ googlechart, type(table) tablesearch ///
 \label{fig:captable}
 \end{figure}
 
-\begin{appliedexample}[One evaluation, one folder]
+\begin{appliedexample}[One evaluation, one folder]\label{ae:ch12-onefolder}
 \textbf{Scenario.} A client wants one offline folder to share with their steering committee: a narrative report, an interactive dashboard of site outcomes, an online chart, and an offline county map, and they need to know six months from now exactly which cut the committee approved.
 
 \medskip
@@ -5028,7 +5082,7 @@ Stata in batch mode (\texttt{-b}) writes any error to the log but still exits wi
 
 The agent version of this pattern replaces the \texttt{grep} with a reviewer LLM per slice, each returning the issues it found; you deduplicate the reports and feed only the real ones back into the loop of Figure~\ref{fig:backbone}. Either way the principle holds: parallelize the work, but keep every piece a logged, checkable artifact.
 
-\begin{appliedexample}[A one-hour reanalysis that survives the LLM changing]
+\begin{appliedexample}[A one-hour reanalysis that survives the LLM changing]\label{ae:ch13-reanalysis}
 \textbf{Scenario.} A funder asks, on short notice, whether a wage gap in last quarter's analysis holds up. The original was run against an LLM version that has since been updated.
 
 \medskip
@@ -5237,9 +5291,19 @@ local se_corr = sqrt(`p_ml_all'*(1-`p_ml_all')/5000 ///
                      + r(sd)^2/r(N))
 \end{verbatim}
 }
-On the simulated notes the correction does exactly what the setup demands. The naive estimate is 0.234 with a 95~percent interval of [0.223, 0.246], tight, confident, and wrong: the truth in this draw is 0.291, far outside it. The corrected estimate is 0.288 with an interval of [0.232, 0.344], which covers the truth. The interval widens because it now tells the truth about where the information lives: with error-prone labels, your effective sample is closer to the 150 notes a human coded than to the 5{,}000 the LLM did, and an interval that admits this is honest where the naive one is flattering. The same logic extends beyond a prevalence to quantiles and regression coefficients \parencite{angelopoulos2023ppi}, so the model in this chapter's applied example, which predicts drop-off from the coded barrier, is correctable the same way.
+On the simulated notes the correction does exactly what the setup demands. The naive estimate is 0.234 with a 95~percent interval of [0.223, 0.246], tight, confident, and wrong: the truth in this draw is 0.291, far outside it. The corrected estimate is 0.288 with an interval of [0.232, 0.344], which covers the truth. The interval widens because it now tells the truth about where the information lives: with error-prone labels, your effective sample is closer to the 150 notes a human coded than to the 5{,}000 the LLM did, and an interval that admits this is honest where the naive one is flattering. The same logic extends beyond a prevalence to quantiles and regression coefficients \parencite{angelopoulos2023ppi}, so the model in Applied Example~\ref{ae:ch13-notes} at the chapter's close, which predicts drop-off from the coded barrier, is correctable the same way.
 
-Two conditions make the correction work, and both are design choices you control before any coding starts. The gold subset must be a \emph{random} draw of the notes, because the gap measured on it stands in for the gap everywhere; hand-pick the clear-cut notes for human coding, as deadline instinct suggests, and the measured gap is too small, the correction too weak, and the bias survives. And the human labels are the standard the correction trusts, so the correction is only as good as the hand-coding behind it, which is the same dependence the kappa already had. Seen from this subsection, the gold standard does double duty, validation first and rectifier second, and that second job is the deeper reason this chapter keeps insisting the human sample be random rather than convenient.
+The conditions that make the correction work are design choices you control before any coding starts.
+
+\begin{restson}[What the corrected estimate rests on]
+\begin{enumerate}
+\item The gold subset is a \emph{random} draw of the notes, so the gap measured on it stands in for the gap everywhere. \emph{Noticed by:} the deadline instinct to hand-pick clear-cut notes, which shrinks the measured gap and lets the bias survive.
+\item The human labels are the standard the correction trusts, the same dependence the kappa already had. \emph{Noticed by:} nothing in the output; only the coding protocol vouches for it.
+\item The LLM that labeled the gold subset is the LLM that labeled the other 4,850. \emph{Noticed by:} the version log of Section~\ref{ch13-sc-promptlog}, when a vendor update lands mid-run.
+\end{enumerate}
+\end{restson}
+
+Seen from this subsection, the gold standard does double duty, validation first and rectifier second, and that second job is the deeper reason this chapter keeps insisting the human sample be random rather than convenient.
 
 \section{Reproducing stochastic output}
 You pin the LLM's answers down once so your pipeline gives the same result next month as it does today, because a rerun that quietly reclassifies cases fails the replicable principle the whole book is built on. An LLM that answers a prompt one way today may answer differently tomorrow, so we set the temperature to zero to minimize randomness, log the LLM version and any seed, and cache every response locally so that the classifications become a frozen dataset the analysis reads, rather than a live call that could change under us.\marginnote{Temperature zero reduces randomness but does not guarantee it away: floating-point non-associativity across GPU batches, and silent LLM updates behind the same API name, can still shift an answer. It is the cache, not the temperature, that actually freezes the result.} Wrapping the LLM behind a generic interface, so swapping a hosted LLM for a local one changes a single macro, keeps the pipeline LLM-agnostic as prices and terms shift.
@@ -5414,7 +5478,7 @@ Keep the policy in the project folder, not a shared drive nobody opens, so it is
 
 Written down, four scattered guardrails become a standard a team can be held to, which is the actionable principle applied to the team's own conduct rather than to a report's findings. A small shop that cannot point to its AI-use policy is deciding these questions anyway, one deadline at a time, without a record of what it decided.
 
-\begin{appliedexample}[Coding 5,000 progress notes without getting burned]
+\begin{appliedexample}[Coding 5,000 progress notes without getting burned]\label{ae:ch13-notes}
 \textbf{Scenario.} A workforce program has 5,000 free-text case notes. You want each tagged with the primary barrier a participant faced (transportation, childcare, scheduling, none, other) to see which barriers predict drop-off.
 
 \medskip
@@ -5571,6 +5635,14 @@ histogram kplot, discrete frequency ///
 \caption[Distribution of quasi-identifier cell sizes]{How many cells have each size, over race, married, collgrad, and industry in the \texttt{nlsw88} stand-in. The tall spike at the left is the danger: 24 cells hold a single person and 15 more hold just two, so dozens of records are uniquely or nearly-uniquely identified by four ordinary columns. Cells of 30 or more people are pooled at the right, where re-identification is not a concern. The mass on the left is what coarsening and suppression exist to move rightward. Built by \texttt{ch14\_kanon.do}.}
 \label{fig:kdist}
 \end{figure}
+
+\begin{restson}[What the $k$-anonymity number rests on]
+\begin{enumerate}
+\item The attacker holds only the quasi-identifiers you counted. \emph{Noticed by:} a partner file arriving with columns your scan never named.
+\item $k$ is counted on the released file, not the population. \emph{Noticed by:} a subset release, where a cell of five in your full file can be a cell of one in the extract.
+\item Every release of the same records is counted together. \emph{Noticed by:} two safe-looking cuts that intersect to a cell of one.
+\end{enumerate}
+\end{restson}
 
 \subsection{Coarsening: the cheapest way to raise \texorpdfstring{$k$}{k}}\label{sec:coarsen}
 The fastest way to empty the $k=1$ bin is to make the mesh coarser, because a record is unique only relative to the resolution of its columns.\marginnote{Coarsen the highest-cardinality column first: the singletons cluster in the rare combinations, and those almost always involve the variable with the most categories. Age in single years, five-digit ZIP, and detailed occupation codes are the usual culprits; bin them before you reach for anything more elaborate.} Industry is the finest of our four quasi-identifiers, twelve categories, so it does the most damage; collapsing it to three broad groups (goods-producing, services, and public administration) merges many singleton cells into populated ones without touching the other three columns:
@@ -5773,7 +5845,7 @@ We move from a do-file that wants to be a command, through help files and distri
 \section{When a do-file wants to be a command}
 A block of code you have pasted across five projects is a maintenance liability and a source of the three-answers problem, and the fix is to turn it into a command. The move is to extract the repeated logic into an \texttt{.ado} file, a text file that defines a program and, once it sits on Stata's search path, makes its name work as a command, then replace its hard-coded specifics with arguments and generalize it just enough to serve the cases you actually have.\marginnote{Resist over-generalizing on the first pass. A command that tries to handle cases you do not yet have accretes options nobody uses and bugs nobody catches; the rule of three, refactor into a command once you have pasted the block a third time, keeps the abstraction honest.} The book's own example is \texttt{dsload}\index{dsload@\texttt{dsload}}: the block of project controls and path settings that three colleagues had each modified, unified into one command that takes its paths as arguments so everyone runs the same logic.
 
-\begin{appliedexample}[Turning a one-off script into a shared tool]
+\begin{appliedexample}[Turning a one-off script into a shared tool]\label{ae:ch15-sharedtool}
 \textbf{Scenario.} You have a do-file block that loads project controls and verifies file paths. Three colleagues use slightly different versions, and path errors follow.
 
 \medskip
@@ -6281,6 +6353,31 @@ This is the predict-then-check discipline in one block. Writing the capstone, th
 \backmatter
 \pagelayout{wide}
 \printbibliography[heading=bibintoc, title=Bibliography]
+
+\section{Data used in this book}\label{app:data}
+Every worked example in this book runs on data you can put your hands on, and this registry is the one place they are all named. The two shipped datasets load with a single command and no download; the public files name their source so a fresh copy is one URL away; and every simulated dataset states its seed in the do-file that builds it, so the exact numbers in the text rebuild on your machine.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption[Datasets used in this book]{Every dataset the book's examples use, where it comes from, and the chapters that use it.}
+\label{tab:app-data}
+\begin{tabular}{p{3.4cm}p{4.6cm}p{2.6cm}p{2.2cm}}
+\hline
+Data & Where it comes from & One row per & Chapters \\
+\hline
+\texttt{auto} & Ships with Stata (\texttt{sysuse auto}); 1978 automobile listings & car model & 4, 5, 8, 9, 12 \\
+\texttt{nlsw88} & Ships with Stata (\texttt{sysuse nlsw88}); 1988 NLS extract of working women & woman, age 34--46 & 1, 2, 7, 8, 9, 13, 14 \\
+\texttt{nlswork} & Stata's website (\texttt{webuse nlswork}); NLS young women panel, 1968--1988 & woman-year & 6 \\
+\texttt{nhanes2f} & Stata's website (\texttt{webuse nhanes2f}); NHANES~II with survey design variables & respondent & 7 \\
+County Health Rankings & One national analytic CSV per year from \texttt{countyhealthrankings.org} & county, plus state and national summary rows & 1, 3, 4, 10, 11, 12 \\
+Texas Academic Performance Reports & Scraped from the state's download form (Chapter~\ref{ch:noapi}) & campus- or district-year & 4 \\
+BLS QCEW & Quarterly wage API at \texttt{data.bls.gov/cew} & county-quarter & 1, 3, 10 \\
+Census and ACS endpoints & The API patterns of Chapter~\ref{ch:apis} & varies by pull & 3 \\
+Simulated data & Built in each chapter's do-file, \texttt{set seed 20260704} & varies by demonstration & 5, 7, 8, 9, 13, 15 \\
+\hline
+\end{tabular}
+\end{table}
 
 \printindex
 

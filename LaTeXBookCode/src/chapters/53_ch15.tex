@@ -7,7 +7,7 @@ We move from a do-file that wants to be a command, through help files and distri
 \section{When a do-file wants to be a command}
 A block of code you have pasted across five projects is a maintenance liability and a source of the three-answers problem, and the fix is to turn it into a command. The move is to extract the repeated logic into an \texttt{.ado} file, a text file that defines a program and, once it sits on Stata's search path, makes its name work as a command, then replace its hard-coded specifics with arguments and generalize it just enough to serve the cases you actually have.\marginnote{Resist over-generalizing on the first pass. A command that tries to handle cases you do not yet have accretes options nobody uses and bugs nobody catches; the rule of three, refactor into a command once you have pasted the block a third time, keeps the abstraction honest.} The book's own example is \texttt{dsload}\index{dsload@\texttt{dsload}}: the block of project controls and path settings that three colleagues had each modified, unified into one command that takes its paths as arguments so everyone runs the same logic.
 
-\begin{appliedexample}[Turning a one-off script into a shared tool]
+\begin{appliedexample}[Turning a one-off script into a shared tool]\label{ae:ch15-sharedtool}
 \textbf{Scenario.} You have a do-file block that loads project controls and verifies file paths. Three colleagues use slightly different versions, and path errors follow.
 
 \medskip

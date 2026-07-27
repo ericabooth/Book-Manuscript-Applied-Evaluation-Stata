@@ -274,7 +274,15 @@ Frame the design in MDE terms and you manage stakeholder expectations honestly a
 \section{Uncertainty without the model's permission}\label{sec:conformal}
 A regression's confidence interval trusts the regression, and when a program director asks where the next client will land, that trust is often the weak link. The interval a fitted model reports assumes the model is right about its own error distribution, so if the residuals are skewed or the form is off, the interval is confidently the wrong width. Split-conformal prediction\index{conformal prediction} gives an evaluator a prediction interval whose coverage holds no matter how wrong the model is: a bad model costs interval width, never the promised coverage rate. The guarantee is an average over cases like the calibration ones, a limit the caveat at the end of this section makes concrete.
 
-\emph{The problem.} A model-based prediction interval inherits every assumption of the model, so a director who reads \enquote{we expect the next participant's wage between \$8 and \$14} is trusting the regression's error model, not just its point estimate. \emph{What we see.} When the outcome is skewed or heteroskedastic, those intervals miss their nominal coverage, and the evaluator learns it only after checking predictions against reality. \emph{The key fact.} Conformal prediction \parencite{shafer2008tutorial,angelopoulos2023conformal} turns any point predictor into an interval with finite-sample coverage guaranteed under only exchangeability, the assumption that the new observation could have been shuffled in with the calibration ones without changing anything. The recipe is three steps: fit on part of the data, measure how large the residuals get on a held-out calibration part, and use the appropriate residual quantile as the half-width:
+\begin{restson}[What the conformal guarantee rests on]
+\begin{enumerate}
+\item Exchangeability: the next case could have been shuffled in with the calibration cases. \emph{Noticed by:} a policy change or an intake shift between calibration and use.
+\item The calibration set is drawn from the same flow the predictions will serve. \emph{Noticed by:} calibrating on one program year and predicting another.
+\item The promise is average coverage, not per-site coverage. \emph{Noticed by:} a small site asking what the band means for it alone.
+\end{enumerate}
+\end{restson}
+
+\emph{The problem.} A model-based prediction interval inherits every assumption of the model, so a director who reads \enquote{we expect the next participant's wage between \$8 and \$14} is trusting the regression's error model, not just its point estimate. \emph{What we see.} When the outcome is skewed or heteroskedastic, those intervals miss their nominal coverage, and the evaluator learns it only after checking predictions against reality. \emph{The key fact.} Conformal prediction \parencite{shafer2008tutorial,angelopoulos2023conformal} turns any point predictor into an interval with finite-sample coverage guaranteed under only exchangeability, the assumption that the new observation could have been shuffled in with the calibration ones without changing anything. The recipe is three steps, each with a named product. Split the data once, producing a fitting half and a calibration half. Fit the model on the fitting half and predict the calibration half, producing residuals measured where the truth is known. Take the appropriate quantile of those residuals, producing the half-width the interval will use from then on:
 \begin{equation}
   Q \;=\; \widehat{Q}_{1-\alpha}\!\bigl(\,\lvert y_j - \hat f(x_j)\rvert : j \in \mathcal{C}\,\bigr),
   \qquad
@@ -356,7 +364,7 @@ The ICC also carries a fork worth agreeing on before anyone builds a site rankin
 
 Fay-Herriot estimation is where the field goes when plain empirical Bayes is not enough: where \S\ref{sec:shrink} pulls every small site toward one common mean, the small-area model pulls each toward the mean of sites like it, closer to how statistics offices produce the small-area numbers policymakers already cite. The cost is honest: the estimate is only as good as the covariate model behind it, trading assumption-light shrinkage for a stronger estimate that leans on a specification a reviewer can question.
 
-\begin{appliedexample}[One quarterly scorecard, four safeguards]
+\begin{appliedexample}[One quarterly scorecard, four safeguards]\label{ae:ch07-scorecard}
 \textbf{Scenario.} A caregiver-support program runs at fifty sites, most of them small. Each quarter the evaluator ships one scorecard: an engagement score from a six-item survey scale, a completion rate per site, and a population claim about the families served. The board wants a site ranking; the director wants to know whether next year's evaluation can detect the improvement the program hopes for.
 
 \medskip

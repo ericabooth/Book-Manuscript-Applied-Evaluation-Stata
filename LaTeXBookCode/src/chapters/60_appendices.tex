@@ -218,6 +218,31 @@ This is the predict-then-check discipline in one block. Writing the capstone, th
 \pagelayout{wide}
 \printbibliography[heading=bibintoc, title=Bibliography]
 
+\section{Data used in this book}\label{app:data}
+Every worked example in this book runs on data you can put your hands on, and this registry is the one place they are all named. The two shipped datasets load with a single command and no download; the public files name their source so a fresh copy is one URL away; and every simulated dataset states its seed in the do-file that builds it, so the exact numbers in the text rebuild on your machine.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption[Datasets used in this book]{Every dataset the book's examples use, where it comes from, and the chapters that use it.}
+\label{tab:app-data}
+\begin{tabular}{p{3.4cm}p{4.6cm}p{2.6cm}p{2.2cm}}
+\hline
+Data & Where it comes from & One row per & Chapters \\
+\hline
+\texttt{auto} & Ships with Stata (\texttt{sysuse auto}); 1978 automobile listings & car model & 4, 5, 8, 9, 12 \\
+\texttt{nlsw88} & Ships with Stata (\texttt{sysuse nlsw88}); 1988 NLS extract of working women & woman, age 34--46 & 1, 2, 7, 8, 9, 13, 14 \\
+\texttt{nlswork} & Stata's website (\texttt{webuse nlswork}); NLS young women panel, 1968--1988 & woman-year & 6 \\
+\texttt{nhanes2f} & Stata's website (\texttt{webuse nhanes2f}); NHANES~II with survey design variables & respondent & 7 \\
+County Health Rankings & One national analytic CSV per year from \texttt{countyhealthrankings.org} & county, plus state and national summary rows & 1, 3, 4, 10, 11, 12 \\
+Texas Academic Performance Reports & Scraped from the state's download form (Chapter~\ref{ch:noapi}) & campus- or district-year & 4 \\
+BLS QCEW & Quarterly wage API at \texttt{data.bls.gov/cew} & county-quarter & 1, 3, 10 \\
+Census and ACS endpoints & The API patterns of Chapter~\ref{ch:apis} & varies by pull & 3 \\
+Simulated data & Built in each chapter's do-file, \texttt{set seed 20260704} & varies by demonstration & 5, 7, 8, 9, 13, 15 \\
+\hline
+\end{tabular}
+\end{table}
+
 \printindex
 
 \end{document}

@@ -193,7 +193,7 @@ Stata in batch mode (\texttt{-b}) writes any error to the log but still exits wi
 
 The agent version of this pattern replaces the \texttt{grep} with a reviewer LLM per slice, each returning the issues it found; you deduplicate the reports and feed only the real ones back into the loop of Figure~\ref{fig:backbone}. Either way the principle holds: parallelize the work, but keep every piece a logged, checkable artifact.
 
-\begin{appliedexample}[A one-hour reanalysis that survives the LLM changing]
+\begin{appliedexample}[A one-hour reanalysis that survives the LLM changing]\label{ae:ch13-reanalysis}
 \textbf{Scenario.} A funder asks, on short notice, whether a wage gap in last quarter's analysis holds up. The original was run against an LLM version that has since been updated.
 
 \medskip
@@ -402,9 +402,19 @@ local se_corr = sqrt(`p_ml_all'*(1-`p_ml_all')/5000 ///
                      + r(sd)^2/r(N))
 \end{verbatim}
 }
-On the simulated notes the correction does exactly what the setup demands. The naive estimate is 0.234 with a 95~percent interval of [0.223, 0.246], tight, confident, and wrong: the truth in this draw is 0.291, far outside it. The corrected estimate is 0.288 with an interval of [0.232, 0.344], which covers the truth. The interval widens because it now tells the truth about where the information lives: with error-prone labels, your effective sample is closer to the 150 notes a human coded than to the 5{,}000 the LLM did, and an interval that admits this is honest where the naive one is flattering. The same logic extends beyond a prevalence to quantiles and regression coefficients \parencite{angelopoulos2023ppi}, so the model in this chapter's applied example, which predicts drop-off from the coded barrier, is correctable the same way.
+On the simulated notes the correction does exactly what the setup demands. The naive estimate is 0.234 with a 95~percent interval of [0.223, 0.246], tight, confident, and wrong: the truth in this draw is 0.291, far outside it. The corrected estimate is 0.288 with an interval of [0.232, 0.344], which covers the truth. The interval widens because it now tells the truth about where the information lives: with error-prone labels, your effective sample is closer to the 150 notes a human coded than to the 5{,}000 the LLM did, and an interval that admits this is honest where the naive one is flattering. The same logic extends beyond a prevalence to quantiles and regression coefficients \parencite{angelopoulos2023ppi}, so the model in Applied Example~\ref{ae:ch13-notes} at the chapter's close, which predicts drop-off from the coded barrier, is correctable the same way.
 
-Two conditions make the correction work, and both are design choices you control before any coding starts. The gold subset must be a \emph{random} draw of the notes, because the gap measured on it stands in for the gap everywhere; hand-pick the clear-cut notes for human coding, as deadline instinct suggests, and the measured gap is too small, the correction too weak, and the bias survives. And the human labels are the standard the correction trusts, so the correction is only as good as the hand-coding behind it, which is the same dependence the kappa already had. Seen from this subsection, the gold standard does double duty, validation first and rectifier second, and that second job is the deeper reason this chapter keeps insisting the human sample be random rather than convenient.
+The conditions that make the correction work are design choices you control before any coding starts.
+
+\begin{restson}[What the corrected estimate rests on]
+\begin{enumerate}
+\item The gold subset is a \emph{random} draw of the notes, so the gap measured on it stands in for the gap everywhere. \emph{Noticed by:} the deadline instinct to hand-pick clear-cut notes, which shrinks the measured gap and lets the bias survive.
+\item The human labels are the standard the correction trusts, the same dependence the kappa already had. \emph{Noticed by:} nothing in the output; only the coding protocol vouches for it.
+\item The LLM that labeled the gold subset is the LLM that labeled the other 4,850. \emph{Noticed by:} the version log of Section~\ref{ch13-sc-promptlog}, when a vendor update lands mid-run.
+\end{enumerate}
+\end{restson}
+
+Seen from this subsection, the gold standard does double duty, validation first and rectifier second, and that second job is the deeper reason this chapter keeps insisting the human sample be random rather than convenient.
 
 \section{Reproducing stochastic output}
 You pin the LLM's answers down once so your pipeline gives the same result next month as it does today, because a rerun that quietly reclassifies cases fails the replicable principle the whole book is built on. An LLM that answers a prompt one way today may answer differently tomorrow, so we set the temperature to zero to minimize randomness, log the LLM version and any seed, and cache every response locally so that the classifications become a frozen dataset the analysis reads, rather than a live call that could change under us.\marginnote{Temperature zero reduces randomness but does not guarantee it away: floating-point non-associativity across GPU batches, and silent LLM updates behind the same API name, can still shift an answer. It is the cache, not the temperature, that actually freezes the result.} Wrapping the LLM behind a generic interface, so swapping a hosted LLM for a local one changes a single macro, keeps the pipeline LLM-agnostic as prices and terms shift.
@@ -579,7 +589,7 @@ Keep the policy in the project folder, not a shared drive nobody opens, so it is
 
 Written down, four scattered guardrails become a standard a team can be held to, which is the actionable principle applied to the team's own conduct rather than to a report's findings. A small shop that cannot point to its AI-use policy is deciding these questions anyway, one deadline at a time, without a record of what it decided.
 
-\begin{appliedexample}[Coding 5,000 progress notes without getting burned]
+\begin{appliedexample}[Coding 5,000 progress notes without getting burned]\label{ae:ch13-notes}
 \textbf{Scenario.} A workforce program has 5,000 free-text case notes. You want each tagged with the primary barrier a participant faced (transportation, childcare, scheduling, none, other) to see which barriers predict drop-off.
 
 \medskip

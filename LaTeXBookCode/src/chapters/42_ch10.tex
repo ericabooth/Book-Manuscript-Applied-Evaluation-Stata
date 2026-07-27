@@ -400,7 +400,7 @@ The operational form of that handover is a refresh calendar decided at ship time
 
 When the trigger is a calendar date, consider taking the rerun out of human memory entirely. The same scheduler that pulled survey responses every morning in Chapter~\ref{ch:surveys} can run a chart build: one \texttt{cron} line on macOS or Linux, or one Task Scheduler job on Windows, runs the do-file in batch on the expected posting date, writes the rebuilt pages, and leaves a dated log. The named person's job then shrinks from remembering the rerun to reading the log and clicking through the refreshed pages once, ten minutes on a known morning instead of a task that competes with everything else for attention. Keep the human in that last step rather than automating it away: the scheduler can rebuild a page, but only a person notices that a county's wage series suddenly halved because the source revised its history, and a dashboard that republishes bad data on schedule is automation working against you. The scheduler moves the work; the log-and-look keeps the judgment.
 
-\begin{appliedexample}[One dataset, three deliverables]
+\begin{appliedexample}[One dataset, three deliverables]\label{ae:ch10-threedeliv}
 \textbf{Scenario.} The workforce board wants the county wage story in three places: a one-page printed brief, an exploratory portal on the agency website, and a two-minute clip in the director's talk.
 
 \medskip

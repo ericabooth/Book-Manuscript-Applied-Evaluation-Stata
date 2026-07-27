@@ -101,6 +101,14 @@ Two defenses fit inside an ordinary evaluation workflow, and neither requires ne
 
 Both defenses work better with a trip wire attached, agreed before the merge runs rather than negotiated after, and the working rule is a stop rule in both directions. When the match rate lands more than a few points below what the data owner led you to expect, stop and investigate the keys before any analysis proceeds: leading zeros stripped by a careless import, a string identifier read as numeric, a key vintage that changed mid-year. Loosening the acceptance threshold to buy the rate back is the one move never on the table, because it converts a visible key problem into invisible measurement error. A merge that improves suspiciously stops the line just as hard: a rate that jumps from last year's 78 percent to 96 usually means duplicated keys on one side are inflating matches through a many-to-many join, and \texttt{isid} on both files is the first check.
 
+\begin{restson}[What a trusted merge rests on]
+\begin{enumerate}
+\item Keys are unique on both sides before the join. \emph{Noticed by:} a match rate that jumps implausibly, the many-to-many signature.
+\item The key's vintage and format are stable across refreshes. \emph{Noticed by:} a concordance row that slips a dozen points with no announcement.
+\item Acceptance thresholds were agreed before the merge ran. \emph{Noticed by:} the urge to loosen them afterward to buy the rate back.
+\end{enumerate}
+\end{restson}
+
 The linkage report describes one link at one moment; its cumulative sibling is the match-rate concordance, the merge pipeline's version of the tracking spine Chapter~\ref{ch:workshop} sets up for the project as a whole. One row per merge per vintage: the two files, the key, the row count on each side, the matched count, the resulting rate, and the threshold decision that produced it. When next year's refresh arrives, the new row lands under last year's, and the question every refresh raises, did this year's data merge like last year's, is answered by reading down a single column. A rate that slips from 83 to 71 between vintages is often the earliest visible symptom of a key change nobody announced, and the concordance surfaces it weeks before any estimate would.
 
 \section{Crosswalks as first-class files}
@@ -111,7 +119,7 @@ This is a small habit with a large payoff for extensibility. When next year's da
 \section{Where did this number come from?}\label{sec:lineage}
 The most dangerous question in policy research is also the simplest: \emph{where did this number come from?} If an evaluator cannot trace a variable back to its source table and vintage within seconds, trust with an agency client evaporates. We store that lineage directly in the data, using \texttt{srctag}\index{srctag@\texttt{srctag}} to write the source agency, table, and vintage into each variable's characteristics, so the provenance travels with the dataset through every subsequent merge, and \texttt{srcfind}\index{srcfind@\texttt{srcfind}} to search a warehouse of \texttt{.dta} files for variables matching a given source.
 
-\begin{appliedexample}[Proving lineage to a skeptical agency]
+\begin{appliedexample}[Proving lineage to a skeptical agency]\label{ae:ch06-lineage}
 \textbf{Scenario.} A state workforce commission doubts a report showing that program graduates earn less than the state average. They suspect the wage data was joined wrong or came from a stale ledger.
 
 \medskip

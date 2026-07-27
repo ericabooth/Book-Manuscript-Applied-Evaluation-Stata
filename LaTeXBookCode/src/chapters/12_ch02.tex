@@ -274,6 +274,15 @@ A log records what the code did; the companion rule keeps work from happening ou
 
 Every step from the raw CSV to the final figure runs in code, where it can be read, reviewed, and rerun. That is the difference between telling a skeptical client \enquote{trust me} and telling them \enquote{rerun me,} and it is the foundation the rest of the book's replicability stands on.
 
+\begin{restson}[What a green rerun rests on]
+\begin{enumerate}
+\item Every path is relative to the project root. \emph{Noticed by:} a loud path error the first time any other machine runs it.
+\item Every community package is named in the install file. \emph{Noticed by:} an unrecognized-command error that names the missing piece.
+\item The version line pins Stata's behavior. \emph{Noticed by:} nothing, which is the danger: the rerun is clean and the numbers differ. Table~\ref{tab:ch02-worksonmine} is the triage order.
+\item No step lives outside a do-file. \emph{Noticed by:} nothing at all, until a successor cannot rebuild the result.
+\end{enumerate}
+\end{restson}
+
 \section{Speed you will actually notice}\label{sec:speed}
 An analyst reruns a pipeline only when a rerun is quick, so speed is a replicability feature, not a luxury. On files with millions of rows, the community packages \texttt{gtools}\index{gtools@\texttt{gtools}} and \texttt{ftools}\index{ftools@\texttt{ftools}} turn \texttt{collapse}\index{collapse@\texttt{collapse}} into \texttt{gcollapse}\index{gcollapse@\texttt{gcollapse}} and \texttt{egen}\index{egen@\texttt{egen}} into \texttt{gegen}\index{gegen@\texttt{gegen}}, and \texttt{reghdfe}\index{reghdfe@\texttt{reghdfe}} handles regressions with many fixed effects, the thousands of group indicators it absorbs without ever creating them as variables, that would otherwise stall. The honest question is when the swap is worth it, and the only way to answer it is to time both on your own data rather than trust a slogan.
 

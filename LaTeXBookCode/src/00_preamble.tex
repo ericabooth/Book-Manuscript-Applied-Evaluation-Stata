@@ -85,6 +85,27 @@
     \end{vizbox}%
 }
 
+% "What this rests on": the short list of conditions a statistical guarantee
+% depends on, stated at the point where the guarantee is handed to the reader,
+% each condition paired with the symptom you would see if it failed.
+\definecolor{roBg}{HTML}{E9EEF5}      % pale slate background
+\definecolor{roRule}{HTML}{1A476F}    % navy rule
+\newmdenv[
+    skipabove=1\topskip, skipbelow=0.6\topskip,
+    innertopmargin=6pt, innerbottommargin=6pt,
+    innerleftmargin=10pt, innerrightmargin=10pt,
+    linewidth=0.9pt, roundcorner=4pt,
+    linecolor=roRule, backgroundcolor=roBg,
+    frametitlerule=true,
+    frametitlefont=\sffamily\bfseries\color{roRule},
+    frametitlebackgroundcolor=roBg,
+]{restsonbox}
+\newenvironment{restson}[1][What this rests on]{%
+    \begin{restsonbox}[frametitle={#1}]%
+}{%
+    \end{restsonbox}%
+}
+
 % Narrow text column (kaobook reserves a wide margin) means long monospace
 % command names and compound terms occasionally overrun. emergencystretch lets
 % TeX relax spacing as a last resort instead of producing overfull lines.
