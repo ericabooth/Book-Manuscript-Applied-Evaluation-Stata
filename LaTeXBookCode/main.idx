@@ -75,16 +75,16 @@
 \indexentry{likertscale@\texttt{likertscale}|hyperpage}{72}
 \indexentry{Cronbach's alpha|hyperpage}{72}
 \indexentry{top-two-box|hyperpage}{72}
-\indexentry{nonresponse!unit|hyperpage}{74}
-\indexentry{nonresponse!item|hyperpage}{74}
-\indexentry{nonresponse@\texttt{nonresponse}|hyperpage}{74}
-\indexentry{loebias@\texttt{loebias}|hyperpage}{74}
-\indexentry{level-of-effort|hyperpage}{74}
-\indexentry{paradata|hyperpage}{74}
-\indexentry{cxchangelog@\texttt{cxchangelog}|hyperpage}{74}
+\indexentry{nonresponse!unit|hyperpage}{75}
+\indexentry{nonresponse!item|hyperpage}{75}
+\indexentry{nonresponse@\texttt{nonresponse}|hyperpage}{75}
+\indexentry{loebias@\texttt{loebias}|hyperpage}{75}
+\indexentry{level-of-effort|hyperpage}{75}
+\indexentry{paradata|hyperpage}{75}
 \indexentry{cxchangelog@\texttt{cxchangelog}|hyperpage}{75}
-\indexentry{datadictionary@\texttt{datadictionary}|hyperpage}{75}
-\indexentry{datadictionary@\texttt{datadictionary}|hyperpage}{78}
+\indexentry{cxchangelog@\texttt{cxchangelog}|hyperpage}{76}
+\indexentry{datadictionary@\texttt{datadictionary}|hyperpage}{76}
+\indexentry{datadictionary@\texttt{datadictionary}|hyperpage}{79}
 \indexentry{probabilistic record linkage|hyperpage}{81}
 \indexentry{Jaro-Winkler distance|hyperpage}{81}
 \indexentry{soundex@\texttt{soundex}|hyperpage}{82}
@@ -124,25 +124,25 @@
 \indexentry{conformalpred@\texttt{conformalpred}|hyperpage}{108}
 \indexentry{intraclass correlation|hyperpage}{109}
 \indexentry{hlmr2@\texttt{hlmr2}|hyperpage}{110}
-\indexentry{Blinder-Oaxaca decomposition|hyperpage}{116}
-\indexentry{oaxaca@\texttt{oaxaca}|hyperpage}{116}
-\indexentry{difference-in-differences|hyperpage}{118}
+\indexentry{Blinder-Oaxaca decomposition|hyperpage}{117}
+\indexentry{oaxaca@\texttt{oaxaca}|hyperpage}{117}
+\indexentry{difference-in-differences|hyperpage}{119}
 \indexentry{two-way fixed effects|hyperpage}{119}
 \indexentry{csdid@\texttt{csdid}|hyperpage}{119}
-\indexentry{event study|hyperpage}{121}
-\indexentry{parallel trends|hyperpage}{121}
-\indexentry{regression discontinuity|hyperpage}{122}
-\indexentry{rdrobust@\texttt{rdrobust}|hyperpage}{122}
-\indexentry{synthetic control|hyperpage}{122}
-\indexentry{synth@\texttt{synth}|hyperpage}{122}
-\indexentry{twinmatch@\texttt{twinmatch}|hyperpage}{124}
-\indexentry{Mahalanobis distance|hyperpage}{124}
-\indexentry{honestdid@\texttt{honestdid}|hyperpage}{126}
-\indexentry{kbal@\texttt{kbal}|hyperpage}{126}
-\indexentry{return on investment|hyperpage}{126}
-\indexentry{Monte Carlo simulation|hyperpage}{127}
-\indexentry{roisim@\texttt{roisim}|hyperpage}{129}
-\indexentry{pre-registration|hyperpage}{129}
+\indexentry{event study|hyperpage}{122}
+\indexentry{parallel trends|hyperpage}{122}
+\indexentry{regression discontinuity|hyperpage}{123}
+\indexentry{rdrobust@\texttt{rdrobust}|hyperpage}{123}
+\indexentry{synthetic control|hyperpage}{123}
+\indexentry{synth@\texttt{synth}|hyperpage}{123}
+\indexentry{twinmatch@\texttt{twinmatch}|hyperpage}{125}
+\indexentry{Mahalanobis distance|hyperpage}{125}
+\indexentry{honestdid@\texttt{honestdid}|hyperpage}{127}
+\indexentry{kbal@\texttt{kbal}|hyperpage}{127}
+\indexentry{return on investment|hyperpage}{127}
+\indexentry{Monte Carlo simulation|hyperpage}{128}
+\indexentry{roisim@\texttt{roisim}|hyperpage}{130}
+\indexentry{pre-registration|hyperpage}{130}
 \indexentry{data-ink ratio|hyperpage}{135}
 \indexentry{graphical perception|hyperpage}{138}
 \indexentry{catplot@\texttt{catplot}|hyperpage}{139}

@@ -11,6 +11,26 @@ Before any code runs, write the sentence you hope to hand the decision-maker, bl
 
 One habit runs through every comparison in this book, borrowed openly from Gelman: the sense check. Having estimated something, test it at once against substantive intuition, and say in a sentence why the number is believable or why it is not. If graduates of a training program appear to earn less than the state average, does that square with what you know, and if so why (Appendix~\ref{app:walkthroughs} works exactly this case). An estimate that survives the sense check is one you can stand behind; one that does not is a prompt to find the error before the client does. This is rigor as a reflex, and it costs nothing but attention.\marginnote{Nine times in ten the sense-check failure is mundane: a units mix-up, a merge that dropped half the sample, a sign flipped in a recode. The tenth time it is a real and surprising finding. Chasing the boring nine down first is what earns you the right to be believed on the tenth.}
 
+\subsection{The cut score: analyze the score, report the label}\label{ch08-sc-cutscore}
+Accountability systems hand the evaluator a threshold: proficient or not, benchmark met or missed. The rate built from that label is required reporting, and nothing here argues against reporting it. The trap is quieter. Because the label is what the state publishes, it is tempting to make the label what you analyze, and a label is a score with most of its information squeezed out \parencite{osborne2013cleaning}: two students one point apart on opposite sides of the cut become categorically different, while two students forty points apart on the same side become identical. Every comparison built on the label inherits that arithmetic.
+
+How much the label wobbles is easy to show, because you can build a world where nothing real changes and watch the labels change anyway. Give 5{,}000 simulated students a true ability and two parallel test forms of respectable reliability (0.85), cut both at the 60th percentile, and compare the labels; the two forms are the same student on the same day, so any disagreement is measurement error alone (part (d) of \texttt{ch08\_did.do}):
+\par
+{\footnotesize
+\begin{verbatim}
+gen formA = true + rnormal(0, sqrt(1/.85 - 1))
+gen formB = true + rnormal(0, sqrt(1/.85 - 1))
+_pctile formA, p(60)
+scalar cut = r(r1)
+gen byte profA = formA >= cut
+gen byte profB = formB >= cut
+count if profA != profB       // 876 of 5,000
+\end{verbatim}
+}
+Seventeen and a half percent of students change proficiency status between two administrations with no learning in between. The flips are not spread evenly: within half a standard deviation of the cut, 37~percent of students flip, while beyond one and a half standard deviations almost none do (0.2~percent). Near the cut, the label is substantially a coin toss about measurement error. And this demonstration is the friendly case, a clean instrument and one honest cut; a shorter scale, or a cut moved mid-stream the way the 2016 STAAR year moved it (Section~\ref{sec:ch06-pollutedyear}), fares worse.
+
+The working rule follows: analyze the score, report the label. Estimate the program's effect on the continuous score, where every student's movement counts; convert to the labeled rate at the reporting stage, because the rate is what the accountability audience plans in; and when the two disagree about whether the program worked, trust the score, because the label can only see students who happened to cross one line.\marginnote{We first ran this demonstration as a median split of raw hourly wages on \texttt{nlsw88}, and the split \emph{looked better}: variance explained by schooling rose from 0.106 to 0.158, because dollar wages are heavily skewed and the split quietly tamed the long tail while changing the question. On log wages, the split costs 8.7~percent of the variance explained. A sense check that surprises you is a sense check that is working.}
+
 \section{Decomposing a gap: composition versus structure}\label{sec:oaxaca}
 Not every question an evaluator gets is about a program. Often the question is a \emph{gap}: two groups, served by the same system, end up in different places, and a board wants to know why. Men earn more than women in the agency's grantee firms; suburban students outscore rural ones; white workers out-earn Black workers in the county's training pipeline. Before anyone can act, they need to know how much of the gap is \emph{composition} (the groups differ in measured characteristics like schooling or experience) and how much is \emph{structure} (the same characteristics earn different returns for the two groups). Those two readings point at different responses, so keeping them apart is the whole job.\marginnote{This is a descriptive decomposition, not a causal estimate. It says how a gap \emph{accounts out} against the characteristics you measured; it does not say what would happen if you changed one. Keep it on the comparisons-first side of the line, before the causal designs below.}
 

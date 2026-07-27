@@ -4444,6 +4444,39 @@
       \verb https://jfly.uni-koeln.de/color/
       \endverb
     \endentry
+    \entry{osborne2013cleaning}{book}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=e67969dbc7538543a2bb7d086a6266d5}{%
+           family={Osborne},
+           familyi={O\bibinitperiod},
+           given={Jason\bibnamedelima W.},
+           giveni={J\bibinitperiod\bibinitdelim W\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Thousand Oaks, CA}%
+      }
+      \list{publisher}{1}{%
+        {SAGE Publications}%
+      }
+      \strng{namehash}{e67969dbc7538543a2bb7d086a6266d5}
+      \strng{fullhash}{e67969dbc7538543a2bb7d086a6266d5}
+      \strng{bibnamehash}{e67969dbc7538543a2bb7d086a6266d5}
+      \strng{authorbibnamehash}{e67969dbc7538543a2bb7d086a6266d5}
+      \strng{authornamehash}{e67969dbc7538543a2bb7d086a6266d5}
+      \strng{authorfullhash}{e67969dbc7538543a2bb7d086a6266d5}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Best Practices in Data Cleaning: A Complete Guide to Everything You Need to Do Before and After Collecting Your Data}
+      \field{year}{2013}
+      \verb{doi}
+      \verb 10.4135/9781452269948
+      \endverb
+    \endentry
     \entry{ouyang2025nondeterminism}{article}{}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=bfe946a4c5a8c511bd785ca047f6d7bf}{%

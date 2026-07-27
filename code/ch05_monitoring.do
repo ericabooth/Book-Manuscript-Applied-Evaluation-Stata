@@ -109,4 +109,39 @@ tabstat scalemean, by(site) statistics(mean) format(%4.2f)
 di as txt _n "==== POOLED (all sites) ===="
 summarize agree1 agree2 agree3 agree4 agree5 scalemean
 
+*==============================================================================*
+* (z) Careless-responding screen: straight-liners and speeders
+*     Printed in ch05 "The respondent who was not really there".
+*     400 simulated responses, q5 reverse-worded, 12 planted straight-liners.
+*==============================================================================*
+clear
+set seed 20260704
+set obs 400
+gen latent = rnormal(0,1)
+forvalues i = 1/4 {
+    gen q`i' = max(1, min(5, round(3.4 + .9*latent + rnormal(0,.7))))
+}
+* q5 is reverse-worded on the form
+gen q5 = max(1, min(5, round(3.6 - .9*latent + rnormal(0,.7))))
+gen duration_sec = round(rgamma(9, 34))
+* plant 12 straight-liners: all 4s on the raw form, fast finishes
+replace q1=4 if _n<=12
+replace q2=4 if _n<=12
+replace q3=4 if _n<=12
+replace q4=4 if _n<=12
+replace q5=4 if _n<=12
+replace duration_sec = round(rgamma(3, 16)) if _n<=12
+egen rowsd_raw = rowsd(q1 q2 q3 q4 q5)
+gen q5r = 6 - q5
+egen scale = rowmean(q1 q2 q3 q4 q5r)
+count if rowsd_raw==0
+assert r(N)==14
+gen byte flag = rowsd_raw==0 | duration_sec < 90
+count if flag
+assert r(N)==16
+summarize scale
+summarize scale if !flag
+di "CARELESS_SCREEN_OK"
+
+
 di "DONE"

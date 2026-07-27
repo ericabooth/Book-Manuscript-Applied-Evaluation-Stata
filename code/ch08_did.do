@@ -176,4 +176,28 @@ graph hbar (asis) swing, over(input, sort(1)                          ///
 graph export "$figures/ch08_tornado.png", replace width(2400)
 di "FIGURE_TORNADO_SAVED"
 
+
+*==============================================================================*
+* (d) Cut-score flip demo: two parallel forms, reliability .85, cut at p60.
+*     Printed in ch08 "The cut score: analyze the score, report the label".
+*==============================================================================*
+clear
+set seed 20260704
+set obs 5000
+gen true  = rnormal(0,1)
+gen formA = true + rnormal(0, sqrt(1/.85 - 1))
+gen formB = true + rnormal(0, sqrt(1/.85 - 1))
+corr formA formB
+_pctile formA, p(60)
+scalar cut = r(r1)
+gen byte profA = formA >= cut
+gen byte profB = formB >= cut
+count if profA != profB
+assert r(N)==876
+gen dist = abs(formA - cut)
+gen byte flip = profA != profB
+summarize flip if dist < .5
+summarize flip if dist >= 1.5
+di "CUTSCORE_FLIP_OK"
+
 di "DONE"

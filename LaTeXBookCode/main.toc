@@ -138,16 +138,18 @@
 \contentsline {mtocsection}{\numberline {5.3}From platform metadata to labeled variables}{71}{section.5.3}%
 \contentsline {section}{\numberline {5.4}Scales without tears}{72}{section.5.4}%
 \contentsline {mtocsection}{\numberline {5.4}Scales without tears}{72}{section.5.4}%
-\contentsline {section}{\numberline {5.5}Who did not answer, and does it matter}{74}{section.5.5}%
-\contentsline {mtocsection}{\numberline {5.5}Who did not answer, and does it matter}{74}{section.5.5}%
-\contentsline {section}{\numberline {5.6}The cross-wave codebook}{74}{section.5.6}%
-\contentsline {mtocsection}{\numberline {5.6}The cross-wave codebook}{74}{section.5.6}%
-\contentsline {subsection}{\numberline {5.6.1}A codebook you can read at a glance: \texttt {datadictionary}}{75}{subsection.5.6.1}%
-\contentsline {mtocsubsection}{\numberline {5.6.1}A codebook you can read at a glance: \texttt {datadictionary}}{75}{subsection.5.6.1}%
-\contentsline {subsection}{\numberline {5.6.2}Sending data out and getting it back labeled}{77}{subsection.5.6.2}%
-\contentsline {mtocsubsection}{\numberline {5.6.2}Sending data out and getting it back labeled}{77}{subsection.5.6.2}%
-\contentsline {paragraph}{\nonumberline Where this leaves you.}{79}{paragraph*.60}%
-\contentsline {section}{Exercises}{79}{section*.61}%
+\contentsline {subsection}{\numberline {5.4.1}The respondent who was not really there}{74}{subsection.5.4.1}%
+\contentsline {mtocsubsection}{\numberline {5.4.1}The respondent who was not really there}{74}{subsection.5.4.1}%
+\contentsline {section}{\numberline {5.5}Who did not answer, and does it matter}{75}{section.5.5}%
+\contentsline {mtocsection}{\numberline {5.5}Who did not answer, and does it matter}{75}{section.5.5}%
+\contentsline {section}{\numberline {5.6}The cross-wave codebook}{75}{section.5.6}%
+\contentsline {mtocsection}{\numberline {5.6}The cross-wave codebook}{75}{section.5.6}%
+\contentsline {subsection}{\numberline {5.6.1}A codebook you can read at a glance: \texttt {datadictionary}}{76}{subsection.5.6.1}%
+\contentsline {mtocsubsection}{\numberline {5.6.1}A codebook you can read at a glance: \texttt {datadictionary}}{76}{subsection.5.6.1}%
+\contentsline {subsection}{\numberline {5.6.2}Sending data out and getting it back labeled}{78}{subsection.5.6.2}%
+\contentsline {mtocsubsection}{\numberline {5.6.2}Sending data out and getting it back labeled}{78}{subsection.5.6.2}%
+\contentsline {paragraph}{\nonumberline Where this leaves you.}{80}{paragraph*.60}%
+\contentsline {section}{Exercises}{80}{section*.61}%
 \contentsline {chapter}{\numberline {6}Building longitudinal data you can trust}{81}{chapter.6}%
 \contentsline {section}{\numberline {6.1}Merging the unmergeable}{81}{section.6.1}%
 \contentsline {mtocsection}{\numberline {6.1}Merging the unmergeable}{81}{section.6.1}%
@@ -204,36 +206,38 @@
 \contentsline {chapter}{\numberline {8}From differences to defensible claims}{115}{chapter.8}%
 \contentsline {section}{\numberline {8.1}Comparisons first}{115}{section.8.1}%
 \contentsline {mtocsection}{\numberline {8.1}Comparisons first}{115}{section.8.1}%
+\contentsline {subsection}{\numberline {8.1.1}The cut score: analyze the score, report the label}{116}{subsection.8.1.1}%
+\contentsline {mtocsubsection}{\numberline {8.1.1}The cut score: analyze the score, report the label}{116}{subsection.8.1.1}%
 \contentsline {section}{\numberline {8.2}Decomposing a gap: composition versus structure}{116}{section.8.2}%
 \contentsline {mtocsection}{\numberline {8.2}Decomposing a gap: composition versus structure}{116}{section.8.2}%
-\contentsline {subsection}{\numberline {8.2.1}Running the decomposition on real wages}{116}{subsection.8.2.1}%
-\contentsline {mtocsubsection}{\numberline {8.2.1}Running the decomposition on real wages}{116}{subsection.8.2.1}%
-\contentsline {section}{\numberline {8.3}When only a causal claim will do: a working DiD kit}{118}{section.8.3}%
-\contentsline {mtocsection}{\numberline {8.3}When only a causal claim will do: a working DiD kit}{118}{section.8.3}%
-\contentsline {subsection}{\numberline {8.3.1}A staggered rollout you can check against the truth}{119}{subsection.8.3.1}%
-\contentsline {mtocsubsection}{\numberline {8.3.1}A staggered rollout you can check against the truth}{119}{subsection.8.3.1}%
+\contentsline {subsection}{\numberline {8.2.1}Running the decomposition on real wages}{117}{subsection.8.2.1}%
+\contentsline {mtocsubsection}{\numberline {8.2.1}Running the decomposition on real wages}{117}{subsection.8.2.1}%
+\contentsline {section}{\numberline {8.3}When only a causal claim will do: a working DiD kit}{119}{section.8.3}%
+\contentsline {mtocsection}{\numberline {8.3}When only a causal claim will do: a working DiD kit}{119}{section.8.3}%
+\contentsline {subsection}{\numberline {8.3.1}A staggered rollout you can check against the truth}{120}{subsection.8.3.1}%
+\contentsline {mtocsubsection}{\numberline {8.3.1}A staggered rollout you can check against the truth}{120}{subsection.8.3.1}%
 \contentsline {subsection}{\numberline {8.3.2}The naive regression, and why it misleads}{120}{subsection.8.3.2}%
 \contentsline {mtocsubsection}{\numberline {8.3.2}The naive regression, and why it misleads}{120}{subsection.8.3.2}%
-\contentsline {subsection}{\numberline {8.3.3}The Callaway--Sant'Anna estimator, and the truth recovered}{120}{subsection.8.3.3}%
-\contentsline {mtocsubsection}{\numberline {8.3.3}The Callaway--Sant'Anna estimator, and the truth recovered}{120}{subsection.8.3.3}%
-\contentsline {subsection}{\numberline {8.3.4}The event study: read the pre-trend before the headline}{121}{subsection.8.3.4}%
-\contentsline {mtocsubsection}{\numberline {8.3.4}The event study: read the pre-trend before the headline}{121}{subsection.8.3.4}%
+\contentsline {subsection}{\numberline {8.3.3}The Callaway--Sant'Anna estimator, and the truth recovered}{121}{subsection.8.3.3}%
+\contentsline {mtocsubsection}{\numberline {8.3.3}The Callaway--Sant'Anna estimator, and the truth recovered}{121}{subsection.8.3.3}%
+\contentsline {subsection}{\numberline {8.3.4}The event study: read the pre-trend before the headline}{122}{subsection.8.3.4}%
+\contentsline {mtocsubsection}{\numberline {8.3.4}The event study: read the pre-trend before the headline}{122}{subsection.8.3.4}%
 \contentsline {subsection}{\numberline {8.3.5}The robustness ledger: every path on the record}{123}{subsection.8.3.5}%
 \contentsline {mtocsubsection}{\numberline {8.3.5}The robustness ledger: every path on the record}{123}{subsection.8.3.5}%
-\contentsline {subsection}{\numberline {8.3.6}Choosing comparison units transparently when N is small}{124}{subsection.8.3.6}%
-\contentsline {mtocsubsection}{\numberline {8.3.6}Choosing comparison units transparently when N is small}{124}{subsection.8.3.6}%
-\contentsline {subsection}{\numberline {8.3.7}The frontier: from ``did it work'' to ``for whom, and how sure''}{125}{subsection.8.3.7}%
-\contentsline {mtocsubsection}{\numberline {8.3.7}The frontier: from ``did it work'' to ``for whom, and how sure''}{125}{subsection.8.3.7}%
-\contentsline {section}{\numberline {8.4}What did it cost, what did it return}{126}{section.8.4}%
-\contentsline {mtocsection}{\numberline {8.4}What did it cost, what did it return}{126}{section.8.4}%
-\contentsline {subsection}{\numberline {8.4.1}A worked ROI: from point estimate to a distribution}{127}{subsection.8.4.1}%
-\contentsline {mtocsubsection}{\numberline {8.4.1}A worked ROI: from point estimate to a distribution}{127}{subsection.8.4.1}%
-\contentsline {subsection}{\numberline {8.4.2}The tornado: which assumption is driving the answer}{128}{subsection.8.4.2}%
-\contentsline {mtocsubsection}{\numberline {8.4.2}The tornado: which assumption is driving the answer}{128}{subsection.8.4.2}%
-\contentsline {section}{\numberline {8.5}Subgroups without fishing}{129}{section.8.5}%
-\contentsline {mtocsection}{\numberline {8.5}Subgroups without fishing}{129}{section.8.5}%
-\contentsline {paragraph}{\nonumberline Where this leaves you.}{130}{paragraph*.85}%
-\contentsline {section}{Exercises}{130}{section*.86}%
+\contentsline {subsection}{\numberline {8.3.6}Choosing comparison units transparently when N is small}{125}{subsection.8.3.6}%
+\contentsline {mtocsubsection}{\numberline {8.3.6}Choosing comparison units transparently when N is small}{125}{subsection.8.3.6}%
+\contentsline {subsection}{\numberline {8.3.7}The frontier: from ``did it work'' to ``for whom, and how sure''}{126}{subsection.8.3.7}%
+\contentsline {mtocsubsection}{\numberline {8.3.7}The frontier: from ``did it work'' to ``for whom, and how sure''}{126}{subsection.8.3.7}%
+\contentsline {section}{\numberline {8.4}What did it cost, what did it return}{127}{section.8.4}%
+\contentsline {mtocsection}{\numberline {8.4}What did it cost, what did it return}{127}{section.8.4}%
+\contentsline {subsection}{\numberline {8.4.1}A worked ROI: from point estimate to a distribution}{128}{subsection.8.4.1}%
+\contentsline {mtocsubsection}{\numberline {8.4.1}A worked ROI: from point estimate to a distribution}{128}{subsection.8.4.1}%
+\contentsline {subsection}{\numberline {8.4.2}The tornado: which assumption is driving the answer}{129}{subsection.8.4.2}%
+\contentsline {mtocsubsection}{\numberline {8.4.2}The tornado: which assumption is driving the answer}{129}{subsection.8.4.2}%
+\contentsline {section}{\numberline {8.5}Subgroups without fishing}{130}{section.8.5}%
+\contentsline {mtocsection}{\numberline {8.5}Subgroups without fishing}{130}{section.8.5}%
+\contentsline {paragraph}{\nonumberline Where this leaves you.}{131}{paragraph*.85}%
+\contentsline {section}{Exercises}{131}{section*.86}%
 \contentsline {part}{\nonumberline Part IV: Communicating Results \newline Graphics, Infographics, Spreadsheets, and Portals}{133}{part*.88}%
 \contentsline {chapter}{\numberline {9}Graphing for busy readers}{135}{chapter.9}%
 \contentsline {section}{\numberline {9.1}Spend ink on the data}{135}{section.9.1}%

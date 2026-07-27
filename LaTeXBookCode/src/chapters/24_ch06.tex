@@ -338,7 +338,7 @@ A Sankey diagram of participant movement through program phases (Intake $\righta
 \end{kaobox}
 
 \section{Missing data honestly}
-Dropping a row is an analytic decision made in silence, so make the decision visible. Missing values are rarely missing at random, so casewise deletion can quietly bias an estimate; we first diagnose the pattern with \texttt{misstable patterns}\index{misstable@\texttt{misstable}}, then decide. That command tabulates which combinations of variables go missing together, and on a 200-row sample of the panel it prints a compact map of the structure:
+Dropping a row is an analytic decision made in silence, so make the decision visible. Missing values are rarely missing at random, so casewise deletion can quietly bias an estimate; we first diagnose the pattern with \texttt{misstable patterns}\index{misstable@\texttt{misstable}}, then decide.\marginnote{The methods literature names three regimes \parencite{rubin1987imputation}: missing completely at random (the gap is unrelated to anything), missing at random (explained by things you observe, a site, a wave, a survey mode), and missing not at random (driven by the unseen value itself, the client doing worst being the one who stopped answering). The table shows the shape; only reasoning about the mechanism says which regime you are in, and no command can rescue the third. The gap itself is also data: a missingness indicator that predicts the outcome is a finding about the program, not just a hole to fill.} That command tabulates which combinations of variables go missing together, and on a 200-row sample of the panel it prints a compact map of the structure:
 \par
 {\footnotesize
 \begin{verbatim}
