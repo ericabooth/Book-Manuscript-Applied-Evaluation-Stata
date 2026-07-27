@@ -9,7 +9,7 @@
 <img width="508" height="754" alt="Screenshot 2026-07-26 at 7 03 25 PM" src="https://github.com/user-attachments/assets/1674bad6-e203-4646-8747-0e5a7eb436e9" />
 
 ## Overview
-*Beyond Analysis* is a practical guide designed to equip professionals in implementation science, applied research, and evaluation with the skills to harness **Stata’s** power for real-world challenges. This book bridges the gap between advanced statistical programming and actionable insights tailored to foundations, nonprofits, and implementation programs.
+*Applied Program Evaluation Using Stata* is a practical guide designed to equip professionals in implementation science, applied research, and evaluation with the skills to harness **Stata’s** power for real-world challenges. This book bridges the gap between advanced statistical programming and actionable insights tailored to foundations, nonprofits, and implementation programs.
 
 The focus is on moving beyond "parachute research" toward **embedded evaluation**—building sustained, strategic relationships between researchers and practitioners.
 
