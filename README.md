@@ -1,10 +1,12 @@
-# Beyond Analysis: Strategic Evaluation with Stata
-### Data Modernization, Modern Causal Inference, and AI-Integrated Workflows
+# Applied Program Evaluation Using Stata: 
+## A Practical Workflow from Data to Deliverables
+###** Data Modernization, Modern Causal Inference, and AI-Integrated Workflows**
 
-**Authors:** Eric A. Booth (Sr Researcher, Texas 2036) & Elizabeth Teas (Far Harbor, LLC)  
+**Authors:** Eric A. Booth (Sr Researcher, Texas 2036) & Elizabeth Teas (Sr Research Scientist, Far Harbor, LLC)  
 **Status:** 🚧 *Preprint Draft in Progress* 🚧
 
 ---
+<img width="508" height="754" alt="Screenshot 2026-07-26 at 7 03 25 PM" src="https://github.com/user-attachments/assets/1674bad6-e203-4646-8747-0e5a7eb436e9" />
 
 ## Overview
 *Beyond Analysis* is a practical guide designed to equip professionals in implementation science, applied research, and evaluation with the skills to harness **Stata’s** power for real-world challenges. This book bridges the gap between advanced statistical programming and actionable insights tailored to foundations, nonprofits, and implementation programs.
