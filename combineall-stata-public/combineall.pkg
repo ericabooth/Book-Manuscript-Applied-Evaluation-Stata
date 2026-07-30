@@ -29,9 +29,10 @@ d KW: harmonize
 d KW: rename
 d KW: vintage
 d
-d Author: Eric A. Booth, Sr Researcher, Texas 2036
+d Authors: Eric A. Booth, Sr Researcher, Texas 2036
+d          Elizabeth Teas, Sr Research Scientist, Far Harbor, LLC
 d Support: eric.a.booth@gmail.com
-d Distribution-Date: 20260706
+d Distribution-Date: 20260730
 d
 f combineall.ado
 f combineall.sthlp

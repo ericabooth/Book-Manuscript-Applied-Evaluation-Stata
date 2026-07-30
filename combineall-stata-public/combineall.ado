@@ -1,5 +1,6 @@
 *! combineall - Stata module to combine (append, merge, or joinby) or convert all files (.dta, ASCII, or Excel) in a directory
 *! v2.0.0 06jul2026 Eric A. Booth, Sr Researcher, Texas 2036 <eric.a.booth@gmail.com>
+*!                  Elizabeth Teas, Sr Research Scientist, Far Harbor, LLC <elizabeth@farharbor.com>
 *! first released 2011 (v1.0.0, April 2011, Eric A. Booth)
 *! v2.0.0 modernizes the 2011 engine (version 16 floor; import delimited and
 *! import excel replace insheet) and grafts a harmonization layer, active

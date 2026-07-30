@@ -110,6 +110,6 @@ Blank `firstyear` or `lastyear` leaves that end of the window open. A row whose 
 
 ## Lineage and license
 
-combineall v1.0.0: April 2011, Eric A. Booth. v2.0.0: 2026, Eric A. Booth, Sr Researcher, Texas 2036 (eric.a.booth@gmail.com). v2.0.0 replaces the short-lived `panelstack` package; its `map()`/`year()`/`strict` layer now lives here.
+combineall v1.0.0: April 2011, Eric A. Booth. v2.0.0: 2026, Eric A. Booth, Sr Researcher, Texas 2036 (eric.a.booth@gmail.com) and Elizabeth Teas, Sr Research Scientist, Far Harbor, LLC (elizabeth@farharbor.com). v2.0.0 replaces the short-lived `panelstack` package; its `map()`/`year()`/`strict` layer now lives here.
 
 MIT. Copyright (c) 2026 Eric A. Booth. See [LICENSE](LICENSE).

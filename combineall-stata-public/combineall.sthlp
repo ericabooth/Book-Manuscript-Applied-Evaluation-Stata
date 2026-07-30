@@ -353,13 +353,19 @@ the problem.
 stems are not valid tokens for the {cmd:_merge} variable names.
 
 
-{title:Author}
+{title:Authors}
 
 {pstd}
 Eric A. Booth, Sr Researcher, Texas 2036 {break}
 eric.a.booth@gmail.com {break}
+
+{pstd}
+Elizabeth Teas, Sr Research Scientist, Far Harbor, LLC {break}
+elizabeth@farharbor.com {break}
+
+{pstd}
 combineall v1.0.0 was first released in April 2011; v2.0.0 (2026) folds in
-the vintage-harmonization layer developed for the author's
+the vintage-harmonization layer developed for the authors'
 applied-evaluation book.  MIT-licensed.
 
 {title:Also see}
