@@ -151,3 +151,35 @@ assert (`p_corr'-1.96*`se_corr') < 0.30 & 0.30 < (`p_corr'+1.96*`se_corr')
 assert abs(`p_corr' - 0.30) < 0.06
 
 di "DONE"
+
+*==============================================================================*
+* (f) ai_privacy_gate demo: 12 simulated case notes, 3+ seeded with PII
+*     Printed in ch13 "A gate the pipeline cannot skip".
+*==============================================================================*
+adopath ++ "`c(pwd)'/ai_privacy_gate"
+clear
+input str244 notes
+"Client reports progress on transportation barrier this week."
+"Follow up scheduled; SSN 123-45-6789 recorded at intake."
+"Call back at (512) 555-1234 after Tuesday."
+"Emailed jane.doe@example.org the schedule."
+"DOB 03/14/1987 confirmed against roster."
+"Lives at 4412 Maple Street since March."
+"MRN: 88471 transferred from the clinic."
+"No barriers reported; attended all sessions."
+"Second contact 512-555-9876 belongs to the sister."
+"Prefers morning appointments; no changes."
+"Case# 100234 flagged for review by supervisor."
+"Discussed goals; nothing identifying shared."
+end
+gen str60 comments = "clean text here"
+replace comments = "reach me at bob@test.io" in 10
+ai_privacy_gate notes comments, genflag(pii)
+assert r(rows) == 9
+preserve
+ai_privacy_gate notes comments, action(mask) noreport
+capture noisily ai_privacy_gate notes comments, action(stop) noreport
+assert _rc == 0
+restore
+di "AIGATE_DEMO_OK"
+

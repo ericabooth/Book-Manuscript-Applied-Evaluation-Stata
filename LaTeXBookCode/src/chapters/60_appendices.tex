@@ -70,7 +70,7 @@ The one exception is \texttt{sparkta2}, whose source is not yet released. The co
 \paragraph{Published packages showcased.}
 \begin{itemize}
     \item \texttt{webapi} -- fetch an authenticated JSON web API into Stata as a dataset, standard-library Python only (Chapter~\ref{ch:apis}).
-    \item \textbf{The thirteen packages built for this book}, each in its own \texttt{-stata-public} repository with tests and help: \texttt{projectbuilder} (scaffold the Chapter~\ref{ch:workshop} project layout), \texttt{combineall} (append, merge, or convert a whole folder, with vintage-aware harmonization; Chapters~\ref{ch:apis} and~\ref{ch:noapi}), \texttt{cxchangelog} (cross-wave survey codebooks), \texttt{datadictionary} (the over-time data codebook: per-wave stats, missingness, value-label diffs, Excel export), and \texttt{undummy} (recombine one-hot columns into one categorical), all Chapter~\ref{ch:surveys}; \texttt{reshapehelper} (diagnose the data and suggest the likely \texttt{reshape} command, Chapter~\ref{ch:panels}); \texttt{rateshrink} (empirical-Bayes rate stabilization), \texttt{conformalpred} (distribution-free prediction intervals), and \texttt{hlmr2} (Nakagawa multilevel $R^2$), all Chapter~\ref{ch:trust}; \texttt{twinmatch} (Mahalanobis policy twins) and \texttt{roisim} (Monte Carlo ROI), both Chapter~\ref{ch:claims}; and \texttt{suppress} (small-cell and complementary suppression) and \texttt{riskscan} ($k$-anonymity scan), both Chapter~\ref{ch:sharing}.
+    \item \textbf{The fifteen packages built for this book}, each in its own \texttt{-stata-public} repository with tests and help: \texttt{projectbuilder} (scaffold the Chapter~\ref{ch:workshop} project layout), \texttt{combineall} (append, merge, or convert a whole folder, with vintage-aware harmonization; Chapters~\ref{ch:apis} and~\ref{ch:noapi}), \texttt{cxchangelog} (cross-wave survey codebooks), \texttt{datadictionary} (the over-time data codebook: per-wave stats, missingness, value-label diffs, Excel export), and \texttt{undummy} (recombine one-hot columns into one categorical), all Chapter~\ref{ch:surveys}; \texttt{reshapehelper} (diagnose the data and suggest the likely \texttt{reshape} command, Chapter~\ref{ch:panels}); \texttt{rateshrink} (empirical-Bayes rate stabilization), \texttt{conformalpred} (distribution-free prediction intervals), and \texttt{hlmr2} (Nakagawa multilevel $R^2$), all Chapter~\ref{ch:trust}; \texttt{twinmatch} (Mahalanobis policy twins) and \texttt{roisim} (Monte Carlo ROI), both Chapter~\ref{ch:claims}; and \texttt{suppress} (small-cell and complementary suppression) and \texttt{riskscan} ($k$-anonymity scan), both Chapter~\ref{ch:sharing}; plus \texttt{reachcheck} (respondents against target margins, Chapter~\ref{ch:surveys}) and \texttt{ai\_privacy\_gate} (the pre-flight PII gate, Chapter~\ref{ch:ai}), which ship in the companion repository's \texttt{code/} folder.
     \item \texttt{googlechart} -- 14 interactive chart types from one command (Chapter~\ref{ch:interactive}).
     \item \texttt{googlesheets} -- read, write, format, and chart Google Sheets from Stata (Chapters~\ref{ch:sheets}, \ref{ch:surveys}, \ref{ch:apis}).
     \item \texttt{statashiny} -- serverless interactive HTML dashboards (Chapter~\ref{ch:portals}).
@@ -86,14 +86,14 @@ The one exception is \texttt{sparkta2}, whose source is not yet released. The co
     \item \texttt{writeinput}, \texttt{editanything}, \texttt{usepackage}, \texttt{ScrapeSSC}, \texttt{driveuse}, \texttt{importR}, \texttt{lstrfun} -- reproducibility, packaging, and interop utilities (Chapters~\ref{ch:workshop}, \ref{ch:tools}).
 \end{itemize}
 
-\paragraph{Proposed tools (plans in this edition).}
+\paragraph{Proposed tools (roadmap, not yet code).}
 \begin{itemize}
     \item \texttt{evalaudit} -- a project-startup checklist auditing data-sharing agreements and funder mandates (Chapter~\ref{ch:embedded}).
     \item \texttt{gtools\_audit} -- a speed audit of a project's heaviest data steps (Chapter~\ref{ch:workshop}).
-    \item \texttt{surveypull}, \texttt{reachcheck} -- scheduled survey download/monitor and a reach check (Chapter~\ref{ch:surveys}).
+    \item \texttt{surveypull} -- scheduled survey download and monitoring (Chapter~\ref{ch:surveys}).
     \item \texttt{fastmatch}, \texttt{trackflow} -- EM-based probabilistic record linkage and flow shaping (Chapter~\ref{ch:panels}).
     \item \texttt{fundertable} -- pre-formatted funder tables (Chapter~\ref{ch:sheets}).
-    \item \texttt{ai\_privacy\_gate}, \texttt{text2vars}, \texttt{stata2brief}, \texttt{evalpreflight} -- AI privacy gate and drafting aids (Chapter~\ref{ch:ai}).
+    \item \texttt{text2vars}, \texttt{stata2brief}, \texttt{evalpreflight} -- LLM extraction and drafting aids (Chapter~\ref{ch:ai}).
     \item \texttt{synthgen}, \texttt{rawsweep} -- synthetic-data generation and intake sanitization (Chapter~\ref{ch:sharing}).
 \end{itemize}
 
@@ -132,7 +132,7 @@ This is the counterpoint to \texttt{convertanything} (Chapter~\ref{ch:noapi}): w
 
 \section*{Example D.2: Education Policy, Big Administrative Data and a Careful Counterfactual}
 \begin{kaobox}[frametitle=Get the files: \texttt{edc-3.0-texas/}]
-\textbf{Data:} Texas school performance (STAAR), 2012--2025, school level (TEA via the EDC/Zelma export; large public CSVs, $\approx$400\,MB per year).
+\textbf{Data:} Texas school performance (STAAR), 2012--2025, school level (Texas Education Agency STAAR results via Zelma, a public research export that republishes the agency's files as analysis-ready CSVs; $\approx$400\,MB per year).
 \textbf{Run:} \texttt{analyze\_performance.do}. \textbf{Outputs:} \texttt{analytic\_performance.dta}, four trend figures, a log.
 \textbf{Unit:} school-grade-subject-year panel ($\approx$289K observations). \emph{Ship note:} distribute the 15.6\,MB \texttt{analytic\_performance.dta} checkpoint rather than the $\approx$5\,GB of raw CSVs, with download instructions for the raw layer.
 \end{kaobox}
@@ -195,7 +195,7 @@ assert ypll > 0 & ypll < 50000
 assert childpov >= 0 & childpov <= 100
 \end{verbatim}
 }
-This is the predict-then-check discipline in one block. Writing the capstone, the first draft bounded YPLL below 40,000 and the \texttt{assert} stopped the run: one county (a small reservation county) genuinely records about 41,000 YPLL.\marginnote{A tripwire that fires is doing its job, but only you can say whether it caught an error or a real outlier. Here it was real, so the bound moved to 50,000. Had the count come back at 300 instead of 3,088, the same \texttt{assert} would have caught a botched \texttt{keep} filter before it reached the regression.} The guard did exactly what Chapter~\ref{ch:trust} asks: it turned a silent assumption into a line that has to pass.
+This is the predict-then-check discipline in one block. In an early run, the do-file bounded YPLL below 40,000 and the \texttt{assert} stopped the run: one county (a small reservation county) genuinely records about 41,000 YPLL.\marginnote{A tripwire that fires is doing its job, but only you can say whether it caught an error or a real outlier. Here it was real, so the bound moved to 50,000. Had the count come back at 300 instead of 3,088, the same \texttt{assert} would have caught a botched \texttt{keep} filter before it reached the regression.} The guard did exactly what Chapter~\ref{ch:trust} asks: it turned a silent assumption into a line that has to pass.
 
 \paragraph{Stage 4, analyze (Chapter~\ref{ch:claims}).} With 3,088 counties in hand, a plain regression of premature death on child poverty and the uninsured rate says that each 10-percentage-point rise in child poverty goes with about 2,990 more years of life lost per 100,000, and the two rates together account for a little over half the variation across counties ($R^2 = 0.55$). Because a state's Medicaid rules and reporting quirks could drive that association, the do-file re-fits it with state fixed effects, comparing counties only against others in the same state (\texttt{areg \ldots, absorb(state)}). The slope barely moves, to about 2,780 YPLL per 10 points. That stability is the finding: the poverty gradient in premature death is a within-state pattern, not an artifact of which states are poor.
 
@@ -216,9 +216,7 @@ This is the predict-then-check discipline in one block. Writing the capstone, th
 
 \backmatter
 \pagelayout{wide}
-\printbibliography[heading=bibintoc, title=Bibliography]
-
-\section{Data used in this book}\label{app:data}
+\chapter{Data Used in This Book}\label{app:data}
 Every worked example in this book runs on data you can put your hands on, and this registry is the one place they are all named. The two shipped datasets load with a single command and no download; the public files name their source so a fresh copy is one URL away; and every simulated dataset states its seed in the do-file that builds it, so the exact numbers in the text rebuild on your machine.
 
 \begin{table}[htbp]
@@ -231,7 +229,7 @@ Every worked example in this book runs on data you can put your hands on, and th
 Data & Where it comes from & One row per & Chapters \\
 \hline
 \texttt{auto} & Ships with Stata (\texttt{sysuse auto}); 1978 automobile listings & car model & 4, 5, 8, 9, 12 \\
-\texttt{nlsw88} & Ships with Stata (\texttt{sysuse nlsw88}); 1988 NLS extract of working women & woman, age 34--46 & 1, 2, 7, 8, 9, 13, 14 \\
+\texttt{nlsw88} & Ships with Stata (\texttt{sysuse nlsw88}); 1988 NLS extract of working women & woman, age 34--46 & 1, 2, 5, 7, 8, 9, 13, 14 \\
 \texttt{nlswork} & Stata's website (\texttt{webuse nlswork}); NLS young women panel, 1968--1988 & woman-year & 6 \\
 \texttt{nhanes2f} & Stata's website (\texttt{webuse nhanes2f}); NHANES~II with survey design variables & respondent & 7 \\
 County Health Rankings & One national analytic CSV per year from \texttt{countyhealthrankings.org} & county, plus state and national summary rows & 1, 3, 4, 10, 11, 12 \\
@@ -242,6 +240,19 @@ Simulated data & Built in each chapter's do-file, \texttt{set seed 20260704} & v
 \hline
 \end{tabular}
 \end{table}
+
+\pagelayout{margin}
+
+\chapter*{Afterword}
+\addcontentsline{toc}{chapter}{Afterword}
+Return, one more time, to the Thursday-afternoon email that opened Chapter~\ref{ch:embedded}: are we actually reaching the rural students we promised? The analyst who met that question on page one had a spreadsheet and a weekend. You have a pipeline: the number lives behind an endpoint you can pull, inside a project that reruns on any machine, feeding a scale you have tested, a comparison you can defend, and a deliverable the program director will actually open. The four principles you have applied chapter by chapter, replicable, extensible, accessible, actionable, were never really rules about code. They are a way of being trustworthy in a room where decisions get made, and by now they should feel less like a checklist than a reflex.
+
+The tools will change. Packages update, endpoints move, the language models of Chapter~\ref{ch:ai} will be unrecognizable in five years, and some page of this book is already aging as you read it. The posture is what keeps: state what you expect before you compute it, write down what would change your mind, let the pipeline remember so that people are free to think, and never hand a decision-maker a number you cannot trace. Everything in this book reruns from its seeds and its sources, which means everything in it can be checked, broken, and improved, and that is an invitation. Rebuild the capstone on your own state's data. Fork a tool and make it fit your shop. When you find the better way, and someone will, share it the way Chapter~\ref{ch:tools} taught, so the next embedded evaluator inherits your version instead of your workaround.
+
+And keep the last habit of all. Behind every row is a person who answered a survey, enrolled a child, showed up on a Tuesday. The care this book has asked of you, the asserts, the caveats, the crowds of $k$, is finally just respect for those people, expressed in code.
+
+\pagelayout{wide}
+\printbibliography[heading=bibintoc, title=Bibliography]
 
 \printindex
 

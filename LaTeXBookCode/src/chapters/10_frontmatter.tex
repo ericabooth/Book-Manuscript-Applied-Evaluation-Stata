@@ -5,19 +5,14 @@
 %	BOOK INFORMATION
 %----------------------------------------------------------------------------------------
 
-% --- Working title under review. Three candidates (see book_update_plan.md, Sec. 2):
-%   1. Applied Program Evaluation Using Stata: A Practical Workflow from Data to Deliverables
-%   2. Evaluation Workflows Using Stata: A Practical Guide for Embedded Researchers
-%   3. Embedded Evaluation: Stata Tools for Applied Research and Evaluation (current)
-% The Stata Press house grammar is "[task] Using Stata"; candidate 1 is recommended.
 \title[Embedded Evaluation]{Applied Program Evaluation \\ Using Stata}
 \subtitle{A Practical Workflow from Data to Deliverables}
 
 \author{Eric Booth \hspace{0.5in} Elizabeth Teas}
 
-\date{Drafted: July 2026}
+\date{July 2026}
 
-\publishers{Publisher or press info goes here}
+%\publishers{} % set when the press is confirmed
 
 \maketitle
 
@@ -60,11 +55,11 @@ In this book, we explore workflows and tools that confront real world scenarios 
 
 \paragraph{A word on AI.} Large language models appear throughout this book, always in a supporting role. An LLM can draft code, debug error logs, and summarize messy text faster than any team could by hand, and it can just as easily leak confidential data or invent a classification. Nor does its output hold still: most hosted LLMs return different output on the same prompt, and the vendor can change the weights under a fixed name without notice, so a conclusion that leaned on the LLM may not survive tomorrow's rerun. We treat an LLM the way a shop treats a power tool: useful in the right jig, dangerous when waved around freely. Wherever we hand work to an LLM in these pages, we pair it with a verification step, a privacy check, and a logged, reproducible trail, and we keep Stata, not the LLM, holding the results (Chapter~\ref{ch:ai}).
 
-\paragraph{Everything here runs.} This is not a book of pseudocode. Every worked example is a do-file in the companion \texttt{code/} folder, and each one downloads only public data (or Stata inbuilt datasets (via \texttt{sysuse})), most of it with a single \texttt{import delimited} from a URL and no login. The figures in these pages came out of those do-files. You can rerun any of them, change a county or a year, and watch the result change on the page.
+\paragraph{Everything here runs.} This is not a book of pseudocode: every worked example runs, and the handful of boxed tool \emph{proposals} scattered through the chapters are labeled as exactly that. Every worked example is a do-file in the companion \texttt{code/} folder, and each one downloads only public data (or Stata inbuilt datasets (via \texttt{sysuse})), most of it with a single \texttt{import delimited} from a URL and no login. The figures in these pages came out of those do-files. You can rerun any of them, change a county or a year, and watch the result change on the page.
 
 \paragraph{Who this book is for.} This book is written for evaluators, applied researchers, and analysts who already know some Stata and want a practical workflow for embedded, real-world evaluation, especially in the nonprofits, agencies, and foundations where the data are messy, the stakes are real, and the team is small.
 
-\paragraph{The arc of the book.} The chapters follow one project from an empty folder to a delivered portal, grouped into five parts that build on each other. You start by setting up a project that lives beyond a deadline (we often refer to this as extensible code that can continue to be built upon, expanded, or recycled). You get the data, wherever it lives: behind an API, buried in a website with no download button, or arriving as survey waves you have to stitch into a defensible panel. You turn that data into evidence at the honest level of rigor, from a careful descriptive comparison up to a difference-in-differences when the question demands it. You deliver the result in a form the client already opens: a chart, a spreadsheet, or a self-contained web portal. And you sustain the practice, selectively using AI without getting burned, sharing data without identifying anyone, and turning a one-off do-file into a tool the whole team reuses. The arc is the point: each part hands the next one something it can build on.
+\paragraph{The arc of the book.} The chapters follow one project from an empty folder to a delivered portal, grouped into five parts that build on each other. You start by setting up a project that lives beyond a deadline (we often refer to this as extensible code that can continue to be built upon, expanded, or recycled). You get the data, wherever it lives: behind an API, buried in a website with no download button, or arriving as survey waves you have to stitch into a defensible panel. You turn that data into evidence at the honest level of rigor, from a careful descriptive comparison up to a difference-in-differences when the question demands it. You deliver the result in a form the client already opens: a chart, a spreadsheet, or a self-contained web portal. And you sustain the practice, selectively using AI without getting burned, sharing data without identifying anyone, and turning a one-off do-file into a tool the whole team reuses. Each part hands the next one something it can build on.
 
 \bigskip
 {\centering

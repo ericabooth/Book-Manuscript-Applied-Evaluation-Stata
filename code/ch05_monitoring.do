@@ -144,4 +144,16 @@ summarize scale if !flag
 di "CARELESS_SCREEN_OK"
 
 
+*==============================================================================*
+* (y) reachcheck demo: sample composition vs supposed frame margins
+*     Printed in ch05 "The one-line frame comparison".
+*==============================================================================*
+adopath ++ "`c(pwd)'/reachcheck"
+sysuse nlsw88, clear
+reachcheck race, target(70 20 10)
+assert r(N) == 2246
+assert abs(r(chi2) - 218.1) < 0.5
+di "REACHCHECK_DEMO_OK"
+
+
 di "DONE"

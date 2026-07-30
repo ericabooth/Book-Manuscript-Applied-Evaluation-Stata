@@ -9,7 +9,7 @@ Behind everything in this chapter sits one framework, total survey error\index{t
 Two design commitments frame everything that follows. The first is tailored design: \textcite{dillman2014tailored} show that response is built at the instrument, through mode, contact sequence, and question wording, long before any download, so the automation in this chapter is stewardship of an instrument someone designed with care, not a substitute for that care. The second is a shared vocabulary for what a response rate even is. \textcite{aapor2023standard} standardize the case dispositions, the codes for how each contact attempt ended, and the outcome-rate formulas built from them, so one evaluator's ``62 percent'' means the same thing as another's; without them, a funder comparing this wave's rate to last year's is comparing a number that quietly redefined itself along the way.
 
 \section{Pulling responses automatically}
-Make your responses download themselves, so the data that lives behind a vendor's login becomes a file you can rebuild on command. Every major platform exposes an API\index{API!survey platforms}, and the patterns differ mainly in how much ceremony each demands. REDCap\index{REDCap} is the simplest: one POST request, the kind of web call that carries data along with it, here your token plus \texttt{content=record\&format=csv}, and the records come back. Because REDCap usually runs on the institution's own server, the review board that approves human-subjects handling tends to trust it, and the pull is straightforward to script. Qualtrics\index{Qualtrics} uses a three-step export, request the file, poll until it is ready, then download, because large exports are prepared asynchronously.\marginnote{The auth models differ too: REDCap issues one project-scoped API token that both identifies you and names the dataset, while Qualtrics wants an account-wide \texttt{X-API-TOKEN} header plus a separate datacenter ID and survey ID. One REDCap secret, three Qualtrics coordinates.} SurveyMonkey pages through responses in bulk but rate-limits hard and has historically reserved full export for paid tiers, a friction worth checking against your plan before you promise a client a live feed. KoBoToolbox, common in field and humanitarian work, returns responses as JSON from an asset endpoint.
+Make your responses download themselves, so the data that lives behind a vendor's login becomes a file you can rebuild on command. Every major platform exposes an API\index{API!survey platforms}, and the patterns differ mainly in how much ceremony each demands. REDCap\index{REDCap} is the simplest: one POST request, the kind of web call that carries data along with it, here your token plus \texttt{content=record\&format=csv}, and the records come back. Because REDCap usually runs on the institution's own server, the review board that approves human-subjects handling tends to trust it, and the pull is straightforward to script; in the book's own tooling the call has the shape \texttt{webapi post using "https://redcap.youruni.edu/api/", body("token=...\&content=record\&format=csv")}. Qualtrics\index{Qualtrics} uses a three-step export, request the file, poll until it is ready, then download, because large exports are prepared asynchronously.\marginnote{The auth models differ too: REDCap issues one project-scoped API token that both identifies you and names the dataset, while Qualtrics wants an account-wide \texttt{X-API-TOKEN} header plus a separate datacenter ID and survey ID. One REDCap secret, three Qualtrics coordinates.} SurveyMonkey pages through responses in bulk but rate-limits hard and has historically reserved full export for paid tiers, a friction worth checking against your plan before you promise a client a live feed. KoBoToolbox, common in field and humanitarian work, returns responses as JSON from an asset endpoint.
 
 A first pull deserves a small rehearsal. Before scripting the full download, pick two respondents you can identify on the platform's dashboard, pull only their records, and check the export against the screen; multi-selects, timestamps, and anything with an accented character are where the export and the dashboard most often disagree. Ten minutes on two known cases settles the export options while the stakes are still zero.
 
@@ -74,7 +74,7 @@ replace rate = rate - 14 if inlist(site,3,6) & week>=4
 replace rate = min(max(rate,0),100)
 \end{verbatim}
 }
-The two edits after the draw are the interesting part: sites~3 and~6 are pushed fourteen points down from week~4 on, so the simulated data carries two genuine laggards for the chart to catch. Everything else is noise around the target, which is what a healthy site looks like.
+After the draw, two edits push sites~3 and~6 fourteen points down from week~4 on, so the simulated data carries two genuine laggards for the chart to catch. Everything else is noise around the target, which is what a healthy site looks like.
 
 The control limits come from the process itself, not from a textbook constant. We set the centerline at the 70 percent target and the limits at two standard deviations of the observed weekly rates, then flag any site-week that falls below the lower limit:
 \par
@@ -111,7 +111,7 @@ Here $\mu$ is the target response rate (the centerline, \texttt{cl}$=70$), $\sig
     FLAGGED_SITEWEEKS=4   FLAGGED_SITES: 3 6
 \end{verbatim}
 }
-The alarm list matches the seed: it names sites~3 and~6 and no others, exactly where we planted the drop, and it names them from week~4 on, the week the drop began, so a manager watching this feed would have made two calls two weeks before the survey closed rather than reading the shortfall in the final report. Those four rows compress the chapter's argument: the automated pull of the previous section is what puts these two sites on a screen while there is still time to act.
+The alarm list matches the seed: it names sites~3 and~6 and no others, exactly where we planted the drop, and it names them from week~4 on, the week the drop began, so a manager watching this feed would have made two calls two weeks before the survey closed rather than reading the shortfall in the final report. Those four rows are why the automated pull of the previous section matters: it puts these two sites on a screen while there is still time to act.
 
 An alarm names a site; it does not name a cause, and the cause decides the remedy. Three explanations cover most dips. Instrument fatigue shows up as a synchronized sag, every panel drifting down in the same field week, and its remedy is a shorter reminder or a trimmed instrument, not a phone call to one site. Site turnover shows up as one panel falling off a cliff, and a single call to the site liaison, asking whether the coordinator who championed the survey left, usually confirms it. Seasonality shows up when the dip lands on the same calendar week as last wave's, spring break or end-of-quarter, which the prior wave's monitoring output confirms in a minute. The working rule is to spend one day sorting a dip into one of these bins before escalating, because a misdiagnosed alarm spends goodwill the next one will need.
 
@@ -185,8 +185,8 @@ Without the scheduler the promise stays aspirational; with it, the do-file's non
 \label{fig:ch05-viz-cronloop}
 \end{figure*}
 
-\begin{kaobox}[frametitle=Ado-file Idea: \texttt{reachcheck}]
-\textbf{Proposed program:} \texttt{reachcheck}. Compares the responding sample's demographics against a target-population file (Census benchmarks, or the enrollment frame) to compute representativeness ratios and flag under-covered groups while the survey is still open, so reach problems get fixed rather than footnoted.
+\begin{kaobox}[frametitle=Package Integration: \texttt{reachcheck}]
+\textbf{Integrated command:} \texttt{reachcheck}\index{reachcheck@\texttt{reachcheck}}. One line compares the responding sample's composition on any categorical variable against target margins you type in, reporting each gap in percentage points, a goodness-of-fit test, and a plain recommendation. Run it mid-field and under-covered groups get fixed rather than footnoted; Section~\ref{sec:ch05-reach} works the full example. Install from the authors' GitHub.
 \end{kaobox}
 
 \section{From platform metadata to labeled variables}
@@ -208,9 +208,17 @@ To show the output a program board actually receives, we simulate a five-item co
 {\footnotesize
 \begin{verbatim}
 set seed 20260704
-* latent site quality drives 5 correlated items,
-* each collapsed to top-two-box agree (=4 or 5);
-* ch05_monitoring.do builds q1-q5 from that recipe
+* site and siteq come a few lines earlier in
+* ch05_monitoring.do; sites 3 and 6 run low
+gen respq = siteq + rnormal(0,0.7)
+forvalues i = 1/5 {
+    local d = 0
+    if `i'==3 local d =  0.35
+    if `i'==4 local d = -0.35
+    gen double z`i' = respq + `d' + rnormal(0,0.6)
+    gen byte q`i' = 1 + (z`i'>-1.1) + (z`i'>-0.4) ///
+                      + (z`i'>0.3) + (z`i'>1.0)
+}
 alpha q1 q2 q3 q4 q5
 \end{verbatim}
 }
@@ -273,6 +281,53 @@ The reason a rate is not a verdict is that nonresponse rate and nonresponse bias
 
 Sequence the diagnostics the way the questions arrive. Mid-field, Section~\ref{sec:monitor} asks why the line dips; after close, this section asks whether the dip mattered, and the frame comparison comes first because it is cheap and decisive. If respondents match the frame on the characteristics that drive the outcome, a modest rate is survivable; if they do not, the gap names the group the weighting has to recover. The level-of-effort check comes second, as corroboration rather than verdict.
 
+\subsection{The one-line frame comparison}\label{sec:ch05-reach}
+The frame comparison earns its first-in-line position only if it actually gets run, and that is where it historically fails: building the comparison by hand means a crosstab, a transcribed set of frame margins, a subtraction, and a judgment call, rebuilt from scratch at every wave, which under deadline means rebuilt at no wave after the first. It also assumes you hold the frame as a dataset, and often you do not: what you hold is published margins, the census figures for the county, the roster totals the program office circulated, the enrollment counts in last year's report. \texttt{reachcheck} is the check sized to what you actually have and the time you actually spend: type the margins into one option, and the gaps, a fit test, and a recommendation come back before the coffee cools. A check this cheap runs at every wave, and a check that runs is worth more than a better check that does not.
+
+Try it first on the running NLSW extract, treating its 2{,}246 respondents as a survey return and supposing the sampling plan had called for margins of 70/20/10 percent across the three race categories:
+\par
+{\footnotesize
+\begin{verbatim}
+. sysuse nlsw88, clear
+. reachcheck race, target(70 20 10)
+
+Reach check: race (N = 2246 respondents)
+------------------------------------------------------------
+category              sample %  target %   gap pp   ratio
+------------------------------------------------------------
+White                     72.9      70.0      2.9    1.04
+Black                     26.0      20.0      6.0    1.30
+Other                      1.2      10.0     -8.8    0.12
+------------------------------------------------------------
+largest gap: -8.8 pp on Other
+goodness of fit vs target: chi2(2) =  218.1, p = 0.0000
+\end{verbatim}
+}
+Read the ratio column the way a program officer would: the \enquote{Other} group arrived at 12~percent of its intended size, not slightly under-covered but nearly absent, and no amount of averaging over the full sample will speak for the group that is not in the room. On a live survey the same line runs against the enrollment roster's margins, site by site, while the field period is still open and the fix is still a targeted reminder rather than a footnote.
+
+What happens next depends on which branch of Figure~\ref{fig:ch05-reachtree} the result lands in, and the honest branch is sometimes the third one. A gap on traits you observe (site, race, age band) is recoverable: rake the respondents to the target margins (\texttt{ipfraking} from SSC, or the weights \texttt{nonresponse} estimates) and rerun the headline both weighted and unweighted, reporting both. A suspected gap on traits nobody measured, the disengaged families, the households whose phones changed, is the branch no weighting can fix, because you cannot weight on a variable you do not have; there the deliverable is the caveat, stated beside the response rate, and a bounded sense of how far the missing group would have to differ to move the finding. Either way the table itself travels into the report: the gap beside the rate is the honest minimum this chapter keeps returning to.
+
+\begin{figure}[htbp]
+\centering
+\resizebox{0.98\linewidth}{!}{%
+\begin{tikzpicture}[node distance=0.5cm and 1.2cm]
+  \node[stage] (close) {Wave closes,\\or the monitor dips};
+  \node[stage, right=of close] (rc) {\texttt{reachcheck}\\vs frame margins};
+  \node[stage, above right=0.55cm and 1.2cm of rc] (ok) {Gaps within\\tolerance};
+  \node[stage, right=1.6cm of rc] (obs) {Gaps on\\observed traits};
+  \node[stage, below right=0.55cm and 1.2cm of rc] (unobs) {Suspected gaps on\\unmeasured traits};
+  \draw[flow] (close) -- (rc);
+  \draw[flow] (rc) -- (ok);
+  \draw[flow] (rc) -- (obs);
+  \draw[flow] (rc) -- (unobs);
+  \node[substep, right=0.5cm of ok, text width=3.1cm] {Report the table beside the rate; proceed};
+  \node[substep, right=0.5cm of obs, text width=3.1cm] {Rake to the margins; rerun the headline both ways};
+  \node[substep, right=0.5cm of unobs, text width=3.1cm] {No weight fixes it: caveat, plus a bound on how much it could matter};
+\end{tikzpicture}}
+\caption[What to do with a reach check's verdict]{What to do with a reach check's verdict. The first branch is the common one and takes a sentence in the report. The second is mechanical repair, raking to known margins, with the headline shown weighted and unweighted. The third is the branch weighting cannot reach, a gap on something nobody measured, where the honest deliverable is the caveat and a bound rather than a corrected number.}
+\label{fig:ch05-reachtree}
+\end{figure}
+
 This matters because representativeness is the difference between \enquote{our respondents} and \enquote{our participants}, and a funder quotes the second. The diagnostics here hand off directly to the weighting of Chapter~\ref{ch:trust}, where the imbalance they find gets corrected.
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{nonresponse} and \texttt{loebias}]
@@ -308,7 +363,7 @@ cxchangelog using crosswalk_w3.xlsx, wave(wave)  ///
 return list
 \end{verbatim}
 }
-On the demo crosswalk this reports \enquote{concepts: 12\quad waves: 3} and a per-wave line of \enquote{1 added, 1 removed, 1 reworded,} leaving \texttt{r(n\_concepts)=12}, \texttt{r(n\_waves)=3}, and \texttt{r(n\_added)}, \texttt{r(n\_removed)}, and \texttt{r(n\_changes)} each equal to~1. It writes an Excel workbook with items-by-wave and options-by-wave sheets plus a per-wave summary of additions, changes, and removals, and \texttt{compare()} diffs a frozen prior vintage to surface what shifted between releases. Two behaviors to state plainly: a change in response-option text alone is not counted as a rewording (it shows in the options sheet instead), and an item that skips a wave and returns reworded counts as removed then added, not reworded.
+On the demo crosswalk this reports \enquote{concepts: 12\quad waves: 3} and a per-wave line of \enquote{1 added, 1 removed, 1 reworded,} leaving \texttt{r(n\_concepts)=12}, \texttt{r(n\_waves)=3}, and \texttt{r(n\_added)}, \texttt{r(n\_removed)}, and \texttt{r(n\_changes)} each equal to~1. It writes an Excel workbook with items-by-wave and options-by-wave sheets plus a per-wave summary of additions, changes, and removals, and \texttt{compare()} diffs a frozen prior vintage to surface what shifted between releases. Two caveats: a change in response-option text alone is not counted as a rewording (it shows in the options sheet instead), and an item that skips a wave and returns reworded counts as removed then added, not reworded.
 \end{kaobox}
 
 When a new analyst asks \enquote{did we change this question in 2024?}, the codebook answers in seconds, and the answer is the same no matter who runs it; that is extensibility across time and staff turnover. The synthetic multi-wave crosswalk used above, three waves and twelve concepts with one item reworded, one added, and one dropped, is generated by the package's own test battery, so the example ships with \texttt{cxchangelog} and reproduces from a clean install.
@@ -343,7 +398,7 @@ Figure~\ref{fig:datadictionaryxlsx} is the workbook you get back, and you read t
 \label{fig:datadictionaryxlsx}
 \end{figure*}
 
-The \texttt{changed} column works only over the wave files, not a stitched panel, and the reason is a fact about Stata worth stating plainly. When you append the three waves into one file, one value-label set survives per variable, so the appended file no longer records that \texttt{q2} meant something different in 2019. Run the codebook \emph{before} the stitch, then combine the waves (Chapter~\ref{ch:panels}). If you only have the stitched panel, \texttt{datadictionary, wave(wave)} still writes a per-wave row for every variable with real per-wave statistics and missingness, and a variable absent from a wave reads as 100\,percent missing that wave; it just leaves \texttt{changed} blank, because a stitched file cannot show what the labels used to say. This is exactly the division of labor with \texttt{cxchangelog} from earlier in this chapter: \texttt{cxchangelog} tracks the instrument you wrote, \texttt{datadictionary} tracks the data the instrument produced, and the two together document a study whose questions and answers both move over time.
+The \texttt{changed} column works only over the wave files, not a stitched panel, because of a fact about Stata: when you append the three waves into one file, one value-label set survives per variable, so the appended file no longer records that \texttt{q2} meant something different in 2019. Run the codebook \emph{before} the stitch, then combine the waves (Chapter~\ref{ch:panels}). If you only have the stitched panel, \texttt{datadictionary, wave(wave)} still writes a per-wave row for every variable with real per-wave statistics and missingness, and a variable absent from a wave reads as 100\,percent missing that wave; it just leaves \texttt{changed} blank, because a stitched file cannot show what the labels used to say. This is exactly the division of labor with \texttt{cxchangelog} from earlier in this chapter: \texttt{cxchangelog} tracks the instrument you wrote, \texttt{datadictionary} tracks the data the instrument produced, and the two together document a study whose questions and answers both move over time.
 
 \subsection{Sending data out and getting it back labeled}\label{sec:datadictionary-roundtrip}
 Evaluation rarely happens inside one program. A statistician does the modeling in R, a data engineer builds the pipeline in Python, and the program officer only opens spreadsheets, so a dataset that starts in Stata will spend part of its life somewhere else and then come home. The trouble is that the file formats everyone shares, CSV and Excel, carry the \emph{values} but drop everything Stata knows about them. Export a labeled survey extract and the variable labels, the value labels that turn a \texttt{2} into \enquote{Disagree}, the display formats, the stored notes, and the \texttt{srctag} lineage (Chapter~\ref{ch:panels}) all stay behind; what lands in the collaborator's inbox is a grid of bare numbers. When the edited file comes back, someone has to redress it by hand, and that hand-relabeling is both tedious and the exact place a value-label mapping gets silently transposed.
@@ -414,11 +469,11 @@ It extends two community tools worth knowing: Roger Newson's \texttt{descsave} (
 \end{kaobox}
 
 \begin{kaobox}[frametitle=Ado-file Idea: \texttt{surveypull}]
-\textbf{Proposed program:} \texttt{surveypull}. One wrapper over the platform APIs of this chapter, with subcommands \texttt{responses} (download to a labeled \texttt{.dta}), \texttt{monitor} (counts and response rates against a roster, with an exit code a scheduler can read), and \texttt{codebook} (platform metadata to a data dictionary). Design principles: REDCap first because its API is simplest, one authentication story per platform, and every secret in an environment variable, never in the do-file. It fills the book's clearest tooling gap, since no existing package reaches Qualtrics or REDCap from Stata.
+\textbf{Proposed program:} \texttt{surveypull}. One wrapper over the platform APIs of this chapter, with subcommands \texttt{responses} (download to a labeled \texttt{.dta}), \texttt{monitor} (counts and response rates against a roster, with an exit code a scheduler can read), and \texttt{codebook} (platform metadata to a data dictionary). Design principles: REDCap first because its API is simplest, one authentication story per platform, and every secret in an environment variable, never in the do-file. It fills the book's clearest tooling gap, since no existing package speaks the platforms' own dialects from Stata: \texttt{webapi} carries the individual GET and POST calls, but the export-request-poll-download dance, the token conventions, and the pagination are platform lore a dedicated wrapper should own.
 \end{kaobox}
 
 \pagelayout{margin}
-\paragraph{Where this leaves you.} You can now auto-download responses from the platforms evaluators use, watch response rates while a survey is live with a scheduled control chart that flags lagging sites by name, carry question meaning into the data, build scales and percent-agree indicators reproducibly with a reliability check behind them, diagnose nonresponse, and track both sides of a changing study across waves: \texttt{cxchangelog} for what the instrument asked, \texttt{datadictionary} for what the data delivered. These capabilities make an evaluation replicable, extensible, and actionable in its most operational form: they let the evaluator rebuild the data on command, carry an instrument across waves, and act on a lagging site while the survey is still open. Chapter~\ref{ch:panels} takes the data you have gathered, from APIs, scrapes, and surveys, and assembles it into panels you can defend. The thread through all of it is that each output is cut for the person who acts on it, and the thresholds that automate action were agreed before the field opened.
+\paragraph{Where this leaves you.} You can now auto-download responses from the platforms evaluators use, watch response rates while a survey is live with a scheduled control chart that flags lagging sites by name, carry question meaning into the data, build scales and percent-agree indicators reproducibly with a reliability check behind them, diagnose nonresponse, and track both sides of a changing study across waves: \texttt{cxchangelog} for what the instrument asked, \texttt{datadictionary} for what the data delivered. These capabilities make an evaluation replicable, extensible, and actionable in its most operational form: they let the evaluator rebuild the data on command, carry an instrument across waves, and act on a lagging site while the survey is still open. Chapter~\ref{ch:panels} shows how to link and stack files like the ones you have been gathering, and how to assemble panels you can defend. The thread through all of it is that each output is cut for the person who acts on it, and the thresholds that automate action were agreed before the field opened.
 
 \section*{Exercises}\addcontentsline{toc}{section}{Exercises}
 \begin{enumerate}

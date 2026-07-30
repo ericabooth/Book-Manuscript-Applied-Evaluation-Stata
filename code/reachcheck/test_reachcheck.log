@@ -1,0 +1,154 @@
+
+  ___  ____  ____  ____  ____ ®
+ /__    /   ____/   /   ____/      StataNow 19.5
+___/   /   /___/   /   /___/       MP—Parallel Edition
+
+ Statistics and Data Science       Copyright 1985-2025 StataCorp LLC
+                                   StataCorp
+                                   4905 Lakeway Drive
+                                   College Station, Texas 77845 USA
+                                   800-782-8272        https://www.stata.com
+                                   979-696-4600        service@stata.com
+
+Stata license: 4-user 4-core network, expiring  6 May 2027
+Serial number: 501909369296
+  Licensed to: Eric Booth
+               TX2036
+
+Notes:
+      1. Stata is running in batch mode.
+      2. Unicode is supported; see help unicode_advice.
+      3. More than 2 billion observations are allowed; see help obs_advice.
+      4. Maximum number of variables is set to 5,000 but can be increased;
+          see help set_maxvar.
+
+
+Running /Users/ebooth/Documents/Stata/profile.do ...
+/Users/ebooth/.config/stata-googlesheets/client_secret_168706661500-h518nlu65no
+> jbc4bprhn896kunie8r44.apps.googleusercontent.com.json
+1
+
+. do test_reachcheck.do 
+
+. * test_reachcheck.do -- behavioral contract for reachcheck
+. * run: stata-mp -b do test_reachcheck.do ; grep for ALL TESTS PASSED
+. clear all
+
+. adopath ++ "`c(pwd)'"
+  [1]              "/Users/ebooth/Documents/GitHub/Book Manuscript:Applied Eval
+> uation-Stata/code/reachcheck"
+  [2]  (BASE)      "/Applications/StataNow/ado/base/"
+  [3]  (SITE)      "/Applications/StataNow/ado/site/"
+  [4]              "."
+  [5]  (PERSONAL)  "/Users/ebooth/Documents/Stata/ado/personal/"
+  [6]  (PLUS)      "/Users/ebooth/Library/Application Support/Stata/ado/plus/"
+  [7]  (OLDPLACE)  "~/ado/"
+
+. set varabbrev off
+
+. 
+. * --- (1) basic run on nlsw88 race, percentages ---------------------------
+. sysuse nlsw88, clear
+(NLSW, 1988 extract)
+
+. quietly count if !missing(race)
+
+. local NN = r(N)
+
+. forvalues k = 1/3 {
+  2.     quietly count if race == `k'
+  3.     local n`k' = r(N)
+  4.     local p`k' = 100*r(N)/`NN'
+  5. }
+
+. reachcheck race, target(70 20 10)
+
+Reach check: race (N = 2246 respondents)
+------------------------------------------------------------
+category              sample %  target %   gap pp   ratio
+------------------------------------------------------------
+White                     72.9      70.0      2.9    1.04
+Black                     26.0      20.0      6.0    1.30
+Other                      1.2      10.0     -8.8    0.12
+------------------------------------------------------------
+largest gap: -8.8 pp on Other
+goodness of fit vs target: chi2(2) =  218.1, p = 0.0000
+
+The responding sample is off its target by more than 5 pp.
+Consider raking to the target margins (ipfraking) and, either way,
+report the gap beside the response rate.
+
+. assert r(N) == `NN'
+
+. matrix T = r(table)
+
+. assert abs(T[1,1] - `p1') < .01
+
+. assert abs(T[2,1] - `p2') < .01
+
+. assert abs(T[3,1] - `p3') < .01
+
+. assert abs(T[1,2] - 70) < .001 & abs(T[2,2] - 20) < .001 & abs(T[3,2] - 10) <
+>  .001
+
+. * the largest |gap| among the three, with its sign
+. local g1 = `p1' - 70
+
+. local g2 = `p2' - 20
+
+. local g3 = `p3' - 10
+
+. local want = `g1'
+
+. if abs(`g2') > abs(`want') local want = `g2'
+
+. if abs(`g3') > abs(`want') local want = `g3'
+
+. assert abs(r(maxgap) - (`want')) < .01
+
+. 
+. * --- (2) shares auto-detect gives identical answers ----------------------
+. reachcheck race, target(.70 .20 .10) noreport
+
+. assert abs(r(maxgap) - (`want')) < .01
+
+. 
+. * --- (3) category-count mismatch errors cleanly --------------------------
+. capture noisily reachcheck race, target(70 30)
+reachcheck: race has 3 categories in the sample but target() lists 2 values
+  sample categories: 1 2 3
+
+. assert _rc == 198
+
+. 
+. * --- (4) nonsense target sum errors cleanly ------------------------------
+. capture noisily reachcheck race, target(10 10 10)
+reachcheck: target() sums to 30.000; expected shares summing to 1 or percentage
+> s summing to 100
+
+. assert _rc == 198
+
+. 
+. * --- (5) if restriction honored ------------------------------------------
+. quietly count if collgrad == 1 & !missing(race)
+
+. local nsub = r(N)
+
+. reachcheck race if collgrad == 1, target(80 15 5) noreport
+
+. assert r(N) == `nsub'
+
+. 
+. * --- (6) perfect target gives chi2 ~ 0 and tiny maxgap -------------------
+. reachcheck race, target(`p1' `p2' `p3') noreport
+
+. assert abs(r(maxgap)) < .01
+
+. assert r(chi2) < .001
+
+. 
+. di as res "ALL TESTS PASSED"
+ALL TESTS PASSED
+
+. 
+end of do-file
