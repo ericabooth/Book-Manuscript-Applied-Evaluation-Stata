@@ -123,9 +123,11 @@ scratch directory:
 stata-mp -b do test_projectbuilder.do
 ```
 
-## Author
+## Authors
 
-Eric A. Booth, Sr Researcher, Texas 2036
+Eric A. Booth, Sr Researcher, Texas 2036 (eric.a.booth@gmail.com)
+
+Elizabeth Teas, Sr Research Scientist, Far Harbor, LLC (elizabeth@farharbor.com)
 
 Support: eric.a.booth@gmail.com
 

@@ -1,4 +1,5 @@
 *! version 2.0.0  07jul2026  Eric A. Booth, Sr Researcher, Texas 2036
+*!                           Elizabeth Teas, Sr Research Scientist, Far Harbor, LLC
 *! projectbuilder -- scaffold a data-analysis project folder with a
 *!                   numbered do-file pipeline, then (optionally) ingest
 *!                   data, convert it, combine it, and build documentation.

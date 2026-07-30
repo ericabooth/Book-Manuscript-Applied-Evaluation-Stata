@@ -2,7 +2,7 @@
 
 Five thousand free-text case notes, one intern, and a coding deadline: this is the situation where a large language model looks like salvation, and where it most easily becomes a liability. Language models can code text, draft summaries, and scaffold analysis faster than any team could by hand, and they can also leak protected data, invent classifications, and produce a result that will not reproduce tomorrow. This chapter is the method and the guardrails that let an evaluator use them anyway.
 
-We treat AI as a power tool that needs a jig, and this chapter builds the jig. First the method: use Stata as the backbone and the LLM as a coding partner rather than a replacement (Section~\ref{sec:backbone}). Then the guardrails that live inside that method: what must never leave the building, how to validate an LLM's output as a measurement rather than trust it as an oracle, how to make stochastic output reproducible, how to defend against untrusted text, and how to audit prediction for fairness when a predictive model helps decide who gets served. The chapter closes on the worked example that ties the guardrails together, because the guardrails only matter in combination. Most numbers shown in this chapter come from a small simulated dataset (seed \texttt{20260704}) built only so the checks run in front of you; the point is the procedure, not the figures, which would come from your own notes and your own LLM.
+We treat AI as a power tool that needs a jig, and this chapter builds the jig. First the method: use Stata as the backbone and the LLM as a coding partner rather than a replacement (Section~\ref{sec:backbone}). Then the guardrails that live inside that method: what must never leave the building, how to validate an LLM's output as a measurement rather than trust it as an oracle, how to make stochastic output reproducible, how to defend against untrusted text, and how to audit prediction for fairness when a predictive model helps decide who gets served. The chapter closes on the worked example that ties the guardrails together, because the guardrails only matter in combination.\marginnote{Most numbers in this chapter come from a small simulated dataset (seed \texttt{20260704}), built only so the checks run in front of you; the point is the procedure, not the figures, which would come from your own notes and your own LLM.}
 
 \section{Stata as the backbone: the LLM as a coding partner}\label{sec:backbone}
 The fastest way to get a wrong answer from an evaluation is to paste your data into a chat window and ask the LLM to \enquote{analyze it.} You get a fluent reply, a table, a paragraph of interpretation, and no way to tell what was actually computed, no way to rerun it next week, and no way to know it will say the same thing tomorrow. This section is the alternative, and it is the central method of the chapter: do not ask the LLM to \emph{be} your statistician. Make your statistical program the backbone, and let the LLM be the coding partner that drafts, tests, and extends the code the program runs. The LLM proposes; Stata disposes.
@@ -69,7 +69,7 @@ The first artifact is not code; it is a plain-text checklist that lives outside 
 Instruct the LLM, in the system prompt, the standing instructions an assistant reads before anything you type, to treat this file as the source of truth: read it first, do the next unchecked item, then write back what it did before stopping. The \texttt{[\textasciitilde]} marker for a deliberately skipped item, with the reason, keeps a caveat from silently vanishing.
 \end{kaobox}
 
-A checklist is only as checkable as its steps, and there is a craft to writing them. The working rule is one action, one observable check, one file touched: \texttt{120\_clean} recodes one indicator, asserts one count, and writes one log, so the item can be ticked or left unticked with no judgment call. A step written as \enquote{clean the data} fails the rule three ways at once, and the failure is not cosmetic; a step with no single observable check is a step the LLM can declare finished without being wrong in any way a log could catch. When a draft step resists the one-action form, that resistance is information: the step is really two steps, and splitting it now is cheaper than untangling it after a tripwire fires somewhere in the middle.
+A checklist is only as checkable as its steps, and there is a craft to writing them. The working rule is one action, one observable check, one file touched: \texttt{120\_clean} recodes one indicator, asserts one count, and writes one log, so the item can be ticked or left unticked with no judgment call. A step written as \enquote{clean the data} fails the rule three ways at once, and the failure is not cosmetic; a step with no single observable check is a step the LLM can declare finished without being wrong in any way a log could catch.\marginnote{When a draft step resists the one-action form, that resistance is information: the step is really two steps, and splitting it now is cheaper than untangling it after a tripwire fires somewhere in the middle.}
 
 The same planning pass is the moment to draw the data-touching boundary: which steps the LLM may draft (recodes, merges, chart code, robustness variants) and which stay human regardless of the deadline (the gold-standard hand-coding of Section~\ref{sec:aiverify}, the sign-off on any number that ships, anything that moves identified records). Marking each item \texttt{llm} or \texttt{human} costs one column in the checklist and settles, in writing and in advance, the question a deadline answers worst.
 
@@ -85,7 +85,7 @@ One more file belongs in the scaffold while it is still empty: the prompt-and-ve
 \subsection{Step 3: the propose, run, verify loop with tripwires}
 This is the heart of the method. The LLM drafts one do-file; you run it in batch Stata from the shell; the log decides whether it worked. The move that makes the log trustworthy is to fill the do-file with \emph{tripwires}, \texttt{assert}\index{assert@\texttt{assert}} statements that stop the run the instant reality departs from the LLM's claim about it. An assertion is a one-line contract: state what must be true, and if it is not, Stata halts with an error rather than sailing on with wrong data.
 
-Here a step recodes a low-pay indicator, and the assertions pin down every property that must hold: no missing values introduced, strictly binary, one row per worker preserved, and an expected count the checklist justifies. The drill runs on the familiar NLSW extract on purpose: with data this boring and this well known since Chapter~\ref{ch:embedded}, every surprise in a run belongs to the pipeline, not the data.
+Here a step recodes a low-pay indicator, and the assertions pin down every property that must hold: no missing values introduced, strictly binary, one row per worker preserved, and an expected count the checklist justifies.\marginnote{The drill runs on the familiar NLSW extract on purpose: with data this boring and this well known since Chapter~\ref{ch:embedded}, every surprise in a run belongs to the pipeline, not the data.}
 \par
 {\footnotesize
 \begin{verbatim}
@@ -100,7 +100,7 @@ assert r(N) == 757      // expected count, per checklist
 di as result "STEP 120 PASSED"
 \end{verbatim}
 }
-Run it from the shell, not from inside the chat, so the run is real and logged. The \texttt{-b} flag is Stata's batch mode: it runs the do-file top to bottom with no interface and writes the log beside it (swap \texttt{stata-mp} for whichever executable your license installs):
+Run it from the shell, not from inside the chat, so the run is real and logged. The \texttt{-b} flag is Stata's batch mode: it runs the do-file top to bottom with no interface and writes the log beside it\marginnote{Swap \texttt{stata-mp} for whichever executable your license installs; the \texttt{-b} flag behaves the same way in each.}:
 \par
 {\footnotesize
 \begin{verbatim}
@@ -121,7 +121,7 @@ That failure is the method working. The wrong number never reached a table; it h
 Two routing rules keep this loop honest, and both are worth fixing before the first run so they operate as reflexes rather than judgment calls. When a tripwire fires, the LLM gets the log itself, pasted verbatim, never a paraphrase of it: the return code, the failing line, and the true count are the diagnostic, and a summary written from memory strips exactly the details the LLM needs while adding a human's guess about the cause, which the LLM will obligingly pursue instead of the evidence. And a step earns its tick only after two clean passes: rerun the passing do-file once more from a fresh batch instance, and proceed when the second log matches the first. A step that passes once may have leaned on leftover state in memory; a step that passes twice from scratch is reproducible by construction, and the second run costs seconds.
 
 \subsection{Step 4: triangulate, and try to break the finding}
-A passing test proves the code ran, not that the answer is right, so in the last step of each loop you reach the number a second way. Re-estimate a key coefficient with a different command or a different subsample and confirm it lands in the same place; hand the finding to a second LLM or a fresh agent whose only instruction is to refute it; spot-check one computed value by hand against the raw data. This is the same posture as the sensitivity analysis of Chapter~\ref{ch:claims} and the gold-standard validation of Section~\ref{sec:aiverify}, now applied to the whole workflow rather than a single estimate. Decide the fork before the comparison runs: name the tolerance within which the two numbers count as agreeing, proceed and record both when they do, and when they do not, make the discrepancy its own checklist item that blocks everything downstream until it is resolved. A tolerance chosen after seeing the gap is a tolerance chosen to close it. A finding that survives an honest attempt to break it is one you can defend; a finding that has only ever been agreed with is not.
+A passing test proves the code ran, not that the answer is right, so in the last step of each loop you reach the number a second way. Re-estimate a key coefficient with a different command or a different subsample and confirm it lands in the same place; hand the finding to a second LLM or a fresh agent whose only instruction is to refute it; spot-check one computed value by hand against the raw data.\marginnote{This is the same posture as the sensitivity analysis of Chapter~\ref{ch:claims} and the gold-standard validation of Section~\ref{sec:aiverify}, now applied to the whole workflow rather than a single estimate.} Decide the fork before the comparison runs: name the tolerance within which the two numbers count as agreeing, proceed and record both when they do, and when they do not, make the discrepancy its own checklist item that blocks everything downstream until it is resolved. A tolerance chosen after seeing the gap is a tolerance chosen to close it. A finding that survives an honest attempt to break it is one you can defend; a finding that has only ever been agreed with is not.
 
 \subsection{Going parallel: two worked patterns}\label{sec:backbone-parallel}
 Two bottlenecks in this loop are worth parallelizing, and both fit the backbone philosophy exactly, because each parallel worker is still a logged, reproducible batch job. The first speeds up slow estimation; the second speeds up review.
@@ -145,7 +145,7 @@ forvalues r = 1/`reps' {
 postclose buf
 \end{verbatim}
 }
-The worker rests on three commands: \texttt{postfile} opens a results buffer that writes one row per \texttt{post}, \texttt{bsample} redraws the sample with replacement (the bootstrap's core move), and \texttt{postclose} seals the file for the harvest step. An orchestrator (a shell loop, or an agent) launches four instances at once, each with its own seed; the trailing \texttt{\&} pushes each run to the background so they overlap, and \texttt{wait} holds the script until all four finish:
+\marginnote{The worker rests on three commands: \texttt{postfile} opens a results buffer that writes one row per \texttt{post}, \texttt{bsample} redraws the sample with replacement (the bootstrap's core move), and \texttt{postclose} seals the file for the harvest step.}An orchestrator (a shell loop, or an agent) launches four instances at once, each with its own seed; the trailing \texttt{\&} pushes each run to the background so they overlap, and \texttt{wait} holds the script until all four finish:
 \par
 {\footnotesize
 \begin{verbatim}
@@ -154,7 +154,7 @@ for t in 1 2 3 4; do
 done; wait
 \end{verbatim}
 }
-On an eight-core laptop the four jobs ran together in under two seconds of wall time (the \texttt{\&} backgrounds each job; \texttt{wait} blocks until all finish). A short combine step stacks the four files and reads off the bootstrap standard error and interval:
+\marginnote{On an eight-core laptop the four jobs ran together in under two seconds of wall time; the \texttt{\&} backgrounds each job and \texttt{wait} blocks until all four finish.}A short combine step stacks the four files and reads off the bootstrap standard error and interval:
 \par
 {\footnotesize
 \begin{verbatim}
@@ -236,7 +236,7 @@ Figure~\ref{fig:ch13-aigate} is the whole arrangement. The gate sits between the
 \label{fig:ch13-aigate}
 \end{figure*}
 
-Watch it work on a dozen simulated case notes, three lines of them deliberately seeded with the leaks a real batch contains, a Social Security number recorded at intake, callback phone numbers, an email address, a birth date, a street address, and two tagged record numbers (part (f) of \texttt{ch13\_validation.do} builds the file):
+Watch it work on a dozen simulated case notes, three lines of them deliberately seeded with the leaks a real batch contains\marginnote{The seeded leaks: a Social Security number recorded at intake, callback phone numbers, an email address, a birth date, a street address, and two tagged record numbers.} (part (f) of \texttt{ch13\_validation.do} builds the file):
 \par
 {\footnotesize
 \begin{verbatim}
@@ -256,7 +256,7 @@ idnum                    2
 any class                9
 \end{verbatim}
 }
-Nine of the twelve notes carry something the gate refuses to pass, which is the realistic surprise: caseworkers write phone numbers into narratives because narratives are where the work happens. The \texttt{genflag()} column routes those nine to local-only handling. For the batch that must go out, the recovery path is three lines, and the third is the proof:
+Nine of the twelve notes carry something the gate refuses to pass\marginnote{The realistic surprise: caseworkers write phone numbers into narratives, because narratives are where the work happens.}. The \texttt{genflag()} column routes those nine to local-only handling. For the batch that must go out, the recovery path is three lines, and the third is the proof:
 \par
 {\footnotesize
 \begin{verbatim}
@@ -341,7 +341,7 @@ graph bar (mean) agree, ///
 A reviewer cannot weigh \enquote{the LLM said so.} A reviewer can weigh a measured error rate, and validation is the step that produces one, which is why a validated AI-coded variable is publishable and an unvalidated one is not. Treating the LLM as a measurement rather than an oracle is the single habit that separates responsible use from wishful use.
 
 \subsection{Consensus across models}\label{sec:consensus}
-One LLM gives you a label; several LLMs give you a confidence signal for free. When the same 150 notes are coded by three different LLMs, the number that agree on the modal label tells you which cases are safe to trust and which need a human, without any extra hand-coding. We run two more simulated LLMs alongside the first (agreement with truth of about 80\% and 78\%) and count, per note, how many of the three back the most common label. Tabulating that count gives a triage table:
+One LLM gives you a label; several LLMs give you a confidence signal for free. When the same 150 notes are coded by three different LLMs, the number that agree on the modal label tells you which cases are safe to trust and which need a human, without any extra hand-coding. We run two more simulated LLMs alongside the first\marginnote{The two extra simulated LLMs agree with the truth about 80\% and 78\% of the time, against the first LLM's 85\%.} and count, per note, how many of the three back the most common label. Tabulating that count gives a triage table:
 
 {\footnotesize
 \begin{tabular}{lrrl}
@@ -378,7 +378,7 @@ The measurement is a normalized edit distance between the two strings, and we ca
 \text{human}  & \Delta \ge \tau,
 \end{cases}
 \]
-where $\operatorname{Lev}$ is the Levenshtein distance (single-character edits from one string to the other), $|R|$ is a string's character length, and $\tau$ is the routing threshold set below to $0.10$. A delta near zero means the second LLM left the first almost untouched, the stable region; a large delta means it rewrote the answer, the region of epistemic uncertainty. The whole computation is small enough to write in Mata, Stata's compiled matrix language (type \texttt{mata:} to enter it and \texttt{end} to leave; its loops and typed functions read like stripped-down C), and read in one screen, so the trust proxy is a function you can inspect line by line rather than a remote service you cannot see inside:
+where $\operatorname{Lev}$ is the Levenshtein distance (single-character edits from one string to the other), $|R|$ is a string's character length, and $\tau$ is the routing threshold set below to $0.10$. A delta near zero means the second LLM left the first almost untouched, the stable region; a large delta means it rewrote the answer, the region of epistemic uncertainty. The whole computation is small enough to write in Mata, Stata's compiled matrix language\marginnote{Type \texttt{mata:} to enter Mata and \texttt{end} to leave; its loops and typed functions read like stripped-down C.}, and read in one screen, so the trust proxy is a function you can inspect line by line rather than a remote service you cannot see inside:
 \par
 {\footnotesize
 \begin{verbatim}
@@ -476,7 +476,7 @@ local se_corr = sqrt(`p_ml_all'*(1-`p_ml_all')/5000 ///
                      + r(sd)^2/r(N))
 \end{verbatim}
 }
-On the simulated notes the correction does exactly what the setup demands. The naive estimate is 0.234 with a 95~percent interval of [0.223, 0.246], tight, confident, and wrong: the truth in this draw is 0.291, far outside it. The corrected estimate is 0.288 with an interval of [0.232, 0.344], which covers the truth. The interval widens because it now tells the truth about where the information lives: with error-prone labels, your effective sample is closer to the 150 notes a human coded than to the 5{,}000 the LLM did, and an interval that admits this is honest where the naive one is flattering. The same logic extends beyond a prevalence to quantiles and regression coefficients \parencite{angelopoulos2023ppi}, so the workflow of Applied Example~\ref{ae:ch13-notes} at the chapter's close, whose labels feed exactly such a model, is correctable the same way.
+On the simulated notes the correction does exactly what the setup demands. The naive estimate is 0.234 with a 95~percent interval of [0.223, 0.246], tight, confident, and wrong: the truth in this draw is 0.291, far outside it. The corrected estimate is 0.288 with an interval of [0.232, 0.344], which covers the truth. The interval widens because it now tells the truth about where the information lives: with error-prone labels, your effective sample is closer to the 150 notes a human coded than to the 5{,}000 the LLM did, and an interval that admits this is honest where the naive one is flattering.\marginnote{The same logic extends beyond a prevalence to quantiles and regression coefficients \parencite{angelopoulos2023ppi}, so the workflow of Applied Example~\ref{ae:ch13-notes} at the chapter's close, whose labels feed exactly such a model, is correctable the same way.}
 
 The conditions that make the correction work are design choices you control before any coding starts.
 
@@ -500,7 +500,7 @@ You pin the LLM's answers down once so your pipeline gives the same result next 
 Reproducibility here includes the LLM, not just the code, because a rerun that silently reclassifies cases is not a rerun. Cache the responses, and an AI-assisted analysis meets the same replicable standard as any other analysis in the book.
 
 \subsection{The prompt-and-version log}\label{ch13-sc-promptlog}
-The cache freezes the results; a second file makes them auditable, and it is this chapter's instance of the tracking-spine pattern of Chapter~\ref{ch:workshop}. The prompt-and-version log is one plain-text row per batch of LLM calls, five fields wide: the date, the LLM version or API name, the prompt file, the output file, and the check result. Each field answers a question someone will ask a year later. The date and version answer \enquote{what was actually called}; the prompt file answers \enquote{with what instructions}, which is why prompts live in versioned text files rather than chat windows, so this column has something to point at; the output file names the frozen dataset the analysis read; and the check result records the kappa, delta, or assert outcome that licensed using it.
+The cache freezes the results; a second file makes them auditable, and it is this chapter's instance of the tracking-spine pattern of Chapter~\ref{ch:workshop}. The prompt-and-version log is one plain-text row per batch of LLM calls, five fields wide: the date, the LLM version or API name, the prompt file, the output file, and the check result. Each field answers a question someone will ask a year later. The date and version answer \enquote{what was actually called}; the prompt file answers \enquote{with what instructions}\marginnote{Prompts live in versioned text files rather than chat windows, so the prompt-file column has something to point at.}; the output file names the frozen dataset the analysis read; and the check result records the kappa, delta, or assert outcome that licensed using it.
 \par
 {\footnotesize
 \begin{verbatim}
@@ -680,7 +680,7 @@ REVIEW: reread and re-date this file at project start.
 Keep the policy in the project folder, not a shared drive nobody opens, so it is reread at each project start and travels with the analysis it governs.
 \end{kaobox}
 
-Written down, four scattered guardrails become a standard a team can be held to, which is the actionable principle applied to the team's own conduct rather than to a report's findings. A small shop that cannot point to its AI-use policy is deciding these questions anyway, one deadline at a time, without a record of what it decided.
+Written down, four scattered guardrails become a standard a team can be held to\marginnote{This is the actionable principle applied to the team's own conduct rather than to a report's findings.}. A small shop that cannot point to its AI-use policy is deciding these questions anyway, one deadline at a time, without a record of what it decided.
 
 \begin{appliedexample}[Coding 5,000 progress notes without getting burned]\label{ae:ch13-notes}
 \textbf{Scenario.} A workforce program has 5,000 free-text case notes. You want each tagged with the primary barrier a participant faced (transportation, childcare, scheduling, none, other) to see which barriers predict drop-off.

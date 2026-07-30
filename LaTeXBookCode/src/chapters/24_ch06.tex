@@ -88,7 +88,7 @@ where $m_\gamma$ is the probability of seeing pattern $\gamma$ among records tha
 
 For numeric keys rather than names (dates, timestamps, rounded amounts), the join is nearest-value rather than exact, and \texttt{nearmrg}\index{nearmrg@\texttt{nearmrg}} performs it, optionally within exact-match groups and with a distance limit. Most administrative questions are join questions in disguise, and when someone asks how the two files were linked, you want to answer with a documented, tunable match rather than a shrug.
 
-The case that makes it concrete: a wage file records one payment date per person and an enrollment file records the spell that preceded it, and no two dates ever match exactly. You want each payment attached to the most recent spell that started \emph{before} it, which is a nearest-value join with a direction:
+The case that makes it concrete: a wage file records one payment date per person and an enrollment file records the spell that preceded it, and no two dates ever match exactly. You want each payment attached to the most recent spell that started \emph{on or before} it, which is a nearest-value join with a direction:
 \par
 {\footnotesize
 \begin{verbatim}

@@ -278,12 +278,18 @@ block over the numbered pipeline.{p_end}
 
 
 {marker author}{...}
-{title:Author}
+{title:Authors}
 
 {pstd}
 Eric A. Booth, Sr Researcher, Texas 2036{break}
-Support: {browse "mailto:eric.a.booth@gmail.com":eric.a.booth@gmail.com}{break}
-A generalization of the author's production project-scaffolding tool; companion
+Support: {browse "mailto:eric.a.booth@gmail.com":eric.a.booth@gmail.com}{p_end}
+
+{pstd}
+Elizabeth Teas, Sr Research Scientist, Far Harbor, LLC{break}
+{browse "mailto:elizabeth@farharbor.com":elizabeth@farharbor.com}{p_end}
+
+{pstd}
+A generalization of the authors' production project-scaffolding tool; companion
 to {it:Applied Program Evaluation Using Stata}.{p_end}
 
 {hline}

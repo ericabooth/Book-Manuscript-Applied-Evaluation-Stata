@@ -62,7 +62,7 @@
 \indexentry{price transparency files|hyperpage}{58}
 \indexentry{streaming large files|hyperpage}{58}
 \indexentry{convertanything@\texttt{convertanything}|hyperpage}{59}
-\indexentry{importR@\texttt{importR}|hyperpage}{60}
+\indexentry{importr@\texttt{importr}|hyperpage}{60}
 \indexentry{import excel@\texttt{import excel}|hyperpage}{60}
 \indexentry{record linkage|hyperpage}{61}
 \indexentry{total survey error|hyperpage}{63}
@@ -201,46 +201,46 @@
 \indexentry{datadictionary@\texttt{datadictionary}|hyperpage}{211}
 \indexentry{assert@\texttt{assert}|hyperpage}{211}
 \indexentry{embarrassingly parallel|hyperpage}{213}
-\indexentry{ai\_privacy\_gate@\texttt{ai\_privacy\_gate}|hyperpage}{216}
-\indexentry{inter-rater reliability|hyperpage}{218}
-\indexentry{kappa!Cohen's and Fleiss'|hyperpage}{218}
-\indexentry{kappa!formula|hyperpage}{218}
+\indexentry{ai\_privacy\_gate@\texttt{ai\_privacy\_gate}|hyperpage}{215}
+\indexentry{inter-rater reliability|hyperpage}{217}
+\indexentry{kappa!Cohen's and Fleiss'|hyperpage}{217}
+\indexentry{kappa!formula|hyperpage}{217}
 \indexentry{kap@\texttt{kap}|hyperpage}{218}
-\indexentry{llmsieve@\texttt{llmsieve}|hyperpage}{219}
+\indexentry{llmsieve@\texttt{llmsieve}|hyperpage}{218}
 \indexentry{convergence delta|hyperpage}{221}
-\indexentry{prompt injection|hyperpage}{226}
-\indexentry{four-fifths rule|hyperpage}{229}
-\indexentry{adverse impact|hyperpage}{229}
-\indexentry{faircheck@\texttt{faircheck}|hyperpage}{230}
-\indexentry{k-anonymity@$k$-anonymity|hyperpage}{235}
-\indexentry{quasi-identifiers|hyperpage}{235}
-\indexentry{l-diversity@$l$-diversity|hyperpage}{235}
-\indexentry{riskscan@\texttt{riskscan}|hyperpage}{236}
-\indexentry{re-identification|hyperpage}{236}
-\indexentry{sysuse@\texttt{sysuse}|hyperpage}{236}
-\indexentry{coarsening|hyperpage}{239}
-\indexentry{collect@\texttt{collect}|hyperpage}{240}
-\indexentry{suppress@\texttt{suppress}|hyperpage}{240}
-\indexentry{complementary suppression|hyperpage}{241}
-\indexentry{dpprivacy@\texttt{dpprivacy}|hyperpage}{243}
-\indexentry{synthetic data|hyperpage}{244}
-\indexentry{synthgen@\texttt{synthgen}|hyperpage}{244}
-\indexentry{rawsweep@\texttt{rawsweep}|hyperpage}{244}
-\indexentry{disclosure-review checklist|hyperpage}{245}
-\indexentry{dsload@\texttt{dsload}|hyperpage}{249}
-\indexentry{net install@\texttt{net install}|hyperpage}{249}
-\indexentry{syntax@\texttt{syntax}|hyperpage}{250}
-\indexentry{version@\texttt{version}|hyperpage}{250}
-\indexentry{SMCL|hyperpage}{251}
-\indexentry{editanything@\texttt{editanything}|hyperpage}{251}
-\indexentry{writeinput@\texttt{writeinput}|hyperpage}{252}
-\indexentry{ScrapeSSC@\texttt{ScrapeSSC}|hyperpage}{252}
-\indexentry{rateshrink@\texttt{rateshrink}|hyperpage}{253}
-\indexentry{empirical Bayes shrinkage|hyperpage}{255}
-\indexentry{rateshrink@\texttt{rateshrink}|hyperpage}{255}
-\indexentry{Mata|hyperpage}{256}
-\indexentry{lstrfun@\texttt{lstrfun}|hyperpage}{256}
-\indexentry{timer@\texttt{timer}|hyperpage}{256}
-\indexentry{openICPSR|hyperpage}{258}
-\indexentry{replication archive|hyperpage}{258}
-\indexentry{capstone|hyperpage}{273}
+\indexentry{prompt injection|hyperpage}{225}
+\indexentry{four-fifths rule|hyperpage}{228}
+\indexentry{adverse impact|hyperpage}{228}
+\indexentry{faircheck@\texttt{faircheck}|hyperpage}{229}
+\indexentry{k-anonymity@$k$-anonymity|hyperpage}{233}
+\indexentry{quasi-identifiers|hyperpage}{233}
+\indexentry{l-diversity@$l$-diversity|hyperpage}{233}
+\indexentry{riskscan@\texttt{riskscan}|hyperpage}{234}
+\indexentry{re-identification|hyperpage}{234}
+\indexentry{sysuse@\texttt{sysuse}|hyperpage}{234}
+\indexentry{coarsening|hyperpage}{237}
+\indexentry{collect@\texttt{collect}|hyperpage}{238}
+\indexentry{suppress@\texttt{suppress}|hyperpage}{238}
+\indexentry{complementary suppression|hyperpage}{239}
+\indexentry{dpprivacy@\texttt{dpprivacy}|hyperpage}{241}
+\indexentry{synthetic data|hyperpage}{241}
+\indexentry{synthgen@\texttt{synthgen}|hyperpage}{241}
+\indexentry{rawsweep@\texttt{rawsweep}|hyperpage}{242}
+\indexentry{disclosure-review checklist|hyperpage}{243}
+\indexentry{dsload@\texttt{dsload}|hyperpage}{245}
+\indexentry{net install@\texttt{net install}|hyperpage}{245}
+\indexentry{syntax@\texttt{syntax}|hyperpage}{246}
+\indexentry{version@\texttt{version}|hyperpage}{246}
+\indexentry{SMCL|hyperpage}{247}
+\indexentry{editanything@\texttt{editanything}|hyperpage}{247}
+\indexentry{writeinput@\texttt{writeinput}|hyperpage}{248}
+\indexentry{scrapessc@\texttt{scrapessc}|hyperpage}{248}
+\indexentry{rateshrink@\texttt{rateshrink}|hyperpage}{249}
+\indexentry{empirical Bayes shrinkage|hyperpage}{251}
+\indexentry{rateshrink@\texttt{rateshrink}|hyperpage}{251}
+\indexentry{Mata|hyperpage}{252}
+\indexentry{lstrfun@\texttt{lstrfun}|hyperpage}{252}
+\indexentry{timer@\texttt{timer}|hyperpage}{252}
+\indexentry{openICPSR|hyperpage}{254}
+\indexentry{replication archive|hyperpage}{254}
+\indexentry{capstone|hyperpage}{269}

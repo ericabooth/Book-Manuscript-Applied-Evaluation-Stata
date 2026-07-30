@@ -260,14 +260,14 @@ convertanything using "$raw/partner_drop", recursive ///
 Every \texttt{.csv}, \texttt{.xlsx}, and \texttt{.dta} under \texttt{partner\_drop/} lands as a cleaned dataset under \texttt{\_converted/}, in the same subfolders, ready for the harmonization step of Chapter~\ref{ch:panels}.
 \end{kaobox}
 
-The one dialect \texttt{convertanything} does not read is R's own. When a partner works in R and hands you an \texttt{.Rdata} or \texttt{.rds} file, \texttt{importR}\index{importR@\texttt{importR}} bridges it\marginnote{\texttt{importR} prefers a local R installation, calling \texttt{Rscript} with the \texttt{haven} package, and falls back to Stata's Python link with \texttt{pyreadstat}, so it works with whichever of the two the machine has.}. That keeps an R-shop collaborator inside the same reproducible pipeline instead of forcing a manual export through CSV, which is one more place a value can silently change.
+The one dialect \texttt{convertanything} does not read is R's own. When a partner works in R and hands you an \texttt{.Rdata} or \texttt{.rds} file, \texttt{importr}\index{importr@\texttt{importr}} bridges it\marginnote{\texttt{importr} prefers a local R installation, calling \texttt{Rscript} with the \texttt{haven} package, and falls back to Stata's Python link with \texttt{pyreadstat}, so it works with whichever of the two the machine has.}. That keeps an R-shop collaborator inside the same reproducible pipeline instead of forcing a manual export through CSV, which is one more place a value can silently change.
 \par
 {\footnotesize
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
-net install importR, ///
+net install importr, ///
     from("`gh'/importR-stata/main/") replace force
-importR using "partner_model_frame.Rdata", clear
+importr using "partner_model_frame.Rdata", clear
 \end{verbatim}
 }
 

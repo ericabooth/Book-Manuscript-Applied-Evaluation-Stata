@@ -37,7 +37,7 @@ if _rc net install webapi, from("https://raw.githubusercontent.com/ericabooth/we
 * net install statashiny, from("https://raw.githubusercontent.com/ericabooth/StataShiny-public/main/") replace force
 * net install dashboardbuilder, from("https://raw.githubusercontent.com/ericabooth/dashboardbuilder-stata-public/main/") replace force  // needs Python 3 (stdlib only); install verified 2026-07-14; required by ch12_dashboardbuilder.do
 * net install convertanything, from("https://raw.githubusercontent.com/ericabooth/convertanything-stata-public/main/") replace force
-* net install importR, from("https://raw.githubusercontent.com/ericabooth/importR-stata/main/") replace force  // needs R (haven) or python pyreadstat to run
+* net install importr, from("https://raw.githubusercontent.com/ericabooth/importR-stata/main/") replace force  // needs R (haven) or python pyreadstat to run
 * webdoc2 needs Ben Jann's webdoc first, and a separate net get for its
 * Bootstrap header.html (net get drops ancillary files in the current dir):
 * ssc install webdoc, replace
