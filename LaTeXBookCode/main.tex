@@ -1765,10 +1765,10 @@ A survey platform knows the text of every question and the coding of every respo
 
 Timing matters here: capture the metadata snapshot at launch, not at close. Platforms let an editor reword a question mid-field, and the wording your December respondents saw is recoverable only if the July pull saved it. A launch-day metadata pull, filed beside the first data pull, is the baseline for every later comparison.
 
-Across waves, the same idea scales into an instrument history. A launch-day instrument log records each wave's variables, labels, and constructs in a running spreadsheet, so you can see at a glance which items are new, which changed, and which were dropped. That inventory is the backbone of the cross-wave codebook of Section~\ref{sec:cxchangelog}; without it, a multi-wave survey is not a study that extends but a pile of unrelated files.
+Across waves, the same idea scales into an instrument history. \texttt{surveytracker} records each wave's variables, labels, and value-label text in a running tracker file, so you can see at a glance which items are new, which changed, and which were dropped. That inventory is the backbone of the cross-wave codebook of Section~\ref{sec:cxchangelog}; without it, a multi-wave survey is not a study that extends but a pile of unrelated files.
 
-\begin{kaobox}[frametitle=Package Integration: \texttt{validemail}]
-\textbf{Integrated command:} \texttt{validemail} validates an email item in three tiers (format, live DNS/MX lookup, and disposable-provider detection), the small but constant chore of cleaning an open-ended contact field before it is used for follow-up. Its planned companion \texttt{surveytracker}, a launch-day instrument logger feeding the same tracker, remains an ado-file idea; Section~\ref{sec:cxchangelog}'s \texttt{cxchangelog} covers the cross-wave inventory today.
+\begin{kaobox}[frametitle=Package Integration: \texttt{surveytracker} and \texttt{validemail}]
+\textbf{Integrated commands:} \texttt{surveytracker}\index{surveytracker@\texttt{surveytracker}} snapshots the instrument's metadata, variable names, labels, and value-label text, as one wave-tagged block appended to a running tracker file, and refuses to re-log a wave: a snapshot is a record, not a draft. \texttt{cxchangelog} (Section~\ref{sec:cxchangelog}) diffs the waves when the next one lands. \texttt{validemail} validates an email item in three tiers (format, live DNS/MX lookup, and disposable-provider detection), the small but constant chore of cleaning a contact field before follow-up. Both ship with the book.
 \end{kaobox}
 
 \section{Scales without tears}
@@ -1860,7 +1860,7 @@ The spread screen alone flags 14 rows: the 12 planted straight-liners plus two h
 
 \pagelayout{wide}
 \section{Who did not answer, and does it matter}
-A response rate is not a verdict on its own; the real question is whether the people who answered differ from the people who did not. We separate two failures: unit nonresponse\index{nonresponse!unit}, when a sampled person answers nothing, and item nonresponse\index{nonresponse!item}, when a respondent skips particular questions. Compare respondents to the sampling frame, \texttt{reachcheck} against published margins, or a logit of response on frame characteristics when you hold the frame file \parencite{groves2008nonresponse}, so \enquote{can we trust a 22 percent response rate} gets a diagnostic answer instead of a shrug. A level-of-effort\index{level-of-effort} check adds a second angle, tracing whether estimates stabilize as later contact attempts bring in reluctant respondents, which is the closest thing to a window on the people you never reached. The level-of-effort logic assumes late responders resemble nonresponders, which holds better for reluctance than for unreachability, so pair the trend with a frame comparison before you lean on it: a dead phone number is not a reluctant respondent.
+A response rate is not a verdict on its own; the real question is whether the people who answered differ from the people who did not. We separate two failures: unit nonresponse\index{nonresponse!unit}, when a sampled person answers nothing, and item nonresponse\index{nonresponse!item}, when a respondent skips particular questions. Compare respondents to the sampling frame: \texttt{reachcheck} against published margins, or, when you hold the frame file itself, \texttt{nonresponse}, which packages the category gaps, the response model, and raking weights in one call \parencite{groves2008nonresponse}, so \enquote{can we trust a 22 percent response rate} gets a diagnostic answer instead of a shrug. The \texttt{loebias} command adds the level-of-effort\index{level-of-effort} angle, tracing whether estimates stabilize as later contact attempts bring in reluctant respondents, which is the closest thing to a window on the people you never reached. The level-of-effort logic assumes late responders resemble nonresponders, which holds better for reluctance than for unreachability, so pair the trend with a frame comparison before you lean on it: a dead phone number is not a reluctant respondent.
 
 The reason a rate is not a verdict is that nonresponse rate and nonresponse bias are not the same quantity. \textcite{groves2006nonresponse} shows, across dozens of studies, that a survey's response rate is a weak predictor of the bias in its estimates, because bias depends on whether responding is correlated with the answer, not on how many people responded. A 40~percent response rate with responders who resemble nonresponders on the outcome can be less biased than an 80~percent rate where the missing fifth is exactly the group whose outcome differs. That is why the response model matters more than the response count, and it is why the level-of-effort trend matters: both are attempts to see the correlation, not just the count. Where the platform records it, the contact history itself is evidence. \textcite{kreuter2013paradata} makes the case for paradata\index{paradata}, the process trail of call attempts, timestamps, and reminder sends, as a lever on total survey error, and the level-of-effort check is paradata put to work: it reads the order in which responses arrived to ask whether the late, reluctant respondents are pulling the estimate.
 
@@ -1890,7 +1890,7 @@ goodness of fit vs target: chi2(2) =  218.1, p = 0.0000
 }
 Read the ratio column the way a program officer would: the \enquote{Other} group arrived at 12~percent of its intended size, not slightly under-covered but nearly absent, and no amount of averaging over the full sample will speak for the group that is not in the room. On a live survey the same line runs against the enrollment roster's margins, site by site, while the field period is still open and the fix is still a targeted reminder rather than a footnote.
 
-What happens next depends on which branch of Figure~\ref{fig:ch05-reachtree} the result lands in, and the honest branch is sometimes the third one. A gap on traits you observe (site, race, age band) is recoverable: rake the respondents to the target margins (\texttt{ipfraking} from SSC) and rerun the headline both weighted and unweighted, reporting both. A suspected gap on traits nobody measured, the disengaged families, the households whose phones changed, is the branch no weighting can fix, because you cannot weight on a variable you do not have; there the deliverable is the caveat, stated beside the response rate, and a bounded sense of how far the missing group would have to differ to move the finding. Either way the table itself travels into the report: the gap beside the rate is the honest minimum this chapter keeps returning to.
+What happens next depends on which branch of Figure~\ref{fig:ch05-reachtree} the result lands in, and the honest branch is sometimes the third one. A gap on traits you observe (site, race, age band) is recoverable: rake the respondents to the target margins (\texttt{ipfraking} from SSC, or \texttt{nonresponse} when you hold the frame) and rerun the headline both weighted and unweighted, reporting both. A suspected gap on traits nobody measured, the disengaged families, the households whose phones changed, is the branch no weighting can fix, because you cannot weight on a variable you do not have; there the deliverable is the caveat, stated beside the response rate, and a bounded sense of how far the missing group would have to differ to move the finding. Either way the table itself travels into the report: the gap beside the rate is the honest minimum this chapter keeps returning to.
 
 \begin{figure}[htbp]
 \centering
@@ -1915,8 +1915,50 @@ What happens next depends on which branch of Figure~\ref{fig:ch05-reachtree} the
 
 This matters because representativeness is the difference between \enquote{our respondents} and \enquote{our participants}, and a funder quotes the second. The diagnostics here hand off directly to the weighting of Chapter~\ref{ch:trust}, where the imbalance they find gets corrected.
 
-\begin{kaobox}[frametitle=Ado-file Idea: \texttt{nonresponse} and \texttt{loebias}]
-\textbf{Proposed programs.} Wrappers for this section's diagnostics: \texttt{nonresponse} would package the frame tests, the response model, and raking weights \parencite{deming1940raking}; \texttt{loebias} the cumulative level-of-effort sensitivity runs. The moves themselves are taught above, and \texttt{reachcheck} already covers the margins comparison; the wrappers await an interface worth freezing.
+\begin{kaobox}[frametitle=Package Integration: \texttt{nonresponse}]
+\textbf{Integrated command:} \texttt{nonresponse}\index{nonresponse@\texttt{nonresponse}}. Run on the sampling frame with a 0/1 response flag, it tabulates respondent-versus-frame shares for every category you trust the frame on, shows the response model (a logit of answering, printed, not hidden), and with \texttt{generate()} rakes the responders to the frame margins \parencite{deming1940raking}, refusing loudly when a category has no responders to rake. On a simulated frame of 2{,}000 where the young answer less (part (n) of \texttt{ch05\_monitoring.do}):
+\par
+{\footnotesize
+\begin{verbatim}
+. nonresponse resp, frame(region young) generate(w)
+
+Nonresponse check: 995 responders in a frame of 2000 (49.8%)
+----------------------------------------------------------
+category                  resp %   frame %   gap pp
+----------------------------------------------------------
+region=North                44.4      51.1     -6.7
+region=South                55.6      48.9      6.7
+young=0                     75.3      61.7     13.6
+young=1                     24.7      38.4    -13.6
+----------------------------------------------------------
+largest gap: -13.6 pp on young=1
+raking converged in 6 iteration(s); weights in w,
+  range  0.72 to  1.77
+rerun the headline weighted and unweighted, and report both.
+\end{verbatim}
+}
+Ships in the companion repository's \texttt{code/} folder.
+\end{kaobox}
+
+\begin{kaobox}[frametitle=Package Integration: \texttt{loebias}]
+\textbf{Integrated command:} \texttt{loebias}\index{loebias@\texttt{loebias}}. The respondents who needed five calls are the closest available stand-ins for the people who never answered. \texttt{loebias} folds each contact-attempt level into a cumulative estimate and says whether the series has settled; it requires a real attempts variable with at least three levels, because arrival order is not effort. On 900 simulated responses where the hard-to-reach differ (part (l) of \texttt{ch05\_monitoring.do}):
+\par
+{\footnotesize
+\begin{verbatim}
+. loebias engaged, attempts(attempts)
+
+Level-of-effort check: cumulative estimate of engaged
+----------------------------------------------
+ attempts <= k       N      estimate
+----------------------------------------------
+             1     316        0.5854
+             2     606        0.5941
+             3     900        0.5578
+----------------------------------------------
+last-step change:  -3.63 pp (still moving at threshold .5)
+\end{verbatim}
+}
+A drifting series says the reluctant differ: treat the final number as provisional and pair it with the frame comparison above. Ships in the companion repository's \texttt{code/} folder.
 \end{kaobox}
 
 \section{The cross-wave codebook}\label{sec:cxchangelog}
@@ -2438,6 +2480,36 @@ A Sankey diagram of participant movement through program phases (Intake $\righta
 \begin{kaobox}[frametitle=Existing tool: \texttt{sankey} for participant-flow pictures]
 \textbf{Use what exists:} the participant-flow picture, who moved from which status to which between waves, needs no new tool. Reshape the panel to one row per source-target-count flow (a \texttt{collapse} over consecutive-wave status pairs), and Asjad Naqvi's \texttt{sankey}, on SSC (\texttt{ssc install sankey}), draws the flow diagram natively in Stata. The reshape is a five-line job with this chapter's tools; the drawing is one command for the static report figure. When a manager needs to filter the picture, Chapter~\ref{ch:portals}'s \texttt{statashiny} renders the same flow data interactively; build the static one first.
 \end{kaobox}
+
+\section{Does this panel belong in a database?}\label{sec:ch06-database}
+Somewhere past the third linked file, someone will suggest moving the whole thing into a database and querying it back into Stata for analysis. The suggestion deserves a real answer, not a reflex, and the answer starts by unbundling three decisions that travel under one name. How results reach non-Stata readers is a delivery question, and Part~IV's dashboards and portals answer it with or without a database underneath. Who may see what is an access question, and folder permissions plus the de-identified extracts of Chapter~\ref{ch:sharing} answer it for a team where everyone with access is cleared for the data. Only the third decision, how the data are stored and combined, is actually a database question, and for a small evaluation shop the answer is usually to stay in code.
+
+The case for staying is not sentiment. \textcite{long2009workflow} built the workflow this book extends on one idea, that every step from raw file to result lives in an auditable chain of do-files, and a database strains that idea at its strongest point: a database stores the current answer, while the do-file chain stores the reasoning, the commented line where you can see which source wins and why. Changing a definition mid-project, which research does weekly, is one line and a rerun in code; in a database it is a structure edit, a reload, and a conversation with whoever owns the dashboard. The linked-tables argument dissolved in Stata~16: frames and \texttt{frlink} hold tables at different levels and pull attributes across the link on demand, exactly the structure a database sells, already in memory. And the costs run one way: storage is the cheapest thing in the shop and analyst time the most expensive, the license is the smallest line in a database budget, and the biggest line is the quarter-to-half of a salary for the person who keeps it running, a job that in a small shop otherwise lands, unfunded, on whoever was most enthusiastic in the meeting. The one discipline all of this rests on costs nothing and is already this book's rule: code makes data; people do not edit data.
+
+Honesty about the other side is what makes the position credible, and three limits are real walls. Stata works in memory, so when the largest file you routinely open stops fitting with room to merge, the work does not slow down, it stops. A person-triggered rebuild falls quietly behind data that arrive daily. And no amount of do-file discipline produces a log of which person read which rows, so a data-use agreement that demands one has made the decision for you. Table~\ref{tab:ch06-dbdecision} turns the choice into two groups of questions rather than a score, because the factors are not interchangeable: the first group are limits code cannot get around, the second are conditions that must all hold before buying helps. If you do buy, keep the build code as the source of truth and load \emph{cleaned} data into the database, never move the cleaning decisions into it; and never query it live from an analysis do-file. Have the database write files on a schedule and Stata read files, which keeps do-files portable and takes the fragile driver, the per-machine ODBC setup, and the single-sign-on dance off the critical path.\marginnote{A middle path worth knowing: DuckDB runs SQL over plain files with no server, no license, and nothing to administer, and handles joins bigger than memory. The robust arrangement is the same either way: let it write files and let every tool read files, rather than wiring tools to it live.}
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption[The database decision in seven questions]{The database decision in seven questions. Any \enquote{yes} in the first group is a limit code cannot get around; only then do the second group's conditions matter, and every one must hold or the purchase makes things worse. No yes in the first group means the decision is finished: stay in code.}
+\label{tab:ch06-dbdecision}
+\begin{tabular}{p{6.6cm}p{2.7cm}}
+\hline
+\multicolumn{2}{p{9.5cm}}{\emph{Limits code cannot get around: any yes points to a database}} \\
+\hline
+Does your largest working file crowd half the machine's memory? & Yes: a real wall \\
+Do data arrive faster than a person can rerun the build? & Yes: a real wall \\
+Does an agreement require a log of who read which rows? & Yes: a real wall \\
+\hline
+\multicolumn{2}{p{9.5cm}}{\emph{Conditions that must all hold before buying helps}} \\
+\hline
+Is a quarter to half of a salary funded, permanently, to run it? & No: fix this first \\
+Will researchers who know the variables still do the cleaning? & No: do not buy \\
+Can a definition change land in days, not weeks? & No: do not buy \\
+Can every tool read the output without a fragile driver? & No: write files instead \\
+\hline
+\end{tabular}
+\end{table}
 
 \section{Missing data honestly}
 Dropping a row is an analytic decision made in silence, so make the decision visible. Missing values are rarely missing at random, so casewise deletion can quietly bias an estimate; we first diagnose the pattern with \texttt{misstable patterns}\index{misstable@\texttt{misstable}}, then decide.\marginnote{The methods literature names three regimes \parencite{rubin1987imputation}: missing completely at random (the gap is unrelated to anything), missing at random (explained by things you observe, a site, a wave, a survey mode), and missing not at random (driven by the unseen value itself, the client doing worst being the one who stopped answering). The table shows the shape; only reasoning about the mechanism says which regime you are in, and no command can rescue the third. The gap itself is also data: a missingness indicator that predicts the outcome is a finding about the program, not just a hole to fill.} That command tabulates which combinations of variables go missing together, and on a 200-row sample of the panel it prints a compact map of the structure:
@@ -6382,7 +6454,7 @@ The one exception is \texttt{sparkta2}, whose source is not yet released. The co
 \paragraph{Published packages showcased.}
 \begin{itemize}
     \item \texttt{webapi} -- fetch an authenticated JSON web API into Stata as a dataset, standard-library Python only (Chapter~\ref{ch:apis}).
-    \item \textbf{The thirteen packages built for this book}, each in its own \texttt{-stata-public} repository with tests and help: \texttt{projectbuilder} (scaffold the Chapter~\ref{ch:workshop} project layout), \texttt{combineall} (append, merge, or convert a whole folder, with vintage-aware harmonization; Chapters~\ref{ch:apis} and~\ref{ch:noapi}), \texttt{cxchangelog} (cross-wave survey codebooks), \texttt{datadictionary} (the over-time data codebook: per-wave stats, missingness, value-label diffs, Excel export), and \texttt{undummy} (recombine one-hot columns into one categorical), all Chapter~\ref{ch:surveys}; \texttt{reshapehelper} (diagnose the data and suggest the likely \texttt{reshape} command, Chapter~\ref{ch:panels}); \texttt{rateshrink} (empirical-Bayes rate stabilization), \texttt{conformalpred} (distribution-free prediction intervals), and \texttt{hlmr2} (Nakagawa multilevel $R^2$), all Chapter~\ref{ch:trust}; \texttt{twinmatch} (Mahalanobis policy twins) and \texttt{roisim} (Monte Carlo ROI), both Chapter~\ref{ch:claims}; and \texttt{suppress} (small-cell and complementary suppression) and \texttt{riskscan} ($k$-anonymity scan), both Chapter~\ref{ch:sharing}; plus nine commands that ship in the companion repository's \texttt{code/} folder, each with its own help file and test battery: \texttt{reachcheck} (respondents against target margins) and \texttt{surveypull} (platform pulls, dry-run first), both Chapter~\ref{ch:surveys}; \texttt{likertscale} (index, alpha, and percent-agree in one step, Chapter~\ref{ch:surveys}); \texttt{srctag} and \texttt{srcfind} (source lineage, Chapter~\ref{ch:panels}); \texttt{ai\_privacy\_gate} (the pre-flight PII gate), \texttt{llmsieve} (convergence-delta routing), and \texttt{faircheck} (group-wise parity and error audit), all Chapter~\ref{ch:ai}; and \texttt{rawsweep} (intake manifest with PII flags, Chapter~\ref{ch:sharing}).
+    \item \textbf{The thirteen packages built for this book}, each in its own \texttt{-stata-public} repository with tests and help: \texttt{projectbuilder} (scaffold the Chapter~\ref{ch:workshop} project layout), \texttt{combineall} (append, merge, or convert a whole folder, with vintage-aware harmonization; Chapters~\ref{ch:apis} and~\ref{ch:noapi}), \texttt{cxchangelog} (cross-wave survey codebooks), \texttt{datadictionary} (the over-time data codebook: per-wave stats, missingness, value-label diffs, Excel export), and \texttt{undummy} (recombine one-hot columns into one categorical), all Chapter~\ref{ch:surveys}; \texttt{reshapehelper} (diagnose the data and suggest the likely \texttt{reshape} command, Chapter~\ref{ch:panels}); \texttt{rateshrink} (empirical-Bayes rate stabilization), \texttt{conformalpred} (distribution-free prediction intervals), and \texttt{hlmr2} (Nakagawa multilevel $R^2$), all Chapter~\ref{ch:trust}; \texttt{twinmatch} (Mahalanobis policy twins) and \texttt{roisim} (Monte Carlo ROI), both Chapter~\ref{ch:claims}; and \texttt{suppress} (small-cell and complementary suppression) and \texttt{riskscan} ($k$-anonymity scan), both Chapter~\ref{ch:sharing}; plus twelve commands that ship in the companion repository's \texttt{code/} folder, each with its own help file and test battery: \texttt{reachcheck} (respondents against target margins), \texttt{surveypull} (platform pulls, dry-run first), \texttt{nonresponse} (frame gaps, response model, raking weights), \texttt{loebias} (level-of-effort sensitivity), \texttt{surveytracker} (wave-tagged instrument snapshots), and \texttt{likertscale} (index, alpha, and percent-agree in one step), all Chapter~\ref{ch:surveys}; \texttt{srctag} and \texttt{srcfind} (source lineage, Chapter~\ref{ch:panels}); \texttt{ai\_privacy\_gate} (the pre-flight PII gate), \texttt{llmsieve} (convergence-delta routing), and \texttt{faircheck} (group-wise parity and error audit), all Chapter~\ref{ch:ai}; and \texttt{rawsweep} (intake manifest with PII flags, Chapter~\ref{ch:sharing}).
     \item \texttt{googlechart} -- 14 interactive chart types from one command (Chapter~\ref{ch:interactive}).
     \item \texttt{googlesheets} -- read, write, format, and chart Google Sheets from Stata (Chapters~\ref{ch:sheets}, \ref{ch:surveys}, \ref{ch:apis}).
     \item \texttt{statashiny} -- serverless interactive HTML dashboards (Chapter~\ref{ch:portals}).
@@ -6402,7 +6474,6 @@ The one exception is \texttt{sparkta2}, whose source is not yet released. The co
     \item \texttt{fastmatch}, \texttt{trackflow} -- EM-based probabilistic record linkage and flow shaping (Chapter~\ref{ch:panels}).
     \item \texttt{text2vars}, \texttt{stata2brief}, \texttt{evalpreflight} -- LLM extraction and drafting aids (Chapter~\ref{ch:ai}).
     \item \texttt{synthgen} -- synthetic-data generation (Chapter~\ref{ch:sharing}).
-    \item \texttt{surveytracker}, \texttt{nonresponse}, \texttt{loebias} -- instrument logging and nonresponse and level-of-effort wrappers; the diagnostics themselves are taught in Chapter~\ref{ch:surveys}.
 \end{itemize}
 
 \pagelayout{margin}

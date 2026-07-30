@@ -194,10 +194,10 @@ A survey platform knows the text of every question and the coding of every respo
 
 Timing matters here: capture the metadata snapshot at launch, not at close. Platforms let an editor reword a question mid-field, and the wording your December respondents saw is recoverable only if the July pull saved it. A launch-day metadata pull, filed beside the first data pull, is the baseline for every later comparison.
 
-Across waves, the same idea scales into an instrument history. A launch-day instrument log records each wave's variables, labels, and constructs in a running spreadsheet, so you can see at a glance which items are new, which changed, and which were dropped. That inventory is the backbone of the cross-wave codebook of Section~\ref{sec:cxchangelog}; without it, a multi-wave survey is not a study that extends but a pile of unrelated files.
+Across waves, the same idea scales into an instrument history. \texttt{surveytracker} records each wave's variables, labels, and value-label text in a running tracker file, so you can see at a glance which items are new, which changed, and which were dropped. That inventory is the backbone of the cross-wave codebook of Section~\ref{sec:cxchangelog}; without it, a multi-wave survey is not a study that extends but a pile of unrelated files.
 
-\begin{kaobox}[frametitle=Package Integration: \texttt{validemail}]
-\textbf{Integrated command:} \texttt{validemail} validates an email item in three tiers (format, live DNS/MX lookup, and disposable-provider detection), the small but constant chore of cleaning an open-ended contact field before it is used for follow-up. Its planned companion \texttt{surveytracker}, a launch-day instrument logger feeding the same tracker, remains an ado-file idea; Section~\ref{sec:cxchangelog}'s \texttt{cxchangelog} covers the cross-wave inventory today.
+\begin{kaobox}[frametitle=Package Integration: \texttt{surveytracker} and \texttt{validemail}]
+\textbf{Integrated commands:} \texttt{surveytracker}\index{surveytracker@\texttt{surveytracker}} snapshots the instrument's metadata, variable names, labels, and value-label text, as one wave-tagged block appended to a running tracker file, and refuses to re-log a wave: a snapshot is a record, not a draft. \texttt{cxchangelog} (Section~\ref{sec:cxchangelog}) diffs the waves when the next one lands. \texttt{validemail} validates an email item in three tiers (format, live DNS/MX lookup, and disposable-provider detection), the small but constant chore of cleaning a contact field before follow-up. Both ship with the book.
 \end{kaobox}
 
 \section{Scales without tears}
@@ -289,7 +289,7 @@ The spread screen alone flags 14 rows: the 12 planted straight-liners plus two h
 
 \pagelayout{wide}
 \section{Who did not answer, and does it matter}
-A response rate is not a verdict on its own; the real question is whether the people who answered differ from the people who did not. We separate two failures: unit nonresponse\index{nonresponse!unit}, when a sampled person answers nothing, and item nonresponse\index{nonresponse!item}, when a respondent skips particular questions. Compare respondents to the sampling frame, \texttt{reachcheck} against published margins, or a logit of response on frame characteristics when you hold the frame file \parencite{groves2008nonresponse}, so \enquote{can we trust a 22 percent response rate} gets a diagnostic answer instead of a shrug. A level-of-effort\index{level-of-effort} check adds a second angle, tracing whether estimates stabilize as later contact attempts bring in reluctant respondents, which is the closest thing to a window on the people you never reached. The level-of-effort logic assumes late responders resemble nonresponders, which holds better for reluctance than for unreachability, so pair the trend with a frame comparison before you lean on it: a dead phone number is not a reluctant respondent.
+A response rate is not a verdict on its own; the real question is whether the people who answered differ from the people who did not. We separate two failures: unit nonresponse\index{nonresponse!unit}, when a sampled person answers nothing, and item nonresponse\index{nonresponse!item}, when a respondent skips particular questions. Compare respondents to the sampling frame: \texttt{reachcheck} against published margins, or, when you hold the frame file itself, \texttt{nonresponse}, which packages the category gaps, the response model, and raking weights in one call \parencite{groves2008nonresponse}, so \enquote{can we trust a 22 percent response rate} gets a diagnostic answer instead of a shrug. The \texttt{loebias} command adds the level-of-effort\index{level-of-effort} angle, tracing whether estimates stabilize as later contact attempts bring in reluctant respondents, which is the closest thing to a window on the people you never reached. The level-of-effort logic assumes late responders resemble nonresponders, which holds better for reluctance than for unreachability, so pair the trend with a frame comparison before you lean on it: a dead phone number is not a reluctant respondent.
 
 The reason a rate is not a verdict is that nonresponse rate and nonresponse bias are not the same quantity. \textcite{groves2006nonresponse} shows, across dozens of studies, that a survey's response rate is a weak predictor of the bias in its estimates, because bias depends on whether responding is correlated with the answer, not on how many people responded. A 40~percent response rate with responders who resemble nonresponders on the outcome can be less biased than an 80~percent rate where the missing fifth is exactly the group whose outcome differs. That is why the response model matters more than the response count, and it is why the level-of-effort trend matters: both are attempts to see the correlation, not just the count. Where the platform records it, the contact history itself is evidence. \textcite{kreuter2013paradata} makes the case for paradata\index{paradata}, the process trail of call attempts, timestamps, and reminder sends, as a lever on total survey error, and the level-of-effort check is paradata put to work: it reads the order in which responses arrived to ask whether the late, reluctant respondents are pulling the estimate.
 
@@ -319,7 +319,7 @@ goodness of fit vs target: chi2(2) =  218.1, p = 0.0000
 }
 Read the ratio column the way a program officer would: the \enquote{Other} group arrived at 12~percent of its intended size, not slightly under-covered but nearly absent, and no amount of averaging over the full sample will speak for the group that is not in the room. On a live survey the same line runs against the enrollment roster's margins, site by site, while the field period is still open and the fix is still a targeted reminder rather than a footnote.
 
-What happens next depends on which branch of Figure~\ref{fig:ch05-reachtree} the result lands in, and the honest branch is sometimes the third one. A gap on traits you observe (site, race, age band) is recoverable: rake the respondents to the target margins (\texttt{ipfraking} from SSC) and rerun the headline both weighted and unweighted, reporting both. A suspected gap on traits nobody measured, the disengaged families, the households whose phones changed, is the branch no weighting can fix, because you cannot weight on a variable you do not have; there the deliverable is the caveat, stated beside the response rate, and a bounded sense of how far the missing group would have to differ to move the finding. Either way the table itself travels into the report: the gap beside the rate is the honest minimum this chapter keeps returning to.
+What happens next depends on which branch of Figure~\ref{fig:ch05-reachtree} the result lands in, and the honest branch is sometimes the third one. A gap on traits you observe (site, race, age band) is recoverable: rake the respondents to the target margins (\texttt{ipfraking} from SSC, or \texttt{nonresponse} when you hold the frame) and rerun the headline both weighted and unweighted, reporting both. A suspected gap on traits nobody measured, the disengaged families, the households whose phones changed, is the branch no weighting can fix, because you cannot weight on a variable you do not have; there the deliverable is the caveat, stated beside the response rate, and a bounded sense of how far the missing group would have to differ to move the finding. Either way the table itself travels into the report: the gap beside the rate is the honest minimum this chapter keeps returning to.
 
 \begin{figure}[htbp]
 \centering
@@ -344,8 +344,50 @@ What happens next depends on which branch of Figure~\ref{fig:ch05-reachtree} the
 
 This matters because representativeness is the difference between \enquote{our respondents} and \enquote{our participants}, and a funder quotes the second. The diagnostics here hand off directly to the weighting of Chapter~\ref{ch:trust}, where the imbalance they find gets corrected.
 
-\begin{kaobox}[frametitle=Ado-file Idea: \texttt{nonresponse} and \texttt{loebias}]
-\textbf{Proposed programs.} Wrappers for this section's diagnostics: \texttt{nonresponse} would package the frame tests, the response model, and raking weights \parencite{deming1940raking}; \texttt{loebias} the cumulative level-of-effort sensitivity runs. The moves themselves are taught above, and \texttt{reachcheck} already covers the margins comparison; the wrappers await an interface worth freezing.
+\begin{kaobox}[frametitle=Package Integration: \texttt{nonresponse}]
+\textbf{Integrated command:} \texttt{nonresponse}\index{nonresponse@\texttt{nonresponse}}. Run on the sampling frame with a 0/1 response flag, it tabulates respondent-versus-frame shares for every category you trust the frame on, shows the response model (a logit of answering, printed, not hidden), and with \texttt{generate()} rakes the responders to the frame margins \parencite{deming1940raking}, refusing loudly when a category has no responders to rake. On a simulated frame of 2{,}000 where the young answer less (part (n) of \texttt{ch05\_monitoring.do}):
+\par
+{\footnotesize
+\begin{verbatim}
+. nonresponse resp, frame(region young) generate(w)
+
+Nonresponse check: 995 responders in a frame of 2000 (49.8%)
+----------------------------------------------------------
+category                  resp %   frame %   gap pp
+----------------------------------------------------------
+region=North                44.4      51.1     -6.7
+region=South                55.6      48.9      6.7
+young=0                     75.3      61.7     13.6
+young=1                     24.7      38.4    -13.6
+----------------------------------------------------------
+largest gap: -13.6 pp on young=1
+raking converged in 6 iteration(s); weights in w,
+  range  0.72 to  1.77
+rerun the headline weighted and unweighted, and report both.
+\end{verbatim}
+}
+Ships in the companion repository's \texttt{code/} folder.
+\end{kaobox}
+
+\begin{kaobox}[frametitle=Package Integration: \texttt{loebias}]
+\textbf{Integrated command:} \texttt{loebias}\index{loebias@\texttt{loebias}}. The respondents who needed five calls are the closest available stand-ins for the people who never answered. \texttt{loebias} folds each contact-attempt level into a cumulative estimate and says whether the series has settled; it requires a real attempts variable with at least three levels, because arrival order is not effort. On 900 simulated responses where the hard-to-reach differ (part (l) of \texttt{ch05\_monitoring.do}):
+\par
+{\footnotesize
+\begin{verbatim}
+. loebias engaged, attempts(attempts)
+
+Level-of-effort check: cumulative estimate of engaged
+----------------------------------------------
+ attempts <= k       N      estimate
+----------------------------------------------
+             1     316        0.5854
+             2     606        0.5941
+             3     900        0.5578
+----------------------------------------------
+last-step change:  -3.63 pp (still moving at threshold .5)
+\end{verbatim}
+}
+A drifting series says the reluctant differ: treat the final number as provisional and pair it with the frame comparison above. Ships in the companion repository's \texttt{code/} folder.
 \end{kaobox}
 
 \section{The cross-wave codebook}\label{sec:cxchangelog}

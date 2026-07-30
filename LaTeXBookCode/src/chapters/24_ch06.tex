@@ -42,7 +42,7 @@ You can read Jaro-Winkler's design straight from its formula. The base Jaro scor
   \mathrm{Jaro}=\tfrac{1}{3}\!\left(\tfrac{m}{|s_1|}+\tfrac{m}{|s_2|}+\tfrac{m-t}{m}\right),$}\]
 where $m$ is the count of matching characters between strings $s_1$ and $s_2$, $t$ is the number of those matches that are transposed, $|s_i|$ is a string's length, $\ell$ is the length of the shared leading prefix (capped at four), and $p$ is a small scaling constant (Winkler used $0.1$). The $\ell\,p$ term is exactly the prefix reward the margin note describes: two surnames that agree on their first letters get pushed toward $1$, while a first-letter slip leaves $\ell=0$ and no boost, which is why Jaro-Winkler suits names and plain edit distance does not.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \resizebox{\linewidth}{!}{%
 \begin{tikzpicture}[node distance=6mm]
@@ -69,7 +69,7 @@ where $m$ is the count of matching characters between strings $s_1$ and $s_2$, $
 }
 \caption[The clean-block-score-threshold linkage pipeline]{The probabilistic-linkage pipeline the section walks: two source files are name-cleaned, blocked on a reliable key to cut the candidate pairs, scored with a string comparator, then split by match weight into three bands. See that the middle band routes to human review rather than a silent accept or reject, and that only the scoring box changes when you swap comparators.}
 \label{fig:ch06-viz-linkpipe}
-\end{figure}
+\end{figure*}
 
 \subsection{Why the method holds up: a four-decade pedigree}\label{sec:ch06-fspedigree}
 None of this machinery is improvised. The clean-block-score-threshold pattern is the Fellegi-Sunter framework\index{Fellegi-Sunter framework}\index{match weight} made operational, and the framework says exactly what the score should be. In words first: the weight asks how much more often this exact pattern of field agreements shows up among true matches than among random pairings, and taking the log base~2 turns that ratio into points you can add across fields. Formally, for a candidate pair with agreement pattern $\gamma$ across the compared fields, the match weight is the base-2 log-likelihood ratio
@@ -223,7 +223,7 @@ Ask a room of Stata users which command they most often get wrong, and \texttt{r
 
 \texttt{reshapehelper}\index{reshapehelper@\texttt{reshapehelper}} does that reading for you, and it never touches the file in front of you. You type the command with no options; it reads the variable names, works out the unit and the repeating dimension, writes the \texttt{reshape} command it believes you want, and runs that command on a throwaway copy to make sure it works. What comes back is a picture rather than a lecture: a sketch of the data now, an arrow labeled with the proposed command, and a sketch of the data after (Figure~\ref{fig:reshapehelper}). You compare the two shapes, decide the arrow does what you meant, and run the command it saved.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 {\footnotesize
 \begin{mdframed}[backgroundcolor=aeBg,linecolor=aeRule,linewidth=0.6pt,%
@@ -263,7 +263,7 @@ suggested command (dry-run PASSED on 3 sample obs):
 }
 \caption[The reshapehelper diagnosis and suggestion]{The \texttt{reshapehelper} output on a grant file that records one outcome column per year. The tool reads \texttt{served2021}--\texttt{served2023} as the stub \texttt{served}, picks \texttt{site} as the row identifier and \texttt{year} as the new time variable, and shows the before-and-after shape from an actual dry run of the command it suggests. The suggestion is also stored in \texttt{r(cmd)} and the global \texttt{\$reshapehelper\_cmd}, and offered as click-to-run and click-to-view links. Reproduced by \texttt{ch06\_reshapehelper.do}.}
 \label{fig:reshapehelper}
-\end{figure}
+\end{figure*}
 
 Start with the two boxes. The top one is your data as it sits: one row per site, a column per year. The bottom one is what you would get if you ran the command on the arrow: one row per site-year, the three \texttt{served} columns folded into a single column. The bottom box is not a mock-up; it comes from the trial run, so the green \enquote{dry run: OK} means the command actually worked on your data. Had it failed, you would read the failure here, on the copy, rather than discover it on your live file. When the two shapes match your intent, one click runs the command, or you copy \texttt{\$reshapehelper\_cmd}, the line it stored, into your do-file so the decision is on the record with everything else.
 
@@ -330,7 +330,7 @@ tab wq wq_next, row nofreq
 }
 Each row of Table~\ref{tab:transition} sums to 100 percent and reads as a probability: given a worker in this quartile now, where is she next? The diagonal is persistence, and it dominates. A worker in the bottom quartile stays there 61 percent of the time and reaches the top only 4 percent of the time; a worker in the top quartile stays 82 percent of the time. The diagonal is believable on its face: wages are sticky, and a single wage ladder does not turn low earners into high earners between survey waves. The off-diagonal mass sits next to the diagonal, so movement, when it happens, is mostly one rung at a time. For an evaluator, that persistence is the counterfactual: a program claiming to move participants up the wage distribution has to beat a world in which most people simply stay where they were, and the matrix quantifies exactly how strong that pull is.
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 \caption[Wage-quartile transition matrix]{Wage-quartile transition matrix, \texttt{nlswork}: row percentages from a worker's current within-year log-wage quartile (rows) to her quartile at the next observation (columns). The diagonal is persistence. Built by \texttt{ch06\_longitudinal.do}.}
 \label{tab:transition}
@@ -347,7 +347,7 @@ Q4 (high)    &  3.02  &  3.88  & 10.95  & 82.15  & 100.00 \\
 \hline
 \end{tabular}
 }
-\end{table}
+\end{table*}
 
 \begin{vizcallout}[Visualization to build: the Sankey flow]
 A Sankey diagram of participant movement through program phases (Intake $\rightarrow$ Active $\rightarrow$ Graduated, with the leaks at each stage). Shape the flow into source-target counts with a five-line \texttt{collapse}; the \texttt{sankey} box below shows the tool that draws it, and the interactive option when you need one. The width of each stream is the count, so a director sees where participants are lost without reading a table.
@@ -364,20 +364,20 @@ The case for staying is not sentiment. \textcite{long2009workflow} built the wor
 
 Honesty about the other side is what makes the position credible, and three limits are real walls. Stata works in memory, so when the largest file you routinely open stops fitting with room to merge, the work does not slow down, it stops. A person-triggered rebuild falls quietly behind data that arrive daily. And no amount of do-file discipline produces a log of which person read which rows, so a data-use agreement that demands one has made the decision for you. Table~\ref{tab:ch06-dbdecision} turns the choice into two groups of questions rather than a score, because the factors are not interchangeable: the first group are limits code cannot get around, the second are conditions that must all hold before buying helps. If you do buy, keep the build code as the source of truth and load \emph{cleaned} data into the database, never move the cleaning decisions into it; and never query it live from an analysis do-file. Have the database write files on a schedule and Stata read files, which keeps do-files portable and takes the fragile driver, the per-machine ODBC setup, and the single-sign-on dance off the critical path.\marginnote{A middle path worth knowing: DuckDB runs SQL over plain files with no server, no license, and nothing to administer, and handles joins bigger than memory. The robust arrangement is the same either way: let it write files and let every tool read files, rather than wiring tools to it live.}
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 \footnotesize
 \caption[The database decision in seven questions]{The database decision in seven questions. Any \enquote{yes} in the first group is a limit code cannot get around; only then do the second group's conditions matter, and every one must hold or the purchase makes things worse. No yes in the first group means the decision is finished: stay in code.}
 \label{tab:ch06-dbdecision}
-\begin{tabular}{p{7.2cm}p{3.4cm}}
+\begin{tabular}{p{9.8cm}p{4.2cm}}
 \hline
-\multicolumn{2}{l}{\emph{Limits code cannot get around: any yes points to a database}} \\
+\multicolumn{2}{p{14.2cm}}{\emph{Limits code cannot get around: any yes points to a database}} \\
 \hline
 Does your largest working file crowd half the machine's memory? & Yes: a real wall \\
 Do data arrive faster than a person can rerun the build? & Yes: a real wall \\
 Does an agreement require a log of who read which rows? & Yes: a real wall \\
 \hline
-\multicolumn{2}{l}{\emph{Conditions that must all hold before buying helps}} \\
+\multicolumn{2}{p{14.2cm}}{\emph{Conditions that must all hold before buying helps}} \\
 \hline
 Is a quarter to half of a salary funded, permanently, to run it? & No: fix this first \\
 Will researchers who know the variables still do the cleaning? & No: do not buy \\
@@ -385,7 +385,7 @@ Can a definition change land in days, not weeks? & No: do not buy \\
 Can every tool read the output without a fragile driver? & No: write files instead \\
 \hline
 \end{tabular}
-\end{table}
+\end{table*}
 
 \section{Missing data honestly}
 Dropping a row is an analytic decision made in silence, so make the decision visible. Missing values are rarely missing at random, so casewise deletion can quietly bias an estimate; we first diagnose the pattern with \texttt{misstable patterns}\index{misstable@\texttt{misstable}}, then decide.\marginnote{The methods literature names three regimes \parencite{rubin1987imputation}: missing completely at random (the gap is unrelated to anything), missing at random (explained by things you observe, a site, a wave, a survey mode), and missing not at random (driven by the unseen value itself, the client doing worst being the one who stopped answering). The table shows the shape; only reasoning about the mechanism says which regime you are in, and no command can rescue the third. The gap itself is also data: a missingness indicator that predicts the outcome is a finding about the program, not just a hole to fill.} That command tabulates which combinations of variables go missing together, and on a 200-row sample of the panel it prints a compact map of the structure:
@@ -425,12 +425,12 @@ graph export "ch06_missmap.png", replace width(2400)
 \end{verbatim}
 }
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \includegraphics[width=\linewidth]{ch06_missmap.png}
 \caption[Percent missing by variable in a longitudinal sample]{Percent of the 200 sampled rows (seed 20260704, from the shipped \texttt{nlswork} panel) on which each variable is missing, sorted. The gaps concentrate in \texttt{union} (30~percent) and \texttt{wks\_ue} (23~percent); \texttt{hours} and \texttt{tenure} lose one row each and \texttt{ln\_wage} and \texttt{msp} none, so casewise deletion here would drop over half the sample, almost all of it on those two variables, not at random. The bar chart puts the magnitude on a common scale that the \texttt{misstable patterns} table, which shows co-occurrence, leaves off. Built by \texttt{ch06\_longitudinal.do}; the command is printed above it.}
 \label{fig:missmap}
-\end{figure}
+\end{figure*}
 
 \begin{vizcallout}[Visualization to build: percent missing by variable]
 A sorted bar of each variable's share of missing rows. \texttt{misstable patterns} shows which variables go missing together; the bar chart puts the magnitude on one scale, so you see at a glance which variables carry the gaps and how large casewise deletion's toll would be before you decide how to handle it.
