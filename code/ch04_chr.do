@@ -64,6 +64,8 @@ summarize yrslost if state=="TX" & name=="Texas"
 local tx_yrslost = r(mean)
 summarize childpov if state=="TX" & name=="Texas"
 local tx_childpov = 100*r(mean)
+summarize uninsured if state=="TX" & name=="Texas"
+local tx_uninsured = 100*r(mean)
 
 keep if state=="TX" & name!="Texas"
 di "TX_COUNTIES  obs = " _N
@@ -73,7 +75,8 @@ assert _N==254
 replace childpov  = 100*childpov
 replace uninsured = 100*uninsured
 di "TX statewide: yrslost = " %6.0fc `tx_yrslost' ///
-   "  childpov = " %4.1f `tx_childpov'
+   "  childpov = " %4.1f `tx_childpov' ///
+   "  uninsured = " %4.1f `tx_uninsured'
 
 * CHR suppresses estimates too unstable to publish; count what we lost.
 count if missing(yrslost)

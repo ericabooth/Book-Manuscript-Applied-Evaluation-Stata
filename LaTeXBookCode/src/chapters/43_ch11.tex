@@ -105,7 +105,34 @@ putexcel A4 = "Participants" B4 = (e(N))
 putexcel save
 \end{verbatim}
 }
-Because \texttt{B3} is filled from \texttt{\_b[hours]} rather than a typed number, the workbook cannot fall out of step with the model that produced the \LaTeX{} table on the same run.\marginnote{A discipline worth adopting: never let a number reach a client-facing cell by keyboard. If it did not come from \texttt{\_b[]}, \texttt{e()}, \texttt{r()}, or a stored table, it is a transcription error waiting to be discovered in a meeting.} Deliver in the client's native format and the work becomes accessible; automate the write and a dreaded recurring chore becomes a rerun. And because the funder table regenerates itself, it cannot fall out of sync with the analysis behind it: the stale number the client would otherwise read, the exact failure replicability guards against, never gets written.
+Because \texttt{B3} is filled from \texttt{\_b[hours]} rather than a typed number, the workbook cannot fall out of step with the model that produced the \LaTeX{} table on the same run.\marginnote{A discipline worth adopting: never let a number reach a client-facing cell by keyboard. If it did not come from \texttt{\_b[]}, \texttt{e()}, \texttt{r()}, or a stored table, it is a transcription error waiting to be discovered in a meeting.} Deliver in the client's native format and the work becomes accessible; automate the write and a dreaded recurring chore becomes a rerun. And because the funder table regenerates itself, it cannot fall out of sync with the analysis behind it: the stale number the client would otherwise read, the exact failure replicability guards against, never gets written. Figure~\ref{fig:ch11-viz-workbook} is the tab those six lines build, as the client opens it.
+
+\begin{figure*}[htbp]
+\centering
+\begin{tikzpicture}[font=\sffamily\footnotesize]
+% column boundaries: rownum 0-0.9, A 0.9-7.3, B 7.3-10.9; rows 0.62cm tall, top at y=0
+\fill[gray!18] (0,-0.62) rectangle (10.9,0);
+\fill[gray!18] (0,-3.10) rectangle (0.9,-0.62);
+\draw[gray!60, thin] (0,-3.10) grid[xstep=200, ystep=0.62] (10.9,0);
+\foreach \x in {0,0.9,7.3,10.9} \draw[gray!60, thin] (\x,-3.10) -- (\x,0);
+\node at (4.1,-0.31) {A};
+\node at (9.1,-0.31) {B};
+\foreach \r/\y in {1/-0.93, 2/-1.55, 3/-2.17, 4/-2.79} \node at (0.45,\y) {\r};
+\node[anchor=west] at (1.05,-0.93) {\textbf{Program earnings model}};
+\node[anchor=west] at (1.05,-1.55) {\textbf{Term}};
+\node[anchor=west] at (7.45,-1.55) {\textbf{Dose + controls}};
+\node[anchor=west] at (1.05,-2.17) {Training hours (\$ per qtr each)};
+\node[anchor=east] at (10.75,-2.17) {20.012522};
+\node[anchor=west] at (1.05,-2.79) {Participants};
+\node[anchor=east] at (10.75,-2.79) {900};
+\node[annot, text width=7.6cm, anchor=north] (typed) at (5.45,-3.7)
+  {the two value cells arrived from \texttt{\_b[hours]} and \texttt{e(N)}; no number in this tab was ever typed};
+\draw[flow, dashed] (typed.north) to[bend right=10] (9.6,-2.44);
+\draw[flow, dashed] (typed.north east) to[bend right=15] (10.1,-3.06);
+\end{tikzpicture}
+\caption[The generated summary tab]{\texttt{summary.xlsx} as the program manager opens it. The bold cells are the layout skeleton the client signed off on; the value cells are wired to stored results, so a rerun of \texttt{ch11\_tables.do} rewrites them and the workbook cannot fall out of step with the model.}
+\label{fig:ch11-viz-workbook}
+\end{figure*}
 
 This is where the chapter's opening lesson, the range that silently stopped short, lands on a concrete keystroke. A \texttt{putexcel} write that reads \texttt{\_b[hours]} removes the class of error entirely: there is no cell range for a human to mis-type, because the value is pulled from the estimate Stata just computed. The point is not that \texttt{putexcel} makes you careful. It is that the discipline moves the number's origin from a keyboard, where \textcite{panko1998errors} shows even careful entry fails a few times per hundred cells, to a stored result that cannot be off by a transcription.\marginnote{\textcite{broman2018spreadsheets} press this separation from the data side: keep the workbook's data a plain rectangle of raw values and do the arithmetic in code, so the spreadsheet a client edits and the computation an evaluator trusts never share a cell.} A workbook built this way is safe to hand over precisely because the parts a practitioner will touch and the parts that must not drift are kept apart by construction.
 
@@ -127,7 +154,29 @@ net install googlesheets, ///
 The one-time OAuth setup is covered in Appendix~\ref{app:setup}, with a credential-free path for readers who only need to read a link-shared sheet. The whole workflow above is collected in \texttt{ch11\_googlesheets.do}, marked display-only because it needs that sign-in and a live Sheet.
 \end{kaobox}
 
-Before the workflow, pin down three terms, because the API vocabulary is where newcomers get lost. A \emph{Sheet ID} is the roughly forty-character string in a Google Sheets URL between \texttt{/d/} and \texttt{/edit}; it names the workbook the way a file path names a file, and every command below takes it (or the whole URL) after \texttt{using}. A \emph{tab} is one sheet inside that workbook, named in \texttt{sheet()} and case-sensitive. \emph{OAuth}\index{OAuth} is the one-time browser sign-in that lets Stata act as you\marginnote{Why OAuth over the alternatives: you never paste a password into code and never have to share each Sheet with a robot account.}; the setup is a one-time chore in Appendix~\ref{app:setup}. With that sign-in done once per machine, every line in this section runs exactly as written.
+Before the workflow, pin down three terms, because the API vocabulary is where newcomers get lost. A \emph{Sheet ID} is the roughly forty-character string in a Google Sheets URL between \texttt{/d/} and \texttt{/edit}; it names the workbook the way a file path names a file, and every command below takes it (or the whole URL) after \texttt{using}. A \emph{tab} is one sheet inside that workbook, named in \texttt{sheet()} and case-sensitive. \emph{OAuth}\index{OAuth} is the one-time browser sign-in that lets Stata act as you\marginnote{Why OAuth over the alternatives: you never paste a password into code and never have to share each Sheet with a robot account.}; the setup is a one-time chore in Appendix~\ref{app:setup}. With that sign-in done once per machine, every line in this section runs exactly as written. Figure~\ref{fig:ch11-viz-sheeturl} maps the vocabulary onto the URL a teammate pastes in chat.
+
+\begin{figure*}[htbp]
+\centering
+\begin{tikzpicture}[node distance=4mm, font=\footnotesize]
+\node[stage] (host) {host};
+\node[stage, right=26mm of host] (id) {Sheet ID};
+\node[stage, right=26mm of id] (frag) {tab pointer};
+\node[substep, below=5mm of host, text width=3.0cm] (hostA)
+  {\texttt{docs.google.com/}\\\texttt{spreadsheets/d/}\\the server and the app};
+\node[substep, below=5mm of id, text width=3.3cm] (idA)
+  {\texttt{1aBcD}\ldots\texttt{wXyZ}\\forty-odd characters between \texttt{/d/} and \texttt{/edit}; what \texttt{using} wants};
+\node[substep, below=5mm of frag, text width=3.4cm] (fragA)
+  {\texttt{/edit\#gid=0}\\numbers the tab the browser has open; your commands name tabs with \texttt{sheet()} instead};
+\draw[flow, dashed] (host) -- (hostA);
+\draw[flow, dashed] (id) -- (idA);
+\draw[flow, dashed] (frag) -- (fragA);
+\node[annot, below=4mm of idA.south, text width=6.6cm] (rng)
+  {cell ranges (\texttt{A1:C20}) never ride in the URL; they go in \texttt{range()} on the command};
+\end{tikzpicture}
+\caption[Anatomy of a Google Sheets URL]{The URL carries everything \texttt{googlesheets} needs to find the workbook: paste the whole thing after \texttt{using} and the command digs the Sheet ID out itself, or pass the ID alone. Only the tab and the range come from options rather than the URL.}
+\label{fig:ch11-viz-sheeturl}
+\end{figure*}
 
 A live Sheet needs the same deliverable spec as the workbook, plus one extra agreement, because here the team is editing while the do-file is writing. Settle the tab boundary by name: tabs the do-file rebuilds carry a marker in the title, a suffix like \texttt{(auto)} the team learns to treat as read-only, and the team's notes and flags live on tabs the do-file never touches. Settle the cadence too, since a refresh that lands mid-meeting on an unexpected day reads as a glitch rather than a feature; a named schedule (\enquote{rebuilds Mondays at 7 a.m.}) written in a corner cell tells every reader when the numbers last moved.
 
@@ -319,7 +368,30 @@ googlesheets import using "$SS", ///
 That is the bridge back to Chapter~\ref{ch:surveys}: the responses your Form collects flow straight into an updating summary, and the same \texttt{export} and \texttt{addchart} steps above write the refreshed numbers back to a tab the team is already watching. The pull schedule belongs in the deliverable spec alongside the tab list, since \enquote{live} to a program team means a defined refresh they can rely on rather than a vague sense of currency.
 
 \subsection{Why a live Sheet beats a static export}
-Why does all this apparatus beat simply emailing the team a workbook? A static export is a photograph: correct the moment you took it, stale the moment the data moves, and multiplied into a dozen slightly different copies the instant you send it to a dozen inboxes. A live Sheet is a window onto the current numbers. The team opens it on their phones in a meeting and sees today's figures, not last Tuesday's; your do-file refreshes it on a schedule, so there is one copy and it is always current; and because a Form can feed it, the loop from data collection to shared summary closes without anyone touching a cell by hand. A live Sheet closes the distance between the analysis and the people it serves: it makes the numbers accessible and lets the team act on them at once, delivered in the tool the client never leaves.
+Why does all this apparatus beat simply emailing the team a workbook? A static export is a photograph: correct the moment you took it, stale the moment the data moves, and multiplied into a dozen slightly different copies the instant you send it to a dozen inboxes. A live Sheet is a window onto the current numbers. The team opens it on their phones in a meeting and sees today's figures, not last Tuesday's; your do-file refreshes it on a schedule, so there is one copy and it is always current; and because a Form can feed it, the loop from data collection to shared summary closes without anyone touching a cell by hand. A live Sheet closes the distance between the analysis and the people it serves: it makes the numbers accessible and lets the team act on them at once, delivered in the tool the client never leaves. Figure~\ref{fig:ch11-viz-twopaths} draws the fork: the same stored estimates feed both surfaces, and only what \enquote{delivered} means differs.
+
+\begin{figure*}[htbp]
+\centering
+\begin{tikzpicture}[node distance=4mm and 9mm, font=\footnotesize]
+\node[io] (est) {one stored estimate\\\texttt{\_b[hours]}, \texttt{e(N)}};
+\node[stage, above right=3mm and 13mm of est] (pe) {\texttt{putexcel}};
+\node[stage, below right=3mm and 13mm of est] (gs) {\texttt{googlesheets}};
+\node[io, right=11mm of pe] (wb) {Excel workbook\\\texttt{summary.xlsx}};
+\node[io, right=11mm of gs] (sheet) {live Google Sheet\\the shared tab};
+\draw[flow] (est) -- (pe);
+\draw[flow] (est) -- (gs);
+\draw[flow] (pe) -- (wb);
+\draw[flow] (gs) -- (sheet);
+\node[substep, right=8mm of wb, text width=3.7cm] (wbA)
+  {a photograph: emailed, correct when sent, updated only by sending again};
+\node[substep, right=8mm of sheet, text width=3.7cm] (shA)
+  {a window: one copy, opened where the team already works, rewritten in place by the refresh};
+\draw[flow, dashed] (wb) -- (wbA);
+\draw[flow, dashed] (sheet) -- (shA);
+\end{tikzpicture}
+\caption[Two delivery surfaces, one source]{Both deliverables read the same stored results, so neither can drift from the model; they differ in what arrival means. The workbook is a snapshot a client files; the Sheet is a channel the team watches. Choosing between them is a question about the audience's habits, not about the analysis.}
+\label{fig:ch11-viz-twopaths}
+\end{figure*}
 
 The live Sheet is also where two arguments of this chapter collide. Section~\ref{sec:ch11-rationale} argued that findings get used when the deliverable lands where the intended user already works, and nothing lands closer than a shared tab the team already opens; an attachment has friction, a bookmark does not. But the same openness invites the helpful colleague who fixes a figure by hand, and a hand-edited cell carries exactly the risk \textcite{panko1998errors} documents, so the discipline that protects the emailed workbook has to protect the live one too. You resolve the collision by drawing the line the chapter keeps drawing: the do-file owns the computed cells, and the team owns the notes and flags around them. When the refresh writes the summary block from \texttt{\_b[]} and \texttt{r()} rather than trusting a cell someone might have retyped, the Sheet stays both usable and correct, and the boundary object of Section~\ref{sec:ch11-rationale} stays trustworthy for both sides to work on. Once the numbers arrive from code, you no longer trade correctness for convenience.
 
@@ -331,6 +403,48 @@ The best deliverable is often not a report at all but a tool the program team ke
 
 \medskip
 \textbf{The build, entirely from Stata.} A Google Sheets workbook with a validated entry tab (dropdowns and checks that stop bad values at the source), an auto-updating charts tab that redraws as rows arrive, and a plain-language data dictionary tab generated by \texttt{datadictionary}\index{datadictionary@\texttt{datadictionary}} (Chapter~\ref{ch:surveys}) so the team understands every field. The evaluator's do-file builds and refreshes it: a scheduled run pulls the latest Form responses with \texttt{googlesheets import}, rebuilds the summary, and writes it back with a fresh \texttt{addchart}, so the team opens the sheet Monday to numbers that are already current. When a stakeholder needs the same picture behind a firewall, where the live Sheet cannot follow, the identical rebuilt table feeds a \texttt{googlechart} export (Chapter~\ref{ch:interactive}), a self-contained HTML file that renders in any browser with nothing to log in to.
+
+\medskip
+\begin{center}
+\begin{tikzpicture}[font=\sffamily\scriptsize]
+% entry-tab mock: rownum 0-0.7, Site 0.7-2.9, Week 2.9-4.9, Enrolled 4.9-7.1, Status 7.1-9.7
+\fill[gray!18] (0,-0.5) rectangle (9.7,0);
+\fill[gray!18] (0,-2.5) rectangle (0.7,-0.5);
+\draw[gray!60, thin] (0,-2.5) grid[xstep=200, ystep=0.5] (9.7,0);
+\foreach \x in {0,0.7,2.9,4.9,7.1,9.7} \draw[gray!60, thin] (\x,-2.5) -- (\x,0);
+\node at (1.8,-0.25) {A};
+\node at (3.9,-0.25) {B};
+\node at (6.0,-0.25) {C};
+\node at (8.4,-0.25) {D};
+\foreach \r/\y in {1/-0.75, 2/-1.25, 3/-1.75, 4/-2.25} \node at (0.35,\y) {\r};
+\node[anchor=west] at (0.85,-0.75) {\textbf{site}};
+\node[anchor=west] at (3.05,-0.75) {\textbf{week\_of}};
+\node[anchor=west] at (5.05,-0.75) {\textbf{enrolled}};
+\node[anchor=west] at (7.25,-0.75) {\textbf{status}};
+\node[anchor=west] at (0.85,-1.25) {Eastside};
+\node[anchor=west] at (3.05,-1.25) {2026-07-14};
+\node[anchor=east] at (6.95,-1.25) {14};
+\node[anchor=west] at (7.25,-1.25) {complete};
+\fill[gray!50] (9.35,-1.2) -- (9.55,-1.2) -- (9.45,-1.32) -- cycle;
+\node[anchor=west] at (0.85,-1.75) {Westside};
+\node[anchor=west] at (3.05,-1.75) {2026-07-21};
+\node[anchor=east] at (6.95,-1.75) {9};
+\node[anchor=west] at (7.25,-1.75) {in progress};
+\fill[gray!50] (9.35,-1.7) -- (9.55,-1.7) -- (9.45,-1.82) -- cycle;
+\node[anchor=west] at (0.85,-2.25) {Eastside};
+\node[anchor=west] at (3.05,-2.25) {2026-07-28};
+\node[anchor=west] at (5.05,-2.25) {twelve};
+\draw[red!70!black, thick] (4.9,-2.5) rectangle (7.1,-2.0);
+\fill[gray!50] (9.35,-2.2) -- (9.55,-2.2) -- (9.45,-2.32) -- cycle;
+% tab strip
+\node[anchor=west, draw=gray!60, fill=white, minimum height=4.5mm, inner xsep=2mm] at (0.15,-2.95) {Entry};
+\node[anchor=west, draw=gray!60, fill=gray!12, minimum height=4.5mm, inner xsep=2mm] at (1.55,-2.95) {Summary (auto)};
+\node[anchor=west, draw=gray!60, fill=gray!12, minimum height=4.5mm, inner xsep=2mm] at (4.35,-2.95) {Charts (auto)};
+\node[anchor=west, draw=gray!60, fill=gray!12, minimum height=4.5mm, inner xsep=2mm] at (6.85,-2.95) {Dictionary (auto)};
+\end{tikzpicture}
+\par\smallskip
+{\footnotesize\itshape The entry tab as the field team sees it. Dropdowns hold \texttt{status} to the dictionary's levels, the validation rule is about to hand \enquote{twelve} back to its typist, and the \texttt{(auto)} tabs are the ones the team treats as read-only.\par}
+\end{center}
 
 \medskip
 \textbf{Why it is the thesis.} The evaluator ships a tool, not a PDF, so the work is extensible (next quarter is a rerun) and accessible (the team reads and uses it without help). And because the team can see themselves in the data, their entry improves at the source, which quietly raises the quality of every analysis downstream. This is what embedded evaluation looks like when it works.

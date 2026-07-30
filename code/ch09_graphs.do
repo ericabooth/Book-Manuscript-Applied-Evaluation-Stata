@@ -106,17 +106,72 @@ di "DIFF        = " %4.1f `post' - `pre'
 
 *==============================================================================*
 * (4) High-density categorical summary with statplot: 13 occupations, ranked,
-*     with 95% CIs. statplot (Booth & Cox, SSC) collapses to the statistic and
-*     draws the ranked hbar in one call; sort/ci/wrap are 1.3.0 options.
+*     with 95% CIs. statplot (Booth & Cox) collapses to the statistic and
+*     draws the ranked hbar in one call.
 *==============================================================================*
 sysuse nlsw88, clear
-statplot wage, over(occ) ci sort wrap(14) ///
-    ytitle("mean hourly wage (1988 dollars)") ///
+statplot wage, over(occupation) ci sort wrap(14) ///
+    xtitle("mean hourly wage (1988 dollars)") ///
     name(statplot_occ, replace) ///
     note("NLSW88 extract; bars are means, whiskers 95% CIs.", size(vsmall))
 graph export "$figures/ch09_statplot.png", replace width(2400)
 * plotted numbers for the caption (top, bottom, and the widest-CI category)
-statplot wage, over(occ) ci sort listdata
+statplot wage, over(occupation) ci sort listdata
 di "STATPLOT_OK"
+
+*==============================================================================*
+* (5) One-call composition snapshot: the indicator variables of the cleaned
+*     extract as ranked percent shares (a graphical -summarize- for the room).
+*     percent scales 0/1 means x100; sort descending ranks; wrap(12) folds
+*     the curated variable labels instead of abbreviating them.
+*==============================================================================*
+sysuse nlsw88, clear
+statplot union married never_married collgrad ///
+    south smsa c_city, ///
+    percent sort descending wrap(12) ///
+    ytitle("percent of respondents") ///
+    name(statplot_snap, replace)
+graph export "$figures/ch09_statplot2.png", replace width(2400)
+* freeze the plotted numbers: each bar = mean x 100 on its own nonmissing N
+quietly summarize smsa
+assert abs(r(mean)*100 - 70.39) < 0.05
+quietly summarize married
+assert abs(r(mean)*100 - 64.20) < 0.05
+quietly summarize south
+assert abs(r(mean)*100 - 41.94) < 0.05
+quietly summarize never_married
+assert abs(r(mean)*100 - 10.42) < 0.05
+quietly summarize union
+assert abs(r(mean)*100 - 24.55) < 0.05
+assert r(N) == 1878
+di "STATPLOT_SNAPSHOT_OK"
+
+*==============================================================================*
+* (6) The template version: fixed house order + headings() section rows +
+*     frame() resultsset handback. headings()/ci build via twoway, so the
+*     value axis is x (xtitle), unlike the plain hbar calls above (ytitle).
+*==============================================================================*
+sysuse nlsw88, clear
+capture frame drop snapshot
+statplot married never_married south smsa c_city ///
+    union collgrad, percent wrap(12) ///
+    headings(married = "{bf:Family}" ///
+             south = "{bf:Location}" ///
+             union = "{bf:Work and education}") ///
+    xtitle("percent of respondents") frame(snapshot) ///
+    name(statplot_tmpl, replace)
+graph export "$figures/ch09_statplot3.png", replace width(2400)
+* the resultsset is a dataset: format it, list it, reuse it
+frame snapshot: format mean %9.1f
+frame snapshot: list, noobs
+* freeze: frame rows match the flat-snapshot values (percent-scaled means)
+frame snapshot {
+    quietly summarize mean if variable == "married"
+    assert abs(r(mean) - 64.20) < 0.05
+    quietly summarize mean if variable == "smsa"
+    assert abs(r(mean) - 70.39) < 0.05
+    assert _N == 7
+}
+di "STATPLOT_TEMPLATE_OK"
 
 di "DONE"

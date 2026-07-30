@@ -130,4 +130,29 @@ power twomeans 50 (52 53 54), sd(10) n(100(20)500)                   ///
 graph export "$figures/ch07_power.png", replace width(2400)
 di "FIGURE_POWER_SAVED"
 
+*==============================================================================*
+* (f) ch07_conformal.png -- the 90% band drawn: observed vs predicted wage,
+*     parallel bounds at +/-Q, the promised 10% marked. Printed in sec:conformal.
+*==============================================================================*
+adopath ++ "`c(pwd)'/../conformalpred-stata-public"
+sysuse nlsw88, clear
+conformalpred, command(regress wage grade tenure) alpha(0.1) seed(20260706)
+assert abs(r(Q) - 5.77) < 0.05
+gen double fit = (cp_lower + cp_upper)/2
+gen byte outside = wage < cp_lower | wage > cp_upper
+quietly summarize outside
+local pctout = 100*r(mean)
+twoway (scatter wage fit if !outside, msymbol(oh) mcolor(navy%40) msize(small)) ///
+       (scatter wage fit if outside,  msymbol(x)  mcolor(cranberry) msize(small)) ///
+       (line cp_lower fit, sort lcolor(gs6) lpattern(dash)) ///
+       (line cp_upper fit, sort lcolor(gs6) lpattern(dash)), ///
+    legend(order(1 "inside the band" 2 "outside (the promised share)") ///
+        ring(0) position(11) cols(1) size(small) region(lstyle(none))) ///
+    ytitle("observed hourly wage") xtitle("predicted hourly wage") ///
+    graphregion(color(white)) ysize(4.2) xsize(6.4)
+graph export "$figures/ch07_conformal.png", replace width(2400)
+di "PCT_OUTSIDE " %4.1f `pctout'
+di "FIGURE_CONFORMAL_SAVED"
+
+
 di "DONE"

@@ -55,7 +55,7 @@ where $y$ is the observed outcome, $\hat{y}$ its model prediction, and $R^{2}$ t
 Sketch enough figures for a real report and you have a pile. To keep the pile from becoming the report, track it the way Chapter~\ref{ch:workshop} tracks everything else, with a spine: a figure inventory, one row per planned exhibit and four columns holding the one-sentence message, the audience and venue, the do-file that builds it, and a status of sketched, drafted, or final. Draft the inventory at the same sitting where you outline the report's argument, so you plan the exhibits as a set that carries the argument in order instead of collecting whatever the analyses happen to produce. You will use it twice: at the outline, a row that cannot fill its message column is a figure to cut before it costs anything; at revision, the status column is the honest answer to \enquote{how close is the report}.\marginnote{This chapter's three exhibits fit in three inventory rows, all pointing at \texttt{ch09\_graphs.do}.}
 
 \section{Why bars beat pies: the perceptual ranking behind every choice}\label{sec:perception}
-Every chart choice in this chapter comes back to one experiment on human vision, so it pays to meet the experiment before leaning on its results. \textcite{cleveland1984graphical}, in the paper that gave chart design a scientific footing, asked people to read values off graphs that encoded the same numbers different ways and ranked the encodings by how accurately readers decoded them. Position along a common scale won: readers judge where a point or the end of a bar sits on a shared axis more accurately than anything else. Length came next, then direction and angle, then area, then color saturation and shading last. The practical order is short enough to keep in your head, and once you have it you will notice this chapter reaching for the same few chart types again and again.\index{graphical perception}\marginnote{The Cleveland--McGill ranking, high to low accuracy: position on a common scale; position on non-aligned scales; length; angle and slope; area; volume; color saturation and density. Design by climbing as high up this list as the data allows.} Table~\ref{tab:ch09-viz-ranking} sets the ranking out in full, pairing each rung with the chart in this chapter that leans on it.
+Every chart choice in this chapter comes back to one experiment on human vision, so it pays to meet the experiment before leaning on its results. \textcite{cleveland1984graphical}, in the paper that gave chart design a scientific footing, asked people to read values off graphs that encoded the same numbers different ways and ranked the encodings by how accurately readers decoded them. Position along a common scale won: readers judge where a point or the end of a bar sits on a shared axis more accurately than anything else. Length came next, then direction and angle, then area, then color saturation and shading last. The practical order is short enough to keep in your head, and once you have it you will notice this chapter reaching for the same few chart types again and again.\index{graphical perception} Table~\ref{tab:ch09-viz-ranking} sets the ranking out in full, pairing each rung with the chart in this chapter that leans on it.
 
 \begin{table*}[htbp]
 \centering
@@ -84,29 +84,92 @@ The ranking belongs at the sketch stage, not the debugging stage. Under the pape
 Sooner or later a program director will ask why the dashboard uses sorted bars instead of the pie chart the last consultant delivered, and the ranking turns your answer from house style into a defensible design choice. \enquote{Position and length are the two most accurately read encodings, and a pie uses neither} defends a measurement, not a taste, and an embedded evaluator gets asked this in the room, not in a footnote. The applied guides you may already own build their rules on the same hierarchy, \marginnote{\textcite{knaflic2015storytelling} writes for practitioners; \textcite{healy2018data} for analysts who work in code. Both build their rules on the same perceptual hierarchy.}so when you cite the ranking to a non-technical team you are speaking the field's common language rather than waving at aesthetics.
 
 \section{Distributions and categories that read at a glance}
-Survey results in particular die in stacked-bar noise, so the categorical graphs get special care. Cox's \texttt{catplot}\index{catplot@\texttt{catplot}} (\texttt{ssc install catplot}) and \texttt{statplot}\index{statplot@\texttt{statplot}} lay out categorical distributions cleanly, and for Likert\index{Likert scale} items a diverging bar\index{diverging bar chart}, centered between agreement and disagreement, shows the balance of opinion far better than a stack that makes the reader do arithmetic.\marginnote{Rule of thumb for a diverging bar: split the neutral category in half, sending one half each direction, or plot it as its own muted segment on the center line. Never let \enquote{neutral} silently pad the agree side.} The point is to choose the layout that lets the pattern show itself rather than forcing the reader to reconstruct it.
+Survey results are where stacked-bar noise hurts most, so the categorical graphs get special care. Cox's \texttt{catplot}\index{catplot@\texttt{catplot}} (\texttt{ssc install catplot}) lays out categorical frequency distributions cleanly, \texttt{statplot}\index{statplot@\texttt{statplot}} does the same for summary statistics over categories, and for Likert\index{Likert scale} items a diverging bar\index{diverging bar chart}, centered between agreement and disagreement, shows the balance of opinion far better than a stack that makes the reader do arithmetic.\marginnote{Rule of thumb for a diverging bar: split the neutral category in half, sending one half each direction, or plot it as its own muted segment on the center line. Never let \enquote{neutral} silently pad the agree side.} The point is to choose the layout that lets the pattern show itself rather than forcing the reader to reconstruct it.
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{statplot}]
-\textbf{Integrated command:} \texttt{statplot} (with Nicholas J. Cox). Collapses a dataset to a summary statistic and draws it as a ranked bar, horizontal bar, or dot chart in one call, so a many-category comparison arrives ordered and readable instead of alphabetized and noisy. The worked example below uses release 1.3.0: install it from the authors' GitHub, and once it lands on SSC, \texttt{ssc install statplot} will suffice. Version 1.3.0 adds confidence intervals (\texttt{ci}), ranking (\texttt{sort}), label wrapping (\texttt{wrap()}), percent and share scaling, and a \texttt{savedata()}/\texttt{listdata} export of the plotted numbers.
+\textbf{Integrated command:} \texttt{statplot} (with Nicholas J. Cox). Collapses a dataset to a summary statistic and draws it as a bar, horizontal bar, or dot chart in one call, labeled from the variable and value labels you curated during cleaning. Its options carry the presentation decisions that otherwise take a dozen lines of \texttt{collapse} and \texttt{graph} code: rank the bars (\texttt{sort}, \texttt{descending}) or pin a fixed house order (\texttt{order()}, \texttt{first()}, \texttt{last()}), wrap long labels (\texttt{wrap()}), scale 0/1 indicators to percents or shares, add confidence intervals (\texttt{ci}), and hand back the plotted numbers (\texttt{listdata}, \texttt{savedata()}) so the chart's values can be checked like any other result. Install it once with \texttt{ssc install statplot}.
 \end{kaobox}
 
-The command earns a worked example because the many-category comparison is where hand-built bar charts go wrong first: the categories arrive in alphabetical or code order, the reader has to hunt for the largest, and nothing on the page says how sure each bar is. One call fixes all three at once. On the \texttt{nlsw88} extract, thirteen occupations, ranked by mean wage, each with its 95~percent interval:
+For a research and evaluation team the command does two jobs, and the first is the question every partner meeting opens with: who is in these data? \texttt{summarize} answers it in a table formatted for the analyst, not the room. Pointed at the indicator variables of a cleaned extract, one \texttt{statplot} call turns the same answer into a chart a program team reads in seconds, with \texttt{percent} doing the times-100 that turns a 0/1 mean into a percentage and \texttt{sort descending} putting the largest first:
 \par
 {\footnotesize
 \begin{verbatim}
 sysuse nlsw88, clear
-statplot wage, over(occ) ci sort wrap(14) ///
-    ytitle("mean hourly wage (1988 dollars)")
+statplot union married never_married collgrad ///
+    south smsa c_city, ///
+    percent sort descending wrap(12) ///
+    ytitle("percent of respondents")
+graph export "$figures/ch09_statplot2.png", ///
+    replace width(2400)
+\end{verbatim}
+}
+Figure~\ref{fig:statplot-snapshot} is a graphical \texttt{summarize} for the extract: seven in ten of the women live in a metro area, 64\% are married, 42\% live in the South, and one in ten never married.\marginnote{Each bar rests on its own nonmissing denominator: the union share is computed over the 1{,}878 women whose union status is recorded, not all 2{,}246. Chapter~\ref{ch:trust}'s small-denominator caution applies to descriptive bars too.} Every label on the chart is a variable label the cleaning do-file already wrote, so the axis reads \enquote{Lives in a central city}, not \texttt{c\_city}, with \texttt{wrap(12)} folding the longer ones onto two lines instead of shrinking the font. The ranking here came from \texttt{sort descending}, but ranking is a choice, not a default: when a funder's template expects demographics first and program indicators last, \texttt{order()}, \texttt{first()}, and \texttt{last()} pin the bars where the house style wants them. Rank while you are discovering; fix the order when you are reporting.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=\linewidth]{ch09_statplot2.png}
+\caption[A one-call snapshot of the cleaned extract]{Seven indicator variables from \texttt{nlsw88} as ranked percentages, drawn by one \texttt{statplot} call with \texttt{percent sort descending wrap(12)}. Metro residence leads at 70\% and never-married closes at 10\%; every bar label is a curated variable label, wrapped rather than abbreviated. Built by \texttt{ch09\_graphs.do}.}
+\label{fig:statplot-snapshot}
+\end{figure*}
+
+When the snapshot goes into a report, discovery order gives way to template order, and the same call absorbs the change. Listing the variables in the order the template expects fixes the layout, and \texttt{headings()} inserts a bold section row above each block, the same section-title idiom \texttt{coefplot} users know.\marginnote{\texttt{headings()} and \texttt{ci} build the chart with \texttt{twoway} rather than \texttt{graph hbar}, so the value axis is $x$: title it with \texttt{xtitle()}. In the plain calls above, \texttt{ytitle()} titles the value axis. \texttt{groups()} is the sibling that brackets a span of bars with a side label instead of inserting a row.} One more option keeps the numbers reusable: \texttt{frame()} hands back the small dataset behind the graph, one row per bar:
+\par
+{\footnotesize
+\begin{verbatim}
+statplot married never_married south smsa c_city ///
+    union collgrad, percent wrap(12) ///
+    headings(married = "{bf:Family}" ///
+             south = "{bf:Location}" ///
+             union = "{bf:Work and education}") ///
+    xtitle("percent of respondents") frame(snapshot)
+\end{verbatim}
+}
+The graph arrives with its three bold section rows; the frame arrives silently. Two dataset commands print what it holds:
+\par
+{\footnotesize
+\begin{verbatim}
+frame snapshot: format mean %9.1f
+frame snapshot: list, noobs
+
+  +----------------------+
+  |      variable   mean |
+  |----------------------|
+  |       married   64.2 |
+  | never_married   10.4 |
+  |         south   41.9 |
+  |          smsa   70.4 |
+  |        c_city   29.2 |
+  |         union   24.5 |
+  |      collgrad   23.7 |
+  +----------------------+
+\end{verbatim}
+}
+Figure~\ref{fig:statplot-template} is the reporting version of Figure~\ref{fig:statplot-snapshot}: the same seven percentages, now under \textbf{Family}, \textbf{Location}, and \textbf{Work and education} headings, in the order the variable list fixed rather than the order the data ranked. The listing under it is the point of \texttt{frame()}: the graph was drawn from a seven-row dataset, and that results set\marginnote{\emph{Results set} is Roger Newson's name for the idea: treat results as data, and every dataset tool, \texttt{format}, \texttt{merge}, \texttt{export excel}, applies to them.} is now yours. Feed those rows to the \texttt{putexcel} discipline of Chapter~\ref{ch:sheets} and the funder workbook cannot disagree with the chart, because both came from the same collapse; \texttt{savedata()} writes the same rows to disk when the receipt belongs in the project folder. And when the question is composition of a total rather than the level of each indicator, \texttt{share} and \texttt{base()} rescale the same bars without any new code.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=\linewidth]{ch09_statplot3.png}
+\caption[The template version, with section headings]{The reporting version of Figure~\ref{fig:statplot-snapshot}: the same \texttt{nlsw88} percentages in fixed template order under \texttt{headings()} section rows, with \texttt{frame()} handing back the seven-row results set behind the bars. One call draws the funder-ready panel; the frame keeps its numbers reusable. Built by \texttt{ch09\_graphs.do}.}
+\label{fig:statplot-template}
+\end{figure*}
+
+The second job is the many-category comparison, where hand-built bar charts go wrong first: the categories arrive in alphabetical or code order, the reader has to hunt for the largest, and nothing on the page says how sure each bar is. One call fixes all three at once. On the same extract, thirteen occupations, ranked by mean wage, each with its 95~percent interval:
+\par
+{\footnotesize
+\begin{verbatim}
+sysuse nlsw88, clear
+statplot wage, over(occupation) ci sort wrap(14) ///
+    xtitle("mean hourly wage (1988 dollars)")
 graph export "$figures/ch09_statplot.png", ///
     replace width(2400)
 \end{verbatim}
 }
-Figure~\ref{fig:statplot} is the result, and you read it in one pass because the sorting already did the reader's work.\marginnote{Managers and professional workers top the ranking near \$10.90 and \$10.72 an hour; farm laborers sit at the bottom at \$3.08, roughly a three-and-a-half-fold spread.} The whiskers then keep the ranking honest, which puts the chapter's ink-on-the-data rule and Chapter~\ref{ch:trust}'s small-denominator warning on one page: the household-workers bar rests on two women and its interval spans \$3.58 to \$9.20, and the farmers bar rests on a single observation, so it draws no whisker at all. A reader who sees those intervals knows which ranks to trust and which are one hire away from moving, without a footnote to tell them.
+Figure~\ref{fig:statplot} is the result, and you read it in one pass because the sorting already did the reader's work.\marginnote{Managers and professional workers top the ranking near \$10.90 and \$10.72 an hour; farm laborers sit at the bottom at \$3.08, roughly a three-and-a-half-fold spread.} The whiskers then keep the ranking honest, putting the chapter's ink-on-the-data rule and Chapter~\ref{ch:trust}'s small-denominator warning on one page: the household-workers bar rests on two women and its interval spans \$3.58 to \$9.20, and the farmers bar rests on a single observation, so its interval collapses to a bare tick at the mean. A reader who sees those intervals knows which ranks to trust and which are one hire away from moving, without a footnote to tell them.
 
 \begin{figure*}[htbp]
 \centering
 \includegraphics[width=\linewidth]{ch09_statplot.png}
-\caption[A ranked, interval-bearing category comparison]{Mean hourly wage across thirteen occupations in the \texttt{nlsw88} extract, drawn by one \texttt{statplot} call with \texttt{ci sort wrap(14)}: categories ranked by the statistic, labels wrapped, and a 95~percent interval on every bar. Managers/Admin tops the ranking at \$10.90 and farm laborers close it at \$3.08. The intervals carry the caution the ranking needs: household workers ($N=2$) spans \$3.58 to \$9.20, and the single-observation farmers category draws no whisker at all, so the eye sees at once which positions rest on real support. Built by \texttt{ch09\_graphs.do}.}
+\caption[A ranked, interval-bearing category comparison]{Mean hourly wage across thirteen occupations in the \texttt{nlsw88} extract, drawn by one \texttt{statplot} call with \texttt{ci sort wrap(14)}: categories ranked by the statistic, labels wrapped, and a 95~percent interval wherever the data can support one. Managers/Admin tops the ranking at \$10.90 and farm laborers close it at \$3.08. The intervals carry the caution the ranking needs: household workers ($N=2$) spans \$3.58 to \$9.20, and the single-observation farmers category collapses to a bare tick at the mean, so the eye sees at once which positions rest on real support. Built by \texttt{ch09\_graphs.do}.}
 \label{fig:statplot}
 \end{figure*}
 

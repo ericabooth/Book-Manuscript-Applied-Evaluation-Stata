@@ -95,7 +95,7 @@ svy: mean highbp
 }
 Read the \texttt{svyset} line as the design's three facts: \texttt{psuid} names the primary sampling units, the clusters drawn first; \texttt{strata(stratid)} names the layers the draw happened within; and the \texttt{pweight} records how many population members each respondent stands for.
 
-The two estimates are not close. The unweighted mean is 0.4229 and the design-based mean is 0.3687, a gap of 5.4 percentage points on the same 10{,}337 respondents.\marginnote{The reason the gap opens is visible in a second variable: mean age falls from 47.6 unweighted to 42.2 once the weights are applied, because the survey drew extra older adults and hypertension climbs with age.} Table~\ref{tab:weights} lays the two columns side by side.
+The two estimates are not close. The unweighted mean is 0.4229 and the design-based mean is 0.3687, a gap of 5.4 percentage points on the same 10{,}337 respondents.\marginnote[-15mm]{The reason the gap opens is visible in a second variable: mean age falls from 47.6 unweighted to 42.2 once the weights are applied, because the survey drew extra older adults and hypertension climbs with age.} Table~\ref{tab:weights} lays the two columns side by side.
 
 \begin{table*}[htbp]
 \centering
@@ -282,7 +282,7 @@ A regression's confidence interval trusts the regression, and when a program dir
 \end{enumerate}
 \end{restson}
 
-\emph{The problem.} A model-based prediction interval inherits every assumption of the model, so a director who reads \enquote{we expect the next participant's wage between \$8 and \$14} is trusting the regression's error model, not just its point estimate. \emph{What we see.} When the outcome is skewed or heteroskedastic, those intervals miss their nominal coverage, and the evaluator learns it only after checking predictions against reality. \emph{The key fact.} Conformal prediction \parencite{shafer2008tutorial,angelopoulos2023conformal} turns any point predictor into an interval with finite-sample coverage guaranteed under only exchangeability, the assumption that the new observation could have been shuffled in with the calibration ones without changing anything. The recipe is three steps, each with a named product. Split the data once, producing a fitting half and a calibration half. Fit the model on the fitting half and predict the calibration half, producing residuals measured where the truth is known. Take the appropriate quantile of those residuals, producing the half-width the interval will use from then on:
+\emph{The problem.} A model-based prediction interval inherits every assumption of the model, so a director who reads \enquote{we expect the next participant's wage between \$8 and \$14} is trusting the regression's error model, not just its point estimate. \emph{What we see.} When the outcome is skewed or heteroskedastic, those intervals miss their nominal coverage, and the evaluator learns it only after checking predictions against reality. \emph{The key fact.} Conformal prediction \parencite{shafer2008tutorial,angelopoulos2023conformal} turns any point predictor into an interval with finite-sample coverage guaranteed under only exchangeability, the assumption that the new observation could have been shuffled in with the calibration ones without changing anything. The recipe is three steps, each with a named product, and Figure~\ref{fig:ch07-viz-recipe} tracks the product each step hands the next. Split the data once, producing a fitting half and a calibration half. Fit the model on the fitting half and predict the calibration half, producing residuals measured where the truth is known. Take the appropriate quantile of those residuals, producing the half-width the interval will use from then on:
 \begin{equation}
   Q \;=\; \widehat{Q}_{1-\alpha}\!\bigl(\,\lvert y_j - \hat f(x_j)\rvert : j \in \mathcal{C}\,\bigr),
   \qquad
@@ -290,6 +290,32 @@ A regression's confidence interval trusts the regression, and when a program dir
   \label{eq:ch07-viz-conformal}
 \end{equation}
 where $\hat f$ is the point predictor fit on the training half, $\mathcal{C}$ is the calibration set, $\lvert y_j-\hat f(x_j)\rvert$ its absolute residuals, and $\widehat{Q}_{1-\alpha}$ their empirical $(1-\alpha)$ quantile; $\alpha$ is the miscoverage rate, so $\alpha=0.1$ targets 90\% coverage. \emph{The move.} Because the calibration residuals stand in for the errors the model will make on new cases, the band covers the truth at the target rate whether or not the model is correctly specified \parencite{lei2018distribution}. \emph{The caveat.} The basic band has constant width, honest about average coverage but not widening where the model is locally uncertain; adaptive variants exist for evaluators who need site-specific widths.
+
+\begin{figure*}[htbp]
+\centering
+\begin{tikzpicture}[node distance=4mm, font=\footnotesize]
+\node[stage] (split) {split once};
+\node[stage, right=27mm of split] (fitp) {fit \&\\predict};
+\node[stage, right=27mm of fitp] (quant) {take the\\quantile};
+\node[io, right=10mm of quant] (band) {the band\\$\hat f(x_{\text{new}}) \pm Q$};
+\draw[flow] (split) -- (fitp);
+\draw[flow] (fitp) -- (quant);
+\draw[flow] (quant) -- (band);
+\node[substep, below=5mm of split, text width=3.2cm] (splitA)
+  {\emph{product:} a fitting half and a calibration half (1{,}144 and 1{,}085 here)};
+\node[substep, below=5mm of fitp, text width=3.4cm] (fitA)
+  {\emph{product:} calibration residuals, errors measured where the truth is known};
+\node[substep, below=5mm of quant, text width=3.2cm] (quantA)
+  {\emph{product:} the half-width $Q$, their 90th percentile (\$5.77 here)};
+\draw[flow, dashed] (split) -- (splitA);
+\draw[flow, dashed] (fitp) -- (fitA);
+\draw[flow, dashed] (quant) -- (quantA);
+\node[annot, below=4mm of fitA.south, text width=7.6cm] (guar)
+  {the model only proposes the center; the calibration residuals set the width, which is why a wrong model costs width, never coverage};
+\end{tikzpicture}
+\caption[The split-conformal recipe]{Three steps, three named products. The split spends half the data to buy an honest error meter; the quantile turns the meter into a half-width; every new prediction then wears the same $\pm Q$. The equation in the text is this strip in symbols.}
+\label{fig:ch07-viz-recipe}
+\end{figure*}
 
 The \texttt{conformalpred}\index{conformalpred@\texttt{conformalpred}} package wraps this around an ordinary Stata estimation command.
 
@@ -315,7 +341,14 @@ conformalpred, command(regress wage grade tenure) ///
     alpha(0.1) seed(20260706)
 \end{verbatim}
 }
-The command splits the 2{,}229 respondents into 1{,}144 training and 1{,}085 calibration cases, fits on the training half, and reads the half-width off the calibration residuals as $Q=5.77$ wage-dollars. Every predicted wage then carries a $\pm 5.77$ band, so the first respondent's arrives as an interval from 1.04 to 12.58. Across new respondents from the same population, 90\% of such bands contain the true wage, confirmed by the package's held-out coverage of 0.90.\marginnote{\texttt{conformalpred} supports \texttt{regress} and \texttt{poisson}; \texttt{logit} is excluded by design, since a $\pm$ band around a predicted probability is not meaningful for a 0/1 outcome. After the call \texttt{e()} holds the training-half fit, so refit on the full sample before quoting coefficients.}
+The command splits the 2{,}229 respondents into 1{,}144 training and 1{,}085 calibration cases, fits on the training half, and reads the half-width off the calibration residuals as $Q=5.77$ wage-dollars. Every predicted wage then carries a $\pm 5.77$ band, so the first respondent's arrives as an interval from 1.04 to 12.58. Across new respondents from the same population, 90\% of such bands contain the true wage, confirmed by the package's held-out coverage of 0.90. Figure~\ref{fig:ch07-conformal} draws the result over the full sample.\marginnote{\texttt{conformalpred} supports \texttt{regress} and \texttt{poisson}; \texttt{logit} is excluded by design, since a $\pm$ band around a predicted probability is not meaningful for a 0/1 outcome. After the call \texttt{e()} holds the training-half fit, so refit on the full sample before quoting coefficients.}
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=\linewidth]{ch07_conformal.png}
+\caption[The conformal band on \texttt{nlsw88}]{The band the one call builds, drawn over every respondent: actual hourly wage against the model's prediction, with dashed lines at the prediction $\pm\$5.77$, the calibration half-width $Q$. Hollow navy circles land inside the band; red crosses are the 8.9\% that land outside, close to the one-in-ten the 90\% target accepts. The band's width never changes, which is the basic method's honesty and its bluntness at once. Rebuilt by \texttt{ch07\_trust.do} on every run.}
+\label{fig:ch07-conformal}
+\end{figure*}
 
 For an embedded evaluator this closes the confidence-interval-versus-prediction-interval gap the chapter's closer flags: the confidence interval brackets the average, the conformal band brackets where the next case lands, without trusting the model's error assumptions. When a funder wants the range a single new clinic might post, this is the interval to quote, and it travels with its guarantee: \enquote{the next participant's wage lands between \$1 and \$13, and that coverage holds even if our wage model is wrong.} The width is then the thing to act on. If a $\pm 5.77$ band is too wide for the decision at hand, the honest fixes are a stronger predictor set or more calibration data; raising \texttt{alpha()} buys a tighter band that simply misses more often, and a program officer handed an 80\% band deserves to hear that one new case in five will land outside it.
 
@@ -354,15 +387,40 @@ mixed wage grade age || industry:
 hlmr2
 \end{verbatim}
 }
-Grade and age explain about 11\% of the wage variance, and adding the industry random effect lifts the explained share to about 19\%. The gap is the industry structure the fixed predictors miss, and it lines up with the ICC: industries matter, but not much, so the number keeps a site-ranking honest by saying up front how much of the variation sites actually explain.
+Grade and age explain about 11\% of the wage variance, and adding the industry random effect lifts the explained share to about 19\%. The gap is the industry structure the fixed predictors miss, and it lines up with the ICC: industries matter, but not much, so the number keeps a site-ranking honest by saying up front how much of the variation sites actually explain. Figure~\ref{fig:ch07-viz-varsplit} lines the two answers up on one scale.
+
+\begin{figure*}[htbp]
+\centering
+\begin{tikzpicture}[x=1.15mm, y=1cm, font=\footnotesize]
+% top bar: where the variance sits (estat icc)
+\node[anchor=east, align=right, text width=3.2cm] at (-3,2.1)
+  {where the variance sits\\(\texttt{estat icc})};
+\fill[blue!55!black] (0,1.75) rectangle (8.9,2.45);
+\fill[gray!22] (8.9,1.75) rectangle (100,2.45);
+\draw[gray!55, thin] (0,1.75) rectangle (100,2.45);
+\node at (54.45,2.1) {within industries \enskip 91.1\%};
+\node[anchor=south west] at (12,2.62) {between industries \enskip 8.9\%, the ICC};
+\draw[thin, gray!70] (4.45,2.45) -- (12.5,2.62);
+% bottom bar: what the model explains (hlmr2)
+\node[anchor=east, align=right, text width=3.2cm] at (-3,0.35)
+  {what the model explains\\(\texttt{hlmr2})};
+\fill[blue!45] (0,0) rectangle (10.7,0.7);
+\fill[blue!55!black] (10.7,0) rectangle (18.6,0.7);
+\fill[gray!22] (18.6,0) rectangle (100,0.7);
+\draw[gray!55, thin] (0,0) rectangle (100,0.7);
+\node at (59.3,0.35) {unexplained \enskip 81.4\%};
+\node[anchor=north west] at (0,-0.35) {grade + age \enskip 10.7\%, marginal $R^2$};
+\draw[thin, gray!70] (5.35,0) -- (4,-0.33);
+\node[anchor=south west] at (20,0.87) {+ industry effects \enskip 7.9\%, lifting the total to 18.6\%, conditional $R^2$};
+\draw[thin, gray!70] (14.65,0.7) -- (20.5,0.87);
+\end{tikzpicture}
+\caption[Two reads of the same wage variance]{The same fitted model, cut two ways, each bar the full wage variance. The top bar splits it by level: 8.9\% sits between industries, and that sliver is all a site-style ranking has to work with. The bottom bar splits it by explanation: grade and age account for 10.7\%, the industry effects add 7.9\%, and the rest is individual variation no ranking will touch.}
+\label{fig:ch07-viz-varsplit}
+\end{figure*}
 
 Agree on a decision rule for the ICC before anyone builds a site ranking. Under a few percent, decline the ranking and say why: site differences sit within noise, and the useful comparisons are between kinds of people, not kinds of sites. Near ten percent, as here, rank with the shrinkage of \S\ref{sec:shrink} and a stated caveat. Above twenty or thirty, site comparisons are the story, and the follow-up question becomes which site practices explain the gap. The one-sentence translation for the program officer: \enquote{about 9\% of what moves wages is the industry, so industry rankings are real but faint.}\marginnote{\texttt{hlmr2} covers linear mixed models fit by \texttt{mixed}; \texttt{melogit} and other generalized mixed models are out of scope. For random-slope models it sums the variance components and ignores their covariances, printing a note when it detects slopes, so treat that figure as an approximation.}
 
-\begin{kaobox}[frametitle=Ado-file Idea: \texttt{bayessae}]
-\textbf{Proposed program:} \texttt{bayessae}. The empirical-Bayes shrinkage of \S\ref{sec:shrink} borrows strength across sites but ignores anything you know about them. The model-based next step is small-area estimation: a Fay-Herriot area-level model \parencite{fay1979estimates,rao2015small} that shrinks each site's direct estimate toward a \emph{regression} prediction built from site covariates, so a small rural clinic is pulled toward what similar rural clinics do rather than toward the global mean. \texttt{bayessae} would fit that model, return estimates with mean-squared-error intervals, and combine survey estimates with administrative predictors the way statistics agencies do for county poverty and health rates. Planned, not built; the design would report each site's shrinkage weight so the borrowing stays auditable.
-\end{kaobox}
-
-Fay-Herriot estimation is where the field goes when plain empirical Bayes is not enough: where \S\ref{sec:shrink} pulls every small site toward one common mean, the small-area model pulls each toward the mean of sites like it\marginnote{Pulling each site toward the mean of sites like it is closer to how statistics offices produce the small-area numbers policymakers already cite.}. The cost is honest: the estimate is only as good as the covariate model behind it, trading assumption-light shrinkage for a stronger estimate that leans on a specification a reviewer can question.
+Fay-Herriot small-area estimation \parencite{fay1979estimates,rao2015small} is where the field goes when plain empirical Bayes is not enough: where \S\ref{sec:shrink} pulls every small site toward one common mean, the small-area model pulls each toward the mean of sites like it\marginnote{Pulling each site toward the mean of sites like it is closer to how statistics offices produce the small-area numbers policymakers already cite.}. The cost is honest: the estimate is only as good as the covariate model behind it, trading assumption-light shrinkage for a stronger estimate that leans on a specification a reviewer can question.
 
 \begin{appliedexample}[One quarterly scorecard, four safeguards]\label{ae:ch07-scorecard}
 \textbf{Scenario.} A caregiver-support program runs at fifty sites, most of them small. Each quarter the evaluator ships one scorecard: an engagement score from a six-item survey scale, a completion rate per site, and a population claim about the families served. The board wants a site ranking; the director wants to know whether next year's evaluation can detect the improvement the program hopes for.

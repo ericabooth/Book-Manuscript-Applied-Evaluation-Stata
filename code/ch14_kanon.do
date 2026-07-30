@@ -143,3 +143,22 @@ assert r(files) == 3
 assert r(flagged) == 1
 di "RAWSWEEP_DEMO_OK"
 
+
+*==============================================================================*
+* (s) Synthetic stand-in with synthgen: same quasi-identifiers plus wage,
+*     rank-preserving copula draw, and the utility-and-safety receipt the
+*     sharing agreement quotes. Numbers frozen in the chapter prose.
+*==============================================================================*
+adopath ++ "`c(pwd)'/../synthgen-stata-public"
+sysuse nlsw88, clear
+synthgen race married collgrad industry wage, frame(synth) seed(20260730)
+local sg_maxdmean = r(maxdmean)
+local sg_maxdrho  = r(maxdrho)
+local sg_dupes    = r(dupes)
+di "SYNTHGEN maxdmean = " %5.3f `sg_maxdmean' ///
+   "  maxdrho = " %5.3f `sg_maxdrho' "  dupes = " `sg_dupes'
+assert `sg_maxdmean' < 0.10
+assert `sg_maxdrho'  < 0.15
+frame synth: quietly count
+assert r(N) == 2246
+di "SYNTHGEN_DEMO_OK"

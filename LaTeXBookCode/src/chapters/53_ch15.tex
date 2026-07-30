@@ -2,7 +2,28 @@
 
 Three colleagues run three slightly different copies of the same cleaning do-file, and they get three different answers to the same question. The team's consistency problem is a packaging problem, and this final chapter is how to solve it: turn the scripts you repeat into shared, versioned tools, document them so others can use them, distribute them, and archive the whole project so it outlives the engagement.
 
-We move from a do-file that wants to be a command, through help files and distribution, to a single honest section on where Mata and Python each do what Stata's main language cannot, and end on the replication archive. One claim runs underneath: colleagues treat a tool as a standard only after you package it, document it, distribute it, and preserve it. What the book has demanded of every analysis, that others can rerun it and build on it, now falls on the code itself.
+We move from a do-file that wants to be a command, through help files and distribution, to a single honest section on where Mata and Python each do what Stata's main language cannot, and end on the replication archive. One claim runs underneath: colleagues treat a tool as a standard only after you package it, document it, distribute it, and preserve it. What the book has demanded of every analysis, that others can rerun it and build on it, now falls on the code itself. Figure~\ref{fig:ch15-viz-lifecycle} maps that arc, and the dashed edge is why it pays: the next engagement starts from the tool, not from the pasted block.
+
+\begin{figure*}[htbp]
+\centering
+\begin{tikzpicture}[font=\footnotesize]
+\node[io] (blk) at (0,1.7) {a block you\\keep pasting};
+\node[stage] (hard) at (3.6,1.7) {hardened into\\a command};
+\node[stage] (dist) at (7.2,1.7) {distributed:\\\texttt{net install}};
+\node[stage] (dep) at (10.8,1.7) {depended on:\\the seven rows};
+\node[stage] (main) at (10.8,-0.6) {maintained:\\semantic versions};
+\node[io] (arc) at (7.2,-0.6) {archived:\\versions pinned};
+\draw[flow] (blk) -- (hard);
+\draw[flow] (hard) -- (dist);
+\draw[flow] (dist) -- (dep);
+\draw[flow] (dep) -- (main);
+\draw[flow] (main) -- (arc);
+\draw[flow, dashed] (arc) -| (blk);
+\node[annot, anchor=north] at (3.6,-0.85) {the next engagement installs it and starts here};
+\end{tikzpicture}
+\caption[The life of a shared tool]{The life of a shared tool, and the map of this chapter. The hardening segment is Figure~\ref{fig:ch15-viz-harden} in detail; the seven rows a colleague checks before depending on it are Table~\ref{tab:ch15-viz-checklist}; maintenance is the semantic-version promise; the archive (\S\ref{sec:archive}) pins the exact releases the analysis ran. The dashed return edge is the payoff that repays the packaging effort.}
+\label{fig:ch15-viz-lifecycle}
+\end{figure*}
 
 \section{When a do-file wants to be a command}
 A block of code you have pasted across five projects is a maintenance liability and a source of the three-answers problem, and the fix is to turn it into a command. The move is to extract the repeated logic into an \texttt{.ado} file, a text file that defines a program and, once it sits on Stata's search path, makes its name work as a command, then replace its hard-coded specifics with arguments and generalize it just enough to serve the cases you actually have.\marginnote{Resist over-generalizing on the first pass. A command that tries to handle cases you do not yet have accretes options nobody uses and bugs nobody catches; the rule of three, refactor into a command once you have pasted the block a third time, keeps the abstraction honest.} The book's own example is \texttt{dsload}\index{dsload@\texttt{dsload}}: the block of project controls and path settings that three colleagues had each modified, unified into one command that takes its paths as arguments so everyone runs the same logic.
@@ -277,7 +298,7 @@ The same restraint that keeps unrequested options out of a command keeps extra l
 An evaluator learns the seams rather than the whole of each language to keep effort in proportion: their time is better spent on the pipeline than on reimplementing it in a faster language that the work does not need. Reach for Mata or Python where it counts, and nowhere else, and the trifecta stays a help rather than a distraction.
 
 \section{The replication archive}\label{sec:archive}
-Years after the engagement ends, someone will ask how a number in the final report was computed, and a workflow that cannot be rerun then has not kept its first principle.\marginnote{The replication standard, that a study should ship enough for someone else to reproduce every number, was argued for social science by \textcite{king1995replication} long before it was routine. \textcite{stodden2018reproducibility} later showed the sobering sequel: even journals that require data and code achieve reproducibility far below 100\%, because an archive is only as good as what actually goes in it.} The archive uses two tiers: a canonical copy with a permanent identifier on a repository like openICPSR\index{openICPSR} \parencite{openicpsr} (a DOI, versioning, longevity), paired with a convenience mirror on GitHub, from which a single \texttt{use} of the file's raw URL loads the data in one line with no login.\marginnote{The division of labour matters: cite the openICPSR DOI in the paper, because a DOI is promised to resolve for decades and freezes an exact version, whereas a GitHub raw URL is a convenience that can move, rename, or vanish the day someone force-pushes. Never cite the raw URL as the archival record.} The canonical copy is for permanence and citation; the mirror is for the colleague who just wants to run the code today.
+Years after the engagement ends, someone will ask how a number in the final report was computed, and a workflow that cannot be rerun then has not kept its first principle.\marginnote{The replication standard, that a study should ship enough for someone else to reproduce every number, was argued for social science by \textcite{king1995replication} long before it was routine. \textcite{stodden2018reproducibility} later showed the sobering sequel: even journals that require data and code achieve reproducibility far below 100\%, because an archive is only as good as what actually goes in it.} The archive uses two tiers: a canonical copy with a permanent identifier on a repository like openICPSR\index{openICPSR} \parencite{openicpsr} (a DOI, versioning, longevity), paired with a convenience mirror on GitHub, from which a single \texttt{use} of the file's raw URL loads the data in one line with no login.\marginnote{Cite the openICPSR DOI in the paper: it resolves for decades and freezes an exact version. A GitHub raw URL can move or vanish, so never cite it as the archival record.} The canonical copy is for permanence and citation; the mirror is for the colleague who just wants to run the code today.
 
 What goes into the archive is not a folder dump but a manifest, so a stranger can tell at a glance that nothing is missing. The manifest below is the one this book's own replication archive\index{replication archive} uses, and it doubles as a checklist: every row names an item, points at where the book demonstrated it, and says why a replicator needs it.
 
