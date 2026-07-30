@@ -64,7 +64,7 @@
 \contentsline {mtocsection}{\numberline {2.10}Speed you will actually notice}{30}{section.2.10}%
 \contentsline {subsection}{\numberline {2.10.1}The biggest speedup is the data you never load}{31}{subsection.2.10.1}%
 \contentsline {mtocsubsection}{\numberline {2.10.1}The biggest speedup is the data you never load}{31}{subsection.2.10.1}%
-\contentsline {paragraph}{\nonumberline Where this leaves you.}{31}{paragraph*.36}%
+\contentsline {paragraph}{\nonumberline Where this leaves you.}{32}{paragraph*.36}%
 \contentsline {section}{Exercises}{32}{section*.37}%
 \contentsline {part}{\nonumberline Part II: Getting the Data \newline APIs, Scrapes, Surveys, and Longitudinal Data}{33}{part*.39}%
 \contentsline {chapter}{\numberline {3}Downloading public data through APIs}{35}{chapter.3}%
