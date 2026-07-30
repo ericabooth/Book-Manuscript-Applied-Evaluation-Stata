@@ -387,9 +387,7 @@ graph export "$figures/ch01_reach.png", ///
 \label{fig:reach}
 \end{figure}
 
-\begin{kaobox}[frametitle=Ado-file Idea: \texttt{evalaudit}]
-\textbf{Proposed program.} \texttt{evalaudit} writes a project-startup checklist auditing data-sharing agreements and funder mandates; it is a plan, not yet code. A companion program, \texttt{datadictionary}\index{datadictionary@\texttt{datadictionary}}, ships with the book as its over-time codebook generator, and Chapter~\ref{ch:surveys} puts it to work on a survey whose items change across waves.
-\end{kaobox}
+A companion program, \texttt{datadictionary}\index{datadictionary@\texttt{datadictionary}}, ships with the book as its over-time codebook generator, and Chapter~\ref{ch:surveys} puts it to work on a survey whose items change across waves. The startup audit itself needs no command: the charter and scoping notes this chapter builds are the checklist, and a document a partner signs beats a program a partner never runs.
 
 \subsection{Scoping the request before touching the data}\label{sec:ch01-sc-scoping}
 Return to the Thursday email that opened this chapter. The tempting first move is to open the enrollment spreadsheet; the better first move is a four-line scoping note, written in fifteen minutes and saved with the project: the decision the answer feeds (where next year's host sites go), who makes that decision (the program officer, with her board), when it is made (the board packet closes Wednesday, which is the real deadline behind the Monday ask), and what counts as good enough (a rural share by site against the target the program committed to, not an explanation of why any shortfall happened). The note is the one-page analysis plan in miniature. It carries the same discipline as the pre-registered plan described earlier in this section, scaled down to a single request: you state which comparison will be the answer before the data has a chance to suggest a more flattering one.
@@ -1767,10 +1765,10 @@ A survey platform knows the text of every question and the coding of every respo
 
 Timing matters here: capture the metadata snapshot at launch, not at close. Platforms let an editor reword a question mid-field, and the wording your December respondents saw is recoverable only if the July pull saved it. A launch-day metadata pull, filed beside the first data pull, is the baseline for every later comparison.
 
-Across waves, the same idea scales into an instrument history. The \texttt{surveytracker}\index{surveytracker@\texttt{surveytracker}} command logs each wave's variables, labels, and constructs into a running spreadsheet, so you can see at a glance which items are new, which changed, and which were dropped. That inventory is the backbone of the cross-wave codebook of Section~\ref{sec:cxchangelog}; without it, a multi-wave survey is not a study that extends but a pile of unrelated files.
+Across waves, the same idea scales into an instrument history. A launch-day instrument log records each wave's variables, labels, and constructs in a running spreadsheet, so you can see at a glance which items are new, which changed, and which were dropped. That inventory is the backbone of the cross-wave codebook of Section~\ref{sec:cxchangelog}; without it, a multi-wave survey is not a study that extends but a pile of unrelated files.
 
-\begin{kaobox}[frametitle=Package Integration: \texttt{surveytracker} and \texttt{validemail}]
-\textbf{Integrated commands:} \texttt{surveytracker} inventories variables, labels, and constructs into a longitudinal Excel tracker to compare instruments across waves. \texttt{validemail} validates an email item in three tiers (format, live DNS/MX lookup, and disposable-provider detection), which is the small but constant chore of cleaning an open-ended contact field before it is used for follow-up.
+\begin{kaobox}[frametitle=Package Integration: \texttt{validemail}]
+\textbf{Integrated command:} \texttt{validemail} validates an email item in three tiers (format, live DNS/MX lookup, and disposable-provider detection), the small but constant chore of cleaning an open-ended contact field before it is used for follow-up. Its planned companion \texttt{surveytracker}, a launch-day instrument logger feeding the same tracker, remains an ado-file idea; Section~\ref{sec:cxchangelog}'s \texttt{cxchangelog} covers the cross-wave inventory today.
 \end{kaobox}
 
 \section{Scales without tears}
@@ -1795,6 +1793,20 @@ forvalues i = 1/5 {
 alpha q1 q2 q3 q4 q5
 \end{verbatim}
 }
+The \texttt{likertscale} box below bundles the whole move; run on the battery just built, it reports:
+\par
+{\footnotesize
+\begin{verbatim}
+. likertscale q1 q2 q3 q4 q5, agree(4 5) genstub(ls_) ///
+      index(ls_index)
+
+likertscale: 5 items, N = 320, agree = {4 5}
+  Cronbach's alpha 0.907
+  index ls_index: mean  3.30, sd  1.10
+  built: ls_1 ls_2 ls_3 ls_4 ls_5
+\end{verbatim}
+}
+One call, and the three artifacts a reviewer asks about, the index, its reliability, and the percent-agree columns a board actually reads, exist with labels attached.
 The battery returns a scale reliability (Cronbach's alpha) of \textbf{0.91} on the pooled data, comfortably above the 0.70 floor and below the 0.95 redundancy ceiling, so the five items are measuring one coaching-satisfaction construct rather than five unrelated things. The number \texttt{alpha} reports is
 \[
   \alpha=\frac{K}{K-1}\left(1-\frac{\sum_{j=1}^{K}\sigma_j^2}{\sigma_T^2}\right),
@@ -1848,9 +1860,9 @@ The spread screen alone flags 14 rows: the 12 planted straight-liners plus two h
 
 \pagelayout{wide}
 \section{Who did not answer, and does it matter}
-A response rate is not a verdict on its own; the real question is whether the people who answered differ from the people who did not. We separate two failures: unit nonresponse\index{nonresponse!unit}, when a sampled person answers nothing, and item nonresponse\index{nonresponse!item}, when a respondent skips particular questions. The \texttt{nonresponse}\index{nonresponse@\texttt{nonresponse}} command compares respondents to the sampling frame and models the probability of responding \parencite{groves2008nonresponse}, so \enquote{can we trust a 22 percent response rate} gets a diagnostic answer instead of a shrug. The \texttt{loebias}\index{loebias@\texttt{loebias}} command adds a level-of-effort\index{level-of-effort} check, tracing whether estimates stabilize as later contact attempts bring in reluctant respondents, which is the closest thing to a window on the people you never reached. The level-of-effort logic assumes late responders resemble nonresponders, which holds better for reluctance than for unreachability, so pair the trend with a frame comparison before you lean on it: a dead phone number is not a reluctant respondent.
+A response rate is not a verdict on its own; the real question is whether the people who answered differ from the people who did not. We separate two failures: unit nonresponse\index{nonresponse!unit}, when a sampled person answers nothing, and item nonresponse\index{nonresponse!item}, when a respondent skips particular questions. Compare respondents to the sampling frame, \texttt{reachcheck} against published margins, or a logit of response on frame characteristics when you hold the frame file \parencite{groves2008nonresponse}, so \enquote{can we trust a 22 percent response rate} gets a diagnostic answer instead of a shrug. A level-of-effort\index{level-of-effort} check adds a second angle, tracing whether estimates stabilize as later contact attempts bring in reluctant respondents, which is the closest thing to a window on the people you never reached. The level-of-effort logic assumes late responders resemble nonresponders, which holds better for reluctance than for unreachability, so pair the trend with a frame comparison before you lean on it: a dead phone number is not a reluctant respondent.
 
-The reason a rate is not a verdict is that nonresponse rate and nonresponse bias are not the same quantity. \textcite{groves2006nonresponse} shows, across dozens of studies, that a survey's response rate is a weak predictor of the bias in its estimates, because bias depends on whether responding is correlated with the answer, not on how many people responded. A 40~percent response rate with responders who resemble nonresponders on the outcome can be less biased than an 80~percent rate where the missing fifth is exactly the group whose outcome differs. That is why the \texttt{nonresponse} command models who responds rather than only counting how many did, and it is why the level-of-effort trend matters: both are attempts to see the correlation, not just the count. Where the platform records it, the contact history itself is evidence. \textcite{kreuter2013paradata} makes the case for paradata\index{paradata}, the process trail of call attempts, timestamps, and reminder sends, as a lever on total survey error, and the level-of-effort check is paradata put to work: it reads the order in which responses arrived to ask whether the late, reluctant respondents are pulling the estimate.
+The reason a rate is not a verdict is that nonresponse rate and nonresponse bias are not the same quantity. \textcite{groves2006nonresponse} shows, across dozens of studies, that a survey's response rate is a weak predictor of the bias in its estimates, because bias depends on whether responding is correlated with the answer, not on how many people responded. A 40~percent response rate with responders who resemble nonresponders on the outcome can be less biased than an 80~percent rate where the missing fifth is exactly the group whose outcome differs. That is why the response model matters more than the response count, and it is why the level-of-effort trend matters: both are attempts to see the correlation, not just the count. Where the platform records it, the contact history itself is evidence. \textcite{kreuter2013paradata} makes the case for paradata\index{paradata}, the process trail of call attempts, timestamps, and reminder sends, as a lever on total survey error, and the level-of-effort check is paradata put to work: it reads the order in which responses arrived to ask whether the late, reluctant respondents are pulling the estimate.
 
 Sequence the diagnostics the way the questions arrive. Mid-field, Section~\ref{sec:monitor} asks why the line dips; after close, this section asks whether the dip mattered, and the frame comparison comes first because it is cheap and decisive. If respondents match the frame on the characteristics that drive the outcome, a modest rate is survivable; if they do not, the gap names the group the weighting has to recover. The level-of-effort check comes second, as corroboration rather than verdict.
 
@@ -1878,7 +1890,7 @@ goodness of fit vs target: chi2(2) =  218.1, p = 0.0000
 }
 Read the ratio column the way a program officer would: the \enquote{Other} group arrived at 12~percent of its intended size, not slightly under-covered but nearly absent, and no amount of averaging over the full sample will speak for the group that is not in the room. On a live survey the same line runs against the enrollment roster's margins, site by site, while the field period is still open and the fix is still a targeted reminder rather than a footnote.
 
-What happens next depends on which branch of Figure~\ref{fig:ch05-reachtree} the result lands in, and the honest branch is sometimes the third one. A gap on traits you observe (site, race, age band) is recoverable: rake the respondents to the target margins (\texttt{ipfraking} from SSC, or the weights \texttt{nonresponse} estimates) and rerun the headline both weighted and unweighted, reporting both. A suspected gap on traits nobody measured, the disengaged families, the households whose phones changed, is the branch no weighting can fix, because you cannot weight on a variable you do not have; there the deliverable is the caveat, stated beside the response rate, and a bounded sense of how far the missing group would have to differ to move the finding. Either way the table itself travels into the report: the gap beside the rate is the honest minimum this chapter keeps returning to.
+What happens next depends on which branch of Figure~\ref{fig:ch05-reachtree} the result lands in, and the honest branch is sometimes the third one. A gap on traits you observe (site, race, age band) is recoverable: rake the respondents to the target margins (\texttt{ipfraking} from SSC) and rerun the headline both weighted and unweighted, reporting both. A suspected gap on traits nobody measured, the disengaged families, the households whose phones changed, is the branch no weighting can fix, because you cannot weight on a variable you do not have; there the deliverable is the caveat, stated beside the response rate, and a bounded sense of how far the missing group would have to differ to move the finding. Either way the table itself travels into the report: the gap beside the rate is the honest minimum this chapter keeps returning to.
 
 \begin{figure}[htbp]
 \centering
@@ -1903,8 +1915,8 @@ What happens next depends on which branch of Figure~\ref{fig:ch05-reachtree} the
 
 This matters because representativeness is the difference between \enquote{our respondents} and \enquote{our participants}, and a funder quotes the second. The diagnostics here hand off directly to the weighting of Chapter~\ref{ch:trust}, where the imbalance they find gets corrected.
 
-\begin{kaobox}[frametitle=Package Integration: \texttt{nonresponse} and \texttt{loebias}]
-\textbf{Integrated commands:} \texttt{nonresponse} compares respondents to the sampling frame with tests and logistic models and estimates raking weights \parencite{deming1940raking}; \texttt{loebias} runs cumulative level-of-effort sensitivity tests to see whether estimates stabilize as call attempts accumulate.
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{nonresponse} and \texttt{loebias}]
+\textbf{Proposed programs.} Wrappers for this section's diagnostics: \texttt{nonresponse} would package the frame tests, the response model, and raking weights \parencite{deming1940raking}; \texttt{loebias} the cumulative level-of-effort sensitivity runs. The moves themselves are taught above, and \texttt{reachcheck} already covers the margins comparison; the wrappers await an interface worth freezing.
 \end{kaobox}
 
 \section{The cross-wave codebook}\label{sec:cxchangelog}
@@ -2041,8 +2053,19 @@ net install datadictionary, ///
 It extends two community tools worth knowing: Roger Newson's \texttt{descsave} (SSC), which writes a variable-level description dataset, and Kishor Das's \texttt{codebookout} (SSC), which exports names, labels, and types to Excel. \texttt{datadictionary} adds the cross-wave diff, the missingness grid, example values, and the \texttt{notes}/\texttt{srctag} harvest. The three demo wave files are generated by the package's own test battery, so the worked example reproduces from a clean install.
 \end{kaobox}
 
-\begin{kaobox}[frametitle=Ado-file Idea: \texttt{surveypull}]
-\textbf{Proposed program:} \texttt{surveypull}. One wrapper over the platform APIs of this chapter, with subcommands \texttt{responses} (download to a labeled \texttt{.dta}), \texttt{monitor} (counts and response rates against a roster, with an exit code a scheduler can read), and \texttt{codebook} (platform metadata to a data dictionary). Design principles: REDCap first because its API is simplest, one authentication story per platform, and every secret in an environment variable, never in the do-file. It fills the book's clearest tooling gap, since no existing package speaks the platforms' own dialects from Stata: \texttt{webapi} carries the individual GET and POST calls, but the export-request-poll-download dance, the token conventions, and the pagination are platform lore a dedicated wrapper should own.
+\begin{kaobox}[frametitle=Package Integration: \texttt{surveypull}]
+\textbf{Integrated command:} \texttt{surveypull}\index{surveypull@\texttt{surveypull}}. Each platform speaks its own dialect of the same idea, and \texttt{surveypull} owns the lore. For REDCap it builds and runs the single tokened POST through \texttt{webapi} and loads the records; for Qualtrics, whose export is a request-poll-download dance ending in a zip Stata cannot yet ingest directly, it prints the three exact calls ready to run, and says so plainly. The \texttt{dryrun} option prints any call without sending it, which is also how you keep a token out of a shared log:
+\par
+{\footnotesize
+\begin{verbatim}
+. surveypull redcap, url(https://redcap.youruni.edu/api/) ///
+      token(YOURTOKEN) dryrun
+surveypull (dry run): the call it would make:
+  webapi post using "https://redcap.youruni.edu/api/",
+      body("token=YOURTOKEN&content=record&format=csv")
+\end{verbatim}
+}
+Ships in the companion repository's \texttt{code/} folder; part (x) of \texttt{ch05\_monitoring.do} prints the Qualtrics sequence too.
 \end{kaobox}
 
 \pagelayout{margin}
@@ -2192,6 +2215,18 @@ The scene is the utilization-focused standard of Chapter~\ref{ch:embedded} at wo
 \begin{kaobox}[frametitle=Package Integration: \texttt{srctag} and \texttt{srcfind}]
 \textbf{Integrated commands:} \texttt{srctag} writes source metadata (agency, table, vintage) into variable characteristics and maintains a dataset-level manifest of all sources represented; \texttt{srcfind} scans a directory of Stata files by reading only their headers, so a warehouse search is fast and never loads the data.
 \end{kaobox}
+
+Two lines at import, and this section's provenance question has a command-line answer years later:
+\par
+{\footnotesize
+\begin{verbatim}
+. srctag q_wage q_hours, source(TWC wage file) vintage(2026q2)
+srctag: stamped 2 variable(s) with source TWC wage file
+. srcfind TWC
+q_wage          TWC wage file (2026q2)
+q_hours         TWC wage file (2026q2)
+\end{verbatim}
+}
 
 \section{Schema drift and the polluted year}
 A pipeline should refuse bad data loudly rather than average over it quietly. Administrative extracts drift\index{schema drift}: a variable changes type, a code that was never legal appears, an ID that should be unique repeats. The defense is a validation step that checks each new extract against a rulebook of required variables, legal values, and uniqueness constraints, and stops with a clear message when the data violates them. Native Stata already carries everything that rulebook needs: \texttt{confirm}\index{confirm@\texttt{confirm}} verifies that a variable exists with the expected type, \texttt{isid}\index{isid@\texttt{isid}} halts if the identifier is not unique, and \texttt{assert}\index{assert@\texttt{assert}} halts if any observation violates a stated condition. Placed at the top of the do-file that ingests an extract, four lines become a contract the data must satisfy before a single analysis line runs:
@@ -4053,9 +4088,7 @@ Table~\ref{tab:wage} is not a screenshot and not hand-set numbers. It is the fil
 \input{ch11_wage_table.tex}
 \end{table}
 
-\begin{kaobox}[frametitle=Ado-file Idea: \texttt{fundertable}]
-\textbf{Proposed program:} \texttt{fundertable}. A wrapper over \texttt{collect} and \texttt{putexcel} that produces the pre-formatted executive-summary and appendix tables funders commonly request, so the format work is done once and reused.
-\end{kaobox}
+There is deliberately no \texttt{fundertable} wrapper in the toolkit: the \texttt{putexcel} discipline this section teaches \emph{is} the funder table, and packaging it would hide exactly the part worth learning.
 
 \subsection{An Excel tab that cannot fall out of step}\label{sec:ch11-excel-tab}
 On any workbook a client will see, build the skeleton before the numbers. Run the \texttt{putexcel} layout lines first, the tab names, header rows, labels, and formats, with every value cell left empty, and send that shell to the client for sign-off on structure. A program manager can react to an empty workbook in ten minutes (\enquote{move the cohort column left, add a notes column}) and the changes cost nothing, because no wiring exists yet. Once the structure is agreed, wiring the numbers is the easy half: each empty cell becomes one \texttt{putexcel} line reading a stored result.
@@ -5238,8 +5271,27 @@ Read this in the units of the decision, not the abstract. The LLM matched the hu
 Set the fork before the kappa prints. Above the threshold named in the plan (0.75 here), scale to the full dataset and carry the kappa into the write-up; below it, the useful question is which failure the confusion matrix shows. Errors concentrated in one category point to a prompt revision, or to a category definition the human coders themselves would argue about; errors spread evenly point to a task the LLM cannot yet do, where the honest next step is more hand-coding rather than a lower threshold. Fix the forks in advance, and a near-miss of 0.73 cannot be rounded up by the wish to be done.
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{llmsieve}]
-\textbf{Integrated command:} \texttt{llmsieve}\index{llmsieve@\texttt{llmsieve}}. Combines multi-model consensus with human gold-standard validation, computing agreement, Shannon entropy, and Fleiss' kappa, and flagging low-agreement observations for manual review. Its trust proxy is the sieve of Section~\ref{sec:sieve}: where no per-answer probability is available, it measures how much a second LLM revises the first and routes the high-revision cases to a human.
+\textbf{Integrated command:} \texttt{llmsieve}\index{llmsieve@\texttt{llmsieve}}. Computes this section's convergence delta for every row, one Mata Levenshtein pass per pair, flags the rows whose delta clears a threshold, and hands back the routing variables (\texttt{gendelta()}, \texttt{genflag()}), so the human-review budget goes exactly where the LLMs disagree. It measures stability, not truth: the gold-standard kappa of Section~\ref{sec:aiverify} stays in the design. Ships in the companion repository's \texttt{code/} folder.
 \end{kaobox}
+
+Watch it on four two-pass answers, two identical, one trivially reworded, one genuinely rewritten (part (g) of \texttt{ch13\_validation.do}):
+\par
+{\footnotesize
+\begin{verbatim}
+. llmsieve pass1 pass2, gendelta(delta) genflag(review)
+
+llmsieve: convergence delta between pass1 and pass2 (N = 4)
+  mean delta  0.206, max  0.786
+  rows above threshold(0.15), routed to human review: 1 of 4
+
+  pass1                            delta   review
+  transportation barrier           0.000        0
+  childcare gap on Tuesdays        0.040        0
+  no barrier reported              0.000        0
+  schedule conflict with work      0.786        1
+\end{verbatim}
+}
+The trivial rewording, Tuesdays to Tuesday, scores 0.04 and passes; the answer that changed its mind scores 0.786 and goes to a human. That is the routing this section promised, now one line long.
 
 \subsection{The weakest category is the one to spot-check}\label{sec:kappa-by-category}
 A single kappa hides where the LLM struggles, so the next question is which categories it gets wrong. Charting agreement one barrier at a time turns the scalar into a map (Figure~\ref{fig:agreement}): four categories sit near 0.85, but \enquote{none} lands lowest at 0.81, which is the category to spot-check and the one \texttt{llmsieve} would route to a human first.
@@ -5550,8 +5602,27 @@ Read this in people, not proportions. The identical cutoff picks 48\% of Group A
 Decide before the audit runs what each side of the 0.80 line triggers. Above 0.80, record the ratio and both selection rates in the run log and proceed. Below it, the next action is not a quiet threshold adjustment but a conversation with the program director, because the remedies (a different cutoff per group, different features, or setting the score aside for this decision) trade off in ways an analyst cannot settle alone. The audit's job is to put a number on the table; deciding whose table it lands on is part of the design.
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{faircheck}]
-\textbf{Integrated command:} \texttt{faircheck}. Audits a prediction model for demographic parity, equalized odds, and predictive parity across groups, printing disparity ratios and flagging violations of a chosen threshold (default: the four-fifths rule).
+\textbf{Integrated command:} \texttt{faircheck}\index{faircheck@\texttt{faircheck}}. One call audits a 0/1 prediction against observed outcomes by group: selection rates with the four-fifths parity ratio and its flag, the equalized-odds ingredients (TPR and FPR), and precision, with the largest cross-group gaps printed. Ships in the companion repository's \texttt{code/} folder.
 \end{kaobox}
+
+The section's simulation asked who gets \emph{selected}; extend it one line, letting true need materialize from the same risk score (\texttt{gen byte need = runiform() < risk}), and \texttt{faircheck} adds the error-rate view (part (h) of \texttt{ch13\_validation.do}):
+\par
+{\footnotesize
+\begin{verbatim}
+. faircheck need select, by(groupB)
+
+faircheck: select against need, by groupB (N = 2000)
+---------------------------------------------------------
+group             N    base  select     TPR     FPR    prec
+---------------------------------------------------------
+0               978   0.522   0.483   0.650   0.300   0.703
+1             1,022   0.377   0.265   0.444   0.157   0.631
+---------------------------------------------------------
+selection-rate parity ratio 0.549 below the 0.80 line
+largest gaps across groups: TPR 0.206, FPR 0.143
+\end{verbatim}
+}
+The 0.549 is the same four-fifths ratio computed above, now with company: of the people who truly need outreach, the cutoff finds 65 percent in one group and 44 in the other. The parity gap was the door; the TPR gap is the harm.
 
 The audit serves the people the targeting model sorts, and that is the accessible principle in its most consequential form: an evaluator who has checked the tool for fairness can defend it to the community it affects. Checking prediction for bias is the duty of care that using prediction at all incurs.
 
@@ -5897,8 +5968,22 @@ The value is collaboration without exposure: partners build against data that be
 \section{Sanitizing raw files with a human in the loop}\label{sec:rawsweep}
 Protected information most often enters at intake, in the raw files a partner drops in the shared drive, so the gate belongs there. The pattern that works is a human-in-the-loop sweep: scan each incoming file, emit a review workbook listing the fields it thinks should be removed, let a person confirm, then execute the removals with a dry-run mode and an audit receipt recording exactly what was stripped and when.\marginnote{Keep the human in the loop deliberately: an auto-redactor that silently drops a column is the fastest way to lose the one field you needed. The reviewer's confirmation is also what makes the receipt meaningful, since it records a decision, not just a script's guess.} The workflow is simple enough to script, and the box below sketches the tool that would package it.
 
-\begin{kaobox}[frametitle=Ado-file Idea: \texttt{rawsweep}]
-\textbf{Proposed program:} \texttt{rawsweep}\index{rawsweep@\texttt{rawsweep}}. Scans incoming raw files, emits a for-human-review workbook of flagged fields, executes removals with confirmation and dry-run modes, and writes an audit receipt, so intake sanitization is demonstrable rather than asserted.
+\begin{kaobox}[frametitle=Package Integration: \texttt{rawsweep}]
+\textbf{Integrated command:} \texttt{rawsweep}\index{rawsweep@\texttt{rawsweep}}. Files that land in a shared intake folder deserve a triage read before anything imports them. \texttt{rawsweep} builds a one-row-per-file manifest (name, extension, bytes), calls out zero-byte files, and with its \texttt{pii} option scans each file's first rows against the same six pattern classes as \texttt{ai\_privacy\_gate}, so protected fields are caught at the door rather than three merges later. What it deliberately does not do is delete or edit anything: removal stays a human decision, on the record. On a three-file intake folder (part (r) of \texttt{ch14\_kanon.do}):
+\par
+{\footnotesize
+\begin{verbatim}
+. rawsweep, directory("raw/intake") pii clear
+
+rawsweep: 3 file(s) in raw/intake
+  smallest            0  largest           43 bytes
+  1 zero-byte file(s): failed downloads wearing success flags
+  files with likely PII in the first 25 rows: 1
+  route those through the privacy gate before anything
+    else touches them.
+\end{verbatim}
+}
+The zero-byte flag is Chapter~\ref{ch:noapi}'s manifest triage, automated; the PII flag hands the file to Chapter~\ref{ch:ai}'s gate.
 \end{kaobox}
 
 The receipt is the difference between telling an auditor the protected fields were stripped and showing the record of what was stripped, by whom, and when; an auditor, like a data-use agreement, accepts only the second. Catching protected data at intake is also cheaper and safer than finding it three merges later, and the receipt proves, replicably, that it was caught. The gate closes the loop the rest of the chapter opens: the same protected fields that make a person unique in Section~\ref{sec:qid} are the ones \texttt{rawsweep} is watching for at the door, so the risk you measured downstream is a risk you can stop upstream.
@@ -6297,7 +6382,7 @@ The one exception is \texttt{sparkta2}, whose source is not yet released. The co
 \paragraph{Published packages showcased.}
 \begin{itemize}
     \item \texttt{webapi} -- fetch an authenticated JSON web API into Stata as a dataset, standard-library Python only (Chapter~\ref{ch:apis}).
-    \item \textbf{The fifteen packages built for this book}, each in its own \texttt{-stata-public} repository with tests and help: \texttt{projectbuilder} (scaffold the Chapter~\ref{ch:workshop} project layout), \texttt{combineall} (append, merge, or convert a whole folder, with vintage-aware harmonization; Chapters~\ref{ch:apis} and~\ref{ch:noapi}), \texttt{cxchangelog} (cross-wave survey codebooks), \texttt{datadictionary} (the over-time data codebook: per-wave stats, missingness, value-label diffs, Excel export), and \texttt{undummy} (recombine one-hot columns into one categorical), all Chapter~\ref{ch:surveys}; \texttt{reshapehelper} (diagnose the data and suggest the likely \texttt{reshape} command, Chapter~\ref{ch:panels}); \texttt{rateshrink} (empirical-Bayes rate stabilization), \texttt{conformalpred} (distribution-free prediction intervals), and \texttt{hlmr2} (Nakagawa multilevel $R^2$), all Chapter~\ref{ch:trust}; \texttt{twinmatch} (Mahalanobis policy twins) and \texttt{roisim} (Monte Carlo ROI), both Chapter~\ref{ch:claims}; and \texttt{suppress} (small-cell and complementary suppression) and \texttt{riskscan} ($k$-anonymity scan), both Chapter~\ref{ch:sharing}; plus \texttt{reachcheck} (respondents against target margins, Chapter~\ref{ch:surveys}) and \texttt{ai\_privacy\_gate} (the pre-flight PII gate, Chapter~\ref{ch:ai}), which ship in the companion repository's \texttt{code/} folder.
+    \item \textbf{The thirteen packages built for this book}, each in its own \texttt{-stata-public} repository with tests and help: \texttt{projectbuilder} (scaffold the Chapter~\ref{ch:workshop} project layout), \texttt{combineall} (append, merge, or convert a whole folder, with vintage-aware harmonization; Chapters~\ref{ch:apis} and~\ref{ch:noapi}), \texttt{cxchangelog} (cross-wave survey codebooks), \texttt{datadictionary} (the over-time data codebook: per-wave stats, missingness, value-label diffs, Excel export), and \texttt{undummy} (recombine one-hot columns into one categorical), all Chapter~\ref{ch:surveys}; \texttt{reshapehelper} (diagnose the data and suggest the likely \texttt{reshape} command, Chapter~\ref{ch:panels}); \texttt{rateshrink} (empirical-Bayes rate stabilization), \texttt{conformalpred} (distribution-free prediction intervals), and \texttt{hlmr2} (Nakagawa multilevel $R^2$), all Chapter~\ref{ch:trust}; \texttt{twinmatch} (Mahalanobis policy twins) and \texttt{roisim} (Monte Carlo ROI), both Chapter~\ref{ch:claims}; and \texttt{suppress} (small-cell and complementary suppression) and \texttt{riskscan} ($k$-anonymity scan), both Chapter~\ref{ch:sharing}; plus nine commands that ship in the companion repository's \texttt{code/} folder, each with its own help file and test battery: \texttt{reachcheck} (respondents against target margins) and \texttt{surveypull} (platform pulls, dry-run first), both Chapter~\ref{ch:surveys}; \texttt{likertscale} (index, alpha, and percent-agree in one step, Chapter~\ref{ch:surveys}); \texttt{srctag} and \texttt{srcfind} (source lineage, Chapter~\ref{ch:panels}); \texttt{ai\_privacy\_gate} (the pre-flight PII gate), \texttt{llmsieve} (convergence-delta routing), and \texttt{faircheck} (group-wise parity and error audit), all Chapter~\ref{ch:ai}; and \texttt{rawsweep} (intake manifest with PII flags, Chapter~\ref{ch:sharing}).
     \item \texttt{googlechart} -- 14 interactive chart types from one command (Chapter~\ref{ch:interactive}).
     \item \texttt{googlesheets} -- read, write, format, and chart Google Sheets from Stata (Chapters~\ref{ch:sheets}, \ref{ch:surveys}, \ref{ch:apis}).
     \item \texttt{statashiny} -- serverless interactive HTML dashboards (Chapter~\ref{ch:portals}).
@@ -6307,21 +6392,17 @@ The one exception is \texttt{sparkta2}, whose source is not yet released. The co
     \item \texttt{statplot} -- high-density categorical plots, with N. Cox (Chapter~\ref{ch:graphs}).
     \item \texttt{convertanything} -- folder trees of mixed formats to clean datasets (Chapter~\ref{ch:noapi}).
     \item \texttt{nearmrg} -- nearest-value merges on dates and amounts (Chapter~\ref{ch:panels}).
-    \item \texttt{srctag} \& \texttt{srcfind} -- tag and search variable source lineage (Chapter~\ref{ch:panels}).
-    \item \texttt{surveytracker}, \texttt{likertscale}, \texttt{nonresponse}, \texttt{loebias}, \texttt{validemail} -- survey instrument, scale, nonresponse, and email tools (Chapter~\ref{ch:surveys}).
-    \item \texttt{llmsieve}, \texttt{faircheck}, \texttt{gemini} -- LLM consensus/validation, fairness audit, and the LLM bridge (Chapter~\ref{ch:ai}).
+    \item \texttt{validemail} -- three-tier email validation (Chapter~\ref{ch:surveys}).
+    \item \texttt{gemini} -- the LLM bridge (Chapter~\ref{ch:ai}).
     \item \texttt{writeinput}, \texttt{editanything}, \texttt{usepackage}, \texttt{ScrapeSSC}, \texttt{driveuse}, \texttt{importR}, \texttt{lstrfun} -- reproducibility, packaging, and interop utilities (Chapters~\ref{ch:workshop}, \ref{ch:tools}).
 \end{itemize}
 
 \paragraph{Proposed tools (roadmap, not yet code).}
 \begin{itemize}
-    \item \texttt{evalaudit} -- a project-startup checklist auditing data-sharing agreements and funder mandates (Chapter~\ref{ch:embedded}).
-    \item \texttt{gtools\_audit} -- a speed audit of a project's heaviest data steps (Chapter~\ref{ch:workshop}).
-    \item \texttt{surveypull} -- scheduled survey download and monitoring (Chapter~\ref{ch:surveys}).
     \item \texttt{fastmatch}, \texttt{trackflow} -- EM-based probabilistic record linkage and flow shaping (Chapter~\ref{ch:panels}).
-    \item \texttt{fundertable} -- pre-formatted funder tables (Chapter~\ref{ch:sheets}).
     \item \texttt{text2vars}, \texttt{stata2brief}, \texttt{evalpreflight} -- LLM extraction and drafting aids (Chapter~\ref{ch:ai}).
-    \item \texttt{synthgen}, \texttt{rawsweep} -- synthetic-data generation and intake sanitization (Chapter~\ref{ch:sharing}).
+    \item \texttt{synthgen} -- synthetic-data generation (Chapter~\ref{ch:sharing}).
+    \item \texttt{surveytracker}, \texttt{nonresponse}, \texttt{loebias} -- instrument logging and nonresponse and level-of-effort wrappers; the diagnostics themselves are taught in Chapter~\ref{ch:surveys}.
 \end{itemize}
 
 \pagelayout{margin}

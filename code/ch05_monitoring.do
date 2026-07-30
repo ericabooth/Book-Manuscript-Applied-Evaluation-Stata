@@ -91,6 +91,13 @@ forvalues i = 1/5 {
 *--- Reliability of the battery ----------------------------------------------*
 alpha q1 q2 q3 q4 q5
 
+* likertscale bundles index + alpha + percent-agree in one call
+adopath ++ "`c(pwd)'/likertscale"
+likertscale q1 q2 q3 q4 q5, agree(4 5) genstub(ls_) index(ls_index)
+assert abs(r(alpha) - .907) < .01
+drop ls_index ls_1 ls_2 ls_3 ls_4 ls_5
+di "LIKERTSCALE_DEMO_OK"
+
 *--- Top-two-box percent agree (=4 or =5) by site + scale mean ---------------*
 egen scalemean = rowmean(q1 q2 q3 q4 q5)
 forvalues i = 1/5 {
@@ -154,6 +161,15 @@ reachcheck race, target(70 20 10)
 assert r(N) == 2246
 assert abs(r(chi2) - 218.1) < 0.5
 di "REACHCHECK_DEMO_OK"
+
+
+*==============================================================================*
+* (x) surveypull dry runs: the platform calls, printed not sent
+*==============================================================================*
+adopath ++ "`c(pwd)'/surveypull"
+surveypull redcap, url(https://redcap.youruni.edu/api/) token(YOURTOKEN) dryrun
+surveypull qualtrics, datacenter(ca1) token(YOURTOKEN) survey(SV_abc123) dryrun
+di "SURVEYPULL_DEMO_OK"
 
 
 di "DONE"

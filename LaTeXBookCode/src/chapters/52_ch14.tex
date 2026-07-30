@@ -278,8 +278,22 @@ The value is collaboration without exposure: partners build against data that be
 \section{Sanitizing raw files with a human in the loop}\label{sec:rawsweep}
 Protected information most often enters at intake, in the raw files a partner drops in the shared drive, so the gate belongs there. The pattern that works is a human-in-the-loop sweep: scan each incoming file, emit a review workbook listing the fields it thinks should be removed, let a person confirm, then execute the removals with a dry-run mode and an audit receipt recording exactly what was stripped and when.\marginnote{Keep the human in the loop deliberately: an auto-redactor that silently drops a column is the fastest way to lose the one field you needed. The reviewer's confirmation is also what makes the receipt meaningful, since it records a decision, not just a script's guess.} The workflow is simple enough to script, and the box below sketches the tool that would package it.
 
-\begin{kaobox}[frametitle=Ado-file Idea: \texttt{rawsweep}]
-\textbf{Proposed program:} \texttt{rawsweep}\index{rawsweep@\texttt{rawsweep}}. Scans incoming raw files, emits a for-human-review workbook of flagged fields, executes removals with confirmation and dry-run modes, and writes an audit receipt, so intake sanitization is demonstrable rather than asserted.
+\begin{kaobox}[frametitle=Package Integration: \texttt{rawsweep}]
+\textbf{Integrated command:} \texttt{rawsweep}\index{rawsweep@\texttt{rawsweep}}. Files that land in a shared intake folder deserve a triage read before anything imports them. \texttt{rawsweep} builds a one-row-per-file manifest (name, extension, bytes), calls out zero-byte files, and with its \texttt{pii} option scans each file's first rows against the same six pattern classes as \texttt{ai\_privacy\_gate}, so protected fields are caught at the door rather than three merges later. What it deliberately does not do is delete or edit anything: removal stays a human decision, on the record. On a three-file intake folder (part (r) of \texttt{ch14\_kanon.do}):
+\par
+{\footnotesize
+\begin{verbatim}
+. rawsweep, directory("raw/intake") pii clear
+
+rawsweep: 3 file(s) in raw/intake
+  smallest            0  largest           43 bytes
+  1 zero-byte file(s): failed downloads wearing success flags
+  files with likely PII in the first 25 rows: 1
+  route those through the privacy gate before anything
+    else touches them.
+\end{verbatim}
+}
+The zero-byte flag is Chapter~\ref{ch:noapi}'s manifest triage, automated; the PII flag hands the file to Chapter~\ref{ch:ai}'s gate.
 \end{kaobox}
 
 The receipt is the difference between telling an auditor the protected fields were stripped and showing the record of what was stripped, by whom, and when; an auditor, like a data-use agreement, accepts only the second. Catching protected data at intake is also cheaper and safer than finding it three merges later, and the receipt proves, replicably, that it was caught. The gate closes the loop the rest of the chapter opens: the same protected fields that make a person unique in Section~\ref{sec:qid} are the ones \texttt{rawsweep} is watching for at the door, so the risk you measured downstream is a risk you can stop upstream.

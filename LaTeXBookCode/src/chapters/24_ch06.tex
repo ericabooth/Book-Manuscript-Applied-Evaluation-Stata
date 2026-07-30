@@ -134,6 +134,18 @@ The scene is the utilization-focused standard of Chapter~\ref{ch:embedded} at wo
 \textbf{Integrated commands:} \texttt{srctag} writes source metadata (agency, table, vintage) into variable characteristics and maintains a dataset-level manifest of all sources represented; \texttt{srcfind} scans a directory of Stata files by reading only their headers, so a warehouse search is fast and never loads the data.
 \end{kaobox}
 
+Two lines at import, and this section's provenance question has a command-line answer years later:
+\par
+{\footnotesize
+\begin{verbatim}
+. srctag q_wage q_hours, source(TWC wage file) vintage(2026q2)
+srctag: stamped 2 variable(s) with source TWC wage file
+. srcfind TWC
+q_wage          TWC wage file (2026q2)
+q_hours         TWC wage file (2026q2)
+\end{verbatim}
+}
+
 \section{Schema drift and the polluted year}
 A pipeline should refuse bad data loudly rather than average over it quietly. Administrative extracts drift\index{schema drift}: a variable changes type, a code that was never legal appears, an ID that should be unique repeats. The defense is a validation step that checks each new extract against a rulebook of required variables, legal values, and uniqueness constraints, and stops with a clear message when the data violates them. Native Stata already carries everything that rulebook needs: \texttt{confirm}\index{confirm@\texttt{confirm}} verifies that a variable exists with the expected type, \texttt{isid}\index{isid@\texttt{isid}} halts if the identifier is not unique, and \texttt{assert}\index{assert@\texttt{assert}} halts if any observation violates a stated condition. Placed at the top of the do-file that ingests an extract, four lines become a contract the data must satisfy before a single analysis line runs:
 \par

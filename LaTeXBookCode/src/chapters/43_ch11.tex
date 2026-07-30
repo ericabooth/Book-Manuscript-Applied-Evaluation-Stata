@@ -87,9 +87,7 @@ Table~\ref{tab:wage} is not a screenshot and not hand-set numbers. It is the fil
 \input{ch11_wage_table.tex}
 \end{table}
 
-\begin{kaobox}[frametitle=Ado-file Idea: \texttt{fundertable}]
-\textbf{Proposed program:} \texttt{fundertable}. A wrapper over \texttt{collect} and \texttt{putexcel} that produces the pre-formatted executive-summary and appendix tables funders commonly request, so the format work is done once and reused.
-\end{kaobox}
+There is deliberately no \texttt{fundertable} wrapper in the toolkit: the \texttt{putexcel} discipline this section teaches \emph{is} the funder table, and packaging it would hide exactly the part worth learning.
 
 \subsection{An Excel tab that cannot fall out of step}\label{sec:ch11-excel-tab}
 On any workbook a client will see, build the skeleton before the numbers. Run the \texttt{putexcel} layout lines first, the tab names, header rows, labels, and formats, with every value cell left empty, and send that shell to the client for sign-off on structure. A program manager can react to an empty workbook in ten minutes (\enquote{move the cohort column left, add a notes column}) and the changes cost nothing, because no wiring exists yet. Once the structure is agreed, wiring the numbers is the easy half: each empty cell becomes one \texttt{putexcel} line reading a stored result.

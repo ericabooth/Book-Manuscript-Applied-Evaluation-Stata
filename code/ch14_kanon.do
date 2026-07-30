@@ -120,3 +120,26 @@ restore
 di "FIGURE_SAVED"
 
 di "DONE"
+
+*==============================================================================*
+* (r) rawsweep demo: manifest of a simulated intake folder, PII flagged
+*==============================================================================*
+adopath ++ "`c(pwd)'/rawsweep"
+local dir "`c(tmpdir)'/ch14_intake"
+capture mkdir "`dir'"
+foreach f in referrals.csv notes.csv failed.csv {
+    capture erase "`dir'/`f'"
+}
+file open h using "`dir'/referrals.csv", write replace
+file write h "id,site,score" _n "1,3,12" _n "2,5,9" _n
+file close h
+file open h using "`dir'/notes.csv", write replace
+file write h "id,note" _n `"1,"call 512-555-0173 re: schedule""' _n
+file close h
+file open h using "`dir'/failed.csv", write replace
+file close h
+rawsweep, directory("`dir'") pii clear
+assert r(files) == 3
+assert r(flagged) == 1
+di "RAWSWEEP_DEMO_OK"
+

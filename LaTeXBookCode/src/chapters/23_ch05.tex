@@ -194,10 +194,10 @@ A survey platform knows the text of every question and the coding of every respo
 
 Timing matters here: capture the metadata snapshot at launch, not at close. Platforms let an editor reword a question mid-field, and the wording your December respondents saw is recoverable only if the July pull saved it. A launch-day metadata pull, filed beside the first data pull, is the baseline for every later comparison.
 
-Across waves, the same idea scales into an instrument history. The \texttt{surveytracker}\index{surveytracker@\texttt{surveytracker}} command logs each wave's variables, labels, and constructs into a running spreadsheet, so you can see at a glance which items are new, which changed, and which were dropped. That inventory is the backbone of the cross-wave codebook of Section~\ref{sec:cxchangelog}; without it, a multi-wave survey is not a study that extends but a pile of unrelated files.
+Across waves, the same idea scales into an instrument history. A launch-day instrument log records each wave's variables, labels, and constructs in a running spreadsheet, so you can see at a glance which items are new, which changed, and which were dropped. That inventory is the backbone of the cross-wave codebook of Section~\ref{sec:cxchangelog}; without it, a multi-wave survey is not a study that extends but a pile of unrelated files.
 
-\begin{kaobox}[frametitle=Package Integration: \texttt{surveytracker} and \texttt{validemail}]
-\textbf{Integrated commands:} \texttt{surveytracker} inventories variables, labels, and constructs into a longitudinal Excel tracker to compare instruments across waves. \texttt{validemail} validates an email item in three tiers (format, live DNS/MX lookup, and disposable-provider detection), which is the small but constant chore of cleaning an open-ended contact field before it is used for follow-up.
+\begin{kaobox}[frametitle=Package Integration: \texttt{validemail}]
+\textbf{Integrated command:} \texttt{validemail} validates an email item in three tiers (format, live DNS/MX lookup, and disposable-provider detection), the small but constant chore of cleaning an open-ended contact field before it is used for follow-up. Its planned companion \texttt{surveytracker}, a launch-day instrument logger feeding the same tracker, remains an ado-file idea; Section~\ref{sec:cxchangelog}'s \texttt{cxchangelog} covers the cross-wave inventory today.
 \end{kaobox}
 
 \section{Scales without tears}
@@ -222,6 +222,20 @@ forvalues i = 1/5 {
 alpha q1 q2 q3 q4 q5
 \end{verbatim}
 }
+The \texttt{likertscale} box below bundles the whole move; run on the battery just built, it reports:
+\par
+{\footnotesize
+\begin{verbatim}
+. likertscale q1 q2 q3 q4 q5, agree(4 5) genstub(ls_) ///
+      index(ls_index)
+
+likertscale: 5 items, N = 320, agree = {4 5}
+  Cronbach's alpha 0.907
+  index ls_index: mean  3.30, sd  1.10
+  built: ls_1 ls_2 ls_3 ls_4 ls_5
+\end{verbatim}
+}
+One call, and the three artifacts a reviewer asks about, the index, its reliability, and the percent-agree columns a board actually reads, exist with labels attached.
 The battery returns a scale reliability (Cronbach's alpha) of \textbf{0.91} on the pooled data, comfortably above the 0.70 floor and below the 0.95 redundancy ceiling, so the five items are measuring one coaching-satisfaction construct rather than five unrelated things. The number \texttt{alpha} reports is
 \[
   \alpha=\frac{K}{K-1}\left(1-\frac{\sum_{j=1}^{K}\sigma_j^2}{\sigma_T^2}\right),
@@ -275,9 +289,9 @@ The spread screen alone flags 14 rows: the 12 planted straight-liners plus two h
 
 \pagelayout{wide}
 \section{Who did not answer, and does it matter}
-A response rate is not a verdict on its own; the real question is whether the people who answered differ from the people who did not. We separate two failures: unit nonresponse\index{nonresponse!unit}, when a sampled person answers nothing, and item nonresponse\index{nonresponse!item}, when a respondent skips particular questions. The \texttt{nonresponse}\index{nonresponse@\texttt{nonresponse}} command compares respondents to the sampling frame and models the probability of responding \parencite{groves2008nonresponse}, so \enquote{can we trust a 22 percent response rate} gets a diagnostic answer instead of a shrug. The \texttt{loebias}\index{loebias@\texttt{loebias}} command adds a level-of-effort\index{level-of-effort} check, tracing whether estimates stabilize as later contact attempts bring in reluctant respondents, which is the closest thing to a window on the people you never reached. The level-of-effort logic assumes late responders resemble nonresponders, which holds better for reluctance than for unreachability, so pair the trend with a frame comparison before you lean on it: a dead phone number is not a reluctant respondent.
+A response rate is not a verdict on its own; the real question is whether the people who answered differ from the people who did not. We separate two failures: unit nonresponse\index{nonresponse!unit}, when a sampled person answers nothing, and item nonresponse\index{nonresponse!item}, when a respondent skips particular questions. Compare respondents to the sampling frame, \texttt{reachcheck} against published margins, or a logit of response on frame characteristics when you hold the frame file \parencite{groves2008nonresponse}, so \enquote{can we trust a 22 percent response rate} gets a diagnostic answer instead of a shrug. A level-of-effort\index{level-of-effort} check adds a second angle, tracing whether estimates stabilize as later contact attempts bring in reluctant respondents, which is the closest thing to a window on the people you never reached. The level-of-effort logic assumes late responders resemble nonresponders, which holds better for reluctance than for unreachability, so pair the trend with a frame comparison before you lean on it: a dead phone number is not a reluctant respondent.
 
-The reason a rate is not a verdict is that nonresponse rate and nonresponse bias are not the same quantity. \textcite{groves2006nonresponse} shows, across dozens of studies, that a survey's response rate is a weak predictor of the bias in its estimates, because bias depends on whether responding is correlated with the answer, not on how many people responded. A 40~percent response rate with responders who resemble nonresponders on the outcome can be less biased than an 80~percent rate where the missing fifth is exactly the group whose outcome differs. That is why the \texttt{nonresponse} command models who responds rather than only counting how many did, and it is why the level-of-effort trend matters: both are attempts to see the correlation, not just the count. Where the platform records it, the contact history itself is evidence. \textcite{kreuter2013paradata} makes the case for paradata\index{paradata}, the process trail of call attempts, timestamps, and reminder sends, as a lever on total survey error, and the level-of-effort check is paradata put to work: it reads the order in which responses arrived to ask whether the late, reluctant respondents are pulling the estimate.
+The reason a rate is not a verdict is that nonresponse rate and nonresponse bias are not the same quantity. \textcite{groves2006nonresponse} shows, across dozens of studies, that a survey's response rate is a weak predictor of the bias in its estimates, because bias depends on whether responding is correlated with the answer, not on how many people responded. A 40~percent response rate with responders who resemble nonresponders on the outcome can be less biased than an 80~percent rate where the missing fifth is exactly the group whose outcome differs. That is why the response model matters more than the response count, and it is why the level-of-effort trend matters: both are attempts to see the correlation, not just the count. Where the platform records it, the contact history itself is evidence. \textcite{kreuter2013paradata} makes the case for paradata\index{paradata}, the process trail of call attempts, timestamps, and reminder sends, as a lever on total survey error, and the level-of-effort check is paradata put to work: it reads the order in which responses arrived to ask whether the late, reluctant respondents are pulling the estimate.
 
 Sequence the diagnostics the way the questions arrive. Mid-field, Section~\ref{sec:monitor} asks why the line dips; after close, this section asks whether the dip mattered, and the frame comparison comes first because it is cheap and decisive. If respondents match the frame on the characteristics that drive the outcome, a modest rate is survivable; if they do not, the gap names the group the weighting has to recover. The level-of-effort check comes second, as corroboration rather than verdict.
 
@@ -305,7 +319,7 @@ goodness of fit vs target: chi2(2) =  218.1, p = 0.0000
 }
 Read the ratio column the way a program officer would: the \enquote{Other} group arrived at 12~percent of its intended size, not slightly under-covered but nearly absent, and no amount of averaging over the full sample will speak for the group that is not in the room. On a live survey the same line runs against the enrollment roster's margins, site by site, while the field period is still open and the fix is still a targeted reminder rather than a footnote.
 
-What happens next depends on which branch of Figure~\ref{fig:ch05-reachtree} the result lands in, and the honest branch is sometimes the third one. A gap on traits you observe (site, race, age band) is recoverable: rake the respondents to the target margins (\texttt{ipfraking} from SSC, or the weights \texttt{nonresponse} estimates) and rerun the headline both weighted and unweighted, reporting both. A suspected gap on traits nobody measured, the disengaged families, the households whose phones changed, is the branch no weighting can fix, because you cannot weight on a variable you do not have; there the deliverable is the caveat, stated beside the response rate, and a bounded sense of how far the missing group would have to differ to move the finding. Either way the table itself travels into the report: the gap beside the rate is the honest minimum this chapter keeps returning to.
+What happens next depends on which branch of Figure~\ref{fig:ch05-reachtree} the result lands in, and the honest branch is sometimes the third one. A gap on traits you observe (site, race, age band) is recoverable: rake the respondents to the target margins (\texttt{ipfraking} from SSC) and rerun the headline both weighted and unweighted, reporting both. A suspected gap on traits nobody measured, the disengaged families, the households whose phones changed, is the branch no weighting can fix, because you cannot weight on a variable you do not have; there the deliverable is the caveat, stated beside the response rate, and a bounded sense of how far the missing group would have to differ to move the finding. Either way the table itself travels into the report: the gap beside the rate is the honest minimum this chapter keeps returning to.
 
 \begin{figure}[htbp]
 \centering
@@ -330,8 +344,8 @@ What happens next depends on which branch of Figure~\ref{fig:ch05-reachtree} the
 
 This matters because representativeness is the difference between \enquote{our respondents} and \enquote{our participants}, and a funder quotes the second. The diagnostics here hand off directly to the weighting of Chapter~\ref{ch:trust}, where the imbalance they find gets corrected.
 
-\begin{kaobox}[frametitle=Package Integration: \texttt{nonresponse} and \texttt{loebias}]
-\textbf{Integrated commands:} \texttt{nonresponse} compares respondents to the sampling frame with tests and logistic models and estimates raking weights \parencite{deming1940raking}; \texttt{loebias} runs cumulative level-of-effort sensitivity tests to see whether estimates stabilize as call attempts accumulate.
+\begin{kaobox}[frametitle=Ado-file Idea: \texttt{nonresponse} and \texttt{loebias}]
+\textbf{Proposed programs.} Wrappers for this section's diagnostics: \texttt{nonresponse} would package the frame tests, the response model, and raking weights \parencite{deming1940raking}; \texttt{loebias} the cumulative level-of-effort sensitivity runs. The moves themselves are taught above, and \texttt{reachcheck} already covers the margins comparison; the wrappers await an interface worth freezing.
 \end{kaobox}
 
 \section{The cross-wave codebook}\label{sec:cxchangelog}
@@ -468,8 +482,19 @@ net install datadictionary, ///
 It extends two community tools worth knowing: Roger Newson's \texttt{descsave} (SSC), which writes a variable-level description dataset, and Kishor Das's \texttt{codebookout} (SSC), which exports names, labels, and types to Excel. \texttt{datadictionary} adds the cross-wave diff, the missingness grid, example values, and the \texttt{notes}/\texttt{srctag} harvest. The three demo wave files are generated by the package's own test battery, so the worked example reproduces from a clean install.
 \end{kaobox}
 
-\begin{kaobox}[frametitle=Ado-file Idea: \texttt{surveypull}]
-\textbf{Proposed program:} \texttt{surveypull}. One wrapper over the platform APIs of this chapter, with subcommands \texttt{responses} (download to a labeled \texttt{.dta}), \texttt{monitor} (counts and response rates against a roster, with an exit code a scheduler can read), and \texttt{codebook} (platform metadata to a data dictionary). Design principles: REDCap first because its API is simplest, one authentication story per platform, and every secret in an environment variable, never in the do-file. It fills the book's clearest tooling gap, since no existing package speaks the platforms' own dialects from Stata: \texttt{webapi} carries the individual GET and POST calls, but the export-request-poll-download dance, the token conventions, and the pagination are platform lore a dedicated wrapper should own.
+\begin{kaobox}[frametitle=Package Integration: \texttt{surveypull}]
+\textbf{Integrated command:} \texttt{surveypull}\index{surveypull@\texttt{surveypull}}. Each platform speaks its own dialect of the same idea, and \texttt{surveypull} owns the lore. For REDCap it builds and runs the single tokened POST through \texttt{webapi} and loads the records; for Qualtrics, whose export is a request-poll-download dance ending in a zip Stata cannot yet ingest directly, it prints the three exact calls ready to run, and says so plainly. The \texttt{dryrun} option prints any call without sending it, which is also how you keep a token out of a shared log:
+\par
+{\footnotesize
+\begin{verbatim}
+. surveypull redcap, url(https://redcap.youruni.edu/api/) ///
+      token(YOURTOKEN) dryrun
+surveypull (dry run): the call it would make:
+  webapi post using "https://redcap.youruni.edu/api/",
+      body("token=YOURTOKEN&content=record&format=csv")
+\end{verbatim}
+}
+Ships in the companion repository's \texttt{code/} folder; part (x) of \texttt{ch05\_monitoring.do} prints the Qualtrics sequence too.
 \end{kaobox}
 
 \pagelayout{margin}

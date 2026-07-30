@@ -183,3 +183,33 @@ assert _rc == 0
 restore
 di "AIGATE_DEMO_OK"
 
+*==============================================================================*
+* (g) llmsieve demo: convergence delta on four two-pass answers
+*==============================================================================*
+adopath ++ "`c(pwd)'/llmsieve"
+clear
+input str60 pass1 str60 pass2
+"transportation barrier"          "transportation barrier"
+"childcare gap on Tuesdays"       "childcare gap on Tuesday"
+"no barrier reported"             "no barrier reported"
+"schedule conflict with work"     "client lost housing in March"
+end
+llmsieve pass1 pass2, gendelta(delta) genflag(review)
+assert r(flagged) == 1
+di "LLMSIEVE_DEMO_OK"
+
+*==============================================================================*
+* (h) faircheck: equalized-odds view of the four-fifths sim (needs realized)
+*==============================================================================*
+adopath ++ "`c(pwd)'/faircheck"
+clear
+set seed 20260704
+set obs 2000
+gen byte groupB = runiform() < 0.5
+gen risk = invlogit(rnormal(0,1) - 0.55*groupB)
+gen select = risk > 0.5
+gen byte need = runiform() < risk
+faircheck need select, by(groupB)
+assert abs(r(tpr_gap) - .206) < .01
+di "FAIRCHECK_DEMO_OK"
+

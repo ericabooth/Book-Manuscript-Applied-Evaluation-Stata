@@ -70,7 +70,7 @@ The one exception is \texttt{sparkta2}, whose source is not yet released. The co
 \paragraph{Published packages showcased.}
 \begin{itemize}
     \item \texttt{webapi} -- fetch an authenticated JSON web API into Stata as a dataset, standard-library Python only (Chapter~\ref{ch:apis}).
-    \item \textbf{The fifteen packages built for this book}, each in its own \texttt{-stata-public} repository with tests and help: \texttt{projectbuilder} (scaffold the Chapter~\ref{ch:workshop} project layout), \texttt{combineall} (append, merge, or convert a whole folder, with vintage-aware harmonization; Chapters~\ref{ch:apis} and~\ref{ch:noapi}), \texttt{cxchangelog} (cross-wave survey codebooks), \texttt{datadictionary} (the over-time data codebook: per-wave stats, missingness, value-label diffs, Excel export), and \texttt{undummy} (recombine one-hot columns into one categorical), all Chapter~\ref{ch:surveys}; \texttt{reshapehelper} (diagnose the data and suggest the likely \texttt{reshape} command, Chapter~\ref{ch:panels}); \texttt{rateshrink} (empirical-Bayes rate stabilization), \texttt{conformalpred} (distribution-free prediction intervals), and \texttt{hlmr2} (Nakagawa multilevel $R^2$), all Chapter~\ref{ch:trust}; \texttt{twinmatch} (Mahalanobis policy twins) and \texttt{roisim} (Monte Carlo ROI), both Chapter~\ref{ch:claims}; and \texttt{suppress} (small-cell and complementary suppression) and \texttt{riskscan} ($k$-anonymity scan), both Chapter~\ref{ch:sharing}; plus \texttt{reachcheck} (respondents against target margins, Chapter~\ref{ch:surveys}) and \texttt{ai\_privacy\_gate} (the pre-flight PII gate, Chapter~\ref{ch:ai}), which ship in the companion repository's \texttt{code/} folder.
+    \item \textbf{The thirteen packages built for this book}, each in its own \texttt{-stata-public} repository with tests and help: \texttt{projectbuilder} (scaffold the Chapter~\ref{ch:workshop} project layout), \texttt{combineall} (append, merge, or convert a whole folder, with vintage-aware harmonization; Chapters~\ref{ch:apis} and~\ref{ch:noapi}), \texttt{cxchangelog} (cross-wave survey codebooks), \texttt{datadictionary} (the over-time data codebook: per-wave stats, missingness, value-label diffs, Excel export), and \texttt{undummy} (recombine one-hot columns into one categorical), all Chapter~\ref{ch:surveys}; \texttt{reshapehelper} (diagnose the data and suggest the likely \texttt{reshape} command, Chapter~\ref{ch:panels}); \texttt{rateshrink} (empirical-Bayes rate stabilization), \texttt{conformalpred} (distribution-free prediction intervals), and \texttt{hlmr2} (Nakagawa multilevel $R^2$), all Chapter~\ref{ch:trust}; \texttt{twinmatch} (Mahalanobis policy twins) and \texttt{roisim} (Monte Carlo ROI), both Chapter~\ref{ch:claims}; and \texttt{suppress} (small-cell and complementary suppression) and \texttt{riskscan} ($k$-anonymity scan), both Chapter~\ref{ch:sharing}; plus nine commands that ship in the companion repository's \texttt{code/} folder, each with its own help file and test battery: \texttt{reachcheck} (respondents against target margins) and \texttt{surveypull} (platform pulls, dry-run first), both Chapter~\ref{ch:surveys}; \texttt{likertscale} (index, alpha, and percent-agree in one step, Chapter~\ref{ch:surveys}); \texttt{srctag} and \texttt{srcfind} (source lineage, Chapter~\ref{ch:panels}); \texttt{ai\_privacy\_gate} (the pre-flight PII gate), \texttt{llmsieve} (convergence-delta routing), and \texttt{faircheck} (group-wise parity and error audit), all Chapter~\ref{ch:ai}; and \texttt{rawsweep} (intake manifest with PII flags, Chapter~\ref{ch:sharing}).
     \item \texttt{googlechart} -- 14 interactive chart types from one command (Chapter~\ref{ch:interactive}).
     \item \texttt{googlesheets} -- read, write, format, and chart Google Sheets from Stata (Chapters~\ref{ch:sheets}, \ref{ch:surveys}, \ref{ch:apis}).
     \item \texttt{statashiny} -- serverless interactive HTML dashboards (Chapter~\ref{ch:portals}).
@@ -80,21 +80,17 @@ The one exception is \texttt{sparkta2}, whose source is not yet released. The co
     \item \texttt{statplot} -- high-density categorical plots, with N. Cox (Chapter~\ref{ch:graphs}).
     \item \texttt{convertanything} -- folder trees of mixed formats to clean datasets (Chapter~\ref{ch:noapi}).
     \item \texttt{nearmrg} -- nearest-value merges on dates and amounts (Chapter~\ref{ch:panels}).
-    \item \texttt{srctag} \& \texttt{srcfind} -- tag and search variable source lineage (Chapter~\ref{ch:panels}).
-    \item \texttt{surveytracker}, \texttt{likertscale}, \texttt{nonresponse}, \texttt{loebias}, \texttt{validemail} -- survey instrument, scale, nonresponse, and email tools (Chapter~\ref{ch:surveys}).
-    \item \texttt{llmsieve}, \texttt{faircheck}, \texttt{gemini} -- LLM consensus/validation, fairness audit, and the LLM bridge (Chapter~\ref{ch:ai}).
+    \item \texttt{validemail} -- three-tier email validation (Chapter~\ref{ch:surveys}).
+    \item \texttt{gemini} -- the LLM bridge (Chapter~\ref{ch:ai}).
     \item \texttt{writeinput}, \texttt{editanything}, \texttt{usepackage}, \texttt{ScrapeSSC}, \texttt{driveuse}, \texttt{importR}, \texttt{lstrfun} -- reproducibility, packaging, and interop utilities (Chapters~\ref{ch:workshop}, \ref{ch:tools}).
 \end{itemize}
 
 \paragraph{Proposed tools (roadmap, not yet code).}
 \begin{itemize}
-    \item \texttt{evalaudit} -- a project-startup checklist auditing data-sharing agreements and funder mandates (Chapter~\ref{ch:embedded}).
-    \item \texttt{gtools\_audit} -- a speed audit of a project's heaviest data steps (Chapter~\ref{ch:workshop}).
-    \item \texttt{surveypull} -- scheduled survey download and monitoring (Chapter~\ref{ch:surveys}).
     \item \texttt{fastmatch}, \texttt{trackflow} -- EM-based probabilistic record linkage and flow shaping (Chapter~\ref{ch:panels}).
-    \item \texttt{fundertable} -- pre-formatted funder tables (Chapter~\ref{ch:sheets}).
     \item \texttt{text2vars}, \texttt{stata2brief}, \texttt{evalpreflight} -- LLM extraction and drafting aids (Chapter~\ref{ch:ai}).
-    \item \texttt{synthgen}, \texttt{rawsweep} -- synthetic-data generation and intake sanitization (Chapter~\ref{ch:sharing}).
+    \item \texttt{synthgen} -- synthetic-data generation (Chapter~\ref{ch:sharing}).
+    \item \texttt{surveytracker}, \texttt{nonresponse}, \texttt{loebias} -- instrument logging and nonresponse and level-of-effort wrappers; the diagnostics themselves are taught in Chapter~\ref{ch:surveys}.
 \end{itemize}
 
 \pagelayout{margin}

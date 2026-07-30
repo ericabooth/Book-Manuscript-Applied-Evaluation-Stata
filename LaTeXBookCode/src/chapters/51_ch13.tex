@@ -298,8 +298,27 @@ Read this in the units of the decision, not the abstract. The LLM matched the hu
 Set the fork before the kappa prints. Above the threshold named in the plan (0.75 here), scale to the full dataset and carry the kappa into the write-up; below it, the useful question is which failure the confusion matrix shows. Errors concentrated in one category point to a prompt revision, or to a category definition the human coders themselves would argue about; errors spread evenly point to a task the LLM cannot yet do, where the honest next step is more hand-coding rather than a lower threshold. Fix the forks in advance, and a near-miss of 0.73 cannot be rounded up by the wish to be done.
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{llmsieve}]
-\textbf{Integrated command:} \texttt{llmsieve}\index{llmsieve@\texttt{llmsieve}}. Combines multi-model consensus with human gold-standard validation, computing agreement, Shannon entropy, and Fleiss' kappa, and flagging low-agreement observations for manual review. Its trust proxy is the sieve of Section~\ref{sec:sieve}: where no per-answer probability is available, it measures how much a second LLM revises the first and routes the high-revision cases to a human.
+\textbf{Integrated command:} \texttt{llmsieve}\index{llmsieve@\texttt{llmsieve}}. Computes this section's convergence delta for every row, one Mata Levenshtein pass per pair, flags the rows whose delta clears a threshold, and hands back the routing variables (\texttt{gendelta()}, \texttt{genflag()}), so the human-review budget goes exactly where the LLMs disagree. It measures stability, not truth: the gold-standard kappa of Section~\ref{sec:aiverify} stays in the design. Ships in the companion repository's \texttt{code/} folder.
 \end{kaobox}
+
+Watch it on four two-pass answers, two identical, one trivially reworded, one genuinely rewritten (part (g) of \texttt{ch13\_validation.do}):
+\par
+{\footnotesize
+\begin{verbatim}
+. llmsieve pass1 pass2, gendelta(delta) genflag(review)
+
+llmsieve: convergence delta between pass1 and pass2 (N = 4)
+  mean delta  0.206, max  0.786
+  rows above threshold(0.15), routed to human review: 1 of 4
+
+  pass1                            delta   review
+  transportation barrier           0.000        0
+  childcare gap on Tuesdays        0.040        0
+  no barrier reported              0.000        0
+  schedule conflict with work      0.786        1
+\end{verbatim}
+}
+The trivial rewording, Tuesdays to Tuesday, scores 0.04 and passes; the answer that changed its mind scores 0.786 and goes to a human. That is the routing this section promised, now one line long.
 
 \subsection{The weakest category is the one to spot-check}\label{sec:kappa-by-category}
 A single kappa hides where the LLM struggles, so the next question is which categories it gets wrong. Charting agreement one barrier at a time turns the scalar into a map (Figure~\ref{fig:agreement}): four categories sit near 0.85, but \enquote{none} lands lowest at 0.81, which is the category to spot-check and the one \texttt{llmsieve} would route to a human first.
@@ -610,8 +629,27 @@ Read this in people, not proportions. The identical cutoff picks 48\% of Group A
 Decide before the audit runs what each side of the 0.80 line triggers. Above 0.80, record the ratio and both selection rates in the run log and proceed. Below it, the next action is not a quiet threshold adjustment but a conversation with the program director, because the remedies (a different cutoff per group, different features, or setting the score aside for this decision) trade off in ways an analyst cannot settle alone. The audit's job is to put a number on the table; deciding whose table it lands on is part of the design.
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{faircheck}]
-\textbf{Integrated command:} \texttt{faircheck}. Audits a prediction model for demographic parity, equalized odds, and predictive parity across groups, printing disparity ratios and flagging violations of a chosen threshold (default: the four-fifths rule).
+\textbf{Integrated command:} \texttt{faircheck}\index{faircheck@\texttt{faircheck}}. One call audits a 0/1 prediction against observed outcomes by group: selection rates with the four-fifths parity ratio and its flag, the equalized-odds ingredients (TPR and FPR), and precision, with the largest cross-group gaps printed. Ships in the companion repository's \texttt{code/} folder.
 \end{kaobox}
+
+The section's simulation asked who gets \emph{selected}; extend it one line, letting true need materialize from the same risk score (\texttt{gen byte need = runiform() < risk}), and \texttt{faircheck} adds the error-rate view (part (h) of \texttt{ch13\_validation.do}):
+\par
+{\footnotesize
+\begin{verbatim}
+. faircheck need select, by(groupB)
+
+faircheck: select against need, by groupB (N = 2000)
+---------------------------------------------------------
+group             N    base  select     TPR     FPR    prec
+---------------------------------------------------------
+0               978   0.522   0.483   0.650   0.300   0.703
+1             1,022   0.377   0.265   0.444   0.157   0.631
+---------------------------------------------------------
+selection-rate parity ratio 0.549 below the 0.80 line
+largest gaps across groups: TPR 0.206, FPR 0.143
+\end{verbatim}
+}
+The 0.549 is the same four-fifths ratio computed above, now with company: of the people who truly need outreach, the cutoff finds 65 percent in one group and 44 in the other. The parity gap was the door; the TPR gap is the harm.
 
 The audit serves the people the targeting model sorts, and that is the accessible principle in its most consequential form: an evaluator who has checked the tool for fairness can defend it to the community it affects. Checking prediction for bias is the duty of care that using prediction at all incurs.
 
