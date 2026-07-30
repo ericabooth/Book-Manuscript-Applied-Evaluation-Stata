@@ -172,4 +172,51 @@ surveypull qualtrics, datacenter(ca1) token(YOURTOKEN) survey(SV_abc123) dryrun
 di "SURVEYPULL_DEMO_OK"
 
 
+*==============================================================================*
+* (n) nonresponse demo: frame with a response flag -> gaps, model, weights
+*==============================================================================*
+adopath ++ "`c(pwd)'/nonresponse"
+preserve
+clear
+set seed 20260704
+set obs 2000
+gen byte region = 1 + (runiform() > 0.5)
+gen byte young  = runiform() < 0.4
+gen byte resp   = runiform() < (0.55 - 0.25*young + 0.10*(region==2))
+label define reg 1 "North" 2 "South"
+label values region reg
+nonresponse resp, frame(region young) generate(w) nomodel
+assert abs(r(maxgap)) > 3
+di "NONRESPONSE_DEMO_OK"
+
+*==============================================================================*
+* (l) loebias demo: does the estimate settle as attempts accumulate?
+*==============================================================================*
+adopath ++ "`c(pwd)'/loebias"
+clear
+set seed 20260704
+set obs 900
+gen byte attempts = 1 + floor(3*runiform())
+gen byte engaged  = runiform() < (0.60 - 0.15*(attempts==3))
+loebias engaged, attempts(attempts)
+assert r(stable) == 0
+di "LOEBIAS_DEMO_OK"
+
+*==============================================================================*
+* (t) surveytracker demo: two waves into a tracker, third relog refused
+*==============================================================================*
+adopath ++ "`c(pwd)'/surveytracker"
+local trk "`c(tmpdir)'/ch05_tracker.dta"
+capture erase "`trk'"
+sysuse auto, clear
+keep price mpg foreign
+surveytracker using "`trk'", wave(2026w1)
+label variable mpg "Mileage, EPA revised"
+surveytracker using "`trk'", wave(2026w2)
+capture noisily surveytracker using "`trk'", wave(2026w1)
+assert _rc == 110
+di "SURVEYTRACKER_DEMO_OK"
+restore
+
+
 di "DONE"
