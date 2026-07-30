@@ -61,12 +61,12 @@ A decomposition pays for itself in the detail, not in the single split, and the 
 
 Draft the claim sentence before the \texttt{oaxaca} call, and give it the shape a decomposition demands: \enquote{of the 15 percent wage gap, about a fifth reflects measured characteristics, almost entirely schooling; the rest is unexplained by anything we measured.} A board hears exactly that sentence and nothing more. A funder's paragraph keeps the sentence and adds the per-characteristic figure plus the caveat that unexplained is not a synonym for discrimination. The technical appendix carries what both dropped: the full \texttt{oaxaca, detail} output, the covariate list, and the choice of pooled reference, because that choice moves the split and a technical reader will ask about it first.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \includegraphics[width=\linewidth]{images/ch08_oaxaca.png}
 \caption[The explained half of a wage gap, characteristic by characteristic]{The endowment (explained) contribution of each characteristic to the white--Black log-wage gap in \texttt{nlsw88}, from a twofold Blinder--Oaxaca decomposition with a pooled reference. A point left of zero widens the gap; right of zero narrows it. Education is the whole of the composition story; the other characteristics push the other way. The bulk of the gap, however, is \emph{unexplained} and not shown here, which is the honest limit of the method. Built by \texttt{ch08\_oaxaca.do}.}
 \label{fig:ch08-oaxaca}
-\end{figure}
+\end{figure*}
 
 \begin{kaobox}[frametitle={SSC toolkit: running, interpreting, and drawing a decomposition}]
 Three community commands make Blinder--Oaxaca a one-sitting job, all from SSC:
@@ -174,7 +174,7 @@ The \texttt{method(dripw)} option asks for doubly-robust inverse-probability wei
 }
 Run the sense check on the pair: the estimator that keeps its comparison group clean recovers 4.86 against a truth of 4.83, inside a whisker, while the naive regression missed by more than a unit and a half in the same data. The 95\% interval covers the truth comfortably. Same panel, same noise, same seed, two estimates a unit and a half apart, and only one of them is right. Table~\ref{tab:did-compare} lays the three numbers side by side.
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 \caption[TWFE vs.\ Callaway--Sant'Anna on a known truth]{Two estimators on the same simulated staggered rollout (seed \texttt{20260704}; 60 units, 12 periods, cohorts at $t{=}5,9$, dynamic effect ramping from 2 upward). The true ATT is known by construction. Only the clean-comparison estimator recovers it; the naive regression is biased downward by contamination from already-treated units.}
 \label{tab:did-compare}
@@ -189,7 +189,7 @@ Callaway--Sant'Anna (\texttt{csdid}) & 4.86 & 0.37 & $+0.03$ \\
 \hline
 \end{tabular}
 }
-\end{table}
+\end{table*}
 
 \begin{vizcallout}[Visualization to build: the event-study plot]
 Relative time on the $x$-axis (negative is pre-treatment), the estimated effect on the $y$-axis, with 95\% confidence intervals and a vertical line at treatment. The pre-treatment points must sit flat and near zero for the parallel-trends assumption to be credible; the plot is the design's honesty check, shown before the headline number.
@@ -211,18 +211,18 @@ graph export "$figures/ch08_event.png", ///
 }
 Figure~\ref{fig:event} shows the result, and we read it in two passes. First the left half, the pre-treatment periods: those points sit flat and statistically indistinguishable from zero, with a pre-treatment average of 0.05 that is nowhere near significant, which is the visual form of the parallel-trends\index{parallel trends} assumption holding. That flat left half is the license to interpret the right half causally.\marginnote{Flat pre-trends are reassurance, not proof. Parallel trends is an assumption about the unobserved counterfactual, which no pre-period can verify. \textcite{rambachan2023honest} turn this into a sensitivity analysis: their \texttt{honestdid} asks how large a violation of parallel trends your headline effect could survive, and reports the answer as a breakdown value.} Then the right half, the post-treatment periods: the effect enters at about~1.8 in the first exposed period and climbs roughly one unit per period, tracing the dynamic effect we built in and passing~6 by four periods out on its way to nearly~9 at the far edge. An audience that sees the pre-trend read first will trust the ramp that follows, which is why the picture leads.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \includegraphics[width=\linewidth]{ch08_event.png}
 \caption[Event-study plot from \texttt{csdid}]{Estimated treatment effect by time since treatment, Callaway--Sant'Anna group-time effects aggregated by exposure (simulated panel, seed \texttt{20260704}). Pre-treatment estimates (blue, to the left of period 0) sit flat and near zero, the visual test of parallel trends; post-treatment estimates (pink) climb from about 1.8 to nearly 9 at the far edge, recovering the dynamic effect built into the simulation. Read the flat left half first: it is the license to read the right half causally.}
 \label{fig:event}
-\end{figure}
+\end{figure*}
 
 The same estimate then dresses differently for each room. The board gets one sentence in program units: \enquote{the policy raised the outcome by about five units on average, and the effect grew the longer a site had it.} The funder's paragraph keeps that sentence and adds the design in miniature: staggered rollout, comparisons only against not-yet-treated sites, flat pre-trends, and the 95\% interval. The technical appendix keeps everything the other two dropped, the event-study figure, the cohort-by-period estimates, the estimator choice, and the robustness ledger of the next subsection. Each version omits on purpose rather than diluting one paragraph three ways: the board sentence carries no interval because the board's decision does not turn on it, and the appendix carries no headline sentence because its reader is checking, not deciding.
 
 The deepest lesson is not an estimator but a sentence: the estimate is only as credible as the comparison group. The STAAR example in Appendix~\ref{app:walkthroughs} makes it concrete, where a math \enquote{gain} of nearly seven points collapses to under two once the baseline is measured off a normal year instead of a pandemic trough. Beyond DiD, an evaluator meets a handful of adjacent designs, each with a Stata home: a sharp eligibility cutoff invites regression discontinuity\index{regression discontinuity} (\texttt{rdrobust}\index{rdrobust@\texttt{rdrobust}}); a single treated unit invites synthetic control\index{synthetic control} (\texttt{synth}\index{synth@\texttt{synth}}); a single site with a clear before-and-after and no control invites interrupted time series; a panel with time-varying shocks invites synthetic DiD (\texttt{sdid}). This book stops at DiD on purpose, and routes the rest to the quick-reference toolbox of Appendix~\ref{app:causal} and to two excellent specialist texts, Cunningham's \emph{Causal Inference: The Mixtape} and Huntington-Klein's \emph{The Effect}. One section done well serves an applied evaluator better than five chapters they will not have time to read. Figure~\ref{fig:ch08-viz-design} routes the four situations above to their Stata home so you can find the door before reading the manual behind it.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \begin{tikzpicture}[node distance=6mm and 10mm]
 \node[io] (data) {Panel / policy\\change in hand};
@@ -244,7 +244,7 @@ The deepest lesson is not an estimator but a sentence: the estimate is only as c
 \end{tikzpicture}
 \caption[Routing a design to its Stata command]{Which causal design fits which data situation, and the Stata command that estimates it. Read top to bottom and take the first \emph{yes}: staggered adoption across many units routes to difference-in-differences (\texttt{csdid}); a sharp eligibility cutoff to regression discontinuity (\texttt{rdrobust}); a single treated unit to synthetic control (\texttt{synth} or \texttt{sdid}); a single site with no control to interrupted time series. This chapter teaches only the top branch in full and routes the rest to Appendix~\ref{app:causal}.}
 \label{fig:ch08-viz-design}
-\end{figure}
+\end{figure*}
 
 \subsection{The robustness ledger: every path on the record}\label{ch08-sc-ledger}
 Estimating the headline is the fast part; defending it consumes the specifications nobody reported. Between the first \texttt{csdid} call and the final table, an analyst typically runs a dozen variants: an alternative comparison group, a dropped cohort, a different aggregation, a placebo outcome. The garden of forking paths grows exactly there, because memory keeps the flattering runs and loses the rest. The antidote is a robustness ledger, this chapter's instance of the tracking-spine pattern of Chapter~\ref{ch:workshop}: one row per specification run, holding the date, the specification, the sample size, the estimate, the standard error, why the run was made, and whether it was kept or dropped and on what grounds. A row from this chapter's example would read \texttt{2026-07-04, csdid dripw baseline, N=720, 4.86 (0.37), primary spec per memo, kept}.
@@ -360,12 +360,12 @@ graph export "$figures/ch08_tornado.png", ///
 \end{verbatim}
 }
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \includegraphics[width=\linewidth]{ch08_tornado.png}
 \caption[ROI tornado from a Monte Carlo]{Sensitivity of the return-on-investment estimate to each uncertain input, one bar per input, longest at the top (simulated, seed \texttt{20260704}). Each bar is the swing in ROI as that input alone moves from the low to the high end of its plausible range with all others held at center. The earnings gain and the persistence horizon dominate; the discount rate barely registers. The chart tells a board which two numbers are worth arguing about.}
 \label{fig:tornado}
-\end{figure}
+\end{figure*}
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{roisim}]
 The hand-coded loop above is the transparent version, worth writing once so a reader sees the machinery, but an evaluator who prices programs monthly wants the same result in one line. \texttt{roisim}\index{roisim@\texttt{roisim}} takes the effect estimate and its standard error, a cost range, and the discount and horizon ranges, draws each input ten thousand times, and returns the ROI percentiles, the break-even probability, and the tornado sweep as saved results. Install it from the book's repository:

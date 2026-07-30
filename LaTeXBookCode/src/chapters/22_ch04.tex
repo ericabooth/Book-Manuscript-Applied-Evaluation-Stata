@@ -19,7 +19,7 @@ The recon pass is where you first test the theory against the site: count three 
 \subsection{Which pulls are fair to script}\label{sec:ch04-legalrisk}
 The legal exposure is smaller than evaluators tend to fear for the files this chapter targets, and the ethics work is correspondingly larger. \textcite{krotov2020legality} sort the legal theories that have been raised against scrapers (terms-of-use breach, copyright, trespass, the Computer Fraud and Abuse Act), and \textcite{luscombe2022scraping} walk social scientists through the technical, legal, and ethical hurdles in sequence; both land near the same place. Publicly posted government files, published precisely so the public will download them, sit at the low-risk end of the spectrum; scraping personal data, or a commercial site against its terms, sits at the other. A working rule for the embedded evaluator: an agency's public accountability files are fair to script, a login-walled portal is a question for the data-sharing agreement, and anything touching individuals' pages is a different method with a different review (Table~\ref{tab:ch04-viz-risk}). For any pull past the first category, a one-paragraph memo to counsel before the loop runs costs less than the same conversation after.
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 \caption[Which channel for which source]{The working rule as a
 which-source-when triage. Read down to the row that matches what you are
@@ -36,7 +36,7 @@ Login-walled portal & Medium & Data-sharing agreement first \\
 Individuals' pages, personal data & High & Different method; formal review \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 Public-records law frames the same work from the other side. \textcite{walby2019foi} collect social-science practice built on freedom-of-information requests, treating the request not as journalism but as research design: you specify records, fields, and years the way you would specify a sample. For an embedded evaluator the two channels are siblings. When the state posts the files, the scripted walk of this chapter retrieves them at zero marginal cost to the agency; when it does not, a public-information request is the walk by other means, and the same habits (name the years, name the fields, keep the correspondence in the project folder) make the released extract replicable. An evaluator who works both channels can also tell a partner exactly where a given file came from, which matters the day a board member asks.
 
@@ -159,7 +159,7 @@ on both.
 
 The five highest-need Texas counties are in Table~\ref{tab:chr}, and they are the five labeled in Figure~\ref{fig:chr}. The list reads the way Texas poverty geography reads: these are small, rural, majority-Hispanic or historically underserved counties (Brooks and Duval in the South Texas brush country, Zavala in the Winter Garden, Cochran on the High Plains, Red River on the northeast border) where child poverty runs from 27 to 47 percent against a statewide 19, and premature death runs about twice the state rate. A foundation reading this does not need a briefing to see where a place-based grant would do the most work.
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 \caption[Five highest-need Texas counties]{The five highest-need Texas counties by a simple need index (the mean of the premature-death and child-poverty \emph{z}-scores), from the County Health Rankings 2024 analytic file. \enquote{Years lost} is years of life lost before age~75 per 100{,}000; the statewide figures are 7{,}900 and 19.0\%. These are the five counties labeled in Figure~\ref{fig:chr}.}
 \label{tab:chr}
@@ -176,7 +176,7 @@ Cochran   & 13{,}400 & 36.4 & 22.8 \\
 Texas     &  7{,}900 & 19.0 & 17.5 \\
 \hline
 \end{tabular}
-\end{table}
+\end{table*}
 
 The figure turns the table into the exhibit a board can act on. Two lines make it: a label variable that names only the five highest-need counties (the data are already sorted by need), then a single \texttt{scatter} with the statewide values drawn as dashed reference lines, so every county lands in one of four quadrants and the high-need corner reads at a glance:
 \par
@@ -206,7 +206,7 @@ Two measures explain most of the spread, and the two together sort the counties 
 \section{Streaming the impossibly large}
 Some public data is too big to download whole, and the trick is to never try. Federal hospital and insurer price-transparency\index{price transparency files} files run past 100\,GB as single cloud-hosted JSON documents, far beyond a laptop's memory or patience. The pattern that works is a sieve (Figure~\ref{fig:ch04-viz-sieve}): stream\index{streaming large files} the file from the cloud, keep only the records that match the procedure codes you care about, and land a modest Stata dataset at the end, never holding more than a slice at once. The authors' price-transparency pipeline does exactly this, extracting negotiated rates for a target set of codes into a \texttt{.dta} that fits comfortably in memory.\marginnote{The enabling tool is a streaming JSON parser (\texttt{ijson} in Python, or \texttt{jq --stream} at the shell), which reads the document in small pieces and never holds the whole thing in memory. A normal \texttt{json.load} on a 100\,GB file kills the process.}
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \begin{tikzpicture}[node distance=7mm]
   \node[io] (cloud) {100\,GB JSON\\in the cloud};
@@ -230,7 +230,7 @@ matched records land in a modest \texttt{.dta}. Because the document is
 never loaded whole, a laptop can process a file far larger than its
 memory.}
 \label{fig:ch04-viz-sieve}
-\end{figure}
+\end{figure*}
 
 The recon pass scales down to streams: time the first few thousand records and multiply, because a filter that will run for thirty hours is worth knowing about before hour one. A keep-count printed every million records serves as the stream's running manifest; when the job dies at hour nine, the count says where it died and whether a restart resumes or begins again, the download loop's resumability decision faced before the stream opens.
 

@@ -28,7 +28,7 @@ The point is easiest to see when the same numbers have to travel to three audien
 
 Which of the three formats does a given audience get? Two questions settle it each time: how current the audience needs the number, and how sensitive the rows behind it are. A funder citing the figure in a grant report needs a number fixed at a point in time, so the funder gets the dated PDF or \LaTeX{} appendix. A program manager who reconciles the figure against their own records needs to sort and filter offline, so the manager gets the Excel tab as an attachment. The whole team standing in a Monday meeting needs today's figure, so the team gets the live Sheet. Sensitivity cuts across all three: participant-level rows never travel to a link-shared Sheet, which anyone holding the URL can open; they stay in an access-controlled workbook or, better, are aggregated before they leave Stata, so the shared surface carries counts and means rather than people.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \begin{tikzpicture}[node distance=6mm]
 \node[io] (data) {current\\data extract};
@@ -50,7 +50,7 @@ Which of the three formats does a given audience get? Two questions settle it ea
 \end{tikzpicture}
 \caption[One do-file, three audiences]{The chapter's thesis: the model is estimated \emph{once} and its stored results feed three writers, so the funder's \LaTeX{} appendix, the manager's Excel tab, and the team's live Google Sheet are the same numbers rendered three ways and cannot drift apart. No path passes through a keyboard between the estimate and any audience.}
 \label{fig:ch11-viz-fanout}
-\end{figure}
+\end{figure*}
 
 \subsection{The earnings table, generated not typed}\label{sec:ch11-worked-example}
 Consider a workforce program that pays participants to complete training and wants to report what the training is associated with in later earnings. We simulate 900 participants across three enrollment cohorts (labeled simulated, seed \texttt{20260704}), where post-program quarterly earnings rise with training hours and prior experience. One do-file estimates a dose-only model and then a model with controls:
@@ -80,12 +80,12 @@ esttab m1 m2 using "$output/ch11_wage_table.tex", ///
 }
 Table~\ref{tab:wage} is not a screenshot and not hand-set numbers. It is the file that command wrote, ingested by the book at compile time. If your report lives in Word rather than \LaTeX{}, the same command serves: point \texttt{using} at an \texttt{.rtf} file and drop \texttt{fragment}, and Word opens the result directly.\marginnote{This is the whole thesis, made physical: the table you are reading was written by \texttt{ch11\_tables.do} and pulled into the manuscript with a single \texttt{\textbackslash input}. Change the data, rerun the do-file, recompile, and every number here updates itself. Nothing in this table was typed by a human.} If you ever doubt that a book can practice what it preaches about reproducibility, this is where to check: rerun the do-file with a new extract and every number below changes on the next compile, untouched by hand.
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 \caption[Reproducible earnings table, ingested from a do-file]{Program earnings model for a simulated workforce cohort (seed \texttt{20260704}). OLS coefficients with standard errors in parentheses; earnings are dollars per quarter. \textbf{This table is not typed:} \texttt{ch11\_tables.do} estimated the two models and wrote this exact \texttt{tabular} with \texttt{esttab}; the book ingests it with \texttt{\textbackslash input\{ch11\_wage\_table.tex\}}. Rerun the do-file and the numbers here update on the next compile.}
 \label{tab:wage}
 \input{ch11_wage_table.tex}
-\end{table}
+\end{table*}
 
 There is deliberately no \texttt{fundertable} wrapper in the toolkit: the \texttt{putexcel} discipline this section teaches \emph{is} the funder table, and packaging it would hide exactly the part worth learning.
 
@@ -224,7 +224,7 @@ googlesheets put using "$SS", sheet("CHR states 2025") ///
 }
 That single call makes the case for \texttt{matrix()}: a correlation table a client would otherwise ask you to retype lands in the sheet exactly as Stata computed it, every cell traceable to \texttt{r(C)} rather than to a keyboard. Table~\ref{tab:ch11-viz-put} collects the choice among the three writing modes on the one axis that decides it: whether you want a frozen snapshot or a cell the team's later edits keep live.
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 \footnotesize
 \caption[Choosing among put's writing modes]{Which \texttt{put} argument to reach for. The deciding question is whether the cell should stay live: use \texttt{formula()} when it must recompute against cells the team edits, \texttt{value()} or \texttt{matrix()} when a fixed number or block is what the run produced.}
@@ -238,7 +238,7 @@ That single call makes the case for \texttt{matrix()}: a correlation table a cli
 \texttt{matrix()}  & No (frozen)  & a whole table (e.g.\ \texttt{r(C)}) lands at once \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 \subsection{Native Sheets charts that stay live}
 The step with no \texttt{putexcel} equivalent is \texttt{addchart}\index{addchart@\texttt{addchart}}. It inserts a real Google Sheets chart object, not a static image: the team can hover it for tooltips, resize it, recolor it in the browser, and it redraws when the cells it reads change. It is the interactive-chart idea, a chart that responds when the reader points at it, delivered natively inside the tool the client already uses. The first chart ranks the fifteen states with the highest uninsured rate. We build that top-fifteen block on its own tab, then point a bar chart at it:\marginnote{\texttt{domain()} is the category axis (here the state names) and \texttt{series()} is the values plotted against it (the uninsured rate). \texttt{anchor()} is the top-left cell the chart floats over. \texttt{targetsheet()} lets a chart built from one tab's data appear on another, which is how a dashboard tab collects charts drawn from several data tabs.}

@@ -8,7 +8,7 @@ The safeguards also belong on the calendar before the analysis does, because eac
 
 A skeptical program officer will ask each of this chapter's questions out loud: does this scale hold together, do these respondents stand in for our clients, is this small site's rate real or an accident of its size, and could this study have found the effect at all. The performance-measurement systems, logic-model indicators, and What Works Clearinghouse evidence tiers that program teams already trust all take the answers for granted, so an evaluator who cannot show the work stands outside that conversation. The AEA Guiding Principles oblige an evaluator to systematic inquiry and competence on behalf of the people the program serves; run the checks in this chapter and those obligations become arithmetic rather than aspiration. The chapter also works two methods newer to evaluation practice: distribution-free prediction intervals, and splitting the variance between the site and the person. Table~\ref{tab:ch07-viz-map} is the chapter's map: each safeguard, the skeptical question it answers, and the Stata command that does the work.
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 \caption[The chapter's safeguards and the question each answers]{The chapter's spine: read down the middle column for the skeptical program officer's question, then across to the safeguard that answers it and the tool that does the work. The last two rows are newer to evaluation practice, prediction intervals and variance partitioning, and both ship as commands here; model-based small-area estimation, the proposed tool this chapter also names, is not yet one of them.}
 \label{tab:ch07-viz-map}
@@ -26,7 +26,7 @@ Variance split & How much of the spread is the site vs.\ the person? & \texttt{m
 \hline
 \end{tabular}
 }
-\end{table}
+\end{table*}
 
 \section{From items to reliable scales}
 Before you average six survey items into one score, confirm they measure the same thing, because a scale that does not hold together will not replicate across waves and every comparison built on it inherits that instability. We check reliability before we model. Cronbach's alpha\index{Cronbach's alpha} (\texttt{alpha}\index{alpha@\texttt{alpha}}) summarizes internal consistency;\sidenote{Alpha is not a fixed target: it rises mechanically with the number of items, so a long scale can clear 0.80 on padding alone. The conventional floor is 0.70 for research and 0.80 for high-stakes decisions, but a value above 0.95 usually signals redundant items, not virtue.} an exploratory factor check\index{factor analysis} (\texttt{factor}\index{factor@\texttt{factor}}) tests whether the items really track one dimension or several; and where item quality varies enough to matter, item response theory\index{item response theory} (\texttt{irt}\index{irt@\texttt{irt}}) models how hard each item is and how much it reveals about the person answering.\marginnote{Also look at the ends of the scale before averaging. If a third of caregivers sit at the maximum on every item, the instrument has a ceiling: it stops measuring exactly where the program hopes to move people, and real gains for the strongest participants vanish into the top box. One \texttt{tabulate} per item shows it in seconds, and the fix is a better instrument, not a different analysis.} The aim is not psychometric perfection but a defensible answer to \enquote{does this scale measure one thing?}
@@ -97,7 +97,7 @@ Read the \texttt{svyset} line as the design's three facts: \texttt{psuid} names 
 
 The two estimates are not close. The unweighted mean is 0.4229 and the design-based mean is 0.3687, a gap of 5.4 percentage points on the same 10{,}337 respondents. The reason is visible in a second variable: mean age falls from 47.6 unweighted to 42.2 once the weights are applied, because the survey drew extra older adults and hypertension climbs with age. Table~\ref{tab:weights} lays the two columns side by side.
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 \caption[Weighted versus unweighted means, NHANES~II]{Unweighted sample means versus design-based (weighted) means, NHANES~II, $N=10{,}337$. The survey oversampled older adults, so the raw sample skews old and hypertensive; the weights restore the population age structure and the hypertension rate falls with it.}
 \label{tab:weights}
@@ -111,7 +111,7 @@ Age (years)                 & 47.56  & 42.24  & $-5.33$ \\
 \hline
 \end{tabular}
 }
-\end{table}
+\end{table*}
 
 The direction of the gap is the check that the weights are working: the oversampled older adults carry more hypertension, so the raw average overstates the population rate, and the weights pull it back down. In policy units the gap is not academic. A state health office reporting \enquote{42\% of adults have high blood pressure} when the weighted figure is 37\% overstates the rate by five percentage points, the kind of gap that misdirects a screening budget when it is applied to a population of millions. Funders and boards do not quote \enquote{our respondents said}; they quote \enquote{our participants are}. Weighting lets you make that second, population-level claim honestly, so the reported number describes the program's people rather than the subset who happened to answer.
 
@@ -254,12 +254,12 @@ power twomeans 50 (52 53 54), sd(10) n(100(20)500) ///
     graph(xline(300, lcolor(cranberry) lpattern(shortdash)))
 \end{verbatim}
 }
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \includegraphics[width=\linewidth]{ch07_power.png}
 \caption[Power curves and the budget line]{Power to detect a 2-, 3-, or 4-point gain (control mean 50, sd~10, $\alpha=0.05$) as total sample size grows. The horizontal dashed line marks the 0.80 convention; the vertical line marks the budgeted $N=300$. Read where each curve crosses the vertical line to see what the affordable design can detect: the 4-point curve clears 0.80, the 3-point curve sits just below it, and the 2-point curve is far under. Built by \texttt{ch07\_trust.do}.}
 \label{fig:power}
-\end{figure}
+\end{figure*}
 
 \begin{vizcallout}[Visualization to build: the power curve]
 Plot statistical power on the $y$-axis against sample size or number of clusters on the $x$-axis, one line per candidate effect size, with a reference line at 0.80. Mark the design the budget can actually afford. Stakeholders grasp \enquote{here is where our budget lands on this curve} far faster than a table of sample sizes.

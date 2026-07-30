@@ -224,12 +224,12 @@ di "built: " r(file) " (" r(bytes) " bytes)"
 }
 Each \texttt{panel} call embeds a snapshot of whatever is in memory at that moment, so you shape the data between calls exactly as you would between graphs. The last line prints the \emph{build receipt}, and it matters more than it looks: \texttt{r(file)} and \texttt{r(bytes)} give your control file something to log and assert on, which extends the book's receipts discipline to a webpage. Figure~\ref{fig:dashbquick} is the result, and the buttons in its corners are furniture you did not have to ask for: every chart panel carries its own CSV and PNG download, the \enquote{ship the numbers alongside the picture} habit of Chapter~\ref{ch:interactive} built in as a default.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \includegraphics[width=\linewidth]{ch12_dashb_quick.png}
 \caption[The two-minute dashboard]{The two-minute build: one \texttt{init}, two \texttt{panel} calls, one \texttt{build}, and the result is a single HTML file with the data inlined. The CSV and PNG buttons on each panel are defaults, so every chart ships its own numbers. Built by the companion \texttt{ch12\_dashboardbuilder.do}.}
 \label{fig:dashbquick}
-\end{figure}
+\end{figure*}
 
 \subsection{An applied build: every unit against the benchmark}
 The request behind half the dashboards an evaluator ships is one sentence with the nouns swapped: how does \emph{this county} compare with the state, \emph{this campus} with the district, \emph{this site} with the portfolio. \texttt{dashboardbuilder} treats the pattern as first class. Declare a \texttt{selector()} column and a \texttt{refvalue()} at init, and every panel whose data carry that column becomes filterable, with the reference unit drawn as a marker the selected unit is read against.\marginnote{The inverse trick is just as useful: a panel whose data do \emph{not} carry the selector column stays static. The companion do-file's top-ten ranking renames \texttt{state} to \texttt{stname} before its \texttt{panel hbar} call, so the ranking holds still while the tiles and bars above it update.} The companion \texttt{ch12\_dashboardbuilder.do} builds Figure~\ref{fig:dashbexplorer} from the 1980 census extract that ships with Stata: a synthetic \enquote{United States} row appended as the reference, KPI tiles and bullet-compare bars on one tab, a top-ten ranking and a full searchable table on another. The payoff for a director is direct: pick a state, read its bars against the national marker, and you see whether that state runs above or below the country without doing the subtraction yourself.
@@ -262,12 +262,12 @@ dashboardbuilder build using ///
 
 One line of that block earns a warning, because it cost us a debugging session while we built the figure. The obvious aggregation, \texttt{collapse (sum) pop [aw=pop]}, silently returns 467{,}012{,}262 for the 1980 United States, more than double the true 225{,}907{,}472: with analytic weights, \texttt{collapse} rescales every \texttt{(sum)} to the sample count times the weighted mean. \texttt{(rawsum)} is the statistic that leaves totals unweighted while \texttt{medage} keeps its population weighting, which is exactly what a reference row needs. A dashboard is the worst place for that mistake to surface, because KPI tiles are the largest type on the page, so the companion file guards the row with the contract discipline of Chapter~\ref{ch:panels}: state what must be true, then \texttt{assert} it. The assert on 225{,}907{,}472 is what caught the wrong total before it reached a tile.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \includegraphics[width=\linewidth]{ch12_dashb_explorer.png}
 \caption[The benchmark explorer dashboard]{The benchmark pattern: a unit selector with \enquote{United States} declared as the reference. Picking a state updates the KPI tiles and draws the state's bars against the national reference markers; the Rankings tab holds a static top ten. One self-contained file, built and rebuilt by \texttt{ch12\_dashboardbuilder.do}.}
 \label{fig:dashbexplorer}
-\end{figure}
+\end{figure*}
 
 \subsection{Put the dashboard where the readers already are}
 The build step hands you a file, and the file is the deliverable, so delivery is a decision about where readers already look rather than a technical step. Three routes cover nearly every case. The first is the file itself: attach it to the email the committee already expects, and it opens by double-click, because the data ride inside the HTML and the \texttt{file://} pitfall in this chapter's margin never bites. The second is the organization's existing website, and the mechanism is the \emph{iframe}, the same embed-a-page-in-a-page element \texttt{webdoc2} wraps in \texttt{wdiframe}. Host the built file anywhere static, GitHub Pages or the web root the organization already rents, and paste four lines into the page where readers should meet it:
@@ -289,7 +289,7 @@ Hand the client one folder they fully control, so the evidence outlives your eng
 
 The folder has a shape worth standardizing, so that any file's job is obvious from where it sits and so that the same layout greets the client every quarter. A landing page names the deliverables and links to them; the compiled report is its own page; the interactive tables and charts live in a \texttt{charts/} subfolder; and the data that feeds them, inlined or bundled, lives in \texttt{data/}. The one arrow that matters points from the whole folder to the browser: double-click the landing page and the portal opens offline, with no server, no login, and no install. Figure~\ref{fig:portal} draws it.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \begin{tikzpicture}[node distance=0.28cm]
   \node[stage, text width=2.9cm] (root) {\texttt{site-portal/}};
@@ -312,7 +312,7 @@ The folder has a shape worth standardizing, so that any file's job is obvious fr
 \end{tikzpicture}
 \caption[The self-contained portal folder]{The self-contained portal folder. A landing page links to the compiled report and the interactive charts, which read their data from an inlined \texttt{data/} folder. The one arrow that matters points to the browser: double-click \texttt{index.html} and the whole portal opens offline, with no server and nothing to install. Because it is only files, it cannot break when a server goes down, and the client can reopen it years later.}
 \label{fig:portal}
-\end{figure}
+\end{figure*}
 
 The virtue of this layout is the same one that made the project folder tree of Chapter~\ref{ch:workshop} worth standardizing: a boring, predictable shape is one nobody has to think about. A steering-committee member who opens the folder next year, long after the engagement ended, finds the landing page where landing pages go and follows it in. An evaluator inheriting the project finds the report, the charts, and the data each in its own named place. Nothing about the folder assumes the person opening it was in the room when it was built, which is exactly the property a deliverable meant to outlive the engagement needs. The layout is also worth agreeing on at kickoff rather than presenting at delivery: a client who saw the empty folder shape in month one, landing page here and charts there, receives quarter three as a familiar object rather than a surprise to decode, and can say early if their committee needs something the shape does not hold.
 
@@ -347,7 +347,7 @@ When the table feels like too much apparatus, there is a one-question shortcut t
 
 Table~\ref{tab:formats} scores the options; Figure~\ref{fig:ch12-viz-choose} walks the choice itself, as the sequence of questions that routes a given delivery to exactly one format.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \resizebox{\linewidth}{!}{%
 \begin{tikzpicture}[node distance=0.8cm and 1.0cm]
@@ -372,14 +372,14 @@ Table~\ref{tab:formats} scores the options; Figure~\ref{fig:ch12-viz-choose} wal
 }
 \caption[Choosing a delivery format]{The same choice Table~\ref{tab:formats} scores, read as a decision path. Follow the questions and each answer routes to one format: a live refresh behind no firewall wants a hosted dashboard; hands-on client reslicing wants a spreadsheet; a fixed record that never changes wants a PDF; and the deliverable that must clear a firewall yet still update itself lands on the offline portal. The portal is the only leaf reached by insisting on both a firewall-safe format and one that changes with the data.}
 \label{fig:ch12-viz-choose}
-\end{figure}
+\end{figure*}
 
 \section{Versioning the artifacts you hand over}\label{sec:versioning}
 A portal the client owns raises a question a hosted dashboard never has to answer: which version is this? A dashboard shows whatever the server holds right now, so there is only ever one. A folder the client can copy, email, and archive multiplies, and six months later a board member is looking at a completion rate on a laptop and no one can say whether it is the number the committee approved in the spring or a later revision. The fix is to stamp every artifact you hand over, so that any copy carries its own provenance and can never be mistaken for another.
 
 Stamp three things, and stamp them where they cannot be lost.\marginnote{Borrow the semantic-versioning habit from software: bump the middle number when the numbers change, the last when only wording or layout does. A board that saw \enquote{v1.2} and hears \enquote{v1.3.1} landed knows nothing material moved.} First, put a visible version and date on the landing page itself, so a reader sees at a glance which cut they are holding. Second, name the folder with the same stamp, so a copy on a shared drive is identified before anyone opens it. Third, and most important, record the commit or tag of the code that produced the folder, so \enquote{which numbers did the board see} resolves to \enquote{run the pipeline at this commit and watch them reappear.} The first two are for humans skimming; the third is the one an auditor or a successor evaluator actually needs. Table~\ref{tab:stamps} lines the three up side by side, and reading down it you can see that each stamp answers a different reader's question.
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 \footnotesize
 \caption[What to stamp on a delivered portal]{The three stamps that keep delivered copies from being confused, and the question each one answers. The visible stamp is for a board member skimming; the folder name is for a colleague browsing a shared drive; the code tag is for the auditor who has to reproduce the exact numbers.}
@@ -393,7 +393,7 @@ Folder name     & \texttt{site-portal-2026Q1/} & \enquote{which copy is on the d
 Code tag        & footer \& \texttt{README} & \enquote{how do I rebuild it?} \\
 \hline
 \end{tabular}
-\end{table}
+\end{table*}
 
 The mechanics are cheap because you already own the pieces. The date is a system macro, so the report stamps itself at build time rather than relying on anyone to remember; the same \texttt{\$S\_DATE} that dated your logs in Chapter~\ref{ch:workshop} dates the portal.\marginnote{A tag is not a comment. Writing \enquote{v1.3} in the footer by hand is a promise you can break; \texttt{git tag v1.3} on the commit that built the folder is a promise the version-control system keeps. The first tells the reader a story about the version; the second lets an auditor check it.} The version is a string you set once per delivery in the control file. The code tag is a one-line \texttt{git} operation on the commit that produced the build; \texttt{commit} records a snapshot of the code, \texttt{tag} pins a name to that snapshot, and \texttt{checkout} returns to it later, which is all the \texttt{git} this chapter needs; Chapter~\ref{ch:tools} returns to tags when a package release has to stay reinstallable. Weave the three into the build so they are produced by the run, not added by hand afterward:
 \par
@@ -420,7 +420,7 @@ The data vintage is the second fact, and it is the one evaluators forget most of
 
 The easiest way to see what the standard asks is to read one full stamp as a single sentence. A self-describing footer reads roughly: \enquote{Version 1.3, built 6 July 2026 from commit \texttt{a1b9c02}, against the County Health Rankings 2025 release pulled 12 March 2026; rebuild with \texttt{git checkout v1.3} then \texttt{run 600\_report.do}.} Every clause in that sentence answers a question a board or an auditor will eventually ask: the version and date say which cut, the commit says which code, the release and pull date say which data, and the rebuild line says how to reproduce it. An evaluator who writes that one sentence into the footer at build time has met the traceability half of \textcite{wilkinson2016fair} for the modest scope of a single report, without any of the infrastructure a full data repository would demand. The point is not to satisfy a standard for its own sake but to make the folder answer for itself, so that a colleague who finds it on a shared drive three years on needs nothing but the footer to know what they are holding and how to rebuild it. Figure~\ref{fig:ch12-viz-footer} takes that one sentence apart clause by clause, so it is plain which reader each clause serves.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \resizebox{\linewidth}{!}{%
 \begin{tikzpicture}[node distance=0.35cm]
@@ -446,7 +446,7 @@ The easiest way to see what the standard asks is to read one full stamp as a sin
 }
 \caption[Anatomy of a self-describing footer]{The self-describing footer, read clause by clause. The top bar is the whole stamp as it appears on the page; each box below names one clause, the question it answers, and the reader it serves. The version and date tell a board member which cut they hold, the commit hash gives an auditor the exact code, the data vintage lets a successor pull the same extract rather than a newer one that quietly moved the numbers, and the rebuild line lets anyone regenerate the folder. The stamp is produced by the same run that produced the numbers, so no clause can drift from what it describes.}
 \label{fig:ch12-viz-footer}
-\end{figure}
+\end{figure*}
 
 The caveat is the same one the equity section named, and it belongs in the footer's honesty too. A stamped static portal tells a reader exactly which cut they hold, but it cannot answer a question about a number the cut does not contain, because there is no live query behind it. A board member who wants this quarter's figure re-sliced by a group the report did not break out is holding a snapshot, not a database, and the footer should not pretend otherwise. Naming the vintage keeps that limit honest: the stamp says \enquote{these are the numbers as of this pull,} which is a promise a static folder can keep, rather than \enquote{ask this folder anything,} which it cannot.
 
@@ -555,7 +555,7 @@ One further step takes the assembly, though not the shipping, off your calendar.
 
 The figures below are real \texttt{googlechart} output from this pipeline on County Health Rankings data, the actual pages a reader opens from the \texttt{charts/} folder.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \par
 {\footnotesize
@@ -569,9 +569,9 @@ googlechart uninsured, name(geo_code) ///
 \includegraphics[width=\linewidth]{ch10_gc_geo.png}
 \caption[The online chart the pipeline embeds]{The \texttt{googlechart} state choropleth from stage 2a of the pipeline, real output on County Health Rankings uninsured rates. In the portal this page is embedded live by \texttt{wdiframe}, so the reader hovers a state and reads its rate without leaving the report.}
 \label{fig:capgeo}
-\end{figure}
+\end{figure*}
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \par
 {\footnotesize
@@ -585,7 +585,7 @@ googlechart, type(table) tablesearch ///
 \includegraphics[width=\linewidth]{ch10_gc_table.png}
 \caption[The searchable table the dashboard mirrors]{A \texttt{googlechart} searchable table on the same data: a reader types a state and the rows filter live in the browser. The \texttt{statashiny} dashboard of stage~3 offers the same interaction offline, and \texttt{webdoc2} embeds one of them into the portal by \texttt{wdiframe}.}
 \label{fig:captable}
-\end{figure}
+\end{figure*}
 
 \begin{appliedexample}[One evaluation, one folder]\label{ae:ch12-onefolder}
 \textbf{Scenario.} A client wants one offline folder to share with their steering committee: a narrative report, an interactive dashboard of site outcomes, an online chart, and an offline county map, and they need to know six months from now exactly which cut the committee approved.

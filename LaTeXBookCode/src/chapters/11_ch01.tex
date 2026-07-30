@@ -41,7 +41,7 @@ These four are the applied researcher's answer to \enquote{why are we doing it t
 
 A principle you cannot test is a slogan. To keep these four honest, we pair each one with a concrete pass\slash fail check you can run on your own project, and we teach each in a specific later chapter. Table~\ref{tab:principles} lists the checks. If a workflow fails any row, you know which chapter to reopen, which is why we return to this table throughout the book rather than treating the principles as an opening flourish.
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 \footnotesize
 \caption[The four principles, with pass/fail tests]{The four principles, each with a one-sentence test you can run on your own project and the chapter that teaches how to pass it. A workflow that fails a row tells you which chapter to reopen.}
@@ -56,7 +56,7 @@ Accessible & A funder with no license or statistics degree can open the result a
 Actionable & It names a next step in the units staff plan in: students, dollars, points. & 8 \\
 \hline
 \end{tabular}
-\end{table}
+\end{table*}
 
 \section{Working embedded: partners, power, and bad news}\label{sec:literacy}
 Embedded evaluation runs on trust, and trust is easiest to keep when the ground rules pre-date the findings. Program managers hope for good news, and that hope can turn into quiet pressure to move a baseline or soften a null. The defense is procedural: agree on data ownership, primary outcomes, and success thresholds in writing before the data is unblinded, and treat a pre-registered analysis plan\index{pre-registered analysis plan} (Section~\ref{sec:prereg}) as something you can point to when the pressure comes.\sidenote{The phrase \enquote{garden of forking paths} comes from \textcite{gelman2013forking}: even with no cheating, an analyst who would have made different choices had the data looked different is implicitly running many tests. Writing the plan down before unblinding closes the garden gate.} None of this requires distrusting your partners; it protects the relationship from the incentives around it.
@@ -119,12 +119,12 @@ graph export "$figures/ch01_reach.png", ///
 \end{verbatim}
 }
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \includegraphics[width=\linewidth]{ch01_reach.png}
 \caption[Rural reach against target, simulated]{Observed versus targeted rural enrollment share across five host sites, on simulated data (seed 20260704), built by \texttt{ch01\_reach.do}. The command that made it is printed above. Two sites clear their target and three fall short, which is precisely the pattern the funder's Thursday email asks about: reach is uneven, and the shortfall is at specific, nameable sites (Cedar and Fork most of all). On real exports the same code answers the real question.}
 \label{fig:reach}
-\end{figure}
+\end{figure*}
 
 A companion program, \texttt{datadictionary}\index{datadictionary@\texttt{datadictionary}}, ships with the book as its over-time codebook generator, and Chapter~\ref{ch:surveys} puts it to work on a survey whose items change across waves. The startup audit itself needs no command: the charter and scoping notes this chapter builds are the checklist, and a document a partner signs beats a program a partner never runs.
 
@@ -157,7 +157,7 @@ The embedded role runs on a trade an external evaluator never makes: you swap ph
 
 So before the first analysis runs, you and the program agree on a charter and date it. This is the same document Section~\ref{sec:literacy} reached for when the worry was trust; here it supplies the record that substitutes for distance. A workable charter fits on one page, lives in the project folder beside the data it governs, and names four things: who owns the data and who may see it before it is final, which outcomes are primary and what thresholds count as success, who has the right to review a draft and who has the right to release the final number, and the escalation path when the evaluator and the program disagree about what a result means (Table~\ref{tab:ch01-viz-charter}). Each clause converts a relationship that could bend under pressure into a rule someone signed while the stakes were still abstract. A program director who has agreed in writing that the evaluator releases the primary finding cannot, in the week a null lands, recast that release as insubordination. The charter and the scoping note of Section~\ref{sec:ch01-sc-scoping} are the same discipline at two scales: the charter fixes the standing rules of the relationship, the note fixes the terms of one request.
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 \footnotesize
 \caption[The one-page charter's four clauses]{The four clauses a workable charter names, each paired with the specific pressure it defuses once the data is unblinded. Read the right column to see why each clause is easier to hold when it was signed while the result was still abstract. Exercise~7 asks you to draft these four for a project you are on now.}
@@ -173,7 +173,7 @@ Review \& release & Who reviews a draft and who releases the final number. & Rec
 Escalation & The path to follow when the two sides read a result differently. & A disagreement litigated only after the findings have landed. \\
 \hline
 \end{tabular}
-\end{table}
+\end{table*}
 
 Why would a program director sign such a document? Because the charter also protects the program from the evaluator, a reciprocity the Standards intend. An embedded evaluator who can quietly redefine success after seeing the data threatens the program as much as a program that leans on the evaluator threatens the finding, so the charter binds both parties to the definitions they set in advance. Written this way, the document is not a shield one side holds against the other. It is the shared record that lets you keep the access proximity buys and the independence the profession requires at the same time.
 

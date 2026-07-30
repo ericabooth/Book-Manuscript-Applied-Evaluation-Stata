@@ -19,7 +19,7 @@ The sharpest way to judge a project's setup is to imagine the person who inherit
 
 Software engineers face the same problem whenever they inherit a codebase, and \textcite{pilgrim2023code} distill their field's response into rules an evaluator can borrow directly. Their advice to a person taking over unfamiliar code is to run it before reading it, to trust the pipeline over the prose, and to treat a project that rebuilds end to end as the only documentation that cannot go stale, because comments lie but a passing run does not. An evaluation folder built to the standard of this chapter passes their test by construction: the successor types one command, watches the numbered pipeline rebuild every figure from the raw downloads, and only then reads the code, now with the confidence that what they are reading is what actually produced the report. The handoff test is not a nicety layered on top of the replicable principle; once a project outlives the analyst who started it, the test and the principle are the same demand. Figure~\ref{fig:ch02-viz-handoff} traces that loop: you run the inherited pipeline first, and read the code only once it rebuilds end to end.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \begin{tikzpicture}[node distance=0.5cm]
   \node[io] (inherit) {inherit the\\project folder};
@@ -38,7 +38,7 @@ Software engineers face the same problem whenever they inherit a codebase, and \
 \end{tikzpicture}
 \caption[The handoff test: run before you read]{The handoff test, after \textcite{pilgrim2023code}: a successor runs the inherited pipeline \emph{before} reading a line of it. Only an end-to-end rebuild proves the code is what produced the report; anything short of that loops back to fixing paths, installs, and versions until it does.}
 \label{fig:ch02-viz-handoff}
-\end{figure}
+\end{figure*}
 
 Consider rehearsing the handoff before it is real: midway through the project, open the folder on a colleague's machine and run the pipeline cold. Whatever breaks then is what would have broken in month eighteen, found while the person who can fix it is still on staff.
 
@@ -77,7 +77,7 @@ Freezing files is the low-ceremony version of a habit software teams reach for s
 \section{A folder layout you never have to think about}\label{sec:folders}
 With the packages installed and pinned, the next decision comes before a line of analysis code: decide where things live, once, and never decide again. The layout that survives is boring on purpose: five folders under one root, each with a single job, so that any file's location is obvious from what it is. Raw downloads land in one place and are never edited; cleaned data lands in another; code, output tables, and figures each get their own. Figure~\ref{fig:foldertree} shows the layout.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \begin{tikzpicture}[node distance=0.28cm]
   \node[stage, text width=2.4cm] (root) {\texttt{myproject/}};
@@ -99,7 +99,7 @@ With the packages installed and pinned, the next decision comes before a line of
 \end{tikzpicture}
 \caption[The project folder tree]{The project folder tree. One root, five folders, each with a single job. The split that does the most work is \texttt{raw/} versus \texttt{clean/}: raw files are write-once, so a botched cleaning step is always one rerun away from repair, never a lost original.}
 \label{fig:foldertree}
-\end{figure}
+\end{figure*}
 
 One distinction does most of the work here: \texttt{raw} versus \texttt{clean}. Raw files are write-once: you download them, you never touch them, and every transformation reads from raw and writes to clean. Under that rule a cleaning bug is never fatal, because the original is still sitting untouched in \texttt{raw} and the fix is one rerun away.\marginnote{The failure mode this prevents: someone opens a raw CSV in Excel to \enquote{just fix one date} and silently reformats every date column on save. If \texttt{raw/} is write-once and read-only, that edit has nowhere to land, and the cleaning step catches the bad date in code where you can see it.} It also lets a teammate audit your work: they start from the same downloads you did and follow the code forward.
 
@@ -180,7 +180,7 @@ The command returns \texttt{r(path)}, \texttt{r(project)}, \texttt{r(nraw)}, \te
 \section{\enquote{Works on my machine} is four failures wearing one coat}\label{sec:ch02-worksonmine}
 The phrase a teammate hears when your do-file dies on their laptop hides four distinct faults; name them separately and a vague complaint becomes a fixable list. A do-file that runs for its author but nowhere else has usually made one of four assumptions the author stopped noticing: that a folder lives at a particular absolute path, that every command it calls is already installed, that those commands are the same version they were the day the code was written, or that a step done once by hand does not need writing down. Each fault has a specific cause and a specific answer in this chapter's setup, and Table~\ref{tab:ch02-worksonmine} lines them up so a stranger inheriting the project can check for all four rather than debug them one crash at a time.
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 \footnotesize
 \caption[The four ``works on my machine'' failures]{The four failures behind \enquote{works on my machine,} the assumption each one hides, and the habit in this chapter that removes it.}
@@ -196,7 +196,7 @@ Unpinned version & Today's package equals last year's & Freeze \texttt{.ado} fil
 Undocumented manual step & \enquote{I just fixed that cell by hand} & Every step in code, no calculator in Excel (Section~\ref{sec:ch02-worksonmine} closer) \\
 \hline
 \end{tabular}
-\end{table}
+\end{table*}
 
 The first three failures the control file and install file close directly, and the fourth is the one that hides longest because it leaves no trace. A manual fix, a teammate opening the raw file to correct a stray value, a number typed straight into a table, runs fine the day it is done and cannot be reproduced the day someone else reruns the pipeline, because the pipeline never knew the step happened. The rule that closes it gets its own heading later in the chapter: every transformation lives in a do-file, so the project has no off-book steps for a successor to rediscover. Read as a set, the four failures are one failure, an assumption the author never wrote down, and the whole setup exists to force every such assumption onto the page where the next person can read it. The table doubles as a triage order: a path fault names a folder in its error, a missing package names a command, a version fault runs clean but prints a different number, and only the off-book manual step leaves no symptom a rerun can surface. Reading a crash against those signatures, top to bottom, beats rereading the code.
 
@@ -219,7 +219,7 @@ The stubs start paying off before they hold any code. On day one, create every n
 
 Build loops small before you build them wide. A loop that will eventually cover every county or every monthly extract gets rehearsed on two units first, \texttt{foreach c in Bexar Travis}, ideally one typical and one awkward, and widens to the full list only after both survive inspection. The rehearsal costs a minute; the alternative is discovering, forty counties into a full run, that unit three had the schema quirk the loop was never built for.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \begin{tikzpicture}[node distance=0.35cm]
   \node[substep, text width=3.2cm] (c) {\texttt{00\_control.do}\\\scriptsize sets \$root, \$clean, \dots};
@@ -234,7 +234,7 @@ Build loops small before you build them wide. A loop that will eventually cover 
 \end{tikzpicture}
 \caption[The numbered pipeline]{The numbered pipeline. The control file sets the paths, then sources each stage in order. Numbering by hundreds leaves room to insert a \texttt{150\_} step later without renaming everything.}
 \label{fig:numbered}
-\end{figure}
+\end{figure*}
 
 \section{Leave a paper trail: logging every run}\label{sec:logging}
 A pipeline that rebuilds silently gives you no evidence of what it did. A log file fixes that: it captures every command and every line of output to a text file, so weeks later you can answer \enquote{what did the January run actually print?} without rerunning anything. Open a log at the top of each do-file and close it at the bottom, and stamp the filename with the date so runs never overwrite each other:
@@ -288,7 +288,7 @@ An analyst reruns a pipeline only when a rerun is quick, so speed is a replicabi
 
 To do exactly that, we built a two-million-row file by expanding \texttt{nlsw88}, the wage extract Chapter~\ref{ch:embedded} introduced, then timed native commands against their \texttt{gtools} twins on two common jobs, computing group means with \texttt{collapse} and attaching group means back to every row with \texttt{egen}. Each job ran at two group counts, a coarse grouping of a couple dozen cells and a fine grouping of two hundred thousand, and each timing is the mean of five runs. Table~\ref{tab:bench} reports the seconds and the speedup, and Figure~\ref{fig:bench} plots them.
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 \footnotesize
 \caption[gtools timings on two million rows]{Seconds per run (mean of 5) on a 2{,}001{,}186-row file, native versus \texttt{gtools}. Apple-silicon Mac, Stata MP. Speedup is native $\div$ gtools; a value below 1 means native was faster.}
@@ -303,7 +303,7 @@ Operation & Native & \texttt{gtools} & Speedup \\
 \texttt{egen} mean, 200{,}000 grps  & 0.61 & 0.10 & 6.1$\times$ \\
 \hline
 \end{tabular}
-\end{table}
+\end{table*}
 
 The result refuses to be a slogan, and that is the lesson. On \texttt{collapse}, native Stata was actually faster on this file: the job is already fast in absolute terms, well under a fifth of a second, and \texttt{gtools} pays a small fixed startup cost that a quick job never earns back. On \texttt{egen}, the order reverses. Attaching a group mean to every one of two million rows took native Stata about six tenths of a second and took \texttt{gegen} about a tenth, a six- to seven-fold speedup that holds whether there are two dozen groups or two hundred thousand. The pattern is what you would guess once you see it: \texttt{gtools} wins where the native command is slow, and the small overhead only shows up where the native command was fast enough not to matter.
 
@@ -328,12 +328,12 @@ graph export "$figures/ch02_benchmark.png", ///
 \end{verbatim}
 }
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \includegraphics[width=\linewidth]{ch02_benchmark.png}
 \caption[Native versus gtools timings]{Seconds per run for four operations on a simulated two-million-row file, native Stata versus \texttt{gtools}, mean of five runs on an Apple-silicon Mac in Stata MP. \texttt{gtools} wins by roughly seven-fold on \texttt{egen}, where the native command is slow, and loses slightly on \texttt{collapse}, where the native command is already fast. The bars and Table~\ref{tab:bench} carry the same numbers: benchmark before you optimize.}
 \label{fig:bench}
-\end{figure}
+\end{figure*}
 
 \subsection{The biggest speedup is the data you never load}\label{sec:ch02-filter}
 The bigger lever than any single command is filtering on import: the STAAR pipeline (Appendix~\ref{app:walkthroughs}) reads fourteen files of roughly 400\,MB each but keeps only the rows it needs, so the full file never sits in memory. For teams on standard Stata, disciplined memory habits do most of the work: drop unneeded variables and rows right after ingestion, run \texttt{compress} before saving, and benchmark before optimizing. A pipeline that reruns in minutes gets rerun; one that takes a day gets patched by hand, and hand-patching is where reproducibility dies. One number worth a comment at the top of the control file is the full rebuild time: a successor deciding whether to rerun before a meeting needs to know if the answer is four minutes or four hours.

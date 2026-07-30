@@ -53,7 +53,7 @@ tabulate kbin            // cells per bin
 }
 Read the result in cells and in people, because the two tell different stories. Table~\ref{tab:kanon} reports both: the number of distinct quasi-identifier cells in each size band, and the number of people those cells hold.
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 {\footnotesize
 \begin{tabular}{lrr}
@@ -71,7 +71,7 @@ Total            & 103 & 2{,}246 \\
 }
 \caption[$k$-anonymity of four ordinary columns]{Re-identification exposure of \texttt{nlsw88} (an administrative stand-in, $N=2{,}246$) on four quasi-identifiers: race, married, collgrad, industry. The four columns carve the file into just 103 distinct cells. Twenty-four people are unique on these four columns alone, and another 63 sit in cells of four or fewer, so 87 of the 2{,}246 people, spread across 49 of the 103 cells, sit in thin cells. Built by \texttt{ch14\_kanon.do}.}
 \label{tab:kanon}
-\end{table}
+\end{table*}
 
 The count that matters is the first row, and it is worth printing on its own:
 \par
@@ -99,7 +99,7 @@ Twenty-four people in this file are re-identifiable by four ordinary columns. No
 
 The count is only useful once it becomes a sentence a non-technical partner can act on. \enquote{$k=1$ for 24 records} means nothing at a data-governance meeting; \enquote{24 people in this file can be picked out from four columns any coworker knows} changes the meeting. When the finding travels into a data-sharing agreement, use the second form and attach which columns, which file version, and which script produced it. The translation is the evaluator's job rather than the lawyer's, because only the evaluator knows which columns a coworker actually knows.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \par
 {\footnotesize
@@ -113,7 +113,7 @@ histogram kplot, discrete frequency ///
 \includegraphics[width=\linewidth]{ch14_kdist.png}
 \caption[Distribution of quasi-identifier cell sizes]{How many cells have each size, over race, married, collgrad, and industry in the \texttt{nlsw88} stand-in. The tall spike at the left is the danger: 24 cells hold a single person and 15 more hold just two, so dozens of records are uniquely or nearly-uniquely identified by four ordinary columns. Cells of 30 or more people are pooled at the right, where re-identification is not a concern. The mass on the left is what coarsening and suppression exist to move rightward. Built by \texttt{ch14\_kanon.do}.}
 \label{fig:kdist}
-\end{figure}
+\end{figure*}
 
 \begin{restson}[What the $k$-anonymity number rests on]
 \begin{enumerate}
@@ -139,7 +139,7 @@ count if k3==1
 }
 Coarsening\index{coarsening} one column moves people off the singleton spike wholesale. Table~\ref{tab:coarsen} shows the before-and-after: the same four quasi-identifiers, but with industry at twelve categories and then at three.
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 {\footnotesize
 \begin{tabular}{lrr}
@@ -153,7 +153,7 @@ Industry, 3 groups     &  3 &  39 \\
 }
 \caption[Coarsening industry collapses unique records]{Collapsing industry from twelve categories to three, holding race, married, and collgrad fixed, cuts the number of one-of-a-kind people from 24 to 3 and the number of distinct cells from 103 to 39. The other three columns are untouched; the whole gain comes from one coarser variable. Built by \texttt{ch14\_kanon.do}.}
 \label{tab:coarsen}
-\end{table}
+\end{table*}
 
 Coarsening industry from twelve groups to three cuts the unique records from 24 to 3, an eight-fold reduction, at the cost of some analytic resolution. The mechanism is plain: a coarser column is a wider net, so more people share each combination, so fewer stand alone. The trade is explicit and it is the analyst's to make: three industry groups may be plenty for a report that only ever compares goods to services, in which case the coarsening costs nothing the reader would have used. When it does cost something, coarsening and suppression combine, coarsen until the remaining singletons are few, then suppress those. The value here is that the trade is visible and defensible: you can tell a lawyer exactly how many people the release protects and exactly what analytic detail that protection cost.
 
@@ -194,7 +194,7 @@ Four cells break the rule: three college graduates in agriculture, none in minin
 
 The fix is \emph{complementary} suppression\index{complementary suppression}: in any column that has just one blank left visible against its total, blank the surviving cell too, so the total can no longer be differenced back. Agriculture and construction each have one primary blank and one visible cell, so the algorithm blanks the visible non-graduate cell in both (14 and 26). Mining needs nothing more, both its cells were already primary blanks. Table~\ref{tab:suppress} shows the published version.
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 {\footnotesize
 \begin{tabular}{lrrrrr}
@@ -210,7 +210,7 @@ Total     & 17 &  4 & 29 & 367 & 417 \\
 }
 \caption[Primary and complementary suppression]{The same cross-tabulation after suppression. The primary blanks are the four cells below the threshold of five (grad/Ag, grad/Mining, grad/Construction, and notgrad/Mining). The complementary blanks are the two surviving cells in the agriculture and construction columns (notgrad/Ag and notgrad/Construction): without them, each column total would reveal the graduate cell by subtraction. Only manufacturing, where both cells are comfortably large, prints numbers. The totals are published unchanged, so the table still adds up honestly. Built by \texttt{ch14\_kanon.do}.}
 \label{tab:suppress}
-\end{table}
+\end{table*}
 
 Now every column with a small cell has both of its cells hidden, so no total can be differenced to a single value: the agriculture column shows only its total of 17 split between two blanks, and a reader cannot tell whether the graduate cell is 1, 2, or 3. The hidden threes are safe because neither is the only unknown in its column, and the reason is the algebra of the row: a single missing number in a line of knowns is not hidden at all, and the only way to hide one small cell is to hide a second so the equation has more unknowns than it can solve. The totals stay truthful, and that is the standard that matters: a suppressed table that still adds up is publishable, and one that quietly alters totals to hide a cell has crossed from suppression into fabrication.
 
@@ -220,7 +220,7 @@ The most common disclosure error in a published table is a single suppressed cel
 
 The rule, and the step analysts most often skip: hiding one cell is not enough when the total is printed. A single blank in a line of visible numbers against a visible total is not hidden, it is defined, because the reader recovers it by subtraction. The only way to hide one small cell is to hide a second in the same line, so the total no longer pins the first to a single value. That is the whole of complementary suppression, and \texttt{suppress} does it by looping over each \texttt{by()} group and, while the group still holds exactly one suppressed cell, blanking the next-smallest surviving cell until at least two are hidden. Figure~\ref{fig:ch14-viz-suppress} traces that decision for a single cell.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \begin{tikzpicture}[node distance=10mm and 16mm]
 \node[io] (cell) {each cell};
@@ -240,7 +240,7 @@ The rule, and the step analysts most often skip: hiding one cell is not enough w
 \end{tikzpicture}
 \caption[The suppression decision, cell by cell]{What the routine decides for each cell. A cell below the threshold $t$ is a primary suppression; then the line is re-checked, and while it holds exactly \emph{one} blank against a visible total, the next-smallest surviving cell is blanked too, so the total can no longer be differenced back to the hidden value. A cell at or above $t$, and any line already carrying two blanks, publishes unchanged. The \texttt{recheck} loop is why a very thin group can consume several complementary blanks before it is safe.}
 \label{fig:ch14-viz-suppress}
-\end{figure}
+\end{figure*}
 
 Run against the goods-producing cross-tabulation, it reproduces the hand-computed table above cell by cell:
 \par

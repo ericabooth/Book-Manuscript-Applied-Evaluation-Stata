@@ -116,7 +116,7 @@ Read this in students, not proportions. Texas gained roughly 48{,}000 students a
 
 Before this series reaches a finance office, the two-benchmark habit from the ACS section applies. The Texas Education Agency publishes its own fall headcounts, so compare one year's state total against that published table and treat a gap of more than a percent as a question to answer, since the CCD and state files count slightly different populations; then, if you pulled this panel last vintage, confirm the overlapping years match row for row. When either check fails, the discrepancy is the finding to chase before the trend is.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \par
 {\footnotesize
@@ -130,7 +130,7 @@ twoway connected enroll_m year, ///
 \includegraphics[width=\linewidth]{ch03_ccd_enrollment.png}
 \caption[Texas public school enrollment, 2015--2022]{Texas public school enrollment, 2015--2022, built by \texttt{ch03\_educationdata.do} from the Common Core of Data through the \texttt{educationdata} package with no API key. The dashed line marks the fall of 2020: enrollment falls about 122{,}000 students from its 2019 peak, then recovers past it by 2022. Add a year to \texttt{sub()} and the series extends.}
 \label{fig:ccd}
-\end{figure}
+\end{figure*}
 
 The whole example, download to figure, is one short do-file (\texttt{ch03\_educationdata.do}) that reruns from the same portal call, so next year's data point arrives by editing one number in \texttt{sub()}. It hands a finance office a defensible enrollment trend it can act on rather than a rumor about the COVID year.
 
@@ -231,7 +231,7 @@ Every API you will meet reduces to one of three routes, and once you can tell wh
 
 Table~\ref{tab:ch03-viz-routes} compresses the decision to one line per route: match the reply an endpoint gives you to a row, and you have the command and the template.
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 \footnotesize
 \begin{tabular}{@{}p{1.4cm}p{1.7cm}p{2.0cm}p{3.2cm}@{}}
@@ -247,7 +247,7 @@ Write-out & you send data up & \texttt{googlesheets}, \texttt{googlechart} & you
 \end{tabular}
 \caption[Three routes from Stata to any API]{Which route a new endpoint needs, decided by the reply it returns. The first two pull data down; the third writes it out. Identify the row and you reuse a template instead of learning the agency from scratch.}
 \label{tab:ch03-viz-routes}
-\end{table}
+\end{table*}
 
 Keep one working template per route and the skill extends past the agencies named here on its own. When a state agency stands up a new endpoint next year, you will not need a new chapter; you will recognize which route applies and reuse the template. That is the difference between learning five APIs and learning how APIs work.
 

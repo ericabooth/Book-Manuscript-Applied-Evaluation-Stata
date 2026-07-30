@@ -57,7 +57,7 @@ Sketch enough figures for a real report and you have a pile. To keep the pile fr
 \section{Why bars beat pies: the perceptual ranking behind every choice}\label{sec:perception}
 Every chart choice in this chapter comes back to one experiment on human vision, so it pays to meet the experiment before leaning on its results. \textcite{cleveland1984graphical}, in the paper that gave chart design a scientific footing, asked people to read values off graphs that encoded the same numbers different ways and ranked the encodings by how accurately readers decoded them. Position along a common scale won: readers judge where a point or the end of a bar sits on a shared axis more accurately than anything else. Length came next, then direction and angle, then area, then color saturation and shading last. The practical order is short enough to keep in your head, and once you have it you will notice this chapter reaching for the same few chart types again and again.\index{graphical perception}\marginnote{The Cleveland--McGill ranking, high to low accuracy: position on a common scale; position on non-aligned scales; length; angle and slope; area; volume; color saturation and density. Design by climbing as high up this list as the data allows.} Table~\ref{tab:ch09-viz-ranking} sets the ranking out in full, pairing each rung with the chart in this chapter that leans on it.
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 \caption[The Cleveland--McGill encoding ranking, mapped to this chapter]{The perceptual accuracy ranking, high to low, with the chart in this chapter that uses each rung. Read it as a decision aid: for any comparison the reader must make precisely, climb as high up column two as the data allows. The encodings this chapter avoids for quantities (pie angles and areas, color as a scale) sit at the bottom for a measured reason, not a stylistic one.}
 \label{tab:ch09-viz-ranking}
@@ -75,7 +75,7 @@ Rank & Encoding & Where this chapter uses it \\
 7 & Color saturation / density & Categorical labels only, never a quantity \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 Put the ranking to work on the questions you face weekly. A sorted bar chart encodes each category as a length on a common baseline; a pie asks the reader to compare angles and areas near the bottom of the accuracy list, so the bars in Figure~\ref{fig:ink} win on measurement, not style. For the same reason, the coefficient plot in Figure~\ref{fig:coefplot} draws estimates as positions on a shared zero line rather than shading a table. Color sits at the bottom of the ranking, so in a good chart it labels categories and adds emphasis but never carries a quantity the reader must read off precisely. And you can lean on all of this: \textcite{heer2010crowdsourcing} reran Cleveland and McGill's experiments with hundreds of online participants and got the same order back, so the hierarchy is not a 1984 laboratory artifact but a stable property of how people read charts. \textcite{franconeri2021science}, reviewing two decades of this work for a policy and education audience, reach the same practical bottom line: match the visual encoding to the comparison the reader needs to make, because a well-matched chart lets the reader's visual system do the arithmetic and a mismatched one forces slow, error-prone conscious effort.\sidenote{\textcite{franconeri2021science} also document the failure mode an evaluator most needs to avoid: a chart that is technically accurate but perceptually misleading, such as a truncated axis that inflates a difference or a dual axis that manufactures a correlation. Accuracy of the numbers does not guarantee accuracy of the impression.}
 
@@ -103,12 +103,12 @@ graph export "$figures/ch09_statplot.png", ///
 }
 Figure~\ref{fig:statplot} is the result, and you read it in one pass because the sorting already did the reader's work. Managers and professional workers top the ranking near \$10.90 and \$10.72 an hour; farm laborers sit at the bottom at \$3.08, roughly a three-and-a-half-fold spread. The whiskers then keep the ranking honest, which puts the chapter's ink-on-the-data rule and Chapter~\ref{ch:trust}'s small-denominator warning on one page: the household-workers bar rests on two women and its interval spans \$3.58 to \$9.20, and the farmers bar rests on a single observation, so it draws no whisker at all. A reader who sees those intervals knows which ranks to trust and which are one hire away from moving, without a footnote to tell them.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \includegraphics[width=\linewidth]{ch09_statplot.png}
 \caption[A ranked, interval-bearing category comparison]{Mean hourly wage across thirteen occupations in the \texttt{nlsw88} extract, drawn by one \texttt{statplot} call with \texttt{ci sort wrap(14)}: categories ranked by the statistic, labels wrapped, and a 95~percent interval on every bar. Managers/Admin tops the ranking at \$10.90 and farm laborers close it at \$3.08. The intervals carry the caution the ranking needs: household workers ($N=2$) spans \$3.58 to \$9.20, and the single-observation farmers category draws no whisker at all, so the eye sees at once which positions rest on real support. Built by \texttt{ch09\_graphs.do}.}
 \label{fig:statplot}
-\end{figure}
+\end{figure*}
 
 A program board reads a diverging Likert bar in seconds and a stacked one not at all; the layout decides whether the survey result ever reaches them. The perceptual reason is the ranking from Section~\ref{sec:perception}. A stacked bar forces the reader to compare the lengths of segments that start at different, floating baselines, the hard version of a length judgment. A diverging layout gives agreement and disagreement a common baseline at the center, so the comparison becomes the accurate kind. \textcite{franconeri2021science} single out exactly this case, noting that segments not anchored to a shared axis are read poorly and that anchoring them is the cheapest fix available. Your job is to match the chart to how the audience will read it, and for survey data that usually means resisting the default stack. Venue matters too: a diverging bar that reads at a glance on the page carries too many segments for a projected slide. For a deck, consider collapsing five response categories to three and letting the slide title state the balance; the full version stays in the report, where the reader has the seconds to use it.
 
@@ -138,12 +138,12 @@ Two options do the arranging: \texttt{aseq} tags each model with the label given
 
 Read the panel in effect units, not stars. Holding age, degree, and region fixed, union membership is associated with about \$0.91 more per hour, roughly 1.5 more usual weekly hours, and about half a year more of total work experience. The wage and hours intervals sit clear of zero; the experience interval reaches back almost to it, so that difference is the shakiest of the three. A reader who would have skimmed past three regression tables sees in one glance that the union premium is real in pay and in hours, and that the experience gap, wider intervals and all, mostly reflects who joins unions rather than an effect of joining. The shared zero line does the work here: it turns \enquote{is this coefficient different from zero} into a question the eye answers, and that, in the end, is why you draw coefficients instead of tabling them.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \includegraphics[width=\linewidth]{ch09_coefplot.png}
 \caption[Coefficient small multiples]{The union coefficient from three separate regressions on \texttt{sysuse nlsw88}, drawn as small multiples on a shared zero line (dashed). Points are estimates, caps are 95\% confidence intervals. Built by \texttt{ch09\_graphs.do} with the command printed above. The wage and hours premiums sit clear of zero; the experience interval reaches almost back to it, so read that gap as selection into unions rather than an effect of them.}
 \label{fig:coefplot}
-\end{figure}
+\end{figure*}
 
 \begin{vizcallout}[Visualization to build: the small-multiple coefficient plot]
 One coefficient plot per outcome or subgroup, arranged on a common horizontal scale, with a reference line at zero. Keep the scale shared and the comparison stays honest and immediate: a reader sees which impacts are large and which cross zero without turning a page.
@@ -177,12 +177,12 @@ twoway (connected days month, mcolor(navy) ///
 }
 Read the shift in days, the unit the program manages to. The series wanders in the low-to-mid twenties for eighteen months, averaging about 22 days, then drops after go-live and settles near 18, a shift of roughly four days that the dashed line ties directly to the intake change. Look for the run of points below the old level after go-live: not one lucky month but a sustained new floor separates a real shift from noise, and a control chart formalizes exactly that judgment. The eye reads \enquote{the line moved after we acted} straight off the picture; the caption is where you qualify that causal-looking story.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \includegraphics[width=\linewidth]{ch09_runchart.png}
 \caption[Run chart with an intervention line]{A simulated monthly service metric, average days to placement, over three years, with a dashed reference line at the go-live of a new intake process. Built by \texttt{ch09\_graphs.do} with \texttt{set seed 20260704}; the command is printed above. The metric holds near 22 days, then settles near 18 after the change. The picture shows the shift; the caption is where you stay honest that a single before-after series cannot rule out other causes.}
 \label{fig:runchart}
-\end{figure}
+\end{figure*}
 
 \subsection{From one-off exhibit to a monitoring habit}\label{ch09-sc-monitoring}
 Hand this chart to a practitioner team and expect them to keep drawing it. Improvement science runs on run charts: a program working plan-do-study-act improvement cycles wants to see, month by month, whether the metric moved after each change, and an annotated reference line already speaks that team's vocabulary. Build the chart in a do-file the team can rerun, and the one-off exhibit becomes a shared monitoring habit, the researcher-practitioner model working as intended rather than a report delivered and shelved.
@@ -191,7 +191,7 @@ A chart headed for a recurring dashboard gets one extra check at the sketch stag
 
 A single well-built trend graph can carry a story responsibly, provided the caption is honest about what the comparison can and cannot show. A run chart shows that the line moved; it cannot by itself show that the program moved it, because anything else that changed that month is confounded with the intervention. Put the intervention on the timeline and a non-technical audience can see the argument for themselves; Table~\ref{tab:runsummary} then sets the before-and-after averages beside it, so the four-day claim is a number, not an impression.
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 \caption[Before and after the intervention]{Mean of the simulated placement metric before and after go-live, the number behind Figure~\ref{fig:runchart}. Computed by \texttt{ch09\_graphs.do}.}
 \label{tab:runsummary}
@@ -205,7 +205,7 @@ After go-live  & 18 & 18.2 \\
 Difference     &    & $-4.3$ \\
 \hline
 \end{tabular}
-\end{table}
+\end{table*}
 
 \section{Captions that carry the finding}\label{sec:captions}
 Reports are skimmed, and captions are read, so the caption has to stand on its own. Following Gelman, we write self-contained captions that name the plot type, decode any encoding (\enquote{darker points are counties above the poverty threshold}), state the takeaway in a sentence, and cross-reference the related figure by number.\marginnote{Eye-tracking studies of how people read charts find that the title and text draw heavy fixation and that the message a reader takes away is largely the message the text states \parencite{borkin2016beyond}. Write for the reader who reads only the figure and its caption, because on a skim that is most of your audience.} \textcite{borkin2016beyond} tracked where readers looked across hundreds of visualizations and found that a chart's title and annotation, not its data marks, drove what viewers later recalled, which for an evaluator is a direct instruction: the caption is where the finding is stored for the reader who does not study the plot. A reader who sees only the figures and their captions should come away with the argument. Every caption in this chapter is written that way on purpose, so you can test the claim by reading only the captions of Figures~\ref{fig:ink}, \ref{fig:coefplot}, and~\ref{fig:runchart} and checking that the chapter's argument survives.

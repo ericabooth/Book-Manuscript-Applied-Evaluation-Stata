@@ -218,7 +218,7 @@ The tripwires of Section~\ref{sec:backbone} rest on one idea: a claim about the 
 
 Figure~\ref{fig:ch13-aigate} is the whole arrangement. The gate sits between the notes and the API call. Clean text passes. Flagged text stops the run, and the recovery path is deliberate: mask a \emph{copy}, prove the mask held by running the gate again, and send only the redacted copy out, while the unmasked originals never leave the machine.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \resizebox{0.98\linewidth}{!}{%
 \begin{tikzpicture}[node distance=0.55cm and 1.3cm]
@@ -234,7 +234,7 @@ Figure~\ref{fig:ch13-aigate} is the whole arrangement. The gate sits between the
 \end{tikzpicture}}
 \caption[The privacy gate in a coding pipeline]{The privacy gate in a coding pipeline. \texttt{ai\_privacy\_gate} with \texttt{action(stop)} halts the do-file the moment any note matches a PII pattern, so text reaches the hosted LLM only by passing the gate. The recovery path masks a copy, proves the mask held by running the gate on the copy again, and sends only the redacted version; the unmasked originals never leave the machine. Built by \texttt{ch13\_validation.do}.}
 \label{fig:ch13-aigate}
-\end{figure}
+\end{figure*}
 
 Watch it work on a dozen simulated case notes, three lines of them deliberately seeded with the leaks a real batch contains, a Social Security number recorded at intake, callback phone numbers, an email address, a birth date, a street address, and two tagged record numbers (part (f) of \texttt{ch13\_validation.do} builds the file):
 \par
@@ -323,7 +323,7 @@ The trivial rewording, Tuesdays to Tuesday, scores 0.04 and passes; the answer t
 \subsection{The weakest category is the one to spot-check}\label{sec:kappa-by-category}
 A single kappa hides where the LLM struggles, so the next question is which categories it gets wrong. Charting agreement one barrier at a time turns the scalar into a map (Figure~\ref{fig:agreement}): four categories sit near 0.85, but \enquote{none} lands lowest at 0.81, which is the category to spot-check and the one \texttt{llmsieve} would route to a human first.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \par
 {\footnotesize
@@ -336,7 +336,7 @@ graph bar (mean) agree, ///
 \includegraphics[width=\linewidth]{ch13_agreement.png}
 \caption[Model-human agreement by category]{Share of notes on which the simulated LLM matches the hand-coded gold standard, one bar per barrier category (150 simulated notes, seed \texttt{20260704}). Overall agreement is high, but the \enquote{none} category is weakest at 0.81, which is exactly where you spot-check the LLM and where a consensus tool routes cases to a human. A single kappa would have hidden this.}
 \label{fig:agreement}
-\end{figure}
+\end{figure*}
 
 A reviewer cannot weigh \enquote{the LLM said so.} A reviewer can weigh a measured error rate, and validation is the step that produces one, which is why a validated AI-coded variable is publishable and an unvalidated one is not. Treating the LLM as a measurement rather than an oracle is the single habit that separates responsible use from wishful use.
 

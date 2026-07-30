@@ -11,7 +11,7 @@ Two terms will come up on every page of this chapter, so pin them down now. An \
 
 Two questions sort the seven tools. \emph{Online versus offline}: does the finished page need an internet connection to draw itself, or does it carry everything it needs? \emph{Chart versus container}: is the tool drawing a single graphic, or is it a shell that holds many graphics and prose together? Figure~\ref{fig:suite-pipeline} lays out the pipeline, and Table~\ref{tab:suite-matrix} places each tool in the grid those two axes make.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \begin{tikzpicture}[node distance=0.5cm and 0.75cm]
   \node[stage] (ing) {Ingest};
@@ -28,7 +28,7 @@ Two questions sort the seven tools. \emph{Online versus offline}: does the finis
 \end{tikzpicture}
 \caption[The visualization suite pipeline]{The suite as one pipeline. Data comes in through \texttt{webapi} (JSON APIs, Chapter~\ref{ch:apis}) or \texttt{googlesheets} (live Google Sheets, Chapter~\ref{ch:sheets}); it is rendered as a chart by \texttt{googlechart} (online) or \texttt{sparkta2} (offline), or as an interactive dashboard by \texttt{statashiny} or \texttt{dashboardbuilder}; and \texttt{webdoc2} wraps the results into one shippable report or GitHub-Pages portal (all Chapter~\ref{ch:portals}). This chapter owns the render column's two chart tools.}
 \label{fig:suite-pipeline}
-\end{figure}
+\end{figure*}
 
 \subsection{Pick the tool by asking the grid two questions}\label{sec:suite-choose}
 Faced with a tool choice, ask the grid's two questions and let the answers pick for you. Does the page have to work with the internet off? Then you are in the offline row: \texttt{sparkta2}\index{sparkta2@\texttt{sparkta2}} for a chart, \texttt{statashiny}\index{statashiny@\texttt{statashiny}}, \texttt{dashboardbuilder}\index{dashboardbuilder@\texttt{dashboardbuilder}}, or \texttt{webdoc2}\index{webdoc2@\texttt{webdoc2}} for a container. Are you drawing one graphic or holding many? That is the chart-versus-container column. The grid settles every choice but one: the offline-container cell holds two dashboard tools, and the reader's verb splits them, \texttt{statashiny} when readers explore rows with a search box or slider, \texttt{dashboardbuilder} when readers scan headline tiles against a benchmark (Chapter~\ref{ch:portals} works both). Name the venue and the deliverable, and the cell, then the verb, picks the tool.
@@ -174,12 +174,12 @@ googlechart uninsured, name(geo_code) type(geo)  ///
 }
 Four options carry the type. The two geography settings, \texttt{georegion("US")} and \texttt{georesolution("us-states")}, tell the renderer to draw the fifty states plus DC rather than a world map. \texttt{scheme(blues)} sets the color ramp, so the darkest state is the highest uninsured rate. And \texttt{download datatable} adds two things a client asks for the moment they see the map: a menu to export the picture as an image, and a \enquote{view data} panel that shows and downloads the numbers behind it. The result is Figure~\ref{fig:gc-geo}: Texas is the darkest state at roughly nineteen percent uninsured, a cluster of southern and mountain-west states trails it, and the northeast is palest.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \includegraphics[width=\linewidth]{ch10_gc_geo.png}
 \caption[A googlechart US-state choropleth]{The \texttt{type(geo)} choropleth of the uninsured rate by state, 2025, written by \texttt{ch10\_googlechart.do} with the command printed above. Darker is higher; the legend runs from 2.9 to 18.8 percent. In the browser this map is interactive: hover a state and its exact value appears. \texttt{googlechart}'s \texttt{geo} type stops at the state level; for a Texas county map, use the offline sibling \texttt{sparkta2} (Section~\ref{sec:sparkta2}).}
 \label{fig:gc-geo}
-\end{figure}
+\end{figure*}
 
 Check the map against knowledge you already hold before you circulate it: the pattern is the familiar coverage gap between states that expanded Medicaid and states that did not, and Texas anchors the dark end of it every year, which is the external evidence that the pipeline drew the right map. The point for the suite is that this map is not a screenshot; it is written by the do-file from the CHR file, so when the 2026 release posts, rerunning the do-file redraws the map with no hand-editing. That is the replicable principle applied to an interactive graphic. The refresh is worth rehearsing before you need it: point the import at the prior year's file, rerun, and confirm the map redraws, because an update path that has never been exercised is an intention, not a fact.\marginnote{The \texttt{geo} type is the one most likely to blank behind a firewall, because it fetches boundary data at render time. Before you promise a client an air-gapped map, open the HTML with your network off and confirm it still draws; if it does not, ship the offline \texttt{sparkta2} choropleth or the static map of Chapter~\ref{ch:graphs}.}
 
@@ -206,12 +206,12 @@ googlechart child_poverty premature_death,       ///
 }
 Read the roles one at a time, because \texttt{type(bubble)} uses more of them than any other type. The two variables in the varlist are the x and y axes (poverty and premature death). \texttt{name(usps)} labels each bubble with its state postal code. \texttt{over(highunins)} colors the bubbles by group, so the high-uninsured states stand out. \texttt{sizevar(pct\_rural)} scales each circle by rurality. And \texttt{time(year)} is the option that adds the Play button and the year slider. The result is Figure~\ref{fig:gc-bubble}.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \includegraphics[width=\linewidth]{ch10_gc_bubble.png}
 \caption[A googlechart animated bubble]{The \texttt{type(bubble)} chart with \texttt{time(year)}, written by \texttt{ch10\_googlechart.do}, shown at one frame. Each circle is a state, sized by how rural it is and colored by whether its uninsured rate clears ten percent. In the browser a Play button walks all fifty states from 2016 to 2025; here we print the final frame. The upward drift, poorer-child states carry higher premature death, is the trajectory that justifies the motion.}
 \label{fig:gc-bubble}
-\end{figure}
+\end{figure*}
 
 Ask of any animation whether the story is the trajectory itself; here it is, states climbing together up the poverty-mortality diagonal over a decade, so the motion carries information no single frame holds. One caveat about this panel: only 2024 and 2025 are the real CHR releases, and the earlier years are simulated to give the Play control frames to move through, which the chart's note says out loud. When you build your own, feed \texttt{time()} a real panel and the animation is worth the motion; feed it filler and you have decoration. A second question worth settling before the build: name the meeting where someone presses Play. A walked-through talk has a presser; an emailed page usually does not, and for that audience the final frame exported as a static scatter carries the same finding without asking anyone to wait.
 
@@ -237,12 +237,12 @@ googlechart, type(table)                          ///
 }
 The payoff is in Figure~\ref{fig:gc-table}: a client opens the page, types their state name into the search box, and reads their own row without a spreadsheet, or clicks a column header to sort every state by that measure. The audience finds their own number instead of hunting a printed table, which is the accessible principle served directly, and because the file is written by the do-file it refreshes when the CHR data does. Column choice is the planning decision here: lead \texttt{tooltipvars()} with the identifier the reader will search on and the two or three measures they came for, because a table that opens on eight columns of equal weight hands the reader the triage the builder skipped.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \includegraphics[width=\linewidth]{ch10_gc_table.png}
 \caption[A googlechart searchable table]{The \texttt{type(table)} output with \texttt{tablesearch} and \texttt{tableheadersticky}, written by \texttt{ch10\_googlechart.do}. All 51 rows (fifty states plus DC) and eight measures; the search box at top filters as the reader types, the sticky header keeps the column names in view, and any column sorts on a click. The columns come from \texttt{tooltipvars()}, not a varlist, which is the one syntax quirk of the table type.}
 \label{fig:gc-table}
-\end{figure}
+\end{figure*}
 
 \subsection{Worked example 4: a diverging stacked bar}\label{sec:gc-divbar}
 The last type is the one survey work needs most and general tools handle worst: the diverging stacked bar\index{diverging stacked bar} for Likert data. A \emph{Likert}\index{Likert scale} item is the familiar strongly-disagree-to-strongly-agree scale, and the honest way to chart it is to center the neutral response on zero, push disagreement left and agreement right, so the balance of opinion reads at a glance. \texttt{type(divbar)} does exactly this. It needs two roles: \texttt{name()} for the question and \texttt{level()} for the response category, plus \texttt{levelorder()} to fix the stack order and \texttt{centerlevel()} to name the neutral level that sits on zero:
@@ -265,12 +265,12 @@ googlechart share, name(q) level(response)        ///
 }
 The data here is a small synthetic set, three policy statements each with five Likert levels, written inline in the do-file so the shape is illustrative rather than a real poll. Figure~\ref{fig:gc-divbar} shows the result: each statement is one horizontal bar split at zero, disagreement in reds to the left and agreement in blues to the right, with the neutral slice straddling the center line.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \includegraphics[width=\linewidth]{ch10_gc_divbar.png}
 \caption[A googlechart diverging stacked bar]{The \texttt{type(divbar)} chart, written by \texttt{ch10\_googlechart.do} from illustrative Likert data. \texttt{centerlevel(Neutral)} puts the neutral response on the zero line and sign-flips the disagree side to the left, so the reader sees the balance of opinion per item at a glance. This is the Pew-style diverging bar; the underlying numbers are synthetic and shown only for shape.}
 \label{fig:gc-divbar}
-\end{figure}
+\end{figure*}
 
 Between them, the geo map, the animated bubble, the searchable table, and the diverging bar cover most of what a board actually asks for, and one do-file writes all four offline with no key. Two options recur across all four. \texttt{scheme()} sets the color ramp in one word (\texttt{scheme(blues)} for a sequential map, \texttt{scheme(rdbu)} for a diverging one), so every page from your shop can carry the same palette without per-chart color fiddling. And \texttt{download datatable} pairs an image-export menu with a \enquote{view the data} panel, so the client takes away both the picture and the numbers; a chart the audience can mine that way has become a small tool. The remaining ten types (column, line, area, combo, pie, donut, scatter, timeline, histogram, and the rest) follow the same grammar: a \texttt{type()}, a varlist or a set of role options, and an \texttt{export()}.
 
@@ -284,7 +284,7 @@ Does this deliverable need to move at all? Ask before you build, because choosin
 \subsection{Which narrative structure for a board versus an explorer}\label{ch10-sec:structures}
 The spectrum names the two ends; your real choice sits between them, and \textcite{segel2010narrative} name three structures that occupy the middle ground. Build a single-slide finding for a full board and you are at the pure author-driven end, no named structure required: one path, one message, no controls handed over. Brief an audience that should hear the headline before it roams and you want their \emph{martini-glass}: the reader walks down your path first, the stem, then the page opens into free exploration at the mouth. Build a portal a dozen managers each mine for their own site and you want their \emph{drill-down story}, which inverts the order: it opens on a general view and lets the reader pick the case to expand. Their third structure, the \emph{interactive slideshow}, keeps the author's ordering across steps while allowing interaction inside each one; it fits a walked-through talk more than a left-alone web page. Figure~\ref{fig:ch10-viz-spectrum} places the author-driven slide and the two structures this chapter uses most on the spectrum and pairs each with the venue it fits.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 \centering
 \resizebox{\linewidth}{!}{%
 \begin{tikzpicture}[node distance=0.6cm and 1.5cm]
@@ -307,7 +307,7 @@ The spectrum names the two ends; your real choice sits between them, and \textci
 }
 \caption[Narrative structures on the control spectrum]{The three narrative structures of \textcite{segel2010narrative} arranged left to right as control passes from maker to reader, each tagged with the venue it fits. Read it as a ladder: hand a full board the author-driven slide, a briefing the martini-glass that states the headline before it opens, and a manager portal the drill-down that opens on the whole field. Shipping a structure to the wrong end of this line is the mistake the surrounding text warns against.}
 \label{fig:ch10-viz-spectrum}
-\end{figure}
+\end{figure*}
 
 The judgment, then, is not \enquote{interactive or not} but \enquote{which structure for which reader.} A board that meets for ninety minutes and needs one decision is an author-driven or martini-glass audience: give them the message first and let exploration follow the point, never precede it. An analyst who will live in the data for a week is a drill-down audience: open on the whole field and let them expand their own county without your narration in the way. The mistake an embedded evaluator makes under deadline is to ship a drill-down structure to a board, which buries the finding behind a click the board will not make, or an author-driven figure to an explorer, which locks the analyst out of the question they came to ask. The searchable table of Section~\ref{sec:gc-table} is a drill-down surface; the spark wall of Section~\ref{sec:sparkwall} paired with one interactive map is a martini-glass deliverable, headline first, exploration second. Naming the structure before you build tells you which one you are actually making.
 
@@ -347,7 +347,7 @@ Look around the boardroom before you pick a palette. Roughly one man in twelve a
 \subsection{Color, contrast, and the numbers beside the picture}\label{ch10-sec:a11y-rules}
 The first rule is to pick a palette that survives color vision deficiency, and the field has a settled answer. \textcite{okabeito2008cud} designed the Color Universal Design palette, eight qualitative colors chosen so protanopes, deuteranopes, and tritanopes, people with the three main forms of color-vision deficiency, can still tell them apart, and \textcite{wong2011color} brought it into scientific practice as the Nature Methods default. Table~\ref{tab:ch10-viz-cud} prints the eight colors with the hex codes you paste straight into a \texttt{scheme()} or a style file.
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 \caption[The Okabe--Ito colorblind-safe palette]{The eight Color Universal Design colors of \textcite{okabeito2008cud}, each with the hex code to hand a chart. Chosen so the three common forms of red--green color vision deficiency can still separate them; use these in place of an arbitrary categorical ramp, and let position or luminance, not hue alone, carry the finding. Viewed in grayscale the swatches still differ in lightness, which is the redundant-channel rule made visible.}
 \label{tab:ch10-viz-cud}
@@ -376,7 +376,7 @@ Swatch & Name & Hex \\
 \cudswatch{cudPurple}     & Reddish purple & \texttt{CC79A7} \\
 \hline
 \end{tabular}}
-\end{table} The practical move for a \texttt{googlechart} or \texttt{sparkta2} page is to feed \texttt{scheme()} a colorblind-safe ramp rather than an arbitrary one, and to prefer a sequential or diverging scheme, a single hue darkening or two hues meeting at a neutral middle, over a rainbow, because a luminance gradient reads even when hue does not. The spark wall of Section~\ref{sec:sparkwall} already banks this hedge by encoding its story in line \emph{position} rather than color; a reader who sees no color still reads six rising trajectories, which is the deeper rule that color should be a redundant channel, never the only one.\marginnote{The test costs nothing: view your finished page through a color-blindness simulator, or desaturate a screenshot to grayscale, and check whether the finding still reads. If the categories collapse into the same gray, hue was doing work that shape, position, or luminance should have shared.}
+\end{table*} The practical move for a \texttt{googlechart} or \texttt{sparkta2} page is to feed \texttt{scheme()} a colorblind-safe ramp rather than an arbitrary one, and to prefer a sequential or diverging scheme, a single hue darkening or two hues meeting at a neutral middle, over a rainbow, because a luminance gradient reads even when hue does not. The spark wall of Section~\ref{sec:sparkwall} already banks this hedge by encoding its story in line \emph{position} rather than color; a reader who sees no color still reads six rising trajectories, which is the deeper rule that color should be a redundant channel, never the only one.\marginnote{The test costs nothing: view your finished page through a color-blindness simulator, or desaturate a screenshot to grayscale, and check whether the finding still reads. If the categories collapse into the same gray, hue was doing work that shape, position, or luminance should have shared.}
 
 The second rule is sufficient contrast, and here the web has a published standard the evaluator can cite rather than eyeball. The Web Content Accessibility Guidelines set a floor of a 4.5:1 luminance-contrast ratio for normal text and 3:1 for the graphical objects a reader must see to understand the chart \parencite{w3c2018wcag}, a threshold a free contrast checker measures for you against the two colors that meet. The ratio itself is a simple object:
 \[
