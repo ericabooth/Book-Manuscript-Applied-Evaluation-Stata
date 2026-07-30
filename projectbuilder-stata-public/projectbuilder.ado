@@ -4,9 +4,8 @@
 *!                   numbered do-file pipeline, then (optionally) ingest
 *!                   data, convert it, combine it, and build documentation.
 *!
-*! A generalization of the author's production scaffolding tool: the
-*! organization-locked pieces (shared-drive discovery, a template folder,
-*! a logo fetcher) are gone.  Everything the scaffold needs is written by
+*! No organization-locked pieces: no shared-drive discovery, no template
+*! folder, no logo fetcher.  Everything the scaffold needs is written by
 *! this program with -file write-; nothing external is required.
 *!
 *! Cross-OS: uses only Stata's mkdir, copy, cd, and file commands;
@@ -65,6 +64,21 @@ program define projectbuilder, rclass
     if `"`path'"' != "" local base `"`path'"'
     if inlist(substr(`"`base'"', -1, 1), "/", "\") {
         local base = substr(`"`base'"', 1, strlen(`"`base'"') - 1)
+    }
+
+    * ---- reject a stray extra token -------------------------------------
+    * -anything- absorbs every word after the command name, so an unquoted
+    * second word would silently become part of the folder name.  A project
+    * name is exactly one token; quote it if it contains spaces.
+    local pbrest `"`projspec'"'
+    gettoken pbfirst pbrest : pbrest
+    local pbrest = strtrim(`"`pbrest'"')
+    if `"`pbrest'"' != "" {
+        di as err `"projectbuilder: too many project names -- "`projspec'""'
+        di as err  "                Give one name (source or source/subsource);"
+        di as err `"                the extra token was "`pbrest'"."'
+        di as err  "                Quote the name if it contains spaces."
+        exit 198
     }
 
     * ---- parse source[/subsource] ---------------------------------------
@@ -152,10 +166,50 @@ program define projectbuilder, rclass
     local docs      `"`target'/_documentation"'
     local web       `"`docs'/website"'
 
+    * ---- metadata persistence -------------------------------------------
+    * A plain -rebuild- must not discard what the scaffold recorded.  The
+    * metadata is stored beside the documentation and read back whenever the
+    * current call does not supply a value, so refreshing a project keeps its
+    * description, topic, and the rest instead of replacing them with
+    * placeholders.  An option given on this call always wins.
+    local metaf `"`docs'/_project_meta.txt"'
+    capture confirm file `"`metaf'"'
+    if _rc == 0 {
+        tempname mfh
+        capture file open `mfh' using `"`metaf'"', read text
+        if _rc == 0 {
+            file read `mfh' mline
+            while r(eof) == 0 {
+                if regexm(`"`macval(mline)'"', "^([a-z]+)=(.*)$") {
+                    local mkey = regexs(1)
+                    local mval = regexs(2)
+                    foreach m in description url topic publicfacing timeline ///
+                                 othernotes outcomes over created {
+                        if "`mkey'" == "`m'" {
+                            if `"``m''"' == "" local `m' `"`mval'"'
+                        }
+                    }
+                }
+                file read `mfh' mline
+            }
+            file close `mfh'
+        }
+    }
+
     * ---- values stamped into the scaffold files -------------------------
     local today : di %tdCCYY-NN-DD daily(`"`c(current_date)'"', "DMY")
+    * -created- is the date the project was first scaffolded; -today- is when
+    * this build ran.  They differ after a rebuild, so keep them separate.
+    if `"`created'"' == "" local created `"`today'"'
+    local lastbuilt `"`today'"'
+
     local author `"`c(username)'"'
-    local sver = c(stata_version)
+    * The generated 000_control.do pins the language version to this package's
+    * own floor rather than to the running Stata.  c(stata_version) can report
+    * a release (19.5, say) that no earlier installation will accept, which
+    * would make the generated file unrunnable for a teammate on Stata 16-19.
+    * Raise the pin by hand if a project comes to rely on newer syntax.
+    local sver "16.0"
     local descfull `"`description'"'
     if `"`descfull'"' == "" local descfull "(add a one-line description of the project here)"
     local url_show `"`url'"'
@@ -167,6 +221,21 @@ program define projectbuilder, rclass
     local gh "https://raw.githubusercontent.com/ericabooth"
     local urlbase ""
     if `"`url'"' != "" pb_base urlbase `"`url'"'
+
+    * ---- record the metadata for the next rebuild ------------------------
+    capture mkdir `"`docs'"'
+    tempname mfw
+    capture file open `mfw' using `"`metaf'"', write text replace
+    if _rc == 0 {
+        file write `mfw' "* projectbuilder metadata.  Read back on -rebuild- so a" _n
+        file write `mfw' "* refresh keeps what the scaffold recorded.  Edit freely;" _n
+        file write `mfw' "* one key=value per line." _n
+        foreach m in description url topic publicfacing timeline othernotes ///
+                     outcomes over created {
+            file write `mfw' "`m'=" `"``m''"' _n
+        }
+        file close `mfw'
+    }
 
     *=====================================================================*
     * WRITE THE NUMBERED PIPELINE (do-files in _code)                     *
@@ -181,12 +250,13 @@ program define projectbuilder, rclass
         quietly file open `fh' using `"`code'/000_control.do"', write text replace
         pb_wl `fh' `"*==============================================================="'
         pb_wl `fh' `"* 000_control.do -- `proj_label'"'
-        pb_wl `fh' `"* Created `today' by `author' (scaffolded by projectbuilder v2.0.0)"'
+        pb_wl `fh' `"* Created `created' by `author' (scaffolded by projectbuilder v2.0.0)"'
+        pb_wl `fh' `"* Last built `lastbuilt'"'
         pb_wl `fh' `"* The control file: every path in one place."'
         pb_wl `fh' `"*==============================================================="'
         pb_wl `fh' `""'
         pb_wl `fh' `"clear all"'
-        pb_wl `fh' `"version `sver'      // pin the language version"'
+        pb_wl `fh' `"version `sver'      // projectbuilder's floor; raise if you need newer syntax"'
         pb_wl `fh' `"set more off"'
         pb_wl `fh' `"set varabbrev off    // abbreviations hide bugs"'
         pb_wl `fh' `""'
@@ -563,7 +633,7 @@ program define projectbuilder, rclass
     local built_stamp `"`today' `c(current_time)'"'
 
     pb_docs `"`web'/index.html"' `"`docs'/Readme.md"' `"`raw'"' `"`converted'"' `"`cleaned'"' ///
-        , project(`"`proj_label'"') date(`"`today'"') author(`"`author'"') ///
+        , project(`"`proj_label'"') date(`"`created'"') author(`"`author'"') ///
           desc(`"`descfull'"') url(`"`url_show'"') topic(`"`topic_show'"') ///
           public(`"`publicfacing_show'"') timeline(`"`timeline_show'"') ///
           othernotes(`"`othernotes_show'"') stamp(`"`built_stamp'"')
@@ -698,6 +768,19 @@ program define pb_docs
         url(string) topic(string) public(string) timeline(string) ///
         othernotes(string) stamp(string) ]
 
+    * ---- escape the recorded metadata -----------------------------------
+    * The metadata is free text, so topic("a&b <tag>") has to appear as
+    * itself rather than as markup.  &, <, and > become HTML entities for
+    * both outputs; the Markdown table additionally needs | escaped, or a
+    * value could open an extra column.
+    foreach m in project date author desc url topic public timeline ///
+                 othernotes stamp {
+        local `m' = subinstr(`"``m''"', "&", "&amp;", .)
+        local `m' = subinstr(`"``m''"', "<", "&lt;",  .)
+        local `m' = subinstr(`"``m''"', ">", "&gt;",  .)
+        local md_`m' = subinstr(`"``m''"', "|", "\|", .)
+    }
+
     tempname fh
 
     * ---- website/index.html ---------------------------------------------
@@ -734,22 +817,22 @@ program define pb_docs
 
     * ---- _documentation/Readme.md ---------------------------------------
     quietly file open `fh' using `"`readme'"', write text replace
-    file write `fh' `"# `project'"' _n _n
-    file write `fh' `"`desc'"' _n _n
+    file write `fh' `"# `md_project'"' _n _n
+    file write `fh' `"`md_desc'"' _n _n
     file write `fh' "| Field | Value |" _n
     file write `fh' "|-------|-------|" _n
-    file write `fh' `"| Created | `date' |"' _n
-    file write `fh' `"| Author | `author' |"' _n
-    file write `fh' `"| Source URL | `url' |"' _n
-    file write `fh' `"| Topic | `topic' |"' _n
-    file write `fh' `"| Public-facing | `public' |"' _n
-    file write `fh' `"| Refresh timeline | `timeline' |"' _n
-    file write `fh' `"| Other notes | `othernotes' |"' _n
+    file write `fh' `"| Created | `md_date' |"' _n
+    file write `fh' `"| Author | `md_author' |"' _n
+    file write `fh' `"| Source URL | `md_url' |"' _n
+    file write `fh' `"| Topic | `md_topic' |"' _n
+    file write `fh' `"| Public-facing | `md_public' |"' _n
+    file write `fh' `"| Refresh timeline | `md_timeline' |"' _n
+    file write `fh' `"| Other notes | `md_othernotes' |"' _n
     file write `fh' _n
     pb_mdlist `fh' `"`rawd'"'   "*"     "Raw files (01_raw/)"
     pb_mdlist `fh' `"`convd'"'  "*.dta" "Converted files (01_raw/_converted/)"
     pb_mdlist `fh' `"`cleand'"' "*.dta" "Analytic files (02_cleaned/)"
-    file write `fh' _n `"_Built `stamp' by projectbuilder v2.0.0._"' _n
+    file write `fh' _n `"_Built `md_stamp' by projectbuilder v2.0.0._"' _n
     file close `fh'
 end
 
@@ -764,7 +847,10 @@ program define pb_htmllist
     file write `fh' "<ul>" _n
     foreach f of local list {
         if substr(`"`f'"', 1, 1) == "." continue
-        file write `fh' `"<li><code>`f'</code></li>"' _n
+        local fe = subinstr(`"`f'"',  "&", "&amp;", .)
+        local fe = subinstr(`"`fe'"', "<", "&lt;",  .)
+        local fe = subinstr(`"`fe'"', ">", "&gt;",  .)
+        file write `fh' `"<li><code>`fe'</code></li>"' _n
         local any = 1
     }
     if !`any' file write `fh' "<li class=""muted"">(none yet)</li>" _n
@@ -781,7 +867,11 @@ program define pb_mdlist
     local any = 0
     foreach f of local list {
         if substr(`"`f'"', 1, 1) == "." continue
-        file write `fh' `"- `f'"' _n
+        local fe = subinstr(`"`f'"',  "&", "&amp;", .)
+        local fe = subinstr(`"`fe'"', "<", "&lt;",  .)
+        local fe = subinstr(`"`fe'"', ">", "&gt;",  .)
+        local fe = subinstr(`"`fe'"', "|", "\|",    .)
+        file write `fh' `"- `fe'"' _n
         local any = 1
     }
     if !`any' file write `fh' "- (none yet)" _n

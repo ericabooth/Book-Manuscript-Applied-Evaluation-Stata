@@ -134,14 +134,21 @@ a stale command from an earlier dataset can never fire in a pipeline.
 | ------ | ------- |
 | `r(status)` | `ok`, `blocked` (dry run failed; see `r(diagnosis)`), or `needinfo` (checklist shown) |
 | `r(direction)` | `wide2long`, `long2wide`, `doubly`, `unknown` |
-| `r(cmd)`, `r(cmd2)` | the suggested command(s); also `$reshapehelper_cmd`(`2`) |
-| `r(preclean)` | a cleaning line to run first (e.g., strip spaces from a string j) |
+| `r(cmd)`, `r(cmd2)` | the suggested command(s); also `$reshapehelper_cmd`(`2`) — `r(cmd2)` when applicable (a chained doubly-wide pair) |
+| `r(preclean)` | when applicable, a cleaning line to run first (e.g., strip spaces from a string j) |
 | `r(i)`, `r(j)`, `r(stubs)` | the pieces the suggestion uses |
-| `r(note)`, `r(caution)`, `r(diagnosis)` | the annotations printed under the suggestion |
+| `r(icands)`, `r(jcands)` | the i and j candidate lists considered |
+| `r(note)`, `r(caution)`, `r(diagnosis)` | the annotations printed under the suggestion, each when applicable |
 | `r(tested)`, `r(rc)` | dry-run verdict and final return code |
-| `r(smcl)` | path of the unwrapped-suggestion SMCL file |
+| `r(smcl)` | path of the unwrapped-suggestion SMCL file, returned only when that file was written (`r(status)` `ok` or `blocked`); `smcl()` appends `.smcl` when the filename you supply lacks it, so this path need not match what you typed |
 | `r(xpose)` | 1 when the layout smells like a transpose job |
 | `r(sparse)` | a would-be identifier set aside as too sparse (returned only when that is why no command was found) |
+
+A macro that does not apply to a run is not stored, so it is absent from
+`return list` rather than empty, and which macros survive varies with the run:
+a `needinfo` run has no `r(cmd)` and no `r(smcl)`, though it may still report
+the piece it did settle on in `r(j)` beside its `r(diagnosis)`. Test a macro
+for emptiness rather than assume it is there.
 
 ## Design limits (v1.0.0, deliberate)
 

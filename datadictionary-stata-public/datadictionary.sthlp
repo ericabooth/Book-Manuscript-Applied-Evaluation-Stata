@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.0.0  2026-07-14}{...}
+{* *! version 1.0.0  2026-07-30}{...}
 {viewerjumpto "Syntax" "datadictionary##syntax"}{...}
 {viewerjumpto "Description" "datadictionary##description"}{...}
 {viewerjumpto "Options" "datadictionary##options"}{...}
@@ -44,26 +44,35 @@ waves):{p_end}
 {synopthdr}
 {synoptline}
 {syntab :In-memory mode}
-{synopt :{cmd:wave(}{varname}{cmd:)}}wave identifier in a stitched file; adds per-wave presence and per-wave missingness{p_end}
-{synopt :{cmd:dofile(}{it:filename}{cmd:)}}write a do-file that re-applies labels, value labels, formats, types, notes, and chars after a CSV/Excel round-trip{p_end}
-{synopt :{cmd:dictionary(}{it:filename}{cmd:)}}write a free-format {help infile} dictionary (.dct): storage type + variable label only{p_end}
-{synopt :{cmd:norecast}}omit the {cmd:recast} lines from {cmd:dofile()} (keep whatever storage type the re-import produced){p_end}
+{synopt :{opth wa:ve(varname)}}wave identifier in a stitched file; adds per-wave presence and per-wave missingness{p_end}
+{synopt :{opth do:file(filename)}}write a do-file that re-applies labels, value labels, formats, types, notes, and chars after a CSV/Excel round-trip{p_end}
+{synopt :{opth dict:ionary(filename)}}write a free-format {help infile} dictionary (.dct): storage type + variable label only{p_end}
+{synopt :{opt norec:ast}}omit the {cmd:recast} lines from {cmd:dofile()} (keep whatever storage type the re-import produced){p_end}
 
 {syntab :Files mode}
-{synopt :{cmd:files(}{it:"f1 f2 ..."}{cmd:)}}space-separated list of wave .dta files, in wave order{p_end}
-{synopt :{cmd:folder(}{it:dirpath}{cmd:)}}take the wave files from a folder instead{p_end}
-{synopt :{cmd:pattern(}{it:str}{cmd:)}}filename pattern for {cmd:folder()}; default is {cmd:*.dta}; matches are sorted by filename{p_end}
-{synopt :{cmd:wavenames(}{it:"n1 n2 ..."}{cmd:)}}display names for the waves, one per file; default is each file's basename{p_end}
+{synopt :{opt fil:es("f1 f2 ...")}}space-separated list of wave .dta files, in wave order{p_end}
+{synopt :{opt fol:der(dirpath)}}take the wave files from a folder instead{p_end}
+{synopt :{opt pat:tern(str)}}filename pattern for {cmd:folder()}; default is {cmd:*.dta}; matches are sorted by filename{p_end}
+{synopt :{opt waven:ames("n1 n2 ...")}}display names for the waves, one per file; default is each file's basename{p_end}
 
 {syntab :Shared}
-{synopt :{cmd:excel(}{it:filename}{cmd:)}}write a multi-sheet .xlsx codebook{p_end}
-{synopt :{cmd:saving(}{it:filename}{cmd:)}}save the codebook itself as a .dta, one row per variable (per variable-wave in files mode){p_end}
-{synopt :{cmd:replace}}overwrite existing {cmd:excel()} and {cmd:saving()} files{p_end}
-{synopt :{cmd:examples(}{it:#}{cmd:)}}distinct example values shown for string variables; default {cmd:examples(3)}{p_end}
-{synopt :{cmd:top(}{it:#}{cmd:)}}top categories by frequency shown for value-labeled variables; default {cmd:top(5)}{p_end}
-{synopt :{cmd:nochars}}skip characteristics (both the {cmd:srctag} and {cmd:chars} columns){p_end}
-{synopt :{cmd:nonotes}}skip stored {help notes}{p_end}
+{synopt :{opth ex:cel(filename)}}write a multi-sheet .xlsx codebook{p_end}
+{synopt :{opth sav:ing(filename)}}save the codebook itself as a .dta, one row per variable (per variable-wave in over-time modes){p_end}
+{synopt :{opt rep:lace}}overwrite existing {cmd:excel()} and {cmd:saving()} files{p_end}
+{synopt :{opt exam:ples(#)}}distinct example values shown for string variables; default {cmd:examples(3)}{p_end}
+{synopt :{opt top(#)}}top categories by frequency shown for value-labeled variables; default {cmd:top(5)}{p_end}
+{synopt :{opt noch:ars}}skip characteristics (both the {cmd:srctag} and {cmd:chars} columns){p_end}
+{synopt :{opt non:otes}}skip stored {help notes}{p_end}
 {synoptline}
+{p2colreset}{...}
+
+{pstd}
+The underlined stem of each option name is its minimum abbreviation.
+{cmd:excel()} and {cmd:examples()} share the stem {cmd:ex}, and the two shortest
+forms do not overlap: {cmd:ex()} is {cmd:excel()}, and {cmd:examples()} must be
+spelled {cmd:exam()} or longer.  {cmd:exa()} therefore matches neither option and
+is rejected as {it:option exa() not allowed} (error 198); spell out
+{cmd:examples()} when you mean it.{p_end}
 
 
 {marker description}{...}
@@ -106,7 +115,11 @@ longer be compared.  Files mode exists for exactly this reason.
 {phang}{cmd:wave(}{varname}{cmd:)} names the wave identifier of a stitched
 multi-wave file (numeric or string).  {cmd:datadictionary} then writes one
 codebook row per variable per wave, with per-wave statistics and % missing, so
-you compare a variable across waves by reading down its rows.  A variable
+you compare a variable across waves by reading down its rows.  The wave
+identifier itself is not documented: it is read to split the file into waves and
+then excluded from the codebook rows, so a 12-variable stitched file with a wave
+identifier among those 12 yields 11 rows per wave, none of them named for the
+wave variable.  A variable
 all-missing within a wave shows 100% missing that wave; in a stitched file a
 variable not fielded that wave and one fielded but never answered both look
 all-missing and cannot be told apart.  Label and category changes are not
@@ -172,9 +185,21 @@ see {help datadictionary##output:Output} below.  {cmd:.xlsx} is appended when no
 extension is given.{p_end}
 
 {phang}{cmd:saving(}{it:filename}{cmd:)} saves the codebook itself as a
-Stata dataset, one row per variable (per variable-wave in files mode) - the
-descsave-style machine-readable product.  {cmd:.dta} is appended when no
-extension is given.{p_end}
+Stata dataset, one row per variable (per variable-wave in over-time modes) - the
+descsave-style machine-readable product.  In-memory cross-sectional runs write
+these 17 columns, in this order: {cmd:name}, {cmd:type}, {cmd:format},
+{cmd:varlab}, {cmd:vallab}, {cmd:n}, {cmd:pctmiss}, {cmd:distinct}, {cmd:mean},
+{cmd:sd}, {cmd:min}, {cmd:p50}, {cmd:max}, {cmd:examples}, {cmd:notes},
+{cmd:srctag}, {cmd:chars}.  Each carries a variable label naming what it holds.
+Over-time modes ({cmd:wave()}, {cmd:files()}, {cmd:folder()}) prepend
+{cmd:wave} and {cmd:wavenum} - the leading order is {cmd:wave}, {cmd:name},
+{cmd:wavenum}, then {cmd:type} onward - and append {cmd:changed}, for 20 columns;
+{cmd:changed} is populated in files mode only and stays blank in {cmd:wave()}
+mode.  Code against these names, not against the screen table, which abbreviates
+its headers: {cmd:distinct} prints as {cmd:dist} and {cmd:pctmiss} prints as
+{cmd:miss%}, but the variables are named {cmd:distinct} and {cmd:pctmiss} (there
+is no {cmd:ndistinct}).  {cmd:.dta} is appended when no extension is
+given.{p_end}
 
 {phang}{cmd:replace} permits overwriting; without it an existing
 {cmd:excel()} or {cmd:saving()} file stops the command with error 602.{p_end}
@@ -206,8 +231,11 @@ open each file and its containing folder are printed at the end.
 {cmd:excel(}{it:filename}{cmd:)} writes:{p_end}
 
 {p2colset 8 26 28 2}{...}
-{p2col :{cmd:Overview}}source file(s), N and variable count per wave, generation date, notes count, changes count{p_end}
-{p2col :{cmd:Variables}}the codebook: one row per variable (per variable-wave in over-time modes), with statistics, {bf:% missing}, distinct count, common values, labels, and notes side by side.  Over-time modes add a {cmd:wave} column and a {cmd:changed} flag (see below){p_end}
+{p2col :{cmd:Overview}}source file(s), N and variable count per wave, generation date, notes count, and, in files mode only, the count of changes detected{p_end}
+{p2col :{cmd:Variables}}the codebook: one row per variable (per variable-wave
+in over-time modes), with statistics, {bf:% missing}, distinct count, common
+values, labels, and notes side by side.  Over-time modes add a {cmd:wave}
+column and a {cmd:changed} flag (see below){p_end}
 {p2col :{cmd:ValueLabels}}label name, value, label text; per wave in over-time modes{p_end}
 {p2col :{cmd:Changes}}files mode only; one row per detected change: wave-pair, variable, change type, before, after{p_end}
 {p2colreset}{...}
@@ -215,8 +243,11 @@ open each file and its containing folder are printed at the end.
 {pstd}
 Missingness is not a separate sheet: the {cmd:% missing} column lives in the
 {cmd:Variables} codebook beside the statistics, and in over-time modes you read
-it down a variable's wave rows.  A variable absent in a wave (dropped, or not
-yet fielded) shows 100% missing that wave.{p_end}
+it down a variable's wave rows.  In {cmd:wave()} mode a variable that carries no
+data in a wave (dropped, or not yet fielded) shows 100% missing that wave.  In
+files mode a variable that is not in a wave's file has no row for that wave at
+all; the {cmd:Changes} sheet reports it as {cmd:variable added} or
+{cmd:variable dropped}.{p_end}
 
 {pstd}
 The {cmd:changed} column (files mode) flags a variable whose {cmd:label} was
@@ -226,10 +257,10 @@ keeps only one label set per variable, so in-memory {cmd:wave()} mode cannot
 detect this and leaves {cmd:changed} blank; use files mode over the original
 wave files to populate it.{p_end}
 
-{pstd}Header rows are written in bold via {help putexcel}.  Value-label text
-longer than 80 characters is truncated in the {cmd:ValueLabels} sheet and in
-the change-detection signatures (a {help uselabel} limit); truncation is
-applied identically in every wave, so change detection is unaffected.{p_end}
+{pstd}Header rows are written in bold via {help putexcel}.  Value-label text is
+written at full length in the {cmd:ValueLabels} sheet up to 2,000 characters;
+text beyond that is cut at 2,000 in the sheet and in the change-detection
+signatures alike, so change detection is unaffected.{p_end}
 
 
 {marker results}{...}
@@ -271,8 +302,13 @@ usual):{p_end}
 {phang2}{cmd:. datadictionary, folder("waves") pattern("staff_*.dta") excel(staff_codebook) replace}{p_end}
 
 {pstd}An already-stitched panel (per-wave statistics and missingness; label
-changes are not detectable once stitched - use files mode for those):{p_end}
+changes are not detectable once stitched - use files mode for those).  Stack the
+same three waves, carry a wave identifier, and document the result:{p_end}
 
+{phang2}{cmd:. use staff_w1, clear}{p_end}
+{phang2}{cmd:. append using staff_w2 staff_w3, generate(src)}{p_end}
+{phang2}{cmd:. gen int wave = 2019 + 2 * src}{p_end}
+{phang2}{cmd:. drop src}{p_end}
 {phang2}{cmd:. datadictionary, wave(wave) excel(stitched_codebook) replace}{p_end}
 
 {pstd}Send data to a collaborator in another package and get it back with the
@@ -314,12 +350,16 @@ is no longer recoverable from the combined file.  Run {cmd:datadictionary} over 
 original wave files, before or alongside stitching, to keep that history.
 
 {pstd}
-{bf:Absent or never answered.}  In the per-wave missingness grid, a variable
-that is all-missing within a wave is reported as {cmd:absent}.  In a stitched
-file this means {it:absent or never answered}: a variable that was not
-fielded that wave and one that was fielded but never answered cannot be
-distinguished.  In files mode, {cmd:absent} means the variable is not in that
-wave's file.
+{bf:Not fielded or never answered.}  Missingness is reported as one number per
+codebook row, the {cmd:pctmiss} column ({cmd:miss%} on screen), and not as a
+separate grid or sheet.  A variable that is all-missing within a wave reads
+{cmd:100} there.  In a stitched file that 100 carries two meanings which cannot
+be told apart: a variable that was not fielded that wave, and one that was
+fielded but never answered.  In files mode the distinction does not arise,
+because a variable that is not in a wave's file gets no row for that wave; it
+appears in the {cmd:Changes} output as {cmd:variable added} or
+{cmd:variable dropped} instead, and a {cmd:pctmiss} of 100 in files mode means
+the variable was in the file and every value was missing.
 
 {pstd}
 {bf:What counts as a change.}  Consecutive waves are compared.  A variable
@@ -328,6 +368,17 @@ reverse is {cmd:dropped}.  For variables present in both waves, the storage
 type, display format, variable label, and value-label set (attached label
 name plus its full value/text content) are compared; each difference is one
 row in the {cmd:Changes} output, with the before and after values.
+
+{pstd}
+{bf:A format change can be a side effect.}  Attaching a longer value label also
+widens the display format, because Stata sizes the format of a value-labeled
+variable to its longest label text.  Recoding an item from a 4-point set whose
+longest text runs 17 characters to a 5-point set whose longest runs 26 moves the
+format from {cmd:%17.0g} to {cmd:%26.0g}, and {cmd:datadictionary} reports
+{cmd:display format changed} for that variable in the same wave-pair as
+{cmd:value label set changed}.  Read the two rows together: a format change
+sitting beside a value-label change is usually that side effect rather than an
+independent edit to the format.
 
 {pstd}
 {bf:Sample restriction.}  In-memory mode documents the selected subsample:
@@ -359,7 +410,7 @@ dataset or do-file; {cmd:datadictionary} adds over-time change detection,
 missingness patterns, example values, and the notes/chars/srctag harvest.
 Kishor Das's {cmd:codebookout} (SSC) writes a one-dataset codebook to
 Excel; {cmd:datadictionary} adds the multi-wave file comparison and multi-sheet
-workbook (value labels, changes, missingness).  Built-in {help codebook}
+workbook (value labels and changes).  Built-in {help codebook}
 prints a rich per-variable report but stores no machine-readable product;
 {cmd:datadictionary} writes one ({cmd:saving()}) plus the Excel workbook, and
 tracks how the file changes across waves.

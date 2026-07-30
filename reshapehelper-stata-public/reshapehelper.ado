@@ -1144,7 +1144,10 @@ program define reshapehelper, rclass
         di as txt _n "suggested command" _c
         if "`notest'" != "" di as txt " (not dry-run tested):"
         else if `tested' di as txt " (dry-run " as res "PASSED" as txt " on `b_obs' sample obs):"
-        else di as txt " (dry-run " as err "FAILED" as txt ", r(" as err "`finalrc'" as txt ")):"
+        * the FAILED verdict is a report, not an error: -as err- output is never
+        * suppressed by -quietly-, which would leak a bare "FAILED198" out of
+        * -quietly reshapehelper-.  Genuine errors above still use -as err-.
+        else di as txt " (dry-run " as res "FAILED" as txt ", r(" as res "`finalrc'" as txt ")):"
         local ls = c(linesize)
         capture set linesize 255
         if `"`preline'"' != "" di as res `"  `preline'"'

@@ -1,4 +1,4 @@
-* test_combineall.do -- test battery for combineall v2.0.0
+* test_combineall.do -- test battery for combineall v2.0.1
 * Run from any scratch directory:  stata-mp -b do test_combineall.do
 * All paths live in globals set here; nothing below is hard-coded.
 
@@ -21,7 +21,7 @@ which combineall
 * 0. Build a clean scratch tree under the system tempdir              *
 * ------------------------------------------------------------------ *
 capture mkdir "$T"
-foreach sub in conv dtaapp data pos mrg out bad {
+foreach sub in conv dtaapp data pos mrg out bad tok tok2 ts {
     capture mkdir "$T/`sub'"
     local stale : dir "$T/`sub'" files "*"
     foreach f of local stale {
@@ -269,10 +269,94 @@ capture noisily combineall using "$T/out/none", cmethod(append) ///
 assert _rc == 601
 
 * ------------------------------------------------------------------ *
-* 8. Clean up the scratch tree                                        *
+* 8. File-list construction: the output stem and the file extension   *
+*    are matched as WHOLE tokens, never stripped as substrings.       *
+* ------------------------------------------------------------------ *
+* 8a. Output stem "my" excludes my.csv only.  The pre-v2.0.1 engine
+*     ran subinstr over the whole file list, so mydata.csv silently
+*     became data.csv: the wrong file was read, with rc 0 and no warning.
+clear
+set obs 2
+gen int id  = _n
+gen str12 who = "my"
+export delimited using "$T/tok/my.csv", replace
+
+clear
+set obs 3
+gen int id  = _n
+gen str12 who = "mydata"
+export delimited using "$T/tok/mydata.csv", replace
+
+combineall using "$T/tok/my", cmethod(append) ///
+    directory("$T/tok") fileid(srcfile) replace
+assert r(n_files) == 1                 // my.csv is the output, mydata.csv is not
+use "$T/tok/my.dta", clear
+assert _N == 3                         // mydata.csv only
+levelsof srcfile, local(sf) clean
+assert "`sf'" == "mydata.csv"
+levelsof who, local(wh) clean
+assert "`wh'" == "mydata"
+
+* 8b. The extension string appearing INSIDE a filename must survive:
+*     mycsvdata.csv and my.csvdata.csv are distinct inputs under
+*     filetype(csv), and only the trailing ".csv" is stripped.
+clear
+set obs 2
+gen int id  = _n
+gen str12 who = "mycsvdata"
+export delimited using "$T/tok2/mycsvdata.csv", replace
+
+clear
+set obs 3
+gen int id  = _n
+gen str12 who = "dotcsvdata"
+export delimited using "$T/tok2/my.csvdata.csv", replace
+
+combineall using "$T/out/tok2out", cmethod(append) ///
+    directory("$T/tok2") fileid(srcfile) replace
+assert r(n_files) == 2
+use "$T/out/tok2out.dta", clear
+assert _N == 5                         // 2 + 3
+levelsof srcfile, local(sf) clean
+assert "`sf'" == "my.csvdata.csv mycsvdata.csv"
+levelsof who, local(wh) clean
+assert "`wh'" == "dotcsvdata mycsvdata"
+
+* ------------------------------------------------------------------ *
+* 9. tostring uses the display format, and so is lossy for numerics.  *
+*    A double holding 1/3 under %10.0g becomes the string ".33333333";*
+*    the help documents this under the tostring option.               *
 * ------------------------------------------------------------------ *
 clear
-foreach sub in conv dtaapp data pos mrg out bad {
+set obs 3
+gen double third = _n/3
+export delimited using "$T/ts/nums.csv", replace
+
+combineall, cmethod(convertonly) directory("$T/ts") prefix(t) tostring
+assert r(n_files) == 1
+use "$T/ts/tnums.dta", clear
+assert substr("`: type third'", 1, 3) == "str"
+assert third[1] == ".33333333"         // not 1/3 to full double precision
+assert third[2] == ".66666667"
+
+* ------------------------------------------------------------------ *
+* 10. A bare combineall (no comma, no options) is legal: convertonly  *
+*     over the .csv files in the working directory.  The syntax       *
+*     diagram in the help shows the comma inside the brackets.        *
+* ------------------------------------------------------------------ *
+local cwd "`c(pwd)'"
+cd "$T/conv"
+combineall
+assert r(n_files) == 3
+confirm file "c1.dta"
+confirm file "c3.dta"
+cd "`cwd'"
+
+* ------------------------------------------------------------------ *
+* 11. Clean up the scratch tree                                       *
+* ------------------------------------------------------------------ *
+clear
+foreach sub in conv dtaapp data pos mrg out bad tok tok2 ts {
     local stale : dir "$T/`sub'" files "*"
     foreach f of local stale {
         erase "$T/`sub'/`f'"

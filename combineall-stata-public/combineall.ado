@@ -1,5 +1,5 @@
 *! combineall - Stata module to combine (append, merge, or joinby) or convert all files (.dta, ASCII, or Excel) in a directory
-*! v2.0.0 06jul2026 Eric A. Booth, Sr Researcher, Texas 2036 <eric.a.booth@gmail.com>
+*! v2.0.1 30jul2026 Eric A. Booth, Sr Researcher, Texas 2036 <eric.a.booth@gmail.com>
 *!                  Elizabeth Teas, Sr Research Scientist, Far Harbor, LLC <elizabeth@farharbor.com>
 *! first released 2011 (v1.0.0, April 2011, Eric A. Booth)
 *! v2.0.0 modernizes the 2011 engine (version 16 floor; import delimited and
@@ -162,10 +162,23 @@ preserve
 		}
 	//Get all files in Directory//
 	loc files:dir `"`directory'"' files "*.`filetype'" , nofail respectcase
-	loc files:subinstr local files ".`filetype'" "", all
-		*subinstr/filter out using2*
-		loc files:subinstr local files `""`using2'""'  "", all
-		loc files:subinstr local files `"`using2'"'  "", all
+		*-- Strip the extension and drop the output file, comparing WHOLE
+		*-- tokens.  Do NOT run -subinstr- over the whole list: it deletes the
+		*-- output stem wherever it appears INSIDE another filename, so an input
+		*-- called mydata_2020.csv silently became data_2020.csv when the output
+		*-- was named "my" -- that file was read twice and the real one never
+		*-- read, with rc 0 and no warning.
+		loc u2 `"`using2'"'
+		loc _ux = strrpos(`"`u2'"', ".`filetype'")
+		if `_ux' > 0 loc u2 = substr(`"`u2'"', 1, `_ux' - 1)
+		loc keep ""
+		foreach f of local files {
+			loc stem `"`f'"'
+			loc _fx = strrpos(`"`stem'"', ".`filetype'")
+			if `_fx' > 0 loc stem = substr(`"`stem'"', 1, `_fx' - 1)
+			if `"`stem'"' != `"`u2'"' loc keep `"`keep' "`stem'""'
+		}
+		loc files `"`keep'"'
 	if `: word count `files'' == 0 {
 		di as err `"no .`filetype' files found in `directory'"'
 		exit 601

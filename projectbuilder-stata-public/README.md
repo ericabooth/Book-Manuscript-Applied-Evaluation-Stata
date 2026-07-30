@@ -8,9 +8,8 @@ a documentation page. If the data comes later, scaffold now and rerun with
 `rebuild` on every refresh.
 
 Companion package to *Applied Program Evaluation Using Stata* (Booth & Teas).
-It is a generalization of the author's production project-scaffolding tool,
-rewritten so it runs anywhere: no organization-specific paths, no template
-folders, no shell calls, same behavior on macOS, Windows, and Linux.
+It runs anywhere: no organization-specific paths, no template folders, no shell
+calls, and the same behavior on macOS, Windows, and Linux.
 
 ## Install
 
@@ -27,8 +26,10 @@ Requires Stata 16.0 or newer. No hard dependencies.
 
 **Workflow A — the data already exists.** Point `data()` at a folder of files
 (and/or `url()` at a source address). `projectbuilder` copies the files into
-`01_raw/`, converts them into `01_raw/_converted/`, appends them into
-`02_cleaned/<project>_analytic.dta`, and builds the documentation:
+`01_raw/` and builds the documentation. The conversion into
+`01_raw/_converted/` requires `convertanything`, and the append into
+`02_cleaned/<project>_analytic.dta` requires `combineall`; neither is installed
+by default, and the run prints the install command for whichever is missing.
 
 ```stata
 cd "~/projects"
@@ -38,6 +39,10 @@ projectbuilder CountyBudgets,                                     ///
     topic("local government, budgets") publicfacing(unsure)      ///
     timeline("annual") outcomes(total_budget) over(year dept) descsave
 ```
+
+Check that `02_cleaned/CountyBudgets_analytic.dta` exists before running
+`300_labels.do`, which opens it. If the optional companions were missing, the
+file is not there yet and `300_labels.do` stops with `r(601)`.
 
 **Workflow B — data later.** Scaffold now with no `data()`/`url()`, drop files
 into `01_raw/` when they arrive, then rebuild. Every refresh is another
@@ -71,18 +76,38 @@ VendorFeed/
 │   ├── 600_analysis.do
 │   └── _archive/
 ├── _documentation/
-│   ├── index.do           webdoc2 source
-│   ├── _runall.do          renders website/index.html
+│   ├── index.do             webdoc2 source
+│   ├── _runall.do           renders website/index.html
+│   ├── _project_meta.txt    recorded metadata, read back on rebuild
 │   ├── Readme.md
 │   ├── website/index.html
 │   └── _archive/
 └── _archive/
 ```
 
-`000_control.do` pins the Stata version, stamps `$root` with the absolute path
-of the new folder (one loudly commented line to edit if the project moves),
+`000_control.do` pins the language version, stamps `$root` with the absolute
+path of the new folder (one loudly commented line to edit if the project moves),
 derives `$raw`, `$converted`, `$cleaned`, `$output`, `$code`, and `$docs` from
-it, and ends with a run-all block over the numbered pipeline.
+it, and ends with a run-all block over the numbered pipeline. The pin is
+`version 16.0`, this package's own floor, not the release of the Stata that
+generated the file, so the control file still runs for a teammate on an older
+Stata. Raise it by hand if the project needs newer syntax.
+
+## Recorded metadata
+
+`description()`, `url()`, `topic()`, `publicfacing()`, `timeline()`,
+`othernotes()`, `outcomes()`, `over()`, and the creation date are written to
+`_documentation/_project_meta.txt` as `key=value` lines and read back on every
+later call. A bare `rebuild` therefore keeps the metadata recorded at scaffold
+time instead of resetting it to placeholders; an option given on the current
+call replaces the recorded value. The `Created` row is the first-scaffold date
+and is not restamped by a rebuild; the build date and time appear in the footer
+of `index.html` and `Readme.md`.
+
+`_documentation/index.do` is guarded like the numbered do-files, so a `rebuild`
+without `replace` leaves it as written. Because it and the regenerated
+`index.html` both come from the same recorded metadata, they agree after a
+rebuild unless you edit one of them by hand.
 
 ## Optional dependencies
 
@@ -114,13 +139,19 @@ When `webdoc2` is absent, `projectbuilder` writes a plain but complete
 ## Testing
 
 `test_projectbuilder.do` scaffolds into a temporary directory and checks both
-workflows, the rebuild idempotence and edit-preservation guarantee, the clobber
-refusal (602), name and option validation (198), nesting, and the generated
-control file. Synthetic data only; nothing is committed. Run it from any
-scratch directory:
+workflows, the rebuild idempotence and edit-preservation guarantee, metadata
+preservation across a rebuild, the seeded-`_converted/` combine path, the
+clobber refusal (602), name and option validation (198), nesting, HTML escaping,
+and the generated control file. Synthetic data only; nothing is committed.
+
+The test finds the package itself: it uses the first of an argument, an
+existing `$pkgroot`, the current directory, or `findfile projectbuilder.ado`.
+Run it from the package folder with no arguments, or from any scratch directory
+by naming the package folder:
 
 ```
 stata-mp -b do test_projectbuilder.do
+stata-mp -b do test_projectbuilder.do "/path/to/projectbuilder-stata-public"
 ```
 
 ## Authors

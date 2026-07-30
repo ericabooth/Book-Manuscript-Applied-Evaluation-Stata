@@ -25,15 +25,30 @@ help combineall
 
 ## Quick start
 
+Both blocks below are self-contained and run as shown in an empty working directory. Stata does not create output folders on demand, so each block creates the folders it writes into first; `capture` lets a block be re-run after its folders exist.
+
 The engine, without the layer — append every `.dta` file in a folder, tagging each row with its source:
 
 ```stata
-combineall using "built/all.dta", cmethod(append) directory("pieces/") filetype(dta) fileid(srcfile)
+capture mkdir "pieces"
+capture mkdir "built"
+
+sysuse auto, clear
+keep make price mpg
+save "pieces/part1.dta", replace
+save "pieces/part2.dta", replace
+
+combineall using "built/all.dta", cmethod(append) directory("pieces/") filetype(dta) fileid(srcfile) replace
 ```
+
+Note that `filetype(dta)` with no `prefix()`/`suffix()` rewrites the sources in place, so this block leaves `srcfile` behind in `pieces/part1.dta` and `pieces/part2.dta`. Point a later command at a fresh folder rather than at `pieces/`.
 
 The layer — build two tiny yearly files whose price column changes name, write a two-line map, and stack:
 
 ```stata
+capture mkdir "raw"
+capture mkdir "built"
+
 sysuse auto, clear
 keep make price mpg
 export delimited using "raw/cars_2019.csv", replace
@@ -45,7 +60,7 @@ file write m "oldname,newname,firstyear,lastyear" _n
 file write m "price_usd,price,2020," _n
 file close m
 
-combineall using "built/cars_panel", cmethod(append) directory("raw/") map("map.csv")
+combineall using "built/cars_panel", cmethod(append) directory("raw/") map("map.csv") replace
 use "built/cars_panel.dta", clear
 char list price[source]
 tabulate year
@@ -67,7 +82,7 @@ The map row reads: from 2020 onward (`firstyear` 2020, `lastyear` blank and so o
 | `_merge` | one match-status variable per file, named `_filestem` |
 | `delimiter(char)` | `comma` (default), `tab`, or a character such as `";"` |
 | `prefix()` / `suffix()` | decorate converted filenames |
-| `tostring` | convert every variable to string during conversion |
+| `tostring` | convert every variable to string during conversion, using each variable's display format (lossy for numerics; see Limits) |
 | `keepconverted` | keep the per-file converted `.dta` copies (implied by `convertonly`) |
 | `xmlopts(options)` | options passed to `xmluse` |
 
@@ -103,6 +118,7 @@ Blank `firstyear` or `lastyear` leaves that end of the window open. A row whose 
 
 - Output goes to the `using` file on disk; your data in memory are preserved and restored, not replaced.
 - Appends use `force` (engine semantics since 2011), so a string/numeric type conflict across files coerces the offending values to missing instead of stopping. This holds under `map()` too, and differs from a bare `append`. Check the harmonization table for unexpected gaps.
+- `tostring` is lossy for numerics. The conversion runs as `tostring varname, force replace usedisplayformat`, so each value is written as its display format renders it rather than at full precision: a double holding 1/3 under the default `%10.0g` becomes the string `.33333333`, and `destring` cannot recover the dropped digits. The conversion runs quietly, so `tostring`'s own loss-of-information message is not shown. Reserve `tostring` for identifier-like columns whose type wobbles across files.
 - `merge`/`joinby` keys must be strings (the seeded empty master creates them as strings); `joinby` needs `unmatched(both)` to be useful.
 - With `filetype(dta)` and no `prefix()`/`suffix()`, the converted copy is the source file itself, so `fileid()`, `tostring`, and `map()` renames write back into the sources.
 - One year per file, taken from the filename; files containing multiple years should be split upstream.

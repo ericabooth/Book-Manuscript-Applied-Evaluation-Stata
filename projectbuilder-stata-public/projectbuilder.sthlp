@@ -9,6 +9,8 @@
 {viewerjumpto "Workflow B"        "projectbuilder##wfB"}{...}
 {viewerjumpto "Optional dependencies" "projectbuilder##deps"}{...}
 {viewerjumpto "What gets built"   "projectbuilder##scaffold"}{...}
+{viewerjumpto "Recorded metadata" "projectbuilder##meta"}{...}
+{viewerjumpto "Examples"          "projectbuilder##examples"}{...}
 {viewerjumpto "Stored results"    "projectbuilder##results"}{...}
 {viewerjumpto "Author"            "projectbuilder##author"}{...}
 {hline}
@@ -29,6 +31,11 @@ into one analytic file, and build a documentation page.{p_end}
 {p 8 17 2}
 {cmd:projectbuilder} {it:Source}[{cmd:/}{it:Subsource}] [{cmd:,} {it:options}]
 
+{pstd}
+{it:Source}[{cmd:/}{it:Subsource}] is one token. Enclose it in quotation marks
+if it contains a space; an unquoted second word is rejected with error 198
+rather than folded into the folder name.{p_end}
+
 {synoptset 27 tabbed}{...}
 {synopthdr}
 {synoptline}
@@ -40,8 +47,8 @@ into one analytic file, and build a documentation page.{p_end}
 {synopt:{opt pub:licfacing(string)}}must be {cmd:yes}, {cmd:no}, or {cmd:unsure}{p_end}
 {synopt:{opt time:line(string)}}refresh cadence (for example, {cmd:monthly}){p_end}
 {synopt:{opt other:notes(string)}}free-text caveats or provenance{p_end}
-{synopt:{opt out:comes(varlist)}}up to 10 outcome variables for the profiler{p_end}
-{synopt:{opt ov:er(varlist)}}up to 10 by-variables for the profiler{p_end}
+{synopt:{opt out:comes(string)}}up to 10 outcome variable names for the profiler{p_end}
+{synopt:{opt ov:er(string)}}up to 10 by-variable names for the profiler{p_end}
 {synopt:{opt descsave}}seed a codebook-export call in {cmd:300_labels.do}{p_end}
 {synopt:{opt rebuild}}refresh an existing project (re-ingest, re-document){p_end}
 {synopt:{opt replace}}with {cmd:rebuild}, also overwrite edited code files{p_end}
@@ -57,9 +64,9 @@ into one analytic file, and build a documentation page.{p_end}
 {cmd:projectbuilder} creates a project folder under the current working
 directory (or under {opt path()}) and fills it with a numbered do-file
 pipeline, an analytic-data folder, an output folder, and a documentation
-folder. Everything is written by the command itself with {help file:file
-write}; there is no template folder and no shell call, so it behaves the same
-on macOS, Windows, and Linux.{p_end}
+folder. Everything is written by the command itself with
+{help file:file write}; there is no template folder and no shell call, so it
+behaves the same on macOS, Windows, and Linux.{p_end}
 
 {pstd}
 There are two ways to use it. In {bf:Workflow A} the data exists now, so you
@@ -105,9 +112,15 @@ have on disk.{p_end}
 {opt publicfacing()} must be {cmd:yes}, {cmd:no}, {cmd:unsure}, or empty.{p_end}
 
 {phang}
-{opt outcomes(varlist)} and {opt over(varlist)} seed the suggested locals in
+{opt outcomes(string)} and {opt over(string)} seed the suggested locals in
 {cmd:400_data_profiler.do}. Each is capped at 10 items, with a note when
-trimmed.{p_end}
+trimmed. Both are recorded as {it:strings}, not validated as varlists: at
+scaffold time the analytic file usually does not exist yet, so there is nothing
+to validate against. Two consequences follow. Names are written through
+verbatim, so abbreviations and wildcards such as {cmd:pri*} are recorded but
+never expanded. Names that turn out not to exist are not an error either: the
+generated profiler tests each name with {helpb confirm:confirm variable} and
+skips the ones the analytic file does not have.{p_end}
 
 {phang}
 {opt descsave} adds a codebook-export call (via {cmd:descsave} from SSC) to
@@ -116,7 +129,8 @@ trimmed.{p_end}
 {phang}
 {opt rebuild} refreshes an existing project: it re-runs the convert/combine
 pass over {cmd:01_raw/} and regenerates the documentation. Every data refresh
-is just another {opt rebuild}.{p_end}
+is just another {opt rebuild}. Metadata recorded earlier survives a bare
+{opt rebuild}; see {help projectbuilder##meta:Recorded metadata} below.{p_end}
 
 {phang}
 {opt replace} has effect only with {opt rebuild}: it allows the numbered
@@ -143,26 +157,38 @@ you want a project built around them in one command.{p_end}
 
 {pstd}
 {bf:Step 1.} Scaffold and ingest in a single call. Point {opt data()} at the
-folder of files (and/or {opt url()} at the source):{p_end}
+folder of files (and/or {opt url()} at the source). Run it from the directory
+that should hold the new project folder, or name that directory in
+{opt path()}:{p_end}
 
-{p 8 8 2}{cmd:. cd "~/projects"}{p_end}
-{p 8 8 2}{cmd:. projectbuilder CountyBudgets,                                   ///}{p_end}
-{p 8 8 2}{cmd:        data("~/Desktop/budget_drop")                            ///}{p_end}
-{p 8 8 2}{cmd:        description("County budget CSVs, one row per dept per FY") ///}{p_end}
-{p 8 8 2}{cmd:        topic("local government, budgets") publicfacing(unsure)  ///}{p_end}
-{p 8 8 2}{cmd:        timeline("annual") outcomes(total_budget) over(year dept) descsave}{p_end}
+{cmd}{...}
+        . projectbuilder CountyBudgets,                                  ///
+              data("budget_drop")                                        ///
+              description("County budget CSVs, one row per dept per FY") ///
+              topic("local government, budgets") publicfacing(unsure)    ///
+              timeline("annual") outcomes(total_budget) over(year dept)  ///
+              descsave
+{txt}{...}
 
 {pstd}
-This copies every file from {cmd:budget_drop/} into {cmd:CountyBudgets/01_raw/},
-runs {cmd:convertanything} over {cmd:01_raw/} into {cmd:01_raw/_converted/},
-appends the converted files with {cmd:combineall} into
-{cmd:02_cleaned/CountyBudgets_analytic.dta}, and writes the documentation page.
+This copies every file from {cmd:budget_drop/} into {cmd:CountyBudgets/01_raw/}
+and writes the documentation page. What happens next depends on which optional
+companions are installed. With {cmd:convertanything} installed,
+{cmd:projectbuilder} converts {cmd:01_raw/} into {cmd:01_raw/_converted/}; with
+{cmd:combineall} also installed, it appends the converted files into
+{cmd:02_cleaned/CountyBudgets_analytic.dta}. Neither is installed by default.
 (If a source lives online, add {cmd:url("https://.../data.csv")}; it is fetched
 now and the fetch is recorded in {cmd:100_data_download.do}.){p_end}
 
 {pstd}
-{bf:Step 2.} Open {cmd:_code/000_control.do}, run it to set the path globals,
-then work down the pipeline from {cmd:300_labels.do} onward.{p_end}
+{bf:Step 2.} Open {cmd:_code/000_control.do} and run it to set the path
+globals. Then check whether {cmd:02_cleaned/CountyBudgets_analytic.dta} exists,
+because the rest of the pipeline reads it. If it does, work down from
+{cmd:300_labels.do}. If it does not, {cmd:convertanything} or {cmd:combineall}
+was missing, and the run printed the install command for whichever one it could
+not find; install them and rerun with {opt rebuild}, or run
+{cmd:200_data_management.do} yourself. Skipping this check makes
+{cmd:300_labels.do} stop with error 601 on its opening {cmd:use}.{p_end}
 
 
 {marker wfB}{...}
@@ -175,7 +201,9 @@ You want the project structure now, before the data has arrived.{p_end}
 {bf:Step 1.} Scaffold with no {opt data()} and no {opt url()}. You get the full
 tree, an empty {cmd:01_raw/}, and printed next steps:{p_end}
 
-{p 8 8 2}{cmd:. projectbuilder VendorFeed, description("Monthly vendor extract")}{p_end}
+{cmd}{...}
+        . projectbuilder VendorFeed, description("Monthly vendor extract")
+{txt}{...}
 
 {pstd}
 {bf:Step 2.} When the files arrive, drop them into
@@ -185,11 +213,15 @@ tree, an empty {cmd:01_raw/}, and printed next steps:{p_end}
 {bf:Step 3.} Rerun with {opt rebuild}. {cmd:projectbuilder} detects the new
 files, re-runs the convert/combine pass, and regenerates the documentation:{p_end}
 
-{p 8 8 2}{cmd:. projectbuilder VendorFeed, rebuild}{p_end}
+{cmd}{...}
+        . projectbuilder VendorFeed, rebuild
+{txt}{...}
 
 {pstd}
-Every later refresh is the same {opt rebuild}. It is idempotent, and it will not
-overwrite a do-file you have edited in {cmd:_code/} unless you add {opt replace}.{p_end}
+Every later refresh is the same {opt rebuild}. It is idempotent: it will not
+overwrite a do-file you have edited in {cmd:_code/} unless you add
+{opt replace}, and the description, topic, and other metadata you recorded at
+scaffold time are carried forward rather than reset to placeholders.{p_end}
 
 
 {marker deps}{...}
@@ -225,40 +257,154 @@ exists.{p_end}
 {pstd}
 After {cmd:projectbuilder MyProject} you have:{p_end}
 
-{p 8 8 2}{cmd}{...}
-MyProject/
-+-- 01_raw/                raw source files (write-once)
-|   +-- _archive/
-|   +-- _converted/        convertanything output (one .dta per raw file)
-+-- 02_cleaned/            <project>_analytic.dta lives here
-|   +-- _archive/
-+-- 03_output/             logs, tables, exhibits
-|   +-- _archive/
-+-- _code/
-|   +-- 000_control.do     every path in one place; run-all block
-|   +-- 100_data_download.do
-|   +-- 200_data_management.do   convertanything -> combineall
-|   +-- 300_labels.do
-|   +-- 400_data_profiler.do
-|   +-- 500_aggregation.do
-|   +-- 600_analysis.do
-|   +-- _archive/
-+-- _documentation/
-|   +-- index.do           webdoc2 source
-|   +-- _runall.do         renders website/index.html
-|   +-- Readme.md
-|   +-- website/index.html
-|   +-- _archive/
-+-- _archive/
+{cmd}{...}
+        MyProject/
+        +-- 01_raw/                raw source files (write-once)
+        |   +-- _archive/
+        |   +-- _converted/        convertanything output (.dta per raw file)
+        +-- 02_cleaned/            <project>_analytic.dta lives here
+        |   +-- _archive/
+        +-- 03_output/             logs, tables, exhibits
+        |   +-- _archive/
+        +-- _code/
+        |   +-- 000_control.do     every path in one place; run-all block
+        |   +-- 100_data_download.do
+        |   +-- 200_data_management.do   convertanything -> combineall
+        |   +-- 300_labels.do
+        |   +-- 400_data_profiler.do
+        |   +-- 500_aggregation.do
+        |   +-- 600_analysis.do
+        |   +-- _archive/
+        +-- _documentation/
+        |   +-- index.do             webdoc2 source
+        |   +-- _runall.do           renders website/index.html
+        |   +-- _project_meta.txt    recorded metadata, read back on rebuild
+        |   +-- Readme.md
+        |   +-- website/index.html
+        |   +-- _archive/
+        +-- _archive/
 {txt}{...}
-{p_end}
 
 {pstd}
-{cmd:000_control.do} pins the Stata version, stamps {cmd:$root} with the
+{cmd:000_control.do} pins the language version, stamps {cmd:$root} with the
 absolute path of the new folder (one loudly commented line to edit if the
 project ever moves), derives {cmd:$raw}, {cmd:$converted}, {cmd:$cleaned},
 {cmd:$output}, {cmd:$code}, and {cmd:$docs} from it, and ends with a run-all
 block over the numbered pipeline.{p_end}
+
+{pstd}
+The version pin is {cmd:version 16.0}, this package's own floor, not the release
+of the Stata that generated the file. Pinning the generating release would write
+something like {cmd:version 19.5}, which every earlier installation rejects, so
+the control file would not run for a teammate on Stata 16 through 19. Raise the
+pin by hand if the project comes to depend on newer syntax.{p_end}
+
+
+{marker meta}{...}
+{title:Recorded metadata}
+
+{pstd}
+The metadata options are recorded once and reused. {cmd:projectbuilder} writes
+{opt description()}, {opt url()}, {opt topic()}, {opt publicfacing()},
+{opt timeline()}, {opt othernotes()}, {opt outcomes()}, {opt over()}, and the
+creation date into {cmd:_documentation/_project_meta.txt}, one {cmd:key=value}
+per line. On any later call, each value the call does not supply is read back
+from that file. A bare {cmd:projectbuilder MyProject, rebuild} therefore keeps
+the description and topic it was given at scaffold time instead of replacing
+them with placeholders, and {opt rebuild} {opt replace} rewrites
+{cmd:400_data_profiler.do} with the {opt outcomes()} and {opt over()} names
+already on record. An option supplied on the current call always wins, so
+{cmd:rebuild description("...")} is how you change a recorded value. The file is
+plain text and can also be edited directly.{p_end}
+
+{pstd}
+The {cmd:Created} row of the documentation is the date of the first scaffold,
+carried in the same file, so a rebuild does not restamp it with today. The date
+and time of the current build appear separately in the footer line of
+{cmd:index.html} and {cmd:Readme.md}. That footer is the only line a rebuild is
+expected to change when nothing else about the project has moved.{p_end}
+
+{pstd}
+{cmd:_documentation/index.do} is guarded in the same way as the numbered
+do-files: a {opt rebuild} without {opt replace} leaves it exactly as written, on
+the assumption that you may have edited it. {cmd:website/index.html} and
+{cmd:Readme.md} are derived artifacts and are rewritten on every call. Because
+both sides now draw on the same recorded metadata, the guarded {cmd:index.do}
+and the regenerated {cmd:index.html} agree after a rebuild. They diverge only if
+you edit one of them by hand, and the two edits behave differently: an edit to
+{cmd:index.do} reaches {cmd:index.html} only when {opt builddocs} renders it
+with {cmd:webdoc2}, whereas an edit to the generated {cmd:index.html} is
+overwritten by the next call. To change what both say, pass the option again or
+edit {cmd:_project_meta.txt}.{p_end}
+
+
+{marker examples}{...}
+{title:Examples}
+
+{pstd}Scaffold an empty project in the current directory, then look at the
+documentation it wrote:{p_end}
+{cmd}{...}
+        . projectbuilder VendorFeed, description("Monthly vendor extract")
+        . type "VendorFeed/_documentation/Readme.md"
+{txt}{...}
+
+{pstd}Scaffold under a named base directory instead of the current one:{p_end}
+{cmd}{...}
+        . projectbuilder VendorFeed2, path("projects")
+{txt}{...}
+
+{pstd}Scaffold a subsource under a source; the project label joins them with an
+underscore:{p_end}
+{cmd}{...}
+        . projectbuilder Agency/Extract, description("One agency extract")
+{txt}{...}
+
+{pstd}Refresh a project after new files land in {cmd:01_raw/}. The recorded
+metadata is kept, and edited do-files in {cmd:_code/} are left alone:{p_end}
+{cmd}{...}
+        . projectbuilder VendorFeed, rebuild
+{txt}{...}
+
+{pstd}Change one recorded value on a refresh; everything else stays as it
+was:{p_end}
+{cmd}{...}
+        . projectbuilder VendorFeed, rebuild topic("procurement")
+{txt}{...}
+
+{pstd}Refresh and reset the numbered do-files to the shipped templates,
+discarding your edits to them:{p_end}
+{cmd}{...}
+        . projectbuilder VendorFeed, rebuild replace
+{txt}{...}
+
+{pstd}Scaffold and ingest in one call: copy a folder of files in, record the
+metadata, and seed the profiler:{p_end}
+{cmd}{...}
+        . projectbuilder CountyBudgets,                                  ///
+              data("budget_drop")                                        ///
+              description("County budget CSVs, one row per dept per FY") ///
+              topic("local government, budgets") publicfacing(unsure)    ///
+              timeline("annual") outcomes(total_budget) over(year dept)  ///
+              descsave
+{txt}{...}
+
+{pstd}Record a source URL. It is fetched now if the address is reachable, and
+the fetch is written into {cmd:100_data_download.do} either way:{p_end}
+{cmd}{...}
+        . projectbuilder OpenData, url("https://example.com/data.csv")
+{txt}{...}
+
+{pstd}Scaffold without running the convert/combine pass, leaving
+{cmd:01_raw/} untouched:{p_end}
+{cmd}{...}
+        . projectbuilder VendorFeed3, noautoconvert
+{txt}{...}
+
+{pstd}Rebuild and render the documentation with {cmd:webdoc2} when it is
+installed:{p_end}
+{cmd}{...}
+        . projectbuilder VendorFeed, rebuild builddocs
+{txt}{...}
 
 
 {marker results}{...}
@@ -289,7 +435,6 @@ Elizabeth Teas, Sr Research Scientist, Far Harbor, LLC{break}
 {browse "mailto:elizabeth@farharbor.com":elizabeth@farharbor.com}{p_end}
 
 {pstd}
-A generalization of the authors' production project-scaffolding tool; companion
-to {it:Applied Program Evaluation Using Stata}.{p_end}
+Companion package to {it:Applied Program Evaluation Using Stata}.{p_end}
 
 {hline}

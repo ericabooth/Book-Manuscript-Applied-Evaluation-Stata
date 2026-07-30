@@ -4,19 +4,30 @@
 *     stata-mp -b do test_reshapehelper.do
 * Judge the run by the log: no r(NNN) errors, no "assertion is false".
 * ---------------------------------------------------------------------------
-* Scenarios T1-T18 mirror the researched catalog: the [D] reshape manual
+* Scenarios T1-T25 mirror the researched catalog: the [D] reshape manual
 * examples, the Stata "problems with reshape" FAQ, UCLA OARC's doubly-wide
 * FAQ, and Statalist threads (prefix-j, duplicate (i,j), composite factors,
-* transpose confusion).  reshapehelper must never modify the data in memory;
+* transpose confusion).  T19-T21 add option guardrails, the SMCL-file check,
+* and an edge sweep over hostile data; T22-T25 are regressions for bugs found
+* in adversarial review.  reshapehelper must never modify the data in memory;
 * every scenario asserts the row/column counts afterward.
+* ---------------------------------------------------------------------------
+* pkgroot is the directory holding reshapehelper.ado.  It defaults to the
+* current directory, which is the package directory when the file is run as
+* shown above, and the run also writes one scratch .smcl file there.  To test
+* a copy somewhere else -- an installed version, say -- set the global first:
+*     global pkgroot "/path/to/copy"
+*     do test_reshapehelper.do
 * ===========================================================================
-global pkgroot "/Users/ebooth/Documents/GitHub/Book Manuscript:Applied Evaluation-Stata/reshapehelper-stata-public"
+if `"$pkgroot"' == "" global pkgroot `"`c(pwd)'"'
 
 version 16.0
 clear all
 set more off
 set seed 20260715
-adopath + "$pkgroot"
+* prepend, so the copy under test wins over any older copy already installed
+adopath ++ "$pkgroot"
+which reshapehelper
 
 * ---------------------------------------------------------------------------
 * T1. Classic wide -> long, numeric suffixes ([D] reshape Example 1)

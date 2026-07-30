@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 2.0.0  06jul2026}{...}
+{* *! version 2.0.1  30jul2026}{...}
 {viewerjumpto "Syntax" "combineall##syntax"}{...}
 {viewerjumpto "Description" "combineall##description"}{...}
 {viewerjumpto "Engine options" "combineall##engine"}{...}
@@ -9,7 +9,7 @@
 {viewerjumpto "Examples" "combineall##examples"}{...}
 {viewerjumpto "Remarks and limits" "combineall##remarks"}{...}
 {hline}
-help for {hi:combineall}{right:v2.0.0}
+help for {hi:combineall}{right:v2.0.1}
 {hline}
 
 {title:Title}
@@ -23,12 +23,14 @@ help for {hi:combineall}{right:v2.0.0}
 {title:Syntax}
 
 {p 8 16 2}
-{cmd:combineall} [{cmd:using} {it:filename}] {cmd:,} [{it:options}]
+{cmd:combineall} [{cmd:using} {it:filename}] [{cmd:,} {it:options}]
 
 {pstd}
 {it:filename} names the combined output dataset ({cmd:.dta} may be given or
 omitted).  If {cmd:using} is omitted, output goes to
-{cmd:combineall_output.dta} inside {cmd:directory()}.
+{cmd:combineall_output.dta} inside {cmd:directory()}.  Every option is
+optional, so a bare {cmd:combineall} is legal: it converts every
+{cmd:.csv} file in the working directory to {cmd:.dta}.
 
 {synoptset 24 tabbed}{...}
 {synopthdr:engine options (2011)}
@@ -51,7 +53,7 @@ omitted).  If {cmd:using} is omitted, output goes to
 {synopt :{cmdab:delim:iter(}{it:char}{cmd:)}}{cmd:comma} (default), {cmd:tab}, or a delimiter character such as {cmd:";"}{p_end}
 {synopt :{cmdab:pre:fix(}{it:string}{cmd:)}}{it:string} added to the beginning of each converted filename{p_end}
 {synopt :{cmdab:suf:fix(}{it:string}{cmd:)}}{it:string} added to the end of each converted filename{p_end}
-{synopt :{cmdab:tostr:ing}}{help tostring} every variable during conversion{p_end}
+{synopt :{cmdab:tostr:ing}}{help tostring} every variable during conversion, using each variable's display format (lossy for numerics){p_end}
 {synopt :{cmdab:xml:opts(}{it:options}{cmd:)}}options passed to {help xmluse} when {cmd:filetype(xml)}{p_end}
 {synoptline}
 
@@ -171,7 +173,18 @@ existing files.  Periods are removed from both.
 
 {phang}
 {opt tostring} converts every variable to string during conversion, for
-files whose types wobble across sources.
+files whose types wobble across sources.  The conversion is lossy for
+numeric variables.  Each variable is passed to
+{help tostring:tostring} {it:varname}{cmd:, force replace usedisplayformat},
+and {cmd:usedisplayformat} is the catch: a value is written as its display
+format renders it, not at full numeric precision.  A double holding 1/3
+under the default {cmd:%10.0g} format becomes the string {cmd:.33333333},
+and {help destring} cannot recover the digits that were dropped.
+{cmd:force} allows that lossy conversion to proceed, and {cmd:combineall}
+runs the conversion quietly, so {cmd:tostring}'s own loss-of-information
+message is never displayed.  Reserve {cmd:tostring} for identifier-like
+columns whose storage type wobbles across files, not for measured
+quantities you intend to analyze at full precision.
 
 {phang}
 {opt xmlopts(options)} passes options to {help xmluse}, for example
@@ -254,26 +267,69 @@ file outside {cmd:directory()} (or use a different extension than
 {marker examples}{...}
 {title:Examples}
 
+{pstd}
+Each block below is self-contained.  It builds its own input files from
+{help sysuse:sysuse auto}, creates the folders it writes into, and runs as
+shown in an empty working directory.  Stata does not create directories on
+demand, so a {help mkdir} precedes every block that writes into a
+subdirectory; {cmd:capture} is used so a block also survives a second run,
+when the folder already exists.
+
+{pstd}
+Each block builds its inputs in a folder of its own on purpose.  Under
+{cmd:filetype(dta)} with no {cmd:prefix()} or {cmd:suffix()} the "converted"
+copy is the source file itself, so a block that adds {cmd:fileid()} writes
+that column back into the files it read, and a later command pointed at the
+same folder would silently inherit it; see
+{help combineall##remarks:Remarks and limits}.
+
 {pstd}{bf:Convert every CSV in a folder to .dta} (converted copies are
 named {cmd:z}{it:name}{cmd:.dta}):{p_end}
 
+{phang2}{cmd:. capture mkdir "raw"}{p_end}
+{phang2}{cmd:. sysuse auto, clear}{p_end}
+{phang2}{cmd:. keep make price mpg}{p_end}
+{phang2}{cmd:. export delimited using "raw/cars_2019.csv", replace}{p_end}
+{phang2}{cmd:. export delimited using "raw/cars_2020.csv", replace}{p_end}
 {phang2}{cmd:. combineall, cmethod(convertonly) directory("raw/") prefix(z)}{p_end}
 
 {pstd}{bf:Append every .dta file in a folder}, tagging each row with its
-source file:{p_end}
+source file.  Because {cmd:filetype(dta)} rewrites the sources in place,
+this block leaves {cmd:srcfile} behind in {cmd:pieces/part1.dta} and
+{cmd:pieces/part2.dta}:{p_end}
 
-{phang2}{cmd:. combineall using "built/all.dta", cmethod(append) directory("pieces/") filetype(dta) fileid(srcfile)}{p_end}
+{phang2}{cmd:. capture mkdir "pieces"}{p_end}
+{phang2}{cmd:. capture mkdir "built"}{p_end}
+{phang2}{cmd:. sysuse auto, clear}{p_end}
+{phang2}{cmd:. keep make price mpg}{p_end}
+{phang2}{cmd:. save "pieces/part1.dta", replace}{p_end}
+{phang2}{cmd:. save "pieces/part2.dta", replace}{p_end}
+{phang2}{cmd:. combineall using "built/all.dta", cmethod(append) directory("pieces/") filetype(dta) fileid(srcfile) replace}{p_end}
 
 {pstd}{bf:Merge every file on a string key}, with one match-status variable
-per file:{p_end}
+per file.  The key must be a string in every input file.  This block builds
+a fresh fixture in {cmd:keys/} rather than reusing {cmd:pieces/}, which the
+block above rewrote when it added {cmd:srcfile}:{p_end}
 
-{phang2}{cmd:. combineall using "built/wide.dta", cmethod(merge) directory("pieces/") filetype(dta) mvars(campusid) _merge}{p_end}
+{phang2}{cmd:. capture mkdir "keys"}{p_end}
+{phang2}{cmd:. capture mkdir "built"}{p_end}
+{phang2}{cmd:. sysuse auto, clear}{p_end}
+{phang2}{cmd:. gen str3 campusid = string(_n, "%03.0f")}{p_end}
+{phang2}{cmd:. keep campusid price}{p_end}
+{phang2}{cmd:. save "keys/prices.dta", replace}{p_end}
+{phang2}{cmd:. sysuse auto, clear}{p_end}
+{phang2}{cmd:. gen str3 campusid = string(_n, "%03.0f")}{p_end}
+{phang2}{cmd:. keep campusid mpg}{p_end}
+{phang2}{cmd:. save "keys/mileage.dta", replace}{p_end}
+{phang2}{cmd:. combineall using "built/wide.dta", cmethod(merge) directory("keys/") filetype(dta) mvars(campusid) _merge replace}{p_end}
 
 {pstd}{bf:Stack yearly vintages with a rename map.}  Build two tiny yearly
 files whose price column changes name, write a two-line map, and stack.
 The 2019 file calls the column {cmd:price}; the 2020 vintage renamed it
 {cmd:price_usd}, and the map folds it back:{p_end}
 
+{phang2}{cmd:. capture mkdir "raw"}{p_end}
+{phang2}{cmd:. capture mkdir "built"}{p_end}
 {phang2}{cmd:. sysuse auto, clear}{p_end}
 {phang2}{cmd:. keep make price mpg}{p_end}
 {phang2}{cmd:. export delimited using "raw/cars_2019.csv", replace}{p_end}
@@ -285,19 +341,47 @@ The 2019 file calls the column {cmd:price}; the 2020 vintage renamed it
 {phang2}{cmd:. file write m "price_usd,price,2020," _n}{p_end}
 {phang2}{cmd:. file close m}{p_end}
 
-{phang2}{cmd:. combineall using "built/cars_panel", cmethod(append) directory("raw/") map("map.csv")}{p_end}
+{phang2}{cmd:. combineall using "built/cars_panel", cmethod(append) directory("raw/") map("map.csv") replace}{p_end}
 {phang2}{cmd:. use "built/cars_panel.dta", clear}{p_end}
 {phang2}{cmd:. char list price[source]}{p_end}
 {phang2}{cmd:. tabulate year}{p_end}
 
-{pstd}{bf:Filenames where the year is not the first 4-digit run:}{p_end}
+{pstd}{bf:Filenames where the year is not the first 4-digit run.}  The
+default extractor would read 2020 out of {cmd:batch2020run_2019.csv}, which
+is the batch identifier rather than the year.  A starting position and an
+explicit regular expression both pick out 2019 instead:{p_end}
 
-{phang2}{cmd:. combineall using "built/p", cmethod(append) directory("raw/") map("map.csv") year(14)}{p_end}
-{phang2}{cmd:. combineall using "built/p", cmethod(append) directory("raw/") map("map.csv") year("run_([0-9][0-9][0-9][0-9])") replace}{p_end}
+{phang2}{cmd:. capture mkdir "pos"}{p_end}
+{phang2}{cmd:. capture mkdir "built"}{p_end}
+{phang2}{cmd:. sysuse auto, clear}{p_end}
+{phang2}{cmd:. keep make price mpg}{p_end}
+{phang2}{cmd:. export delimited using "pos/batch2020run_2019.csv", replace}{p_end}
 
-{pstd}{bf:Insist the map is fully satisfied:}{p_end}
+{phang2}{cmd:. file open m using "posmap.csv", write replace}{p_end}
+{phang2}{cmd:. file write m "oldname,newname,firstyear,lastyear" _n}{p_end}
+{phang2}{cmd:. file write m "price,price_usd,2019,2019" _n}{p_end}
+{phang2}{cmd:. file close m}{p_end}
 
-{phang2}{cmd:. combineall using "built/p", cmethod(append) directory("raw/") map("map.csv") strict replace}{p_end}
+{phang2}{cmd:. combineall using "built/p", cmethod(append) directory("pos/") map("posmap.csv") year(14) replace}{p_end}
+{phang2}{cmd:. combineall using "built/p", cmethod(append) directory("pos/") map("posmap.csv") year("run_([0-9][0-9][0-9][0-9])") replace}{p_end}
+
+{pstd}{bf:Insist the map is fully satisfied.}  A map row whose {it:oldname}
+equals its {it:newname} asserts that the variable is present.  With
+{cmd:strict}, a file whose year the window covers but which lacks that
+variable stops the run with error 111 instead of producing a report:{p_end}
+
+{phang2}{cmd:. capture mkdir "contract"}{p_end}
+{phang2}{cmd:. capture mkdir "built"}{p_end}
+{phang2}{cmd:. sysuse auto, clear}{p_end}
+{phang2}{cmd:. keep make price mpg}{p_end}
+{phang2}{cmd:. export delimited using "contract/cars_2021.csv", replace}{p_end}
+
+{phang2}{cmd:. file open cm using "contractmap.csv", write replace}{p_end}
+{phang2}{cmd:. file write cm "oldname,newname,firstyear,lastyear" _n}{p_end}
+{phang2}{cmd:. file write cm "price,price,," _n}{p_end}
+{phang2}{cmd:. file close cm}{p_end}
+
+{phang2}{cmd:. combineall using "built/contract", cmethod(append) directory("contract/") map("contractmap.csv") strict replace}{p_end}
 
 
 {marker remarks}{...}
@@ -314,8 +398,14 @@ current data and writes the combined dataset to disk.  Load it with
 variable that is string in one file and numeric in another is coerced (the
 offending values become missing) rather than stopping with an error.  This
 engine behavior is kept in v2.0.0, including under {cmd:map()}.  Check the
-harmonization table for unexpected gaps, or use {cmd:tostring} to import
-everything as strings and {help destring} deliberately.
+harmonization table for unexpected gaps.  Importing everything as strings
+with {cmd:tostring} and then applying {help destring} deliberately is one
+way around the coercion, but that round trip is itself lossy.
+{cmd:tostring} is run with {cmd:usedisplayformat}, so a numeric value is
+written as its display format renders it and the digits beyond it are gone
+before {cmd:destring} ever sees the column (see
+{help combineall##engine:tostring} above).  Reserve that route for
+identifier-like columns.
 
 {pstd}
 {bf:Merge and joinby keys must be strings.}  The engine seeds an empty
