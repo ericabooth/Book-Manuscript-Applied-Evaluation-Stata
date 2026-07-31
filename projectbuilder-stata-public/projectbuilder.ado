@@ -1,4 +1,4 @@
-*! version 2.0.0  07jul2026  Eric A. Booth, Sr Researcher, Texas 2036
+*! version 2.0.1  31jul2026  Eric A. Booth, Sr Researcher, Texas 2036
 *!                           Elizabeth Teas, Sr Research Scientist, Far Harbor, LLC
 *! projectbuilder -- scaffold a data-analysis project folder with a
 *!                   numbered do-file pipeline, then (optionally) ingest
@@ -31,6 +31,47 @@ program define projectbuilder, rclass
         BUILDDOCS            ///
         NOAUTOconvert]
 
+    * ---- reject characters that cannot survive the trip to a file --------
+    * Every free-text value here is eventually written into a do-file or a
+    * documentation page, which means it is re-expanded on the way.  A
+    * backtick does not survive that: it opens a macro reference that never
+    * closes, and Stata stops with a bare "invalid syntax".  That used to
+    * happen AFTER the folder tree was built, leaving a half-made project
+    * that the corrected re-run then refused to touch (error 602).  Check it
+    * first, before anything is created, and name the option at fault.
+    foreach o in description url topic publicfacing timeline othernotes ///
+                 outcomes over path data {
+        if strpos(`"`macval(`o')'"', char(96)) {
+            di as err `"projectbuilder: `o'() may not contain a backtick"'
+            di as err  "                (it opens a macro reference Stata cannot close)."
+            di as err  "                Use a plain apostrophe instead."
+            exit 198
+        }
+    }
+    if strpos(`"`macval(projspec)'"', char(96)) {
+        di as err "projectbuilder: the project name may not contain a backtick"
+        exit 198
+    }
+
+    * ---- park ~ so the file writer cannot mistake it for a marker --------
+    * pb_wl writes $ and ` into the generated do-files by spelling them ~D
+    * and ~B, then substituting.  It runs on the finished line, so it cannot
+    * tell its own markers from a value that happens to contain "~D" -- and
+    * "~D" is not far-fetched: url("https://example.edu/~Dave/data.csv") used
+    * to be written out as ".../$ave/data.csv".  Hold every free-text value's
+    * tildes on a control character until pb_wl has done its own pass, then
+    * restore them (see pb_wl and pb_unesc below).
+    *
+    * A $ typed on the command line is a different matter and is NOT fixable
+    * here: Stata expands globals while parsing the command, so the ado never
+    * sees the $.  description("costs $M") reaches this program as
+    * "costs " no matter what we do; write \$M to get a literal dollar sign.
+    * The metadata read-back below IS under our control, and does preserve $.
+    local url_live : copy local url
+    foreach o in description url topic timeline othernotes {
+        local `o' = subinstr(`"`macval(`o')'"', char(126), char(5), .)
+    }
+
     * ---- validate publicfacing ------------------------------------------
     if !inlist(lower(`"`publicfacing'"'), "", "yes", "no", "unsure") {
         di as err `"projectbuilder: publicfacing() must be yes, no, unsure, or empty (got "`publicfacing'")"'
@@ -62,8 +103,46 @@ program define projectbuilder, rclass
     * ---- base path: path() overrides the current working directory ------
     local base `"`c(pwd)'"'
     if `"`path'"' != "" local base `"`path'"'
+
+    * A relative path() used to be carried through verbatim, so r(path) and
+    * the -global root- stamped into 000_control.do came out relative -- both
+    * documented as absolute, and the control file is the one thing that must
+    * keep working after the project moves or someone else opens it.  Resolve
+    * it against the current directory now.
+    local isabs = 0
+    if inlist(substr(`"`base'"', 1, 1), "/", "\")  local isabs = 1
+    if regexm(`"`base'"', "^[a-zA-Z]:")            local isabs = 1
+    if !`isabs' {
+        local cwd `"`c(pwd)'"'
+        if inlist(substr(`"`cwd'"', -1, 1), "/", "\") {
+            local cwd = substr(`"`cwd'"', 1, strlen(`"`cwd'"') - 1)
+        }
+        if `"`base'"' == "." | `"`base'"' == "" local base `"`cwd'"'
+        else                                    local base `"`cwd'/`base'"'
+    }
+
+    * Strip one trailing separator so the joins below never double it.  Doing
+    * that blindly is what broke a bare root: path("/") left nothing at all,
+    * and on Windows path("C:\") left the bare drive "C:".  Keep the
+    * separator in those two cases and record that the joins must not add a
+    * second one, rather than appending a slash and stamping "//Demo" into
+    * the control file.
+    local sep "/"
     if inlist(substr(`"`base'"', -1, 1), "/", "\") {
-        local base = substr(`"`base'"', 1, strlen(`"`base'"') - 1)
+        local stripped = substr(`"`base'"', 1, strlen(`"`base'"') - 1)
+        if `"`stripped'"' == "" {
+            local base "/"                  // the filesystem root
+            local sep  ""
+        }
+        else if regexm(`"`stripped'"', "^[a-zA-Z]:$") {
+            local base `"`stripped'/"'      // a bare drive root, e.g. C:/
+            local sep  ""
+        }
+        else local base `"`stripped'"'
+    }
+    else if regexm(`"`base'"', "^[a-zA-Z]:$") {
+        local base `"`base'/"'              // "C:" alone means that drive's root
+        local sep  ""
     }
 
     * ---- reject a stray extra token -------------------------------------
@@ -114,15 +193,14 @@ program define projectbuilder, rclass
         exit 198
     }
 
-    if `"`parent'"' != "" local target `"`base'/`parent'/`leaf'"'
-    else                  local target `"`base'/`leaf'"'
+    if `"`parent'"' != "" local target `"`base'`sep'`parent'/`leaf'"'
+    else                  local target `"`base'`sep'`leaf'"'
 
     * ---- rebuild vs. fresh scaffold; refuse to clobber ------------------
     * A fresh call never overwrites an existing project (exit 602).
     * -rebuild- opts in to working on an existing project; it preserves
     * any do-file in _code that the user edited unless -replace- is given.
-    capture confirm file `"`target'/."'
-    local exists = (_rc == 0)
+    pb_isdir exists `"`target'"'
     if `exists' & "`rebuild'" == "" {
         di as err `"projectbuilder: target already exists -- `target'"'
         di as err  "                projectbuilder never overwrites an existing project."
