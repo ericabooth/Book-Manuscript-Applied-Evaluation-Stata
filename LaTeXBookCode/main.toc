@@ -205,7 +205,7 @@
 \contentsline {mtocsection}{\numberline {7.5}Uncertainty without the model's permission}{112}{section.7.5}%
 \contentsline {section}{\numberline {7.6}How much of the variation is the site, and how much the person?}{114}{section.7.6}%
 \contentsline {mtocsection}{\numberline {7.6}How much of the variation is the site, and how much the person?}{114}{section.7.6}%
-\contentsline {paragraph}{\nonumberline Where this leaves you.}{117}{paragraph*.82}%
+\contentsline {paragraph}{\nonumberline Where this leaves you.}{116}{paragraph*.82}%
 \contentsline {section}{Exercises}{117}{section*.83}%
 \contentsline {chapter}{\numberline {8}From differences to defensible claims}{119}{chapter.8}%
 \contentsline {section}{\numberline {8.1}Comparisons first}{119}{section.8.1}%
@@ -232,16 +232,16 @@
 \contentsline {mtocsubsection}{\numberline {8.3.6}Choosing comparison units transparently when N is small}{129}{subsection.8.3.6}%
 \contentsline {subsection}{\numberline {8.3.7}The frontier: from ``did it work'' to ``for whom, and how sure''}{130}{subsection.8.3.7}%
 \contentsline {mtocsubsection}{\numberline {8.3.7}The frontier: from ``did it work'' to ``for whom, and how sure''}{130}{subsection.8.3.7}%
-\contentsline {section}{\numberline {8.4}What did it cost, what did it return}{132}{section.8.4}%
-\contentsline {mtocsection}{\numberline {8.4}What did it cost, what did it return}{132}{section.8.4}%
+\contentsline {section}{\numberline {8.4}What did it cost, what did it return}{131}{section.8.4}%
+\contentsline {mtocsection}{\numberline {8.4}What did it cost, what did it return}{131}{section.8.4}%
 \contentsline {subsection}{\numberline {8.4.1}A worked ROI: from point estimate to a distribution}{132}{subsection.8.4.1}%
 \contentsline {mtocsubsection}{\numberline {8.4.1}A worked ROI: from point estimate to a distribution}{132}{subsection.8.4.1}%
 \contentsline {subsection}{\numberline {8.4.2}The tornado: which assumption is driving the answer}{133}{subsection.8.4.2}%
 \contentsline {mtocsubsection}{\numberline {8.4.2}The tornado: which assumption is driving the answer}{133}{subsection.8.4.2}%
-\contentsline {section}{\numberline {8.5}Subgroups without fishing}{135}{section.8.5}%
-\contentsline {mtocsection}{\numberline {8.5}Subgroups without fishing}{135}{section.8.5}%
+\contentsline {section}{\numberline {8.5}Subgroups without fishing}{134}{section.8.5}%
+\contentsline {mtocsection}{\numberline {8.5}Subgroups without fishing}{134}{section.8.5}%
 \contentsline {paragraph}{\nonumberline Where this leaves you.}{135}{paragraph*.90}%
-\contentsline {section}{Exercises}{136}{section*.91}%
+\contentsline {section}{Exercises}{135}{section*.91}%
 \contentsline {part}{\nonumberline Part IV: Communicating Results \newline Graphics, Infographics, Spreadsheets, and Portals}{137}{part*.93}%
 \contentsline {chapter}{\numberline {9}Graphing for busy readers}{139}{chapter.9}%
 \contentsline {section}{\numberline {9.1}Spend ink on the data}{139}{section.9.1}%
@@ -293,16 +293,16 @@
 \contentsline {mtocsection}{\numberline {10.4}Choosing static, interactive, or animated}{164}{section.10.4}%
 \contentsline {subsection}{\numberline {10.4.1}Which narrative structure for a board versus an explorer}{164}{subsection.10.4.1}%
 \contentsline {mtocsubsection}{\numberline {10.4.1}Which narrative structure for a board versus an explorer}{164}{subsection.10.4.1}%
-\contentsline {subsection}{\numberline {10.4.2}Match the form to the venue, and read the failure column first}{166}{subsection.10.4.2}%
-\contentsline {mtocsubsection}{\numberline {10.4.2}Match the form to the venue, and read the failure column first}{166}{subsection.10.4.2}%
-\contentsline {section}{\numberline {10.5}Build the chart for the readers you actually have}{167}{section.10.5}%
-\contentsline {mtocsection}{\numberline {10.5}Build the chart for the readers you actually have}{167}{section.10.5}%
-\contentsline {subsection}{\numberline {10.5.1}Color, contrast, and the numbers beside the picture}{167}{subsection.10.5.1}%
-\contentsline {mtocsubsection}{\numberline {10.5.1}Color, contrast, and the numbers beside the picture}{167}{subsection.10.5.1}%
-\contentsline {section}{\numberline {10.6}A live dashboard is a promise to keep the pipeline alive}{169}{section.10.6}%
-\contentsline {mtocsection}{\numberline {10.6}A live dashboard is a promise to keep the pipeline alive}{169}{section.10.6}%
+\contentsline {subsection}{\numberline {10.4.2}Match the form to the venue, and read the failure column first}{165}{subsection.10.4.2}%
+\contentsline {mtocsubsection}{\numberline {10.4.2}Match the form to the venue, and read the failure column first}{165}{subsection.10.4.2}%
+\contentsline {section}{\numberline {10.5}Build the chart for the readers you actually have}{166}{section.10.5}%
+\contentsline {mtocsection}{\numberline {10.5}Build the chart for the readers you actually have}{166}{section.10.5}%
+\contentsline {subsection}{\numberline {10.5.1}Color, contrast, and the numbers beside the picture}{166}{subsection.10.5.1}%
+\contentsline {mtocsubsection}{\numberline {10.5.1}Color, contrast, and the numbers beside the picture}{166}{subsection.10.5.1}%
+\contentsline {section}{\numberline {10.6}A live dashboard is a promise to keep the pipeline alive}{168}{section.10.6}%
+\contentsline {mtocsection}{\numberline {10.6}A live dashboard is a promise to keep the pipeline alive}{168}{section.10.6}%
 \contentsline {paragraph}{\nonumberline Where this leaves you.}{170}{paragraph*.116}%
-\contentsline {section}{Exercises}{171}{section*.117}%
+\contentsline {section}{Exercises}{170}{section*.117}%
 \contentsline {chapter}{\numberline {11}Delivering through spreadsheets}{173}{chapter.11}%
 \contentsline {section}{\numberline {11.1}Meeting practitioners where they work}{173}{section.11.1}%
 \contentsline {mtocsection}{\numberline {11.1}Meeting practitioners where they work}{173}{section.11.1}%
@@ -353,12 +353,12 @@
 \contentsline {mtocsubsection}{\numberline {12.2.2}The init, add, build workflow}{195}{subsection.12.2.2}%
 \contentsline {section}{\numberline {12.3}The dashboard you rebuild instead of maintain}{196}{section.12.3}%
 \contentsline {mtocsection}{\numberline {12.3}The dashboard you rebuild instead of maintain}{196}{section.12.3}%
-\contentsline {subsection}{\numberline {12.3.1}Three moves, one file}{198}{subsection.12.3.1}%
-\contentsline {mtocsubsection}{\numberline {12.3.1}Three moves, one file}{198}{subsection.12.3.1}%
-\contentsline {subsection}{\numberline {12.3.2}An applied build: every unit against the benchmark}{198}{subsection.12.3.2}%
-\contentsline {mtocsubsection}{\numberline {12.3.2}An applied build: every unit against the benchmark}{198}{subsection.12.3.2}%
-\contentsline {subsection}{\numberline {12.3.3}Put the dashboard where the readers already are}{200}{subsection.12.3.3}%
-\contentsline {mtocsubsection}{\numberline {12.3.3}Put the dashboard where the readers already are}{200}{subsection.12.3.3}%
+\contentsline {subsection}{\numberline {12.3.1}Three moves, one file}{197}{subsection.12.3.1}%
+\contentsline {mtocsubsection}{\numberline {12.3.1}Three moves, one file}{197}{subsection.12.3.1}%
+\contentsline {subsection}{\numberline {12.3.2}An applied build: every unit against the benchmark}{199}{subsection.12.3.2}%
+\contentsline {mtocsubsection}{\numberline {12.3.2}An applied build: every unit against the benchmark}{199}{subsection.12.3.2}%
+\contentsline {subsection}{\numberline {12.3.3}Put the dashboard where the readers already are}{199}{subsection.12.3.3}%
+\contentsline {mtocsubsection}{\numberline {12.3.3}Put the dashboard where the readers already are}{199}{subsection.12.3.3}%
 \contentsline {section}{\numberline {12.4}One folder the client can own}{201}{section.12.4}%
 \contentsline {mtocsection}{\numberline {12.4}One folder the client can own}{201}{section.12.4}%
 \contentsline {subsection}{\numberline {12.4.1}Choosing a format: a comparison}{202}{subsection.12.4.1}%
@@ -435,8 +435,8 @@
 \contentsline {mtocsubsection}{\numberline {14.2.1}A worked example: blanking a cell without leaking it}{246}{subsection.14.2.1}%
 \contentsline {subsection}{\numberline {14.2.2}Where the field is going: formal guarantees beyond $k$-anonymity}{249}{subsection.14.2.2}%
 \contentsline {mtocsubsection}{\numberline {14.2.2}Where the field is going: formal guarantees beyond $k$-anonymity}{249}{subsection.14.2.2}%
-\contentsline {section}{\numberline {14.3}Synthetic stand-ins}{250}{section.14.3}%
-\contentsline {mtocsection}{\numberline {14.3}Synthetic stand-ins}{250}{section.14.3}%
+\contentsline {section}{\numberline {14.3}Synthetic stand-ins}{249}{section.14.3}%
+\contentsline {mtocsection}{\numberline {14.3}Synthetic stand-ins}{249}{section.14.3}%
 \contentsline {section}{\numberline {14.4}Sanitizing raw files with a human in the loop}{250}{section.14.4}%
 \contentsline {mtocsection}{\numberline {14.4}Sanitizing raw files with a human in the loop}{250}{section.14.4}%
 \contentsline {subsection}{\numberline {14.4.1}The disclosure-review checklist: one page both signatures can read}{251}{subsection.14.4.1}%

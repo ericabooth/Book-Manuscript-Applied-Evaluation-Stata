@@ -6,8 +6,8 @@
 \appendix
 \addpart{Appendices}
 
-\pagelayout{wide}
-\setchapterstyle{lines}
+\pagelayout{margin}
+\setchapterstyle{kao}
 \chapter{The Setup Guide}\label{app:setup}
 Do the blocks below once and every example in the book runs. Keys, environments, and credentials are startup friction, not evaluation, so we collected them here in one place; work through them now and the chapters never make you stop mid-example to configure anything.
 
@@ -45,8 +45,8 @@ Chapter~\ref{ch:claims} teaches one causal method in full, difference-in-differe
 
 \paragraph{Further reading.} For applied depth beyond this map: \textcite{cunningham2021mixtape}, \emph{Causal Inference: The Mixtape}, for intuition and Stata/R code; \textcite{huntingtonklein2022effect}, \emph{The Effect}, for design-first reasoning in plain language; and \textcite{cameron2022microeconometrics}, \emph{Microeconometrics Using Stata} (Vol.~II), for the econometric treatment of treatment effects. These are where the designs sketched here become methods you can defend.
 
-\pagelayout{wide}
-\setchapterstyle{lines}
+\pagelayout{margin}
+\setchapterstyle{kao}
 \chapter{The Book's Toolkit}\label{app:toolkit}
 Use this appendix to find any tool the book uses and jump straight to the chapter that puts it to work. It lists every package and proposed tool in one place so a reader who remembers a capability but not its name can recover both. Published packages install from the authors' GitHub with \texttt{net install}; proposed tools are plans, not yet code. The split matters when you cite the book: the published packages are runnable today and safe to build a workflow on, whereas the proposed tools mark gaps the authors intend to fill, so treat them as a roadmap rather than a dependency. When you adopt one of these into a live project, consider copying its install line into the project's own \texttt{01\_install.do}, so the toolkit travels with the analysis rather than living on one machine (Appendix~\ref{app:setup}). The suite packages follow one pattern, each installing with a single command from its own repository:
 \par
@@ -208,11 +208,11 @@ This is the predict-then-check discipline in one block. In an early run, the do-
 \paragraph{Make it yours.} Swap the outcome for a different CHR measure (say, the uninsured-adults rate), or add a third predictor, and rerun. If the county count changes, the \texttt{assert} in Stage~3 will tell you before the regression does. That edit-and-rerun loop, on data you chose, is what keeps the workflow extensible: the structure survives a new outcome or predictor without a rewrite.
 
 \backmatter
-\pagelayout{wide}
+\pagelayout{margin}
 \chapter{Data Used in This Book}\label{app:data}
 Every worked example in this book runs on data you can put your hands on, and this registry is the one place they are all named. The two shipped datasets load with a single command and no download; the public files name their source so a fresh copy is one URL away; and every simulated dataset states its seed in the do-file that builds it, so the exact numbers in the text rebuild on your machine.
 
-\begin{table}[htbp]
+\begin{table*}[htbp]
 \centering
 \footnotesize
 \caption[Datasets used in this book]{Every dataset the book's examples use, where it comes from, and the chapters that use it.}
@@ -232,7 +232,7 @@ Census and ACS endpoints & The API patterns of Chapter~\ref{ch:apis} & varies by
 Simulated data & Built in each chapter's do-file, \texttt{set seed 20260704} & varies by demonstration & 5, 7, 8, 9, 13, 15 \\
 \hline
 \end{tabular}
-\end{table}
+\end{table*}
 
 \pagelayout{margin}
 

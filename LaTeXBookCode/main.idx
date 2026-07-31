@@ -142,10 +142,10 @@
 \indexentry{Mahalanobis distance|hyperpage}{129}
 \indexentry{honestdid@\texttt{honestdid}|hyperpage}{131}
 \indexentry{kbal@\texttt{kbal}|hyperpage}{131}
-\indexentry{return on investment|hyperpage}{132}
-\indexentry{Monte Carlo simulation|hyperpage}{132}
-\indexentry{roisim@\texttt{roisim}|hyperpage}{133}
-\indexentry{pre-registration|hyperpage}{135}
+\indexentry{return on investment|hyperpage}{131}
+\indexentry{Monte Carlo simulation|hyperpage}{131}
+\indexentry{roisim@\texttt{roisim}|hyperpage}{134}
+\indexentry{pre-registration|hyperpage}{134}
 \indexentry{data-ink ratio|hyperpage}{139}
 \indexentry{graphical perception|hyperpage}{142}
 \indexentry{catplot@\texttt{catplot}|hyperpage}{143}
@@ -222,10 +222,9 @@
 \indexentry{collect@\texttt{collect}|hyperpage}{246}
 \indexentry{suppress@\texttt{suppress}|hyperpage}{246}
 \indexentry{complementary suppression|hyperpage}{247}
-\indexentry{dpprivacy@\texttt{dpprivacy}|hyperpage}{249}
-\indexentry{synthetic data|hyperpage}{250}
+\indexentry{synthetic data|hyperpage}{249}
 \indexentry{synthgen@\texttt{synthgen}|hyperpage}{250}
-\indexentry{rawsweep@\texttt{rawsweep}|hyperpage}{250}
+\indexentry{rawsweep@\texttt{rawsweep}|hyperpage}{251}
 \indexentry{disclosure-review checklist|hyperpage}{251}
 \indexentry{dsload@\texttt{dsload}|hyperpage}{255}
 \indexentry{net install@\texttt{net install}|hyperpage}{256}

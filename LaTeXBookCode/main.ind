@@ -57,7 +57,6 @@
   \item disclosure-review checklist, \hyperpage{251}
   \item diverging bar chart, \hyperpage{143}
   \item diverging stacked bar, \hyperpage{162}
-  \item \texttt{dpprivacy}, \hyperpage{249}
   \item \texttt{dsload}, \hyperpage{255}
 
   \indexspace
@@ -157,7 +156,7 @@
   \item match weight, \hyperpage{85}
   \item minimum detectable effect, \hyperpage{109}
   \item \texttt{misstable}, \hyperpage{98}
-  \item Monte Carlo simulation, \hyperpage{132}
+  \item Monte Carlo simulation, \hyperpage{131}
   \item multiple imputation, \hyperpage{98}
 
   \indexspace
@@ -185,7 +184,7 @@
   \item post-stratification, \hyperpage{105}
   \item \texttt{power}, \hyperpage{110}
   \item pre-registered analysis plan, \hyperpage{7}
-  \item pre-registration, \hyperpage{135}
+  \item pre-registration, \hyperpage{134}
   \item price transparency files, \hyperpage{59}
   \item probabilistic record linkage, \hyperpage{83}
   \item process use, \hyperpage{11}
@@ -206,7 +205,7 @@
   \item raking, \hyperpage{105}
   \item \texttt{rateshrink}, \hyperpage{108}, \hyperpage{259}, 
 		\hyperpage{261}
-  \item \texttt{rawsweep}, \hyperpage{250}
+  \item \texttt{rawsweep}, \hyperpage{251}
   \item \texttt{rdrobust}, \hyperpage{127}
   \item re-identification, \hyperpage{242}
   \item \texttt{reachcheck}, \hyperpage{71}
@@ -221,9 +220,9 @@
   \item reproducible reporting, \hyperpage{176}
   \item research-practice partnership, \hyperpage{11}
   \item \texttt{reshapehelper}, \hyperpage{93}
-  \item return on investment, \hyperpage{132}
+  \item return on investment, \hyperpage{131}
   \item \texttt{riskscan}, \hyperpage{242}
-  \item \texttt{roisim}, \hyperpage{133}
+  \item \texttt{roisim}, \hyperpage{134}
   \item run chart, \hyperpage{148}
 
   \indexspace
@@ -252,7 +251,7 @@
   \item \texttt{syntax}, \hyperpage{256}
   \item \texttt{synth}, \hyperpage{127}
   \item synthetic control, \hyperpage{127}
-  \item synthetic data, \hyperpage{250}
+  \item synthetic data, \hyperpage{249}
   \item \texttt{synthgen}, \hyperpage{250}
   \item \texttt{sysuse}, \hyperpage{243}
 

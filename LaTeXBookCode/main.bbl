@@ -2308,47 +2308,6 @@
       \field{title}{Purposeful Program Theory: Effective Use of Theories of Change and Logic Models}
       \field{year}{2011}
     \endentry
-    \entry{gaboardi2020opendp}{report}{}
-      \name{author}{3}{}{%
-        {{un=0,uniquepart=base,hash=2236e238d6bdc3c54b604fb209e4f6d2}{%
-           family={Gaboardi},
-           familyi={G\bibinitperiod},
-           given={Marco},
-           giveni={M\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=a80c8d292c85e81bcde88f81c4b25204}{%
-           family={Hay},
-           familyi={H\bibinitperiod},
-           given={Michael},
-           giveni={M\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=c915d3380da8c4288e9634bbee5ba983}{%
-           family={Vadhan},
-           familyi={V\bibinitperiod},
-           given={Salil},
-           giveni={S\bibinitperiod},
-           givenun=0}}%
-      }
-      \list{institution}{1}{%
-        {Harvard University}%
-      }
-      \strng{namehash}{ce9d34891a25544fa81d42b9ffdf592f}
-      \strng{fullhash}{ce9d34891a25544fa81d42b9ffdf592f}
-      \strng{bibnamehash}{ce9d34891a25544fa81d42b9ffdf592f}
-      \strng{authorbibnamehash}{ce9d34891a25544fa81d42b9ffdf592f}
-      \strng{authornamehash}{ce9d34891a25544fa81d42b9ffdf592f}
-      \strng{authorfullhash}{ce9d34891a25544fa81d42b9ffdf592f}
-      \field{sortinit}{G}
-      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{note}{Working paper, 6th Workshop on the Theory and Practice of Differential Privacy (TPDP 2020)}
-      \field{title}{A Programming Framework for {OpenDP}}
-      \field{type}{techreport}
-      \field{year}{2020}
-    \endentry
     \entry{gao2023pal}{inproceedings}{}
       \name{author}{8}{}{%
         {{un=0,uniquepart=base,hash=7ef8e07d2bd57499ac7dd40d1123fb5d}{%
