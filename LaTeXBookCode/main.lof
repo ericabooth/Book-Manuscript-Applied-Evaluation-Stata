@@ -30,7 +30,7 @@
 \contentsline {figure}{\numberline {7.2}{\ignorespaces Power curves and the budget line}}{111}{figure.caption.77}%
 \contentsline {figure}{\numberline {7.3}{\ignorespaces The split-conformal recipe}}{113}{figure.caption.78}%
 \contentsline {figure}{\numberline {7.4}{\ignorespaces The conformal band on \texttt {nlsw88}}}{114}{figure.caption.79}%
-\contentsline {figure}{\numberline {7.5}{\ignorespaces Two reads of the same wage variance}}{115}{figure.caption.80}%
+\contentsline {figure}{\numberline {7.5}{\ignorespaces Two reads of the same wage variance}}{116}{figure.caption.80}%
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {8.1}{\ignorespaces The explained half of a wage gap, characteristic by characteristic}}{122}{figure.caption.84}%
 \contentsline {figure}{\numberline {8.2}{\ignorespaces Event-study plot from \texttt {csdid}}}{127}{figure.caption.86}%
@@ -42,7 +42,7 @@
 \contentsline {figure}{\numberline {9.3}{\ignorespaces The template version, with section headings}}{145}{figure.caption.97}%
 \contentsline {figure}{\numberline {9.4}{\ignorespaces A ranked, interval-bearing category comparison}}{146}{figure.caption.98}%
 \contentsline {figure}{\numberline {9.5}{\ignorespaces Coefficient small multiples}}{148}{figure.caption.99}%
-\contentsline {figure}{\numberline {9.6}{\ignorespaces Run chart with an intervention line}}{150}{figure.caption.100}%
+\contentsline {figure}{\numberline {9.6}{\ignorespaces Run chart with an intervention line}}{149}{figure.caption.100}%
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {10.1}{\ignorespaces The visualization suite pipeline}}{154}{figure.caption.105}%
 \contentsline {figure}{\numberline {10.2}{\ignorespaces A spark wall of Texas county wages}}{157}{figure.caption.107}%
@@ -63,13 +63,13 @@
 \contentsline {figure}{\numberline {12.4}{\ignorespaces Choosing a delivery format}}{203}{figure.caption.131}%
 \contentsline {figure}{\numberline {12.5}{\ignorespaces Anatomy of a self-describing footer}}{206}{figure.caption.133}%
 \contentsline {figure}{\numberline {12.6}{\ignorespaces The suite pipeline, end to end}}{207}{figure.caption.134}%
-\contentsline {figure}{\numberline {12.7}{\ignorespaces The online chart the pipeline embeds}}{210}{figure.caption.135}%
+\contentsline {figure}{\numberline {12.7}{\ignorespaces The online chart the pipeline embeds}}{209}{figure.caption.135}%
 \contentsline {figure}{\numberline {12.8}{\ignorespaces The searchable table the dashboard mirrors}}{210}{figure.caption.136}%
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {13.1}{\ignorespaces The backbone loop}}{217}{figure.caption.142}%
 \contentsline {figure}{\numberline {13.2}{\ignorespaces The privacy gate in a coding pipeline}}{224}{figure.caption.149}%
 \contentsline {figure}{\numberline {13.3}{\ignorespaces Model-human agreement by category}}{227}{figure.caption.150}%
-\contentsline {figure}{\numberline {13.4}{\ignorespaces Prompt-injection defence in depth}}{235}{figure.caption.151}%
+\contentsline {figure}{\numberline {13.4}{\ignorespaces Prompt-injection defense in depth}}{235}{figure.caption.151}%
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {14.1}{\ignorespaces The release pipeline this chapter teaches}}{242}{figure.caption.155}%
 \contentsline {figure}{\numberline {14.2}{\ignorespaces Distribution of quasi-identifier cell sizes}}{245}{figure.caption.157}%

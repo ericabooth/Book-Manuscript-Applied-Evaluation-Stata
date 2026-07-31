@@ -156,3 +156,26 @@ di "FIGURE_CONFORMAL_SAVED"
 
 
 di "DONE"
+
+*==============================================================================*
+* (g) rateshrink one-line demo: the fresh 50-site draw the chapter prints.
+*     Seed pinned so the fitted prior and reliability column reproduce.
+*==============================================================================*
+adopath ++ "`c(pwd)'/../rateshrink-stata-public"
+clear
+set seed 20260706
+set obs 50
+gen n = 5 + int(495*runiform()^2)
+gen y = rbinomial(n, rbeta(8, 32))
+rateshrink, success(y) denominator(n) ///
+    generate(pshrunk) ci(95) rel(reliab)
+local rs_a = r(alpha)
+local rs_b = r(beta)
+local rs_mr = r(meanrel)
+di "RATESHRINK alpha = " %5.1f `rs_a' "  beta = " %5.1f `rs_b' ///
+   "  priorN = " %6.1f `rs_a'+`rs_b' "  meanrel = " %4.2f `rs_mr'
+* freeze: the chapter prints alpha 24.4, beta 89.1, prior N 113.5, mean rel 0.48
+assert abs(`rs_a' - 24.4) < 0.05
+assert abs(`rs_b' - 89.1) < 0.05
+assert abs(`rs_mr' - 0.48) < 0.005
+di "RATESHRINK_DEMO_OK"

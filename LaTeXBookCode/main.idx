@@ -9,7 +9,7 @@
 \indexentry{labelbook@\texttt{labelbook}|hyperpage}{8}
 \indexentry{convertanything@\texttt{convertanything}|hyperpage}{9}
 \indexentry{getcensus@\texttt{getcensus}|hyperpage}{9}
-\indexentry{datadictionary@\texttt{datadictionary}|hyperpage}{9}
+\indexentry{datadictionary@\texttt{datadictionary}|hyperpage}{10}
 \indexentry{instrumental use|hyperpage}{11}
 \indexentry{conceptual use|hyperpage}{11}
 \indexentry{process use|hyperpage}{11}
@@ -21,7 +21,7 @@
 \indexentry{theory of change|hyperpage}{14}
 \indexentry{numbered pipeline|hyperpage}{19}
 \indexentry{ssc install@\texttt{ssc install}|hyperpage}{21}
-\indexentry{usepackage@\texttt{usepackage}|hyperpage}{22}
+\indexentry{usepackage@\texttt{usepackage}|hyperpage}{21}
 \indexentry{writeinput@\texttt{writeinput}|hyperpage}{22}
 \indexentry{control file|hyperpage}{24}
 \indexentry{version@\texttt{version}|hyperpage}{24}
@@ -42,8 +42,8 @@
 \indexentry{American Community Survey (ACS)|hyperpage}{38}
 \indexentry{getcensus@\texttt{getcensus}|hyperpage}{38}
 \indexentry{educationdata@\texttt{educationdata}|hyperpage}{39}
-\indexentry{import fred@\texttt{import fred}|hyperpage}{41}
-\indexentry{FRED (Federal Reserve Economic Data)|hyperpage}{41}
+\indexentry{import fred@\texttt{import fred}|hyperpage}{42}
+\indexentry{FRED (Federal Reserve Economic Data)|hyperpage}{42}
 \indexentry{Quarterly Census of Employment and Wages (QCEW)|hyperpage}{42}
 \indexentry{FIPS codes|hyperpage}{42}
 \indexentry{Socrata|hyperpage}{44}
@@ -52,7 +52,7 @@
 \indexentry{webapi@\texttt{webapi}|hyperpage}{45}
 \indexentry{JSON (JavaScript Object Notation)|hyperpage}{46}
 \indexentry{flattening (JSON)|hyperpage}{46}
-\indexentry{combineall@\texttt{combineall}|hyperpage}{48}
+\indexentry{combineall@\texttt{combineall}|hyperpage}{49}
 \indexentry{combineall@\texttt{combineall}|hyperpage}{54}
 \indexentry{copy@\texttt{copy}|hyperpage}{56}
 \indexentry{import delimited@\texttt{import delimited}|hyperpage}{56}
@@ -119,13 +119,13 @@
 \indexentry{post-stratification|hyperpage}{105}
 \indexentry{raking|hyperpage}{105}
 \indexentry{empirical Bayes shrinkage|hyperpage}{106}
-\indexentry{rateshrink@\texttt{rateshrink}|hyperpage}{108}
+\indexentry{rateshrink@\texttt{rateshrink}|hyperpage}{107}
 \indexentry{minimum detectable effect|hyperpage}{109}
-\indexentry{power@\texttt{power}|hyperpage}{110}
-\indexentry{design effect|hyperpage}{110}
+\indexentry{power@\texttt{power}|hyperpage}{109}
+\indexentry{design effect|hyperpage}{109}
 \indexentry{conformal prediction|hyperpage}{112}
-\indexentry{conformalpred@\texttt{conformalpred}|hyperpage}{113}
-\indexentry{intraclass correlation|hyperpage}{114}
+\indexentry{conformalpred@\texttt{conformalpred}|hyperpage}{112}
+\indexentry{intraclass correlation|hyperpage}{115}
 \indexentry{hlmr2@\texttt{hlmr2}|hyperpage}{115}
 \indexentry{Blinder-Oaxaca decomposition|hyperpage}{121}
 \indexentry{oaxaca@\texttt{oaxaca}|hyperpage}{121}
@@ -165,7 +165,7 @@
 \indexentry{webdoc2@\texttt{webdoc2}|hyperpage}{154}
 \indexentry{googlechart@\texttt{googlechart}|hyperpage}{154}
 \indexentry{googlesheets@\texttt{googlesheets}|hyperpage}{154}
-\indexentry{sparkline|hyperpage}{154}
+\indexentry{sparkline|hyperpage}{155}
 \indexentry{small multiples|hyperpage}{155}
 \indexentry{choropleth|hyperpage}{159}
 \indexentry{diverging stacked bar|hyperpage}{162}
@@ -192,7 +192,7 @@
 \indexentry{googlesheets@\texttt{googlesheets}|hyperpage}{207}
 \indexentry{googlechart@\texttt{googlechart}|hyperpage}{207}
 \indexentry{sparkta2@\texttt{sparkta2}|hyperpage}{207}
-\indexentry{projectbuilder@\texttt{projectbuilder}|hyperpage}{209}
+\indexentry{projectbuilder@\texttt{projectbuilder}|hyperpage}{210}
 \indexentry{lost in the middle|hyperpage}{216}
 \indexentry{program-aided language models|hyperpage}{216}
 \indexentry{projectbuilder@\texttt{projectbuilder}|hyperpage}{219}
@@ -222,10 +222,10 @@
 \indexentry{collect@\texttt{collect}|hyperpage}{246}
 \indexentry{suppress@\texttt{suppress}|hyperpage}{246}
 \indexentry{complementary suppression|hyperpage}{247}
-\indexentry{synthetic data|hyperpage}{249}
+\indexentry{synthetic data|hyperpage}{250}
 \indexentry{synthgen@\texttt{synthgen}|hyperpage}{250}
 \indexentry{rawsweep@\texttt{rawsweep}|hyperpage}{251}
-\indexentry{disclosure-review checklist|hyperpage}{251}
+\indexentry{disclosure-review checklist|hyperpage}{252}
 \indexentry{dsload@\texttt{dsload}|hyperpage}{255}
 \indexentry{net install@\texttt{net install}|hyperpage}{256}
 \indexentry{syntax@\texttt{syntax}|hyperpage}{256}
@@ -239,7 +239,7 @@
 \indexentry{rateshrink@\texttt{rateshrink}|hyperpage}{261}
 \indexentry{Mata|hyperpage}{262}
 \indexentry{lstrfun@\texttt{lstrfun}|hyperpage}{262}
-\indexentry{timer@\texttt{timer}|hyperpage}{263}
+\indexentry{timer@\texttt{timer}|hyperpage}{262}
 \indexentry{openICPSR|hyperpage}{264}
 \indexentry{replication archive|hyperpage}{264}
 \indexentry{capstone|hyperpage}{279}

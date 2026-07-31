@@ -23,16 +23,16 @@
 \contentsline {mtocsection}{\numberline {1.4}Embedded evaluation is the researcher-practitioner model, put to work}{11}{section.1.4}%
 \contentsline {subsection}{\numberline {1.4.1}Where an effect lives is the embedded evaluator's home question}{12}{subsection.1.4.1}%
 \contentsline {mtocsubsection}{\numberline {1.4.1}Where an effect lives is the embedded evaluator's home question}{12}{subsection.1.4.1}%
-\contentsline {subsection}{\numberline {1.4.2}The profession named these instincts first}{12}{subsection.1.4.2}%
-\contentsline {mtocsubsection}{\numberline {1.4.2}The profession named these instincts first}{12}{subsection.1.4.2}%
+\contentsline {subsection}{\numberline {1.4.2}The profession named these instincts first}{13}{subsection.1.4.2}%
+\contentsline {mtocsubsection}{\numberline {1.4.2}The profession named these instincts first}{13}{subsection.1.4.2}%
 \contentsline {subsection}{\numberline {1.4.3}A written charter buys independence back after you trade distance for access}{13}{subsection.1.4.3}%
 \contentsline {mtocsubsection}{\numberline {1.4.3}A written charter buys independence back after you trade distance for access}{13}{subsection.1.4.3}%
 \contentsline {subsection}{\numberline {1.4.4}The four principles compress toolkits you already carry}{14}{subsection.1.4.4}%
 \contentsline {mtocsubsection}{\numberline {1.4.4}The four principles compress toolkits you already carry}{14}{subsection.1.4.4}%
 \contentsline {section}{\numberline {1.5}The running examples, and how to get them}{15}{section.1.5}%
 \contentsline {mtocsection}{\numberline {1.5}The running examples, and how to get them}{15}{section.1.5}%
-\contentsline {section}{\numberline {1.6}How the book is organized}{16}{section.1.6}%
-\contentsline {mtocsection}{\numberline {1.6}How the book is organized}{16}{section.1.6}%
+\contentsline {section}{\numberline {1.6}How the book is organized: a map from question to chapter}{16}{section.1.6}%
+\contentsline {mtocsection}{\numberline {1.6}How the book is organized: a map from question to chapter}{16}{section.1.6}%
 \contentsline {paragraph}{\nonumberline Where this leaves you.}{17}{paragraph*.27}%
 \contentsline {section}{Exercises}{17}{section*.28}%
 \contentsline {chapter}{\numberline {2}Setting up a project that survives deadlines}{19}{chapter.2}%
@@ -52,8 +52,8 @@
 \contentsline {mtocsection}{\numberline {2.5}One control file for every path and preference}{24}{section.2.5}%
 \contentsline {section}{\numberline {2.6}\enquote {Works on my machine} is four failures wearing one coat}{26}{section.2.6}%
 \contentsline {mtocsection}{\numberline {2.6}\enquote {Works on my machine} is four failures wearing one coat}{26}{section.2.6}%
-\contentsline {section}{\numberline {2.7}The numbered pipeline}{27}{section.2.7}%
-\contentsline {mtocsection}{\numberline {2.7}The numbered pipeline}{27}{section.2.7}%
+\contentsline {section}{\numberline {2.7}The numbered pipeline: the folder listing is the run order}{27}{section.2.7}%
+\contentsline {mtocsection}{\numberline {2.7}The numbered pipeline: the folder listing is the run order}{27}{section.2.7}%
 \contentsline {section}{\numberline {2.8}Leave a paper trail: logging every run}{28}{section.2.8}%
 \contentsline {mtocsection}{\numberline {2.8}Leave a paper trail: logging every run}{28}{section.2.8}%
 \contentsline {subsection}{\numberline {2.8.1}The tracking spine: a working file for decisions, not output}{28}{subsection.2.8.1}%
@@ -72,8 +72,8 @@
 \contentsline {mtocsection}{\numberline {3.1}Practitioners hold the questions; public APIs hold the denominators}{35}{section.3.1}%
 \contentsline {subsection}{\numberline {3.1.1}Leaning on public sources is a defensible move, not a shortcut}{35}{subsection.3.1.1}%
 \contentsline {mtocsubsection}{\numberline {3.1.1}Leaning on public sources is a defensible move, not a shortcut}{35}{subsection.3.1.1}%
-\contentsline {section}{\numberline {3.2}The shape of an API request}{36}{section.3.2}%
-\contentsline {mtocsection}{\numberline {3.2}The shape of an API request}{36}{section.3.2}%
+\contentsline {section}{\numberline {3.2}Every API request has the same shape}{36}{section.3.2}%
+\contentsline {mtocsection}{\numberline {3.2}Every API request has the same shape}{36}{section.3.2}%
 \contentsline {subsection}{\numberline {3.2.1}Write the extraction contract before the loop exists}{37}{subsection.3.2.1}%
 \contentsline {mtocsubsection}{\numberline {3.2.1}Write the extraction contract before the loop exists}{37}{subsection.3.2.1}%
 \contentsline {subsection}{\numberline {3.2.2}Rate-limit etiquette is commons stewardship, not just self-protection}{38}{subsection.3.2.2}%
@@ -84,22 +84,22 @@
 \contentsline {mtocsection}{\numberline {3.4}Education panels with educationdata}{39}{section.3.4}%
 \contentsline {subsection}{\numberline {3.4.1}A worked example: did Texas enrollment dip with COVID?}{40}{subsection.3.4.1}%
 \contentsline {mtocsubsection}{\numberline {3.4.1}A worked example: did Texas enrollment dip with COVID?}{40}{subsection.3.4.1}%
-\contentsline {section}{\numberline {3.5}Economic series with import fred}{41}{section.3.5}%
-\contentsline {mtocsection}{\numberline {3.5}Economic series with import fred}{41}{section.3.5}%
+\contentsline {section}{\numberline {3.5}Economic series with import fred}{42}{section.3.5}%
+\contentsline {mtocsection}{\numberline {3.5}Economic series with import fred}{42}{section.3.5}%
 \contentsline {section}{\numberline {3.6}A worked example: county wages from the BLS, no key}{42}{section.3.6}%
 \contentsline {mtocsection}{\numberline {3.6}A worked example: county wages from the BLS, no key}{42}{section.3.6}%
-\contentsline {section}{\numberline {3.7}Health and community context: County Health Rankings and PLACES}{43}{section.3.7}%
-\contentsline {mtocsection}{\numberline {3.7}Health and community context: County Health Rankings and PLACES}{43}{section.3.7}%
+\contentsline {section}{\numberline {3.7}Health and community context: County Health Rankings and PLACES}{44}{section.3.7}%
+\contentsline {mtocsection}{\numberline {3.7}Health and community context: County Health Rankings and PLACES}{44}{section.3.7}%
 \contentsline {subsection}{\numberline {3.7.1}PLACES is often the only defensible health number below the county}{44}{subsection.3.7.1}%
 \contentsline {mtocsubsection}{\numberline {3.7.1}PLACES is often the only defensible health number below the county}{44}{subsection.3.7.1}%
 \contentsline {section}{\numberline {3.8}Three routes from Stata to any API}{45}{section.3.8}%
 \contentsline {mtocsection}{\numberline {3.8}Three routes from Stata to any API}{45}{section.3.8}%
-\contentsline {subsection}{\numberline {3.8.1}The source inventory: one row per endpoint}{45}{subsection.3.8.1}%
-\contentsline {mtocsubsection}{\numberline {3.8.1}The source inventory: one row per endpoint}{45}{subsection.3.8.1}%
+\contentsline {subsection}{\numberline {3.8.1}The source inventory: one row per endpoint}{46}{subsection.3.8.1}%
+\contentsline {mtocsubsection}{\numberline {3.8.1}The source inventory: one row per endpoint}{46}{subsection.3.8.1}%
 \contentsline {subsection}{\numberline {3.8.2}JSON and the \texttt {webapi} command}{46}{subsection.3.8.2}%
 \contentsline {mtocsubsection}{\numberline {3.8.2}JSON and the \texttt {webapi} command}{46}{subsection.3.8.2}%
-\contentsline {paragraph}{\nonumberline Where this leaves you.}{48}{paragraph*.45}%
-\contentsline {section}{Exercises}{48}{section*.46}%
+\contentsline {paragraph}{\nonumberline Where this leaves you.}{50}{paragraph*.45}%
+\contentsline {section}{Exercises}{50}{section*.46}%
 \contentsline {chapter}{\numberline {4}Harvesting data when there is no API}{51}{chapter.4}%
 \contentsline {section}{\numberline {4.1}Reading the site before you scrape}{51}{section.4.1}%
 \contentsline {mtocsection}{\numberline {4.1}Reading the site before you scrape}{51}{section.4.1}%
@@ -195,17 +195,17 @@
 \contentsline {mtocsubsection}{\numberline {7.1.1}Fixing a low alpha before the wave closes}{105}{subsection.7.1.1}%
 \contentsline {section}{\numberline {7.2}Weights that restore the population}{105}{section.7.2}%
 \contentsline {mtocsection}{\numberline {7.2}Weights that restore the population}{105}{section.7.2}%
-\contentsline {section}{\numberline {7.3}Small sites, noisy rates}{106}{section.7.3}%
-\contentsline {mtocsection}{\numberline {7.3}Small sites, noisy rates}{106}{section.7.3}%
-\contentsline {subsection}{\numberline {7.3.1}Reliability and shrinkage are one number}{108}{subsection.7.3.1}%
-\contentsline {mtocsubsection}{\numberline {7.3.1}Reliability and shrinkage are one number}{108}{subsection.7.3.1}%
+\contentsline {section}{\numberline {7.3}Stabilizing noisy small-site rates}{106}{section.7.3}%
+\contentsline {mtocsection}{\numberline {7.3}Stabilizing noisy small-site rates}{106}{section.7.3}%
+\contentsline {subsection}{\numberline {7.3.1}Reliability and shrinkage are one number}{107}{subsection.7.3.1}%
+\contentsline {mtocsubsection}{\numberline {7.3.1}Reliability and shrinkage are one number}{107}{subsection.7.3.1}%
 \contentsline {section}{\numberline {7.4}Power and the smallest effect you can see}{109}{section.7.4}%
 \contentsline {mtocsection}{\numberline {7.4}Power and the smallest effect you can see}{109}{section.7.4}%
 \contentsline {section}{\numberline {7.5}Uncertainty without the model's permission}{112}{section.7.5}%
 \contentsline {mtocsection}{\numberline {7.5}Uncertainty without the model's permission}{112}{section.7.5}%
-\contentsline {section}{\numberline {7.6}How much of the variation is the site, and how much the person?}{114}{section.7.6}%
-\contentsline {mtocsection}{\numberline {7.6}How much of the variation is the site, and how much the person?}{114}{section.7.6}%
-\contentsline {paragraph}{\nonumberline Where this leaves you.}{116}{paragraph*.82}%
+\contentsline {section}{\numberline {7.6}How much of the variation is the site, and how much the person?}{115}{section.7.6}%
+\contentsline {mtocsection}{\numberline {7.6}How much of the variation is the site, and how much the person?}{115}{section.7.6}%
+\contentsline {paragraph}{\nonumberline Where this leaves you.}{117}{paragraph*.82}%
 \contentsline {section}{Exercises}{117}{section*.83}%
 \contentsline {chapter}{\numberline {8}From differences to defensible claims}{119}{chapter.8}%
 \contentsline {section}{\numberline {8.1}Comparisons first}{119}{section.8.1}%
@@ -260,8 +260,8 @@
 \contentsline {mtocsubsection}{\numberline {9.4.1}Render one figure three ways, not three figures}{148}{subsection.9.4.1}%
 \contentsline {section}{\numberline {9.5}Trends with a story line}{148}{section.9.5}%
 \contentsline {mtocsection}{\numberline {9.5}Trends with a story line}{148}{section.9.5}%
-\contentsline {subsection}{\numberline {9.5.1}From one-off exhibit to a monitoring habit}{149}{subsection.9.5.1}%
-\contentsline {mtocsubsection}{\numberline {9.5.1}From one-off exhibit to a monitoring habit}{149}{subsection.9.5.1}%
+\contentsline {subsection}{\numberline {9.5.1}From one-off exhibit to a monitoring habit}{150}{subsection.9.5.1}%
+\contentsline {mtocsubsection}{\numberline {9.5.1}From one-off exhibit to a monitoring habit}{150}{subsection.9.5.1}%
 \contentsline {section}{\numberline {9.6}Captions that carry the finding}{150}{section.9.6}%
 \contentsline {mtocsection}{\numberline {9.6}Captions that carry the finding}{150}{section.9.6}%
 \contentsline {paragraph}{\nonumberline Where this leaves you.}{151}{paragraph*.103}%
@@ -271,8 +271,8 @@
 \contentsline {mtocsection}{\numberline {10.1}The visualization suite: one toolkit, seven tools}{153}{section.10.1}%
 \contentsline {subsection}{\numberline {10.1.1}Pick the tool by asking the grid two questions}{153}{subsection.10.1.1}%
 \contentsline {mtocsubsection}{\numberline {10.1.1}Pick the tool by asking the grid two questions}{153}{subsection.10.1.1}%
-\contentsline {section}{\numberline {10.2}Sparklines: the word-sized trend}{154}{section.10.2}%
-\contentsline {mtocsection}{\numberline {10.2}Sparklines: the word-sized trend}{154}{section.10.2}%
+\contentsline {section}{\numberline {10.2}Sparklines: the word-sized trend}{155}{section.10.2}%
+\contentsline {mtocsection}{\numberline {10.2}Sparklines: the word-sized trend}{155}{section.10.2}%
 \contentsline {subsection}{\numberline {10.2.1}The spark wall you can build today}{155}{subsection.10.2.1}%
 \contentsline {mtocsubsection}{\numberline {10.2.1}The spark wall you can build today}{155}{subsection.10.2.1}%
 \contentsline {subsection}{\numberline {10.2.2}What \texttt {sparkta2} adds: offline maps (source not yet released)}{157}{subsection.10.2.2}%
@@ -289,8 +289,8 @@
 \contentsline {mtocsubsection}{\numberline {10.3.4}Worked example 3: a searchable table}{162}{subsection.10.3.4}%
 \contentsline {subsection}{\numberline {10.3.5}Worked example 4: a diverging stacked bar}{162}{subsection.10.3.5}%
 \contentsline {mtocsubsection}{\numberline {10.3.5}Worked example 4: a diverging stacked bar}{162}{subsection.10.3.5}%
-\contentsline {section}{\numberline {10.4}Choosing static, interactive, or animated}{164}{section.10.4}%
-\contentsline {mtocsection}{\numberline {10.4}Choosing static, interactive, or animated}{164}{section.10.4}%
+\contentsline {section}{\numberline {10.4}Static, interactive, or animated: prefer the simplest form that carries the finding}{164}{section.10.4}%
+\contentsline {mtocsection}{\numberline {10.4}Static, interactive, or animated: prefer the simplest form that carries the finding}{164}{section.10.4}%
 \contentsline {subsection}{\numberline {10.4.1}Which narrative structure for a board versus an explorer}{164}{subsection.10.4.1}%
 \contentsline {mtocsubsection}{\numberline {10.4.1}Which narrative structure for a board versus an explorer}{164}{subsection.10.4.1}%
 \contentsline {subsection}{\numberline {10.4.2}Match the form to the venue, and read the failure column first}{165}{subsection.10.4.2}%
@@ -314,8 +314,8 @@
 \contentsline {mtocsection}{\numberline {11.2}Formatted Excel from collect and putexcel}{175}{section.11.2}%
 \contentsline {subsection}{\numberline {11.2.1}The earnings table, generated not typed}{175}{subsection.11.2.1}%
 \contentsline {mtocsubsection}{\numberline {11.2.1}The earnings table, generated not typed}{175}{subsection.11.2.1}%
-\contentsline {subsection}{\numberline {11.2.2}An Excel tab that cannot fall out of step}{177}{subsection.11.2.2}%
-\contentsline {mtocsubsection}{\numberline {11.2.2}An Excel tab that cannot fall out of step}{177}{subsection.11.2.2}%
+\contentsline {subsection}{\numberline {11.2.2}An Excel tab that cannot fall out of step}{176}{subsection.11.2.2}%
+\contentsline {mtocsubsection}{\numberline {11.2.2}An Excel tab that cannot fall out of step}{176}{subsection.11.2.2}%
 \contentsline {section}{\numberline {11.3}Google Sheets as a live channel}{178}{section.11.3}%
 \contentsline {mtocsection}{\numberline {11.3}Google Sheets as a live channel}{178}{section.11.3}%
 \contentsline {subsection}{\numberline {11.3.1}The workflow, one command at a time}{179}{subsection.11.3.1}%
@@ -355,23 +355,23 @@
 \contentsline {mtocsection}{\numberline {12.3}The dashboard you rebuild instead of maintain}{196}{section.12.3}%
 \contentsline {subsection}{\numberline {12.3.1}Three moves, one file}{197}{subsection.12.3.1}%
 \contentsline {mtocsubsection}{\numberline {12.3.1}Three moves, one file}{197}{subsection.12.3.1}%
-\contentsline {subsection}{\numberline {12.3.2}An applied build: every unit against the benchmark}{199}{subsection.12.3.2}%
-\contentsline {mtocsubsection}{\numberline {12.3.2}An applied build: every unit against the benchmark}{199}{subsection.12.3.2}%
+\contentsline {subsection}{\numberline {12.3.2}An applied build: every unit against the benchmark}{198}{subsection.12.3.2}%
+\contentsline {mtocsubsection}{\numberline {12.3.2}An applied build: every unit against the benchmark}{198}{subsection.12.3.2}%
 \contentsline {subsection}{\numberline {12.3.3}Put the dashboard where the readers already are}{199}{subsection.12.3.3}%
 \contentsline {mtocsubsection}{\numberline {12.3.3}Put the dashboard where the readers already are}{199}{subsection.12.3.3}%
 \contentsline {section}{\numberline {12.4}One folder the client can own}{201}{section.12.4}%
 \contentsline {mtocsection}{\numberline {12.4}One folder the client can own}{201}{section.12.4}%
-\contentsline {subsection}{\numberline {12.4.1}Choosing a format: a comparison}{202}{subsection.12.4.1}%
-\contentsline {mtocsubsection}{\numberline {12.4.1}Choosing a format: a comparison}{202}{subsection.12.4.1}%
+\contentsline {subsection}{\numberline {12.4.1}Choosing a format: only the portal clears the firewall and updates itself}{201}{subsection.12.4.1}%
+\contentsline {mtocsubsection}{\numberline {12.4.1}Choosing a format: only the portal clears the firewall and updates itself}{201}{subsection.12.4.1}%
 \contentsline {section}{\numberline {12.5}Versioning the artifacts you hand over}{203}{section.12.5}%
 \contentsline {mtocsection}{\numberline {12.5}Versioning the artifacts you hand over}{203}{section.12.5}%
 \contentsline {subsection}{\numberline {12.5.1}Stamp the code commit and the data vintage, not just the version}{205}{subsection.12.5.1}%
 \contentsline {mtocsubsection}{\numberline {12.5.1}Stamp the code commit and the data vintage, not just the version}{205}{subsection.12.5.1}%
 \contentsline {subsection}{\numberline {12.5.2}The release checklist}{206}{subsection.12.5.2}%
 \contentsline {mtocsubsection}{\numberline {12.5.2}The release checklist}{206}{subsection.12.5.2}%
-\contentsline {section}{\numberline {12.6}The whole suite in one folder}{207}{section.12.6}%
-\contentsline {mtocsection}{\numberline {12.6}The whole suite in one folder}{207}{section.12.6}%
-\contentsline {paragraph}{\nonumberline Where this leaves you.}{211}{paragraph*.138}%
+\contentsline {section}{\numberline {12.6}The whole suite in one folder}{206}{section.12.6}%
+\contentsline {mtocsection}{\numberline {12.6}The whole suite in one folder}{206}{section.12.6}%
+\contentsline {paragraph}{\nonumberline Where this leaves you.}{210}{paragraph*.138}%
 \contentsline {section}{Exercises}{211}{section*.139}%
 \contentsline {part}{\nonumberline Part V: Sustaining the Practice \newline Careful AI, Safe Sharing, and Shared Tools}{213}{part*.141}%
 \contentsline {chapter}{\numberline {13}Using AI without getting burned}{215}{chapter.13}%
@@ -389,8 +389,8 @@
 \contentsline {mtocsubsection}{\numberline {13.1.5}Step 3: the propose, run, verify loop with tripwires}{219}{subsection.13.1.5}%
 \contentsline {subsection}{\numberline {13.1.6}Step 4: triangulate, and try to break the finding}{220}{subsection.13.1.6}%
 \contentsline {mtocsubsection}{\numberline {13.1.6}Step 4: triangulate, and try to break the finding}{220}{subsection.13.1.6}%
-\contentsline {subsection}{\numberline {13.1.7}Going parallel: two worked patterns}{221}{subsection.13.1.7}%
-\contentsline {mtocsubsection}{\numberline {13.1.7}Going parallel: two worked patterns}{221}{subsection.13.1.7}%
+\contentsline {subsection}{\numberline {13.1.7}Going parallel without losing the log: two worked patterns}{221}{subsection.13.1.7}%
+\contentsline {mtocsubsection}{\numberline {13.1.7}Going parallel without losing the log: two worked patterns}{221}{subsection.13.1.7}%
 \contentsline {paragraph}{\nonumberline Pattern 1: split a slow estimation across instances.}{221}{paragraph*.144}%
 \contentsline {paragraph}{\nonumberline Pattern 2: fan out the code review.}{222}{paragraph*.146}%
 \contentsline {paragraph}{\nonumberline Where this leaves you.}{223}{paragraph*.148}%
@@ -402,8 +402,8 @@
 \contentsline {mtocsection}{\numberline {13.3}A measurement, not an oracle}{225}{section.13.3}%
 \contentsline {subsection}{\numberline {13.3.1}The weakest category is the one to spot-check}{227}{subsection.13.3.1}%
 \contentsline {mtocsubsection}{\numberline {13.3.1}The weakest category is the one to spot-check}{227}{subsection.13.3.1}%
-\contentsline {subsection}{\numberline {13.3.2}Consensus across models}{228}{subsection.13.3.2}%
-\contentsline {mtocsubsection}{\numberline {13.3.2}Consensus across models}{228}{subsection.13.3.2}%
+\contentsline {subsection}{\numberline {13.3.2}Consensus across LLMs: disagreement finds the hard cases}{228}{subsection.13.3.2}%
+\contentsline {mtocsubsection}{\numberline {13.3.2}Consensus across LLMs: disagreement finds the hard cases}{228}{subsection.13.3.2}%
 \contentsline {subsection}{\numberline {13.3.3}The sieve: turning disagreement into a black-box trust proxy}{228}{subsection.13.3.3}%
 \contentsline {mtocsubsection}{\numberline {13.3.3}The sieve: turning disagreement into a black-box trust proxy}{228}{subsection.13.3.3}%
 \contentsline {subsection}{\numberline {13.3.4}Use the labels, then correct the estimate}{231}{subsection.13.3.4}%
@@ -412,10 +412,10 @@
 \contentsline {mtocsection}{\numberline {13.4}Reproducing stochastic output}{232}{section.13.4}%
 \contentsline {subsection}{\numberline {13.4.1}The prompt-and-version log}{233}{subsection.13.4.1}%
 \contentsline {mtocsubsection}{\numberline {13.4.1}The prompt-and-version log}{233}{subsection.13.4.1}%
-\contentsline {section}{\numberline {13.5}Untrusted text and prompt injection}{233}{section.13.5}%
-\contentsline {mtocsection}{\numberline {13.5}Untrusted text and prompt injection}{233}{section.13.5}%
-\contentsline {subsection}{\numberline {13.5.1}The defence in depth: distrust the text, fence it, then validate the output}{234}{subsection.13.5.1}%
-\contentsline {mtocsubsection}{\numberline {13.5.1}The defence in depth: distrust the text, fence it, then validate the output}{234}{subsection.13.5.1}%
+\contentsline {section}{\numberline {13.5}Prompt injection: untrusted text can carry instructions}{233}{section.13.5}%
+\contentsline {mtocsection}{\numberline {13.5}Prompt injection: untrusted text can carry instructions}{233}{section.13.5}%
+\contentsline {subsection}{\numberline {13.5.1}The defense in depth: distrust the text, fence it, then validate the output}{234}{subsection.13.5.1}%
+\contentsline {mtocsubsection}{\numberline {13.5.1}The defense in depth: distrust the text, fence it, then validate the output}{234}{subsection.13.5.1}%
 \contentsline {section}{\numberline {13.6}Auditing prediction for fairness}{236}{section.13.6}%
 \contentsline {mtocsection}{\numberline {13.6}Auditing prediction for fairness}{236}{section.13.6}%
 \contentsline {section}{\numberline {13.7}Governance for a small shop: the one-page AI-use policy}{238}{section.13.7}%
@@ -423,24 +423,24 @@
 \contentsline {paragraph}{\nonumberline Where this leaves you.}{239}{paragraph*.153}%
 \contentsline {section}{Exercises}{240}{section*.154}%
 \contentsline {chapter}{\numberline {14}Sharing data and results safely}{241}{chapter.14}%
-\contentsline {section}{\numberline {14.1}Quasi-identifiers and re-identification}{241}{section.14.1}%
-\contentsline {mtocsection}{\numberline {14.1}Quasi-identifiers and re-identification}{241}{section.14.1}%
-\contentsline {subsection}{\numberline {14.1.1}A worked example: how many people are one of a kind?}{242}{subsection.14.1.1}%
-\contentsline {mtocsubsection}{\numberline {14.1.1}A worked example: how many people are one of a kind?}{242}{subsection.14.1.1}%
+\contentsline {section}{\numberline {14.1}Quasi-identifiers: why removing names is not enough}{241}{section.14.1}%
+\contentsline {mtocsection}{\numberline {14.1}Quasi-identifiers: why removing names is not enough}{241}{section.14.1}%
+\contentsline {subsection}{\numberline {14.1.1}A worked example: how many people are one of a kind?}{243}{subsection.14.1.1}%
+\contentsline {mtocsubsection}{\numberline {14.1.1}A worked example: how many people are one of a kind?}{243}{subsection.14.1.1}%
 \contentsline {subsection}{\numberline {14.1.2}Coarsening: the cheapest way to raise $k$}{244}{subsection.14.1.2}%
 \contentsline {mtocsubsection}{\numberline {14.1.2}Coarsening: the cheapest way to raise $k$}{244}{subsection.14.1.2}%
 \contentsline {section}{\numberline {14.2}Suppressing small cells without lying}{246}{section.14.2}%
 \contentsline {mtocsection}{\numberline {14.2}Suppressing small cells without lying}{246}{section.14.2}%
-\contentsline {subsection}{\numberline {14.2.1}A worked example: blanking a cell without leaking it}{246}{subsection.14.2.1}%
-\contentsline {mtocsubsection}{\numberline {14.2.1}A worked example: blanking a cell without leaking it}{246}{subsection.14.2.1}%
+\contentsline {subsection}{\numberline {14.2.1}A worked example: blanking a cell without leaking it}{247}{subsection.14.2.1}%
+\contentsline {mtocsubsection}{\numberline {14.2.1}A worked example: blanking a cell without leaking it}{247}{subsection.14.2.1}%
 \contentsline {subsection}{\numberline {14.2.2}Where the field is going: formal guarantees beyond $k$-anonymity}{249}{subsection.14.2.2}%
 \contentsline {mtocsubsection}{\numberline {14.2.2}Where the field is going: formal guarantees beyond $k$-anonymity}{249}{subsection.14.2.2}%
-\contentsline {section}{\numberline {14.3}Synthetic stand-ins}{249}{section.14.3}%
-\contentsline {mtocsection}{\numberline {14.3}Synthetic stand-ins}{249}{section.14.3}%
-\contentsline {section}{\numberline {14.4}Sanitizing raw files with a human in the loop}{250}{section.14.4}%
-\contentsline {mtocsection}{\numberline {14.4}Sanitizing raw files with a human in the loop}{250}{section.14.4}%
-\contentsline {subsection}{\numberline {14.4.1}The disclosure-review checklist: one page both signatures can read}{251}{subsection.14.4.1}%
-\contentsline {mtocsubsection}{\numberline {14.4.1}The disclosure-review checklist: one page both signatures can read}{251}{subsection.14.4.1}%
+\contentsline {section}{\numberline {14.3}Synthetic stand-ins: sharing structure, not records}{250}{section.14.3}%
+\contentsline {mtocsection}{\numberline {14.3}Synthetic stand-ins: sharing structure, not records}{250}{section.14.3}%
+\contentsline {section}{\numberline {14.4}Sanitizing raw files with a human in the loop}{251}{section.14.4}%
+\contentsline {mtocsection}{\numberline {14.4}Sanitizing raw files with a human in the loop}{251}{section.14.4}%
+\contentsline {subsection}{\numberline {14.4.1}The disclosure-review checklist: one page both signatures can read}{252}{subsection.14.4.1}%
+\contentsline {mtocsubsection}{\numberline {14.4.1}The disclosure-review checklist: one page both signatures can read}{252}{subsection.14.4.1}%
 \contentsline {paragraph}{\nonumberline Where this leaves you.}{252}{paragraph*.162}%
 \contentsline {section}{Exercises}{252}{section*.163}%
 \contentsline {chapter}{\numberline {15}Turning scripts into shared tools}{255}{chapter.15}%
@@ -456,10 +456,10 @@
 \contentsline {mtocsubsection}{\numberline {15.4.1}The two rows that decide whether to depend on a tool}{260}{subsection.15.4.1}%
 \contentsline {section}{\numberline {15.5}A dash of Mata and Python where it counts}{262}{section.15.5}%
 \contentsline {mtocsection}{\numberline {15.5}A dash of Mata and Python where it counts}{262}{section.15.5}%
-\contentsline {subsection}{\numberline {15.5.1}A worked example: three ways to build one variable}{262}{subsection.15.5.1}%
-\contentsline {mtocsubsection}{\numberline {15.5.1}A worked example: three ways to build one variable}{262}{subsection.15.5.1}%
-\contentsline {section}{\numberline {15.6}The replication archive}{264}{section.15.6}%
-\contentsline {mtocsection}{\numberline {15.6}The replication archive}{264}{section.15.6}%
+\contentsline {subsection}{\numberline {15.5.1}A worked example: vectorize first, loop last}{262}{subsection.15.5.1}%
+\contentsline {mtocsubsection}{\numberline {15.5.1}A worked example: vectorize first, loop last}{262}{subsection.15.5.1}%
+\contentsline {section}{\numberline {15.6}A replication archive that outlives the engagement}{264}{section.15.6}%
+\contentsline {mtocsection}{\numberline {15.6}A replication archive that outlives the engagement}{264}{section.15.6}%
 \contentsline {paragraph}{\nonumberline Where this leaves you.}{265}{paragraph*.170}%
 \contentsline {section}{Exercises}{265}{section*.171}%
 \contentsline {part}{\nonumberline Appendices}{267}{part*.173}%

@@ -26,13 +26,13 @@
   \item \texttt{coefplot}, \hyperpage{147}
   \item \texttt{collapse}, \hyperpage{30}
   \item \texttt{collect}, \hyperpage{175}, \hyperpage{246}
-  \item \texttt{combineall}, \hyperpage{25}, \hyperpage{48}, 
+  \item \texttt{combineall}, \hyperpage{25}, \hyperpage{49}, 
 		\hyperpage{54}
   \item complementary suppression, \hyperpage{247}
   \item conceptual use, \hyperpage{11}
   \item \texttt{confirm}, \hyperpage{90}
   \item conformal prediction, \hyperpage{112}
-  \item \texttt{conformalpred}, \hyperpage{113}
+  \item \texttt{conformalpred}, \hyperpage{112}
   \item control chart, \hyperpage{67}, \hyperpage{148}
   \item control file, \hyperpage{24}
   \item convergence delta, \hyperpage{229}
@@ -49,12 +49,12 @@
   \item \texttt{dashboardbuilder}, \hyperpage{154}, \hyperpage{197}
   \item data dictionary, \hyperpage{8}
   \item data-ink ratio, \hyperpage{139}
-  \item \texttt{datadictionary}, \hyperpage{9}, \hyperpage{78}, 
+  \item \texttt{datadictionary}, \hyperpage{10}, \hyperpage{78}, 
 		\hyperpage{81}, \hyperpage{185}, \hyperpage{219}
-  \item design effect, \hyperpage{110}
+  \item design effect, \hyperpage{109}
   \item \texttt{destring}, \hyperpage{56}
   \item difference-in-differences, \hyperpage{123}
-  \item disclosure-review checklist, \hyperpage{251}
+  \item disclosure-review checklist, \hyperpage{252}
   \item diverging bar chart, \hyperpage{143}
   \item diverging stacked bar, \hyperpage{162}
   \item \texttt{dsload}, \hyperpage{255}
@@ -81,7 +81,7 @@
   \item flattening (JSON), \hyperpage{46}
   \item four principles, \hyperpage{6}
   \item four-fifths rule, \hyperpage{236}
-  \item FRED (Federal Reserve Economic Data), \hyperpage{41}
+  \item FRED (Federal Reserve Economic Data), \hyperpage{42}
   \item \texttt{ftools}, \hyperpage{30}
 
   \indexspace
@@ -108,13 +108,13 @@
 
   \item \texttt{import delimited}, \hyperpage{56}
   \item \texttt{import excel}, \hyperpage{61}
-  \item \texttt{import fred}, \hyperpage{41}
+  \item \texttt{import fred}, \hyperpage{42}
   \item \texttt{importr}, \hyperpage{61}
   \item improvement science, \hyperpage{13}
   \item instrumental use, \hyperpage{11}
   \item inter-rater reliability, \hyperpage{225}
   \item interactive chart, \hyperpage{153}
-  \item intraclass correlation, \hyperpage{114}
+  \item intraclass correlation, \hyperpage{115}
   \item \texttt{irt}, \hyperpage{104}
   \item \texttt{isid}, \hyperpage{90}
   \item item response theory, \hyperpage{104}
@@ -182,14 +182,14 @@
   \item parallel trends, \hyperpage{126}
   \item Plan-Do-Study-Act cycle, \hyperpage{8}
   \item post-stratification, \hyperpage{105}
-  \item \texttt{power}, \hyperpage{110}
+  \item \texttt{power}, \hyperpage{109}
   \item pre-registered analysis plan, \hyperpage{7}
   \item pre-registration, \hyperpage{134}
   \item price transparency files, \hyperpage{59}
   \item probabilistic record linkage, \hyperpage{83}
   \item process use, \hyperpage{11}
   \item program-aided language models, \hyperpage{216}
-  \item \texttt{projectbuilder}, \hyperpage{25}, \hyperpage{209}, 
+  \item \texttt{projectbuilder}, \hyperpage{25}, \hyperpage{210}, 
 		\hyperpage{219}
   \item prompt injection, \hyperpage{233}
   \item \texttt{putexcel}, \hyperpage{175}
@@ -203,7 +203,7 @@
   \indexspace
 
   \item raking, \hyperpage{105}
-  \item \texttt{rateshrink}, \hyperpage{108}, \hyperpage{259}, 
+  \item \texttt{rateshrink}, \hyperpage{107}, \hyperpage{259}, 
 		\hyperpage{261}
   \item \texttt{rawsweep}, \hyperpage{251}
   \item \texttt{rdrobust}, \hyperpage{127}
@@ -234,7 +234,7 @@
   \item SMCL, \hyperpage{257}
   \item Socrata, \hyperpage{44}
   \item \texttt{soundex}, \hyperpage{84}
-  \item sparkline, \hyperpage{154}
+  \item sparkline, \hyperpage{155}
   \item \texttt{sparkta2}, \hyperpage{153}, \hyperpage{207}
   \item spreadsheet errors, \hyperpage{174}
   \item \texttt{srcfind}, \hyperpage{89}
@@ -251,14 +251,14 @@
   \item \texttt{syntax}, \hyperpage{256}
   \item \texttt{synth}, \hyperpage{127}
   \item synthetic control, \hyperpage{127}
-  \item synthetic data, \hyperpage{249}
+  \item synthetic data, \hyperpage{250}
   \item \texttt{synthgen}, \hyperpage{250}
   \item \texttt{sysuse}, \hyperpage{243}
 
   \indexspace
 
   \item theory of change, \hyperpage{14}
-  \item \texttt{timer}, \hyperpage{263}
+  \item \texttt{timer}, \hyperpage{262}
   \item top-two-box, \hyperpage{72}
   \item total survey error, \hyperpage{65}
   \item tracking spine, \hyperpage{28}
@@ -269,7 +269,7 @@
 
   \item unbalanced panel, \hyperpage{91}
   \item \texttt{undummy}, \hyperpage{66}
-  \item \texttt{usepackage}, \hyperpage{22}
+  \item \texttt{usepackage}, \hyperpage{21}
   \item utilization-focused evaluation, \hyperpage{13}
 
   \indexspace
