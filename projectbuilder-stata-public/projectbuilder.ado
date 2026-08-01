@@ -67,7 +67,6 @@ program define projectbuilder, rclass
     * sees the $.  description("costs $M") reaches this program as
     * "costs " no matter what we do; write \$M to get a literal dollar sign.
     * The metadata read-back below IS under our control, and does preserve $.
-    local url_live : copy local url
     foreach o in description url topic timeline othernotes {
         local `o' = subinstr(`"`macval(`o')'"', char(126), char(5), .)
     }
@@ -216,13 +215,13 @@ program define projectbuilder, rclass
 
     * ---- build the folder tree (Stata's mkdir is cross-OS) --------------
     capture mkdir `"`base'"'
-    capture confirm file `"`base'/."'
-    if _rc {
+    pb_isdir baseok `"`base'"'
+    if !`baseok' {
         di as err `"projectbuilder: base path not found and could not be created -- `base'"'
         di as err  "                Create its parent directories first, or check path()."
         exit 601
     }
-    if `"`parent'"' != "" capture mkdir `"`base'/`parent'"'
+    if `"`parent'"' != "" capture mkdir `"`base'`sep'`parent'"'
     capture mkdir `"`target'"'
     foreach sub in 01_raw 02_cleaned 03_output _code _documentation _archive {
         capture mkdir `"`target'/`sub'"'
@@ -234,6 +233,22 @@ program define projectbuilder, rclass
     capture mkdir `"`target'/_code/_archive"'
     capture mkdir `"`target'/_documentation/_archive"'
     capture mkdir `"`target'/_documentation/website"'
+
+    * Every mkdir above is captured, because re-running over an existing tree
+    * must not be an error.  That also swallowed real failures: on a
+    * read-only base the whole tree silently failed to appear and the run
+    * carried on until the first -file open-, which stopped with a bare
+    * r(603) naming a do-file, not the directory that could not be made.
+    * Confirm the two folders everything else is written into.
+    foreach sub in _code _documentation {
+        pb_isdir subok `"`target'/`sub'"'
+        if !`subok' {
+            di as err `"projectbuilder: could not create `target'/`sub'"'
+            di as err  "                The base path exists but is not writable, or the"
+            di as err  "                project name is not legal on this filesystem."
+            exit 693
+        }
+    }
 
     * ---- convenient path locals -----------------------------------------
     local raw       `"`target'/01_raw"'
@@ -261,10 +276,31 @@ program define projectbuilder, rclass
                 if regexm(`"`macval(mline)'"', "^([a-z]+)=(.*)$") {
                     local mkey = regexs(1)
                     local mval = regexs(2)
-                    foreach m in description url topic publicfacing timeline ///
-                                 othernotes outcomes over created {
-                        if "`mkey'" == "`m'" {
-                            if `"``m''"' == "" local `m' `"`mval'"'
+                    * A recorded value goes straight back into a local, so it
+                    * must not be re-expanded on the way: -local x `"`mval'"'-
+                    * ate a recorded $ (silently, then wrote the damaged text
+                    * back out) and stopped dead on a recorded backtick, which
+                    * left the project permanently un-rebuildable.  Copy the
+                    * macro instead, and park the tildes exactly as the option
+                    * values above were parked.  The help file says this file
+                    * may be edited by hand, so it has to survive being edited.
+                    if strpos(`"`macval(mval)'"', char(96)) {
+                        di as txt `"projectbuilder: ignoring `mkey'= in _project_meta.txt (it contains a backtick)"'
+                    }
+                    else {
+                        local mval = subinstr(`"`macval(mval)'"', char(126), char(5), .)
+                        * Park the $ as well.  Unlike a $ typed on the command
+                        * line -- which Stata expands before this program is
+                        * reached -- a recorded one arrives intact, and only
+                        * gets eaten further downstream when the value is
+                        * re-expanded on its way into pb_docs.  Hold it here
+                        * and pb_wl/pb_docs will put it back at write time.
+                        local mval = subinstr(`"`macval(mval)'"', char(36), char(1), .)
+                        foreach m in description url topic publicfacing timeline ///
+                                     othernotes outcomes over created {
+                            if "`mkey'" == "`m'" {
+                                if `"``m''"' == "" local `m' : copy local mval
+                            }
                         }
                     }
                 }
@@ -288,17 +324,22 @@ program define projectbuilder, rclass
     * would make the generated file unrunnable for a teammate on Stata 16-19.
     * Raise the pin by hand if a project comes to rely on newer syntax.
     local sver "16.0"
-    local descfull `"`description'"'
+    * Copy rather than re-expand: these values may hold a recorded $ that a
+    * bare `"`description'"' would eat a second time.
+    local descfull : copy local description
     if `"`descfull'"' == "" local descfull "(add a one-line description of the project here)"
-    local url_show `"`url'"'
+    local url_show : copy local url
     if `"`url_show'"' == "" local url_show "(none recorded)"
+    * url() may have come from the metadata file rather than this call, so
+    * the live fetch below needs its tildes put back now.
+    pb_unesc url_live `"`url'"'
     foreach m in topic publicfacing timeline othernotes {
-        local `m'_show `"``m''"'
+        local `m'_show : copy local `m'
         if `"``m'_show'"' == "" local `m'_show "(not recorded)"
     }
     local gh "https://raw.githubusercontent.com/ericabooth"
     local urlbase ""
-    if `"`url'"' != "" pb_base urlbase `"`url'"'
+    if `"`url_live'"' != "" pb_base urlbase `"`url_live'"'
 
     * ---- record the metadata for the next rebuild ------------------------
     capture mkdir `"`docs'"'
@@ -310,7 +351,10 @@ program define projectbuilder, rclass
         file write `mfw' "* one key=value per line." _n
         foreach m in description url topic publicfacing timeline othernotes ///
                      outcomes over created {
-            file write `mfw' "`m'=" `"``m''"' _n
+            * Write the value the user typed, not the parked form: this file
+            * is documented as hand-editable, so it must be readable text.
+            pb_unesc mout `"``m''"'
+            file write `mfw' "`m'=" `"`macval(mout)'"' _n
         }
         file close `mfw'
     }
@@ -328,7 +372,7 @@ program define projectbuilder, rclass
         quietly file open `fh' using `"`code'/000_control.do"', write text replace
         pb_wl `fh' `"*==============================================================="'
         pb_wl `fh' `"* 000_control.do -- `proj_label'"'
-        pb_wl `fh' `"* Created `created' by `author' (scaffolded by projectbuilder v2.0.0)"'
+        pb_wl `fh' `"* Created `created' by `author' (scaffolded by projectbuilder v2.0.1)"'
         pb_wl `fh' `"* Last built `lastbuilt'"'
         pb_wl `fh' `"* The control file: every path in one place."'
         pb_wl `fh' `"*==============================================================="'
@@ -511,6 +555,12 @@ program define projectbuilder, rclass
         pb_wl `fh' `"local outcomes "`outcomes'"   // recorded from outcomes(); edit freely"'
         pb_wl `fh' `"local over     "`over'"   // recorded from over(); edit freely"'
         pb_wl `fh' `""'
+        pb_wl `fh' `"* -table, statistic()- is the Stata 17 syntax.  000_control.do pins"'
+        pb_wl `fh' `"* -version 16.0-, this package's floor, so this file has to work under"'
+        pb_wl `fh' `"* that pin too: under 16 the statistic() option is a syntax error."'
+        pb_wl `fh' `"* c(stata_version) is the RUNNING release, which is what decides."'
+        pb_wl `fh' `"local newtable = (c(stata_version) >= 17)"'
+        pb_wl `fh' `""'
         pb_wl `fh' `"foreach y of local outcomes {"'
         pb_wl `fh' `"    capture confirm variable ~By'"'
         pb_wl `fh' `"    if _rc continue          // silently skip vars not in this file"'
@@ -518,7 +568,12 @@ program define projectbuilder, rclass
         pb_wl `fh' `"    foreach g of local over {"'
         pb_wl `fh' `"        capture confirm variable ~Bg'"'
         pb_wl `fh' `"        if _rc continue"'
-        pb_wl `fh' `"        table ~Bg', statistic(mean ~By') statistic(count ~By')"'
+        pb_wl `fh' `"        if ~Bnewtable' {"'
+        pb_wl `fh' `"            version 17: table ~Bg', statistic(mean ~By') statistic(count ~By')"'
+        pb_wl `fh' `"        }"'
+        pb_wl `fh' `"        else {"'
+        pb_wl `fh' `"            tabstat ~By', by(~Bg') statistics(mean count)"'
+        pb_wl `fh' `"        }"'
         pb_wl `fh' `"    }"'
         pb_wl `fh' `"}"'
         file close `fh'
@@ -613,8 +668,13 @@ program define projectbuilder, rclass
         pb_wl `fh' `"    di as txt `"  net install webdoc2, from("`gh'/webdoc2-stata-public/main/") replace"'"'
         pb_wl `fh' `"}"'
         pb_wl `fh' `"else {"'
-        pb_wl `fh' `"    * cd so webdoc2 finds index.do and writes index.html beside it"'
-        pb_wl `fh' `"    cd "~Ddocs""'
+        pb_wl `fh' `"    * cd so webdoc2 finds index.do and writes index.html beside it."'
+        pb_wl `fh' `"    * The path is stamped literally rather than taken from ~Ddocs:"'
+        pb_wl `fh' `"    * projectbuilder runs this file itself under -builddocs-, and at"'
+        pb_wl `fh' `"    * that point 000_control.do has not run, so ~Ddocs is undefined."'
+        pb_wl `fh' `"    local here "`docs'""'
+        pb_wl `fh' `"    if "~Bhere'" == "" local here "~Ddocs""'
+        pb_wl `fh' `"    cd "~Bhere'""'
         pb_wl `fh' `"    capture noisily webdoc2 "index.do""'
         pb_wl `fh' `"    if _rc di as txt "webdoc2 render skipped; the built-in website/index.html remains.""'
         pb_wl `fh' `"}"'
@@ -629,17 +689,31 @@ program define projectbuilder, rclass
         if inlist(substr(`"`dsrc'"', -1, 1), "/", "\") {
             local dsrc = substr(`"`dsrc'"', 1, strlen(`"`dsrc'"') - 1)
         }
-        capture confirm file `"`dsrc'/."'
-        if !_rc {
+        pb_isdir dsrcdir `"`dsrc'"'
+        if `dsrcdir' {
             * a directory: copy every (non-hidden) file into 01_raw/
-            local dfiles : dir `"`dsrc'"' files "*"
+            capture local dfiles : dir `"`dsrc'"' files "*"
+            if _rc {
+                di as err `"projectbuilder: data("`data'") is a directory that cannot be listed."'
+                exit 601
+            }
             local ncopy = 0
+            local nskip = 0
             foreach f of local dfiles {
-                if substr(`"`f'"', 1, 1) == "." continue
-                capture copy `"`dsrc'/`f'"' `"`raw'/`f'"', replace
+                if substr(`"`macval(f)'"', 1, 1) == "." continue
+                capture copy `"`dsrc'/`macval(f)'"' `"`raw'/`macval(f)'"', replace
                 if !_rc local ++ncopy
+                else {
+                    local ++nskip
+                    di as txt `"projectbuilder: could not copy `macval(f)'"'
+                }
             }
             di as txt `"projectbuilder: copied `ncopy' file(s) from `dsrc' into 01_raw/"'
+            * A skipped file used to be invisible: the count went down and the
+            * run still said OK, so a locked or unreadable source file dropped
+            * out of the analytic file without anyone being told.
+            if `nskip' > 0 ///
+                di as err `"projectbuilder: `nskip' file(s) in data() could NOT be copied (see above)."'
         }
         else {
             capture confirm file `"`dsrc'"'
@@ -649,14 +723,21 @@ program define projectbuilder, rclass
                 di as txt `"projectbuilder: copied 1 file into 01_raw/ (`bn')"'
             }
             else {
-                di as txt `"projectbuilder: data("`data'") not found; nothing copied into 01_raw/."'
+                * You asked for data and got none.  This used to be one -as txt-
+                * note among several, and the run still ended "projectbuilder
+                * OK", so the first thing a reader of Workflow A saw was an
+                * empty project reported as a success.
+                di as err `"projectbuilder: data("`data'") does not exist; NOTHING was copied into 01_raw/."'
+                di as err  "                The scaffold was still built. Check the path -- a"
+                di as err  "                relative one is read from the current directory --"
+                di as err `"                then rerun with -rebuild-."'
             }
         }
     }
-    if `"`url'"' != "" {
+    if `"`url_live'"' != "" {
         local ubn `"`urlbase'"'
-        capture copy `"`url'"' `"`raw'/`ubn'"', replace
-        if !_rc di as txt `"projectbuilder: fetched `url' into 01_raw/ (`ubn')"'
+        capture copy `"`url_live'"' `"`raw'/`ubn'"', replace
+        if !_rc di as txt `"projectbuilder: fetched `url_live' into 01_raw/ (`ubn')"'
         else    di as txt `"projectbuilder: url() not reachable now; the fetch is written into 100_data_download.do to run later."'
     }
 
@@ -667,9 +748,24 @@ program define projectbuilder, rclass
     * AUTO-PASS: convertanything -> combineall over 01_raw/               *
     * (projectbuilder's own run; the do-file holds the reproducible copy) *
     *=====================================================================*
+    * The auto-pass runs -convertanything, clear- and -combineall-, and both
+    * load data.  Without the -preserve- below, scaffolding a project threw
+    * away whatever the user had in memory: -sysuse auto- followed by
+    * -projectbuilder MyProj, rebuild- came back with the converted file
+    * loaded and the auto data gone, silently, with no warning.  A command
+    * that builds folders has no business touching the user's data, so put it
+    * back.  -preserve- is a no-op when nothing is in memory.
+    local pbrestore = 0
     if `nraw' > 0 & "`noautoconvert'" == "" {
         capture which convertanything
-        if _rc {
+        local haveconv = (_rc == 0)
+        capture which combineall
+        local havecomb = (_rc == 0)
+        if `haveconv' | `havecomb' {
+            preserve
+            local pbrestore = 1
+        }
+        if !`haveconv' {
             di as txt "projectbuilder: convertanything not installed; skipping auto-convert."
             di as txt `"                install: net install convertanything, from("`gh'/convertanything-stata-public/main/") replace"'
         }
@@ -681,8 +777,7 @@ program define projectbuilder, rclass
         * combine only if there is something converted to combine
         pb_count nconverted `"`converted'"' "*.dta"
         if `nconverted' > 0 {
-            capture which combineall
-            if _rc {
+            if !`havecomb' {
                 di as txt "projectbuilder: combineall not installed; skipping auto-combine."
                 di as txt `"                install: net install combineall, from("`gh'/combineall-stata-public/main/") replace"'
             }
@@ -693,9 +788,15 @@ program define projectbuilder, rclass
             }
         }
         else {
+            * Do not tell the user to install a package they already have, and
+            * do not repeat the install line already printed two lines above.
             di as txt "projectbuilder: nothing converted yet; skipping auto-combine."
-            di as txt "                (install convertanything, or add .dta files to 01_raw/_converted/)."
+            if `haveconv' ///
+                di as txt "                (nothing in 01_raw/ could be converted; check the file types.)"
+            else ///
+                di as txt "                (that is expected without convertanything -- see above.)"
         }
+        if `pbrestore' restore
     }
     else if `nraw' == 0 {
         di as txt "projectbuilder: 01_raw/ is empty -- scaffold only (Method B)."
@@ -726,29 +827,36 @@ program define projectbuilder, rclass
         else {
             di as txt "projectbuilder: rendering documentation with webdoc2 ..."
             * _runall.do cd's into _documentation; save and restore the cwd.
+            * If the cwd has been deleted out from under the session, c(pwd)
+            * comes back empty and a bare -cd ""- silently lands the user in
+            * their home directory.  Only restore what we actually captured.
             local pb_pwd `"`c(pwd)'"'
             capture noisily do `"`docs'/_runall.do"'
-            quietly cd `"`pb_pwd'"'
+            if `"`pb_pwd'"' != "" quietly cd `"`pb_pwd'"'
         }
     }
 
     *=====================================================================*
     * SUMMARY + NEXT STEPS                                                *
     *=====================================================================*
+    * Show the values the user typed, not the parked form.
+    foreach m in descfull url_show topic_show timeline_show othernotes_show {
+        pb_unesc `m' `"``m''"'
+    }
     di as txt _n "{hline 66}"
-    di as txt "projectbuilder OK  (v2.0.0)"
+    di as txt "projectbuilder OK  (v2.0.1)"
     di as txt `"  Project       : `proj_label'"'
     di as txt `"  Location      : `target'"'
-    di as txt `"  Description   : `descfull'"'
-    di as txt `"  Source URL    : `url_show'"'
+    di as txt `"  Description   : `macval(descfull)'"'
+    di as txt `"  Source URL    : `macval(url_show)'"'
     di as txt `"  Raw files     : `nraw'"'
     di as txt `"  Converted     : `nconverted'"'
     di as txt `"  Outcomes      : `outcomes'"'
     di as txt `"  Over          : `over'"'
     di as txt `"  Descsave      : `=cond("`descsave'" != "", "yes", "no")'"'
-    di as txt `"  Topic         : `topic_show'"'
+    di as txt `"  Topic         : `macval(topic_show)'"'
     di as txt `"  Public-facing : `publicfacing_show'"'
-    di as txt `"  Timeline      : `timeline_show'"'
+    di as txt `"  Timeline      : `macval(timeline_show)'"'
     di as txt `"  Mode          : `=cond(`exists', "rebuild", "fresh scaffold")'"'
     di as txt "{hline 66}"
     di as txt _n "Next steps:"
@@ -760,12 +868,32 @@ program define projectbuilder, rclass
         di as txt `"  3. do "`code'/000_control.do"   then work down 100..600."'
     }
     else {
+        * There are raw files, but that does not mean the analytic file got
+        * built: on an install without convertanything/combineall -- the
+        * default state -- nothing is converted and nothing is combined.  The
+        * next steps used to say "Review 02_cleaned/<project>_analytic.dta"
+        * regardless, sending a first-time user to a file that was never
+        * created.  Say what is actually on disk.
+        capture confirm file `"`cleaned'/`proj_label'_analytic.dta"'
+        local haveanalytic = (_rc == 0)
         di as txt `"  1. do "`code'/000_control.do"    (sets the path globals)"'
-        di as txt  "  2. Review 02_cleaned/`proj_label'_analytic.dta, then work down"
-        di as txt  "     the pipeline: 300_labels -> 400_data_profiler ->"
-        di as txt  "     500_aggregation -> 600_analysis."
-        di as txt  "  3. Every data refresh is just another:"
-        di as txt `"       projectbuilder `projspec', rebuild"'
+        if `haveanalytic' {
+            di as txt  "  2. Review 02_cleaned/`proj_label'_analytic.dta, then work down"
+            di as txt  "     the pipeline: 300_labels -> 400_data_profiler ->"
+            di as txt  "     500_aggregation -> 600_analysis."
+            di as txt  "  3. Every data refresh is just another:"
+            di as txt `"       projectbuilder `projspec', rebuild"'
+        }
+        else {
+            di as txt  "  2. There is no 02_cleaned/`proj_label'_analytic.dta yet, so the"
+            di as txt  "     pipeline from 300_labels on has nothing to read. Either:"
+            di as txt  "       - install the optional companions named above and rerun"
+            di as txt `"         with -projectbuilder `projspec', rebuild-, or"'
+            di as txt  "       - build the analytic file yourself and save it there"
+            di as txt `"         (see _code/200_data_management.do)."'
+            di as txt  "  3. Then work down 300_labels -> 400_data_profiler ->"
+            di as txt  "     500_aggregation -> 600_analysis."
+        }
     }
     di as txt `"  Docs: `web'/index.html"'
 
@@ -782,14 +910,51 @@ end
 * HELPERS                                                             *
 *=====================================================================*
 
+* --- pb_isdir: set the caller's local `retname' to 1 if `p' is an existing
+*     DIRECTORY, else 0.  Mata's direxists() answers exactly that question on
+*     every platform, with no side effects.
+*
+*     This replaces -capture confirm file "<dir>/."-, which was used in three
+*     places and whose behavior on Windows the authors could not confirm.
+*     The alternative of -capture cd- into the directory was rejected: it
+*     moves the working directory to ask a question, and it reports "missing"
+*     for a directory that merely cannot be entered.
+program define pb_isdir
+    gettoken retname 0 : 0
+    gettoken p 0 : 0
+    local r = 0
+    mata: st_local("r", strofreal(direxists(st_local("p"))))
+    c_local `retname' `r'
+end
+
+* --- pb_unesc: restore the characters parked by the caller -- char(5) back
+*     to ~, char(1) back to $ -- for text that is about to be shown or
+*     written outside pb_wl.
+program define pb_unesc
+    gettoken retname 0 : 0
+    gettoken s 0 : 0
+    local s = subinstr(`"`macval(s)'"', char(5), char(126), .)
+    local s = subinstr(`"`macval(s)'"', char(1), char(36),  .)
+    c_local `retname' `"`macval(s)'"'
+end
+
 * --- pb_wl: write one line, turning ~D into a literal $ and ~B into a
 *     literal backtick.  The line is written as a string EXPRESSION, so the
 *     substituted characters are never re-parsed by the macro processor --
 *     which lets a self-contained ado emit files full of $globals and
 *     `locals' without any template folder or -filefilter-.
+*
+*     The two ~ markers run FIRST, then char(5) is turned back into a real ~.
+*     That order is what makes the markers unambiguous: the caller has
+*     already parked every user-supplied tilde on char(5), so by the time
+*     this runs, the only "~D" left in the line is one this program wrote.
+*     Before that, url("https://example.edu/~Dave/data.csv") came out of here
+*     as ".../$ave/data.csv".
 program define pb_wl
     gettoken fh 0 : 0
-    file write `fh' (subinstr(subinstr(`0', "~D", char(36), .), "~B", char(96), .)) _n
+    file write `fh' (subinstr(subinstr(subinstr(subinstr(`0',    ///
+        "~D", char(36), .), "~B", char(96), .),                  ///
+        char(5), char(126), .), char(1), char(36), .)) _n
 end
 
 * --- pb_guard: set the caller's local `flag' to 1 if the code file should
@@ -824,7 +989,14 @@ program define pb_count
     gettoken retname 0 : 0
     gettoken dir 0 : 0
     gettoken pat 0 : 0
-    local list : dir `"`dir'"' files `"`pat'"'
+    * -: dir- stops with r(601) when the path is missing or is not a
+    * directory, which used to abort the whole run from inside a counter.
+    * A folder we cannot list simply holds no files we can see.
+    capture local list : dir `"`dir'"' files `"`pat'"'
+    if _rc {
+        c_local `retname' 0
+        exit
+    }
     local k = 0
     foreach f of local list {
         if substr(`"`f'"', 1, 1) == "." continue
@@ -853,10 +1025,13 @@ program define pb_docs
     * value could open an extra column.
     foreach m in project date author desc url topic public timeline ///
                  othernotes stamp {
-        local `m' = subinstr(`"``m''"', "&", "&amp;", .)
-        local `m' = subinstr(`"``m''"', "<", "&lt;",  .)
-        local `m' = subinstr(`"``m''"', ">", "&gt;",  .)
-        local md_`m' = subinstr(`"``m''"', "|", "\|", .)
+        * Put back the ~ (and any $) the caller parked, before escaping.
+        local `m' = subinstr(`"`macval(`m')'"', char(5), char(126), .)
+        local `m' = subinstr(`"`macval(`m')'"', char(1), char(36),  .)
+        local `m' = subinstr(`"`macval(`m')'"', "&", "&amp;", .)
+        local `m' = subinstr(`"`macval(`m')'"', "<", "&lt;",  .)
+        local `m' = subinstr(`"`macval(`m')'"', ">", "&gt;",  .)
+        local md_`m' = subinstr(`"`macval(`m')'"', "|", "\|", .)
     }
 
     tempname fh
@@ -866,7 +1041,7 @@ program define pb_docs
     file write `fh' "<!doctype html>" _n
     file write `fh' `"<html lang="en"><head><meta charset="utf-8">"' _n
     file write `fh' `"<meta name="viewport" content="width=device-width, initial-scale=1">"' _n
-    file write `fh' `"<title>`project' -- project documentation</title>"' _n
+    file write `fh' `"<title>`macval(project)' -- project documentation</title>"' _n
     file write `fh' "<style>" _n
     file write `fh' "body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;" _n
     file write `fh' "max-width:820px;margin:2rem auto;padding:0 1rem;line-height:1.5;color:#1a1a1a}" _n
@@ -874,43 +1049,43 @@ program define pb_docs
     file write `fh' "th,td{text-align:left;padding:.3rem .8rem;border-bottom:1px solid #ddd;vertical-align:top}" _n
     file write `fh' "code{background:#f4f4f4;padding:.1rem .3rem;border-radius:3px}" _n
     file write `fh' ".muted{color:#666;font-size:.9rem}</style></head><body>" _n
-    file write `fh' `"<h1>`project'</h1>"' _n
-    file write `fh' `"<p>`desc'</p>"' _n
+    file write `fh' `"<h1>`macval(project)'</h1>"' _n
+    file write `fh' `"<p>`macval(desc)'</p>"' _n
     file write `fh' "<table>" _n
-    file write `fh' `"<tr><th>Created</th><td>`date'</td></tr>"' _n
-    file write `fh' `"<tr><th>Author</th><td>`author'</td></tr>"' _n
-    file write `fh' `"<tr><th>Source URL</th><td>`url'</td></tr>"' _n
-    file write `fh' `"<tr><th>Topic</th><td>`topic'</td></tr>"' _n
-    file write `fh' `"<tr><th>Public-facing</th><td>`public'</td></tr>"' _n
-    file write `fh' `"<tr><th>Refresh timeline</th><td>`timeline'</td></tr>"' _n
-    file write `fh' `"<tr><th>Other notes</th><td>`othernotes'</td></tr>"' _n
+    file write `fh' `"<tr><th>Created</th><td>`macval(date)'</td></tr>"' _n
+    file write `fh' `"<tr><th>Author</th><td>`macval(author)'</td></tr>"' _n
+    file write `fh' `"<tr><th>Source URL</th><td>`macval(url)'</td></tr>"' _n
+    file write `fh' `"<tr><th>Topic</th><td>`macval(topic)'</td></tr>"' _n
+    file write `fh' `"<tr><th>Public-facing</th><td>`macval(public)'</td></tr>"' _n
+    file write `fh' `"<tr><th>Refresh timeline</th><td>`macval(timeline)'</td></tr>"' _n
+    file write `fh' `"<tr><th>Other notes</th><td>`macval(othernotes)'</td></tr>"' _n
     file write `fh' "</table>" _n
     pb_htmllist `fh' `"`rawd'"'   "*"      "Raw files (01_raw/)"
     pb_htmllist `fh' `"`convd'"'  "*.dta"  "Converted files (01_raw/_converted/)"
     pb_htmllist `fh' `"`cleand'"' "*.dta"  "Analytic files (02_cleaned/)"
-    file write `fh' `"<p class="muted">Built `stamp' by projectbuilder v2.0.0."' _n
+    file write `fh' `"<p class="muted">Built `macval(stamp)' by projectbuilder v2.0.1."' _n
     file write `fh' " Install webdoc2 for a richer rendering.</p>" _n
     file write `fh' "</body></html>" _n
     file close `fh'
 
     * ---- _documentation/Readme.md ---------------------------------------
     quietly file open `fh' using `"`readme'"', write text replace
-    file write `fh' `"# `md_project'"' _n _n
-    file write `fh' `"`md_desc'"' _n _n
+    file write `fh' `"# `macval(md_project)'"' _n _n
+    file write `fh' `"`macval(md_desc)'"' _n _n
     file write `fh' "| Field | Value |" _n
     file write `fh' "|-------|-------|" _n
-    file write `fh' `"| Created | `md_date' |"' _n
-    file write `fh' `"| Author | `md_author' |"' _n
-    file write `fh' `"| Source URL | `md_url' |"' _n
-    file write `fh' `"| Topic | `md_topic' |"' _n
-    file write `fh' `"| Public-facing | `md_public' |"' _n
-    file write `fh' `"| Refresh timeline | `md_timeline' |"' _n
-    file write `fh' `"| Other notes | `md_othernotes' |"' _n
+    file write `fh' `"| Created | `macval(md_date)' |"' _n
+    file write `fh' `"| Author | `macval(md_author)' |"' _n
+    file write `fh' `"| Source URL | `macval(md_url)' |"' _n
+    file write `fh' `"| Topic | `macval(md_topic)' |"' _n
+    file write `fh' `"| Public-facing | `macval(md_public)' |"' _n
+    file write `fh' `"| Refresh timeline | `macval(md_timeline)' |"' _n
+    file write `fh' `"| Other notes | `macval(md_othernotes)' |"' _n
     file write `fh' _n
     pb_mdlist `fh' `"`rawd'"'   "*"     "Raw files (01_raw/)"
     pb_mdlist `fh' `"`convd'"'  "*.dta" "Converted files (01_raw/_converted/)"
     pb_mdlist `fh' `"`cleand'"' "*.dta" "Analytic files (02_cleaned/)"
-    file write `fh' _n `"_Built `md_stamp' by projectbuilder v2.0.0._"' _n
+    file write `fh' _n `"_Built `macval(md_stamp)' by projectbuilder v2.0.1._"' _n
     file close `fh'
 end
 
@@ -920,7 +1095,10 @@ program define pb_htmllist
     gettoken pat 0 : 0
     gettoken hdr 0 : 0
     file write `fh' `"<h3>`hdr'</h3>"' _n
-    local list : dir `"`dir'"' files `"`pat'"'
+    * As in pb_count: a folder we cannot list simply shows no files, rather
+    * than stopping the run with r(601) from inside the documentation writer.
+    capture local list : dir `"`dir'"' files `"`pat'"'
+    if _rc local list ""
     local any = 0
     file write `fh' "<ul>" _n
     foreach f of local list {
@@ -941,7 +1119,8 @@ program define pb_mdlist
     gettoken pat 0 : 0
     gettoken hdr 0 : 0
     file write `fh' `"## `hdr'"' _n _n
-    local list : dir `"`dir'"' files `"`pat'"'
+    capture local list : dir `"`dir'"' files `"`pat'"'
+    if _rc local list ""
     local any = 0
     foreach f of local list {
         if substr(`"`f'"', 1, 1) == "." continue

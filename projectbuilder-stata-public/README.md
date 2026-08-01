@@ -136,13 +136,24 @@ When `webdoc2` is absent, `projectbuilder` writes a plain but complete
 - `r(nconverted)` — number of `.dta` files in `01_raw/_converted/`
 - `r(rebuilt)` — `1` if this call refreshed an existing project, else `0`
 
+## Your data in memory
+
+`projectbuilder` leaves the dataset in memory exactly as it found it. The
+automatic pass does load data — `convertanything` runs with `clear`, and
+`combineall` does its own `use` and `save` — so the command wraps that pass in
+`preserve`. Scaffolding or refreshing in the middle of an analysis session does
+not cost you your data. `noautoconvert` skips the pass, and with it the
+`preserve`.
+
 ## Testing
 
 `test_projectbuilder.do` scaffolds into a temporary directory and checks both
 workflows, the rebuild idempotence and edit-preservation guarantee, metadata
 preservation across a rebuild, the seeded-`_converted/` combine path, the
 clobber refusal (602), name and option validation (198), nesting, HTML escaping,
-and the generated control file. Synthetic data only; nothing is committed.
+and the generated control file. It also runs every example printed in the help
+file, and the clickable *Try it now* walkthrough, so the documentation cannot
+drift from the code. Synthetic data only; nothing is committed.
 
 The test finds the package itself: it uses the first of an argument, an
 existing `$pkgroot`, the current directory, or `findfile projectbuilder.ado`.
@@ -153,6 +164,28 @@ by naming the package folder:
 stata-mp -b do test_projectbuilder.do
 stata-mp -b do test_projectbuilder.do "/path/to/projectbuilder-stata-public"
 ```
+
+## Changes in 2.0.1
+
+- The dataset in memory is preserved across the automatic convert/combine pass.
+  It used to be silently replaced by the converted file.
+- The generated `400_data_profiler.do` runs under the `version 16.0` pin that
+  `000_control.do` sets. It used to emit Stata 17 `table, statistic()` syntax
+  and stop with r(198).
+- `builddocs` renders. The generated `_runall.do` now carries a literal
+  documentation path instead of `$docs`, which is undefined at the point
+  `projectbuilder` runs that file.
+- A backtick in any option value is refused up front, naming the option. It
+  used to abort partway through and leave a half-built folder that blocked the
+  corrected re-run with 602.
+- A tilde in a value survives into the generated files. `url(".../~Dave/...")`
+  used to be written out as `.../$ave/...`.
+- A `$` or a backtick recorded in `_project_meta.txt` survives a rebuild.
+- A relative `path()` is resolved, so `r(path)` and `$root` are absolute as
+  documented.
+- Failures are reported rather than swallowed: files `data()` could not copy, a
+  base that exists but is not writable, and directories that cannot be listed.
+- Directory tests use Mata's `direxists()` in place of `confirm file dir/.`.
 
 ## Authors
 
