@@ -19,228 +19,228 @@
 \indexentry{theory of change|hyperpage}{15}
 \indexentry{logic model|hyperpage}{15}
 \indexentry{theory of change|hyperpage}{15}
-\indexentry{numbered pipeline|hyperpage}{19}
-\indexentry{ssc install@\texttt{ssc install}|hyperpage}{21}
-\indexentry{writeinput@\texttt  {writeinput}|hyperpage}{22}
-\indexentry{usepackage@\texttt{usepackage}|hyperpage}{22}
-\indexentry{control file|hyperpage}{24}
-\indexentry{version@\texttt{version}|hyperpage}{25}
-\indexentry{varabbrev@\texttt{varabbrev}|hyperpage}{25}
-\indexentry{projectbuilder@\texttt{projectbuilder}|hyperpage}{25}
-\indexentry{convertanything@\texttt{convertanything}|hyperpage}{27}
-\indexentry{combineall@\texttt{combineall}|hyperpage}{27}
-\indexentry{srctag@\texttt{srctag}|hyperpage}{28}
-\indexentry{webdoc2@\texttt{webdoc2}|hyperpage}{28}
-\indexentry{tracking spine|hyperpage}{31}
-\indexentry{gtools@\texttt{gtools}|hyperpage}{33}
-\indexentry{collapse@\texttt{collapse}|hyperpage}{33}
-\indexentry{gcollapse@\texttt{gcollapse}|hyperpage}{33}
-\indexentry{egen@\texttt{egen}|hyperpage}{33}
-\indexentry{gegen@\texttt{gegen}|hyperpage}{33}
-\indexentry{ftools@\texttt{ftools}|hyperpage}{33}
-\indexentry{reghdfe@\texttt{reghdfe}|hyperpage}{33}
-\indexentry{API (application programming interface)|hyperpage}{39}
-\indexentry{American Community Survey (ACS)|hyperpage}{43}
-\indexentry{getcensus@\texttt{getcensus}|hyperpage}{43}
-\indexentry{educationdata@\texttt{educationdata}|hyperpage}{44}
-\indexentry{import fred@\texttt{import fred}|hyperpage}{47}
-\indexentry{FRED (Federal Reserve Economic Data)|hyperpage}{47}
-\indexentry{Quarterly Census of Employment and Wages (QCEW)|hyperpage}{47}
-\indexentry{FIPS codes|hyperpage}{48}
-\indexentry{Socrata|hyperpage}{50}
-\indexentry{googlesheets@\texttt  {googlesheets}|hyperpage}{51}
-\indexentry{googlechart@\texttt  {googlechart}|hyperpage}{51}
-\indexentry{webapi@\texttt{webapi}|hyperpage}{51}
-\indexentry{JSON (JavaScript Object Notation)|hyperpage}{51}
-\indexentry{flattening (JSON)|hyperpage}{52}
-\indexentry{combineall@\texttt{combineall}|hyperpage}{55}
-\indexentry{combineall@\texttt{combineall}|hyperpage}{60}
-\indexentry{copy@\texttt{copy}|hyperpage}{63}
-\indexentry{import delimited@\texttt{import delimited}|hyperpage}{63}
-\indexentry{destring@\texttt{destring}|hyperpage}{63}
-\indexentry{need index|hyperpage}{64}
-\indexentry{z-score@\emph{z}-score|hyperpage}{64}
-\indexentry{price transparency files|hyperpage}{66}
-\indexentry{streaming large files|hyperpage}{66}
-\indexentry{convertanything@\texttt{convertanything}|hyperpage}{68}
-\indexentry{importr@\texttt{importr}|hyperpage}{69}
-\indexentry{import excel@\texttt{import excel}|hyperpage}{69}
-\indexentry{record linkage|hyperpage}{69}
-\indexentry{total survey error|hyperpage}{73}
-\indexentry{API!survey platforms|hyperpage}{74}
-\indexentry{REDCap|hyperpage}{74}
-\indexentry{Qualtrics|hyperpage}{74}
-\indexentry{undummy@\texttt{undummy}|hyperpage}{75}
-\indexentry{control chart|hyperpage}{76}
-\indexentry{reachcheck@\texttt{reachcheck}|hyperpage}{79}
-\indexentry{char define@\texttt{char define}|hyperpage}{80}
-\indexentry{surveytracker@\texttt{surveytracker}|hyperpage}{80}
-\indexentry{likertscale@\texttt{likertscale}|hyperpage}{80}
-\indexentry{Cronbach's alpha|hyperpage}{80}
-\indexentry{top-two-box|hyperpage}{80}
-\indexentry{nonresponse!unit|hyperpage}{84}
-\indexentry{nonresponse!item|hyperpage}{84}
-\indexentry{level-of-effort|hyperpage}{84}
-\indexentry{paradata|hyperpage}{84}
-\indexentry{nonresponse@\texttt{nonresponse}|hyperpage}{85}
-\indexentry{loebias@\texttt{loebias}|hyperpage}{86}
-\indexentry{cxchangelog@\texttt{cxchangelog}|hyperpage}{86}
-\indexentry{cxchangelog@\texttt{cxchangelog}|hyperpage}{87}
-\indexentry{datadictionary@\texttt{datadictionary}|hyperpage}{87}
-\indexentry{datadictionary@\texttt{datadictionary}|hyperpage}{90}
-\indexentry{surveypull@\texttt{surveypull}|hyperpage}{90}
-\indexentry{probabilistic record linkage|hyperpage}{93}
-\indexentry{Jaro-Winkler distance|hyperpage}{93}
-\indexentry{soundex@\texttt{soundex}|hyperpage}{94}
-\indexentry{joinby@\texttt{joinby}|hyperpage}{94}
-\indexentry{reclink@\texttt{reclink}|hyperpage}{95}
-\indexentry{Fellegi-Sunter framework|hyperpage}{95}
-\indexentry{match weight|hyperpage}{95}
-\indexentry{nearmrg@\texttt{nearmrg}|hyperpage}{96}
-\indexentry{linkage error|hyperpage}{97}
-\indexentry{crosswalk|hyperpage}{98}
-\indexentry{srctag@\texttt{srctag}|hyperpage}{99}
-\indexentry{srcfind@\texttt{srcfind}|hyperpage}{99}
-\indexentry{schema drift|hyperpage}{100}
-\indexentry{confirm@\texttt{confirm}|hyperpage}{100}
-\indexentry{isid@\texttt{isid}|hyperpage}{100}
-\indexentry{assert@\texttt{assert}|hyperpage}{100}
-\indexentry{xtset@\texttt{xtset}|hyperpage}{101}
-\indexentry{unbalanced panel|hyperpage}{101}
-\indexentry{reshapehelper@\texttt{reshapehelper}|hyperpage}{103}
-\indexentry{misstable@\texttt{misstable}|hyperpage}{108}
-\indexentry{multiple imputation|hyperpage}{108}
-\indexentry{Cronbach's alpha|hyperpage}{116}
-\indexentry{alpha@\texttt{alpha}|hyperpage}{116}
-\indexentry{factor analysis|hyperpage}{116}
-\indexentry{factor@\texttt{factor}|hyperpage}{116}
-\indexentry{item response theory|hyperpage}{116}
-\indexentry{irt@\texttt{irt}|hyperpage}{116}
-\indexentry{svyset@\texttt{svyset}|hyperpage}{118}
-\indexentry{post-stratification|hyperpage}{118}
-\indexentry{raking|hyperpage}{118}
-\indexentry{empirical Bayes shrinkage|hyperpage}{119}
-\indexentry{rateshrink@\texttt{rateshrink}|hyperpage}{120}
-\indexentry{minimum detectable effect|hyperpage}{122}
-\indexentry{power@\texttt{power}|hyperpage}{122}
-\indexentry{design effect|hyperpage}{122}
-\indexentry{conformal prediction|hyperpage}{124}
-\indexentry{conformalpred@\texttt{conformalpred}|hyperpage}{125}
-\indexentry{intraclass correlation|hyperpage}{127}
-\indexentry{hlmr2@\texttt{hlmr2}|hyperpage}{127}
-\indexentry{Blinder-Oaxaca decomposition|hyperpage}{133}
-\indexentry{oaxaca@\texttt{oaxaca}|hyperpage}{133}
-\indexentry{difference-in-differences|hyperpage}{135}
-\indexentry{two-way fixed effects|hyperpage}{136}
-\indexentry{csdid@\texttt{csdid}|hyperpage}{136}
-\indexentry{event study|hyperpage}{139}
-\indexentry{parallel trends|hyperpage}{139}
-\indexentry{regression discontinuity|hyperpage}{140}
-\indexentry{rdrobust@\texttt{rdrobust}|hyperpage}{140}
-\indexentry{synthetic control|hyperpage}{140}
-\indexentry{synth@\texttt{synth}|hyperpage}{140}
-\indexentry{twinmatch@\texttt{twinmatch}|hyperpage}{142}
-\indexentry{Mahalanobis distance|hyperpage}{142}
-\indexentry{honestdid@\texttt{honestdid}|hyperpage}{143}
-\indexentry{kbal@\texttt{kbal}|hyperpage}{144}
-\indexentry{return on investment|hyperpage}{144}
-\indexentry{Monte Carlo simulation|hyperpage}{144}
-\indexentry{roisim@\texttt{roisim}|hyperpage}{146}
-\indexentry{pre-registration|hyperpage}{147}
-\indexentry{data-ink ratio|hyperpage}{153}
-\indexentry{graphical perception|hyperpage}{156}
-\indexentry{catplot@\texttt{catplot}|hyperpage}{157}
-\indexentry{statplot@\texttt{statplot}|hyperpage}{157}
-\indexentry{Likert scale|hyperpage}{157}
-\indexentry{diverging bar chart|hyperpage}{157}
-\indexentry{coefplot@\texttt{coefplot}|hyperpage}{161}
-\indexentry{small multiples|hyperpage}{161}
-\indexentry{run chart|hyperpage}{163}
-\indexentry{xline()@\texttt{xline()}|hyperpage}{163}
-\indexentry{control chart|hyperpage}{163}
-\indexentry{interactive chart|hyperpage}{167}
-\indexentry{self-contained HTML|hyperpage}{167}
-\indexentry{sparkta2@\texttt{sparkta2}|hyperpage}{168}
-\indexentry{statashiny@\texttt{statashiny}|hyperpage}{168}
-\indexentry{dashboardbuilder@\texttt{dashboardbuilder}|hyperpage}{168}
-\indexentry{webdoc2@\texttt{webdoc2}|hyperpage}{168}
-\indexentry{googlechart@\texttt{googlechart}|hyperpage}{169}
-\indexentry{googlesheets@\texttt{googlesheets}|hyperpage}{169}
-\indexentry{sparkline|hyperpage}{169}
-\indexentry{small multiples|hyperpage}{169}
-\indexentry{choropleth|hyperpage}{173}
-\indexentry{diverging stacked bar|hyperpage}{177}
-\indexentry{Likert scale|hyperpage}{177}
-\indexentry{spreadsheet errors|hyperpage}{188}
-\indexentry{collect@\texttt{collect}|hyperpage}{189}
-\indexentry{putexcel@\texttt{putexcel}|hyperpage}{189}
-\indexentry{reproducible reporting|hyperpage}{190}
-\indexentry{esttab@\texttt{esttab}|hyperpage}{190}
-\indexentry{googlesheets@\texttt{googlesheets}|hyperpage}{193}
-\indexentry{OAuth|hyperpage}{193}
-\indexentry{googlechart@\texttt{googlechart}|hyperpage}{194}
-\indexentry{API quota|hyperpage}{194}
-\indexentry{addchart@\texttt{addchart}|hyperpage}{196}
-\indexentry{read-back verification|hyperpage}{197}
-\indexentry{datadictionary@\texttt{datadictionary}|hyperpage}{200}
-\indexentry{webdoc@\texttt{webdoc}|hyperpage}{204}
-\indexentry{literate programming|hyperpage}{204}
-\indexentry{webdoc2@\texttt{webdoc2}|hyperpage}{204}
-\indexentry{statashiny@\texttt{statashiny}|hyperpage}{207}
-\indexentry{dashboardbuilder@\texttt{dashboardbuilder}|hyperpage}{211}
-\indexentry{GitHub Pages|hyperpage}{215}
-\indexentry{webapi@\texttt{webapi}|hyperpage}{221}
-\indexentry{googlesheets@\texttt{googlesheets}|hyperpage}{221}
-\indexentry{googlechart@\texttt{googlechart}|hyperpage}{221}
-\indexentry{sparkta2@\texttt{sparkta2}|hyperpage}{221}
-\indexentry{projectbuilder@\texttt{projectbuilder}|hyperpage}{225}
-\indexentry{lost in the middle|hyperpage}{230}
-\indexentry{program-aided language models|hyperpage}{230}
-\indexentry{projectbuilder@\texttt{projectbuilder}|hyperpage}{233}
-\indexentry{webdoc2@\texttt{webdoc2}|hyperpage}{233}
-\indexentry{srctag@\texttt{srctag}|hyperpage}{233}
-\indexentry{datadictionary@\texttt{datadictionary}|hyperpage}{233}
-\indexentry{assert@\texttt{assert}|hyperpage}{233}
-\indexentry{embarrassingly parallel|hyperpage}{235}
-\indexentry{ai\_privacy\_gate@\texttt{ai\_privacy\_gate}|hyperpage}{237}
-\indexentry{inter-rater reliability|hyperpage}{240}
-\indexentry{kappa!Cohen's and Fleiss'|hyperpage}{240}
-\indexentry{kappa!formula|hyperpage}{240}
-\indexentry{kap@\texttt{kap}|hyperpage}{240}
-\indexentry{llmsieve@\texttt{llmsieve}|hyperpage}{241}
-\indexentry{convergence delta|hyperpage}{243}
-\indexentry{prompt injection|hyperpage}{248}
-\indexentry{four-fifths rule|hyperpage}{250}
-\indexentry{adverse impact|hyperpage}{250}
-\indexentry{faircheck@\texttt{faircheck}|hyperpage}{251}
-\indexentry{k-anonymity@$k$-anonymity|hyperpage}{257}
-\indexentry{quasi-identifiers|hyperpage}{257}
-\indexentry{l-diversity@$l$-diversity|hyperpage}{257}
-\indexentry{riskscan@\texttt{riskscan}|hyperpage}{258}
-\indexentry{re-identification|hyperpage}{259}
-\indexentry{sysuse@\texttt{sysuse}|hyperpage}{259}
-\indexentry{coarsening|hyperpage}{262}
-\indexentry{collect@\texttt{collect}|hyperpage}{262}
-\indexentry{suppress@\texttt{suppress}|hyperpage}{263}
-\indexentry{complementary suppression|hyperpage}{264}
-\indexentry{synthetic data|hyperpage}{266}
-\indexentry{synthgen@\texttt{synthgen}|hyperpage}{266}
-\indexentry{rawsweep@\texttt{rawsweep}|hyperpage}{267}
-\indexentry{disclosure-review checklist|hyperpage}{268}
-\indexentry{dsload@\texttt{dsload}|hyperpage}{271}
-\indexentry{net install@\texttt{net install}|hyperpage}{272}
-\indexentry{syntax@\texttt{syntax}|hyperpage}{272}
-\indexentry{version@\texttt{version}|hyperpage}{273}
-\indexentry{SMCL|hyperpage}{273}
-\indexentry{editanything@\texttt{editanything}|hyperpage}{273}
-\indexentry{writeinput@\texttt{writeinput}|hyperpage}{274}
-\indexentry{scrapessc@\texttt{scrapessc}|hyperpage}{275}
-\indexentry{rateshrink@\texttt{rateshrink}|hyperpage}{276}
-\indexentry{empirical Bayes shrinkage|hyperpage}{277}
+\indexentry{numbered pipeline|hyperpage}{21}
+\indexentry{ssc install@\texttt{ssc install}|hyperpage}{23}
+\indexentry{writeinput@\texttt  {writeinput}|hyperpage}{24}
+\indexentry{usepackage@\texttt{usepackage}|hyperpage}{24}
+\indexentry{control file|hyperpage}{26}
+\indexentry{version@\texttt{version}|hyperpage}{27}
+\indexentry{varabbrev@\texttt{varabbrev}|hyperpage}{27}
+\indexentry{projectbuilder@\texttt{projectbuilder}|hyperpage}{27}
+\indexentry{convertanything@\texttt{convertanything}|hyperpage}{29}
+\indexentry{combineall@\texttt{combineall}|hyperpage}{29}
+\indexentry{srctag@\texttt{srctag}|hyperpage}{30}
+\indexentry{webdoc2@\texttt{webdoc2}|hyperpage}{30}
+\indexentry{tracking spine|hyperpage}{33}
+\indexentry{gtools@\texttt{gtools}|hyperpage}{35}
+\indexentry{collapse@\texttt{collapse}|hyperpage}{35}
+\indexentry{gcollapse@\texttt{gcollapse}|hyperpage}{35}
+\indexentry{egen@\texttt{egen}|hyperpage}{35}
+\indexentry{gegen@\texttt{gegen}|hyperpage}{35}
+\indexentry{ftools@\texttt{ftools}|hyperpage}{35}
+\indexentry{reghdfe@\texttt{reghdfe}|hyperpage}{35}
+\indexentry{API (application programming interface)|hyperpage}{41}
+\indexentry{American Community Survey (ACS)|hyperpage}{45}
+\indexentry{getcensus@\texttt{getcensus}|hyperpage}{45}
+\indexentry{educationdata@\texttt{educationdata}|hyperpage}{46}
+\indexentry{import fred@\texttt{import fred}|hyperpage}{49}
+\indexentry{FRED (Federal Reserve Economic Data)|hyperpage}{49}
+\indexentry{Quarterly Census of Employment and Wages (QCEW)|hyperpage}{49}
+\indexentry{FIPS codes|hyperpage}{50}
+\indexentry{Socrata|hyperpage}{52}
+\indexentry{googlesheets@\texttt  {googlesheets}|hyperpage}{53}
+\indexentry{googlechart@\texttt  {googlechart}|hyperpage}{53}
+\indexentry{webapi@\texttt{webapi}|hyperpage}{53}
+\indexentry{JSON (JavaScript Object Notation)|hyperpage}{53}
+\indexentry{flattening (JSON)|hyperpage}{54}
+\indexentry{combineall@\texttt{combineall}|hyperpage}{57}
+\indexentry{combineall@\texttt{combineall}|hyperpage}{62}
+\indexentry{copy@\texttt{copy}|hyperpage}{65}
+\indexentry{import delimited@\texttt{import delimited}|hyperpage}{65}
+\indexentry{destring@\texttt{destring}|hyperpage}{65}
+\indexentry{need index|hyperpage}{66}
+\indexentry{z-score@\emph{z}-score|hyperpage}{66}
+\indexentry{price transparency files|hyperpage}{68}
+\indexentry{streaming large files|hyperpage}{68}
+\indexentry{convertanything@\texttt{convertanything}|hyperpage}{70}
+\indexentry{importr@\texttt{importr}|hyperpage}{70}
+\indexentry{import excel@\texttt{import excel}|hyperpage}{71}
+\indexentry{record linkage|hyperpage}{71}
+\indexentry{total survey error|hyperpage}{75}
+\indexentry{API!survey platforms|hyperpage}{76}
+\indexentry{REDCap|hyperpage}{76}
+\indexentry{Qualtrics|hyperpage}{76}
+\indexentry{undummy@\texttt{undummy}|hyperpage}{77}
+\indexentry{control chart|hyperpage}{78}
+\indexentry{reachcheck@\texttt{reachcheck}|hyperpage}{81}
+\indexentry{char define@\texttt{char define}|hyperpage}{82}
+\indexentry{surveytracker@\texttt{surveytracker}|hyperpage}{82}
+\indexentry{likertscale@\texttt{likertscale}|hyperpage}{82}
+\indexentry{Cronbach's alpha|hyperpage}{82}
+\indexentry{top-two-box|hyperpage}{82}
+\indexentry{nonresponse!unit|hyperpage}{86}
+\indexentry{nonresponse!item|hyperpage}{86}
+\indexentry{level-of-effort|hyperpage}{86}
+\indexentry{paradata|hyperpage}{86}
+\indexentry{nonresponse@\texttt{nonresponse}|hyperpage}{87}
+\indexentry{loebias@\texttt{loebias}|hyperpage}{88}
+\indexentry{cxchangelog@\texttt{cxchangelog}|hyperpage}{88}
+\indexentry{cxchangelog@\texttt{cxchangelog}|hyperpage}{89}
+\indexentry{datadictionary@\texttt{datadictionary}|hyperpage}{89}
+\indexentry{datadictionary@\texttt{datadictionary}|hyperpage}{92}
+\indexentry{surveypull@\texttt{surveypull}|hyperpage}{92}
+\indexentry{probabilistic record linkage|hyperpage}{95}
+\indexentry{Jaro-Winkler distance|hyperpage}{95}
+\indexentry{soundex@\texttt{soundex}|hyperpage}{96}
+\indexentry{joinby@\texttt{joinby}|hyperpage}{96}
+\indexentry{reclink@\texttt{reclink}|hyperpage}{97}
+\indexentry{Fellegi-Sunter framework|hyperpage}{97}
+\indexentry{match weight|hyperpage}{97}
+\indexentry{nearmrg@\texttt{nearmrg}|hyperpage}{98}
+\indexentry{linkage error|hyperpage}{99}
+\indexentry{crosswalk|hyperpage}{100}
+\indexentry{srctag@\texttt{srctag}|hyperpage}{101}
+\indexentry{srcfind@\texttt{srcfind}|hyperpage}{101}
+\indexentry{schema drift|hyperpage}{102}
+\indexentry{confirm@\texttt{confirm}|hyperpage}{102}
+\indexentry{isid@\texttt{isid}|hyperpage}{102}
+\indexentry{assert@\texttt{assert}|hyperpage}{102}
+\indexentry{xtset@\texttt{xtset}|hyperpage}{103}
+\indexentry{unbalanced panel|hyperpage}{103}
+\indexentry{reshapehelper@\texttt{reshapehelper}|hyperpage}{105}
+\indexentry{misstable@\texttt{misstable}|hyperpage}{110}
+\indexentry{multiple imputation|hyperpage}{110}
+\indexentry{Cronbach's alpha|hyperpage}{118}
+\indexentry{alpha@\texttt{alpha}|hyperpage}{118}
+\indexentry{factor analysis|hyperpage}{118}
+\indexentry{factor@\texttt{factor}|hyperpage}{118}
+\indexentry{item response theory|hyperpage}{118}
+\indexentry{irt@\texttt{irt}|hyperpage}{118}
+\indexentry{svyset@\texttt{svyset}|hyperpage}{120}
+\indexentry{post-stratification|hyperpage}{120}
+\indexentry{raking|hyperpage}{120}
+\indexentry{empirical Bayes shrinkage|hyperpage}{121}
+\indexentry{rateshrink@\texttt{rateshrink}|hyperpage}{122}
+\indexentry{minimum detectable effect|hyperpage}{123}
+\indexentry{power@\texttt{power}|hyperpage}{124}
+\indexentry{design effect|hyperpage}{124}
+\indexentry{conformal prediction|hyperpage}{126}
+\indexentry{conformalpred@\texttt{conformalpred}|hyperpage}{127}
+\indexentry{intraclass correlation|hyperpage}{129}
+\indexentry{hlmr2@\texttt{hlmr2}|hyperpage}{129}
+\indexentry{Blinder-Oaxaca decomposition|hyperpage}{135}
+\indexentry{oaxaca@\texttt{oaxaca}|hyperpage}{135}
+\indexentry{difference-in-differences|hyperpage}{137}
+\indexentry{two-way fixed effects|hyperpage}{138}
+\indexentry{csdid@\texttt{csdid}|hyperpage}{138}
+\indexentry{event study|hyperpage}{141}
+\indexentry{parallel trends|hyperpage}{141}
+\indexentry{regression discontinuity|hyperpage}{142}
+\indexentry{rdrobust@\texttt{rdrobust}|hyperpage}{142}
+\indexentry{synthetic control|hyperpage}{142}
+\indexentry{synth@\texttt{synth}|hyperpage}{142}
+\indexentry{twinmatch@\texttt{twinmatch}|hyperpage}{144}
+\indexentry{Mahalanobis distance|hyperpage}{144}
+\indexentry{honestdid@\texttt{honestdid}|hyperpage}{145}
+\indexentry{kbal@\texttt{kbal}|hyperpage}{146}
+\indexentry{return on investment|hyperpage}{146}
+\indexentry{Monte Carlo simulation|hyperpage}{146}
+\indexentry{roisim@\texttt{roisim}|hyperpage}{148}
+\indexentry{pre-registration|hyperpage}{149}
+\indexentry{data-ink ratio|hyperpage}{155}
+\indexentry{graphical perception|hyperpage}{158}
+\indexentry{catplot@\texttt{catplot}|hyperpage}{159}
+\indexentry{statplot@\texttt{statplot}|hyperpage}{159}
+\indexentry{Likert scale|hyperpage}{159}
+\indexentry{diverging bar chart|hyperpage}{159}
+\indexentry{coefplot@\texttt{coefplot}|hyperpage}{163}
+\indexentry{small multiples|hyperpage}{163}
+\indexentry{run chart|hyperpage}{165}
+\indexentry{xline()@\texttt{xline()}|hyperpage}{165}
+\indexentry{control chart|hyperpage}{165}
+\indexentry{interactive chart|hyperpage}{169}
+\indexentry{self-contained HTML|hyperpage}{169}
+\indexentry{sparkta2@\texttt{sparkta2}|hyperpage}{170}
+\indexentry{statashiny@\texttt{statashiny}|hyperpage}{170}
+\indexentry{dashboardbuilder@\texttt{dashboardbuilder}|hyperpage}{170}
+\indexentry{webdoc2@\texttt{webdoc2}|hyperpage}{170}
+\indexentry{googlechart@\texttt{googlechart}|hyperpage}{171}
+\indexentry{googlesheets@\texttt{googlesheets}|hyperpage}{171}
+\indexentry{sparkline|hyperpage}{171}
+\indexentry{small multiples|hyperpage}{171}
+\indexentry{choropleth|hyperpage}{175}
+\indexentry{diverging stacked bar|hyperpage}{179}
+\indexentry{Likert scale|hyperpage}{179}
+\indexentry{spreadsheet errors|hyperpage}{190}
+\indexentry{collect@\texttt{collect}|hyperpage}{191}
+\indexentry{putexcel@\texttt{putexcel}|hyperpage}{191}
+\indexentry{reproducible reporting|hyperpage}{192}
+\indexentry{esttab@\texttt{esttab}|hyperpage}{192}
+\indexentry{googlesheets@\texttt{googlesheets}|hyperpage}{195}
+\indexentry{OAuth|hyperpage}{195}
+\indexentry{googlechart@\texttt{googlechart}|hyperpage}{196}
+\indexentry{API quota|hyperpage}{196}
+\indexentry{addchart@\texttt{addchart}|hyperpage}{198}
+\indexentry{read-back verification|hyperpage}{199}
+\indexentry{datadictionary@\texttt{datadictionary}|hyperpage}{202}
+\indexentry{webdoc@\texttt{webdoc}|hyperpage}{206}
+\indexentry{literate programming|hyperpage}{206}
+\indexentry{webdoc2@\texttt{webdoc2}|hyperpage}{206}
+\indexentry{statashiny@\texttt{statashiny}|hyperpage}{209}
+\indexentry{dashboardbuilder@\texttt{dashboardbuilder}|hyperpage}{213}
+\indexentry{GitHub Pages|hyperpage}{217}
+\indexentry{webapi@\texttt{webapi}|hyperpage}{223}
+\indexentry{googlesheets@\texttt{googlesheets}|hyperpage}{223}
+\indexentry{googlechart@\texttt{googlechart}|hyperpage}{223}
+\indexentry{sparkta2@\texttt{sparkta2}|hyperpage}{223}
+\indexentry{projectbuilder@\texttt{projectbuilder}|hyperpage}{227}
+\indexentry{lost in the middle|hyperpage}{232}
+\indexentry{program-aided language models|hyperpage}{232}
+\indexentry{projectbuilder@\texttt{projectbuilder}|hyperpage}{235}
+\indexentry{webdoc2@\texttt{webdoc2}|hyperpage}{235}
+\indexentry{srctag@\texttt{srctag}|hyperpage}{235}
+\indexentry{datadictionary@\texttt{datadictionary}|hyperpage}{235}
+\indexentry{assert@\texttt{assert}|hyperpage}{235}
+\indexentry{embarrassingly parallel|hyperpage}{237}
+\indexentry{ai\_privacy\_gate@\texttt{ai\_privacy\_gate}|hyperpage}{239}
+\indexentry{inter-rater reliability|hyperpage}{242}
+\indexentry{kappa!Cohen's and Fleiss'|hyperpage}{242}
+\indexentry{kappa!formula|hyperpage}{242}
+\indexentry{kap@\texttt{kap}|hyperpage}{242}
+\indexentry{llmsieve@\texttt{llmsieve}|hyperpage}{243}
+\indexentry{convergence delta|hyperpage}{245}
+\indexentry{prompt injection|hyperpage}{250}
+\indexentry{four-fifths rule|hyperpage}{252}
+\indexentry{adverse impact|hyperpage}{252}
+\indexentry{faircheck@\texttt{faircheck}|hyperpage}{253}
+\indexentry{k-anonymity@$k$-anonymity|hyperpage}{259}
+\indexentry{quasi-identifiers|hyperpage}{259}
+\indexentry{l-diversity@$l$-diversity|hyperpage}{259}
+\indexentry{riskscan@\texttt{riskscan}|hyperpage}{260}
+\indexentry{re-identification|hyperpage}{261}
+\indexentry{sysuse@\texttt{sysuse}|hyperpage}{261}
+\indexentry{coarsening|hyperpage}{264}
+\indexentry{collect@\texttt{collect}|hyperpage}{264}
+\indexentry{suppress@\texttt{suppress}|hyperpage}{265}
+\indexentry{complementary suppression|hyperpage}{266}
+\indexentry{synthetic data|hyperpage}{268}
+\indexentry{synthgen@\texttt{synthgen}|hyperpage}{268}
+\indexentry{rawsweep@\texttt{rawsweep}|hyperpage}{269}
+\indexentry{disclosure-review checklist|hyperpage}{270}
+\indexentry{dsload@\texttt{dsload}|hyperpage}{273}
+\indexentry{net install@\texttt{net install}|hyperpage}{274}
+\indexentry{syntax@\texttt{syntax}|hyperpage}{274}
+\indexentry{version@\texttt{version}|hyperpage}{275}
+\indexentry{SMCL|hyperpage}{275}
+\indexentry{editanything@\texttt{editanything}|hyperpage}{275}
+\indexentry{writeinput@\texttt{writeinput}|hyperpage}{276}
+\indexentry{scrapessc@\texttt{scrapessc}|hyperpage}{277}
 \indexentry{rateshrink@\texttt{rateshrink}|hyperpage}{278}
-\indexentry{Mata|hyperpage}{279}
-\indexentry{lstrfun@\texttt{lstrfun}|hyperpage}{279}
-\indexentry{timer@\texttt{timer}|hyperpage}{279}
-\indexentry{openICPSR|hyperpage}{280}
-\indexentry{replication archive|hyperpage}{281}
-\indexentry{capstone|hyperpage}{297}
+\indexentry{empirical Bayes shrinkage|hyperpage}{279}
+\indexentry{rateshrink@\texttt{rateshrink}|hyperpage}{280}
+\indexentry{Mata|hyperpage}{281}
+\indexentry{lstrfun@\texttt{lstrfun}|hyperpage}{281}
+\indexentry{timer@\texttt{timer}|hyperpage}{281}
+\indexentry{openICPSR|hyperpage}{282}
+\indexentry{replication archive|hyperpage}{283}
+\indexentry{capstone|hyperpage}{299}

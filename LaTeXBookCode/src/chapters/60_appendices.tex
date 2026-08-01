@@ -41,7 +41,7 @@ Two terms in those steps are worth defining. \emph{OAuth} is the standard way to
 \pagelayout{margin}
 \setchapterstyle{kao}
 \chapter{The Causal Quick-Reference Toolbox}\label{app:causal}
-Chapter~\ref{ch:claims} teaches one causal method in full, difference-in-differences (Section~\ref{sec:did}), because it is the design an applied evaluator meets most often. This appendix is the quick reference for the neighboring designs: here we give you enough to recognize which design a situation calls for, name the Stata command that implements it, and find where you can read more. It is a map, not a manual; each design rewards the deeper treatment in the specialist texts at the end. When two designs both seem to fit, write the claim sentence first and let it choose: the sentence names the units, the comparison, and the timing, and usually only one design can deliver all three (Chapter~\ref{ch:claims}). A staggered rollout across districts points to the first entry below; a single flagship site points to synthetic control. You settle the design in that sentence before you pick the estimator.
+Chapter~\ref{ch:claims} teaches one causal method in full, difference-in-differences (Section~\ref{sec:did}), because it is the design an applied evaluator meets most often. This appendix is the quick reference for the neighboring designs: here we give you enough to recognize which design a situation calls for, name the Stata command that implements it, and find where you can read more. It is a map, not a manual; before you commit to a design, read the deeper treatment in the specialist texts at the end. When two designs both seem to fit, write the claim sentence first and read the design off it: the sentence names the units, the comparison, and the timing, and usually only one design can deliver all three (Chapter~\ref{ch:claims}). A staggered rollout across districts points to the first entry below; a single flagship site points to synthetic control. You settle the design in that sentence before you pick the estimator.
 
 \begin{description}
     \item[Staggered treatment timing.] When units adopt a policy at different times, use \texttt{csdid} (Callaway and Sant'Anna) or \texttt{jwdid} (Wooldridge) rather than plain two-way fixed effects, which can weight already-treated units as controls and mislead. Check pre-trends with an event-study plot. \emph{Caveat:} the design still requires parallel trends, which the plot supports but cannot prove.\marginnote{Goodman-Bacon (2021) is why plain TWFE misleads here: the estimate is a weighted average of all $2\times2$ comparisons, and the ones that use already-treated units as controls can receive negative weights, so part of the average can enter with the wrong sign. The naive fix, throwing lags and leads into one TWFE regression, inherits the same contaminated comparisons; build the event study from \texttt{csdid} or its kin instead.}
@@ -58,7 +58,7 @@ Chapter~\ref{ch:claims} teaches one causal method in full, difference-in-differe
 \pagelayout{margin}
 \setchapterstyle{kao}
 \chapter{The Book's Toolkit}\label{app:toolkit}
-Use this appendix to find any tool the book uses and jump straight to the chapter that puts it to work. It lists every package and proposed tool in one place so a reader who remembers a capability but not its name can recover both. Three of these packages, \texttt{webapi}, \texttt{googlesheets}, and \texttt{googlechart}, are published on SSC, so a single line installs each of them:
+Use this appendix to find any tool the book uses and jump straight to the chapter that puts it to work. It lists every package and proposed tool in one place, so when you remember a capability but not its name you can recover both. Three of these packages, \texttt{webapi}, \texttt{googlesheets}, and \texttt{googlechart}, are published on SSC, so a single line installs each of them:
 \par
 {\footnotesize
 \begin{verbatim}
@@ -110,7 +110,7 @@ The one exception is \texttt{sparkta2}, whose source is not yet released. The co
 \setchapterstyle{kao}
 \chapter{Two Hands-On Worked Examples}\label{app:walkthroughs}
 
-In the chapters we lay out the workflow one piece at a time; in the two examples here we run it end to end on real files, so you can watch the pieces connect. They bracket the two kinds of trouble an embedded evaluator meets most. Example D.1 is small but messy: a set of human-formatted PRAMS workbooks that fight every import. Example D.2 is large but clean: a stack of multi-hundred-megabyte STAAR files that will not fit in memory at once. Both walk the same path from raw ingest to an honest finding, and both end the way this book ends every analysis, on a claim pitched at the level of rigor the data can actually support.
+In the chapters we lay out the workflow one piece at a time; in the two examples here we run it end to end on real files, so you can watch the pieces connect. They bracket the two kinds of trouble an embedded evaluator meets most. Example D.1 is small but messy: a set of human-formatted PRAMS workbooks that fight every import. Example D.2 is large but clean: a stack of multi-hundred-megabyte STAAR files that will not fit in memory at once. Both walk the same path from raw ingest to an honest finding, and both end the way we end every analysis in this book, on a claim pitched at the level of rigor the data can actually support.
 
 \section*{Example D.1: Maternal Health, a Messy Workbook to an Ecological Regression}
 You can set this example up before reading on: the box below lists the files to download, the do-file to run, and the outputs to expect.
@@ -141,7 +141,7 @@ This is the counterpoint to \texttt{convertanything} (Chapter~\ref{ch:noapi}): w
 \paragraph{Concepts it illustrates.} Irregular-spreadsheet ingestion and crosswalks (Chapters~\ref{ch:noapi} and~\ref{ch:panels}); ecological regression and its interpretation caveats; the forest/caterpillar plot and coefficient plot (Chapter~\ref{ch:graphs}); and honest reporting of a null primary hypothesis (Chapter~\ref{ch:embedded}). The seven exported figures (bar, forest with 95\% CIs, scatter-with-fit, scatter matrix, coefplot, fitted-vs-observed, and residuals) double as a gallery of the evaluation graphics this book recommends.
 
 \section*{Example D.2: Education Policy, Big Administrative Data and a Careful Counterfactual}
-In the box below we collect the files, the run command, and the outputs for this example, along with a note on distributing the small checkpoint file rather than the raw gigabytes.
+In the box below we collect the files, the run command, and the outputs for this example.
 \begin{kaobox}[frametitle=Get the files: \texttt{edc-3.0-texas/}]
 \textbf{Data:} Texas school performance (STAAR), 2012--2025, school level (Texas Education Agency STAAR results via Zelma, a public research export that republishes the agency's files as analysis-ready CSVs; $\approx$400\,MB per year).
 \textbf{Run:} \texttt{analyze\_performance.do}. \textbf{Outputs:} \texttt{analytic\_performance.dta}, four trend figures, a log.
@@ -196,7 +196,7 @@ import delimited "chr_2024.csv", clear varnames(1) ///
 \end{verbatim}
 }
 
-\paragraph{Stage 2, clean (Chapters~\ref{ch:noapi}--\ref{ch:panels}).} The CHR file ships a second header row of human-readable labels; the do-file drops it, then keeps only true county rows (the codes ending in \texttt{000} are state roll-ups that would double-count if left in). It renames four munged columns to working names and rescales the two rates from proportions to percentage points so the coefficients later read in units people plan in.
+\paragraph{Stage 2, clean (Chapters~\ref{ch:noapi}--\ref{ch:panels}).} The CHR file includes a second header row of human-readable labels; the do-file drops it, then keeps only true county rows (the codes ending in \texttt{000} are state roll-ups that would double-count if left in). It renames four munged columns to working names and rescales the two rates from proportions to percentage points so the coefficients later read in units people plan in.
 
 \paragraph{Stage 3, guard (Chapter~\ref{ch:trust}).} Before trusting a single number, the do-file sets tripwires that fail loudly if the file drifts. It predicts the county count and asserts it, and bounds each variable to a sane range:
 \par
@@ -262,11 +262,11 @@ Return, one more time, to the Thursday-afternoon email that opened Chapter~\ref{
 
 If one habit recurred more than any other across these chapters, it was writing the decision down before the data could argue with it. You wrote a scoping note before opening the file, an extraction contract before the first request, a pre-analysis memo before the estimator ran, a deliverable spec before anyone formatted a cell, and a disclosure record before the file left the building; in Chapter~\ref{ch:tools} you drafted the help file's syntax line before the command existed at all. Those are the same move at six different scales, and it is the cheapest one in the book. You make the judgment while you are calm rather than at 4 p.m.\ on the day of the board meeting, and you keep something you can show a partner who asks, a year later, how you decided.
 
-A second lesson took longer to surface: the four principles compound rather than compete. A pipeline that reruns is what lets you afford to extend it, work you can extend is what you can afford to make accessible, because the second version costs a rerun instead of a rebuild, and only work someone can open ever becomes work someone acts on. That order is worth remembering the week a deadline tempts you to skip the first step. Replicability is not the virtuous extra at the end of the list; it is what pays for the other three.
+A second lesson took longer to surface: the four principles compound rather than compete. A pipeline that reruns is what lets you afford to extend it, because the second version costs a rerun instead of a rebuild; work you can extend is work you can afford to make accessible; and only work someone can open ever becomes work someone acts on. That order is worth remembering the week a deadline tempts you to skip the first step. Replicability is not the virtuous extra at the end of the list; it is what pays for the other three.
 
 The tools will change. Packages update, endpoints move, the language models of Chapter~\ref{ch:ai} will be unrecognizable in five to ten years, and some page of this book is already aging as you read it. The posture is what lasts: state what you expect before you compute it, write down what would change your mind, let the pipeline remember so that people are free to think, and never hand a decision-maker a number you cannot trace. Everything in this book reruns from its seeds and its sources, which means everything in it can be checked, broken, and improved, and that is an invitation. Rebuild the capstone on your own state's data. Fork a tool and make it fit your shop. When you find the better way, and someone will, share it the way Chapter~\ref{ch:tools} taught, so the next embedded evaluator inherits your version instead of your workaround.
 
-And keep the last habit of all. Behind every row is a person who answered a survey, enrolled a child, showed up on a Tuesday. The care this book has asked of you, the asserts, the caveats, the $k$-anonymity checks, is finally just respect for those people, expressed in code.
+And keep the last habit of all. Behind every row is a person who answered a survey, enrolled a child, showed up on a Tuesday. The care we have asked of you, the asserts, the caveats, the $k$-anonymity checks, is finally just respect for those people, expressed in code.
 
 \pagelayout{wide}
 \printbibliography[heading=bibintoc, title=Bibliography]
