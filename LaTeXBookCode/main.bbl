@@ -638,10 +638,10 @@
       \field{labeldatesource}{year}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{howpublished}{Statistical Software Components S457280, Boston College Department of Economics}
-      \field{note}{Available from SSC}
-      \field{title}{{USEPACKAGE}: Stata module to find and install a list of user-written packages needed to run a do-file}
-      \field{year}{2011}
+      \field{howpublished}{Statistical Software Components S459828, Boston College Department of Economics}
+      \field{note}{Version 1.0.0 written 2011; available from SSC}
+      \field{title}{{USEPACKAGE}: Stata module to find, verify, and install the user-written packages (and data) a do-file needs}
+      \field{year}{2026}
     \endentry
     \entry{borkin2016beyond}{article}{}
       \name{author}{8}{}{%
