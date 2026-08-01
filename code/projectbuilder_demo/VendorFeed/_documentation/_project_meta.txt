@@ -1,0 +1,13 @@
+* projectbuilder metadata.  Read back on -rebuild- so a
+* refresh keeps what the scaffold recorded.  Edit freely;
+* one key=value per line.
+description=Monthly vendor extract; agency emails the file
+url=https://example.gov/vendor/monthly.csv
+topic=procurement
+publicfacing=no
+timeline=monthly
+othernotes=
+outcomes=
+over=
+created=2026-07-31
+descsave=

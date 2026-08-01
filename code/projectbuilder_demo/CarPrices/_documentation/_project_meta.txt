@@ -1,0 +1,13 @@
+* projectbuilder metadata.  Read back on -rebuild- so a
+* refresh keeps what the scaffold recorded.  Edit freely;
+* one key=value per line.
+description=Dealer price extracts, one file per model year
+url=
+topic=prices, vehicles
+publicfacing=unsure
+timeline=annual, each October
+othernotes=
+outcomes=price
+over=foreign
+created=2026-07-31
+descsave=descsave

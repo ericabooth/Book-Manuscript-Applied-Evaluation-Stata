@@ -128,10 +128,18 @@ automatic pass skips that step, and a one-line note names the install command.
 | `combineall` | append/merge the converted files into the analytic file | `net install combineall, from("https://raw.githubusercontent.com/ericabooth/combineall-stata-public/main/")` |
 | `descsave` | codebook (.dta plus .xlsx) from `300_labels.do` | `ssc install descsave` |
 | `srctag` / `srcfind` | tag and search each variable's source lineage | author's GitHub |
-| `webdoc2` | render a richer `index.html` | `ssc install webdoc`, then `net install webdoc2` (author's GitHub) |
+| `webdoc2` | render a richer `index.html` | `ssc install webdoc`, then `net install webdoc2` **and** `net get webdoc2` (author's GitHub) |
 
-When `webdoc2` is absent, `projectbuilder` writes a plain but complete
-`index.html` and `Readme.md` directly, so the documentation always exists.
+`webdoc2` needs one extra step: its renderer injects a `header.html` that
+webdoc2 ships as an *ancillary* file, so `net install webdoc2` does not place
+it. Run `net get webdoc2` as well — that drops `header.html` in your current
+directory — and move it somewhere on your adopath (PERSONAL is the usual place)
+so it is found from anywhere. `builddocs` looks for it before it renders and
+carries a copy into `_documentation/` for the duration.
+
+When `webdoc2` is absent, or its `header.html` cannot be found,
+`projectbuilder` writes a plain but complete `index.html` and `Readme.md`
+directly, so the documentation always exists.
 
 ## Stored results
 

@@ -6,83 +6,84 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {2.1}{\ignorespaces The handoff test: run before you read}}{21}{figure.caption.29}%
 \contentsline {figure}{\numberline {2.2}{\ignorespaces The project folder tree}}{24}{figure.caption.30}%
-\contentsline {figure}{\numberline {2.3}{\ignorespaces The numbered pipeline}}{28}{figure.caption.32}%
-\contentsline {figure}{\numberline {2.4}{\ignorespaces Native versus gtools timings}}{32}{figure.caption.34}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Three ways to start a project}}{26}{figure.caption.31}%
+\contentsline {figure}{\numberline {2.4}{\ignorespaces The numbered pipeline}}{30}{figure.caption.33}%
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Native versus gtools timings}}{34}{figure.caption.35}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Anatomy of an API request}}{39}{figure.caption.40}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Texas public school enrollment, 2015--2022}}{43}{figure.caption.41}%
-\contentsline {figure}{\numberline {3.3}{\ignorespaces County wages from the BLS QCEW}}{46}{figure.caption.42}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Anatomy of an API request}}{41}{figure.caption.41}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Texas public school enrollment, 2015--2022}}{46}{figure.caption.42}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces County wages from the BLS QCEW}}{49}{figure.caption.43}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Premature death vs child poverty, Texas counties}}{64}{figure.caption.49}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces The streaming sieve}}{65}{figure.caption.50}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Premature death vs child poverty, Texas counties}}{66}{figure.caption.50}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces The streaming sieve}}{67}{figure.caption.51}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Small-multiples response-rate control chart}}{76}{figure.caption.54}%
-\contentsline {figure}{\numberline {5.2}{\ignorespaces The scheduled monitoring loop}}{77}{figure.caption.55}%
-\contentsline {figure}{\numberline {5.3}{\ignorespaces What to do with a reach check's verdict}}{83}{figure.caption.57}%
-\contentsline {figure}{\numberline {5.4}{\ignorespaces The datadictionary Excel codebook}}{86}{figure.caption.58}%
-\contentsline {figure}{\numberline {5.5}{\ignorespaces The label round-trip across programming languages}}{87}{figure.caption.59}%
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Small-multiples response-rate control chart}}{78}{figure.caption.55}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces The scheduled monitoring loop}}{79}{figure.caption.56}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces What to do with a reach check's verdict}}{85}{figure.caption.58}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces The datadictionary Excel codebook}}{88}{figure.caption.59}%
+\contentsline {figure}{\numberline {5.5}{\ignorespaces The label round-trip across programming languages}}{89}{figure.caption.60}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {6.1}{\ignorespaces The clean-block-score-threshold linkage pipeline}}{93}{figure.caption.63}%
-\contentsline {figure}{\numberline {6.2}{\ignorespaces The reshapehelper diagnosis and suggestion}}{102}{figure.caption.64}%
-\contentsline {figure}{\numberline {6.3}{\ignorespaces Percent missing by variable in a longitudinal sample}}{107}{figure.caption.68}%
+\contentsline {figure}{\numberline {6.1}{\ignorespaces The clean-block-score-threshold linkage pipeline}}{95}{figure.caption.64}%
+\contentsline {figure}{\numberline {6.2}{\ignorespaces The reshapehelper diagnosis and suggestion}}{104}{figure.caption.65}%
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Percent missing by variable in a longitudinal sample}}{109}{figure.caption.69}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {7.1}{\ignorespaces Empirical-Bayes shrinkage of small-site rates}}{118}{figure.caption.76}%
-\contentsline {figure}{\numberline {7.2}{\ignorespaces Power curves and the budget line}}{121}{figure.caption.77}%
-\contentsline {figure}{\numberline {7.3}{\ignorespaces The split-conformal recipe}}{123}{figure.caption.78}%
-\contentsline {figure}{\numberline {7.4}{\ignorespaces The conformal band on \texttt {nlsw88}}}{124}{figure.caption.79}%
-\contentsline {figure}{\numberline {7.5}{\ignorespaces Two reads of the same wage variance}}{126}{figure.caption.80}%
+\contentsline {figure}{\numberline {7.1}{\ignorespaces Empirical-Bayes shrinkage of small-site rates}}{120}{figure.caption.77}%
+\contentsline {figure}{\numberline {7.2}{\ignorespaces Power curves and the budget line}}{123}{figure.caption.78}%
+\contentsline {figure}{\numberline {7.3}{\ignorespaces The split-conformal recipe}}{125}{figure.caption.79}%
+\contentsline {figure}{\numberline {7.4}{\ignorespaces The conformal band on \texttt {nlsw88}}}{126}{figure.caption.80}%
+\contentsline {figure}{\numberline {7.5}{\ignorespaces Two reads of the same wage variance}}{128}{figure.caption.81}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {8.1}{\ignorespaces The explained half of a wage gap, characteristic by characteristic}}{133}{figure.caption.84}%
-\contentsline {figure}{\numberline {8.2}{\ignorespaces Event-study plot from \texttt {csdid}}}{138}{figure.caption.86}%
-\contentsline {figure}{\numberline {8.3}{\ignorespaces Routing a design to its Stata command}}{139}{figure.caption.87}%
-\contentsline {figure}{\numberline {8.4}{\ignorespaces ROI tornado from a Monte Carlo}}{144}{figure.caption.88}%
+\contentsline {figure}{\numberline {8.1}{\ignorespaces The explained half of a wage gap, characteristic by characteristic}}{135}{figure.caption.85}%
+\contentsline {figure}{\numberline {8.2}{\ignorespaces Event-study plot from \texttt {csdid}}}{140}{figure.caption.87}%
+\contentsline {figure}{\numberline {8.3}{\ignorespaces Routing a design to its Stata command}}{141}{figure.caption.88}%
+\contentsline {figure}{\numberline {8.4}{\ignorespaces ROI tornado from a Monte Carlo}}{146}{figure.caption.89}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {9.1}{\ignorespaces Data-ink, before and after}}{153}{figure.caption.94}%
-\contentsline {figure}{\numberline {9.2}{\ignorespaces A one-call snapshot of the cleaned extract}}{156}{figure.caption.96}%
-\contentsline {figure}{\numberline {9.3}{\ignorespaces The template version, with section headings}}{158}{figure.caption.97}%
-\contentsline {figure}{\numberline {9.4}{\ignorespaces A ranked, interval-bearing category comparison}}{159}{figure.caption.98}%
-\contentsline {figure}{\numberline {9.5}{\ignorespaces Coefficient small multiples}}{160}{figure.caption.99}%
-\contentsline {figure}{\numberline {9.6}{\ignorespaces Run chart with an intervention line}}{162}{figure.caption.100}%
+\contentsline {figure}{\numberline {9.1}{\ignorespaces Data-ink, before and after}}{155}{figure.caption.95}%
+\contentsline {figure}{\numberline {9.2}{\ignorespaces A one-call snapshot of the cleaned extract}}{158}{figure.caption.97}%
+\contentsline {figure}{\numberline {9.3}{\ignorespaces The template version, with section headings}}{160}{figure.caption.98}%
+\contentsline {figure}{\numberline {9.4}{\ignorespaces A ranked, interval-bearing category comparison}}{161}{figure.caption.99}%
+\contentsline {figure}{\numberline {9.5}{\ignorespaces Coefficient small multiples}}{162}{figure.caption.100}%
+\contentsline {figure}{\numberline {9.6}{\ignorespaces Run chart with an intervention line}}{164}{figure.caption.101}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {10.1}{\ignorespaces The visualization suite pipeline}}{166}{figure.caption.105}%
-\contentsline {figure}{\numberline {10.2}{\ignorespaces A spark wall of Texas county wages}}{169}{figure.caption.107}%
-\contentsline {figure}{\numberline {10.3}{\ignorespaces A googlechart US-state choropleth}}{172}{figure.caption.108}%
-\contentsline {figure}{\numberline {10.4}{\ignorespaces A googlechart animated bubble}}{173}{figure.caption.109}%
-\contentsline {figure}{\numberline {10.5}{\ignorespaces A googlechart searchable table}}{174}{figure.caption.110}%
-\contentsline {figure}{\numberline {10.6}{\ignorespaces A googlechart diverging stacked bar}}{175}{figure.caption.111}%
-\contentsline {figure}{\numberline {10.7}{\ignorespaces Narrative structures on the control spectrum}}{177}{figure.caption.112}%
+\contentsline {figure}{\numberline {10.1}{\ignorespaces The visualization suite pipeline}}{168}{figure.caption.106}%
+\contentsline {figure}{\numberline {10.2}{\ignorespaces A spark wall of Texas county wages}}{171}{figure.caption.108}%
+\contentsline {figure}{\numberline {10.3}{\ignorespaces A googlechart US-state choropleth}}{174}{figure.caption.109}%
+\contentsline {figure}{\numberline {10.4}{\ignorespaces A googlechart animated bubble}}{176}{figure.caption.110}%
+\contentsline {figure}{\numberline {10.5}{\ignorespaces A googlechart searchable table}}{177}{figure.caption.111}%
+\contentsline {figure}{\numberline {10.6}{\ignorespaces A googlechart diverging stacked bar}}{178}{figure.caption.112}%
+\contentsline {figure}{\numberline {10.7}{\ignorespaces Narrative structures on the control spectrum}}{179}{figure.caption.113}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {11.1}{\ignorespaces One do-file, three audiences}}{188}{figure.caption.118}%
-\contentsline {figure}{\numberline {11.2}{\ignorespaces The generated summary tab}}{190}{figure.caption.120}%
-\contentsline {figure}{\numberline {11.3}{\ignorespaces Anatomy of a Google Sheets URL}}{192}{figure.caption.121}%
-\contentsline {figure}{\numberline {11.4}{\ignorespaces Two delivery surfaces, one source}}{196}{figure.caption.123}%
+\contentsline {figure}{\numberline {11.1}{\ignorespaces One do-file, three audiences}}{190}{figure.caption.119}%
+\contentsline {figure}{\numberline {11.2}{\ignorespaces The generated summary tab}}{192}{figure.caption.121}%
+\contentsline {figure}{\numberline {11.3}{\ignorespaces Anatomy of a Google Sheets URL}}{194}{figure.caption.122}%
+\contentsline {figure}{\numberline {11.4}{\ignorespaces Two delivery surfaces, one source}}{199}{figure.caption.124}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {12.1}{\ignorespaces The two-minute dashboard}}{211}{figure.caption.127}%
-\contentsline {figure}{\numberline {12.2}{\ignorespaces The benchmark explorer dashboard}}{212}{figure.caption.128}%
-\contentsline {figure}{\numberline {12.3}{\ignorespaces The self-contained portal folder}}{214}{figure.caption.129}%
-\contentsline {figure}{\numberline {12.4}{\ignorespaces Choosing a delivery format}}{216}{figure.caption.131}%
-\contentsline {figure}{\numberline {12.5}{\ignorespaces Anatomy of a self-describing footer}}{218}{figure.caption.133}%
-\contentsline {figure}{\numberline {12.6}{\ignorespaces The suite pipeline, end to end}}{220}{figure.caption.134}%
-\contentsline {figure}{\numberline {12.7}{\ignorespaces The online chart the pipeline embeds}}{222}{figure.caption.135}%
-\contentsline {figure}{\numberline {12.8}{\ignorespaces The searchable table the dashboard mirrors}}{223}{figure.caption.136}%
+\contentsline {figure}{\numberline {12.1}{\ignorespaces The two-minute dashboard}}{213}{figure.caption.128}%
+\contentsline {figure}{\numberline {12.2}{\ignorespaces The benchmark explorer dashboard}}{214}{figure.caption.129}%
+\contentsline {figure}{\numberline {12.3}{\ignorespaces The self-contained portal folder}}{216}{figure.caption.130}%
+\contentsline {figure}{\numberline {12.4}{\ignorespaces Choosing a delivery format}}{218}{figure.caption.132}%
+\contentsline {figure}{\numberline {12.5}{\ignorespaces Anatomy of a self-describing footer}}{220}{figure.caption.134}%
+\contentsline {figure}{\numberline {12.6}{\ignorespaces The suite pipeline, end to end}}{222}{figure.caption.135}%
+\contentsline {figure}{\numberline {12.7}{\ignorespaces The online chart the pipeline embeds}}{224}{figure.caption.136}%
+\contentsline {figure}{\numberline {12.8}{\ignorespaces The searchable table the dashboard mirrors}}{225}{figure.caption.137}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {13.1}{\ignorespaces The backbone loop}}{229}{figure.caption.142}%
-\contentsline {figure}{\numberline {13.2}{\ignorespaces The privacy gate in a coding pipeline}}{237}{figure.caption.149}%
-\contentsline {figure}{\numberline {13.3}{\ignorespaces Model-human agreement by category}}{240}{figure.caption.150}%
-\contentsline {figure}{\numberline {13.4}{\ignorespaces Prompt-injection defense in depth}}{247}{figure.caption.151}%
+\contentsline {figure}{\numberline {13.1}{\ignorespaces The backbone loop}}{231}{figure.caption.143}%
+\contentsline {figure}{\numberline {13.2}{\ignorespaces The privacy gate in a coding pipeline}}{239}{figure.caption.150}%
+\contentsline {figure}{\numberline {13.3}{\ignorespaces Model-human agreement by category}}{242}{figure.caption.151}%
+\contentsline {figure}{\numberline {13.4}{\ignorespaces Prompt-injection defense in depth}}{249}{figure.caption.152}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {14.1}{\ignorespaces The release pipeline this chapter teaches}}{256}{figure.caption.155}%
-\contentsline {figure}{\numberline {14.2}{\ignorespaces Distribution of quasi-identifier cell sizes}}{259}{figure.caption.157}%
-\contentsline {figure}{\numberline {14.3}{\ignorespaces The suppression decision, cell by cell}}{263}{figure.caption.160}%
+\contentsline {figure}{\numberline {14.1}{\ignorespaces The release pipeline this chapter teaches}}{258}{figure.caption.156}%
+\contentsline {figure}{\numberline {14.2}{\ignorespaces Distribution of quasi-identifier cell sizes}}{261}{figure.caption.158}%
+\contentsline {figure}{\numberline {14.3}{\ignorespaces The suppression decision, cell by cell}}{265}{figure.caption.161}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {15.1}{\ignorespaces The life of a shared tool}}{269}{figure.caption.164}%
-\contentsline {figure}{\numberline {15.2}{\ignorespaces The hardening path from script to installable tool}}{274}{figure.caption.165}%
-\addvspace {10\p@ }
-\addvspace {10\p@ }
-\addvspace {10\p@ }
+\contentsline {figure}{\numberline {15.1}{\ignorespaces The life of a shared tool}}{271}{figure.caption.165}%
+\contentsline {figure}{\numberline {15.2}{\ignorespaces The hardening path from script to installable tool}}{276}{figure.caption.166}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {E.1}{\ignorespaces Premature death rises steadily with county child poverty. Each point is the mean YPLL per 100,000 for counties in a five-point poverty bin; bins holding fewer than ten counties are dropped. A county at 30 percent child poverty averages about 12,900 YPLL, roughly double the 6,800 at 10 percent. County Health Rankings 2024, produced by \texttt {capstone\_chr.do}.\relax }}{295}{figure.caption.228}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {E.1}{\ignorespaces Premature death rises steadily with county child poverty. Each point is the mean YPLL per 100,000 for counties in a five-point poverty bin; bins holding fewer than ten counties are dropped. A county at 30 percent child poverty averages about 12,900 YPLL, roughly double the 6,800 at 10 percent. County Health Rankings 2024, produced by \texttt {capstone\_chr.do}.\relax }}{299}{figure.caption.229}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file

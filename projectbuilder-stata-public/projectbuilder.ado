@@ -681,6 +681,9 @@ program define projectbuilder, rclass
         pb_wl `fh' `"* Build it with:  webdoc2 "index.do"   (see _runall.do)"'
         pb_wl `fh' `"* Content subcommands: wdinit, wputh1, wput (edit freely)."'
         pb_wl `fh' `""'
+        pb_wl `fh' `"* wdinit injects webdoc2's header.html, which it locates with findfile"'
+        pb_wl `fh' `"* -- so header.html has to be on the adopath or in the directory this"'
+        pb_wl `fh' `"* renders from.  _runall.do takes care of that; see the note there."'
         pb_wl `fh' `"wdinit index, replace"'
         pb_wl `fh' `"wputh1 `proj_label'"'
         pb_wl `fh' `"wput `descfull'"'
@@ -713,8 +716,34 @@ program define projectbuilder, rclass
         pb_wl `fh' `"    * rather than taken from ~Ddocs: projectbuilder runs this file"'
         pb_wl `fh' `"    * itself under -builddocs-, and at that point 000_control.do has"'
         pb_wl `fh' `"    * not run, so ~Ddocs is undefined."'
+        pb_wl `fh' `"    * wdinit finds webdoc2's header.html with -findfile-, i.e. on the"'
+        pb_wl `fh' `"    * adopath or in the current directory.  webdoc2 ships header.html as"'
+        pb_wl `fh' `"    * an ANCILLARY file, so -net install webdoc2- never places it and"'
+        pb_wl `fh' `"    * -net get webdoc2- leaves it in whatever directory you were in."'
+        pb_wl `fh' `"    * Since the render happens from _documentation/, look for it HERE,"'
+        pb_wl `fh' `"    * before the cd, and carry a copy over if we found one.  Passing it"'
+        pb_wl `fh' `"    * through wdinit's headerfile() is not an option: that goes through"'
+        pb_wl `fh' `"    * findfile too, so it takes a findable NAME, not a path."'
+        pb_wl `fh' `"    local hf """'
+        pb_wl `fh' `"    capture findfile "header.html""'
+        pb_wl `fh' `"    if !_rc {"'
+        pb_wl `fh' `"        local hf "~Br(fn)'""'
+        pb_wl `fh' `"        if substr("~Bhf'", 1, 1) != "/" & !regexm("~Bhf'", "^[a-zA-Z]:") {"'
+        pb_wl `fh' `"            local hf "~Bc(pwd)'/~Bhf'"   // absolute: we are about to cd"'
+        pb_wl `fh' `"        }"'
+        pb_wl `fh' `"    }"'
+        pb_wl `fh' `""'
         pb_wl `fh' `"    local here "`docs'""'
         pb_wl `fh' `"    cd "~Bhere'""'
+        pb_wl `fh' `""'
+        pb_wl `fh' `"    * Borrow header.html only if this folder does not already have one,"'
+        pb_wl `fh' `"    * and put it back the way we found it afterwards."'
+        pb_wl `fh' `"    local borrowed 0"'
+        pb_wl `fh' `"    capture confirm file "header.html""'
+        pb_wl `fh' `"    if _rc & "~Bhf'" != "" {"'
+        pb_wl `fh' `"        capture copy "~Bhf'" "header.html""'
+        pb_wl `fh' `"        if !_rc local borrowed 1"'
+        pb_wl `fh' `"    }"'
         pb_wl `fh' `"    capture noisily webdoc2 "index.do""'
         pb_wl `fh' `"    local wrc = _rc"'
         pb_wl `fh' `"    if ~Bwrc' {"'
@@ -732,6 +761,7 @@ program define projectbuilder, rclass
         pb_wl `fh' `"            local wrc = 603"'
         pb_wl `fh' `"        }"'
         pb_wl `fh' `"    }"'
+        pb_wl `fh' `"    if ~Bborrowed' capture erase "header.html""'
         pb_wl `fh' `"    * Hand the outcome back: projectbuilder decides what to report from"'
         pb_wl `fh' `"    * this file's return code, so swallowing it here made every render"'
         pb_wl `fh' `"    * look successful."'
@@ -917,7 +947,18 @@ program define projectbuilder, rclass
             if `renderrc' {
                 di as txt "                webdoc2 render did not finish (r(`renderrc')); the built-in"
                 di as txt "                website/index.html is unchanged and still complete."
-                di as txt `"                To see why, run: do "`docs'/_runall.do""'
+                * By far the most common cause: webdoc2 ships header.html as an
+                * ancillary file, so -net install- alone never places it.
+                capture findfile "header.html"
+                if _rc {
+                    di as txt "                webdoc2's header.html is not on the adopath. It is an"
+                    di as txt "                ancillary file, so install it separately:"
+                    di as txt `"                  net get webdoc2, from("`gh'/webdoc2-stata-public/main/") replace"'
+                    di as txt "                then move header.html somewhere on your adopath"
+                    di as txt "                (PERSONAL is the usual place) so it is found from"
+                    di as txt "                any directory."
+                }
+                else di as txt `"                To see why, run: do "`docs'/_runall.do""'
             }
             else di as txt "                rendered."
         }

@@ -12,12 +12,12 @@
 * Everything below runs offline on synthetic files made from sysuse auto.
 * Nothing here needs a key or a network.
 *
-* Install once:
-*   local gh "https://raw.githubusercontent.com/ericabooth"
-*   net install projectbuilder, from("`gh'/projectbuilder-stata-public/main/") replace
+* Install once (projectbuilder is on SSC as of 2026-07):
+*   ssc install projectbuilder
 * Optional, and used automatically when present (each step degrades gracefully):
+*   ssc install combineall
+*   local gh "https://raw.githubusercontent.com/ericabooth"
 *   net install convertanything, from("`gh'/convertanything-stata-public/main/") replace
-*   net install combineall,      from("`gh'/combineall-stata-public/main/") replace
 *   ssc install descsave                       // Excel codebook in 300_labels.do
 *==============================================================================*
 version 18

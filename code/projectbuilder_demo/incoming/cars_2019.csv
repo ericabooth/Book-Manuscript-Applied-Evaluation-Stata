@@ -1,0 +1,75 @@
+make,price,mpg,weight,foreign
+AMC Concord,4099,22,2930,Domestic
+AMC Pacer,4749,17,3350,Domestic
+AMC Spirit,3799,22,2640,Domestic
+Buick Century,4816,20,3250,Domestic
+Buick Electra,7827,15,4080,Domestic
+Buick LeSabre,5788,18,3670,Domestic
+Buick Opel,4453,26,2230,Domestic
+Buick Regal,5189,20,3280,Domestic
+Buick Riviera,10372,16,3880,Domestic
+Buick Skylark,4082,19,3400,Domestic
+Cad. Deville,11385,14,4330,Domestic
+Cad. Eldorado,14500,14,3900,Domestic
+Cad. Seville,15906,21,4290,Domestic
+Chev. Chevette,3299,29,2110,Domestic
+Chev. Impala,5705,16,3690,Domestic
+Chev. Malibu,4504,22,3180,Domestic
+Chev. Monte Carlo,5104,22,3220,Domestic
+Chev. Monza,3667,24,2750,Domestic
+Chev. Nova,3955,19,3430,Domestic
+Dodge Colt,3984,30,2120,Domestic
+Dodge Diplomat,4010,18,3600,Domestic
+Dodge Magnum,5886,16,3600,Domestic
+Dodge St. Regis,6342,17,3740,Domestic
+Ford Fiesta,4389,28,1800,Domestic
+Ford Mustang,4187,21,2650,Domestic
+Linc. Continental,11497,12,4840,Domestic
+Linc. Mark V,13594,12,4720,Domestic
+Linc. Versailles,13466,14,3830,Domestic
+Merc. Bobcat,3829,22,2580,Domestic
+Merc. Cougar,5379,14,4060,Domestic
+Merc. Marquis,6165,15,3720,Domestic
+Merc. Monarch,4516,18,3370,Domestic
+Merc. XR-7,6303,14,4130,Domestic
+Merc. Zephyr,3291,20,2830,Domestic
+Olds 98,8814,21,4060,Domestic
+Olds Cutl Supr,5172,19,3310,Domestic
+Olds Cutlass,4733,19,3300,Domestic
+Olds Delta 88,4890,18,3690,Domestic
+Olds Omega,4181,19,3370,Domestic
+Olds Starfire,4195,24,2730,Domestic
+Olds Toronado,10371,16,4030,Domestic
+Plym. Arrow,4647,28,3260,Domestic
+Plym. Champ,4425,34,1800,Domestic
+Plym. Horizon,4482,25,2200,Domestic
+Plym. Sapporo,6486,26,2520,Domestic
+Plym. Volare,4060,18,3330,Domestic
+Pont. Catalina,5798,18,3700,Domestic
+Pont. Firebird,4934,18,3470,Domestic
+Pont. Grand Prix,5222,19,3210,Domestic
+Pont. Le Mans,4723,19,3200,Domestic
+Pont. Phoenix,4424,19,3420,Domestic
+Pont. Sunbird,4172,24,2690,Domestic
+Audi 5000,9690,17,2830,Foreign
+Audi Fox,6295,23,2070,Foreign
+BMW 320i,9735,25,2650,Foreign
+Datsun 200,6229,23,2370,Foreign
+Datsun 210,4589,35,2020,Foreign
+Datsun 510,5079,24,2280,Foreign
+Datsun 810,8129,21,2750,Foreign
+Fiat Strada,4296,21,2130,Foreign
+Honda Accord,5799,25,2240,Foreign
+Honda Civic,4499,28,1760,Foreign
+Mazda GLC,3995,30,1980,Foreign
+Peugeot 604,12990,14,3420,Foreign
+Renault Le Car,3895,26,1830,Foreign
+Subaru,3798,35,2050,Foreign
+Toyota Celica,5899,18,2410,Foreign
+Toyota Corolla,3748,31,2200,Foreign
+Toyota Corona,5719,18,2670,Foreign
+VW Dasher,7140,23,2160,Foreign
+VW Diesel,5397,41,2040,Foreign
+VW Rabbit,4697,25,1930,Foreign
+VW Scirocco,6850,25,1990,Foreign
+Volvo 260,11995,17,3170,Foreign

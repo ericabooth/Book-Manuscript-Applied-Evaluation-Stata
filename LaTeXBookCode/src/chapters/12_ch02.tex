@@ -2,22 +2,22 @@
 
 You wrote a do-file that ran perfectly last month. Today it dies on your coworker's laptop over a hard-coded path, and you cannot remember which of three folders contains the version that made the figure the client already saw. How do you set up a project once so that these failures cannot happen? A folder layout, a control file, and a few habits are the answer, and they take about ten minutes to put in place.\marginnote{Why one absolute root rather than relative paths everywhere? Because Stata's working directory moves as you \texttt{cd} between projects and as you double-click a do-file versus running it from the command line. A single absolute \texttt{\$root}, set once, is the only anchor that survives all of that.}
 
-We build the setup in the order you would do it: install the packages, lay out the folders, write the control file that sets every path in one place, and adopt the numbered-pipeline\index{numbered pipeline} convention that lets the whole project rebuild with one command. By the end you will be able to hand a colleague a project folder that rebuilds every table and figure from the raw downloads with one switch, with the package versions frozen inside the project, a dated log for every run, and a tracking spine that records the decisions the code carries out. That is what you want in hand the week a funder asks where a number came from, or the month a successor opens the folder after you have taken another job. Every habit here is an investment in the first two principles, replicable and extensible, paid once and returned on every project after.
+We build the setup in the order you would do it: install the packages, lay out the folders, write the control file that sets every path in one place, and adopt the numbered-pipeline\index{numbered pipeline} convention that lets the whole project rebuild with one command. By the end you will be able to hand a colleague a project folder that rebuilds every table and figure from the raw downloads with one switch, with the package versions frozen inside the project, a dated log for every run, and a tracking spine, one small side file that records the decisions the code carries out. That is what you want in hand the week a funder asks where a number came from, or the month a successor opens the folder after you have taken another job. Every habit here is an investment in the first two principles, replicable and extensible, paid once and returned on every project after.
 
 \section{The control file is a handoff, not housekeeping}\label{sec:ch02-teamscience}
 An embedded evaluator's project usually outlives its staffing. In a three-person evaluation shop inside a nonprofit or an agency, the analyst who builds the pipeline in year one of a grant is often gone before the final report is due, and the successor inherits exactly what the project folder says and nothing more, because no meeting can recover what the folder left out. So when you lay out the folders and write the control file, you are not tidying up; you are writing the handoff document for whoever opens the project next, and a shop that has one can absorb turnover without losing the evidence base a client is paying for. At kickoff, before any do-file exists, spend fifteen minutes agreeing with the team on the folder names, who owns the control file, and where decisions get recorded, so the conventions are shared property rather than one analyst's dialect. In the next two subsections we look at what several research fields found when they audited their own published code, then work through one test you can run on your own project folder while the analyst who built it is still on staff.
 
 \subsection{Several fields went looking and found the same short list}\label{sec:ch02-evidence}
-You do not have to take this on faith. Researchers in several different fields have gone looking at the code their own colleagues published, and each group arrived at the same short list of habits this chapter teaches. Writing for Stata users specifically, \textcite{long2009workflow} reached the same list; Chapter~\ref{ch:embedded} traced this book's lineage to him, and his master do-file is the direct ancestor of the control file in Section~\ref{sec:control}. \textcite{gentzkow2014code} wrote their practitioner's guide after concluding that empirical economists were relearning, one painful project at a time, disciplines the software industry had settled decades earlier: automate what you can, give every file one obvious home, and name each directory for what it contains. \marginnote{\textcite{wilson2017good} aimed one notch lower on purpose, trimming the list to the \enquote{good enough} practices a small lab can adopt without a dedicated engineer, which is exactly where an evaluation team of three sits.}\textcite{christensen2019transparent} carried the same habits into the broader transparency movement in social science, and \textcite{ball2012tier} boiled them down to the TIER Protocol, which stakes everything on one test worth holding this chapter to: hand a stranger only the raw data and the written instructions, and they rebuild every number in the report.
+You do not have to take this on faith. Researchers in several different fields have gone looking at the code their own colleagues published, and each group arrived at the same short list of habits this chapter teaches. Writing for Stata users specifically, \textcite{long2009workflow} set out these habits as a single workflow; Chapter~\ref{ch:embedded} traced this book's lineage to him, and his master do-file is the direct ancestor of the control file in Section~\ref{sec:control}. \textcite{gentzkow2014code} wrote their practitioner's guide after concluding that empirical economists were relearning, one painful project at a time, disciplines the software industry had settled decades earlier: automate what you can, give every file one obvious home, and name each directory for what it contains. \marginnote{\textcite{wilson2017good} aimed one notch lower on purpose, trimming the list to the \enquote{good enough} practices a small lab can adopt without a dedicated engineer, which is exactly where an evaluation team of three sits.}\textcite{christensen2019transparent} carried the same habits into the broader transparency movement in social science, and \textcite{ball2012tier} boiled them down to the TIER Protocol, which rests on one test worth holding this chapter to: hand a stranger only the raw data and the written instructions, and they rebuild every number in the report.
 
-We can put a number on what happens when no one imposes this structure, and the number is high enough to plan around. \textcite{trisovic2022code} re-executed more than 9{,}000 R files that authors had deposited in replication archives at the Harvard Dataverse and found that 74 percent failed to run as deposited; automated cleanup of common errors still left 56 percent failing, with broken file paths and missing package dependencies among the routine culprits. Those are the two failures that this chapter's control file and install file exist to prevent, and the deposited archive is the \emph{best} case, a project its author knowingly packaged for strangers. Every file in that count also ran, once, on its author's machine; \enquote{it works here today} is precisely the belief the failure rate measures. \textcite{peng2011reproducible} argues that this rerun-from-deposit standard, reproducibility in his vocabulary and replicability in this book's, is the minimum computational work owes its readers, not the gold one; an evaluator whose numbers steer a program budget owes at least that much.
+We can put a number on what happens when no one imposes this structure, and the number is high enough to plan around. \textcite{trisovic2022code} re-executed more than 9{,}000 R files that authors had deposited in replication archives at the Harvard Dataverse and found that 74 percent failed to run as deposited; automated cleanup of common errors still left 56 percent failing, with broken file paths and missing package dependencies among the routine culprits. Those are the two failures that this chapter's control file and install file exist to prevent, and the deposited archive is the \emph{best} case, a project its author knowingly packaged for strangers. Every file in that count also ran, once, on its author's machine; \enquote{it works here today} is precisely the belief the failure rate measures. \textcite{peng2011reproducible} argues that this rerun-from-deposit standard, reproducibility in his vocabulary and replicability in this book's, sets the minimum standard for computational work rather than the gold standard; an evaluator whose numbers steer a program budget owes readers at least that much.
 
-Why does any of this belong in an evaluation book and not just a programming one? Because evaluators ask for the same habits under different names. Judge the setup by Chapter~\ref{ch:embedded}'s utilization-focused standard \parencite{patton2008utilization}: a pipeline the program's own data manager can rerun after the contract ends is use in its most durable form. In the research-practice partnerships of Chapter~\ref{ch:embedded}, both sides can open, read, and rerun the project folder, so the partnership's evidence stays jointly owned rather than dependent on one analyst's laptop. At team scale, the replicable principle asks nothing more exotic than this: the project explains itself to the next person.
+Why does any of this belong in an evaluation book and not just a programming one? Because evaluators ask for the same habits under different names. Judge the setup by Chapter~\ref{ch:embedded}'s utilization-focused standard \parencite{patton2008utilization}, which asks whether anyone actually uses what the evaluation produces: a pipeline the program's own data manager can rerun after the contract ends is use in its most durable form. In the research-practice partnerships of Chapter~\ref{ch:embedded}, both sides can open, read, and rerun the project folder, so the partnership's evidence stays jointly owned rather than dependent on one analyst's laptop. At team scale, being replicable means nothing more exotic than this: the project explains itself to the next person.
 
 \subsection{The handoff test: could a stranger rebuild it after you leave?}\label{sec:ch02-handoff}
 You can judge a project's setup most sharply by imagining the person who inherits it. Picture a two-year grant to evaluate a workforce program: the analyst who built the pipeline in month three takes another job in month sixteen, and the successor opens the folder in month eighteen with the final report due in month twenty. The folder is the whole inheritance, and whether the successor can rebuild the results is decided entirely by choices the first analyst made before anyone knew they were leaving. The setup in this chapter is the answer to that scenario, built so the folder records the knowledge that would otherwise walk out the door.
 
-Software engineers face the same problem whenever they inherit a codebase, and \textcite{pilgrim2023code} distill their field's response into rules an evaluator can borrow directly. Their advice to a person taking over unfamiliar code is to run it before reading it, to trust the pipeline over the prose, and to treat a project that rebuilds end to end as the only documentation that cannot go stale, because comments lie but a passing run does not. An evaluation folder built to the standard of this chapter passes their test by construction: the successor types one command, watches the numbered pipeline rebuild every figure from the raw downloads, and only then reads the code, now with the confidence that what they are reading is what actually produced the report. \marginnote{The handoff test is not a nicety layered on top of the replicable principle: once a project outlives the analyst who started it, the test and the principle are the same demand.}Figure~\ref{fig:ch02-viz-handoff} traces that loop: you run the inherited pipeline first, and read the code only once it rebuilds end to end.
+Software engineers face the same problem whenever they inherit a codebase, and \textcite{pilgrim2023code} distill their field's response into rules an evaluator can borrow directly. Their advice to a person taking over unfamiliar code is to run it before reading it, to trust the pipeline over the prose, and to treat a project that rebuilds end to end as the only documentation that cannot go stale, because a comment can be out of date while a run that still passes cannot. An evaluation folder built to the standard of this chapter passes their test by construction: the successor types one command, watches the numbered pipeline rebuild every figure from the raw downloads, and only then reads the code, now with the confidence that what they are reading is what actually produced the report. \marginnote{The handoff test is not a nicety layered on top of the replicable principle: once a project outlives the analyst who started it, the test and the principle are the same demand.}Figure~\ref{fig:ch02-viz-handoff} traces that loop: you run the inherited pipeline first, and read the code only once it rebuilds end to end.
 
 \begin{figure*}[htbp]
 \centering
@@ -53,24 +53,23 @@ foreach pkg in estout coefplot gtools reghdfe getcensus {
 }
 \end{verbatim}
 }
-The two-line body is a pattern the book reuses: \texttt{capture} runs a command and swallows any error, leaving the return code in \texttt{\_rc}, which is zero on success. So the loop asks whether each package is already present and installs only when the answer is no.
+The two-line body is a pattern the book reuses: \texttt{capture} runs a command and swallows any error, leaving the return code in \texttt{\_rc}, which is zero on success. So the loop checks each package and installs only the ones that are missing.\marginnote{One trap when you extend the list: those are \emph{package} names, not command names, and the two often differ. The \texttt{esttab} command lives in the \texttt{estout} package, and \texttt{ssc install esttab} simply fails. When you find a dependency by running \texttt{which} on a command, look up the package that ships it before adding it here.}
 
-Once you outgrow a hand-written loop, you can turn the job over to \texttt{usepackage}\index{usepackage@\texttt{usepackage}} \parencite{booth2011usepackage}, an SSC command that finds and installs a named list of user-written packages in one call, searching the SSC first and other archives if a name is not found there. A team that names its project toolchain in a single \texttt{usepackage} line pins the same set of dependencies for everyone who opens the folder, so the install step becomes one command a new teammate reads and runs rather than a loop they have to trust. Recording the environment in code, not in someone's memory or on a wiki page, is the part of replicability that beginners skip and experts never do.\marginnote{One gap this loop leaves: \texttt{ssc install} always fetches \emph{today's} version, so a package author's update can change your results a year later. Section~\ref{sec:ch02-pinning} closes this gap by freezing the toolchain inside the project.} We suggest you add each new dependency to \texttt{01\_install.do} the same day you write the line that needs it, so the file remains the project's one roster of dependencies rather than a snapshot of week one. If you cannot tell whether a command is a dependency, run \texttt{which} on it: built-ins report as built in, and community commands point at the \texttt{.ado} file they load from. When you file a bug or ask for help, write the example in code as well: the \texttt{writeinput}\index{writeinput@\texttt{writeinput}} command turns the data in memory into a self-contained \texttt{input} block, so the person helping you can run your exact problem without needing your files.
+Once you outgrow a hand-written loop, you can turn the job over to \texttt{usepackage}\index{usepackage@\texttt{usepackage}} \parencite{booth2011usepackage}, an SSC command that finds and installs a named list of user-written packages in one call, searching the SSC first and other archives if a name is not found there. A team that names its project toolchain in a single \texttt{usepackage} line gives everyone who opens the folder the same set of dependencies, so the install step becomes one command a new teammate reads and runs rather than a loop they have to trust. Recording the environment in code, not in someone's memory or on a wiki page, is the part of replicability that beginners skip and experts never do.\marginnote{One gap this loop leaves: \texttt{ssc install} always fetches \emph{today's} version, so a package author's update can change your results a year later. Section~\ref{sec:ch02-pinning} closes this gap by freezing the toolchain inside the project.} We suggest you add each new dependency to \texttt{01\_install.do} the same day you write the line that needs it, so the file remains the project's one roster of dependencies rather than a snapshot of week one. If you cannot tell whether a command is a dependency, run \texttt{which} on it: built-ins report as built in, and community commands point at the \texttt{.ado} file they load from.\marginnote{When you file a bug or ask for help, write the example in code as well: the \texttt{writeinput}\index{writeinput@\texttt{writeinput}} command (\texttt{ssc install writeinput}) turns the data in memory into a self-contained \texttt{input} block, so the person helping you can run your exact problem without needing your files.}
 
 \section{Pin the packages, not just the language}\label{sec:ch02-pinning}
 When you install the packages from a rerunnable file, you have settled who has them, but not which version they have, and that gap is where a result quietly rots. Every \texttt{ssc install} fetches whatever the author has posted \emph{today}, so two teammates who run the same install file a year apart can end up with different code behind the same command name, and a package update that changes a default or fixes a rounding rule can move a published number without touching a line of your own do-files. For a project whose numbers a client may revisit years later, the versions are the part you must keep fixed. By the end of the section your project folder will hold its own copy of every community command the pipeline calls, plus a short note of which versions those are, so a rerun two years from now meets the code you tested against rather than whatever SSC serves that morning.
 
 The size of this risk is not hypothetical, and computational scientists have measured it. When \textcite{perkel2020code} organized a challenge to rerun decade-old analysis code, participants found that obsolete dependencies and vanished package versions, more than the authors' own logic, were what broke the reruns, and some pipelines could not be revived at all. The lesson for an evaluator is that the language version you already pin with \texttt{version} is only half the environment; the community commands your results lean on are the other half, and they drift on their authors' schedules rather than yours.
 
-We suggest you freeze the toolchain inside the project, the same way you froze the language. Copy the \texttt{.ado} files your pipeline calls into a folder under the project root\marginnote{Installed packages land in the PLUS directory; \texttt{adopath} lists its location.}, then point Stata at the project folder first with \texttt{adopath ++} in the control file, so the project runs against its own stashed copies before it ever consults the machine's shared install:
+We suggest you freeze the toolchain inside the project, the same way you froze the language. Copy the files of each package your pipeline calls into a folder under the project root\marginnote{Stata installs packages into the PLUS directory; \texttt{adopath} lists its location, and \texttt{ado dir} lists what a given package installed. Copy all of it: a package is a file set, not a file. \texttt{gtools}, for instance, ships one \texttt{.ado} per subcommand plus a Mata library (\texttt{.mlib}) and compiled plugins (\texttt{.plugin}), and a stash holding only \texttt{gtools.ado} leaves \texttt{gcollapse} unrecognized.}, then point Stata at the project folder first with \texttt{adopath ++} in the control file, so the project runs against its own stashed copies before it ever consults the machine's shared install:
 \par
 {\footnotesize
 \begin{verbatim}
 adopath ++ "$root/ado"   // project ados win first
-sysdir set PLUS "$root/ado"
 \end{verbatim}
 }
-The first line pushes the project folder to the front of the search path Stata walks whenever it meets a command name; the second redirects where Stata writes any new install, so even a mid-project \texttt{ssc install} stays inside the project. Now the command behind \texttt{reghdfe} is the one you tested against, not the one SSC happens to serve the day a reviewer reruns you, and the project stores its dependencies the same way \texttt{raw/} stores its downloads (Section~\ref{sec:folders}): written once, read many times, never silently updated. Recording which versions those are, in a short text note beside the stashed \texttt{.ado} files, turns the freeze into something a successor can audit rather than merely trust. Re-freeze deliberately: at a project milestone, refresh the installed copies (\texttt{adoupdate, update} brings every package current), re-copy the files into the stash, rerun the pipeline, and note the date and reason, never mid-analysis where a moved number could have two explanations.
+That one line pushes the project folder to the front of the search path Stata walks whenever it meets a command name, so the stashed copy answers first and the machine's own installations stay available behind it.\marginnote{You may see \texttt{sysdir set PLUS} suggested for this. Use it knowingly: it \emph{replaces} the machine's package directory on the path rather than adding a layer in front of it, so every community command you did not stash, \texttt{reghdfe} and \texttt{estout} included, stops being found. \texttt{adopath ++} gives you project-first precedence without that cost.} Now the command behind \texttt{reghdfe} is the one you tested against, not the one SSC happens to serve the day a reviewer reruns you, and the project stores its dependencies the same way \texttt{raw/} stores its downloads (Section~\ref{sec:folders}): written once, read many times, never silently updated. Recording which versions those are, in a short text note beside the stashed \texttt{.ado} files, turns the freeze into something a successor can audit rather than merely trust. Re-freeze on purpose rather than by accident: at a project milestone, refresh the installed copies, re-copy the files into the stash, rerun the pipeline, and note the date and reason, never mid-analysis where a moved number could have two explanations.\marginnote{\texttt{adoupdate, update} brings every installed package current.}
 
 Freezing files is the low-ceremony version of a habit software teams reach for sooner: version control. \marginnote{\textcite{bryan2018version} makes the case to statisticians in plain language: Git and a hosting service such as GitHub turn a project's history into a navigable record of what changed, when, and why, so a team can see the exact state of the code that produced last quarter's figure rather than guess at it.}An evaluation shop does not need the full workflow to get most of the benefit; even committing the control file, the numbered do-files, and the version note at each milestone gives the team a labeled snapshot to return to when a client asks why a number moved, and it makes the frozen \texttt{ado} folder something the whole team shares rather than one analyst's local copy. The point is not to adopt every engineering practice at once; it is to recognize that pinning versions and tracking history are the same instinct, applied to the toolchain and to the timeline.
 
@@ -124,6 +123,11 @@ global clean   "$root/clean"     // analysis-ready data
 global code    "$root/code"      // the do-files
 global output  "$root/output"    // logs and tables
 global figures "$root/figures"   // exported graphs
+capture confirm file "$root/."   // fail here, not three do-files later
+if _rc {
+    display as error "root does not exist: $root"
+    exit 601
+}
 foreach f in raw clean output figures {
     capture mkdir "${`f'}"       // safe to rerun
 }
@@ -133,51 +137,145 @@ set scheme s2color    // one graphics style project-wide
 }
 Now every downstream do-file refers to \texttt{\$clean} and \texttt{\$figures} rather than a literal path, so a script written on a Mac runs unedited on a Windows laptop once the one \texttt{root} line is changed. Pinning \texttt{version}\index{version@\texttt{version}} and turning off \texttt{varabbrev}\index{varabbrev@\texttt{varabbrev}} are small reproducibility insurance: the first makes today's code behave the same next year, the second turns a silently-wrong abbreviation into a clear error.\marginnote{Concretely: with \texttt{varabbrev} on, typing \texttt{gen x = inc} happily resolves \texttt{inc} to \texttt{income} \emph{until} the day a new \texttt{income\_adj} lands in the file and the abbreviation turns ambiguous, or worse, silently binds to the wrong one. Turning it off makes you spell the name out, so the code says what it means.} This one file is the extensible principle in practice: the project extends across people, not just across time.
 
-Paths are not the only values worth hoisting to the top; parameterize what changes on a schedule. A project that evaluates fiscal year 2026 will evaluate 2027 next, so the year belongs beside \texttt{root} as \texttt{global fy 2026}, along with a \texttt{global counties} list if the sites rotate, and every downstream do-file reads \texttt{\$fy} rather than a literal 2026. Next year's update is then a one-line edit, not a hunt for every buried 2026, including the one in a filter that would silently return last year's rows.
+Paths are not the only values worth hoisting to the top: give a global to anything that changes on a schedule. A project that evaluates fiscal year 2026 will evaluate 2027 next, so the year belongs beside \texttt{root} as \texttt{global fy 2026}, along with a \texttt{global counties} list if the sites rotate, and every downstream do-file reads \texttt{\$fy} rather than a literal 2026. Next year's update is then a one-line edit, not a hunt for every buried 2026, including the one in a filter that would silently return last year's rows.
 
-You do not have to assemble this structure by hand on every project; the box below introduces \texttt{projectbuilder}, a package that generates the folder tree, the control file, and the numbered do-file stubs the chapter turns to shortly, in one command.
+You do not have to assemble this structure by hand on every project. The next section works through \texttt{projectbuilder}, a command that generates the whole tree, the control file, and the numbered do-file stubs in one call.
 
-\begin{kaobox}[frametitle=Package Integration: \texttt{projectbuilder}]
-\texttt{projectbuilder}\index{projectbuilder@\texttt{projectbuilder}} scaffolds a project in one command: the folder tree, a starter control file, the numbered pipeline, and a documentation site. It builds the same shape this chapter teaches, numbered so a folder listing sorts in pipeline order: \texttt{01\_raw/} (holding \texttt{\_converted/}), \texttt{02\_cleaned/}, \texttt{03\_output/}, a \texttt{\_code/} folder with \texttt{000\_control.do} and the \texttt{100}--\texttt{600} stubs, and a \texttt{\_documentation/} folder whose site is rebuilt on every run. It generalizes the production tool the authors open every engagement with, so later chapters that mention \enquote{the \texttt{projectbuilder} scaffold} mean this shipped command, not a plan. Install it once:
+\section{Scaffolding a project in one command}\label{sec:ch02-projectbuilder}
+You cut corners on the folder tree a little more each time you build one by hand: you skip the \texttt{\_archive} folder this time, you name it \texttt{output} instead of \texttt{03\_output} because you were in a hurry, and six months later two projects that should look identical do not. \texttt{projectbuilder}\index{projectbuilder@\texttt{projectbuilder}} removes that drift by writing the structure for you, the same way every time. In this section you scaffold a real project, watch what the command puts on disk, and learn the one call you rerun whenever the data changes. It is published on SSC, so one line installs it:
 \par
 {\footnotesize
 \begin{verbatim}
+ssc install projectbuilder
+\end{verbatim}
+}
+
+\subsection{Start by asking what you have right now}\label{sec:ch02-pb-paths}
+Start by answering one question for yourself, before you type the command: what do you have at this moment? There are only three honest answers, and Figure~\ref{fig:ch02-viz-pbpaths} maps each to the call it implies.
+
+You may have \emph{nothing yet}, which is the most common case at kickoff: the partnership is agreed, the data-sharing agreement is still in a lawyer's inbox, and you want the folder to exist so the first extract has somewhere to land. You may have \emph{files already on your drive}, the folder of spreadsheets a partner emailed over. Or you may have \emph{a web address}, a public file you can fetch. You give the command what you have, and it does the corresponding work: with nothing, it writes an empty, correctly shaped shell; with local files, it copies them into \texttt{01\_raw/}, converts each one, and appends them into a single analytic file; with a URL, it records the address and fetches the file if the server responds.
+
+\begin{figure*}[htbp]
+\centering
+\begin{tikzpicture}[font=\footnotesize]
+\node[io] (q) at (0,0) {What do you\\have right now?};
+\node[decision] (d1) at (3.4,1.9) {nothing\\yet};
+\node[decision] (d2) at (3.4,0) {files on\\your drive};
+\node[decision] (d3) at (3.4,-1.9) {a web\\address};
+\draw[flow] (q) -- (d1);
+\draw[flow] (q) -- (d2);
+\draw[flow] (q) -- (d3);
+\node[stage, text width=3.0cm] (c1) at (7.4,1.9) {no data option};
+\node[stage, text width=3.0cm] (c2) at (7.4,0) {\texttt{data("folder")}};
+\node[stage, text width=3.0cm] (c3) at (7.4,-1.9) {\texttt{url("https://...")}};
+\draw[flow] (d1) -- (c1);
+\draw[flow] (d2) -- (c2);
+\draw[flow] (d3) -- (c3);
+\node[substep, text width=4.3cm] (o1) at (12.2,1.9) {an empty shell, correctly shaped; the data lands later};
+\node[substep, text width=4.3cm] (o2) at (12.2,0) {files copied into \texttt{01\_raw/}, converted, appended into one analytic file};
+\node[substep, text width=4.3cm] (o3) at (12.2,-1.9) {the address recorded, and fetched now if it answers};
+\draw[flow] (c1) -- (o1);
+\draw[flow] (c2) -- (o2);
+\draw[flow] (c3) -- (o3);
+\node[io, text width=4.6cm] (rb) at (12.2,-3.8) {then, on every refresh:\\\texttt{projectbuilder \textit{name}, rebuild}};
+\draw[flow, dashed] (o3.south) -- (rb.north);
+\node[annot, text width=4.0cm, align=center] at (6.0,-3.6) {all three paths converge on the same tree and the same refresh call};
+\end{tikzpicture}
+\caption[Three ways to start a project]{The one decision that starts a project, and what each answer builds. The three paths differ only in what you hand the command on the first call; they converge on the same folder tree and the same refresh command. Starting with an empty shell costs nothing later, because the same \texttt{rebuild} call ingests the data whenever it arrives.}
+\label{fig:ch02-viz-pbpaths}
+\end{figure*}
+
+\subsection{A worked example: the folder of spreadsheets a partner sent}\label{sec:ch02-pb-worked}
+Take the middle path, since it is the one that shows the most work. A county finance office has sent you two CSVs, one per fiscal year, sitting in a folder called \texttt{drop} inside your working directory, since \texttt{data()} measures a relative path from wherever Stata is currently working. You want a project built around them:
+\par
+{\footnotesize
+\begin{verbatim}
+projectbuilder CountyBudgets,                 ///
+    data("drop")                              ///
+    description("County budget CSVs, one per FY") ///
+    outcomes(price) over(foreign)             ///
+    publicfacing(unsure)
+\end{verbatim}
+}
+The first argument names the project, and it becomes the folder name. \texttt{data()} is the one that does the heavy lifting here: point it at a file or a folder and the command copies what it finds into \texttt{01\_raw/}, the write-once folder of Section~\ref{sec:folders}. The rest of the options are metadata, and they are worth filling in while you still remember the answers.\marginnote{\texttt{description()} is stamped into the generated file headers and the documentation page; \texttt{outcomes()} and \texttt{over()} name the variables the template analysis loops over, up to ten each; \texttt{publicfacing()} takes \texttt{yes}, \texttt{no}, or \texttt{unsure} and records the sharing stance where a colleague will find it. Type \texttt{help projectbuilder} for the rest.} The command reports what it did as it goes, and closes with a summary block. The real run prints more than fits here, including the full paths, the metadata you recorded, and a short list of next steps, and the two optional companions print their own progress in between; this is the shape of it:
+\par
+{\footnotesize
+\begin{verbatim}
+projectbuilder: scaffolding .../CountyBudgets
+projectbuilder: copied 2 file(s) from drop into 01_raw/
+projectbuilder: converting 01_raw/ -> 01_raw/_converted/ ...
+projectbuilder: appending converted files ->
+    02_cleaned/CountyBudgets_analytic.dta ...
+
+------------------------------------------------------------
+projectbuilder OK  (v2.0.1)
+  Project       : CountyBudgets
+  Description   : County budget CSVs, one per FY
+  Raw files     : 2
+  Converted     : 2
+  Outcomes      : price
+  Over          : foreign
+  Public-facing : unsure
+  Mode          : fresh scaffold
+------------------------------------------------------------
+\end{verbatim}
+}
+Read those three progress lines as the pipeline of Chapter~\ref{ch:noapi} running on your behalf: \texttt{convertanything}\index{convertanything@\texttt{convertanything}} turned each CSV into a \texttt{.dta} under \texttt{01\_raw/\_converted/}, and \texttt{combineall}\index{combineall@\texttt{combineall}} appended those into \texttt{02\_cleaned/CountyBudgets\_analytic.dta}. You now have an analytic file before you have written a line of code.\marginnote{Those two commands are optional. If you have not installed them, you still get the folder tree, the control file, and the do-files; the generated \texttt{200\_data\_management.do} still contains the calls, so it stays a working example, and the run prints the line that installs what is missing.} The command also stores the counts in \texttt{r()}, the holding area Stata fills with a command's results, so a wrapper script can check them: \texttt{r(nraw)} and \texttt{r(nconverted)} are 2 here, \texttt{r(path)} is the absolute path of the new folder, and \texttt{r(rebuilt)} is 0 because this was a fresh build.
+
+What landed on disk does the same jobs as the layout of Section~\ref{sec:folders}, under names numbered so a folder listing sorts into pipeline order. The mapping is worth reading once: \texttt{01\_raw/} is that section's \texttt{raw/}, \texttt{02\_cleaned/} is its \texttt{clean/}, and \texttt{03\_output/} absorbs both \texttt{output/} and \texttt{figures/}, so exhibits land there rather than in a folder of their own:
+\par
+{\footnotesize
+\begin{verbatim}
+CountyBudgets/
++-- 01_raw/              the two CSVs, write-once
+|   +-- _converted/      one .dta per raw file
++-- 02_cleaned/          CountyBudgets_analytic.dta
++-- 03_output/           logs, tables, exhibits
++-- _code/
+|   +-- 000_control.do   every path in one place
+|   +-- 100_data_download.do
+|   +-- 200_data_management.do
+|   +-- 300_labels.do
+|   +-- 400_data_profiler.do
+|   +-- 500_aggregation.do
+|   +-- 600_analysis.do
++-- _documentation/      Readme, metadata, website/index.html
++-- _archive/
+\end{verbatim}
+}
+The do-file names are the numbered pipeline of Section~\ref{sec:numbered} with more specific labels: \texttt{100\_data\_download} is that section's ingest stage, \texttt{200\_data\_management} its clean stage, and \texttt{600\_analysis} its analysis stage, with \texttt{300\_labels}, \texttt{400\_data\_profiler}, and \texttt{500\_aggregation} filling the gaps the hundreds were left open for.\marginnote{The two companions that did the ingest work install separately: \texttt{ssc install combineall} for the appender, and \texttt{convertanything} for the converter, from the authors' GitHub with the house idiom of Appendix~\ref{app:toolkit}. The version string in the summary block tracks whichever copy of \texttt{projectbuilder} you installed.} Open \texttt{000\_control.do} and you will recognize it, because it is the control file this chapter just taught you to write: it sets \texttt{\$root} to the absolute path of the new folder in one clearly commented line, derives every other path from it, and ends with the run-all block. It pins \texttt{version 16.0}, the package's own floor rather than the release of Stata that generated the file, so a teammate on an older release can still run it.\marginnote{That choice is deliberate. Pinning the generating release would write something like \texttt{version 19.5}, which every earlier installation rejects, and the control file would fail for exactly the colleague you built it for. Raise the pin by hand if the project comes to need newer syntax.}
+
+\subsection{One call for every refresh afterward}\label{sec:ch02-pb-rebuild}
+The scaffold is worth little if the second month costs as much as the first, so the command is built around one repeat call. When next quarter's CSVs arrive in \texttt{01\_raw/}, you rerun with \texttt{rebuild}:
+\par
+{\footnotesize
+\begin{verbatim}
+projectbuilder CountyBudgets, rebuild
+\end{verbatim}
+}
+That re-converts the raw folder, re-appends the analytic file, and regenerates the documentation. You can run it as often as you like, because it protects your work: any do-file in \texttt{\_code/} that you have edited is left alone unless you also give \texttt{replace}. The documentation is the exception, and deliberately so, since it is derived rather than authored. A plain call on a folder that already exists stops with an error instead of overwriting it, which is the guard that makes the command safe to put in a scheduled script.\marginnote{Your data in memory is never touched, by a fresh build or a rebuild, so you can scaffold a project in the middle of an analysis session without losing what you are working on.}
+
+Two more options are worth turning on, because they are where the scaffold stops being a folder tree and starts being something you can hand to a partner. The box below works through both.
+
+\begin{kaobox}[frametitle=Package Integration: documentation from the scaffold]
+Two options make \texttt{projectbuilder} build a project's documentation rather than just a place to put it, and both degrade gracefully when the tool behind them is missing.
+
+\textbf{A codebook, written by the pipeline.} Add \texttt{descsave} to the call and the generated \texttt{300\_labels.do} carries a codebook-export step, which runs when you run that file and writes a \texttt{.dta} and an \texttt{.xlsx} describing every variable. The same file carries a lineage block, written commented and ready for you to switch on: uncomment its \texttt{srctag}\index{srctag@\texttt{srctag}} line and each variable records which raw file it came from, so \enquote{where did this number come from?} still has an answer a year later (Chapter~\ref{ch:panels}).
+
+\textbf{A documentation website.} Add \texttt{builddocs} and the command renders \texttt{\_documentation/website/index.html} with \texttt{webdoc2}\index{webdoc2@\texttt{webdoc2}}, the report tool of Chapter~\ref{ch:portals}. A page is written either way; this option makes it a styled site rather than a plain one. \texttt{webdoc2} needs one extra step at install time, because its header template ships as an ancillary file that \texttt{net install} does not place:
+\par
+{\footnotesize
+\begin{verbatim}
+ssc install webdoc
 local gh "https://raw.githubusercontent.com/ericabooth"
-net install projectbuilder, ///
-    from("`gh'/projectbuilder-stata-public/main/") ///
-    replace
+net install webdoc2, from("`gh'/webdoc2-stata-public/main/") replace
+net get     webdoc2, from("`gh'/webdoc2-stata-public/main/") replace
 \end{verbatim}
 }
-Projects start one of two ways and the command handles both. \textbf{When the data already exists}, point at the folder (or a source URL) and the scaffold ingests it: \texttt{convertanything}\index{convertanything@\texttt{convertanything}} turns every raw file into \texttt{.dta} under \texttt{01\_raw/\_converted/}, then \texttt{combineall}\index{combineall@\texttt{combineall}} appends those into the analytic file in \texttt{02\_cleaned/}, both of them the Chapter~\ref{ch:noapi} tools doing the work they were built for:
-\par
-{\footnotesize
-\begin{verbatim}
-cd "~/projects"
-projectbuilder CountyBudgets,                ///
-    data("~/Desktop/budget_drop")            ///
-    desc("County budget CSVs, one per FY")   ///
-    outcomes(total_budget) over(year dept)   ///
-    descsave publicfacing(unsure)
-\end{verbatim}
-}
-The options name what a reader needs on day one: \texttt{desc()} is a human description stamped into the generated headers, \texttt{outcomes()} and \texttt{over()} name the variables the template analysis loops over, \texttt{descsave} switches on the codebook step, and \texttt{publicfacing()} records the sharing stance in the documentation; \texttt{help projectbuilder} details each.
-
-\textbf{More often the folder comes before the data.} Scaffold the empty shell now, and when the first extract arrives in \texttt{01\_raw/}, rerun with \texttt{rebuild}. That one call re-converts, re-appends, and regenerates the documentation, and every later refresh is the same call again:
-\par
-{\footnotesize
-\begin{verbatim}
-projectbuilder VendorFeed,                   ///
-    desc("Monthly vendor extract")           ///
-    url("https://example.gov/monthly.csv")
-
-* ...the first extract arrives in 01_raw/...
-projectbuilder VendorFeed, rebuild
-\end{verbatim}
-}
-\texttt{rebuild} never overwrites a do-file you have edited unless you add \texttt{replace}, so you can run it on every refresh without fear. The generated \texttt{300\_labels.do} carries the documentation load: it calls \texttt{descsave} for a codebook and \texttt{srctag}\index{srctag@\texttt{srctag}} to record which raw file each variable came from, so \enquote{where did this number come from?} still has an answer a year later (Chapter~\ref{ch:panels}). Every optional package degrades gracefully: if \texttt{convertanything}, \texttt{combineall}, \texttt{descsave}, or \texttt{webdoc2} is missing, the generated do-file still carries the call, the scaffold prints the one line that installs it, and the documentation site is written anyway.
-
-The command returns \texttt{r(path)}, \texttt{r(project)}, \texttt{r(nraw)}, \texttt{r(nconverted)}, and \texttt{r(rebuilt)}, so a wrapper can chain straight into the pipeline. Three caveats keep the claims honest. The generated control file pins \texttt{version} to the machine that scaffolded it, so a team on mixed Stata releases may need to edit that one line. Metadata strings are stamped in verbatim, so \texttt{desc()} and \texttt{url()} should avoid backticks, dollar signs, and apostrophes. And nesting stops at one level, with \texttt{outcomes()} and \texttt{over()} keeping at most ten items each. The companion \texttt{ch02\_projectbuilder.do} runs both workflows end to end on synthetic files, with no network and no key.
+Keep that \texttt{header.html} somewhere on your adopath and \texttt{builddocs} will find it from any working directory. If the render fails, the built-in page is kept and the run still succeeds, so a documentation problem never costs you the scaffold.
 \end{kaobox}
+
+The companion \texttt{ch02\_projectbuilder.do} runs both of these paths end to end on synthetic files, with no network and no key, so you can watch a project build twice, once around data that already exists and once around a shell that waits for it, before you point the command at a real engagement.
 
 \section{\enquote{Works on my machine} is four failures with one name}\label{sec:ch02-worksonmine}
 When your do-file dies on a teammate's laptop, the phrase you hear back covers four distinct faults, and naming them separately turns a vague complaint into a fixable list. A do-file that runs for its author but nowhere else has usually made one of four assumptions the author stopped noticing: that a folder exists at a particular absolute path, that every command it calls is already installed, that those commands are the same version they were the day the code was written, or that a step done once by hand does not need writing down. Each fault has a specific cause and a specific answer in this chapter's setup, and Table~\ref{tab:ch02-worksonmine} lines them up so a stranger inheriting the project can check for all four rather than debug them one crash at a time.
@@ -195,15 +293,15 @@ Failure & Hidden assumption & The setup's answer \\
 Hard-coded path & The folder sits at \texttt{/Users/me/\dots} & One \texttt{\$root} in the control file; everything derived from it (Section~\ref{sec:control}) \\
 Uninstalled package & The command is already there & Rerunnable install file with a \texttt{capture which} guard (Section~\ref{sec:ch02-install}) \\
 Unpinned version & Today's package equals last year's & Freeze \texttt{.ado} files, \texttt{adopath ++} them, pin \texttt{version} (Section~\ref{sec:ch02-pinning}) \\
-Undocumented manual step & \enquote{I just fixed that cell by hand} & Every step in code, no calculator in Excel (Section~\ref{sec:ch02-worksonmine} closer) \\
+Undocumented manual step & \enquote{I just fixed that cell by hand} & Every step in code, no calculator in Excel (Section~\ref{sec:ch02-excel}) \\
 \hline
 \end{tabular}
 \end{table*}
 
-The control file and install file close the first three failures directly; the fourth hides longest because it leaves no trace. A manual fix, a teammate opening the raw file to correct a stray value, a number typed straight into a table, runs fine the day it is done and cannot be reproduced the day someone else reruns the pipeline, because the pipeline never knew the step happened. The rule that closes it gets its own heading later in the chapter: you write every transformation in a do-file, so the project has no off-book steps for a successor to rediscover. Read as a set, the four failures are one failure, an assumption the author never wrote down, and the whole setup exists to force every such assumption onto the page where the next person can read it.\marginnote{Table~\ref{tab:ch02-worksonmine} doubles as a triage order: a path fault names a folder in its error, a missing package names a command, a version fault runs clean but prints a different number, and only the off-book manual step leaves no symptom a rerun can surface. Read a crash against those signatures, top to bottom.}
+The control file and install file close the first three failures directly; the fourth hides longest because it leaves no trace. A manual fix, a teammate opening the raw file to correct a stray value, a number typed straight into a table, runs fine the day it is done and cannot be reproduced the day someone else reruns the pipeline, because the pipeline never knew the step happened. You close it by writing every transformation into a do-file, which is the rule that gets its own heading later in the chapter, so the project leaves no off-book steps for a successor to rediscover. Read as a set, the four failures are one failure, an assumption the author never wrote down, and the whole setup exists to force every such assumption onto the page where the next person can read it.\marginnote{Table~\ref{tab:ch02-worksonmine} doubles as a triage order: a path fault names a folder in its error, a missing package names a command, a version fault runs clean but prints a different number, and only the off-book manual step leaves no symptom a rerun can surface. Read a crash against those signatures, top to bottom.}
 
-\section{The numbered pipeline: the folder listing is the run order}
-You now have the folders and one control file; what the project still lacks is an obvious order to run the code in, so a newcomer does not have to ask which do-file comes first. Name your do-files so the folder listing itself tells anyone the order to run them, and so the whole project rebuilds with one command instead of tribal knowledge. Give the project's do-files numbered names that sort into the order they run: \texttt{100\_ingest}, \texttt{200\_clean}, \texttt{300\_analyze}, up to \texttt{600\_report} (Figure~\ref{fig:numbered}). Numbering by hundreds leaves gaps, so a new step slots in as \texttt{250\_} without renaming the rest. The control file ends with an optional block that runs them all:
+\section{The numbered pipeline: the folder listing is the run order}\label{sec:numbered}
+You now have the folders and one control file; what the project still lacks is an obvious order to run the code in, so a newcomer does not have to ask which do-file comes first. Name your do-files so that anyone can read the run order straight off the folder listing, and so the whole project rebuilds with one command rather than from someone's memory. Give the project's do-files numbered names that sort into the order they run: \texttt{100\_ingest}, \texttt{200\_clean}, \texttt{300\_analyze}, up to \texttt{600\_report} (Figure~\ref{fig:numbered}). Numbering by hundreds leaves gaps, so a new step slots in as \texttt{250\_} without renaming the rest. The control file ends with an optional block that runs them all:
 \par
 {\footnotesize
 \begin{verbatim}
@@ -244,22 +342,24 @@ When a pipeline rebuilds silently, you are left with no evidence of what it did.
 \par
 {\footnotesize
 \begin{verbatim}
-log using "$output/clean_$S_DATE.log", replace text
+local today : display %tdCY-N-D date("$S_DATE", "DMY")
+capture log close mylog
+log using "$output/clean_`today'.log", name(mylog) replace text
 \end{verbatim}
 }
-The \texttt{\$S\_DATE} system macro expands to today's date, so yesterday's log survives today's run and you keep a dated trail rather than a single file that is only ever as old as your last mistake. Ask for \texttt{text} rather than Stata's default \texttt{smcl} markup\marginnote{\texttt{smcl} is Stata's own tagged log format, and only Stata renders it.}, so the log opens in any editor and greps cleanly. Close it explicitly at the end, guarding the close so a half-open log from a crashed run does not stop the next one:
+Three details in those lines are worth the space. The date local turns today into \texttt{2026-07-31}, which sorts correctly in a folder listing, where the raw \texttt{\$S\_DATE} would give you \texttt{31 Jul 2026}, spaces and all, and file names that sort by day of the month.\marginnote{That matters more than it sounds: a folder of \texttt{\$S\_DATE} logs lists as 01~Aug, 02~Jul, 03~Sep, which is the opposite of the sortable-name rule this chapter sets for the numbered pipeline.} Closing a named log \emph{before} you open it is what makes the file safe to rerun: if an earlier run crashed with its log still open, a bare \texttt{log using} stops with \enquote{log file already open} and your do-file dies on line one. Naming the log means you close your own rather than whatever some other file left open. Dating it means yesterday's log survives today's run, so you keep a trail rather than a single file that is only ever as old as your last mistake. Ask for \texttt{text} rather than Stata's default \texttt{smcl} markup\marginnote{\texttt{smcl} is Stata's own tagged log format, and only Stata renders it.}, so you can open the log in any editor and search it with any text tool. Close it explicitly at the end, guarding the close so a half-open log from a crashed run does not stop the next one:
 \par
 {\footnotesize
 \begin{verbatim}
-capture log close
+capture log close mylog
 \end{verbatim}
 }
-Two lines per do-file is the whole cost, and you will be glad you spent them the first time a client asks why a number changed between drafts: open the two dated logs side by side, and the diff between them is the answer.\marginnote{One log per do-file, not one for the whole project. Per-file logs mean a failure in \texttt{300\_analyze} leaves the \texttt{200\_clean} log intact and readable, so you debug the stage that broke instead of scrolling through a single giant transcript to find where things went wrong.}
+A few lines per do-file is the whole cost, and you will be glad you spent them the first time a client asks why a number changed between drafts: open the two dated logs side by side, and the lines that differ are the answer.\marginnote{One log per do-file, not one for the whole project. Per-file logs mean a failure in \texttt{300\_analyze} leaves the \texttt{200\_clean} log intact and readable, so you debug the stage that broke instead of scrolling through a single giant transcript to find where things went wrong.}
 
 \subsection{The tracking spine: a working file for decisions, not output}\label{sec:ch02-spine}
 A log records what the code did; it does not record what you decided, what surprised you, or what you still owe. Those belong in the tracking spine\index{tracking spine}: one small external file, a CSV or a modest Excel sheet the pipeline can append to, with one row per decision, finding, anomaly, or bug, and columns for the date, the pipeline stage, the item, the decision or finding, the evidence file that backs it, and a status of open or closed. When the cleaning step reveals duplicate IDs and you resolve to keep the latest record per person, that resolution is a spine row, dated and pointed at the log that shows the duplicates. The code carries out the decision, the log proves the code ran, and the spine is the only place the decision itself is written down.
 
-Appending a row costs five lines, and because \texttt{file write} with \texttt{append} creates the file when it is missing, the same fragment works on day one and day two hundred:
+Appending a row costs five lines, and because \texttt{file write} with \texttt{append} creates the file when it is missing, the same fragment works on day one and day two hundred.\marginnote{Write the header once, or the file opens in Excel as six unlabeled columns. Guard it: \texttt{capture confirm file "\$output/spine.csv"} and, when the return code is nonzero, write the column names before the first row.}
 \par
 {\footnotesize
 \begin{verbatim}
@@ -272,7 +372,7 @@ file close spine
 }
 The spine is worth keeping only if you read it before you write anything new: open it at the start of each work session, scan the rows still marked \texttt{open}, and let those set the session's agenda, so yesterday's unresolved anomaly is today's first task rather than a deadline casualty. At handoff the spine becomes the successor's briefing, the record of every judgment call the folder's code silently obeys.\marginnote{Later chapters build domain-specific spines on this same pattern: a merge concordance when files join, a robustness ledger when specifications multiply, a prompt log when a language model enters the pipeline. Each is this file with its columns renamed for the task.}
 
-\section{Excel is a format, not a calculator}
+\section{Excel is a format, not a calculator}\label{sec:ch02-excel}
 The log records what the code did and the spine records why; the companion rule keeps work from happening outside the code at all. Spreadsheets are where good evaluations quietly go wrong. A hard-coded cell edit, a sort that scrambles rows, a formula that stops at row 999: none of these leave a trace, and none can be reproduced on next month's file.\marginnote{The famous case is \textcite{reinhart2010debt}: a spreadsheet range that omitted five countries helped produce a growth result that steered austerity debates, and it went unnoticed until a graduate student got the raw file. The error was not the economics; it was the calculator.} The rule fits in one sentence: Excel is a format, not a calculator. It is a fine way to receive data and a fine way to deliver it (Chapter~\ref{ch:sheets}), and it is never where a number is computed. The tracking spine of Section~\ref{sec:ch02-spine} respects the boundary: a spreadsheet-friendly format that records decisions and computes nothing.
 
 Every step from the raw CSV to the final figure runs in code, where it can be read, reviewed, and rerun. That is the difference between telling a skeptical client \enquote{trust me} and telling them \enquote{rerun me,} and it is the foundation the rest of the book's replicability stands on.
@@ -289,7 +389,7 @@ Every step from the raw CSV to the final figure runs in code, where it can be re
 Having ruled out the spreadsheet as the place where work happens, teams often meet the opposite suggestion in the first planning meeting: should all of this be stored in a database instead? If you are on a small or bootstrapping team, you can stay in Stata with a clear conscience. Frames already keep linked tables at different levels,\marginnote{Frames (\texttt{frame create}, \texttt{frlink}, \texttt{frget}) keep several tables in memory and pull attributes across the links on demand: the structure a database would sell you, without the license, the server, or the administrator nobody budgeted for, and without asking a research team to hire for database programming.} the do-file chain keeps every coding rule somewhere a colleague can read and argue with, and this chapter's pipeline is the rebuild a database would otherwise schedule. That default has two working limits, data that stop fitting in memory and data generated and analyzed in real time, and neither describes an annual or quarterly evaluation cycle. Chapter~\ref{ch:panels} takes the question up properly once the panels grow, with a decision table (Table~\ref{tab:ch06-dbdecision}) for the day a real limit is hit.
 
 \section{Speed you will actually notice}\label{sec:speed}
-An analyst reruns a pipeline only when a rerun is quick, so speed is a replicability feature, not a luxury. On files with millions of rows, the community packages \texttt{gtools}\index{gtools@\texttt{gtools}} and \texttt{ftools}\index{ftools@\texttt{ftools}} turn \texttt{collapse}\index{collapse@\texttt{collapse}} into \texttt{gcollapse}\index{gcollapse@\texttt{gcollapse}} and \texttt{egen}\index{egen@\texttt{egen}} into \texttt{gegen}\index{gegen@\texttt{gegen}}, and \texttt{reghdfe}\index{reghdfe@\texttt{reghdfe}} handles regressions with many fixed effects\marginnote{\enquote{Many fixed effects} means thousands of group indicators; \texttt{reghdfe} absorbs them without ever creating them as variables.} that would otherwise stall. The honest question is when the swap is worth it, and you can only answer that by timing both on your own data rather than trusting a slogan. By the end of the section you will be able to time a step on your own file, compare it against the benchmark we report, and decide which commands are worth swapping and which are already fast enough to leave alone.
+An analyst reruns a pipeline only when a rerun is quick, so speed is a replicability feature, not a luxury. On files with millions of rows, the community package \texttt{gtools}\index{gtools@\texttt{gtools}} turns \texttt{collapse}\index{collapse@\texttt{collapse}} into \texttt{gcollapse}\index{gcollapse@\texttt{gcollapse}} and \texttt{egen}\index{egen@\texttt{egen}} into \texttt{gegen}\index{gegen@\texttt{gegen}}, with \texttt{ftools}\index{ftools@\texttt{ftools}} offering its own \texttt{fcollapse} and \texttt{fegen}, and \texttt{reghdfe}\index{reghdfe@\texttt{reghdfe}} handles regressions with many fixed effects\marginnote{\enquote{Many fixed effects} means thousands of group indicators; \texttt{reghdfe} absorbs them without ever creating them as variables.} that would otherwise stall. The honest question is when the swap is worth it, and you can only answer that by timing both on your own data rather than trusting a slogan. By the end of the section you will be able to time a step on your own file, compare it against the benchmark we report, and decide which commands are worth swapping and which are already fast enough to leave alone.
 
 To do exactly that, we built a two-million-row file by expanding \texttt{nlsw88}, the wage extract Chapter~\ref{ch:embedded} introduced, then timed native commands against their \texttt{gtools} twins on two common jobs, computing group means with \texttt{collapse} and attaching group means back to every row with \texttt{egen}. Each job ran at two group counts, a coarse grouping of a couple dozen cells and a fine grouping of two hundred thousand, and each timing is the mean of five runs. Table~\ref{tab:bench} reports the seconds and the speedup, and Figure~\ref{fig:bench} plots them.
 
@@ -320,13 +420,17 @@ The pattern of the payoff is its own check: it scales with how much work the ope
 \]
 where $t_{\text{native}}$ and $t_{\text{gtools}}$ are the mean seconds per run in Table~\ref{tab:bench}, $c_{0}$ is the command's fixed startup cost, $n$ is the number of rows, $k$ a constant, and $w$ the work done per row. In words: total time is a startup cost plus rows times per-row work. A speedup above~$1$ means \texttt{gtools} was faster; below~$1$, its fixed cost $c_{0}$ outweighed the per-row saving, which is exactly what a fast \texttt{collapse} shows and a slow \texttt{egen} does not. The practical rule falls out of the table. Reach for \texttt{gtools} when a step is slow and you run it often; leave the fast steps alone, because a half-second job optimized to a quarter-second saves nothing a human will notice. Benchmark first, on your data, then optimize the step the clock actually flags.\marginnote{These are Mauricio Caceres Bravo's \texttt{gtools} and Sergio Correia's \texttt{ftools}/\texttt{reghdfe}. The speedups here are modest because the file is only two million rows and the operations are simple; on tens of millions of rows, or with string-keyed groups, the gap between native and \texttt{gtools} widens sharply.}
 
-We drew the chart in code as well. The lines below plot each operation's native and \texttt{gtools} seconds as paired bars with \texttt{graph hbar}, print the value on every bar with \texttt{blabel}, and write the chart into the \texttt{figures/} folder with \texttt{graph export}, so a rerun rebuilds Figure~\ref{fig:bench} alongside the numbers it reports:
+We drew the chart in code as well, from the same timings. Just above these lines the do-file reshapes the results into one row per timing, with \texttt{sec} holding the seconds, \texttt{eng} labeled native or \texttt{gtools}, and \texttt{task} naming the operation; the two \texttt{over()} options then nest engine inside operation, and \texttt{blabel} prints the value on every bar so a reader never has to measure against the axis:
 \par
 {\footnotesize
 \begin{verbatim}
-graph hbar (asis) native gtools, ///
-    over(op, label(labsize(small))) ///
-    blabel(bar, format(%3.2f)) ///
+* one row per timing: sec, with eng (native/gtools)
+* and task (which operation) labeled just above
+graph hbar (asis) sec, ///
+    over(eng, label(labsize(small))) ///
+    over(task, label(labsize(small))) asyvars ///
+    blabel(bar, format(%9.2f) size(small)) ///
+    ytitle("Seconds per run (mean of 5)", size(small)) ///
     title("Native vs. gtools on 2 million rows", ///
         size(medium))
 graph export "$figures/ch02_benchmark.png", ///

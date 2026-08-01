@@ -12,7 +12,7 @@
 \chapter{The Setup Guide}\label{app:setup}
 Do the blocks below once and every example in the book runs. Keys, environments, and credentials are startup friction, not evaluation, so we collected them here in one place; work through them now, before any chapter needs them.
 
-\paragraph{Packages.} Running \texttt{01\_install.do} from the companion folder once fetches everything: the community packages from SSC (\texttt{estout}, \texttt{coefplot}, \texttt{gtools}, \texttt{ftools}, \texttt{reghdfe}, \texttt{getcensus}, \texttt{educationdata}) and the authors' suite packages from GitHub, each of which also installs on its own with the one-line \texttt{net install} shown in its Package Integration box (the pattern is collected in Appendix~\ref{app:toolkit}).
+\paragraph{Packages.} Running \texttt{01\_install.do} from the companion folder once fetches everything: the community packages from SSC (\texttt{estout}, \texttt{coefplot}, \texttt{gtools}, \texttt{ftools}, \texttt{reghdfe}, \texttt{getcensus}, \texttt{educationdata}), the authors' three SSC packages (\texttt{webapi}, \texttt{googlesheets}, \texttt{googlechart}), and the remaining suite packages from the authors' GitHub. Each also installs on its own with the one line shown in its Package Integration box, and Appendix~\ref{app:toolkit} collects both patterns.
 
 \paragraph{API keys and \texttt{profile.do} hygiene.} Several sources need a free key. Request them once (Census at \texttt{api.census.gov/data/key\_signup.html}; FRED at \texttt{fred.stlouisfed.org}), then store them where shared code will never see them:
 \begin{itemize}
@@ -21,9 +21,18 @@ Do the blocks below once and every example in the book runs. Keys, environments,
     \item Never paste a key into a do-file you will commit to a repository. A key in public version control is a key someone else will spend, and deleting it in a later commit does not help: git keeps every past commit, so anyone with a copy of the repository can still read the key out of its history. If a key does reach a repository, revoke it at the provider and reissue a new one, because that is the only step that actually ends the exposure; tools like \texttt{git-secrets} or GitHub push protection catch the mistake before the push.
 \end{itemize}
 
-\paragraph{The Python bridge and virtual environments.} When you call an authenticated JSON API or run one of the book's LLM examples, you are relying on Stata's Python integration. Point Stata at a Python with \texttt{python query}, and keep project dependencies in a virtual environment so one project's package versions do not disturb another's. One compatibility note: Stata talks to Python over a shared C API, so the interpreter must be a shared-library build (\texttt{--enable-shared}); the stripped Pythons some package managers ship will pass \texttt{python query} yet fail to load, and \texttt{python set exec} lets you point at a working one. Several of the authors' tools (for example \texttt{googlesheets}) bootstrap their own private environment on first run and install what they need, so you do not manage packages by hand.
+\paragraph{Python: two different arrangements.} Two kinds of tools in this book use Python, and they ask different things of you, so it is worth separating them once. The book's LLM examples run through Stata's own Python integration. Point Stata at an interpreter with \texttt{python query}, and keep project dependencies in a virtual environment so one project's package versions do not disturb another's. One compatibility note applies only to this route: Stata talks to Python over a shared C API, so the interpreter must be a shared-library build (\texttt{--enable-shared}); the stripped Pythons some package managers ship will pass \texttt{python query} yet fail to load, and \texttt{python set exec} lets you point at a working one. The web-API tools take the other arrangement and ask less. \texttt{webapi} and \texttt{googlesheets} each run a helper script with the \texttt{python3} already on your system path rather than through Stata's integration, so the only requirement is that \texttt{python3} answers when you type \texttt{shell python3 -{}-version}. \texttt{webapi} needs nothing beyond Python's standard library; \texttt{googlesheets} needs Google's client libraries and installs them itself, into a private environment it builds on first run, so you never manage those packages by hand.
 
-\paragraph{Google Cloud OAuth for \texttt{googlesheets}.} Writing to a private Google Sheet needs a one-time authorization. Create a Google Cloud project, enable the Sheets and Drive APIs, download a desktop OAuth client, and point \texttt{googlesheets} at it (the \texttt{\$GS\_CLIENT} global); the first run opens a browser for consent and caches a refresh token, so later runs are silent. The common first-run failure is the consent screen: leave the app in \enquote{Testing} status and add your own address under Test users, or Google blocks the token. A refresh token from a Testing app also expires after seven days, so publish the app once the flow works. For headless or scheduled runs, a service account replaces the browser step. Readers who only need to \emph{read} a link-shared response sheet can skip all of this and use the credential-free one-line \texttt{import delimited} of Chapter~\ref{ch:surveys}.
+\paragraph{Google Cloud OAuth for \texttt{googlesheets}.} Because \texttt{googlesheets} reads and writes documents that belong to you, Google has to be satisfied that the commands really are acting on your behalf. The setup below arranges exactly that: you authorize this copy of Stata, once, to act as you inside your own account. It takes six steps, done once per machine.
+\begin{enumerate}
+    \item Create a free project at \texttt{console.cloud.google.com}; any name will do. The project is only a container Google uses to track the permission you are about to grant.
+    \item Inside that project, switch on both the Google Sheets API and the Google Drive API. Stata calls both, so enabling one and not the other is the most common reason a first run fails.
+    \item On the consent screen, choose \emph{External}, add your own Google address as a test user, and grant the two scopes the package needs, \texttt{.../auth/spreadsheets} and \texttt{.../auth/drive}. This is where you say which account Stata may act as, and what it may touch.
+    \item Create credentials of type \emph{Desktop app} and download the small \texttt{.json} file Google gives you. That file identifies the package to Google; save it somewhere stable, such as \texttt{\~{}/.config/stata-googlesheets/client.json}.
+    \item Point Stata at that file with one global, \texttt{global GS\_CLIENT "\ldots"}. We suggest you put that line in your \texttt{profile.do} so you set the path once and never paste it into a script you share.
+    \item Run any \texttt{googlesheets} command. A browser opens, you pick your account and click \emph{Allow}, and Stata saves a reusable token beside the credentials file. Every later call runs silently.
+\end{enumerate}
+Two terms in those steps are worth defining. \emph{OAuth} is the standard way to let one program act inside your account without ever giving it your password; you approve it once in the browser. The reusable token Stata saves afterward is a \emph{refresh token}, which is why only the first call opens a browser. Google imposes one limit on this arrangement, and it is milder than it first sounds. Leave the app in \enquote{Testing} status and keep your own address under Test users, or Google blocks the token. You do not need to publish the app: under that Testing consent screen a refresh token lasts about six months, and when it does expire the next call simply opens the browser again, where one click on \emph{Allow} restores it. For scheduled runs with nobody present to click \emph{Allow}, point the package at a \emph{service-account credential} instead, a stand-in Google login for a program rather than a person, which signs in on its own. Readers who only need to \emph{read} a link-shared response sheet can skip all of this and use the credential-free one-line \texttt{import delimited} of Chapter~\ref{ch:surveys}.
 
 \paragraph{LLM setup, hosted and local.} For hosted LLMs, install the vendor's SDK (for example \texttt{pip install google-genai}) and store the API key in an environment variable, never in a do-file. For protected data that cannot leave the building, install Ollama locally, pull an LLM (\texttt{ollama pull llama3} or a Gemma model), and confirm the local server is running before Stata calls it. Budget for the download: a quantized 7B LLM is 4--5\,GB and a laptop with 16\,GB of RAM can run it, but the larger LLMs that rival hosted quality need a GPU. Ollama serves on \texttt{localhost:11434} by default, so a \texttt{curl} to that port is the fastest check that the server is running. The LLM-agnostic wrapper of Chapter~\ref{ch:ai} lets you switch between the two by changing one macro.
 
@@ -49,19 +58,25 @@ Chapter~\ref{ch:claims} teaches one causal method in full, difference-in-differe
 \pagelayout{margin}
 \setchapterstyle{kao}
 \chapter{The Book's Toolkit}\label{app:toolkit}
-Use this appendix to find any tool the book uses and jump straight to the chapter that puts it to work. It lists every package and proposed tool in one place so a reader who remembers a capability but not its name can recover both. Published packages install from the authors' GitHub with \texttt{net install}; proposed tools are plans, not yet code. The split matters when you build on the book: the published packages are runnable today and safe to build a workflow on, whereas the proposed tools mark gaps the authors intend to fill, so treat them as a roadmap rather than a dependency. When you adopt one of these into a live project, consider copying its install line into the project's own \texttt{01\_install.do}, so that anyone who receives the project can reinstall the same tools instead of depending on what one machine happens to have configured (Appendix~\ref{app:setup}). The suite packages follow one pattern, each installing with a single command from its own repository:
+Use this appendix to find any tool the book uses and jump straight to the chapter that puts it to work. It lists every package and proposed tool in one place so a reader who remembers a capability but not its name can recover both. Three of these packages, \texttt{webapi}, \texttt{googlesheets}, and \texttt{googlechart}, are published on SSC, so a single line installs each of them:
+\par
+{\footnotesize
+\begin{verbatim}
+ssc install webapi
+ssc install googlesheets
+ssc install googlechart
+\end{verbatim}
+}
+The rest install from the authors' GitHub. One \texttt{net install} line does it, and you swap in the repository name for each package:
 \par
 {\footnotesize
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
-net install webapi, ///
-    from("`gh'/webapi-stata-public/main/") replace force
+net install statashiny, ///
+    from("`gh'/StataShiny-public/main/") replace force
 \end{verbatim}
 }
-The same line installs the other five; swap in the repository name:
 \begin{itemize}
-    \item \texttt{googlechart-stata-public}
-    \item \texttt{googlesheets-stata-public}
     \item \texttt{StataShiny-public}
     \item \texttt{dashboardbuilder-stata-public}
     \item \texttt{webdoc2-stata-public} (also needs \texttt{ssc install webdoc} and a follow-up \texttt{net get webdoc2} for its header template; its Chapter~\ref{ch:portals} box shows all three lines)

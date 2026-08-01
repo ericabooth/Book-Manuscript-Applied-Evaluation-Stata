@@ -26,14 +26,16 @@ if _rc ssc install educationdata, replace
 capture which libjson
 if _rc ssc install libjson, replace            // educationdata dependency
 
-*--- The book's own packages (from the authors' GitHub) -----------------------*
+*--- The book's own packages --------------------------------------------------*
+* Three are published on SSC and install like any community package.
 * webapi is required by ch03_webapi.do (and the guarded ch12 portal build);
-* the others are optional. Each installs with one net command (verified 2026-07).
+* googlesheets and googlechart are optional (verified on SSC 2026-07-31).
 capture which webapi
-if _rc net install webapi, from("https://raw.githubusercontent.com/ericabooth/webapi-stata-public/main/") replace force
+if _rc ssc install webapi, replace
 * Uncomment the ones you want:
-* net install googlechart, from("https://raw.githubusercontent.com/ericabooth/googlechart-stata-public/main/") replace force
-* net install googlesheets, from("https://raw.githubusercontent.com/ericabooth/googlesheets-stata-public/main/") replace force
+* ssc install googlechart, replace
+* ssc install googlesheets, replace       // also needs the OAuth setup (Appendix A)
+* The remaining suite packages install from the authors' GitHub:
 * net install statashiny, from("https://raw.githubusercontent.com/ericabooth/StataShiny-public/main/") replace force
 * net install dashboardbuilder, from("https://raw.githubusercontent.com/ericabooth/dashboardbuilder-stata-public/main/") replace force  // needs Python 3 (stdlib only); install verified 2026-07-14; required by ch12_dashboardbuilder.do
 * net install convertanything, from("https://raw.githubusercontent.com/ericabooth/convertanything-stata-public/main/") replace force

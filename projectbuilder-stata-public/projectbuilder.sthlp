@@ -365,8 +365,28 @@ and appear only when you run it.{p_end}
 {p2col:{bf:combineall}}append or merge the converted files into the analytic file (author's GitHub){p_end}
 {p2col:{bf:descsave}}write a codebook (.dta plus .xlsx) from {cmd:300_labels.do} (SSC: {cmd:ssc install descsave}){p_end}
 {p2col:{bf:srctag} / {bf:srcfind}}tag and search each variable's source lineage (author's GitHub){p_end}
-{p2col:{bf:webdoc2}}render a richer {cmd:index.html} (author's GitHub; needs {cmd:ssc install webdoc}){p_end}
+{p2col:{bf:webdoc2}}render a richer {cmd:index.html} (author's GitHub; needs {cmd:ssc install webdoc}, and see the note below){p_end}
 {p2colreset}{...}
+
+{pstd}
+{bf:webdoc2 needs one extra step.} Its renderer injects a file called
+{cmd:header.html}, and webdoc2 ships that as an {it:ancillary} file, so
+{cmd:net install webdoc2} does not place it:{p_end}
+
+{cmd}{...}
+        . ssc install webdoc
+        . net install webdoc2, from("https://raw.githubusercontent.com/ericabooth/webdoc2-stata-public/main/") replace
+        . net get webdoc2, from("https://raw.githubusercontent.com/ericabooth/webdoc2-stata-public/main/") replace
+{txt}{...}
+
+{pstd}
+The last line drops {cmd:header.html} into your current directory. {opt builddocs}
+looks for it there, and on the adopath, before it renders, and carries a copy
+into {cmd:_documentation/} for the duration of the render. Put it somewhere on
+your adopath -- your PERSONAL directory is the usual place -- and it will be
+found from anywhere. Without it the render stops, {cmd:projectbuilder} says so
+and names this remedy, and the built-in {cmd:website/index.html} is left
+untouched.{p_end}
 
 {pstd}
 {bf:Keep non-data files out of }{cmd:01_raw/}{bf:.} The automatic pass hands

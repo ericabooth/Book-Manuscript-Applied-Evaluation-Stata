@@ -891,7 +891,13 @@ di as text "{hline 70}"
 * "projectbuilder OK" and then tell them to "Review 02_cleaned/<proj>_analytic
 * .dta" -- a file that was never created.  Drop PLUS from the adopath to
 * reproduce a bare install even on a machine where the companions ARE present.
-local pk `"$pkgroot"'
+* Drop PLUS to simulate a machine without the optional companions.  Remember
+* where it was: -adopath - PLUS- is not undone by anything later in this file,
+* and forgetting to put it back silently disables convertanything, combineall,
+* descsave and webdoc2 for EVERY test after this one -- which quietly turned
+* their checks into no-ops.
+local pk       `"$pkgroot"'
+local plusdir  `"`c(sysdir_plus)'"'
 adopath - PLUS
 capture which convertanything
 local haveconv = (_rc == 0)
@@ -908,7 +914,11 @@ assert _rc != 0                          // there is genuinely no analytic file
 * the scaffold is still complete -- that is the promise of a no-dependency tool
 confirm file "$work/Bare/_code/000_control.do"
 confirm file "$work/Bare/_documentation/website/index.html"
+* Put PLUS back before anything else runs, then the package copy on top of it.
+adopath ++ `"`plusdir'"'
 adopath ++ `"`pk'"'
+capture which convertanything
+assert _rc == 0                          // the companions are reachable again
 
 di as text "{hline 70}"
 di as text "TEST y: data() that does not exist is reported, not glossed over"
@@ -1108,6 +1118,54 @@ quietly cd `"`pwd_before'"'
 global work    `"`W'"'
 global pkgroot `"`PK'"'
 adopath ++ "$pkgroot"
+
+di as text "{hline 70}"
+di as text "TEST ee: builddocs renders into website/, or says why it could not"
+di as text "{hline 70}"
+* Two bugs lived here.  webdoc2 writes index.html BESIDE index.do, so the
+* rendered page never reached website/index.html -- which is the page the run
+* points you at and the one the built-in fallback writes.  And the generated
+* _runall.do swallowed webdoc2's error, so every render reported success.
+*
+* The render also needs webdoc2's header.html, which webdoc2 ships as an
+* ANCILLARY file: -net install webdoc2- never places it.  _runall.do therefore
+* looks for it before it cd's into _documentation/ and borrows a copy.
+mkdir "$work/_docs"
+local pwd_before `"`c(pwd)'"'
+quietly cd "$work/_docs"
+
+projectbuilder Rendered, description("builddocs check") topic("docs")
+
+capture which webdoc2
+local havewd2 = (_rc == 0)
+capture findfile "header.html"
+local havehdr = (_rc == 0)
+
+capture noisily projectbuilder Rendered, rebuild builddocs
+assert _rc == 0                              // never fatal, either way
+confirm file "Rendered/_documentation/website/index.html"
+
+if `havewd2' & `havehdr' {
+    * The render should have succeeded and landed in website/.
+    loadlines "Rendered/_documentation/website/index.html"
+    quietly count if strpos(lower(v1), "bootstrap")
+    assert r(N) >= 1                         // it is the webdoc2 page ...
+    quietly count if strpos(v1, "Install webdoc2 for a richer")
+    assert r(N) == 0                         // ... not the built-in fallback
+    * and the borrowed header was not left lying in the project
+    capture confirm file "Rendered/_documentation/header.html"
+    assert _rc != 0
+    di as text "  webdoc2 rendered into website/index.html"
+}
+else {
+    * Without webdoc2, or without its header.html, the built-in page must
+    * survive intact -- that is the whole promise of the fallback.
+    loadlines "Rendered/_documentation/website/index.html"
+    quietly count if strpos(v1, "Install webdoc2 for a richer")
+    assert r(N) == 1
+    di as text "  (webdoc2/header.html unavailable; checked the fallback instead)"
+}
+quietly cd `"`pwd_before'"'
 
 di as text ""
 di as text "{hline 70}"
