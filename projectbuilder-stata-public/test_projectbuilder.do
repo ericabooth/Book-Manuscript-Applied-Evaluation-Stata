@@ -711,8 +711,8 @@ projectbuilder Ex07Budgets,                                      ///
     descsave
 assert r(nraw) == 1
 loadlines "Ex07Budgets/_code/300_labels.do"
-quietly count if strpos(v1, "descsave using")
-assert r(N) == 1                    // descsave really did seed 300_labels.do
+quietly count if strpos(v1, "_codebook.dta")
+assert r(N) >= 1                    // descsave really did seed 300_labels.do
 loadlines "Ex07Budgets/_code/400_data_profiler.do"
 quietly count if strpos(v1, `"local outcomes "total_budget""')
 assert r(N) == 1
@@ -941,12 +941,12 @@ assert r(rebuilt) == 1
 projectbuilder Guarded, path("$work")
 projectbuilder Guarded, path("$work") rebuild descsave
 loadlines "$work/Guarded/_code/300_labels.do"
-quietly count if strpos(v1, "descsave using")
+quietly count if strpos(v1, "_codebook.dta")
 assert r(N) == 0                         // bare rebuild leaves _code/ alone
 projectbuilder Guarded, path("$work") rebuild replace descsave
 loadlines "$work/Guarded/_code/300_labels.do"
-quietly count if strpos(v1, "descsave using")
-assert r(N) == 1                         // with replace, it lands
+quietly count if strpos(v1, "_codebook.dta")
+assert r(N) >= 1                         // with replace, it lands
 
 di as text "{hline 70}"
 di as text "TEST aa: what the run prints back can be pasted straight back in"
@@ -977,7 +977,11 @@ assert r(N) == 1
 quietly count if strpos(v1, "Rerun:") & strpos(v1, "projectbuilder Spaced Name 2027,")
 assert r(N) == 0
 
-* a name without a space is printed bare, and with no path() when none was given
+* A name without a space is printed bare -- but path() is printed EVEN WHEN THE
+* USER DID NOT TYPE IT.  That is deliberate: the base is absolute by this point,
+* so the hint runs from any directory.  Printing it only when path() was typed
+* meant that a project built in the current directory produced a hint which,
+* pasted anywhere else, scaffolded a second empty project.
 local pwd_before `"`c(pwd)'"'
 quietly cd "$work"
 projectbuilder Plain
@@ -986,9 +990,11 @@ projectbuilder Plain, rebuild
 log close pbcap
 quietly cd `"`pwd_before'"'
 loadlines "$work/rerun2.log"
-quietly count if strpos(v1, "Rerun:") & strpos(v1, "projectbuilder Plain, rebuild")
+quietly count if strpos(v1, "Rerun:") & strpos(v1, "projectbuilder Plain,") & ///
+                strpos(v1, "path(") & strpos(v1, "rebuild")
 assert r(N) == 1
-quietly count if strpos(v1, "Rerun:") & strpos(v1, "path(")
+* the name itself is still unquoted when it has no space
+quietly count if strpos(v1, "Rerun:") & strpos(v1, char(34) + "Plain" + char(34))
 assert r(N) == 0
 set linesize `ls_before'
 
@@ -1000,8 +1006,8 @@ di as text "{hline 70}"
 * call it had originally written.
 projectbuilder Cb, path("$work") description("codebook") descsave noautoconvert
 loadlines "$work/Cb/_code/300_labels.do"
-quietly count if strpos(v1, "descsave using")
-assert r(N) == 1
+quietly count if strpos(v1, "_codebook.dta")
+assert r(N) >= 1
 loadlines "$work/Cb/_documentation/_project_meta.txt"
 quietly count if strpos(v1, "descsave=descsave")
 assert r(N) == 1
@@ -1013,8 +1019,8 @@ assert r(N) == 1
 * ... and -rebuild replace- rewrites 300_labels.do WITH the call still in it
 projectbuilder Cb, path("$work") rebuild replace noautoconvert
 loadlines "$work/Cb/_code/300_labels.do"
-quietly count if strpos(v1, "descsave using")
-assert r(N) == 1
+quietly count if strpos(v1, "_codebook.dta")
+assert r(N) >= 1
 
 di as text "{hline 70}"
 di as text "TEST cc: publicfacing() trims, othernotes is echoed, description reaches _code/"
@@ -1029,6 +1035,79 @@ assert r(N) == 1
 loadlines "$work/Pf/_code/000_control.do"
 quietly count if strpos(v1, "A tidy description")
 assert r(N) == 1
+
+di as text "{hline 70}"
+di as text "TEST dd: every generated do-file actually RUNS"
+di as text "{hline 70}"
+* The battery used to check what the generated files CONTAIN, and ran only
+* 000_control.do.  That let a real defect ship in 300_labels.do: the descsave
+* block passed a -replace- option that -descsave- does not have, so on any
+* machine where descsave IS installed the file stopped with r(198).  The
+* "not installed" branch is what everyone else hits, which is why nobody saw
+* it.  Run all seven, in order, and require rc 0 from each.
+mkdir "$work/_gen"
+local pwd_before `"`c(pwd)'"'
+quietly cd "$work/_gen"
+
+projectbuilder Gen, description("generated-pipeline check") ///
+    topic("testing") publicfacing(no) timeline("annual")    ///
+    outcomes(price mpg) over(foreign) descsave
+sysuse auto, clear
+quietly export delimited using "Gen/01_raw/auto_a.csv", replace
+keep make price mpg foreign
+quietly export delimited using "Gen/01_raw/auto_b.csv", replace
+quietly projectbuilder Gen, rebuild
+
+* 300 onward read the analytic file, which only exists if the companions are
+* installed.  Seed it by hand when they are not, so the pipeline is exercised
+* on every machine rather than only on the author's.
+capture confirm file "Gen/02_cleaned/Gen_analytic.dta"
+if _rc {
+    sysuse auto, clear
+    quietly save "Gen/02_cleaned/Gen_analytic.dta", replace
+    di as text "  (seeded the analytic file: companions absent on this machine)"
+}
+
+local genpwd `"`c(pwd)'"'
+foreach f in 000_control.do 100_data_download.do 200_data_management.do ///
+             300_labels.do 400_data_profiler.do 500_aggregation.do     ///
+             600_analysis.do {
+    capture noisily do "`genpwd'/Gen/_code/`f'"
+    local generc = _rc
+    adopath ++ "$pkgroot"          // each control-file run drops the addition
+    if `generc' di as err "  FAILED: `f' returned r(`generc')"
+    assert `generc' == 0
+}
+di as text "  all seven generated do-files ran"
+* 000_control.do ran -clear all-, which dropped the helper program; restore it
+capture program drop loadlines
+program define loadlines
+    import delimited using `0', clear delimiters("`=char(1)'", asstring) ///
+        varnames(nonames) bindquote(nobind) encoding("utf-8")
+end
+
+* descsave really produced something, and left the analytic data loaded
+capture which descsave
+if !_rc {
+    confirm file "`genpwd'/Gen/_documentation/Gen_codebook.dta"
+    di as text "  descsave wrote the codebook dataset"
+}
+
+* no file-writer marker survived into any generated file
+foreach f in _code/000_control.do _code/100_data_download.do            ///
+             _code/200_data_management.do _code/300_labels.do           ///
+             _code/400_data_profiler.do _code/500_aggregation.do        ///
+             _code/600_analysis.do _documentation/index.do              ///
+             _documentation/_runall.do {
+    loadlines "`genpwd'/Gen/`f'"
+    quietly count if strpos(v1, "~D") | strpos(v1, "~B")
+    assert r(N) == 0
+}
+di as text "  no ~D/~B markers left anywhere in the generated files"
+quietly cd `"`pwd_before'"'
+global work    `"`W'"'
+global pkgroot `"`PK'"'
+adopath ++ "$pkgroot"
 
 di as text ""
 di as text "{hline 70}"

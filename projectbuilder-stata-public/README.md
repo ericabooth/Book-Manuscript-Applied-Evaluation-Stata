@@ -20,6 +20,13 @@ net install projectbuilder, from("https://raw.githubusercontent.com/ericabooth/p
 help projectbuilder
 ```
 
+`net install` copies the command and its help file. The test battery ships as an
+ancillary file, so fetch it separately if you want to run it:
+
+```stata
+net get projectbuilder, from("https://raw.githubusercontent.com/ericabooth/projectbuilder-stata-public/main/") replace
+```
+
 Requires Stata 16.0 or newer. No hard dependencies.
 
 ## Quick start
@@ -119,7 +126,7 @@ automatic pass skips that step, and a one-line note names the install command.
 |---------|--------------|---------|
 | `convertanything` | bulk-convert `01_raw/` to `.dta` in `01_raw/_converted/` | `net install convertanything, from("https://raw.githubusercontent.com/ericabooth/convertanything-stata-public/main/")` |
 | `combineall` | append/merge the converted files into the analytic file | `net install combineall, from("https://raw.githubusercontent.com/ericabooth/combineall-stata-public/main/")` |
-| `descsave` | Excel codebook from `300_labels.do` | `ssc install descsave` |
+| `descsave` | codebook (.dta plus .xlsx) from `300_labels.do` | `ssc install descsave` |
 | `srctag` / `srcfind` | tag and search each variable's source lineage | author's GitHub |
 | `webdoc2` | render a richer `index.html` | `ssc install webdoc`, then `net install webdoc2` (author's GitHub) |
 
@@ -151,9 +158,14 @@ not cost you your data. `noautoconvert` skips the pass, and with it the
 workflows, the rebuild idempotence and edit-preservation guarantee, metadata
 preservation across a rebuild, the seeded-`_converted/` combine path, the
 clobber refusal (602), name and option validation (198), nesting, HTML escaping,
-and the generated control file. It also runs every example printed in the help
-file, and the clickable *Try it now* walkthrough, so the documentation cannot
-drift from the code. Synthetic data only; nothing is committed.
+and the generated control file. It runs every example printed in the help file
+and the clickable *Try it now* walkthrough, so the documentation cannot drift
+from the code, and it runs all seven generated do-files end to end, so the
+pipeline the package writes cannot break unnoticed. Synthetic data only;
+nothing is committed.
+
+If you installed rather than cloned, get the file first with `net get
+projectbuilder` (see [Install](#install)); it lands in the current directory.
 
 The test finds the package itself: it uses the first of an argument, an
 existing `$pkgroot`, the current directory, or `findfile projectbuilder.ado`.
@@ -226,6 +238,37 @@ What the command prints now matches the help around it:
 - Warnings when the converted count does not match the raw count — same-stem
   files overwriting each other, or stale output from a raw file since deleted.
 - `path()` naming an existing file says so instead of "not found".
+
+And one defect in the code the package *generates*, found by running the
+generated pipeline rather than only inspecting it:
+
+- `300_labels.do` called `descsave using "<file>.xlsx", ... replace`. `descsave`
+  has no top-level `replace`, and its `using` names the file to *describe*, not
+  the output — so on any machine where `descsave` was installed the file stopped
+  with `r(198)`. Everyone else hit the "not installed" branch, which is why it
+  went unseen. It now calls `descsave, list(...) saving("<file>.dta", replace)`
+  and exports that to `.xlsx` with `export excel`, wrapped in `preserve` so the
+  analytic file is still loaded afterwards. The test battery now runs all seven
+  generated do-files instead of only `000_control.do`.
+
+An independent clean-room pass then found two more, both in `builddocs`:
+
+- The webdoc2 render landed in `_documentation/index.html`, while the run's
+  `Docs:` pointer, the help, and the README all name
+  `_documentation/website/index.html` — so the page you were sent to was always
+  the built-in fallback, never the rendered one. The generated `_runall.do` now
+  copies the rendered page into `website/`.
+- `builddocs` reported `rendered.` even when webdoc2 had failed, because the
+  generated `_runall.do` swallowed the error and always returned 0. It now
+  propagates the return code, so a failure is reported as one.
+
+Also: a tilde in the *filename* part of `url()` was still corrupted on its way
+into `100_data_download.do` (`.../~Dataset.csv` became `$raw/$ataset.csv`, which
+downloads into a hidden `.csv`); the `Rerun:` hint now always carries `path()`,
+so it is portable even for a project built in the current directory; the `.pkg`
+description no longer promises an analytic file that a companion-free install
+does not produce; and the README says how to obtain the test file after a
+`net install`.
 
 ## Authors
 

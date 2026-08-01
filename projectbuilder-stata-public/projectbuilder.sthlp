@@ -198,7 +198,12 @@ skips the ones the analytic file does not have.{p_end}
 {phang}
 {opt descsave} writes a codebook-export call (via {cmd:descsave} from SSC) into
 {cmd:300_labels.do}. Nothing is exported at scaffold time: the codebook appears
-in {cmd:_documentation/} when you run {cmd:300_labels.do}. Like the other
+in {cmd:_documentation/} when you run {cmd:300_labels.do}, as both
+{it:project}{cmd:_codebook.dta} (which is what {cmd:descsave} produces, one
+observation per variable) and {it:project}{cmd:_codebook.xlsx}, exported from it
+with Stata's own {helpb export_excel:export excel} so it can be read without
+Stata. The block is wrapped in {helpb preserve}, so running
+{cmd:300_labels.do} leaves the analytic file loaded as before. Like the other
 options it is remembered, so a later {opt rebuild} keeps it. Note the
 abbreviations here: {cmd:des()} is {opt description()}, while a bare
 {cmd:desc} is {opt descsave}.{p_end}
@@ -358,7 +363,7 @@ and appear only when you run it.{p_end}
 {p2colset 8 26 28 2}{...}
 {p2col:{bf:convertanything}}bulk-convert mixed formats in {cmd:01_raw/} to {cmd:.dta} in {cmd:01_raw/_converted/} (author's GitHub){p_end}
 {p2col:{bf:combineall}}append or merge the converted files into the analytic file (author's GitHub){p_end}
-{p2col:{bf:descsave}}write an Excel codebook from {cmd:300_labels.do} (SSC: {cmd:ssc install descsave}){p_end}
+{p2col:{bf:descsave}}write a codebook (.dta plus .xlsx) from {cmd:300_labels.do} (SSC: {cmd:ssc install descsave}){p_end}
 {p2col:{bf:srctag} / {bf:srcfind}}tag and search each variable's source lineage (author's GitHub){p_end}
 {p2col:{bf:webdoc2}}render a richer {cmd:index.html} (author's GitHub; needs {cmd:ssc install webdoc}){p_end}
 {p2colreset}{...}

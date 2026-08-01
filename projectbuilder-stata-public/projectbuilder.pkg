@@ -7,8 +7,9 @@ d folder, and a numbered do-file pipeline (000_control through
 d 600_analysis). A control file holds every path in one place and can
 d run the whole pipeline. If you already have the data, point data() at
 d local files or url() at a source address and projectbuilder copies it
-d in, converts it, appends it into one analytic file, and writes a
-d documentation page. If the data comes later, scaffold now and rerun
+d in and writes a documentation page; with the optional convertanything
+d and combineall installed it also converts each raw file and appends
+d them into one analytic file. If the data comes later, scaffold now and rerun
 d with rebuild on every refresh; rebuild never overwrites a do-file you
 d have edited unless you add replace. The tool is self-contained (every
 d file is written by the program, no template folder), uses only Stata's

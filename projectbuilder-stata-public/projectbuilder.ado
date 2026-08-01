@@ -278,7 +278,6 @@ program define projectbuilder, rclass
     local raw       `"`target'/01_raw"'
     local converted `"`target'/01_raw/_converted"'
     local cleaned   `"`target'/02_cleaned"'
-    local output    `"`target'/03_output"'
     local code      `"`target'/_code"'
     local docs      `"`target'/_documentation"'
     local web       `"`docs'/website"'
@@ -309,7 +308,7 @@ program define projectbuilder, rclass
                     * values above were parked.  The help file says this file
                     * may be edited by hand, so it has to survive being edited.
                     if strpos(`"`macval(mval)'"', char(96)) {
-                        di as txt `"projectbuilder: ignoring `mkey'= in _project_meta.txt (it contains a backtick)"'
+                        di as txt `"projectbuilder: dropping `mkey'= from _project_meta.txt (it contains a backtick)"'
                     }
                     else {
                         local mval = subinstr(`"`macval(mval)'"', char(126), char(5), .)
@@ -363,7 +362,13 @@ program define projectbuilder, rclass
     }
     local gh "https://raw.githubusercontent.com/ericabooth"
     local urlbase ""
-    if `"`url_live'"' != "" pb_base urlbase `"`url_live'"'
+    * Take the basename from the PARKED url, not from url_live.  url_live has
+    * already had its tildes restored, so a basename derived from it goes
+    * through pb_wl on its way into 100_data_download.do -- and pb_wl reads
+    * "~D" as its own marker.  A source at ".../~Dataset.csv" was written out
+    * as "$raw/$ataset.csv", which at run time downloads into a hidden ".csv".
+    * Keep it parked here; pb_unesc restores it for the live fetch below.
+    if `"`url'"' != "" pb_base urlbase `"`url'"'
 
     * ---- record the metadata for the next rebuild ------------------------
     capture mkdir `"`docs'"'
@@ -554,8 +559,19 @@ program define projectbuilder, rclass
             pb_wl `fh' `"    di as txt "descsave not installed. Install it with:  ssc install descsave""'
             pb_wl `fh' `"}"'
             pb_wl `fh' `"else {"'
-            pb_wl `fh' `"    descsave using "~Ddocs/`proj_label'_codebook.xlsx", ///"'
-            pb_wl `fh' `"        list(name type format varlab vallab) replace"'
+            pb_wl `fh' `"    * descsave writes a Stata dataset, one observation per variable."'
+            pb_wl `fh' `"    * Its -using- names the file to DESCRIBE; the output file goes in"'
+            pb_wl `fh' `"    * saving(), which is also where -replace- belongs.  Export the"'
+            pb_wl `fh' `"    * result to .xlsx afterwards with Stata's own -export excel-, so"'
+            pb_wl `fh' `"    * the codebook is readable by someone without Stata."'
+            pb_wl `fh' `"    preserve"'
+            pb_wl `fh' `"    descsave, list(name type format varlab vallab) ///"'
+            pb_wl `fh' `"        saving("~Ddocs/`proj_label'_codebook.dta", replace)"'
+            pb_wl `fh' `"    use "~Ddocs/`proj_label'_codebook.dta", clear"'
+            pb_wl `fh' `"    capture noisily export excel using "~Ddocs/`proj_label'_codebook.xlsx", ///"'
+            pb_wl `fh' `"        firstrow(variables) replace"'
+            pb_wl `fh' `"    if _rc di as txt "codebook saved as .dta; the .xlsx export failed.""'
+            pb_wl `fh' `"    restore"'
             pb_wl `fh' `"}"'
         }
         pb_wl `fh' `""'
@@ -693,15 +709,33 @@ program define projectbuilder, rclass
         pb_wl `fh' `"    di as txt `"  net install webdoc2, from("`gh'/webdoc2-stata-public/main/") replace"'"'
         pb_wl `fh' `"}"'
         pb_wl `fh' `"else {"'
-        pb_wl `fh' `"    * cd so webdoc2 finds index.do and writes index.html beside it."'
-        pb_wl `fh' `"    * The path is stamped literally rather than taken from ~Ddocs:"'
-        pb_wl `fh' `"    * projectbuilder runs this file itself under -builddocs-, and at"'
-        pb_wl `fh' `"    * that point 000_control.do has not run, so ~Ddocs is undefined."'
+        pb_wl `fh' `"    * cd so webdoc2 finds index.do.  The path is stamped literally"'
+        pb_wl `fh' `"    * rather than taken from ~Ddocs: projectbuilder runs this file"'
+        pb_wl `fh' `"    * itself under -builddocs-, and at that point 000_control.do has"'
+        pb_wl `fh' `"    * not run, so ~Ddocs is undefined."'
         pb_wl `fh' `"    local here "`docs'""'
-        pb_wl `fh' `"    if "~Bhere'" == "" local here "~Ddocs""'
         pb_wl `fh' `"    cd "~Bhere'""'
         pb_wl `fh' `"    capture noisily webdoc2 "index.do""'
-        pb_wl `fh' `"    if _rc di as txt "webdoc2 render skipped; the built-in website/index.html remains.""'
+        pb_wl `fh' `"    local wrc = _rc"'
+        pb_wl `fh' `"    if ~Bwrc' {"'
+        pb_wl `fh' `"        di as txt "webdoc2 render skipped; the built-in website/index.html remains.""'
+        pb_wl `fh' `"    }"'
+        pb_wl `fh' `"    else {"'
+        pb_wl `fh' `"        * webdoc2 writes index.html BESIDE index.do, but the project's"'
+        pb_wl `fh' `"        * documentation page is website/index.html -- that is what the"'
+        pb_wl `fh' `"        * run points you at, and what the built-in fallback writes."'
+        pb_wl `fh' `"        * Put the rendered page where everything says it is."'
+        pb_wl `fh' `"        capture copy "~Bhere'/index.html" "~Bhere'/website/index.html", replace"'
+        pb_wl `fh' `"        if _rc {"'
+        pb_wl `fh' `"            di as txt "webdoc2 rendered index.html, but it could not be copied""'
+        pb_wl `fh' `"            di as txt "into website/; the built-in page remains.""'
+        pb_wl `fh' `"            local wrc = 603"'
+        pb_wl `fh' `"        }"'
+        pb_wl `fh' `"    }"'
+        pb_wl `fh' `"    * Hand the outcome back: projectbuilder decides what to report from"'
+        pb_wl `fh' `"    * this file's return code, so swallowing it here made every render"'
+        pb_wl `fh' `"    * look successful."'
+        pb_wl `fh' `"    exit ~Bwrc'"'
         pb_wl `fh' `"}"'
         file close `fh'
     }
@@ -760,9 +794,10 @@ program define projectbuilder, rclass
         }
     }
     if `"`url_live'"' != "" {
-        local ubn `"`urlbase'"'
-        capture copy `"`url_live'"' `"`raw'/`ubn'"', replace
-        if !_rc di as txt `"projectbuilder: fetched `url_live' into 01_raw/ (`ubn')"'
+        * urlbase is parked (see above); the file on disk needs the real name.
+        pb_unesc ubn `"`urlbase'"'
+        capture copy `"`url_live'"' `"`raw'/`macval(ubn)'"', replace
+        if !_rc di as txt `"projectbuilder: fetched `url_live' into 01_raw/ (`macval(ubn)')"'
         else    di as txt `"projectbuilder: url() not reachable now; the fetch is written into 100_data_download.do to run later."'
     }
 
@@ -937,8 +972,7 @@ program define projectbuilder, rclass
     * directory the user happened to be standing in.  Carry it.
     * NB: options are separated by spaces, not commas -- only the first comma
     * belongs, the one that opens the option list.
-    local pathshow ""
-    if `"`path'"' != "" local pathshow `"path("`base'") "'
+    local pathshow `"path("`base'") "'
     local rerun `"`projshow', `pathshow'rebuild"'
     di as txt _n "Next steps:"
     if `nraw' == 0 {
@@ -1206,7 +1240,7 @@ program define pb_htmllist
         file write `fh' `"<li><code>`fe'</code></li>"' _n
         local any = 1
     }
-    if !`any' file write `fh' "<li class=""muted"">(none yet)</li>" _n
+    if !`any' file write `fh' `"<li class="muted">(none yet)</li>"' _n
     file write `fh' "</ul>" _n
 end
 
