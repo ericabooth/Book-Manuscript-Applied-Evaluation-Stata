@@ -71,12 +71,18 @@ program define projectbuilder, rclass
         local `o' = subinstr(`"`macval(`o')'"', char(126), char(5), .)
     }
 
+    * Which code-affecting options did the user type on THIS call?  Recorded
+    * before the metadata read-back below fills the same locals in from disk,
+    * so the summary can tell "you asked for this" from "this was on record".
+    local gave_code = 0
+    if `"`outcomes'"' != "" | `"`over'"' != "" | "`descsave'" != "" local gave_code = 1
+
     * ---- validate publicfacing ------------------------------------------
-    if !inlist(lower(`"`publicfacing'"'), "", "yes", "no", "unsure") {
+    if !inlist(lower(strtrim(`"`publicfacing'"')), "", "yes", "no", "unsure") {
         di as err `"projectbuilder: publicfacing() must be yes, no, unsure, or empty (got "`publicfacing'")"'
         exit 198
     }
-    local publicfacing = lower(`"`publicfacing'"')
+    local publicfacing = lower(strtrim(`"`publicfacing'"'))
 
     * ---- cap outcomes / over at 10 each ---------------------------------
     local outcomes_trim
@@ -211,14 +217,32 @@ program define projectbuilder, rclass
     local writecode = cond("`rebuild'" != "" & "`replace'" == "", 0, 1)
 
     if `exists' di as txt `"projectbuilder: rebuilding `target'"'
-    else        di as txt `"projectbuilder: scaffolding `target'"'
+    else {
+        di as txt `"projectbuilder: scaffolding `target'"'
+        * -rebuild- on something that is not there is not an error: it just
+        * scaffolds, which is what makes the command safe to put in a script
+        * that runs on a schedule.  Say so, though.  A mistyped project name
+        * with -rebuild- otherwise looks like a successful refresh, when what
+        * actually happened is that a second, empty project appeared and the
+        * real one was never touched.
+        if "`rebuild'" != "" {
+            di as txt  "                (-rebuild- was given but no project was there yet,"
+            di as txt  "                 so this is a fresh scaffold. If you meant to refresh"
+            di as txt  "                 an existing project, check the name and the path.)"
+        }
+    }
 
     * ---- build the folder tree (Stata's mkdir is cross-OS) --------------
     capture mkdir `"`base'"'
     pb_isdir baseok `"`base'"'
     if !`baseok' {
+        capture confirm file `"`base'"'
+        if !_rc {
+            di as err `"projectbuilder: path() must name a directory -- `base' is a file"'
+            exit 601
+        }
         di as err `"projectbuilder: base path not found and could not be created -- `base'"'
-        di as err  "                Create its parent directories first, or check path()."
+        di as err  "                path() creates one level: its parent must already exist."
         exit 601
     }
     if `"`parent'"' != "" capture mkdir `"`base'`sep'`parent'"'
@@ -297,7 +321,7 @@ program define projectbuilder, rclass
                         * and pb_wl/pb_docs will put it back at write time.
                         local mval = subinstr(`"`macval(mval)'"', char(36), char(1), .)
                         foreach m in description url topic publicfacing timeline ///
-                                     othernotes outcomes over created {
+                                     othernotes outcomes over created descsave {
                             if "`mkey'" == "`m'" {
                                 if `"``m''"' == "" local `m' : copy local mval
                             }
@@ -350,7 +374,7 @@ program define projectbuilder, rclass
         file write `mfw' "* refresh keeps what the scaffold recorded.  Edit freely;" _n
         file write `mfw' "* one key=value per line." _n
         foreach m in description url topic publicfacing timeline othernotes ///
-                     outcomes over created {
+                     outcomes over created descsave {
             * Write the value the user typed, not the parked form: this file
             * is documented as hand-editable, so it must be readable text.
             pb_unesc mout `"``m''"'
@@ -374,6 +398,7 @@ program define projectbuilder, rclass
         pb_wl `fh' `"* 000_control.do -- `proj_label'"'
         pb_wl `fh' `"* Created `created' by `author' (scaffolded by projectbuilder v2.0.1)"'
         pb_wl `fh' `"* Last built `lastbuilt'"'
+        pb_wl `fh' `"* `descfull'"'
         pb_wl `fh' `"* The control file: every path in one place."'
         pb_wl `fh' `"*==============================================================="'
         pb_wl `fh' `""'
@@ -797,9 +822,26 @@ program define projectbuilder, rclass
                 di as txt "                (that is expected without convertanything -- see above.)"
         }
         if `pbrestore' restore
+        * Converted fewer files than went in?  Say so.  Two raw files sharing
+        * a stem -- survey.csv and survey.dta -- both convert to survey.dta
+        * and the second overwrites the first, which is otherwise visible only
+        * as a count that does not add up.
+        if `haveconv' & `nconverted' > `nraw' {
+            di as txt "projectbuilder: `nconverted' converted file(s) but only `nraw' raw file(s)."
+            di as txt "                01_raw/_converted/ still holds output from raw files that"
+            di as txt "                are no longer there, and it is all being appended into the"
+            di as txt "                analytic file. Delete the stale .dta files to drop them."
+        }
+        if `haveconv' & `nconverted' > 0 & `nconverted' < `nraw' {
+            di as txt "projectbuilder: `nraw' raw file(s) produced `nconverted' converted file(s)."
+            di as txt "                Files that share a name but not an extension convert to"
+            di as txt "                the same .dta and overwrite each other; others may simply"
+            di as txt "                not be convertible. Check 01_raw/_converted/."
+        }
     }
     else if `nraw' == 0 {
-        di as txt "projectbuilder: 01_raw/ is empty -- scaffold only (Method B)."
+        di as txt "projectbuilder: 01_raw/ is empty -- scaffold only (Workflow B:"
+        di as txt "                put files in 01_raw/, then rerun with -rebuild-)."
     }
 
     * ---- count converted files ------------------------------------------
@@ -826,13 +868,23 @@ program define projectbuilder, rclass
         }
         else {
             di as txt "projectbuilder: rendering documentation with webdoc2 ..."
+            * Quietly: _runall.do echoes its own source otherwise, and a
+            * webdoc2 failure ends in a bare r(601) that reads as a crash
+            * even though it is caught and the built-in HTML is kept.
             * _runall.do cd's into _documentation; save and restore the cwd.
             * If the cwd has been deleted out from under the session, c(pwd)
             * comes back empty and a bare -cd ""- silently lands the user in
             * their home directory.  Only restore what we actually captured.
             local pb_pwd `"`c(pwd)'"'
-            capture noisily do `"`docs'/_runall.do"'
+            capture quietly do `"`docs'/_runall.do"'
+            local renderrc = _rc
             if `"`pb_pwd'"' != "" quietly cd `"`pb_pwd'"'
+            if `renderrc' {
+                di as txt "                webdoc2 render did not finish (r(`renderrc')); the built-in"
+                di as txt "                website/index.html is unchanged and still complete."
+                di as txt `"                To see why, run: do "`docs'/_runall.do""'
+            }
+            else di as txt "                rendered."
         }
     }
 
@@ -857,13 +909,42 @@ program define projectbuilder, rclass
     di as txt `"  Topic         : `macval(topic_show)'"'
     di as txt `"  Public-facing : `publicfacing_show'"'
     di as txt `"  Timeline      : `macval(timeline_show)'"'
+    di as txt `"  Other notes   : `macval(othernotes_show)'"'
     di as txt `"  Mode          : `=cond(`exists', "rebuild", "fresh scaffold")'"'
+    * outcomes(), over() and descsave are shown above because they were
+    * recorded -- but on a bare rebuild the do-file that would carry them is
+    * one of the guarded ones, so _code/ still holds the old values.  Say so
+    * rather than letting the banner imply the change landed.
+    if `exists' & !`writecode' & `gave_code' {
+        di as txt "  NOTE: outcomes()/over()/descsave were recorded, but _code/ was"
+        di as txt "        left as you edited it. Add -replace- to rewrite it."
+    }
+    * The other direction: -replace- overwrote them in place, with no copy
+    * kept anywhere.  The _archive/ folders look like they might catch this;
+    * they do not, and nothing else does either.
+    if `exists' & `writecode' {
+        di as txt "  NOTE: -replace- rewrote the do-files in _code/ from the shipped"
+        di as txt "        templates. Any edits you had made to them are gone."
+    }
     di as txt "{hline 66}"
+    * The name is printed back inside a runnable command.  It was printed
+    * bare, so a project named "Vendor Feed 2027" produced a "Rerun:" line that
+    * projectbuilder itself rejects with "too many project names".  Quote it
+    * when it contains a space.
+    local projshow : copy local projspec
+    if strpos(`"`projspec'"', " ") local projshow `""`projspec'""'
+    * ... and it dropped path() too, so the hint only worked from the one
+    * directory the user happened to be standing in.  Carry it.
+    * NB: options are separated by spaces, not commas -- only the first comma
+    * belongs, the one that opens the option list.
+    local pathshow ""
+    if `"`path'"' != "" local pathshow `"path("`base'") "'
+    local rerun `"`projshow', `pathshow'rebuild"'
     di as txt _n "Next steps:"
     if `nraw' == 0 {
         di as txt  "  1. Put the raw source files in 01_raw/ (or edit"
         di as txt  "     _code/100_data_download.do to fetch them by URL)."
-        di as txt `"  2. Rerun:  projectbuilder `projspec', rebuild"'
+        di as txt `"  2. Rerun:  projectbuilder `rerun'"'
         di as txt  "     -- this converts, combines, and rebuilds the docs."
         di as txt `"  3. do "`code'/000_control.do"   then work down 100..600."'
     }
@@ -882,13 +963,19 @@ program define projectbuilder, rclass
             di as txt  "     the pipeline: 300_labels -> 400_data_profiler ->"
             di as txt  "     500_aggregation -> 600_analysis."
             di as txt  "  3. Every data refresh is just another:"
-            di as txt `"       projectbuilder `projspec', rebuild"'
+            di as txt `"       projectbuilder `rerun'"'
         }
         else {
             di as txt  "  2. There is no 02_cleaned/`proj_label'_analytic.dta yet, so the"
             di as txt  "     pipeline from 300_labels on has nothing to read. Either:"
-            di as txt  "       - install the optional companions named above and rerun"
-            di as txt `"         with -projectbuilder `projspec', rebuild-, or"'
+            if "`noautoconvert'" != "" {
+                di as txt  "       - drop -noautoconvert- and rerun with"
+                di as txt `"         -projectbuilder `rerun'-, or"'
+            }
+            else {
+                di as txt  "       - install the optional companions named above and rerun"
+                di as txt `"         with -projectbuilder `rerun'-, or"'
+            }
             di as txt  "       - build the analytic file yourself and save it there"
             di as txt `"         (see _code/200_data_management.do)."'
             di as txt  "  3. Then work down 300_labels -> 400_data_profiler ->"
@@ -1020,18 +1107,28 @@ program define pb_docs
 
     * ---- escape the recorded metadata -----------------------------------
     * The metadata is free text, so topic("a&b <tag>") has to appear as
-    * itself rather than as markup.  &, <, and > become HTML entities for
-    * both outputs; the Markdown table additionally needs | escaped, or a
-    * value could open an extra column.
+    * itself rather than as markup.  The two outputs need different escaping,
+    * and the Markdown copy used to be derived from the HTML one -- so
+    * "R&D" was written into Readme.md as "R&amp;D".  That renders correctly
+    * on a site that parses entities, but Readme.md is a file people also read
+    * raw, in an editor or a terminal, where it is just wrong.
+    *
+    * HTML: &, <, and > all become entities.
+    * Markdown: only what Markdown itself would misread -- | would open an
+    * extra table column, and < would open a raw HTML tag.  A bare & is
+    * ordinary text in Markdown and is left alone.
     foreach m in project date author desc url topic public timeline ///
                  othernotes stamp {
         * Put back the ~ (and any $) the caller parked, before escaping.
         local `m' = subinstr(`"`macval(`m')'"', char(5), char(126), .)
         local `m' = subinstr(`"`macval(`m')'"', char(1), char(36),  .)
+        * Markdown first, from the unescaped value.
+        local md_`m' = subinstr(`"`macval(`m')'"', "|", "\|",  .)
+        local md_`m' = subinstr(`"`macval(md_`m')'"', "<", "&lt;", .)
+        * then HTML.
         local `m' = subinstr(`"`macval(`m')'"', "&", "&amp;", .)
         local `m' = subinstr(`"`macval(`m')'"', "<", "&lt;",  .)
         local `m' = subinstr(`"`macval(`m')'"', ">", "&gt;",  .)
-        local md_`m' = subinstr(`"`macval(`m')'"', "|", "\|", .)
     }
 
     tempname fh
@@ -1123,12 +1220,12 @@ program define pb_mdlist
     if _rc local list ""
     local any = 0
     foreach f of local list {
-        if substr(`"`f'"', 1, 1) == "." continue
-        local fe = subinstr(`"`f'"',  "&", "&amp;", .)
-        local fe = subinstr(`"`fe'"', "<", "&lt;",  .)
-        local fe = subinstr(`"`fe'"', ">", "&gt;",  .)
-        local fe = subinstr(`"`fe'"', "|", "\|",    .)
-        file write `fh' `"- `fe'"' _n
+        if substr(`"`macval(f)'"', 1, 1) == "." continue
+        * Markdown escaping only -- see the note in pb_docs.  A file called
+        * "R&D notes.csv" is listed as itself, not as "R&amp;D notes.csv".
+        local fe = subinstr(`"`macval(f)'"',  "|", "\|",   .)
+        local fe = subinstr(`"`macval(fe)'"', "<", "&lt;", .)
+        file write `fh' `"- `macval(fe)'"' _n
         local any = 1
     }
     if !`any' file write `fh' "- (none yet)" _n

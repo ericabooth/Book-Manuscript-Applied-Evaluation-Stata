@@ -187,6 +187,46 @@ stata-mp -b do test_projectbuilder.do "/path/to/projectbuilder-stata-public"
   base that exists but is not writable, and directories that cannot be listed.
 - Directory tests use Mata's `direxists()` in place of `confirm file dir/.`.
 
+First-run clarity, from watching new readers work through the help:
+
+- The "Next steps" block no longer tells you to review an analytic file that was
+  never created. Without the optional companions — the default state — it now
+  says the file is missing and gives the two ways to get one.
+- A `data()` folder that does not exist is reported as an error rather than a
+  passing note, so an empty project no longer looks like a success.
+- `rebuild` on a project that does not exist still scaffolds one, which is what
+  makes it safe in a scheduled script, but it now says that is what it did. A
+  mistyped name used to look like a successful refresh. `r(rebuilt)` is `1` only
+  when an existing project was refreshed.
+- The help gained a Quick start, and Workflow A now creates the folder its
+  example reads from, so its first worked example runs as printed.
+- The Options section documents the `des()` / `desc` abbreviation split and the
+  fact that options changing a guarded do-file need `replace` to take effect.
+
+What the command prints now matches the help around it:
+
+- The `Rerun:` hint is copy-pasteable. It used to drop the `path()` you built
+  with, so pasting it from another directory made a second empty project, and
+  it printed a name with spaces unquoted, which the command itself rejects.
+- The console said "Method B" where the help says Workflow B.
+- `descsave` is recorded in `_project_meta.txt` like every other option. A bare
+  rebuild used to report it as `no`, and `rebuild replace` deleted the codebook
+  call it had written.
+- A bare rebuild says when `outcomes()`/`over()`/`descsave` were recorded but
+  `_code/` was left alone, and `replace` says when it overwrote your edits.
+  Nothing is archived automatically; the `_archive/` folders are yours.
+- `builddocs` runs the render quietly and reports one line either way. It used
+  to echo the whole of `_runall.do` and end in a bare `r(601)` that read as a
+  crash when it was caught.
+- `publicfacing()` trims surrounding spaces; `othernotes()` is echoed in the
+  summary like the other metadata; `description()` reaches the header of
+  `000_control.do`, which the help had claimed all along.
+- `Readme.md` gets Markdown escaping rather than HTML: `R&D` stayed `R&amp;D`
+  in a file people read raw.
+- Warnings when the converted count does not match the raw count — same-stem
+  files overwriting each other, or stale output from a raw file since deleted.
+- `path()` naming an existing file says so instead of "not found".
+
 ## Authors
 
 Eric A. Booth, Sr Researcher, Texas 2036 (eric.a.booth@gmail.com)

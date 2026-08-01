@@ -3,6 +3,7 @@
 {vieweralsosee "[P] file" "help file"}{...}
 {vieweralsosee "[D] copy" "help copy"}{...}
 {viewerjumpto "Syntax"            "projectbuilder##syntax"}{...}
+{viewerjumpto "Quick start"       "projectbuilder##quickstart"}{...}
 {viewerjumpto "Description"       "projectbuilder##description"}{...}
 {viewerjumpto "Options"           "projectbuilder##options"}{...}
 {viewerjumpto "Workflow A"        "projectbuilder##wfA"}{...}
@@ -37,27 +38,78 @@ into one analytic file, and build a documentation page.{p_end}
 {pstd}
 {it:Source}[{cmd:/}{it:Subsource}] is one token. Enclose it in quotation marks
 if it contains a space; an unquoted second word is rejected with error 198
-rather than folded into the folder name.{p_end}
+rather than folded into the folder name. Leading and trailing spaces are
+trimmed; interior ones are kept, in the folder name and in {cmd:r(project)}.
+On macOS and Windows, where the filesystem ignores case, a name differing from
+an existing project only in case is the same project and trips the 602
+guard.{p_end}
 
 {synoptset 27 tabbed}{...}
 {synopthdr}
 {synoptline}
-{synopt:{opt path(string)}}base directory; default is the current working directory{p_end}
+{synopt:{opt path(string)}}base directory, created if its parent exists; default is the current directory{p_end}
 {synopt:{opt des:cription(string)}}one-line description of the project{p_end}
 {synopt:{opt url(string)}}source URL; recorded, and fetched now if reachable{p_end}
-{synopt:{opt data(string)}}local file or folder to copy into {cmd:01_raw/} now{p_end}
+{synopt:{opt data(string)}}one local file, or one folder, to copy into {cmd:01_raw/} now, then convert and combine{p_end}
 {synopt:{opt topic(string)}}free-text topic tag(s){p_end}
 {synopt:{opt pub:licfacing(string)}}must be {cmd:yes}, {cmd:no}, or {cmd:unsure}{p_end}
 {synopt:{opt time:line(string)}}refresh cadence (for example, {cmd:monthly}){p_end}
 {synopt:{opt other:notes(string)}}free-text caveats or provenance{p_end}
-{synopt:{opt out:comes(string)}}up to 10 outcome variable names for the profiler{p_end}
-{synopt:{opt ov:er(string)}}up to 10 by-variable names for the profiler{p_end}
-{synopt:{opt desc:save}}seed a codebook-export call in {cmd:300_labels.do}{p_end}
+{synopt:{opt out:comes(string)}}up to 10 outcome variable names for the profiler; recorded, not validated{p_end}
+{synopt:{opt ov:er(string)}}up to 10 by-variable names for the profiler; recorded, not validated{p_end}
+{synopt:{opt desc:save}}write a codebook-export call into {cmd:300_labels.do}, to run when you run that file{p_end}
 {synopt:{opt rebuild}}refresh an existing project (re-ingest, re-document){p_end}
 {synopt:{opt replace}}with {cmd:rebuild}, also overwrite edited code files{p_end}
 {synopt:{opt builddocs}}render the documentation with {cmd:webdoc2} if installed{p_end}
 {synopt:{opt noauto:convert}}skip the automatic convert/combine pass{p_end}
 {synoptline}
+
+{pstd}
+All options are optional. The project name is not: {cmd:projectbuilder} with no
+name stops with "source[/subsource] required". Each option may be given at most
+once; repeating one raises Stata's "option ... not allowed". Two abbreviations
+sit close together: {cmd:des()} is {opt description()}, while a bare
+{cmd:desc} is {opt descsave}.{p_end}
+
+{pstd}
+The convert-and-combine step named on the {opt data()} row needs
+{cmd:convertanything} and {cmd:combineall}, which are optional and not
+installed by default. Without them you still get the folder tree, the
+do-files, and the documentation. See
+{help projectbuilder##deps:Optional dependencies}.{p_end}
+
+
+{marker quickstart}{...}
+{title:Quick start}
+
+{pstd}
+Start one of two ways. If the data has not arrived yet, build the folder
+now:{p_end}
+{cmd}{...}
+        . projectbuilder MyProject, description("What this project is for")
+{txt}{...}
+
+{pstd}If you already have the files, point at the folder holding them and get
+them ingested in the same call:{p_end}
+{cmd}{...}
+        . projectbuilder MyProject, data("the_folder_the_files_are_in") ///
+              description("What this project is for")
+{txt}{...}
+
+{pstd}
+Use one or the other, not both: the second call would stop with error 602,
+because {cmd:MyProject} already exists. From then on, every data refresh is the
+same one command:{p_end}
+{cmd}{...}
+        . projectbuilder MyProject, rebuild
+{txt}{...}
+
+{pstd}
+That is the whole daily loop. The folder is created under the current
+directory unless you name another in {opt path()}; a plain rerun never
+overwrites an existing project; and the dataset in memory is left alone. To
+click through a full worked example in the Viewer, see
+{help projectbuilder##tryit:Try it now}.{p_end}
 
 
 {marker description}{...}
@@ -101,11 +153,16 @@ For a guided tour you can click through in the Viewer, see
 created. The default is the current working directory. The project is created
 at {it:path}{cmd:/}{it:Source} (or {it:path}{cmd:/}{it:Source}{cmd:/}{it:Subsource}).
 A relative path is resolved against the current directory, so {cmd:r(path)} and
-the {cmd:$root} stamped into {cmd:000_control.do} are always absolute.{p_end}
+the {cmd:$root} stamped into {cmd:000_control.do} are always absolute. The base
+itself is created if its own parent already exists; {cmd:path("new/deeper")}
+where neither level exists stops with error 601 rather than making two levels
+at once.{p_end}
 
 {phang}
 {opt description(string)} is a one-line description of the project. It is
-stamped into the documentation and the pipeline headers.{p_end}
+stamped into the documentation and into the header of
+{cmd:_code/000_control.do}, so the first file a colleague opens says what the
+project is for.{p_end}
 
 {phang}
 {opt url(string)} records a source URL. The fetch is written into
@@ -113,14 +170,19 @@ stamped into the documentation and the pipeline headers.{p_end}
 scaffold time; if the address is reachable the file lands in {cmd:01_raw/}.{p_end}
 
 {phang}
-{opt data(string)} names a local file, or a folder of files, to copy into
-{cmd:01_raw/} now. This is the Workflow A entry point for data you already
-have on disk.{p_end}
+{opt data(string)} names one local file, or one folder of files, to copy into
+{cmd:01_raw/} now, after which the automatic convert/combine pass runs unless
+{opt noautoconvert} is given. This is the Workflow A entry point for data you
+already have on disk. It takes a single path: wildcards are not expanded and a
+space-separated list is not split, so {cmd:data("*.csv")} looks for a file
+literally named {cmd:*.csv}, does not find one, and says so. Point it at the
+folder instead. A relative path is read from the current directory.{p_end}
 
 {phang}
 {opt topic(string)}, {opt publicfacing(string)}, {opt timeline(string)}, and
 {opt othernotes(string)} are metadata stamped into the documentation.
-{opt publicfacing()} must be {cmd:yes}, {cmd:no}, {cmd:unsure}, or empty.{p_end}
+{opt publicfacing()} must be {cmd:yes}, {cmd:no}, {cmd:unsure}, or empty; case
+does not matter, and surrounding spaces are trimmed.{p_end}
 
 {phang}
 {opt outcomes(string)} and {opt over(string)} seed the suggested locals in
@@ -134,26 +196,43 @@ generated profiler tests each name with {helpb confirm:confirm variable} and
 skips the ones the analytic file does not have.{p_end}
 
 {phang}
-{opt descsave} adds a codebook-export call (via {cmd:descsave} from SSC) to
-{cmd:300_labels.do}, writing an Excel codebook into {cmd:_documentation/}. Note
-the abbreviations here: {cmd:des()} is {opt description()}, while a bare
+{opt descsave} writes a codebook-export call (via {cmd:descsave} from SSC) into
+{cmd:300_labels.do}. Nothing is exported at scaffold time: the codebook appears
+in {cmd:_documentation/} when you run {cmd:300_labels.do}. Like the other
+options it is remembered, so a later {opt rebuild} keeps it. Note the
+abbreviations here: {cmd:des()} is {opt description()}, while a bare
 {cmd:desc} is {opt descsave}.{p_end}
 
 {phang}
 {opt rebuild} refreshes an existing project: it re-runs the convert/combine
 pass over {cmd:01_raw/} and regenerates the documentation. Every data refresh
 is just another {opt rebuild}. Metadata recorded earlier survives a bare
-{opt rebuild}; see {help projectbuilder##meta:Recorded metadata} below.{p_end}
+{opt rebuild}; see {help projectbuilder##meta:Recorded metadata} below. Given
+for a project that does not exist yet, {opt rebuild} is not an error: it
+scaffolds one, and says that is what it did. That is what makes the command
+safe to put in a scheduled script, but it also means a mistyped name plus
+{opt rebuild} produces a second, empty project rather than a complaint. Check
+{cmd:r(rebuilt)}, which is {cmd:1} only when an existing project was
+refreshed.{p_end}
 
 {phang}
 {opt replace} has effect only with {opt rebuild}: it allows the numbered
 do-files to be overwritten. Without it, a {opt rebuild} leaves your edited
-do-files untouched.{p_end}
+do-files untouched. One consequence catches people out: adding an option that
+changes what a do-file should contain, such as {opt descsave} or a new
+{opt outcomes()}, has no visible effect on a bare {opt rebuild}, because the
+do-file it would rewrite is one of the guarded ones. Add {opt replace} to make
+those options reach {cmd:_code/}. The documentation, which is not guarded,
+updates either way.{p_end}
 
 {phang}
 {opt builddocs} renders {cmd:_documentation/website/index.html} with
 {cmd:webdoc2} if it is installed. Documentation is always built either way; this
-option only makes it prettier.{p_end}
+option only makes it prettier. The render runs {cmd:_documentation/_runall.do},
+so its output appears in your log, and a render that fails part way -- most
+often because the {cmd:webdoc2} package directory is not on the adopath -- will
+print its own error there. That failure is caught: the built-in
+{cmd:index.html} is kept and the run still succeeds.{p_end}
 
 {phang}
 {opt noautoconvert} skips the automatic {cmd:convertanything} and
@@ -265,9 +344,16 @@ scaffold time are carried forward rather than reset to placeholders.{p_end}
 {pstd}
 {cmd:projectbuilder} has no hard dependencies. A few companion tools make it do
 more when installed; each is detected with {help capture:capture which}. If a
-tool is missing, the generated do-file still {it:contains} the call (so it is a
-working example), the automatic pass skips that step, and a one-line note names
-the package and its install command.{p_end}
+tool is missing, the generated do-file still {it:contains} the call, so it
+remains a working example, and the step is skipped rather than failing.{p_end}
+
+{pstd}
+Where you see the note depends on when the tool is needed.
+{cmd:convertanything}, {cmd:combineall}, and {cmd:webdoc2} do their work while
+{cmd:projectbuilder} runs, so a missing one is named on screen along with its
+install command. {cmd:descsave} and {cmd:srctag}/{cmd:srcfind} do their work
+later, when you run {cmd:300_labels.do}, so their notes live inside that file
+and appear only when you run it.{p_end}
 
 {p2colset 8 26 28 2}{...}
 {p2col:{bf:convertanything}}bulk-convert mixed formats in {cmd:01_raw/} to {cmd:.dta} in {cmd:01_raw/_converted/} (author's GitHub){p_end}
@@ -276,6 +362,25 @@ the package and its install command.{p_end}
 {p2col:{bf:srctag} / {bf:srcfind}}tag and search each variable's source lineage (author's GitHub){p_end}
 {p2col:{bf:webdoc2}}render a richer {cmd:index.html} (author's GitHub; needs {cmd:ssc install webdoc}){p_end}
 {p2colreset}{...}
+
+{pstd}
+{bf:Keep non-data files out of }{cmd:01_raw/}{bf:.} The automatic pass hands
+every file it finds there to {cmd:convertanything}, which reads delimited text
+by extension. A {cmd:README.txt} or a notes file sitting beside the data is
+therefore read as a dataset and appended into the analytic file, and a
+{cmd:.pdf} or a file with no extension is skipped without comment. Two files
+whose names differ only by extension, such as {cmd:report.csv} and
+{cmd:report.xlsx}, both convert to {cmd:report.dta} and the second overwrites
+the first. When the converted count does not match the raw count,
+{cmd:projectbuilder} says so; {cmd:r(nraw)} and {cmd:r(nconverted)} let a
+script check the same thing. Put documentation in {cmd:_documentation/} and
+leave {cmd:01_raw/} for data.{p_end}
+
+{pstd}
+The analytic file is a straight append of the converted files and carries no
+column saying which raw file each row came from. If you need that, add it in
+{cmd:200_data_management.do}, or install {cmd:srctag}, which is what it is
+for.{p_end}
 
 {pstd}
 The convert-then-combine chain is the heart of {cmd:200_data_management.do}:
@@ -321,6 +426,13 @@ After {cmd:projectbuilder MyProject} you have:{p_end}
 {txt}{...}
 
 {pstd}
+The {cmd:_archive/} folders are made for your convenience and are never written
+to by {cmd:projectbuilder}. Nothing is moved into them automatically -- not by
+{opt rebuild}, and not by {opt replace}, which overwrites an edited do-file in
+place with no copy kept. Move anything you want to keep before running
+{opt replace}, or keep {cmd:_code/} under version control.{p_end}
+
+{pstd}
 {cmd:000_control.do} pins the language version, stamps {cmd:$root} with the
 absolute path of the new folder (one loudly commented line to edit if the
 project ever moves), derives {cmd:$raw}, {cmd:$converted}, {cmd:$cleaned},
@@ -348,9 +460,12 @@ from that file. A bare {cmd:projectbuilder MyProject, rebuild} therefore keeps
 the description and topic it was given at scaffold time instead of replacing
 them with placeholders, and {opt rebuild} {opt replace} rewrites
 {cmd:400_data_profiler.do} with the {opt outcomes()} and {opt over()} names
-already on record. An option supplied on the current call always wins, so
-{cmd:rebuild description("...")} is how you change a recorded value. The file is
-plain text and can also be edited directly.{p_end}
+already on record. A {it:non-empty} option on the current call always wins, so
+{cmd:rebuild description("...")} is how you change a recorded value. An empty
+one is treated as not supplied: {cmd:rebuild topic("")} does not clear the
+topic, it re-reads the recorded one. To clear a value, delete it from
+{cmd:_project_meta.txt}, which is plain text and meant to be edited
+directly.{p_end}
 
 {pstd}
 The {cmd:Created} row of the documentation is the date of the first scaffold,
@@ -433,10 +548,12 @@ never changed. Click them in order; each step assumes the one before it. The
 whole sequence is identical on Windows, macOS, and Linux.{p_end}
 
 {pstd}
-If you have walked through this before, Step 1 will stop with error 602:
-{cmd:projectbuilder} does not overwrite an existing project, which is the point
-Step 6 makes on purpose. Either delete the folder Step 2 names, or add
-{opt rebuild} to Step 1 and read the rest as a refresh.{p_end}
+If you, or anyone else on this machine, has walked through this before, Step 1
+will stop with error 602: {cmd:projectbuilder} does not overwrite an existing
+project, which is the point Step 6 makes on purpose. Add {opt rebuild} to
+Step 1 and read the rest as a refresh, or delete the folder Step 2 names and
+start over. On a shared server, give {opt path()} a directory of your own
+instead of the temporary one.{p_end}
 
 {pstd}{bf:Step 1.} Scaffold a project with no data yet, in the temporary
 directory Stata already uses. Read the "Next steps" block it prints:{p_end}
@@ -489,8 +606,9 @@ project ever moves:{p_end}
 
 {pstd}
 Run this one last, because the control file begins with {cmd:clear all}: it
-drops the auto data and the {cmd:$pbdemo} global the steps above were using.
-That is the control file doing its job at the top of a pipeline, not something
+drops the auto data the steps above were using. ({cmd:clear all} clears data
+and programs but leaves globals alone, so {cmd:$pbdemo} survives it.) That is
+the control file doing its job at the top of a pipeline, not something
 {cmd:projectbuilder} does to you.{p_end}
 
 {pstd}
@@ -600,9 +718,11 @@ down:{p_end}
         . projectbuilder Ex08Open, url("https://example.com/data.csv")
 {txt}{...}
 
-{pstd}Scaffold without running the convert/combine pass, leaving
-{cmd:01_raw/} untouched. Also the fastest option when a large dataset is
-loaded, since it skips the {helpb preserve} the pass would otherwise do:{p_end}
+{pstd}Scaffold without running the convert/combine pass, so
+{cmd:01_raw/_converted/} and the analytic file are not built. Files named in
+{opt data()} are still copied into {cmd:01_raw/}. This is also the fastest
+option when a large dataset is loaded, since it skips the {helpb preserve} the
+pass would otherwise do:{p_end}
 {cmd}{...}
         . projectbuilder Ex05Feed, noautoconvert
 {txt}{...}

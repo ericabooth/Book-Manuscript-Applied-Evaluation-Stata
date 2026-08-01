@@ -272,10 +272,12 @@ quietly count if strpos(v1, "version 16.0")
 assert r(N) == 1
 
 di as text "{hline 70}"
-di as text "TEST i: metadata is HTML-escaped in index.html and Readme.md"
+di as text "TEST i: each output gets the escaping ITS format needs"
 di as text "{hline 70}"
 projectbuilder Esc, path("$work") description("R&D <b>bold</b>") ///
     topic("a&b <tag>") othernotes("left|right")
+
+* index.html is HTML, so &, < and > all become entities
 loadlines "$work/Esc/_documentation/website/index.html"
 quietly count if strpos(v1, "<td>a&amp;b &lt;tag&gt;</td>")
 assert r(N) == 1
@@ -283,10 +285,19 @@ quietly count if strpos(v1, "<p>R&amp;D &lt;b&gt;bold&lt;/b&gt;</p>")
 assert r(N) == 1
 quietly count if strpos(v1, "<td>a&b <tag></td>")
 assert r(N) == 0
+
+* Readme.md is Markdown, so it gets ONLY what Markdown misreads: | would open
+* an extra table column and < would open a raw HTML tag.  A bare & is
+* ordinary text and must survive as itself -- this file is read raw as often
+* as it is rendered, and "R&amp;D" in an editor is simply wrong.
 loadlines "$work/Esc/_documentation/Readme.md"
-quietly count if strpos(v1, "| Topic | a&amp;b &lt;tag&gt; |")
+quietly count if strpos(v1, "| Topic | a&b &lt;tag> |")
 assert r(N) == 1
 quietly count if strpos(v1, "| Other notes | left\|right |")
+assert r(N) == 1
+quietly count if strpos(v1, "&amp;")
+assert r(N) == 0                       // no HTML entity for & anywhere in the .md
+quietly count if strpos(v1, "R&D &lt;b>bold&lt;/b>")
 assert r(N) == 1
 
 di as text "{hline 70}"
@@ -462,12 +473,20 @@ loadlines "$work/Tilde/_documentation/Readme.md"
 quietly count if strpos(v1, "~Daily refresh")
 assert r(N) >= 1
 
-* the markers themselves still work: the control file really does get $ and `
+* The markers themselves still work: the control file really does get $ and `.
+* NB: do NOT assert that "~D" is absent from this file.  The description is
+* stamped into its header, so a description of "~Daily refresh" puts a real
+* "~D" there -- which is the point.  Check the markers pb_wl owns instead.
 loadlines "$work/Tilde/_code/000_control.do"
 quietly count if strpos(v1, "global raw")
 assert r(N) == 1
-quietly count if strpos(v1, "~D") | strpos(v1, "~B")
-assert r(N) == 0
+foreach mark in "~Draw" "~Dcode" "~Dcleaned" "~Broot" "~Brun_all" {
+    quietly count if strpos(v1, "`mark'")
+    assert r(N) == 0
+}
+* and the user's own tilde survived into the header
+quietly count if strpos(v1, "~Daily refresh")
+assert r(N) == 1
 
 di as text "{hline 70}"
 di as text "TEST o: a relative path() still yields an absolute r(path)/\$root"
@@ -806,6 +825,210 @@ assert `"`c(pwd)'"' == `"`pwd_before'"'
 global work    `"`W'"'
 global pkgroot `"`PK'"'
 adopath ++ "$pkgroot"
+capture program drop loadlines
+program define loadlines
+    import delimited using `0', clear delimiters("`=char(1)'", asstring) ///
+        varnames(nonames) bindquote(nobind) encoding("utf-8")
+end
+
+di as text "{hline 70}"
+di as text "TEST x0: Workflow A and the Quick start run exactly as printed"
+di as text "{hline 70}"
+* Workflow A's worked example used to read from a folder called budget_drop
+* that the help never told you to create, so the first thing a reader ran
+* produced an empty project and a green OK.  Step 1 now makes the folder.
+mkdir "$work/_wfa"
+local pwd_before `"`c(pwd)'"'
+quietly cd "$work/_wfa"
+
+* Workflow A, Step 1 as printed
+mkdir "budget_drop"
+sysuse auto, clear
+quietly export delimited using "budget_drop/budgets_fy24.csv", replace
+quietly export delimited using "budget_drop/budgets_fy25.csv", replace
+* Workflow A, Step 2 as printed
+projectbuilder CountyBudgets,                                  ///
+      data("budget_drop")                                      ///
+      description("County budget CSVs, one row per dept per FY") ///
+      topic("local government, budgets") publicfacing(unsure)  ///
+      timeline("annual") outcomes(total_budget) over(year dept) ///
+      descsave
+assert r(nraw) == 2                       // the files really were ingested
+confirm file "CountyBudgets/01_raw/budgets_fy24.csv"
+confirm file "CountyBudgets/01_raw/budgets_fy25.csv"
+* Workflow A, Step 3 as printed
+do "CountyBudgets/_code/000_control.do"
+foreach g in root raw converted cleaned output code docs {
+    confirm file "${`g'}/."
+}
+quietly cd `"`pwd_before'"'
+global work    `"`W'"'
+global pkgroot `"`PK'"'
+adopath ++ "$pkgroot"
+capture program drop loadlines
+program define loadlines
+    import delimited using `0', clear delimiters("`=char(1)'", asstring) ///
+        varnames(nonames) bindquote(nobind) encoding("utf-8")
+end
+
+* the Quick start block: two alternatives, then the refresh
+mkdir "$work/_qs"
+local pwd_before `"`c(pwd)'"'
+quietly cd "$work/_qs"
+projectbuilder MyProject, description("What this project is for")
+capture noisily projectbuilder MyProject, data("nothing_here") ///
+    description("What this project is for")
+assert _rc == 602                         // the help says exactly this
+projectbuilder MyProject, rebuild
+assert r(rebuilt) == 1
+quietly cd `"`pwd_before'"'
+
+di as text "{hline 70}"
+di as text "TEST x: what a first-time user is told when the companions are absent"
+di as text "{hline 70}"
+* A new user on a bare install has neither convertanything nor combineall, so
+* nothing is converted and no analytic file appears.  The summary used to end
+* "projectbuilder OK" and then tell them to "Review 02_cleaned/<proj>_analytic
+* .dta" -- a file that was never created.  Drop PLUS from the adopath to
+* reproduce a bare install even on a machine where the companions ARE present.
+local pk `"$pkgroot"'
+adopath - PLUS
+capture which convertanything
+local haveconv = (_rc == 0)
+assert !`haveconv'                       // PLUS really is off the path now
+
+mkdir "$work/_bare"
+sysuse auto, clear
+quietly export delimited using "$work/_bare/a.csv", replace
+projectbuilder Bare, path("$work") data("$work/_bare")
+assert r(nraw) == 1
+assert r(nconverted) == 0
+capture confirm file "$work/Bare/02_cleaned/Bare_analytic.dta"
+assert _rc != 0                          // there is genuinely no analytic file
+* the scaffold is still complete -- that is the promise of a no-dependency tool
+confirm file "$work/Bare/_code/000_control.do"
+confirm file "$work/Bare/_documentation/website/index.html"
+adopath ++ `"`pk'"'
+
+di as text "{hline 70}"
+di as text "TEST y: data() that does not exist is reported, not glossed over"
+di as text "{hline 70}"
+* Workflow A's first worked example used to be run verbatim against a folder
+* that did not exist; the run said so in passing and then printed OK, so the
+* reader's first project was empty and looked successful.
+capture noisily projectbuilder Missing, path("$work") data("$work/no_such_drop")
+assert _rc == 0                          // still a usable scaffold
+assert r(nraw) == 0
+confirm file "$work/Missing/_code/000_control.do"
+
+di as text "{hline 70}"
+di as text "TEST z: rebuild on a project that is not there says so"
+di as text "{hline 70}"
+* -rebuild- on a missing project scaffolds one rather than erroring, which is
+* what makes it safe in a scheduled script.  A mistyped name therefore looks
+* like a successful refresh unless the run says otherwise.  r(rebuilt)
+* distinguishes the two cases.
+capture noisily projectbuilder NeverMade, path("$work") rebuild
+assert _rc == 0
+assert r(rebuilt) == 0                   // scaffolded, NOT refreshed
+confirm file "$work/NeverMade/_code/000_control.do"
+* and a real refresh does report 1
+projectbuilder NeverMade, path("$work") rebuild
+assert r(rebuilt) == 1
+
+* the -replace- gotcha the Options section now warns about: an option that
+* changes a guarded do-file needs -replace- to take effect
+projectbuilder Guarded, path("$work")
+projectbuilder Guarded, path("$work") rebuild descsave
+loadlines "$work/Guarded/_code/300_labels.do"
+quietly count if strpos(v1, "descsave using")
+assert r(N) == 0                         // bare rebuild leaves _code/ alone
+projectbuilder Guarded, path("$work") rebuild replace descsave
+loadlines "$work/Guarded/_code/300_labels.do"
+quietly count if strpos(v1, "descsave using")
+assert r(N) == 1                         // with replace, it lands
+
+di as text "{hline 70}"
+di as text "TEST aa: what the run prints back can be pasted straight back in"
+di as text "{hline 70}"
+* The "Rerun:" line printed the name bare, so a project called
+* "Vendor Feed 2027" produced a command projectbuilder itself rejects with
+* "too many project names".  Two separate readers hit this.
+* NB: use a NAMED log -- -log close _all- would close the batch log this whole
+* battery is written to, and -quietly- would keep the very lines under test out
+* of it.  Widen linesize first: the hint carries an absolute path and the log
+* would otherwise wrap it onto a continuation line, defeating any match.
+local ls_before = c(linesize)
+set linesize 250
+
+projectbuilder "Spaced Name 2027", path("$work") description("quoted name")
+
+log using "$work/rerun.log", replace text name(pbcap)
+projectbuilder "Spaced Name 2027", path("$work") rebuild
+log close pbcap
+loadlines "$work/rerun.log"
+* the one line a user is most likely to copy must be runnable as printed:
+* quoted name, and the path() they built with
+quietly count if strpos(v1, "Rerun:") & ///
+                strpos(v1, `"projectbuilder "Spaced Name 2027""') & ///
+                strpos(v1, `"path("$work")"') & strpos(v1, "rebuild")
+assert r(N) == 1
+* and never the bare, unpasteable form
+quietly count if strpos(v1, "Rerun:") & strpos(v1, "projectbuilder Spaced Name 2027,")
+assert r(N) == 0
+
+* a name without a space is printed bare, and with no path() when none was given
+local pwd_before `"`c(pwd)'"'
+quietly cd "$work"
+projectbuilder Plain
+log using "$work/rerun2.log", replace text name(pbcap)
+projectbuilder Plain, rebuild
+log close pbcap
+quietly cd `"`pwd_before'"'
+loadlines "$work/rerun2.log"
+quietly count if strpos(v1, "Rerun:") & strpos(v1, "projectbuilder Plain, rebuild")
+assert r(N) == 1
+quietly count if strpos(v1, "Rerun:") & strpos(v1, "path(")
+assert r(N) == 0
+set linesize `ls_before'
+
+di as text "{hline 70}"
+di as text "TEST bb: descsave is remembered like every other recorded option"
+di as text "{hline 70}"
+* descsave was the one option missing from _project_meta.txt, so a bare
+* rebuild reported "Descsave: no" and -rebuild replace- deleted the codebook
+* call it had originally written.
+projectbuilder Cb, path("$work") description("codebook") descsave noautoconvert
+loadlines "$work/Cb/_code/300_labels.do"
+quietly count if strpos(v1, "descsave using")
+assert r(N) == 1
+loadlines "$work/Cb/_documentation/_project_meta.txt"
+quietly count if strpos(v1, "descsave=descsave")
+assert r(N) == 1
+* a bare rebuild keeps it on record ...
+projectbuilder Cb, path("$work") rebuild noautoconvert
+loadlines "$work/Cb/_documentation/_project_meta.txt"
+quietly count if strpos(v1, "descsave=descsave")
+assert r(N) == 1
+* ... and -rebuild replace- rewrites 300_labels.do WITH the call still in it
+projectbuilder Cb, path("$work") rebuild replace noautoconvert
+loadlines "$work/Cb/_code/300_labels.do"
+quietly count if strpos(v1, "descsave using")
+assert r(N) == 1
+
+di as text "{hline 70}"
+di as text "TEST cc: publicfacing() trims, othernotes is echoed, description reaches _code/"
+di as text "{hline 70}"
+* publicfacing("yes ") used to be rejected with 198 over one trailing space
+projectbuilder Pf, path("$work") publicfacing("Yes ") ///
+    othernotes("sent by the county in August") description("A tidy description")
+loadlines "$work/Pf/_documentation/Readme.md"
+quietly count if strpos(v1, "| Public-facing | yes |")
+assert r(N) == 1
+* the help says description() reaches the pipeline headers -- check that it does
+loadlines "$work/Pf/_code/000_control.do"
+quietly count if strpos(v1, "A tidy description")
+assert r(N) == 1
 
 di as text ""
 di as text "{hline 70}"
