@@ -548,8 +548,10 @@ program define projectbuilder, rclass
         pb_wl `fh' `"    di as txt "srctag/srcfind not installed (author's GitHub); skipping lineage tags.""'
         pb_wl `fh' `"}"'
         pb_wl `fh' `"else {"'
-        pb_wl `fh' `"    * srctag, source("~Draw") // record which raw file/vintage each var came from"'
-        pb_wl `fh' `"    * srcfind somevar         // later: search a variable's source lineage"'
+        pb_wl `fh' `"    * srctag takes a varlist, so name the variables (or _all).  It"'
+        pb_wl `fh' `"    * writes char varname[source], which -datadictionary- harvests."'
+        pb_wl `fh' `"    * srctag _all, source("~Draw")   // stamp every variable's origin"'
+        pb_wl `fh' `"    * srcfind somevar               // later: search that lineage"'
         pb_wl `fh' `"}"'
         if "`descsave'" != "" {
             pb_wl `fh' `""'

@@ -56,22 +56,22 @@
 \contentsline {mtocsubsection}{\numberline {2.6.1}Start by asking what you have right now}{25}{subsection.2.6.1}%
 \contentsline {subsection}{\numberline {2.6.2}A worked example: the folder of spreadsheets a partner sent}{26}{subsection.2.6.2}%
 \contentsline {mtocsubsection}{\numberline {2.6.2}A worked example: the folder of spreadsheets a partner sent}{26}{subsection.2.6.2}%
-\contentsline {subsection}{\numberline {2.6.3}One call for every refresh afterward}{27}{subsection.2.6.3}%
-\contentsline {mtocsubsection}{\numberline {2.6.3}One call for every refresh afterward}{27}{subsection.2.6.3}%
+\contentsline {subsection}{\numberline {2.6.3}One call for every refresh afterward}{28}{subsection.2.6.3}%
+\contentsline {mtocsubsection}{\numberline {2.6.3}One call for every refresh afterward}{28}{subsection.2.6.3}%
 \contentsline {section}{\numberline {2.7}\enquote {Works on my machine} is four failures with one name}{29}{section.2.7}%
 \contentsline {mtocsection}{\numberline {2.7}\enquote {Works on my machine} is four failures with one name}{29}{section.2.7}%
 \contentsline {section}{\numberline {2.8}The numbered pipeline: the folder listing is the run order}{29}{section.2.8}%
 \contentsline {mtocsection}{\numberline {2.8}The numbered pipeline: the folder listing is the run order}{29}{section.2.8}%
-\contentsline {section}{\numberline {2.9}Leave a paper trail: logging every run}{30}{section.2.9}%
-\contentsline {mtocsection}{\numberline {2.9}Leave a paper trail: logging every run}{30}{section.2.9}%
+\contentsline {section}{\numberline {2.9}Leave a paper trail: logging every run}{31}{section.2.9}%
+\contentsline {mtocsection}{\numberline {2.9}Leave a paper trail: logging every run}{31}{section.2.9}%
 \contentsline {subsection}{\numberline {2.9.1}The tracking spine: a working file for decisions, not output}{31}{subsection.2.9.1}%
 \contentsline {mtocsubsection}{\numberline {2.9.1}The tracking spine: a working file for decisions, not output}{31}{subsection.2.9.1}%
 \contentsline {section}{\numberline {2.10}Excel is a format, not a calculator}{32}{section.2.10}%
 \contentsline {mtocsection}{\numberline {2.10}Excel is a format, not a calculator}{32}{section.2.10}%
 \contentsline {section}{\numberline {2.11}Speed you will actually notice}{33}{section.2.11}%
 \contentsline {mtocsection}{\numberline {2.11}Speed you will actually notice}{33}{section.2.11}%
-\contentsline {subsection}{\numberline {2.11.1}The biggest speedup is the data you never load}{34}{subsection.2.11.1}%
-\contentsline {mtocsubsection}{\numberline {2.11.1}The biggest speedup is the data you never load}{34}{subsection.2.11.1}%
+\contentsline {subsection}{\numberline {2.11.1}The biggest speedup is the data you never load}{35}{subsection.2.11.1}%
+\contentsline {mtocsubsection}{\numberline {2.11.1}The biggest speedup is the data you never load}{35}{subsection.2.11.1}%
 \contentsline {paragraph}{\nonumberline Where this leaves you.}{35}{paragraph*.37}%
 \contentsline {section}{Exercises}{35}{section*.38}%
 \contentsline {part}{\nonumberline Part II: Getting the Data \newline APIs, Scrapes, Surveys, and Longitudinal Data}{37}{part*.40}%

@@ -26,7 +26,16 @@ set more off
 set seed 20260707
 
 *--- A sandbox to build in; everything below stays inside it -----------------*
-local demo "`c(pwd)'/projectbuilder_demo"
+* Built in Stata's own temporary directory so this file never leaves anything
+* in your project folder, and cleared first so the file is rerunnable:
+* -projectbuilder- refuses to overwrite an existing project (error 602), which
+* is the guard Chapter 2 describes, so a leftover demo would stop a second run.
+local demo "`c(tmpdir)'/projectbuilder_demo"
+capture confirm file "`demo'/."
+if !_rc {
+    if lower("`c(os)'") == "windows"  shell rmdir /s /q "`demo'"
+    else                              shell rm -rf "`demo'"
+}
 capture mkdir "`demo'"
 cd "`demo'"
 

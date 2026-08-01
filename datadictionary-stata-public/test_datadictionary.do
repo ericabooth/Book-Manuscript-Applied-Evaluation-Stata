@@ -66,8 +66,8 @@ format hours %5.1f
 label variable hours "Weekly work hours (self-report)"
 note q2: Core supervisor-support item; fielded every wave.
 note hours: Self-reported average weekly hours.
-char q2[srctag] "staff_survey_w1.dta"
-char hours[srctag] "staff_survey_w1.dta"
+char q2[source] "staff_survey_w1.dta"
+char hours[source] "staff_survey_w1.dta"
 char q2[module] "core"
 label data "Staff wellbeing survey, wave 1 (2019)"
 save "$ddtmp/staff_survey_w1.dta", replace
@@ -103,8 +103,8 @@ format hours %5.1f
 label variable hours "Weekly work hours (self-report)"
 note q2: Core supervisor-support item; fielded every wave.
 note hours: Self-reported average weekly hours.
-char q2[srctag] "staff_survey_w2.dta"
-char hours[srctag] "staff_survey_w2.dta"
+char q2[source] "staff_survey_w2.dta"
+char hours[source] "staff_survey_w2.dta"
 char q2[module] "core"
 label data "Staff wellbeing survey, wave 2 (2021)"
 save "$ddtmp/staff_survey_w2.dta", replace
@@ -145,8 +145,8 @@ format hours %5.1f
 label variable hours "Weekly work hours (self-report)"
 note q2: Recoded from 4-point (agree4) to 5-point (agree5) in 2023.
 note hours: Self-reported average weekly hours.
-char q2[srctag] "staff_survey_w3.dta"
-char hours[srctag] "staff_survey_w3.dta"
+char q2[source] "staff_survey_w3.dta"
+char hours[source] "staff_survey_w3.dta"
 char q2[module] "core"
 label data "Staff wellbeing survey, wave 3 (2023)"
 save "$ddtmp/staff_survey_w3.dta", replace
@@ -199,7 +199,8 @@ quietly count if name == "q1" & before == "Overall job satisfaction (1-5)" ///
     & after == "Overall satisfaction with job (1-5 scale)"
 assert r(N) == 1
 
-* --- the saving() dta: one row per variable-wave, srctag harvested ---
+* --- the saving() dta: one row per variable-wave, char[source] harvested
+*     into the column named srctag (after the tool, not the char) ---
 use "$ddtmp/datadictionary_codebook.dta", clear
 assert _N == 25
 quietly count if wave == "2019"
@@ -306,7 +307,7 @@ assert `hasmiss' == 0
 * ---------------------------------------------------------------------------
 * 3b. Relabel do-file and dictionary: the export / edit / re-import round-trip
 *     (both are in-memory features; run on wave 1, which has value labels,
-*      notes, and srctag/module chars)
+*      notes, and source/module chars)
 * ---------------------------------------------------------------------------
 cd "$ddtmp"
 use "staff_survey_w1.dta", clear
@@ -328,7 +329,7 @@ local ll2 : value label q2
 assert "`ll2'" == "agree4"
 local vl2 : variable label q2
 assert `"`vl2'"' == "I feel supported by my supervisor"
-local st : char q2[srctag]
+local st : char q2[source]
 assert "`st'" == "staff_survey_w1.dta"
 local mod : char q2[module]
 assert "`mod'" == "core"

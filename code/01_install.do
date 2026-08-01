@@ -47,23 +47,20 @@ if _rc ssc install webapi, replace
 * net get webdoc2, from("https://raw.githubusercontent.com/ericabooth/webdoc2-stata-public/main/")
 * (sparkta2 is not yet published; its examples in the book are display-only.)
 
-*--- The thirteen packages built FOR this book ---------------------------------*
-* Each lives in a <name>-stata-public folder that publishes to the authors'
-* GitHub with the book. Until those repos are live, install from the local
-* folders that ship beside this project (edit BOOKPKG to your copy's path);
-* after publication the same names install from raw.githubusercontent.com
-* with the usual one-line net install.
-* NOTE: -net- mistakes a colon in a folder path for a URL scheme, so if your
-* copy sits under a path containing ":", copy the package folders somewhere
-* colon-free first (or wait for the GitHub repos).
-local BOOKPKG ""   // e.g. "/path/to/book-repo" ; leave empty to skip
-if "`BOOKPKG'" != "" {
-    foreach pkg in projectbuilder combineall cxchangelog datadictionary ///
-        reshapehelper rateshrink conformalpred hlmr2 twinmatch roisim ///
-        suppress riskscan undummy {
-        capture which `pkg'
-        if _rc net install `pkg', from("`BOOKPKG'/`pkg'-stata-public/") replace force
-    }
+*--- The packages built FOR this book -----------------------------------------*
+* All of these are published. Four are on SSC and install like any community
+* package; the rest install from the authors' GitHub with one net line each
+* (verified 2026-07-31).
+foreach pkg in projectbuilder combineall datadictionary reshapehelper {
+    capture which `pkg'
+    if _rc ssc install `pkg', replace
+}
+
+local gh "https://raw.githubusercontent.com/ericabooth"
+foreach pkg in cxchangelog rateshrink conformalpred hlmr2 twinmatch roisim ///
+    suppress riskscan undummy synthgen {
+    capture which `pkg'
+    if _rc net install `pkg', from("`gh'/`pkg'-stata-public/main/") replace force
 }
 
 di as result "Package setup complete."

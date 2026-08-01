@@ -4,9 +4,10 @@ d
 d A modern descsave. datadictionary builds an Excel codebook that puts each
 d variable's statistics, % missing, distinct count, common values, labels, and
 d notes side by side (one row per variable, or per variable-wave over time),
-d including the srctag char written by combineall/projectbuilder. Results go to
-d the screen, a machine-readable .dta, and a multi-sheet workbook, with clickable
-d links to open them. For a study run in waves, files() / folder() stack a
+d including the char[source] provenance stamp written by srctag and
+d combineall. Results go to the screen, a machine-readable .dta, and a
+d multi-sheet workbook, with clickable links to open them. For a study run
+d in waves, files() / folder() stack a
 d per-wave row per variable and add a "changed" column flagging any variable
 d whose label or category set shifted since the previous wave (only detectable
 d from the original wave files, since stitching destroys per-wave value labels).
