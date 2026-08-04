@@ -389,27 +389,173 @@ A Sankey diagram of participant movement through program phases (Intake $\righta
 \textbf{Use what exists:} the participant-flow picture, who moved from which status to which between waves, needs no new tool. Reshape the panel to one row per source-target-count flow (a \texttt{collapse} over consecutive-wave status pairs), and Asjad Naqvi's \texttt{sankey}, on SSC (\texttt{ssc install sankey}), draws the flow diagram natively in Stata. The reshape is a five-line job with this chapter's tools; the drawing is one command for the static report figure. When a manager needs to filter the picture, Chapter~\ref{ch:portals}'s \texttt{statashiny} renders the same flow data interactively; build the static one first.
 \end{kaobox}
 
-\section{Does this panel belong in a database?}\label{sec:ch06-database}
-Somewhere past the third linked file, someone will suggest moving the whole thing into a database and querying it back into Stata for analysis. You owe that suggestion a real answer rather than a reflex, and you can start by unbundling three decisions that people lump under one name. You will leave with seven questions you can put to the room: three name a limit that code cannot get around, and four have to hold before buying helps, so the meeting ends with a decision the team can repeat back rather than a preference. How results reach non-Stata readers is a delivery question, and Part~IV's dashboards and portals answer it with or without a database underneath. Who may see what is an access question, and folder permissions plus the de-identified extracts of Chapter~\ref{ch:sharing} answer it for a team where everyone with access is cleared for the data. Only the third decision, how the data are stored and combined, is actually a database question, and most small evaluation shops are better off staying in code.
+\section{Where should all these files live?}\label{sec:ch06-database}
+By now you have several files that describe the same program: a roster, a services log, a test-score export, a campus lookup. Somewhere past the third file, someone in a planning meeting will suggest moving the whole thing into a database. In this section we work out how to answer that, and we get there by building up from the question underneath it, which is how any two files should be put together in the first place. You will learn to name the level of a file, to choose between appending, merging, and Stata's frames, and to say in one sentence whether a database would actually help, because most small teams reach for a database when what they needed was a clearer answer to a much smaller question.
 
-The case for staying is not sentiment. \textcite{long2009workflow} built the workflow this book extends on one idea, that every step from raw file to result is recorded in an auditable chain of do-files, and a database strains that idea at its strongest point: a database stores the current answer, while the do-file chain stores the reasoning, the commented line where you can see which source wins and why. Changing a definition mid-project, which research does weekly, is one line and a rerun in code; in a database it is a structure edit, a reload, and a conversation with whoever owns the dashboard. \marginnote{The linked-tables argument for a database dissolved in Stata~16: frames and \texttt{frlink} let you keep tables at different levels and pull attributes across the link on demand, exactly the structure a database sells, already in memory.}And the costs run one way: storage is the cheapest thing in the shop and analyst time the most expensive, the license is the smallest line in a database budget, and the biggest line is the quarter-to-half of a salary for the person who keeps it running, a job that in a small shop otherwise falls, unfunded, to whoever was most enthusiastic in the meeting. The one discipline all of this depends on costs nothing and is already this book's rule: code makes data; people do not edit data.
+\subsection{First ask: one row per what?}\label{sec:ch06-grain}
+Every dataset answers a question you can ask in five words: one row per what? The roster has one row per student. The services log has one row per student per visit. The test-score export has one row per student per year per subject. The campus lookup has one row per campus. That answer is the file's \emph{level}\index{level of a dataset}, and naming it out loud before you touch a command is the single habit that prevents most multi-file trouble.\marginnote{Statisticians call this the unit of observation and database people call it the grain. The three names describe the same thing: what one row stands for.}
 
-To hold that position credibly, we have to be honest about the other side, where three limits are real walls. Stata works in memory, so when the largest file you routinely open stops fitting with room to merge, the work does not slow down, it stops. A person-triggered rebuild falls quietly behind data that arrive daily. And no amount of do-file discipline produces a log of which person read which rows, so a data-use agreement that demands one has made the decision for you. Table~\ref{tab:ch06-dbdecision} turns the choice into two groups of questions rather than a score, because the factors are not interchangeable: the first group are limits code cannot get around, the second are conditions that must all hold before buying helps. If you do buy, keep the build code as the source of truth and load \emph{cleaned} data into the database, never move the cleaning decisions into it; and never query it live from an analysis do-file. Have the database write files on a schedule and Stata read files, which keeps do-files portable and takes the fragile driver, the per-machine ODBC setup, and the single-sign-on dance off the critical path.\marginnote[-24mm]{A middle path worth knowing: DuckDB runs SQL over plain files with no server, no license, and nothing to administer, and handles joins bigger than memory. The robust arrangement is the same either way: let it write files and let every tool read files, rather than wiring tools to it live.}
+Level matters because it decides what combining two files even means. Put the roster next to the campus lookup and each student has exactly one campus, so the campuses can ride along beside the students. Put the roster next to the services log and each student has many visits, so there is no way to set them side by side without either duplicating each student's row once per visit or collapsing the visits down to one number per student. Neither is wrong; they answer different questions. What is wrong is doing one while believing you did the other, which is how a program with 400 students comes to report 1,900 of them.
+
+Stata will tell you the level of a file if you ask. \texttt{isid}\index{isid@\texttt{isid}} asserts that a variable, or a combination of them, identifies rows uniquely and stops the do-file if it does not:
+\par
+{\footnotesize
+\begin{verbatim}
+isid studentid                  // one row per student?
+isid studentid schoolyear       // one row per student-year?
+duplicates report studentid     // if not, how bad is it?
+\end{verbatim}
+}
+Run \texttt{isid} on every file the moment it arrives, and write the answer in a comment at the top of the do-file that reads it. That comment is worth more than it looks: it is the thing you will check first the day a merge produces a number nobody expected.
+
+\subsection{Three ways to put two files together}\label{sec:ch06-threeways}
+Once you can name the level of both files, the choice among the three ways to combine them mostly makes itself. Figure~\ref{fig:ch06-combine} lays them out, and Table~\ref{tab:ch06-combine} is the same decision in words.
+
+\emph{Append} stacks files on top of each other. Use it when the files have the same columns and different rows, which is what happens when an agency sends you one file per year. Three years of the same export become one file with a year variable, and the level does not change: one row per student-year going in, one row per student-year coming out.
+
+\emph{Merge} sets files side by side, matching rows by a shared key. Use it when the files describe the same units at the same level but contain different columns, or when one file is a lookup that each row of the other points to once. \texttt{merge 1:1 studentid} joins two student-level files; \texttt{merge m:1 campusid} attaches campus attributes to a student-level file, where the \texttt{m:1} says many students to one campus. The result is one dataset, wider than before.
+
+\emph{Frames} keep the files separate and let you look across. Use them when the two files sit at genuinely different levels and you want to keep both, or when you would otherwise merge the same lookup over and over. The next subsection explains what a frame is, since it is the one of the three that will be new to most readers.
+
+There is a fourth answer, and for a small team it is often the right one: do nothing yet. Two files that never need to be looked at together do not need to be combined at all.
 
 \begin{table*}[htbp]
 \centering
 \footnotesize
-\caption[The database decision in seven questions]{The database decision in seven questions. Any \enquote{yes} in the first group is a limit code cannot get around; only then do the second group's conditions matter, and every one must hold or the purchase makes things worse. No yes in the first group means the decision is finished: stay in code.}
-\label{tab:ch06-dbdecision}
-\begin{tabular}{p{9.8cm}p{4.2cm}}
+\caption[Append, merge, or frames]{Which of the three combining moves fits, given what you learned by asking \enquote{one row per what?} of both files.}
+\label{tab:ch06-combine}
+\begin{tabular}{@{}p{2.6cm}p{5.4cm}p{6.6cm}@{}}
 \hline
-\multicolumn{2}{p{14.2cm}}{\emph{Limits code cannot get around: any yes points to a database}} \\
+Move & Use it when & What you get \\
+\hline
+\texttt{append} & Same columns, different rows (one file per year) & One longer file at the same level \\
+\texttt{merge 1:1} & Same level, different columns & One wider file at the same level \\
+\texttt{merge m:1} & Many rows point to one lookup row & One wider file, lookup values repeated \\
+frames & Different levels, or the same lookup used repeatedly & Both files stay open at their own level \\
+\hline
+\end{tabular}
+\end{table*}
+
+\begin{figure*}[htbp]
+\centering
+\begin{tikzpicture}[node distance=0.5cm and 0.7cm]
+  \node[decision, text width=2.0cm] (same) {Same columns?};
+  \node[io, below=0.75cm of same] (app) {\texttt{append}};
+  \node[decision, right=1.5cm of same, text width=2.1cm] (level) {Same level?};
+  \node[io, below=0.75cm of level] (mrg) {\texttt{merge 1:1}\\or \texttt{m:1}};
+  \node[decision, right=1.5cm of level, text width=2.2cm] (keep) {Keep both levels?};
+  \node[io, below=0.75cm of keep] (frm) {frames};
+  \node[io, right=1.3cm of keep] (db) {see Table~\ref{tab:ch06-dbdecision}};
+
+  \draw[flow] (same) -- node[annot, left=1pt] {yes} (app);
+  \draw[flow] (same) -- node[annot, above] {no} (level);
+  \draw[flow] (level) -- node[annot, left=1pt] {yes} (mrg);
+  \draw[flow] (level) -- node[annot, above] {no} (keep);
+  \draw[flow] (keep) -- node[annot, left=1pt] {yes} (frm);
+  \draw[flow] (keep) -- node[annot, above, text width=1.6cm, align=center] {hits a wall} (db);
+\end{tikzpicture}
+\caption[Append, merge, frames, or a database]{The combining decision, left to right. Only after all three in-Stata moves fail does a database become the question, and Table~\ref{tab:ch06-dbdecision} is where that conversation belongs. Most teams never leave the first two boxes.}
+\label{fig:ch06-combine}
+\end{figure*}
+
+\subsection{Frames: a second dataset open at the same time}\label{sec:ch06-frames}
+For most of Stata's history you could hold exactly one dataset in memory, so combining files meant merging them whether you wanted one file or not. Stata~16 lifted that restriction with \emph{frames}\index{frames@frames (Stata)}. A frame is a named workspace with its own dataset loaded, and you can have several open at once. If it helps, picture a browser with several tabs: each tab has its own page loaded, one tab is in front, and you can switch without closing anything.
+
+Four commands cover nearly all of it, and you can read them as a sentence:
+\begin{itemize}
+    \item \texttt{frame create}\index{frame create@\texttt{frame create}} makes a new empty frame, and \texttt{frame put} copies variables into a new one.
+    \item \texttt{frame change} switches which frame you are working in, the way clicking a tab does.
+    \item \texttt{frame} \emph{name}\texttt{: }\emph{command} runs one command inside another frame without switching to it.
+    \item \texttt{frlink}\index{frlink@\texttt{frlink}} records how the rows of two frames correspond, and \texttt{frget}\index{frget@\texttt{frget}} copies variables across that link when you want them.
+\end{itemize}
+\texttt{frlink} is the one worth pausing on, because it is what makes frames different from a merge. It does not combine anything. It creates a link variable that remembers, for each row of the current frame, which row of the other frame it goes with. The two datasets stay at their own levels, and you pull values across only when you need them.\marginnote{The link survives \texttt{save} and reloads with the data, so a linked pair of frames can be rebuilt without redoing the matching.}
+
+Here is the whole idea on data you already have. Every woman in \texttt{nlsw88} works in one of twelve industries, so the women sit at one level and the industries at another. We want each woman's wage compared against her own industry's average, which is exactly the comparison that tempts people into a merge that duplicates rows. Start by building the industry-level file in its own frame:
+\par
+{\footnotesize
+\begin{verbatim}
+sysuse nlsw88, clear
+keep idcode industry wage union
+drop if missing(industry)          // 14 dropped, 2,232 women left
+
+frame put industry wage, into(indlevel)
+frame indlevel {
+    collapse (mean) ind_wage = wage (count) n_women = wage, by(industry)
+    format ind_wage %6.2f
+    list in 1/4, noobs abbrev(12)
+}
+\end{verbatim}
+}
+The \texttt{frame indlevel \{ \dots \}} block runs those three commands inside the new frame and then hands control back, leaving the women untouched in the original frame:
+\par
+{\footnotesize
+\begin{verbatim}
+  +--------------------------------------------+
+  |              industry   ind_wage   n_women |
+  |--------------------------------------------|
+  | Ag/Forestry/Fisheries       5.62        17 |
+  |                Mining      15.35         4 |
+  |          Construction       7.56        29 |
+  |         Manufacturing       7.50       367 |
+  +--------------------------------------------+
+\end{verbatim}
+}
+Twelve rows, one per industry. Now link the two levels and pull across only the two columns we want:
+\par
+{\footnotesize
+\begin{verbatim}
+frlink m:1 industry, frame(indlevel)
+frget ind_wage n_women, from(indlevel)
+\end{verbatim}
+}
+Stata reports \texttt{(all observations in frame default matched)} and then \texttt{(2 variables copied from linked frame)}. That first message is a free diagnostic and worth reading every time: it tells you no woman was left without an industry to compare against. With both columns in hand the question the team actually asked takes one line:
+\par
+{\footnotesize
+\begin{verbatim}
+gen above = wage > ind_wage if !missing(wage, ind_wage)
+tabulate above
+\end{verbatim}
+}
+\par
+{\footnotesize
+\begin{verbatim}
+      above |      Freq.     Percent        Cum.
+------------+-----------------------------------
+at or below |      1,442       64.61       64.61
+      above |        790       35.39      100.00
+------------+-----------------------------------
+      Total |      2,232      100.00
+\end{verbatim}
+}
+About a third of the women earn above their own industry's average, which is the shape you would expect when a few high earners pull each industry mean upward. The companion \texttt{ch06\_frames.do} runs this example end to end and asserts every count printed here, so you can rebuild it before trusting it.
+
+Notice what did not happen. The industry file never lost its level: it is still twelve rows, and if a reviewer asks how many women stand behind the mining average you can answer four, because \texttt{n\_women} came across with it. The women's file never gained rows. And when next quarter's extract arrives, the same two lines rebuild the comparison. A \texttt{merge m:1} would have produced the same \texttt{above} variable here, and for a one-off comparison it is a perfectly good choice; frames earn their place when you need that second level again later in the same do-file, when several lookups would each require their own merge, or when you want the industry table itself as an output rather than as scaffolding you discard.
+
+\subsection{When a database is the right call}\label{sec:ch06-dbcase}
+Now the meeting question can be answered properly. Someone proposes a database; you owe that a real answer rather than a reflex, and the way to give one is to unbundle three decisions that people lump under a single word.
+
+How results reach non-Stata readers is a \emph{delivery} question, and Part~IV's dashboards and portals answer it with or without a database underneath. Who may see what is an \emph{access} question, and folder permissions plus the de-identified extracts of Chapter~\ref{ch:sharing} answer it for a team where everyone with access is cleared for the data. Only the third decision, how the data are stored and combined, is actually a database question, and for most small evaluation shops the previous two subsections have already answered it.
+
+The case for staying in code is not sentiment. \textcite{long2009workflow} built the workflow this book extends on one idea, that every step from raw file to result is recorded in an auditable chain of do-files, and a database strains that idea at its strongest point: a database stores the current answer, while the do-file chain stores the reasoning, the commented line where you can see which source wins and why. Changing a definition mid-project, which research does weekly, is one line and a rerun in code; in a database it is a structure edit, a reload, and a conversation with whoever owns the dashboard. The costs also run one way. Storage is the cheapest thing in the shop and analyst time the most expensive, the license is the smallest line in a database budget, and the biggest line is the quarter-to-half of a salary for the person who keeps it running, a job that in a small shop otherwise falls, unfunded, to whoever was most enthusiastic in the meeting. The one discipline all of this depends on costs nothing and is already this book's rule: code makes data; people do not edit data.
+
+To hold that position credibly we have to be honest about the other side, where three limits are real walls. Stata works in memory, so when the largest file you routinely open stops fitting with room to merge, the work does not slow down, it stops. A person-triggered rebuild falls quietly behind data that arrive daily. And no amount of do-file discipline produces a log of which person read which rows, so a data-use agreement that demands one has made the decision for you.
+
+Table~\ref{tab:ch06-dbdecision} turns the choice into two groups of questions rather than a score, because the factors are not interchangeable: the first group are limits code cannot get around, the second are conditions that must all hold before buying helps. If you do buy, keep the build code as the source of truth and load \emph{cleaned} data into the database, never move the cleaning decisions into it; and never query it live from an analysis do-file. Have the database write files on a schedule and Stata read files, which keeps do-files portable and takes the fragile driver, the per-machine ODBC setup, and the single-sign-on dance off the critical path.\marginnote[-6mm]{A middle path worth knowing: DuckDB runs SQL over plain files with no server, no license, and nothing to administer, and handles joins bigger than memory. The robust arrangement is the same either way: let it write files and let every tool read files, rather than wiring tools to it live.}
+
+\begin{table*}[htbp]
+\centering
+\footnotesize
+\caption[The database decision in seven questions]{The database decision in seven questions, reached only after Figure~\ref{fig:ch06-combine} has ruled out appending, merging, and frames. Any \enquote{yes} in the first group is a limit code cannot get around; only then do the second group's conditions matter, and every one must hold or the purchase makes things worse. No yes in the first group means the decision is finished: stay in code.}
+\label{tab:ch06-dbdecision}
+\begin{tabular}{@{}p{9.8cm}p{4.2cm}@{}}
+\hline
+\multicolumn{2}{@{}p{14.2cm}@{}}{\emph{Limits code cannot get around: any yes points to a database}} \\
 \hline
 Does your largest working file crowd half the machine's memory? & Yes: a real wall \\
 Do data arrive faster than a person can rerun the build? & Yes: a real wall \\
 Does an agreement require a log of who read which rows? & Yes: a real wall \\
 \hline
-\multicolumn{2}{p{14.2cm}}{\emph{Conditions that must all hold before buying helps}} \\
+\multicolumn{2}{@{}p{14.2cm}@{}}{\emph{Conditions that must all hold before buying helps}} \\
 \hline
 Is a quarter to half of a salary funded, permanently, to run it? & No: fix this first \\
 Will researchers who know the variables still do the cleaning? & No: do not buy \\
