@@ -2669,12 +2669,12 @@
            given={Jennifer\bibnamedelima M.},
            giveni={J\bibinitperiod\bibinitdelim M\bibinitperiod},
            givenun=0}}%
-        {{un=0,uniquepart=base,hash=c271e6dd638994066846eb0ec13895d1}{%
+        {{un=1,uniquepart=given,hash=c271e6dd638994066846eb0ec13895d1}{%
            family={Lee},
            familyi={L\bibinitperiod},
            given={Benjamin},
            giveni={B\bibinitperiod},
-           givenun=0}}%
+           givenun=1}}%
       }
       \strng{namehash}{538ca965e5f280162824df198fab87da}
       \strng{fullhash}{269d9544127471620fde528f1802fff4}
@@ -3166,6 +3166,36 @@
       \verb{doi}
       \verb 10.1007/0-387-69505-2
       \endverb
+    \endentry
+    \entry{huber2023causal}{book}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=62023ef11c8c35aad6d9e4cf52411643}{%
+           family={Huber},
+           familyi={H\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Cambridge, MA}%
+      }
+      \list{publisher}{1}{%
+        {MIT Press}%
+      }
+      \strng{namehash}{62023ef11c8c35aad6d9e4cf52411643}
+      \strng{fullhash}{62023ef11c8c35aad6d9e4cf52411643}
+      \strng{bibnamehash}{62023ef11c8c35aad6d9e4cf52411643}
+      \strng{authorbibnamehash}{62023ef11c8c35aad6d9e4cf52411643}
+      \strng{authornamehash}{62023ef11c8c35aad6d9e4cf52411643}
+      \strng{authorfullhash}{62023ef11c8c35aad6d9e4cf52411643}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Causal Analysis: Impact Evaluation and Causal Machine Learning with Applications in {R}}
+      \field{year}{2023}
     \endentry
     \entry{hullman2011rhetoric}{article}{}
       \name{author}{2}{}{%
@@ -3818,6 +3848,35 @@
       \verb{doi}
       \verb 10.1037/met0000081
       \endverb
+    \endentry
+    \entry{lee2009bounds}{article}{}
+      \name{author}{1}{}{%
+        {{un=1,uniquepart=given,hash=95a248b56768f250923ee04ec474cf6c}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={David\bibnamedelima S.},
+           giveni={D\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=1}}%
+      }
+      \strng{namehash}{95a248b56768f250923ee04ec474cf6c}
+      \strng{fullhash}{95a248b56768f250923ee04ec474cf6c}
+      \strng{bibnamehash}{95a248b56768f250923ee04ec474cf6c}
+      \strng{authorbibnamehash}{95a248b56768f250923ee04ec474cf6c}
+      \strng{authornamehash}{95a248b56768f250923ee04ec474cf6c}
+      \strng{authorfullhash}{95a248b56768f250923ee04ec474cf6c}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Review of Economic Studies}
+      \field{number}{3}
+      \field{title}{Training, Wages, and Sample Selection: Estimating Sharp Bounds on Treatment Effects}
+      \field{volume}{76}
+      \field{year}{2009}
+      \field{pages}{1071\bibrangedash 1102}
+      \range{pages}{32}
     \endentry
     \entry{lei2018distribution}{article}{}
       \name{author}{5}{}{%
@@ -5574,6 +5633,35 @@
       \verb https://doi.org/10.6028/NIST.AI.100-1
       \endverb
     \endentry
+    \entry{tauchmann2014leebounds}{article}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=38f09c63499828818f57ef44d465722b}{%
+           family={Tauchmann},
+           familyi={T\bibinitperiod},
+           given={Harald},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{38f09c63499828818f57ef44d465722b}
+      \strng{fullhash}{38f09c63499828818f57ef44d465722b}
+      \strng{bibnamehash}{38f09c63499828818f57ef44d465722b}
+      \strng{authorbibnamehash}{38f09c63499828818f57ef44d465722b}
+      \strng{authornamehash}{38f09c63499828818f57ef44d465722b}
+      \strng{authorfullhash}{38f09c63499828818f57ef44d465722b}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Stata Journal}
+      \field{number}{4}
+      \field{title}{Lee (2009) Treatment-Effect Bounds for Nonrandom Sample Selection}
+      \field{volume}{14}
+      \field{year}{2014}
+      \field{pages}{884\bibrangedash 894}
+      \range{pages}{11}
+    \endentry
     \entry{trisovic2022code}{article}{}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=847c66c3c8a2d14adee00c7786662b86}{%
@@ -5802,6 +5890,36 @@
       \verb{url}
       \verb https://www.countyhealthrankings.org
       \endverb
+    \endentry
+    \entry{vanderweele2015explanation}{book}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=ba96229639c6eae3740881fb282dd436}{%
+           family={VanderWeele},
+           familyi={V\bibinitperiod},
+           given={Tyler\bibnamedelima J.},
+           giveni={T\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {Oxford University Press}%
+      }
+      \strng{namehash}{ba96229639c6eae3740881fb282dd436}
+      \strng{fullhash}{ba96229639c6eae3740881fb282dd436}
+      \strng{bibnamehash}{ba96229639c6eae3740881fb282dd436}
+      \strng{authorbibnamehash}{ba96229639c6eae3740881fb282dd436}
+      \strng{authornamehash}{ba96229639c6eae3740881fb282dd436}
+      \strng{authorfullhash}{ba96229639c6eae3740881fb282dd436}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Explanation in Causal Inference: Methods for Mediation and Interaction}
+      \field{year}{2015}
     \endentry
     \entry{kellogg2004logic}{report}{}
       \name{author}{1}{}{%
