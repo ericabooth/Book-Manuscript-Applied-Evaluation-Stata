@@ -127,19 +127,21 @@ automatic pass skips that step, and a one-line note names the install command.
 | `convertanything` | bulk-convert `01_raw/` to `.dta` in `01_raw/_converted/` | `net install convertanything, from("https://raw.githubusercontent.com/ericabooth/convertanything-stata-public/main/")` |
 | `combineall` | append/merge the converted files into the analytic file | `net install combineall, from("https://raw.githubusercontent.com/ericabooth/combineall-stata-public/main/")` |
 | `descsave` | codebook (.dta plus .xlsx) from `300_labels.do` | `ssc install descsave` |
-| `srctag` / `srcfind` | tag and search each variable's source lineage | author's GitHub |
-| `webdoc2` | render a richer `index.html` | `ssc install webdoc`, then `net install webdoc2` **and** `net get webdoc2` (author's GitHub) |
+| `srctag` / `srcfind` | tag and search each variable's source lineage | `net install srctag, from("https://raw.githubusercontent.com/ericabooth/srctag-stata-public/main/")` |
+| `datadictionary` | codebook workbook; harvests srctag's tags | `ssc install datadictionary` |
+| `webdoc2` | render a richer `index.html` | `ssc install webdoc`, then `net install webdoc2` (author's GitHub) |
 
-`webdoc2` needs one extra step: its renderer injects a `header.html` that
-webdoc2 ships as an *ancillary* file, so `net install webdoc2` does not place
-it. Run `net get webdoc2` as well — that drops `header.html` in your current
-directory — and move it somewhere on your adopath (PERSONAL is the usual place)
-so it is found from anywhere. `builddocs` looks for it before it renders and
-carries a copy into `_documentation/` for the duration.
+`webdoc2` needs no extra step: projectbuilder writes a self-contained
+`header_fallback.html` into every project's `_documentation/` on every run,
+and the render stages it automatically when webdoc2's own themed
+`header.html` is not installed. (Before v2.1.0 this took a manual `net get`
+plus an adopath move; that step is gone.)
 
-When `webdoc2` is absent, or its `header.html` cannot be found,
-`projectbuilder` writes a plain but complete `index.html` and `Readme.md`
-directly, so the documentation always exists.
+Run `projectbuilder check` to see every companion's status in one table,
+with clickable install commands.
+
+When `webdoc2` is absent, `projectbuilder` writes a plain but complete
+`index.html` and `Readme.md` directly, so the documentation always exists.
 
 ## Stored results
 
@@ -184,6 +186,35 @@ by naming the package folder:
 stata-mp -b do test_projectbuilder.do
 stata-mp -b do test_projectbuilder.do "/path/to/projectbuilder-stata-public"
 ```
+
+## Changes in 2.1.0
+
+- **Self-contained documentation render.** projectbuilder now writes
+  `header_fallback.html` into every project, and the generated `_runall.do`
+  stages it under the name webdoc2's `wdinit` looks for whenever no
+  `header.html` is installed — then removes it after the render. The old
+  requirement to `net get webdoc2` and move its ancillary `header.html`
+  onto the adopath is gone; a webdoc2 render succeeds with nothing
+  installed beyond `webdoc` and `webdoc2` themselves. The fallback header
+  has no CDN links, so rendered pages read correctly offline.
+- **`projectbuilder sitebuild`** scans a base folder for projects and
+  writes `projects_index.html` + `projects_index.md`: one catalog page
+  linking every project's documentation site with its recorded metadata.
+  A folder of isolated project sites becomes a browsable portfolio.
+- **`projectbuilder check`** prints one table covering every optional
+  companion — installed or missing, what it adds, and the exact install
+  command, clickable — replacing the install hints that were scattered
+  across five different moments of a run. Stores `r(missing)` and
+  `r(nmissing)` for scripts.
+- **Per-stage run log.** The generated control file's run-all block times
+  each pipeline stage and appends a line to `_documentation/run_log.txt`;
+  a failing stage is logged with its return code before the failure is
+  re-raised.
+- **Raw-file change report.** Every run records each raw file's `checksum`
+  in `_project_meta.txt`; a rebuild compares and prints how many raw files
+  are new, changed, and unchanged, naming the changed ones.
+- `sitebuild` and `check` are reserved words and cannot be used as project
+  names.
 
 ## Changes in 2.0.1
 

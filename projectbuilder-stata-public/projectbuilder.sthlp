@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 2.0.1 31jul2026 Eric A. Booth and Elizabeth Teas}{...}
+{* *! version 2.1.0 08aug2026 Eric A. Booth and Elizabeth Teas}{...}
 {vieweralsosee "[P] file" "help file"}{...}
 {vieweralsosee "[D] copy" "help copy"}{...}
 {viewerjumpto "Syntax"            "projectbuilder##syntax"}{...}
@@ -9,7 +9,9 @@
 {viewerjumpto "Workflow A"        "projectbuilder##wfA"}{...}
 {viewerjumpto "Workflow B"        "projectbuilder##wfB"}{...}
 {viewerjumpto "Optional dependencies" "projectbuilder##deps"}{...}
+{viewerjumpto "Subcommands"       "projectbuilder##subcommands"}{...}
 {viewerjumpto "What gets built"   "projectbuilder##scaffold"}{...}
+{viewerjumpto "Platform notes"    "projectbuilder##platform"}{...}
 {viewerjumpto "Recorded metadata" "projectbuilder##meta"}{...}
 {viewerjumpto "Your data in memory" "projectbuilder##memory"}{...}
 {viewerjumpto "Characters in option values" "projectbuilder##chars"}{...}
@@ -35,6 +37,12 @@ into one analytic file, and build a documentation page.{p_end}
 {p 8 17 2}
 {cmd:projectbuilder} {it:Source}[{cmd:/}{it:Subsource}] [{cmd:,} {it:options}]
 
+{p 8 17 2}
+{cmd:projectbuilder} {cmd:sitebuild} [{cmd:,} {opt path(folder)} {opt title(text)}]
+
+{p 8 17 2}
+{cmd:projectbuilder} {cmd:check}
+
 {pstd}
 {it:Source}[{cmd:/}{it:Subsource}] is one token. Enclose it in quotation marks
 if it contains a space; an unquoted second word is rejected with error 198
@@ -42,7 +50,8 @@ rather than folded into the folder name. Leading and trailing spaces are
 trimmed; interior ones are kept, in the folder name and in {cmd:r(project)}.
 On macOS and Windows, where the filesystem ignores case, a name differing from
 an existing project only in case is the same project and trips the 602
-guard.{p_end}
+guard. {cmd:sitebuild} and {cmd:check} are reserved words, so a project
+cannot take either as its name.{p_end}
 
 {synoptset 27 tabbed}{...}
 {synopthdr}
@@ -232,12 +241,13 @@ updates either way.{p_end}
 
 {phang}
 {opt builddocs} renders {cmd:_documentation/website/index.html} with
-{cmd:webdoc2} if it is installed. Documentation is always built either way; this
-option only makes it prettier. The render runs {cmd:_documentation/_runall.do},
-so its output appears in your log, and a render that fails part way -- most
-often because the {cmd:webdoc2} package directory is not on the adopath -- will
-print its own error there. That failure is caught: the built-in
-{cmd:index.html} is kept and the run still succeeds.{p_end}
+{cmd:webdoc2} if it is installed. Documentation is always built either way;
+this option only makes it prettier. The render needs nothing beyond webdoc2
+itself: projectbuilder writes {cmd:header_fallback.html} into every project,
+and the render stages it automatically when webdoc2's own themed header is
+not installed. The render runs {cmd:_documentation/_runall.do}, so its output
+appears in your log, and a failure is caught: the built-in {cmd:index.html}
+is kept and the run still succeeds.{p_end}
 
 {phang}
 {opt noautoconvert} skips the automatic {cmd:convertanything} and
@@ -369,24 +379,23 @@ and appear only when you run it.{p_end}
 {p2colreset}{...}
 
 {pstd}
-{bf:webdoc2 needs one extra step.} Its renderer injects a file called
-{cmd:header.html}, and webdoc2 ships that as an {it:ancillary} file, so
-{cmd:net install webdoc2} does not place it:{p_end}
+{bf:webdoc2 needs no extra step.} Its renderer injects a header file, and
+projectbuilder writes one -- {cmd:header_fallback.html} -- into every
+project's {cmd:_documentation/} on every run. When webdoc2's own themed
+{cmd:header.html} is installed (on the adopath, or dropped into
+{cmd:_documentation/}), the render uses that instead; the fallback is
+self-contained (no CDN links), so the page reads correctly offline and inside
+networks that block external fetches. To install the renderer:{p_end}
 
 {cmd}{...}
         . ssc install webdoc
         . net install webdoc2, from("https://raw.githubusercontent.com/ericabooth/webdoc2-stata-public/main/") replace
-        . net get webdoc2, from("https://raw.githubusercontent.com/ericabooth/webdoc2-stata-public/main/") replace
 {txt}{...}
 
 {pstd}
-The last line drops {cmd:header.html} into your current directory. {opt builddocs}
-looks for it there, and on the adopath, before it renders, and carries a copy
-into {cmd:_documentation/} for the duration of the render. Put it somewhere on
-your adopath -- your PERSONAL directory is the usual place -- and it will be
-found from anywhere. Without it the render stops, {cmd:projectbuilder} says so
-and names this remedy, and the built-in {cmd:website/index.html} is left
-untouched.{p_end}
+(Before v2.1.0 the render also required fetching webdoc2's ancillary
+{cmd:header.html} by hand and placing it on the adopath; that step is
+gone.){p_end}
 
 {pstd}
 {bf:Keep non-data files out of }{cmd:01_raw/}{bf:.} The automatic pass hands
@@ -414,6 +423,39 @@ The convert-then-combine chain is the heart of {cmd:200_data_management.do}:
 When {cmd:webdoc2} is absent, {cmd:projectbuilder} writes a plain but complete
 {cmd:index.html} and {cmd:Readme.md} directly, so the documentation always
 exists.{p_end}
+
+
+{marker subcommands}{...}
+{title:Subcommands}
+
+{pstd}
+{bf:projectbuilder sitebuild} makes a folder of projects into a browsable
+portfolio. It scans a base directory ({opt path()}; default the current
+one) for project folders -- anything holding
+{cmd:_documentation/_project_meta.txt} -- and writes
+{cmd:projects_index.html} and {cmd:projects_index.md} at the base: one
+catalog page with each project's name, description, topic, creation date,
+public-facing flag, and a link to its documentation site. {opt title()}
+names the page (default "Project catalog"). Rerun it after any project
+changes; it stores {cmd:r(nprojects)} and {cmd:r(catalog)}. A folder
+without the metadata file is skipped, so mixed directories are fine:{p_end}
+
+{cmd}{...}
+        . projectbuilder sitebuild, path("~/projects") title("Team portfolio")
+{txt}{...}
+
+{pstd}
+{bf:projectbuilder check} prints one table covering every optional
+companion: installed or missing, what it adds, and the exact install
+command, clickable. This replaces the install hints that v2.0.1 scattered
+across five different moments in a run. It stores the missing names in
+{cmd:r(missing)} and their count in {cmd:r(nmissing)}, so a setup script
+can act on the answer:{p_end}
+
+{cmd}{...}
+        . projectbuilder check
+        . if r(nmissing) > 0 di as err "companions missing: `r(missing)'"
+{txt}{...}
 
 
 {marker scaffold}{...}
@@ -444,6 +486,8 @@ After {cmd:projectbuilder MyProject} you have:{p_end}
         |   +-- index.do             webdoc2 source
         |   +-- _runall.do           renders website/index.html
         |   +-- _project_meta.txt    recorded metadata, read back on rebuild
+        |   +-- header_fallback.html self-contained render header (derived)
+        |   +-- run_log.txt          per-stage runtimes (written by run_all)
         |   +-- Readme.md
         |   +-- website/index.html
         |   +-- _archive/
@@ -462,7 +506,11 @@ place with no copy kept. Move anything you want to keep before running
 absolute path of the new folder (one loudly commented line to edit if the
 project ever moves), derives {cmd:$raw}, {cmd:$converted}, {cmd:$cleaned},
 {cmd:$output}, {cmd:$code}, and {cmd:$docs} from it, and ends with a run-all
-block over the numbered pipeline.{p_end}
+block over the numbered pipeline. The run-all block times each stage and
+appends one line per stage to {cmd:_documentation/run_log.txt}, so every
+full pipeline run leaves a dated build history; a stage that fails is
+logged with its return code, the log file is closed, and the failure is
+re-raised.{p_end}
 
 {pstd}
 The version pin is {cmd:version 16.0}, this package's own floor, not the release
@@ -493,6 +541,15 @@ topic, it re-reads the recorded one. To clear a value, delete it from
 directly.{p_end}
 
 {pstd}
+The same file also holds one {cmd:rawsig=} line per raw file: the file's
+{helpb checksum}, recorded on every run. On a {opt rebuild},
+{cmd:projectbuilder} compares against last run's record and prints how many
+raw files are new, changed, and unchanged, naming the changed ones -- so a
+refreshed extract that silently swapped a file announces itself. The lines
+are regenerated each run; there is nothing in them to maintain by
+hand.{p_end}
+
+{pstd}
 The {cmd:Created} row of the documentation is the date of the first scaffold,
 carried in the same file, so a rebuild does not restamp it with today. The date
 and time of the current build appear separately in the footer line of
@@ -517,6 +574,29 @@ you may have edited {cmd:index.do} yourself. Add {opt replace} to bring
 hand edits: an edit to {cmd:index.do} reaches {cmd:index.html} only when
 {opt builddocs} renders it with {cmd:webdoc2}, whereas an edit to the generated
 {cmd:index.html} is overwritten by the next call.{p_end}
+
+
+{marker platform}{...}
+{title:Platform notes}
+
+{pstd}
+{cmd:projectbuilder} makes no shell call on any platform: every folder,
+do-file, and page is made with Stata's own {helpb mkdir}, {helpb copy},
+and {help file:file write}, and directory existence is tested with Mata's
+{bf:direxists()}. The same command therefore behaves the same on Windows,
+macOS, and Linux, including headless Linux servers running batch
+jobs.{p_end}
+
+{pstd}
+Paths may be typed with forward slashes everywhere; Stata accepts them on
+Windows too, and the generated files use them throughout. A Windows drive
+letter ({cmd:C:...}) and a UNC-style lead are recognized as absolute in
+{opt path()}. On macOS and Windows the filesystem ignores case, so project
+names differing only in case are the same project (see the 602 guard
+above); on Linux they are distinct. The raw-file change report uses
+Stata's built-in {helpb checksum}, which is platform-independent, so a
+project moved across operating systems reports its raw files as unchanged
+when they are in fact unchanged.{p_end}
 
 
 {marker memory}{...}
@@ -775,9 +855,13 @@ installed:{p_end}
 {synopt:{cmd:r(nraw)}}number of files in {cmd:01_raw/}{p_end}
 {synopt:{cmd:r(nconverted)}}number of {cmd:.dta} files in {cmd:01_raw/_converted/}{p_end}
 {synopt:{cmd:r(rebuilt)}}1 if this call refreshed an existing project, else 0{p_end}
+{synopt:{cmd:r(nprojects)}}({cmd:sitebuild}) projects cataloged{p_end}
+{synopt:{cmd:r(nmissing)}}({cmd:check}) companions not installed{p_end}
 {p2col 5 16 20 2: Macros}{p_end}
 {synopt:{cmd:r(project)}}project label (slashes become underscores){p_end}
 {synopt:{cmd:r(path)}}absolute path of the project folder{p_end}
+{synopt:{cmd:r(catalog)}}({cmd:sitebuild}) path of the catalog page{p_end}
+{synopt:{cmd:r(missing)}}({cmd:check}) names of the missing companions{p_end}
 {p2colreset}{...}
 
 

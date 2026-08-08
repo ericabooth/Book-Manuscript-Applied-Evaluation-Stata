@@ -1120,54 +1120,204 @@ global pkgroot `"`PK'"'
 adopath ++ "$pkgroot"
 
 di as text "{hline 70}"
-di as text "TEST ee: builddocs renders into website/, or says why it could not"
+di as text "TEST ee: builddocs renders into website/ with NO header install step"
 di as text "{hline 70}"
-* Two bugs lived here.  webdoc2 writes index.html BESIDE index.do, so the
-* rendered page never reached website/index.html -- which is the page the run
-* points you at and the one the built-in fallback writes.  And the generated
-* _runall.do swallowed webdoc2's error, so every render reported success.
-*
-* The render also needs webdoc2's header.html, which webdoc2 ships as an
-* ANCILLARY file: -net install webdoc2- never places it.  _runall.do therefore
-* looks for it before it cd's into _documentation/ and borrows a copy.
+* v2.0.1 history: webdoc2 wrote index.html beside index.do (never reaching
+* website/), _runall.do swallowed the error, and the render depended on
+* webdoc2's header.html being fetched and moved onto the adopath by hand.
+* v2.1.0 promise: projectbuilder writes header_fallback.html into every
+* project, index.do falls back to it, and a webdoc2 render succeeds with
+* nothing installed beyond webdoc2 itself.
 mkdir "$work/_docs"
 local pwd_before `"`c(pwd)'"'
 quietly cd "$work/_docs"
 
 projectbuilder Rendered, description("builddocs check") topic("docs")
 
+* the fallback header is written on every run, unconditionally
+confirm file "Rendered/_documentation/header_fallback.html"
+* _runall.do stages the fallback under the name wdinit looks for
+loadlines "Rendered/_documentation/_runall.do"
+quietly count if strpos(v1, `"copy "header_fallback.html" "header.html""')
+assert r(N) == 1
+
 capture which webdoc2
 local havewd2 = (_rc == 0)
-capture findfile "header.html"
-local havehdr = (_rc == 0)
 
 capture noisily projectbuilder Rendered, rebuild builddocs
 assert _rc == 0                              // never fatal, either way
 confirm file "Rendered/_documentation/website/index.html"
 
-if `havewd2' & `havehdr' {
-    * The render should have succeeded and landed in website/.
+if `havewd2' {
+    * With webdoc2 installed the render must succeed -- header.html on the
+    * adopath or not; that independence is the point of the fallback.
     loadlines "Rendered/_documentation/website/index.html"
-    quietly count if strpos(lower(v1), "bootstrap")
-    assert r(N) >= 1                         // it is the webdoc2 page ...
     quietly count if strpos(v1, "Install webdoc2 for a richer")
-    assert r(N) == 0                         // ... not the built-in fallback
-    * and the borrowed header was not left lying in the project
+    assert r(N) == 0                         // not the built-in page
+    * webdoc2's own header (bootstrap theme) or our fallback -- one of the
+    * two headers must be in the rendered page
+    quietly count if strpos(lower(v1), "bootstrap") | ///
+        strpos(v1, "header_fallback.html -- written by projectbuilder")
+    assert r(N) >= 1
+    * projectbuilder never writes webdoc2's reserved header name
     capture confirm file "Rendered/_documentation/header.html"
     assert _rc != 0
-    di as text "  webdoc2 rendered into website/index.html"
+    di as text "  webdoc2 rendered into website/index.html with no extra install"
 }
 else {
-    * Without webdoc2, or without its header.html, the built-in page must
-    * survive intact -- that is the whole promise of the fallback.
+    * Without webdoc2 the built-in page must survive intact.
     loadlines "Rendered/_documentation/website/index.html"
     quietly count if strpos(v1, "Install webdoc2 for a richer")
     assert r(N) == 1
-    di as text "  (webdoc2/header.html unavailable; checked the fallback instead)"
+    di as text "  (webdoc2 unavailable; checked the built-in fallback instead)"
 }
 quietly cd `"`pwd_before'"'
 
 di as text ""
 di as text "{hline 70}"
-di as text "projectbuilder v2.0.1: ALL TESTS PASSED"
+di as text "TEST ff: check reports every companion in one table"
+di as text "{hline 70}"
+projectbuilder check
+assert inrange(r(nmissing), 0, 7)
+local nm : word count `r(missing)'
+assert `nm' == r(nmissing)
+* takes no options
+capture noisily projectbuilder check, whatever
+assert _rc == 198
+di as text "  check ran; `nm' companion(s) missing on this machine"
+
+di as text ""
+di as text "{hline 70}"
+di as text "TEST gg: sitebuild catalogs every project under a base folder"
+di as text "{hline 70}"
+mkdir "$work/_site"
+local pwd_before `"`c(pwd)'"'
+quietly cd "$work/_site"
+projectbuilder SiteAlpha, description("first catalog entry") topic("alpha")
+projectbuilder SiteBeta,  description("second catalog entry") publicfacing(yes)
+mkdir "NotAProject"                          // no meta file: must be skipped
+projectbuilder sitebuild
+assert r(nprojects) == 2
+confirm file "projects_index.html"
+confirm file "projects_index.md"
+loadlines "projects_index.html"
+quietly count if strpos(v1, "SiteAlpha")
+assert r(N) >= 1
+quietly count if strpos(v1, "first catalog entry")
+assert r(N) >= 1
+quietly count if strpos(v1, "NotAProject")
+assert r(N) == 0
+* path() form works from anywhere, and title() reaches the page
+quietly cd `"`pwd_before'"'
+projectbuilder sitebuild, path("$work/_site") title("Team portfolio")
+assert r(nprojects) == 2
+loadlines "$work/_site/projects_index.html"
+quietly count if strpos(v1, "Team portfolio")
+assert r(N) >= 1
+* a base that is not a directory errors clearly
+capture noisily projectbuilder sitebuild, path("$work/_site/nope")
+assert _rc == 601
+di as text "  sitebuild cataloged 2 projects and skipped the impostor"
+
+di as text ""
+di as text "{hline 70}"
+di as text "TEST hh: run_all logs per-stage runtimes to run_log.txt"
+di as text "{hline 70}"
+mkdir "$work/_runlog"
+local pwd_before `"`c(pwd)'"'
+quietly cd "$work/_runlog"
+projectbuilder Timed, description("run log check")
+* give stages 300+ an analytic file to read, so the whole pipeline runs
+* even without the optional converters installed -- and give stage 200
+* something in 01_raw/ so the converters have work when they ARE installed
+preserve
+sysuse auto, clear
+quietly export delimited using "Timed/01_raw/auto.csv", replace
+quietly save "Timed/02_cleaned/Timed_analytic.dta", replace
+restore
+* flip the run_all switch in the generated control file
+filefilter "Timed/_code/000_control.do" "Timed/_code/000_control_run.do", ///
+    from("local run_all 0") to("local run_all 1") replace
+local genpwd `"`c(pwd)'"'
+capture noisily do "Timed/_code/000_control_run.do"
+local runrc = _rc
+adopath ++ "$pkgroot"              // control's -clear all- dropped the addition
+quietly cd `"`genpwd'"'
+assert `runrc' == 0
+confirm file "Timed/_documentation/run_log.txt"
+* restore the helper that -clear all- dropped
+capture program drop loadlines
+program define loadlines
+    import delimited using `0', clear delimiters("`=char(1)'", asstring) ///
+        varnames(nonames) bindquote(nobind) encoding("utf-8")
+end
+loadlines "Timed/_documentation/run_log.txt"
+quietly count if strpos(v1, "pipeline run")
+assert r(N) == 1
+foreach stg in 100_data_download 300_labels 600_analysis {
+    quietly count if strpos(v1, "`stg'")
+    assert r(N) == 1
+}
+quietly count if strpos(v1, "FAILED")
+assert r(N) == 0
+* a second run APPENDS rather than overwrites
+capture noisily do "Timed/_code/000_control_run.do"
+adopath ++ "$pkgroot"
+quietly cd `"`genpwd'"'
+assert _rc == 0
+capture program drop loadlines
+program define loadlines
+    import delimited using `0', clear delimiters("`=char(1)'", asstring) ///
+        varnames(nonames) bindquote(nobind) encoding("utf-8")
+end
+loadlines "Timed/_documentation/run_log.txt"
+quietly count if strpos(v1, "pipeline run")
+assert r(N) == 2
+quietly cd `"`pwd_before'"'
+di as text "  run_log.txt holds a timed line per stage, appending run over run"
+
+di as text ""
+di as text "{hline 70}"
+di as text "TEST ii: a rebuild reports raw files as new, changed, or unchanged"
+di as text "{hline 70}"
+mkdir "$work/_sigs"
+local pwd_before `"`c(pwd)'"'
+quietly cd "$work/_sigs"
+projectbuilder Sigged, description("checksum check")
+* first data drop: two files
+preserve
+sysuse auto, clear
+quietly export delimited using "Sigged/01_raw/a.csv", replace
+quietly export delimited using "Sigged/01_raw/b.csv", replace
+restore
+quietly projectbuilder Sigged, rebuild
+* the record landed in the metadata file
+loadlines "Sigged/_documentation/_project_meta.txt"
+quietly count if strpos(v1, "rawsig=")
+assert r(N) == 2
+* untouched rebuild: both unchanged
+capture noisily projectbuilder Sigged, rebuild
+assert _rc == 0
+* change one file, add a third
+preserve
+sysuse bplong, clear
+quietly export delimited using "Sigged/01_raw/b.csv", replace
+quietly export delimited using "Sigged/01_raw/c.csv", replace
+restore
+tempfile sigout
+quietly log using "`sigout'.log", text name(sigcheck)
+capture noisily projectbuilder Sigged, rebuild
+quietly log close sigcheck
+assert _rc == 0
+loadlines "`sigout'.log"
+quietly count if strpos(v1, "1 new, 1 changed, 1 unchanged")
+assert r(N) >= 1
+quietly count if strpos(v1, "changed:") & strpos(v1, "b.csv")
+assert r(N) >= 1
+quietly cd `"`pwd_before'"'
+di as text "  change report named the changed file and counted the rest"
+
+di as text ""
+di as text "{hline 70}"
+di as text "projectbuilder v2.1.0: ALL TESTS PASSED"
 di as text "{hline 70}"

@@ -1,4 +1,4 @@
-*! version 2.0.1  31jul2026  Eric A. Booth, Sr Researcher, Texas 2036
+*! version 2.1.0  08aug2026  Eric A. Booth, Sr Researcher, Texas 2036
 *!                           Elizabeth Teas, Sr Research Scientist, Far Harbor, LLC
 *! projectbuilder -- scaffold a data-analysis project folder with a
 *!                   numbered do-file pipeline, then (optionally) ingest
@@ -11,9 +11,33 @@
 *! Cross-OS: uses only Stata's mkdir, copy, cd, and file commands;
 *! no shell calls.  Companion to "Applied Program Evaluation Using Stata".
 *! Support: eric.a.booth@gmail.com
+*!
+*! v2.1.0: the webdoc2 render is self-contained (a fallback header ships
+*!         inside every project, so no net get / adopath step); new
+*!         -sitebuild- subcommand writes a catalog page across projects;
+*!         new -check- subcommand reports every optional companion in one
+*!         table; the generated control file logs per-stage runtimes; raw
+*!         files are checksummed so a rebuild reports new/changed/unchanged.
 
 program define projectbuilder, rclass
     version 16
+
+    * ---- subcommands: sitebuild, check -----------------------------------
+    * Dispatched before -syntax- so they need no project name.  A project
+    * literally named "sitebuild" or "check" cannot be scaffolded; both are
+    * reserved words now, which the help file says out loud.
+    gettoken pbfirst pbrest : 0, parse(" ,")
+    if lower(`"`pbfirst'"') == "sitebuild" {
+        pb_sitebuild `pbrest'
+        return add
+        exit
+    }
+    if lower(`"`pbfirst'"') == "check" {
+        pb_check `pbrest'
+        return add
+        exit
+    }
+
     syntax anything(name=projspec id="source[/subsource]") [, ///
         PATH(string)         ///
         DEScription(string)  ///
@@ -289,6 +313,7 @@ program define projectbuilder, rclass
     * description, topic, and the rest instead of replacing them with
     * placeholders.  An option given on this call always wins.
     local metaf `"`docs'/_project_meta.txt"'
+    local nrawsig = 0
     capture confirm file `"`metaf'"'
     if _rc == 0 {
         tempname mfh
@@ -299,6 +324,15 @@ program define projectbuilder, rclass
                 if regexm(`"`macval(mline)'"', "^([a-z]+)=(.*)$") {
                     local mkey = regexs(1)
                     local mval = regexs(2)
+                    * rawsig lines carry last run's raw-file checksums
+                    * ("<checksum> <filename>"); collect them for the change
+                    * report and skip the metadata parking below.
+                    if "`mkey'" == "rawsig" {
+                        local ++nrawsig
+                        local rawsig`nrawsig' `"`macval(mval)'"'
+                        file read `mfh' mline
+                        continue
+                    }
                     * A recorded value goes straight back into a local, so it
                     * must not be re-expanded on the way: -local x `"`mval'"'-
                     * ate a recorded $ (silently, then wrote the damaged text
@@ -401,7 +435,7 @@ program define projectbuilder, rclass
         quietly file open `fh' using `"`code'/000_control.do"', write text replace
         pb_wl `fh' `"*==============================================================="'
         pb_wl `fh' `"* 000_control.do -- `proj_label'"'
-        pb_wl `fh' `"* Created `created' by `author' (scaffolded by projectbuilder v2.0.1)"'
+        pb_wl `fh' `"* Created `created' by `author' (scaffolded by projectbuilder v2.1.0)"'
         pb_wl `fh' `"* Last built `lastbuilt'"'
         pb_wl `fh' `"* `descfull'"'
         pb_wl `fh' `"* The control file: every path in one place."'
@@ -438,12 +472,31 @@ program define projectbuilder, rclass
         pb_wl `fh' `"*---------------------------------------------------------------"'
         pb_wl `fh' `"local run_all 0    // flip to 1 to run every numbered step"'
         pb_wl `fh' `"if ~Brun_all' {"'
-        pb_wl `fh' `"    do "~Dcode/100_data_download.do""'
-        pb_wl `fh' `"    do "~Dcode/200_data_management.do""'
-        pb_wl `fh' `"    do "~Dcode/300_labels.do""'
-        pb_wl `fh' `"    do "~Dcode/400_data_profiler.do""'
-        pb_wl `fh' `"    do "~Dcode/500_aggregation.do""'
-        pb_wl `fh' `"    do "~Dcode/600_analysis.do""'
+        pb_wl `fh' `"    * Each stage is timed, and the runtimes append to"'
+        pb_wl `fh' `"    * _documentation/run_log.txt -- a free build history."'
+        pb_wl `fh' `"    tempname rl"'
+        pb_wl `fh' `"    capture confirm file "~Ddocs/run_log.txt""'
+        pb_wl `fh' `"    if _rc file open ~Brl' using "~Ddocs/run_log.txt", write text replace"'
+        pb_wl `fh' `"    else   file open ~Brl' using "~Ddocs/run_log.txt", write text append"'
+        pb_wl `fh' `"    file write ~Brl' "---- pipeline run ~Bc(current_date)' ~Bc(current_time)' ----" _n"'
+        pb_wl `fh' `"    foreach stg in 100_data_download 200_data_management 300_labels ///"'
+        pb_wl `fh' `"                   400_data_profiler 500_aggregation 600_analysis {"'
+        pb_wl `fh' `"        timer clear 99"'
+        pb_wl `fh' `"        timer on 99"'
+        pb_wl `fh' `"        * capture, so a failing stage is LOGGED and the log file is"'
+        pb_wl `fh' `"        * closed before the failure is re-raised (still fails hard)."'
+        pb_wl `fh' `"        capture noisily do "~Dcode/~Bstg'.do""'
+        pb_wl `fh' `"        local stagerc = _rc"'
+        pb_wl `fh' `"        timer off 99"'
+        pb_wl `fh' `"        quietly timer list 99"'
+        pb_wl `fh' `"        if ~Bstagerc' {"'
+        pb_wl `fh' `"            file write ~Brl' "~Bstg'  FAILED r(~Bstagerc') after " %8.1f (r(t99)) " s" _n"'
+        pb_wl `fh' `"            file close ~Brl'"'
+        pb_wl `fh' `"            error ~Bstagerc'"'
+        pb_wl `fh' `"        }"'
+        pb_wl `fh' `"        file write ~Brl' "~Bstg'  " %8.1f (r(t99)) " s" _n"'
+        pb_wl `fh' `"    }"'
+        pb_wl `fh' `"    file close ~Brl'"'
         pb_wl `fh' `"}"'
         file close `fh'
     }
@@ -683,9 +736,12 @@ program define projectbuilder, rclass
         pb_wl `fh' `"* Build it with:  webdoc2 "index.do"   (see _runall.do)"'
         pb_wl `fh' `"* Content subcommands: wdinit, wputh1, wput (edit freely)."'
         pb_wl `fh' `""'
-        pb_wl `fh' `"* wdinit injects webdoc2's header.html, which it locates with findfile"'
-        pb_wl `fh' `"* -- so header.html has to be on the adopath or in the directory this"'
-        pb_wl `fh' `"* renders from.  _runall.do takes care of that; see the note there."'
+        pb_wl `fh' `"* wdinit injects a header file it locates with -findfile-.  If"'
+        pb_wl `fh' `"* webdoc2's own header.html is installed (adopath or this folder),"'
+        pb_wl `fh' `"* it wins; otherwise _runall.do stages header_fallback.html --"'
+        pb_wl `fh' `"* which projectbuilder writes into this folder on every run --"'
+        pb_wl `fh' `"* under the name wdinit looks for.  Either way the render has a"'
+        pb_wl `fh' `"* header, with no extra install step."'
         pb_wl `fh' `"wdinit index, replace"'
         pb_wl `fh' `"wputh1 `proj_label'"'
         pb_wl `fh' `"wput `descfull'"'
@@ -707,6 +763,10 @@ program define projectbuilder, rclass
         pb_wl `fh' `"* Prettier docs use webdoc2 (author's GitHub; needs -ssc install webdoc-)."'
         pb_wl `fh' `"* projectbuilder always writes website/index.html directly as a"'
         pb_wl `fh' `"* fallback; this renders the webdoc2 version when it is available."'
+        pb_wl `fh' `"* The header the render injects is settled inside index.do: webdoc2's"'
+        pb_wl `fh' `"* own header.html when installed, else the header_fallback.html that"'
+        pb_wl `fh' `"* projectbuilder writes into this folder on every run.  Nothing needs"'
+        pb_wl `fh' `"* to be fetched or moved onto the adopath."'
         pb_wl `fh' `"capture which webdoc2"'
         pb_wl `fh' `"if _rc {"'
         pb_wl `fh' `"    di as txt "webdoc2 not installed; using the built-in website/index.html.""'
@@ -718,36 +778,22 @@ program define projectbuilder, rclass
         pb_wl `fh' `"    * rather than taken from ~Ddocs: projectbuilder runs this file"'
         pb_wl `fh' `"    * itself under -builddocs-, and at that point 000_control.do has"'
         pb_wl `fh' `"    * not run, so ~Ddocs is undefined."'
-        pb_wl `fh' `"    * wdinit finds webdoc2's header.html with -findfile-, i.e. on the"'
-        pb_wl `fh' `"    * adopath or in the current directory.  webdoc2 ships header.html as"'
-        pb_wl `fh' `"    * an ANCILLARY file, so -net install webdoc2- never places it and"'
-        pb_wl `fh' `"    * -net get webdoc2- leaves it in whatever directory you were in."'
-        pb_wl `fh' `"    * Since the render happens from _documentation/, look for it HERE,"'
-        pb_wl `fh' `"    * before the cd, and carry a copy over if we found one.  Passing it"'
-        pb_wl `fh' `"    * through wdinit's headerfile() is not an option: that goes through"'
-        pb_wl `fh' `"    * findfile too, so it takes a findable NAME, not a path."'
-        pb_wl `fh' `"    local hf """'
-        pb_wl `fh' `"    capture findfile "header.html""'
-        pb_wl `fh' `"    if !_rc {"'
-        pb_wl `fh' `"        local hf "~Br(fn)'""'
-        pb_wl `fh' `"        if substr("~Bhf'", 1, 1) != "/" & !regexm("~Bhf'", "^[a-zA-Z]:") {"'
-        pb_wl `fh' `"            local hf "~Bc(pwd)'/~Bhf'"   // absolute: we are about to cd"'
-        pb_wl `fh' `"        }"'
-        pb_wl `fh' `"    }"'
-        pb_wl `fh' `""'
         pb_wl `fh' `"    local here "`docs'""'
         pb_wl `fh' `"    cd "~Bhere'""'
-        pb_wl `fh' `""'
-        pb_wl `fh' `"    * Borrow header.html only if this folder does not already have one,"'
-        pb_wl `fh' `"    * and put it back the way we found it afterwards."'
-        pb_wl `fh' `"    local borrowed 0"'
-        pb_wl `fh' `"    capture confirm file "header.html""'
-        pb_wl `fh' `"    if _rc & "~Bhf'" != "" {"'
-        pb_wl `fh' `"        capture copy "~Bhf'" "header.html""'
-        pb_wl `fh' `"        if !_rc local borrowed 1"'
+        pb_wl `fh' `"    * No header.html anywhere?  Stage the fallback projectbuilder"'
+        pb_wl `fh' `"    * wrote into this folder under the name wdinit's -findfile-"'
+        pb_wl `fh' `"    * looks for, and remove it again after the render.  Staging by"'
+        pb_wl `fh' `"    * copy (rather than wdinit's headerfile() option) works on every"'
+        pb_wl `fh' `"    * webdoc2 version in the field."'
+        pb_wl `fh' `"    local staged 0"'
+        pb_wl `fh' `"    capture findfile "header.html""'
+        pb_wl `fh' `"    if _rc {"'
+        pb_wl `fh' `"        capture copy "header_fallback.html" "header.html""'
+        pb_wl `fh' `"        if !_rc local staged 1"'
         pb_wl `fh' `"    }"'
         pb_wl `fh' `"    capture noisily webdoc2 "index.do""'
         pb_wl `fh' `"    local wrc = _rc"'
+        pb_wl `fh' `"    if ~Bstaged' capture erase "header.html""'
         pb_wl `fh' `"    if ~Bwrc' {"'
         pb_wl `fh' `"        di as txt "webdoc2 render skipped; the built-in website/index.html remains.""'
         pb_wl `fh' `"    }"'
@@ -763,7 +809,6 @@ program define projectbuilder, rclass
         pb_wl `fh' `"            local wrc = 603"'
         pb_wl `fh' `"        }"'
         pb_wl `fh' `"    }"'
-        pb_wl `fh' `"    if ~Bborrowed' capture erase "header.html""'
         pb_wl `fh' `"    * Hand the outcome back: projectbuilder decides what to report from"'
         pb_wl `fh' `"    * this file's return code, so swallowing it here made every render"'
         pb_wl `fh' `"    * look successful."'
@@ -835,6 +880,56 @@ program define projectbuilder, rclass
 
     * ---- count raw files -------------------------------------------------
     pb_count nraw `"`raw'"' "*"
+
+    * ---- raw-file change report ------------------------------------------
+    * Every run records each raw file's checksum as a rawsig= line in
+    * _project_meta.txt; a rebuild compares against last run's record and
+    * says which files are new, changed, and unchanged -- a lightweight
+    * cousin of -project-'s (SSC) dependency tracking.
+    capture local rawlist : dir `"`raw'"' files "*"
+    if _rc local rawlist ""
+    local nnew  = 0
+    local nchg  = 0
+    local nsame = 0
+    local chgnames ""
+    local nsigout = 0
+    foreach f of local rawlist {
+        if substr(`"`macval(f)'"', 1, 1) == "." continue
+        capture quietly checksum `"`raw'/`macval(f)'"'
+        if _rc continue
+        local crc `"`r(checksum)'"'
+        local ++nsigout
+        local sigout`nsigout' `"`crc' `macval(f)'"'
+        local status "new"
+        forvalues j = 1/`nrawsig' {
+            gettoken scrc sfn : rawsig`j'
+            local sfn = strtrim(`"`macval(sfn)'"')
+            if `"`macval(sfn)'"' == `"`macval(f)'"' {
+                local status = cond(`"`scrc'"' == `"`crc'"', "same", "changed")
+                continue, break
+            }
+        }
+        if "`status'" == "new"     local ++nnew
+        if "`status'" == "same"    local ++nsame
+        if "`status'" == "changed" {
+            local ++nchg
+            local chgnames `"`chgnames' `macval(f)'"'
+        }
+    }
+    if `exists' & `nrawsig' > 0 {
+        di as txt "projectbuilder: raw files vs last run: `nnew' new, `nchg' changed, `nsame' unchanged"
+        if `nchg' > 0 di as txt `"                changed:`chgnames'"'
+    }
+    if `nsigout' > 0 {
+        tempname mfs
+        capture file open `mfs' using `"`metaf'"', write text append
+        if _rc == 0 {
+            forvalues j = 1/`nsigout' {
+                file write `mfs' "rawsig=" `"`macval(sigout`j')'"' _n
+            }
+            file close `mfs'
+        }
+    }
 
     *=====================================================================*
     * AUTO-PASS: convertanything -> combineall over 01_raw/               *
@@ -920,6 +1015,10 @@ program define projectbuilder, rclass
     *=====================================================================*
     local built_stamp `"`today' `c(current_time)'"'
 
+    * The fallback header is a derived artifact, rewritten every run, so the
+    * webdoc2 render always has a header to inject with no install step.
+    pb_fallbackheader `"`docs'/header_fallback.html"' `"`proj_label'"'
+
     pb_docs `"`web'/index.html"' `"`docs'/Readme.md"' `"`raw'"' `"`converted'"' `"`cleaned'"' ///
         , project(`"`proj_label'"') date(`"`created'"') author(`"`author'"') ///
           desc(`"`descfull'"') url(`"`url_show'"') topic(`"`topic_show'"') ///
@@ -949,18 +1048,7 @@ program define projectbuilder, rclass
             if `renderrc' {
                 di as txt "                webdoc2 render did not finish (r(`renderrc')); the built-in"
                 di as txt "                website/index.html is unchanged and still complete."
-                * By far the most common cause: webdoc2 ships header.html as an
-                * ancillary file, so -net install- alone never places it.
-                capture findfile "header.html"
-                if _rc {
-                    di as txt "                webdoc2's header.html is not on the adopath. It is an"
-                    di as txt "                ancillary file, so install it separately:"
-                    di as txt `"                  net get webdoc2, from("`gh'/webdoc2-stata-public/main/") replace"'
-                    di as txt "                then move header.html somewhere on your adopath"
-                    di as txt "                (PERSONAL is the usual place) so it is found from"
-                    di as txt "                any directory."
-                }
-                else di as txt `"                To see why, run: do "`docs'/_runall.do""'
+                di as txt `"                To see why, run: do "`docs'/_runall.do""'
             }
             else di as txt "                rendered."
         }
@@ -974,7 +1062,7 @@ program define projectbuilder, rclass
         pb_unesc `m' `"``m''"'
     }
     di as txt _n "{hline 66}"
-    di as txt "projectbuilder OK  (v2.0.1)"
+    di as txt "projectbuilder OK  (v2.1.0)"
     di as txt `"  Project       : `proj_label'"'
     di as txt `"  Location      : `target'"'
     di as txt `"  Description   : `macval(descfull)'"'
@@ -1237,7 +1325,7 @@ program define pb_docs
     pb_htmllist `fh' `"`rawd'"'   "*"      "Raw files (01_raw/)"
     pb_htmllist `fh' `"`convd'"'  "*.dta"  "Converted files (01_raw/_converted/)"
     pb_htmllist `fh' `"`cleand'"' "*.dta"  "Analytic files (02_cleaned/)"
-    file write `fh' `"<p class="muted">Built `macval(stamp)' by projectbuilder v2.0.1."' _n
+    file write `fh' `"<p class="muted">Built `macval(stamp)' by projectbuilder v2.1.0."' _n
     file write `fh' " Install webdoc2 for a richer rendering.</p>" _n
     file write `fh' "</body></html>" _n
     file close `fh'
@@ -1259,7 +1347,7 @@ program define pb_docs
     pb_mdlist `fh' `"`rawd'"'   "*"     "Raw files (01_raw/)"
     pb_mdlist `fh' `"`convd'"'  "*.dta" "Converted files (01_raw/_converted/)"
     pb_mdlist `fh' `"`cleand'"' "*.dta" "Analytic files (02_cleaned/)"
-    file write `fh' _n `"_Built `macval(md_stamp)' by projectbuilder v2.0.1._"' _n
+    file write `fh' _n `"_Built `macval(md_stamp)' by projectbuilder v2.1.0._"' _n
     file close `fh'
 end
 
@@ -1307,4 +1395,223 @@ program define pb_mdlist
     }
     if !`any' file write `fh' "- (none yet)" _n
     file write `fh' _n
+end
+
+
+* --- pb_fallbackheader: write the self-contained header the webdoc2 render
+*     falls back on.  Injected into <head> by wdinit when webdoc2's own
+*     header.html is not installed.  No CDN links: the page must be readable
+*     offline and inside an agency network that blocks external fetches.
+program define pb_fallbackheader
+    version 16
+    gettoken hf 0 : 0
+    gettoken proj 0 : 0
+    tempname fh
+    quietly file open `fh' using `"`hf'"', write text replace
+    file write `fh' "<!-- header_fallback.html -- written by projectbuilder v2.1.0." _n
+    file write `fh' "     Used by index.do's wdinit only when webdoc2's own header.html" _n
+    file write `fh' "     is not installed.  Rewritten on every projectbuilder run; put" _n
+    file write `fh' "     customizations in a header.html instead (it wins). -->" _n
+    file write `fh' `"<meta charset="utf-8">"' _n
+    file write `fh' `"<meta name="viewport" content="width=device-width, initial-scale=1">"' _n
+    file write `fh' "<style>" _n
+    file write `fh' "body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;" _n
+    file write `fh' "max-width:860px;margin:2rem auto;padding:0 1rem;line-height:1.55;color:#1a1a2e}" _n
+    file write `fh' "h1{margin-bottom:.3rem;color:#1b2d55} h2{color:#1b2d55;border-bottom:2px solid #d44500;" _n
+    file write `fh' "padding-bottom:.2rem} h3{color:#1b2d55}" _n
+    file write `fh' "a{color:#2b6cb0} table{border-collapse:collapse;margin:1rem 0}" _n
+    file write `fh' "th,td{text-align:left;padding:.3rem .8rem;border-bottom:1px solid #dee2e6;vertical-align:top}" _n
+    file write `fh' "pre{background:#f5f7fa;border:1px solid #dee2e6;border-radius:4px;padding:.8rem;" _n
+    file write `fh' "overflow-x:auto;font-size:.9rem;line-height:1.4}" _n
+    file write `fh' "code{background:#f5f7fa;padding:.1rem .3rem;border-radius:3px;font-size:.9em}" _n
+    file write `fh' ".stinp{color:#1b2d55;font-weight:600} .stoup{color:#1a1a2e}" _n
+    file write `fh' ".muted{color:#6c7a8d;font-size:.9rem}" _n
+    file write `fh' "</style>" _n
+    file close `fh'
+end
+
+* --- pb_sitebuild: the cross-project catalog.  Scans a base directory for
+*     project folders (anything holding _documentation/_project_meta.txt),
+*     reads each project's recorded metadata, and writes projects_index.html
+*     and projects_index.md at the base -- one page that links every
+*     project's documentation site.  This is the piece that makes a folder
+*     of projectbuilder projects into a browsable portfolio.
+program define pb_sitebuild, rclass
+    version 16
+    syntax [, PATH(string) TITLE(string)]
+
+    foreach o in path title {
+        if strpos(`"`macval(`o')'"', char(96)) {
+            di as err "projectbuilder sitebuild: `o'() may not contain a backtick"
+            exit 198
+        }
+    }
+
+    local base `"`c(pwd)'"'
+    if `"`path'"' != "" local base `"`path'"'
+    local isabs = 0
+    if inlist(substr(`"`base'"', 1, 1), "/", "\") local isabs = 1
+    if regexm(`"`base'"', "^[a-zA-Z]:")           local isabs = 1
+    if !`isabs' local base `"`c(pwd)'/`base'"'
+    if inlist(substr(`"`base'"', -1, 1), "/", "\") ///
+        local base = substr(`"`base'"', 1, strlen(`"`base'"') - 1)
+    pb_isdir okdir `"`base'"'
+    if !`okdir' {
+        di as err `"projectbuilder sitebuild: `base' is not a directory"'
+        exit 601
+    }
+    if `"`title'"' == "" local title "Project catalog"
+
+    capture local dirs : dir `"`base'"' dirs "*"
+    if _rc local dirs ""
+
+    local stamp `"`c(current_date)' `c(current_time)'"'
+    tempname hh mm
+    quietly file open `hh' using `"`base'/projects_index.html"', write text replace
+    quietly file open `mm' using `"`base'/projects_index.md"',   write text replace
+
+    * html head (same look as the per-project fallback pages)
+    file write `hh' "<!doctype html>" _n
+    file write `hh' `"<html lang="en"><head><meta charset="utf-8">"' _n
+    file write `hh' `"<meta name="viewport" content="width=device-width, initial-scale=1">"' _n
+    local etitle = subinstr(`"`title'"', "&", "&amp;", .)
+    local etitle = subinstr(`"`etitle'"', "<", "&lt;", .)
+    file write `hh' `"<title>`etitle'</title>"' _n
+    file write `hh' "<style>" _n
+    file write `hh' "body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;" _n
+    file write `hh' "max-width:1000px;margin:2rem auto;padding:0 1rem;line-height:1.5;color:#1a1a2e}" _n
+    file write `hh' "h1{margin-bottom:.2rem;color:#1b2d55} table{border-collapse:collapse;margin:1rem 0;width:100%}" _n
+    file write `hh' "th,td{text-align:left;padding:.35rem .8rem;border-bottom:1px solid #dee2e6;vertical-align:top}" _n
+    file write `hh' "th{border-bottom:2px solid #1b2d55} a{color:#2b6cb0}" _n
+    file write `hh' ".muted{color:#6c7a8d;font-size:.9rem}</style></head><body>" _n
+    file write `hh' `"<h1>`etitle'</h1>"' _n
+    file write `hh' "<table>" _n
+    file write `hh' "<tr><th>Project</th><th>Description</th><th>Topic</th><th>Created</th><th>Public-facing</th><th>Docs</th></tr>" _n
+
+    file write `mm' `"# `title'"' _n _n
+    file write `mm' "| Project | Description | Topic | Created | Public-facing | Docs |" _n
+    file write `mm' "|---------|-------------|-------|---------|---------------|------|" _n
+
+    local np = 0
+    foreach d of local dirs {
+        if substr(`"`macval(d)'"', 1, 1) == "." continue
+        if inlist(`"`macval(d)'"', "_archive", "_code", "_documentation") continue
+        local mf `"`base'/`macval(d)'/_documentation/_project_meta.txt"'
+        capture confirm file `"`mf'"'
+        if _rc continue
+        local ++np
+        * read this project's recorded metadata
+        foreach k in description topic created publicfacing {
+            local p_`k' ""
+        }
+        tempname pf
+        capture file open `pf' using `"`mf'"', read text
+        if _rc == 0 {
+            file read `pf' pline
+            while r(eof) == 0 {
+                if regexm(`"`macval(pline)'"', "^([a-z]+)=(.*)$") {
+                    local pkey = regexs(1)
+                    local pval = regexs(2)
+                    if !strpos(`"`macval(pval)'"', char(96)) {
+                        foreach k in description topic created publicfacing {
+                            if "`pkey'" == "`k'" & `"`p_`k''"' == "" ///
+                                local p_`k' : copy local pval
+                        }
+                    }
+                }
+                file read `pf' pline
+            }
+            file close `pf'
+        }
+        * the docs link, only if the page is actually there
+        local dlink ""
+        capture confirm file `"`base'/`macval(d)'/_documentation/website/index.html"'
+        if !_rc local dlink `"`macval(d)'/_documentation/website/index.html"'
+        * escape for each output
+        foreach k in description topic created publicfacing {
+            local h_`k' = subinstr(`"`macval(p_`k')'"', "&", "&amp;", .)
+            local h_`k' = subinstr(`"`macval(h_`k')'"', "<", "&lt;",  .)
+            local h_`k' = subinstr(`"`macval(h_`k')'"', ">", "&gt;",  .)
+            local m_`k' = subinstr(`"`macval(p_`k')'"', "|", "\|",    .)
+            local m_`k' = subinstr(`"`macval(m_`k')'"', "<", "&lt;",  .)
+        }
+        local hd = subinstr(`"`macval(d)'"', "&", "&amp;", .)
+        local hd = subinstr(`"`hd'"', "<", "&lt;", .)
+        file write `hh' `"<tr><td><b>`hd'</b></td><td>`macval(h_description)'</td><td>`macval(h_topic)'</td><td>`macval(h_created)'</td><td>`macval(h_publicfacing)'</td>"' _n
+        if `"`dlink'"' != "" file write `hh' `"<td><a href="`dlink'">site</a></td></tr>"' _n
+        else                 file write `hh' `"<td class="muted">(not built)</td></tr>"' _n
+        local md = subinstr(`"`macval(d)'"', "|", "\|", .)
+        if `"`dlink'"' != "" local mlink `"[site](`dlink')"'
+        else                 local mlink "(not built)"
+        file write `mm' `"| `macval(md)' | `macval(m_description)' | `macval(m_topic)' | `macval(m_created)' | `macval(m_publicfacing)' | `mlink' |"' _n
+    }
+    if `np' == 0 {
+        file write `hh' `"<tr><td colspan="6" class="muted">(no projectbuilder projects found under this folder)</td></tr>"' _n
+        file write `mm' "| (none found) | | | | | |" _n
+    }
+    file write `hh' "</table>" _n
+    file write `hh' `"<p class="muted">Built `stamp' by projectbuilder v2.1.0 sitebuild. Rerun after any project changes.</p>"' _n
+    file write `hh' "</body></html>" _n
+    file close `hh'
+    file write `mm' _n `"_Built `stamp' by projectbuilder v2.1.0 sitebuild._"' _n
+    file close `mm'
+
+    di as txt "projectbuilder sitebuild: " as res `np' as txt " project(s) cataloged"
+    di as txt `"  Catalog: `base'/projects_index.html (+ projects_index.md)"'
+    return scalar nprojects = `np'
+    return local catalog `"`base'/projects_index.html"'
+end
+
+* --- pb_check: one table for every optional companion -- installed or not,
+*     what it adds, and the exact install command, clickable.  This replaces
+*     five install hints scattered across five different moments.
+program define pb_check, rclass
+    version 16
+    syntax [, *]
+    if `"`options'"' != "" {
+        di as err "projectbuilder check: takes no options"
+        exit 198
+    }
+    local gh "https://raw.githubusercontent.com/ericabooth"
+
+    di as txt "{hline 74}"
+    di as txt "projectbuilder check -- optional companions (none are required)"
+    di as txt "{hline 74}"
+    local missing ""
+    local nmiss = 0
+
+    * name : what it adds : install line(s), | separated
+    local c1 `"convertanything|bulk-converts 01_raw/ to .dta|net install convertanything, from("`gh'/convertanything-stata-public/main/") replace"'
+    local c2 `"combineall|appends converted files into the analytic file|net install combineall, from("`gh'/combineall-stata-public/main/") replace"'
+    local c3 `"descsave|codebook export from 300_labels.do|ssc install descsave"'
+    local c4 `"srctag|per-variable source lineage (with srcfind)|net install srctag, from("`gh'/srctag-stata-public/main/") replace"'
+    local c5 `"srcfind|searches the lineage srctag writes|net install srctag, from("`gh'/srctag-stata-public/main/") replace"'
+    local c6 `"datadictionary|codebook workbook; harvests srctag's tags|ssc install datadictionary"'
+    local c7 `"webdoc2|prettier documentation render|net install webdoc2, from("`gh'/webdoc2-stata-public/main/") replace"'
+
+    forvalues j = 1/7 {
+        gettoken cname crest : c`j', parse("|")
+        gettoken bar   crest : crest, parse("|")
+        gettoken cwhat crest : crest, parse("|")
+        gettoken bar   crest : crest, parse("|")
+        local cinst `"`crest'"'
+        capture which `cname'
+        if _rc == 0 {
+            di as txt "  " %-16s "`cname'" as res "installed  " as txt "`cwhat'"
+        }
+        else {
+            di as txt "  " %-16s "`cname'" as err "missing    " as txt "`cwhat'"
+            di as txt _col(30) `"{stata `"`cinst'"':`cinst'}"'
+            if "`cname'" == "webdoc2" ///
+                di as txt _col(30) `"{stata "ssc install webdoc":ssc install webdoc}  (webdoc2 builds on it)"'
+            local ++nmiss
+            local missing "`missing' `cname'"
+        }
+    }
+    di as txt "{hline 74}"
+    if `nmiss' == 0 di as txt "  All companions are installed."
+    else di as txt "  Each install line above is clickable. projectbuilder works without them."
+    local missing : list retokenize missing
+    return local  missing  "`missing'"
+    return scalar nmissing = `nmiss'
 end
