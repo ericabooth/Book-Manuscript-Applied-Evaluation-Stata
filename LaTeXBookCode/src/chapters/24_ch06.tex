@@ -201,6 +201,152 @@ The message names the count of offending rows, the do-file stops at the exact li
 \subsection{Flagging a known-bad year, not smoothing it}\label{sec:ch06-pollutedyear}
 Sometimes the data is bad for a known reason, and flagging that period tells your reader more than smoothing over it does. The 2016 Texas STAAR results are the standing example: a vendor transition and a cut-score change corrupted that year's comparability, so we mark 2016 explicitly in the pipeline and keep the caveat attached to it rather than letting a bad year masquerade as a data point (Appendix~\ref{app:walkthroughs}). Document the flag today and you spare next year's analyst a wrong finding, because in a replicable pipeline a trap you found once stays found. The flag marks a real event: the 2016 STAAR online-testing failure hit tens of thousands of students, whose sessions were disrupted or answers lost, and the state ultimately excluded the affected results from that year's accountability ratings. Write the flag into the data as a variable so it survives every merge, because a caveat stored only in a memo dies at the first append.
 
+\section{One workflow carries the year files to a panel that explains itself}\label{sec:ch06-ecosystem}
+Each tool in this book so far solved one problem in isolation: a folder layout in Chapter~\ref{ch:workshop}, a converter and a stacker in Chapter~\ref{ch:noapi}, a codebook in Chapter~\ref{ch:surveys}, lineage tags in Section~\ref{sec:lineage}. A real project meets all of those problems in the same week, so this section connects the tools into one workflow and walks it end to end on a small, complete example. The workflow extends the discipline \textcite{long2009workflow} built for a single analyst's do-files out into the parts of a project Long's book could take as given and an evaluation shop cannot: metadata that must survive years of merges, column names that drift across vintages, extracts that arrive with undocumented surprises, and a reviewer who needs to correct the record without touching the data. Figure~\ref{fig:ch06-ecosystem} shows the whole route on one page; everything below runs it for real, and the companion do-file \texttt{ch06\_provenance.do} reruns every step with assertions attached.
+
+\begin{figure*}[p]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[font=\footnotesize, node distance=9mm]
+% ---- main spine, top to bottom ----
+\node[io, text width=5.4cm] (raw) at (0,0) {three yearly releases arrive:\\\texttt{wages\_2019.csv} $\cdot$ \texttt{wages\_2020.xlsx}\\$\cdot$ \texttt{wages\_2021.dta}};
+\node[stage, text width=5.2cm, below=of raw] (pb) {\texttt{projectbuilder}\\folders, numbered do-files,\\a documentation page};
+\node[stage, text width=5.2cm, below=of pb] (conv) {\texttt{convertanything}\\every raw file becomes \texttt{.dta}};
+\node[stage, text width=5.2cm, below=of conv] (comb) {\texttt{combineall} with \texttt{map()}\\stack the years, rename drifted\\columns, stamp \texttt{char[source]}};
+\node[stage, text width=5.2cm, below=of comb] (rule) {the rulebook (built-ins)\\\texttt{confirm} $\cdot$ \texttt{isid} $\cdot$ \texttt{assert}\\refuse bad data loudly};
+\node[stage, text width=5.2cm, below=of rule] (tag) {\texttt{srctag} \& \texttt{srctag sign}\\agency, vintage, caveats,\\then a data signature};
+\node[stage, text width=5.2cm, below=of tag] (doc) {\texttt{datadictionary}\\\texttt{codebook.xlsx} for people,\\\texttt{relabel.do} for the data};
+\node[io, text width=4.6cm, below=of doc] (human) {a person reads the codebook\\and spots a wrong vintage};
+\node[stage, text width=5.2cm, below=of human] (find) {\texttt{srcfind} \& \texttt{srctag verify}\\answer the provenance question;\\audit for untagged variables};
+\node[io, text width=4.6cm, below=of find] (panel) {analysis-ready panel\\\texttt{xtset id year} (\S\ref{sec:xtset})};
+\draw[flow] (raw) -- (pb);
+\draw[flow] (pb) -- (conv);
+\draw[flow] (conv) -- (comb);
+\draw[flow] (comb) -- (rule);
+\draw[flow] (rule) -- (tag);
+\draw[flow] (tag) -- (doc);
+\draw[flow] (doc) -- (human);
+\draw[flow] (human) -- (find);
+\draw[flow] (find) -- (panel);
+% ---- review loop, right side ----
+\node[substep, text width=4.4cm, right=18mm of human] (loop) {the review loop:\\1. \texttt{srcfind, saving()} exports the tags as an editable file\\2. the reviewer corrects values in that file\\3. \texttt{srctag apply} folds them back, guarded and receipted\\4. \texttt{srctag sign} restamps; the codebook and \texttt{relabel.do} regenerate};
+\draw[flow, dashed] (human.east) -- (loop.west);
+\draw[flow, dashed] (loop.north) |- (tag.east);
+% ---- data round trip, left side ----
+\node[substep, text width=4.0cm, left=16mm of doc] (trip) {the data round trip:\\export a bare CSV to a collaborator in R, Python, or Excel; on return, \texttt{relabel.do} restores every label and tag (\S\ref{sec:datadictionary-roundtrip})};
+\draw[flow, dashed] (doc.west) -- (trip.east);
+% ---- chapter guideposts ----
+\node[annot, right=14mm of pb]   {Chapter~\ref{ch:workshop}, \S\ref{sec:ch02-projectbuilder}};
+\node[annot, right=14mm of conv] {Chapter~\ref{ch:noapi}};
+\node[annot, right=14mm of comb] {Chapter~\ref{ch:noapi}, \S\ref{sec:ch04-combine}};
+\node[annot, right=14mm of rule] {this chapter, \S\ref{sec:lineage}ff.};
+\node[annot, left=14mm of tag]   {this chapter, \S\ref{sec:lineage}};
+\node[annot, left=14mm of doc, yshift=13mm]  {Chapter~\ref{ch:surveys}, \S\ref{sec:datadictionary}};
+\end{tikzpicture}%
+}
+\caption[The provenance workflow on one page]{The whole workflow on one page. The spine runs top to bottom: yearly files in mixed formats become one organized, harmonized, tagged, documented, and verified panel, and every stage is one command from a package this book teaches (the rulebook stage uses only Stata built-ins). The two dashed side-paths are the loops real projects live in. On the right, a reviewer corrects the metadata itself and \texttt{srctag apply} folds the corrections back under the same overwrite guard the tags were written with. On the left, the data travel to a collaborator as a bare CSV and come home with every label and tag restored by the generated \texttt{relabel.do}. The margin notes name the chapter that teaches each stage in depth.}
+\label{fig:ch06-ecosystem}
+\end{figure*}
+
+\subsection{Three files, three formats, one silent rename}
+The example is small enough to read in one sitting and shaped like the real thing. A workforce agency sends a wage extract every year: 2019 arrives as a CSV, 2020 as an Excel workbook, and 2021 as a Stata file, because the person exporting it changed and so did their habits. Worse, the 2021 release renames \texttt{hours} to \texttt{hrs\_weekly} without telling anyone. That rename is the schema drift of the previous section wearing its most common disguise, and the workflow has to catch it, fix it, and write down that it fixed it.
+
+One command organizes the project and ingests the drop (Chapter~\ref{ch:workshop} covers everything it builds):
+\par
+{\footnotesize
+\begin{verbatim}
+. projectbuilder TWCwages, data("drop")                        ///
+      description("TWC annual wage extracts, one row per worker per year") ///
+      topic("wages") publicfacing(no) timeline("annual")       ///
+      outcomes(wage hours) over(year)
+\end{verbatim}
+}
+The automatic pass converts all three formats to \texttt{.dta} and appends them, and the append is exactly where the rename bites: the naive stack carries both \texttt{hours} and \texttt{hrs\_weekly}, each with a year-shaped hole. A one-line check makes the damage visible instead of leaving it for a referee:
+\par
+{\footnotesize
+\begin{verbatim}
+. use "TWCwages/02_cleaned/TWCwages_analytic.dta", clear
+. count if missing(hours)
+  40
+\end{verbatim}
+}
+Forty rows, which is every 2021 observation. The fix is one small text file and one rerun. The rename map is a CSV a reviewer can read, with a year window so the rename applies only where it is true; \texttt{combineall} extracts each file's year from its name, applies the windowed rename, stacks the years, and stamps each renamed variable's origin into \texttt{char[source]} as it goes (\S\ref{sec:ch04-combine} teaches the mechanics):
+\par
+{\footnotesize
+\begin{verbatim}
+. type renames.csv
+oldname,newname,firstyear,lastyear
+hrs_weekly,hours,2021,2021
+
+. combineall using "TWCwages/02_cleaned/TWCwages_analytic",   ///
+      cmethod(append) directory("TWCwages/01_raw/_converted") ///
+      filetype(dta) map("renames.csv") replace
+
+Harmonization table (X = data present in that year):
+
+variable                  2019  2020  2021
+------------------------------------------
+id                           X     X     X
+wage                         X     X     X
+hours                        X     X     X
+
+combineall: 3 file(s), 120 observations, 4 variables, years 2019 2020 2021
+\end{verbatim}
+}
+The table is the receipt: every variable now has data in every year, and the rename decision lives in two places at once, the human-readable map file and the machine-readable stamp on the variable itself. This is the moment to run the rulebook of the previous section, \texttt{confirm}, \texttt{isid}, and \texttt{assert}, so next year's surprise stops the pipeline instead of polluting it.
+
+\subsection{Tag, sign, and hand the codebook to a person}
+The stamps say which file each variable came from; they do not yet say which agency, which vintage, or what to watch out for. \texttt{srctag} adds those, and \texttt{srctag sign} stores a fingerprint of the data so a tag that outlives the data it described gets caught (\S\ref{sec:lineage}):
+\par
+{\footnotesize
+\begin{verbatim}
+. srctag wage hours, agency(TWC) dataset(annual wage extract) vintage(2019-2021)
+. srctag id, source(assigned at intake) notes(stable across years)
+. srctag year, source(derived by combineall from the filenames)
+. srctag sign
+\end{verbatim}
+}
+Two commands then turn the tagged file into documentation. The first writes a codebook workbook a reviewer can open without Stata, with each variable's lineage in its own column; the second writes \texttt{relabel.do}, the file that restores every label and tag after the data round-trip through a collaborator's R, Python, or Excel (\S\ref{sec:datadictionary} and \S\ref{sec:datadictionary-roundtrip}):
+\par
+{\footnotesize
+\begin{verbatim}
+. datadictionary, excel("TWCwages/_documentation/TWCwages_codebook.xlsx") replace
+. datadictionary, dofile("TWCwages/_code/310_relabel.do") replace
+\end{verbatim}
+}
+
+\subsection{The review loop: correcting the record without touching the data}
+Now the part most pipelines skip. A reviewer reads the codebook and notices the vintage is too coarse: the extracts are quarterly files, so \enquote{2019-2021} should read \enquote{2019q1-2021q4}. The correction belongs in the tags, not the data, and it should go through the same guarded door the tags came in through. \texttt{srcfind}'s \texttt{saving()} exports every tag as an editable dataset, one row per variable per tag; the reviewer fixes the value column in that file; \texttt{srctag apply} folds the file back in and accounts for every row:
+\par
+{\footnotesize
+\begin{verbatim}
+. srcfind , all noreport saving("TWCwages/_documentation/lineage.dta", replace)
+. * ... the reviewer corrects the vintage rows in lineage.dta ...
+. srctag apply using "TWCwages/_documentation/lineage.dta", replace
+srctag apply: 2 tag(s) applied, 8 already current
+              the data are signed; rerun srctag sign to restamp the
+              signing time over the edited tags
+\end{verbatim}
+}
+The receipt is the point. Two rows changed, eight were already current, and nothing was overwritten silently; without \texttt{replace}, the two changes would have been held back and named. The hint in the last line is the discipline that keeps the record honest: re-sign, then regenerate the codebook and \texttt{relabel.do}, because a relabel file generated before the correction would restore the wrong vintage on the next data round trip.
+
+\subsection{The payoff: a panel that answers for itself}
+Months later, the meeting question from Section~\ref{sec:lineage} arrives, and the panel answers it directly:
+\par
+{\footnotesize
+\begin{verbatim}
+. srcfind TWC
+wage            TWC (2019q1-2021q4)
+hours           TWC (2019q1-2021q4)
+
+. srcfind , untagged noreport
+. assert r(n) == 0
+. srctag verify
+srctag verify: data unchanged since signing (8 Aug 2026 09:58)
+\end{verbatim}
+}
+The three lines are three different guarantees. The search shows the corrected vintage attached to the variables themselves. The \texttt{untagged} audit, written as an \texttt{assert}, is a completeness contract: the do-file refuses to finish while any variable lacks a source. And \texttt{verify} confirms the data have not changed since the tags were last blessed. From here the file is a panel like any other, and \texttt{xtset id year} in the next section declares it. What this workflow claims is narrow and checkable: every variable's origin is written inside the file, every metadata correction went through a guarded, receipted door, and the documentation people read was regenerated from the same file it describes. What it does not claim is that the data are right; that is what the rulebook, the linkage report of Section~\ref{sec:ch06-linkerror}, and your own eyes on the harmonization table are for.
+
 \section{Declaring the panel: \texttt{xtset} and \texttt{xtdescribe}}\label{sec:xtset}
 Before any panel method runs, Stata has to know two things: which variable identifies a unit and which variable orders time. You will leave this section able to declare a panel and read its shape report back, so you can say how many units it contains, how often the typical one appears, and whether attrition has already thinned it before you promise anyone a follow-up estimate. One command, \texttt{xtset id time}\index{xtset@\texttt{xtset}}, declares both, and from that point on the whole \texttt{xt} family (fixed effects, lagged terms, transition counts) knows how to walk the data. Getting this declaration right is not bookkeeping; it is the difference between a lag that reaches back one survey wave and one that silently reaches across two different people. We use \texttt{nlswork}, the panel behind the book's running \texttt{nlsw88} cross-section: the same National Longitudinal Survey young-women cohort, now one row per woman-year from 1968 to 1988. It loads from Stata's website with one \texttt{webuse}, so this runs on any connected machine:
 \par
