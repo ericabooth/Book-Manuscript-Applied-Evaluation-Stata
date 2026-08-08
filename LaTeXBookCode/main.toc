@@ -183,36 +183,36 @@
 \contentsline {mtocsection}{\numberline {6.6}One workflow carries the year files to a panel that explains itself}{103}{section.6.6}%
 \contentsline {subsection}{\numberline {6.6.1}Three files, three formats, one silent rename}{103}{subsection.6.6.1}%
 \contentsline {mtocsubsection}{\numberline {6.6.1}Three files, three formats, one silent rename}{103}{subsection.6.6.1}%
-\contentsline {subsection}{\numberline {6.6.2}Tag, sign, and hand the codebook to a person}{105}{subsection.6.6.2}%
-\contentsline {mtocsubsection}{\numberline {6.6.2}Tag, sign, and hand the codebook to a person}{105}{subsection.6.6.2}%
-\contentsline {subsection}{\numberline {6.6.3}The review loop: correcting the record without touching the data}{105}{subsection.6.6.3}%
-\contentsline {mtocsubsection}{\numberline {6.6.3}The review loop: correcting the record without touching the data}{105}{subsection.6.6.3}%
-\contentsline {subsection}{\numberline {6.6.4}The payoff: a panel that answers for itself}{106}{subsection.6.6.4}%
-\contentsline {mtocsubsection}{\numberline {6.6.4}The payoff: a panel that answers for itself}{106}{subsection.6.6.4}%
-\contentsline {section}{\numberline {6.7}Declaring the panel: \texttt {xtset} and \texttt {xtdescribe}}{106}{section.6.7}%
-\contentsline {mtocsection}{\numberline {6.7}Declaring the panel: \texttt {xtset} and \texttt {xtdescribe}}{106}{section.6.7}%
+\contentsline {subsection}{\numberline {6.6.2}Tag, sign, and hand the codebook to a person}{104}{subsection.6.6.2}%
+\contentsline {mtocsubsection}{\numberline {6.6.2}Tag, sign, and hand the codebook to a person}{104}{subsection.6.6.2}%
+\contentsline {subsection}{\numberline {6.6.3}The review loop: correcting the record without touching the data}{104}{subsection.6.6.3}%
+\contentsline {mtocsubsection}{\numberline {6.6.3}The review loop: correcting the record without touching the data}{104}{subsection.6.6.3}%
+\contentsline {subsection}{\numberline {6.6.4}The payoff: a panel that answers for itself}{105}{subsection.6.6.4}%
+\contentsline {mtocsubsection}{\numberline {6.6.4}The payoff: a panel that answers for itself}{105}{subsection.6.6.4}%
+\contentsline {section}{\numberline {6.7}Declaring the panel: \texttt {xtset} and \texttt {xtdescribe}}{107}{section.6.7}%
+\contentsline {mtocsection}{\numberline {6.7}Declaring the panel: \texttt {xtset} and \texttt {xtdescribe}}{107}{section.6.7}%
 \contentsline {subsection}{\numberline {6.7.1}Asking whether attrition is selective}{107}{subsection.6.7.1}%
 \contentsline {mtocsubsection}{\numberline {6.7.1}Asking whether attrition is selective}{107}{subsection.6.7.1}%
-\contentsline {section}{\numberline {6.8}Reshaping into analysis-ready panels}{108}{section.6.8}%
-\contentsline {mtocsection}{\numberline {6.8}Reshaping into analysis-ready panels}{108}{section.6.8}%
-\contentsline {subsection}{\numberline {6.8.1}Getting the reshape command right without the guesswork}{108}{subsection.6.8.1}%
-\contentsline {mtocsubsection}{\numberline {6.8.1}Getting the reshape command right without the guesswork}{108}{subsection.6.8.1}%
-\contentsline {subsection}{\numberline {6.8.2}Coding the transitions: where do people go?}{110}{subsection.6.8.2}%
-\contentsline {mtocsubsection}{\numberline {6.8.2}Coding the transitions: where do people go?}{110}{subsection.6.8.2}%
-\contentsline {section}{\numberline {6.9}Where should all these files live?}{112}{section.6.9}%
-\contentsline {mtocsection}{\numberline {6.9}Where should all these files live?}{112}{section.6.9}%
-\contentsline {subsection}{\numberline {6.9.1}First ask: one row per what?}{112}{subsection.6.9.1}%
-\contentsline {mtocsubsection}{\numberline {6.9.1}First ask: one row per what?}{112}{subsection.6.9.1}%
-\contentsline {subsection}{\numberline {6.9.2}Three ways to put two files together}{113}{subsection.6.9.2}%
-\contentsline {mtocsubsection}{\numberline {6.9.2}Three ways to put two files together}{113}{subsection.6.9.2}%
-\contentsline {subsection}{\numberline {6.9.3}Frames: a second dataset open at the same time}{113}{subsection.6.9.3}%
-\contentsline {mtocsubsection}{\numberline {6.9.3}Frames: a second dataset open at the same time}{113}{subsection.6.9.3}%
-\contentsline {subsection}{\numberline {6.9.4}When a database is the right call}{115}{subsection.6.9.4}%
-\contentsline {mtocsubsection}{\numberline {6.9.4}When a database is the right call}{115}{subsection.6.9.4}%
-\contentsline {section}{\numberline {6.10}Missing data honestly}{116}{section.6.10}%
-\contentsline {mtocsection}{\numberline {6.10}Missing data honestly}{116}{section.6.10}%
-\contentsline {paragraph}{\nonumberline Where this leaves you.}{118}{paragraph*.74}%
-\contentsline {section}{Exercises}{119}{section*.75}%
+\contentsline {section}{\numberline {6.8}Reshaping into analysis-ready panels}{109}{section.6.8}%
+\contentsline {mtocsection}{\numberline {6.8}Reshaping into analysis-ready panels}{109}{section.6.8}%
+\contentsline {subsection}{\numberline {6.8.1}Getting the reshape command right without the guesswork}{109}{subsection.6.8.1}%
+\contentsline {mtocsubsection}{\numberline {6.8.1}Getting the reshape command right without the guesswork}{109}{subsection.6.8.1}%
+\contentsline {subsection}{\numberline {6.8.2}Coding the transitions: where do people go?}{111}{subsection.6.8.2}%
+\contentsline {mtocsubsection}{\numberline {6.8.2}Coding the transitions: where do people go?}{111}{subsection.6.8.2}%
+\contentsline {section}{\numberline {6.9}Where should all these files live?}{113}{section.6.9}%
+\contentsline {mtocsection}{\numberline {6.9}Where should all these files live?}{113}{section.6.9}%
+\contentsline {subsection}{\numberline {6.9.1}First ask: one row per what?}{113}{subsection.6.9.1}%
+\contentsline {mtocsubsection}{\numberline {6.9.1}First ask: one row per what?}{113}{subsection.6.9.1}%
+\contentsline {subsection}{\numberline {6.9.2}Three ways to put two files together}{114}{subsection.6.9.2}%
+\contentsline {mtocsubsection}{\numberline {6.9.2}Three ways to put two files together}{114}{subsection.6.9.2}%
+\contentsline {subsection}{\numberline {6.9.3}Frames: a second dataset open at the same time}{114}{subsection.6.9.3}%
+\contentsline {mtocsubsection}{\numberline {6.9.3}Frames: a second dataset open at the same time}{114}{subsection.6.9.3}%
+\contentsline {subsection}{\numberline {6.9.4}When a database is the right call}{116}{subsection.6.9.4}%
+\contentsline {mtocsubsection}{\numberline {6.9.4}When a database is the right call}{116}{subsection.6.9.4}%
+\contentsline {section}{\numberline {6.10}Missing data honestly}{117}{section.6.10}%
+\contentsline {mtocsection}{\numberline {6.10}Missing data honestly}{117}{section.6.10}%
+\contentsline {paragraph}{\nonumberline Where this leaves you.}{119}{paragraph*.74}%
+\contentsline {section}{Exercises}{120}{section*.75}%
 \contentsline {part}{\nonumberline Part III: Turning Data into Evidence \newline Measurement, Comparison, and the Causal Question}{121}{part*.77}%
 \contentsline {chapter}{\numberline {7}Making numbers trustworthy}{123}{chapter.7}%
 \contentsline {section}{\numberline {7.1}From items to reliable scales}{124}{section.7.1}%

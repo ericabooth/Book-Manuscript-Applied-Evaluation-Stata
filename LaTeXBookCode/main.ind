@@ -81,11 +81,11 @@
   \item flattening (JSON), \hyperpage{54}
   \item four principles, \hyperpage{6}
   \item four-fifths rule, \hyperpage{260}
-  \item \texttt{frame create}, \hyperpage{114}
-  \item frames (Stata), \hyperpage{113}
+  \item \texttt{frame create}, \hyperpage{115}
+  \item frames (Stata), \hyperpage{114}
   \item FRED (Federal Reserve Economic Data), \hyperpage{49}
-  \item \texttt{frget}, \hyperpage{114}
-  \item \texttt{frlink}, \hyperpage{114}
+  \item \texttt{frget}, \hyperpage{115}
+  \item \texttt{frlink}, \hyperpage{115}
   \item \texttt{ftools}, \hyperpage{35}
 
   \indexspace
@@ -120,7 +120,7 @@
   \item interactive chart, \hyperpage{177}
   \item intraclass correlation, \hyperpage{135}
   \item \texttt{irt}, \hyperpage{124}
-  \item \texttt{isid}, \hyperpage{102}, \hyperpage{112}
+  \item \texttt{isid}, \hyperpage{102}, \hyperpage{113}
   \item item response theory, \hyperpage{124}
 
   \indexspace
@@ -142,7 +142,7 @@
 
   \item $l$-diversity, \hyperpage{267}
   \item \texttt{labelbook}, \hyperpage{8}
-  \item level of a dataset, \hyperpage{112}
+  \item level of a dataset, \hyperpage{113}
   \item level-of-effort, \hyperpage{86}
   \item Likert scale, \hyperpage{167}, \hyperpage{187}
   \item \texttt{likertscale}, \hyperpage{82}
@@ -160,9 +160,9 @@
   \item Mata, \hyperpage{289}
   \item match weight, \hyperpage{97}
   \item minimum detectable effect, \hyperpage{129}
-  \item \texttt{misstable}, \hyperpage{116}
+  \item \texttt{misstable}, \hyperpage{117}
   \item Monte Carlo simulation, \hyperpage{153}
-  \item multiple imputation, \hyperpage{117}
+  \item multiple imputation, \hyperpage{118}
 
   \indexspace
 
@@ -224,7 +224,7 @@
   \item replication archive, \hyperpage{291}
   \item reproducible reporting, \hyperpage{200}
   \item research-practice partnership, \hyperpage{12}
-  \item \texttt{reshapehelper}, \hyperpage{108}
+  \item \texttt{reshapehelper}, \hyperpage{109}
   \item return on investment, \hyperpage{153}
   \item \texttt{riskscan}, \hyperpage{268}
   \item \texttt{roisim}, \hyperpage{155}
@@ -294,7 +294,7 @@
   \indexspace
 
   \item \texttt{xline()}, \hyperpage{173}
-  \item \texttt{xtset}, \hyperpage{106}
+  \item \texttt{xtset}, \hyperpage{107}
 
   \indexspace
 
