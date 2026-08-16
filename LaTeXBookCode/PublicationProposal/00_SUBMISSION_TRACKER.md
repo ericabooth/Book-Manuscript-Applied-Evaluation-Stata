@@ -1,19 +1,22 @@
 # Submission tracker — Applied Program Evaluation Using Stata
 
-Four packages are ready in this folder. Each subfolder has the same three files plus the publisher's own blank form: `00_HOW_TO_SUBMIT.md`, `01_cover_letter*.md`, `02_proposal*.md`.
+Five packages are ready in this folder. The four traditional-press subfolders each hold the same three files plus the publisher's own blank form: `00_HOW_TO_SUBMIT.md`, `01_cover_letter*.md`, `02_proposal*.md`. `MIT_Press/` is shaped differently because MIT Press works in two stages: it holds `00_HOW_TO_SUBMIT.md`, `01_inquiry_email.md` (a short first-contact email, no attachments), and `02_if_invited_checklist.md`.
 
 | Press | Folder | Route | Decision time | Cost to you | Sent | Reply |
 |---|---|---|---|---|---|---|
-| **Stata Press** | *(root of this folder)* | email `service@stata-press.com` | ~3 weeks | none | | |
+| **Stata Press** | *(root of this folder)* | email `editor@stata-press.com` | ~3 weeks | none | | |
 | **Vernon Press** | `Vernon_Press/` | email `submissions@vernonpress.com` | ack 1 wk, decision ~2 wks | none | | |
 | **Policy Press / Bristol UP** | `PolicyPress_BristolUP/` | email Paul Stevens, `paul.stevens@bristol.ac.uk` | 6–8 wks after it goes to review | none | | |
 | **Anthem Press** | `Anthem_Press/` | email `proposal@anthempress.com` | 3–4 wks | none | | |
+| **MIT Press** | `MIT_Press/` | short inquiry to Catherine Woods, `cawoods@mit.edu` | no published time; board meets 4×/yr | none | | |
 
 ## Suggested order
 
-All four at once, with disclosure (see below). They run on different clocks. Vernon answers in about two weeks, Anthem in three to four, Stata Press in three, Bristol in six to eight after an initial conversation, so sequencing them would burn months for no gain.
+All four traditional packages at once, with disclosure (see below). They run on different clocks. Vernon answers in about two weeks, Anthem in three to four, Stata Press in three, Bristol in six to eight after an initial conversation, so sequencing them would burn months for no gain.
 
 If you would rather stage it: Stata Press and Vernon first (fastest answers, best fit and cleanest terms respectively), then Bristol and Anthem two weeks later.
+
+**MIT Press sits outside that group.** It is a prestige longshot with a weak catalog fit, and stage one costs about an hour: a few-paragraph email with nothing attached. Send it alongside the others and treat silence as the expected answer. If Woods does engage, the full proposal she would ask for is the same material the other packages already contain, plus a competition analysis that names Scott Long's Stata Press book directly, which is worth thinking about while Stata Press is also considering the book.
 
 ---
 
@@ -72,17 +75,21 @@ Bristol also asks for course information, which is worth filling precisely becau
 
 ## Sample chapter
 
-I recommend **Chapter 13, "Using AI without getting burned"** everywhere. It is the chapter an editor can judge without knowing Stata, it is the most obviously current, and there is no competing title on the subject anywhere. Chapter 2 is the alternate if you would rather lead with the workflow spine; Bristol gets both.
+Send **four chapters: 1, 2, 6, and 13** (92 pages, about a quarter of the book). They make the argument in order: Chapter 1 sets the role and previews the route, Chapter 2 builds the project scaffold, Chapter 6 is the capstone where the whole workflow runs end to end on one worked example, and Chapter 13 is the chapter with no competing title anywhere. Chapters 2 and 6 are the two halves of the book's central claim, so sending one without the other halves the case.
 
-**Vernon is the exception on volume:** their guidance says *"Please do not forward complete manuscripts as part of a proposal."* One chapter only. Bristol, by contrast, invites a complete draft if available.
+**One swap worth knowing.** If the editor turns out to be an econometrician, swap Chapter 2 for **Chapter 8** ("From differences to defensible claims", 24pp). The default four are strong on workflow and light on inference, and against a list that already carries Cameron and Trivedi, the difference-in-differences material may matter more than the scaffold.
+
+**Rank order beyond the four**, if a press asks for something different: 8 (methods heart), 12 (the deliverable payoff, and the most visually impressive), 7 (shrinkage, conformal intervals, minimum detectable effect), 14 (disclosure risk, short and distinctive), 3 (clean but commodity), 15 (closes the ecosystem arc), 10, 5, 9, 4, 11.
+
+**Vernon is the exception on volume:** their guidance says *"Please do not forward complete manuscripts as part of a proposal."* One chapter only, and it should be **Chapter 6**, which is the argument in miniature. Bristol, by contrast, invites a complete draft if available, so Bristol gets all four plus the full PDF.
 
 ## Facts every package uses
 
-Verified against the manuscript, so they are consistent across all four:
+Verified against the compiled manuscript on 8 August 2026, so they are consistent across all five packages:
 
-- 328 pages, 15 chapters, 4 appendices
-- ~155,000 words including references and appendices
-- 65 figures, 32 tables
+- 336 pages, 15 chapters, 5 appendices
+- ~158,000 words including references and appendices
+- 67 figures, 32 tables
 - No permissions to clear: all data public or simulated, all figures ours
 - No part previously published
 - Every printed number generated by a companion do-file

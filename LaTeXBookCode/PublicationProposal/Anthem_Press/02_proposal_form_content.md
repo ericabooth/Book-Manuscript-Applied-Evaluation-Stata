@@ -33,7 +33,7 @@ A **professional / practitioner reference with textbook use**. It is written fir
 
 ### One paragraph on scope and content
 
-Applied evaluators are asked whether public programmes work, and they answer on a deadline with whatever data an agency can supply. This book teaches that whole job as one reproducible workflow: acquiring data from public interfaces and from agencies that publish nothing but a download button, linking administrative records that share no identifier, making a claim at the level of rigour the evidence supports, and delivering the result to a programme director, a funder, and an auditor: three readers who need the same finding at different depths. Most methods books begin once data is clean and end once a model is estimated; this one covers the eighty percent of the work on either side, in a single piece of software, with runnable code for every step.
+Applied evaluators are asked whether public programmes work, and they answer on a deadline with whatever data an agency can supply. This book teaches that whole job as one reproducible workflow: acquiring data from public interfaces and from agencies that publish nothing but a download button, linking administrative records that share no identifier, making a claim at the level of rigour the evidence supports, and delivering the result to a programme director, a funder, and an auditor: three readers who need the same finding at different depths. Most methods books begin once data is clean and end once a model is estimated; this one covers the eighty percent of the work on either side, in a single piece of software, with runnable code for every step. That route has a name in the book: it extends the workflow discipline Scott Long set out for the inside of an analysis to the parts of an evaluation project Long could take as given, and five free companion Stata packages implement it.
 
 ### Table of contents
 
@@ -62,7 +62,7 @@ Applied evaluators are asked whether public programmes work, and they answer on 
 14. Sharing data and results safely
 15. Turning scripts into shared tools
 
-**Appendices:** A. Setup and credentials · B. Two end-to-end worked examples · C. Causal-design quick reference · D. The book's toolkit
+**Appendices (five):** A. The setup guide (4pp) · B. The causal quick-reference toolbox (2pp) · C. The book's toolkit (2pp) · D. Two hands-on worked examples (4pp) · E. A reproducible capstone: one public dataset, ingest to deliverable (30pp)
 
 ### Chapter summaries
 
@@ -71,7 +71,7 @@ Applied evaluators are asked whether public programmes work, and they answer on 
 3. **Downloading public data through APIs.** The anatomy of a request, authentication, rate limits, nested data, and error handling, written so a reader with no web-development background can pull census, labour, and health denominators directly rather than downloading them by hand.
 4. **Harvesting data when there is no API.** Responsible automated retrieval, reading terms before scraping, filtering files too large to load, and ingesting a folder of mixed formats in one call.
 5. **Working with survey platforms.** Connecting to live survey platforms to watch response rates while a survey is open, keeping question wording attached to variables, and distinguishing a low response rate from a biased one.
-6. **Building longitudinal data you can trust.** Linking administrative records with no shared identifier through cleaning, blocking, and graded string-distance scoring; handling schema drift across years; and reporting missing data rather than dropping it silently.
+6. **Building longitudinal data you can trust.** Linking administrative records with no shared identifier through cleaning, blocking, and graded string-distance scoring; handling schema drift across years; and reporting missing data rather than dropping it silently. The chapter closes with a capstone section, 6.6, and a full-page figure that carry the book's whole route on one worked example: three yearly wage extracts arrive as a CSV file, an Excel file, and a Stata file, one of them silently renaming a column between years, and the section works them through to an analysis-ready panel that answers "where did this number come from?" on its own. It also teaches the loop most pipelines skip: a human reviewer reads the generated codebook, spots a wrong data vintage, corrects the metadata rather than the data, and the correction returns to the pipeline under an overwrite guard with a row-by-row receipt. Every command and every printed output in the section comes from a companion do-file that runs with assertions at each step.
 7. **Making numbers trustworthy.** Scale reliability, survey weighting, stabilising rates for sites too small to rank fairly, distribution-free prediction intervals, and stating the minimum effect a design can detect before data collection starts.
 8. **From differences to defensible claims.** Decomposing a group gap into composition and structure, then modern difference-in-differences at length: where the standard approach fails with staggered timing, how to read an event study, and how to choose a defensible comparison group.
 9. **Graphing for busy readers.** Static graphics built on the perceptual research about which encodings people read accurately, and captions that state the finding rather than describing the axes.
@@ -84,7 +84,7 @@ Applied evaluators are asked whether public programmes work, and they answer on 
 
 ### Sample chapter
 
-**Chapter 13, "Using AI without getting burned."** This is **a sample of the proposed manuscript**, in final draft, not a writing sample written for the proposal.
+**Chapters 1, 2, 6, and 13**, ninety-two pages and about a quarter of the book. These are **samples of the proposed manuscript**, in final draft, not writing samples written for the proposal. Chapter 1 frames the evaluator's role and previews the route; Chapter 2 builds the project scaffold; Chapter 6 carries the route end to end on one worked example and is the argument in miniature; Chapter 13, "Using AI without getting burned," is the chapter with no competing title anywhere. A reviewer with time for one chapter should read Chapter 6.
 
 ### Edited collection contributors
 
@@ -96,7 +96,9 @@ Not applicable. Sole-authored by the two of us.
 
 ### Why should we publish this book? What are the particular strengths?
 
-Three reasons.
+Four reasons.
+
+**It is one argument rather than fifteen how-tos.** The book teaches a single route and names it. Scott Long's *The Workflow of Data Analysis Using Stata* disciplined the work inside an analysis; we extend that discipline to the parts of an evaluation project Long could take as given and an evaluation shop cannot: metadata that has to survive years of merges, column names that drift between vintages, extracts that arrive with undocumented surprises, and a reviewer who has to correct the record without touching the data. Chapters 1 and 2 set the route out, Chapter 6 walks it end to end on one worked example, and Appendix E runs it again across thirty pages, carrying one public dataset from ingest to finished deliverable. Five companion Stata packages implement the route and all five are free and public: projectbuilder and combineall are already distributed through SSC, and srctag/srcfind, datadictionary, and convertanything are submitted this month. For a buyer the appeal is direct: the route answers the question in front of an analyst this week, and it leaves a pipeline they can rerun next quarter on their own data, with free tools they keep.
 
 **It occupies a real gap.** Books that teach statistical software teach estimation. Books that teach evaluation practice are software-agnostic and stop before the code. Nothing covers data acquisition, analysis, and delivery as one reproducible workflow, which is what practitioners actually need and what funders increasingly require.
 
@@ -112,7 +114,7 @@ Practical strengths for a publisher: the manuscript is finished, no permissions 
 
 **Secondary market.** Graduate programmes in public policy, public health, social work, and applied social research, whose students take exactly these jobs. The book is built for course use: chapter previews, worked examples, and exercises throughout, including exercises that move each technique onto the student's own data. Also evaluation offices building internal capacity, for whom the reproducibility and handover material is directly useful.
 
-**Routes to the buyer.** The American Evaluation Association and its international counterparts; annual Stata user-group meetings in London and the US; the authors' own workshop teaching; and the existing user base of the authors' published software packages, which reaches practising Stata users directly.
+**Routes to the buyer.** The American Evaluation Association and its international counterparts; annual Stata user-group meetings in London and the US; the authors' own workshop teaching; and the users of the five free Stata packages the book teaches, two of them already distributed through SSC, which reaches practising Stata users directly.
 
 *[Eric: if you have workshop enrolment numbers or package download counts, put them here. Concrete demand figures are the single most persuasive thing you can add for a committee that includes sales and marketing.]*
 
@@ -120,7 +122,7 @@ Practical strengths for a publisher: the manuscript is finished, no permissions 
 
 | Title | Publisher / date | Relationship |
 |---|---|---|
-| J. Scott Long, *The Workflow of Data Analysis Using Stata* | Stata Press, 2009 | Closest relative. Excellent on project discipline; predates public APIs, web deliverables, disclosure control, and AI. We build on it and say so. |
+| J. Scott Long, *The Workflow of Data Analysis Using Stata* | Stata Press, 2009 | Closest relative. Excellent on project discipline; predates public APIs, web deliverables, disclosure control, and AI. We extend it by name into the parts Long could take as given: metadata that survives years of merges, column names that drift between vintages, and a reviewer who corrects the record without touching the data. |
 | Michael N. Mitchell, *Data Management Using Stata: A Practical Handbook*, 2nd ed. | Stata Press | Strong on cleaning; nothing on acquisition or delivery. |
 | Kyle C. Longest, *Using Stata for Quantitative Analysis*, 3rd ed. | Sage, 2019 | Student introduction to analysis. Assumes the data exists; ends at the output. |
 | Lisa Daniels & Nicholas Minot, *An Introduction to Statistics and Data Analysis Using Stata*, 2nd ed. | Sage, 2025 | Same segment, more recent. Not data engineering or delivery. |
@@ -135,8 +137,8 @@ Practical strengths for a publisher: the manuscript is finished, no permissions 
 | Question | Answer |
 |---|---|
 | Proposed submission date for the completed manuscript | The manuscript is **already complete**. A final typescript in your required format within **three months of contract**. |
-| Word count | Approximately **155,000** including references and appendices. |
-| Pictures, graphs, diagrams | **65 figures and 32 tables.** Figures are statistical graphics generated from code plus workflow diagrams drawn in TikZ. All are ours and can be supplied at any resolution as PDF, EPS, or PNG. Authored in colour on a colour-vision-deficiency-safe palette and legible in greyscale, so colour is welcome but not required. **No permissions to secure. Every image is our own work.** |
+| Word count | Approximately **158,000** including references and appendices. |
+| Pictures, graphs, diagrams | **67 figures and 32 tables.** Figures are statistical graphics generated from code plus workflow diagrams drawn in TikZ. All are ours and can be supplied at any resolution as PDF, EPS, or PNG. Authored in colour on a colour-vision-deficiency-safe palette and legible in greyscale, so colour is welcome but not required. **No permissions to secure. Every image is our own work.** |
 | Copyright or permission issues | **None.** All data is public (US Census, Bureau of Labor Statistics, CDC, County Health Rankings, state education files) or simulated. |
 | Previously published portions | **None.** No part of the manuscript has appeared elsewhere. A *Stata Journal* article on one of the software packages is in preparation and does not overlap with the book's argument. |
 | Translated manuscript | Not applicable. Written in English. |

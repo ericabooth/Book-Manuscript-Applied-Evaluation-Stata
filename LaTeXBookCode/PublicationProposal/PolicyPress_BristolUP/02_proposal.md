@@ -28,6 +28,10 @@ This book treats all three as one continuous workflow, taught in Stata, from an 
 
 What is original is the connection rather than the components. Individually, most of these techniques exist somewhere in the literature. What has not existed is a single account in which an API pull feeds a longitudinal panel, the panel feeds an empirical-Bayes estimator that stabilises rates for sites too small to rank fairly, and that estimator feeds a self-contained web portal a reader can open with the internet off. Teaching the pieces separately, which is what the field currently does, leaves the reader to invent every join. Following one project the whole way is what requires a book.
 
+That connection is the book's spine, and the text names it: the workflow ecosystem. J. Scott Long's *The Workflow of Data Analysis Using Stata* set the standard for project discipline inside one analyst's session, and we build on it explicitly. This book extends that discipline into the parts of a project Long could take as given and an evaluation shop cannot: metadata that has to survive years of merges, column names that drift between vintages, extracts that arrive with undocumented surprises, and a reviewer who has to correct the record without touching the data. Chapters 1 and 2 both signal the route forward, so the book reads as one argument rather than fifteen separate how-tos. Chapter 6 runs the route end to end on one worked example, and Appendix E runs it again at greater length on a single public dataset. Five Stata packages we wrote implement the route, and all five are free and public.
+
+For a Learning Resource, that spine is the practical payoff. It gives a course one worked project to teach from, with each technique arriving at the point the project needs it, instead of fifteen disconnected techniques a student has to assemble alone. An instructor can teach the short version in a week from Chapter 6, or carry the long version across a term from Appendix E.
+
 The themes developed throughout are four principles the book measures every deliverable against, introduced in Chapter 1 and returned to explicitly in each chapter: work should be **replicable** (someone else can rerun it and get the same answer), **extensible** (next year's data costs a rerun, not a rebuild), **accessible** (it reaches the people who need it, in the format they use, including readers with colour-vision deficiency or a screen reader), and **actionable** (a named person can decide something with it).
 
 Two areas are at the forefront of current practice and are treated at length. The difference-in-differences literature has moved substantially in the last few years, and practising evaluators are working to catch up; Chapter 8 gives a practical translation, including how two-way fixed effects goes wrong and what diagnostics tell a reader when a design is credible. And evaluators are already using large language models, frequently in ways that leak confidential data or produce results nobody can reproduce; Chapter 13 sets out a working framework in which the model drafts code one checkable step at a time and the statistical software remains the system of record.
@@ -52,6 +56,7 @@ The whole pipeline in one volume, in one piece of software, with working code fo
 
 ### Key features
 
+- **One argument, taught as one project.** The book extends Scott Long's workflow discipline into metadata that has to survive years of merges, column names that drift between vintages, and corrections a reviewer makes to the record rather than to the data. Chapter 6 and Appendix E run that route end to end, so a course has a single worked spine to teach from.
 - **Runnable throughout.** Companion do-files reproduce every result in the book; roughly two dozen Stata commands written and released by the authors are taught in place, most already distributed through the field's standard archive.
 - **Covers the first mile and the last mile.** Data acquisition and delivery get eight of the fifteen chapters, ground that competing texts skip entirely.
 - **Built for the constraints practitioners actually face:** locked-down IT, data-use agreements, small samples, and audiences who need a spreadsheet rather than a table.
@@ -76,7 +81,7 @@ The software packages taught in the book were written over several years in resp
 
 ## 4. Content
 
-Total: fifteen chapters in five parts, plus four appendices. Approximate word counts per chapter are given in brackets and include references.
+Total: fifteen chapters in five parts, plus five appendices. Approximate word counts per chapter are given in brackets and include references.
 
 ### Part I — The embedded evaluator workflow
 
@@ -97,8 +102,8 @@ Most agencies do not offer an API; they offer a download button, or a shared dri
 **5. Working with survey platforms** *(9,500)*
 Connects the statistical session to live survey platforms so response rates can be watched while the survey is still open, rather than diagnosed after it closes. Covers total survey error as a working framework, attaching question wording to variables so meaning survives the export, scale construction, and nonresponse bias diagnostics that distinguish a low response rate from a biased one.
 
-**6. Building longitudinal data you can trust** *(10,400)*
-Links administrative records that share no identifier, using cleaning, blocking, and graded string-distance scoring, and treats the match rate as a quantity to be predicted and checked rather than accepted. Covers schema drift across years, declaring a panel, and reporting missing data honestly rather than dropping it silently. Includes a decision table for the question every team eventually asks: should this be in a database instead?
+**6. Building longitudinal data you can trust** *(12,400)*
+Links administrative records that share no identifier, using cleaning, blocking, and graded string-distance scoring, and treats the match rate as a quantity to be predicted and checked rather than accepted. Covers schema drift across years, declaring a panel, and reporting missing data honestly rather than dropping it silently. Includes a decision table for the question every team eventually asks: should this be in a database instead? Closes with a capstone section, illustrated by a full-page figure, that runs the book's whole route on one example: three yearly wage extracts arrive as a CSV file, an Excel file, and a Stata file, and one of them silently renames a column between years. The section takes that mess to an analysis-ready panel that can answer on its own where any number came from, and it teaches the step most pipelines omit. A human reviewer reads the generated codebook, spots a wrong data vintage, and corrects the metadata rather than the data; the correction goes back in under an overwrite guard, with a row-by-row receipt. Every command and every printed output in the section comes from a companion do-file that runs with assertions at each step.
 
 ### Part III — Turning data into evidence
 
@@ -133,9 +138,9 @@ Preparing analytic files for release without re-identifying the people in them. 
 **15. Turning scripts into shared tools** *(6,600)*
 Turning a repeated block of code into a documented, installable tool a colleague can use. Covers writing the program and its help file, distributing it, writing a test battery *before* the command it tests, versioning promises, using faster languages only where they pay, and leaving a replication archive that outlives the project.
 
-### Appendices *(5,900 combined)*
+### Appendices *(11,500 combined)*
 
-A setup guide covering installation and credentials; two end-to-end worked examples on real public files, one small and messy and one large and clean; a causal-design quick reference; and a toolkit index of every package the book uses.
+Five appendices, in this order. **A**, a setup guide covering installation and credentials. **B**, a causal quick-reference toolbox for the designs the book routes elsewhere. **C**, a toolkit index of every package the book uses. **D**, two hands-on worked examples on real public files, one small and messy and one large and clean. **E**, a reproducible capstone of thirty pages that carries one public dataset from ingest to finished deliverable, every step runnable, which is the longest sustained demonstration in the book and the one an instructor can teach a term from.
 
 ### Digital content
 
@@ -177,7 +182,7 @@ The workflow is not jurisdiction-specific; the public datasets used as examples 
 
 *[Eric: this is worth completing precisely, because for a Learning Resource it carries real weight. Name the workshops you and Elizabeth teach: the institution or programme, level (doctoral, professional), typical enrolment, and how often they run. If either of you has a standing course or guest lecture, say so. If you have colleagues who would adopt it, name their courses too.]*
 
-The book is designed to work as a course text for an applied research methods or evaluation practicum at master's or doctoral level, and as the spine of a professional short course. Every chapter ends with exercises, including one that asks students to run the technique on their own data.
+The book is designed to work as a course text for an applied research methods or evaluation practicum at master's or doctoral level, and as the spine of a professional short course. Every chapter ends with exercises, including one that asks students to run the technique on their own data. An instructor gets one project to teach from rather than fifteen disconnected techniques: Chapter 6 supplies a week-sized worked example that runs the book's route end to end, and Appendix E supplies a term-sized one on a single public dataset, so a syllabus can be built around a project students carry the whole way.
 
 ---
 
@@ -187,7 +192,7 @@ There is no direct competitor. The nearest works each cover one segment of the w
 
 | Title | Publisher / date | How ours differs |
 |---|---|---|
-| J. Scott Long, *The Workflow of Data Analysis Using Stata* | Stata Press, 2009 | The closest relative and an excellent book. Covers project discipline thoroughly but predates public APIs, web deliverables, disclosure control, and AI. We build on it explicitly and say so. |
+| J. Scott Long, *The Workflow of Data Analysis Using Stata* | Stata Press, 2009 | The closest relative and a genuinely good book. Covers project discipline inside one analyst's session, and predates public APIs, web deliverables, disclosure control, and AI. Ours extends that route to metadata that has to survive years of merges, column names that drift between vintages, extracts that arrive with undocumented surprises, and corrections a reviewer makes to the record rather than to the data. We build on it explicitly and say so. |
 | Michael N. Mitchell, *Data Management Using Stata: A Practical Handbook*, 2nd ed. | Stata Press | Strong on cleaning and reshaping; stops at the analysis boundary in both directions. Nothing on acquisition or delivery. |
 | Kyle C. Longest, *Using Stata for Quantitative Analysis*, 3rd ed. | Sage, 2019 | An introduction to statistical analysis for students. Assumes the data exists and ends at the output. |
 | Lisa Daniels & Nicholas Minot, *An Introduction to Statistics and Data Analysis Using Stata*, 2nd ed. | Sage, 2025 | Same segment as Longest, more recent. Research-design-to-report in scope, but not data engineering or delivery. |
@@ -204,9 +209,9 @@ There is no direct competitor. The nearest works each cover one segment of the w
 
 ## 8. Typescript information
 
-- **Estimated total word count:** approximately **155,000 words** including references and appendices.
-- **Illustrations:** **65 figures and 32 tables**. Figures are a mix of statistical graphics generated from code and workflow diagrams drawn in TikZ. All are ours; all can be supplied as PDF, EPS, or PNG at any resolution. Figures are authored in colour using a colour-vision-deficiency-safe palette and remain legible in greyscale, so colour printing is welcome but not required.
-- **Stage reached:** **complete**. All fifteen chapters and four appendices are drafted and compile clean at 328 pages in a wide-margin layout; converting to a conventional academic format will tighten the page count. Every printed number is generated by a companion do-file we can rerun on request.
+- **Estimated total word count:** approximately **158,000 words** including references and appendices. The per-chapter counts in Section 4 sum to about 145,300; they cover body text only. The balance is the bibliography, the index, the front matter, and the book's margin notes, which are a substantial part of a tufte-style layout rather than an afterthought.
+- **Illustrations:** **67 figures and 32 tables**. Figures are a mix of statistical graphics generated from code and workflow diagrams drawn in TikZ. All are ours; all can be supplied as PDF, EPS, or PNG at any resolution. Figures are authored in colour using a colour-vision-deficiency-safe palette and remain legible in greyscale, so colour printing is welcome but not required.
+- **Stage reached:** **complete**. All fifteen chapters and five appendices are drafted and compile clean at 336 pages in a wide-margin layout; converting to a conventional academic format will tighten the page count. Every printed number is generated by a companion do-file we can rerun on request.
 - **Prior publication:** none. No part of the manuscript has appeared elsewhere.
 - **Copyright clearance:** **none required.** All data used is public or simulated, and all figures are our own work.
 
@@ -263,7 +268,7 @@ This is where the book differs most from a conventional methods text, and it cos
 
 - **Runnable code for the entire book.** A companion do-file per chapter reproduces every number, table, and figure printed in the text. A reader can rebuild the book's results before trusting them, and an instructor can regenerate every exhibit.
 - **Datasets.** Every example uses public data (US Census, Bureau of Labor Statistics, CDC, County Health Rankings, state education files) or clearly labelled simulated data. Nothing is restricted, so students can run everything.
-- **Roughly two dozen Stata packages** written and released by the authors, taught in place in the book. Several are already distributed through the Statistical Software Components archive, the field's standard channel, and we expect the rest to be there before publication. These install in one line and are free.
+- **Roughly two dozen Stata packages** written and released by the authors, taught in place in the book. Several are already distributed through the Statistical Software Components archive, the field's standard channel, and we expect the rest to be there before publication. These install in one line and are free. Five of them implement the workflow route the book teaches: `projectbuilder`, `combineall`, `srctag`/`srcfind`, `datadictionary`, and `convertanything`. The first two are on the archive now; the others are submitted this month.
 - **Test batteries** for the authors' packages, which double as teaching material in Chapter 15.
 - **Instructor material** we would be glad to develop if useful: exercise solutions, a suggested twelve-week course map, and slide sets built from the book's own figures.
 

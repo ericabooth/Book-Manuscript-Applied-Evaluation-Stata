@@ -17,9 +17,11 @@ Readers learn to run the entire project lifecycle from Stata: pull raw data from
 ### Why should it exist? Why is it new?
 We cover the first mile and the last mile of an evaluation, the parts most Stata resources skip. We use every one of these skills in our own policy and program work, and we teach parts of it in workshops for policy PhD students and early-career researchers. What our audiences ask for has changed: funders now expect an interactive dashboard rather than a static PDF, the difference-in-differences literature has overturned what a two-way fixed-effects regression can claim, and everyone feels pressure to use AI without a clear account of the privacy, accuracy, and reproducibility risks. We put those demands into one reproducible Stata pipeline.
 
-Where it fits in the Stata publication universe: excellent texts already cover microeconometrics (Cameron and Trivedi) and workflow discipline (Long). What no Stata book covers is *delivery* and *operations*, the capabilities Stata users routinely say they want and reach for R or Python to get. A *Stata Journal* article could cover any one of the commands we introduce, and one on the Google tools is in progress. The value here is the connection between them: an API pull feeds a panel, the panel feeds an empirical-Bayes shrinkage estimator, and the estimator feeds a scheduled HTML dashboard that needs no server. Showing that chain end to end takes a book.
+Where it fits in the Stata publication universe: this book extends Scott Long's *The Workflow of Data Analysis Using Stata* rather than competing with it. Long taught Stata users to plan, document, and version an analysis whose data they control from the start. An evaluation shop controls less. Metadata has to survive years of merges, column names drift between vintages, extracts arrive with undocumented surprises, and a reviewer has to correct the record without editing the data. We carry Long's discipline into those parts of a project. Chapters 1 and 2 name that route, Chapter 6 works it end to end on one example, and the later chapters follow it to a delivered result, so the fifteen chapters read as one argument rather than fifteen separate how-tos.
 
-The book's toolkit appendix lists every package it uses. Several of our own commands are already on SSC as of this month, and we expect the rest to be posted there before the book comes out.
+Five companion Stata packages implement the route, and all five are free and public. `projectbuilder` builds the folder structure and the control file, `convertanything` reads whatever format the data arrives in, `combineall` stacks extracts whose columns disagree, `srctag` and `srcfind` record where a value came from and retrieve it later, and `datadictionary` writes the codebook and guards the metadata when someone corrects it. `projectbuilder` and `combineall` are on SSC now; `srctag`/`srcfind`, `datadictionary`, and `convertanything` go up this month. Appendix C lists every package the book uses, ours and other people's.
+
+On causal inference, Cameron and Trivedi's second volume already serves this list, and we do not try to displace it. Chapter 8 gives practitioners a working translation of the modern difference-in-differences results and the diagnostics that go with them, and it sends readers who want the theory to the econometrics texts. This book occupies a different shelf: applied workflow and reproducibility, where every number printed on the page comes from a companion do-file we can rerun on request. On that shelf, what no Stata book covers is *delivery* and *operations*, the capabilities Stata users routinely say they want and reach for R or Python to get. A *Stata Journal* article could cover any one of the commands we introduce, and one on the Google tools is in progress. The value here is the connection between them: an API pull feeds a panel, the panel feeds an empirical-Bayes shrinkage estimator, and the estimator feeds a scheduled HTML dashboard that needs no server. Showing that chain end to end takes a book.
 
 ### Why are you the one to write it?
 We have spent our careers in applied evaluation and policy, currently at the Texas 2036 policy think tank and at Far Harbor, LLC, a private research and evaluation consulting firm. We also build the tools. The Stata packages this book teaches are ones we wrote because our own projects needed them, including `webapi`, `googlesheets`, `statashiny`, `webdoc2`, `rateshrink`, and `convertanything`. Between us we have spent years working inside restrictive IT environments, making defensible claims from samples smaller than we would like, and building data systems that practitioners keep using after the contract ends.
@@ -88,6 +90,7 @@ The book has five parts, following a project's natural lifecycle from an empty f
 **6. Building longitudinal data you can trust**
 *Point:* Linking administrative records with no shared identifier and reshaping them into an analysis-ready panel.
 *Contribution:* Covers probabilistic record linkage (cleaning, blocking, Jaro-Winkler scoring), schema drift, declaring a panel with `xtset`, and reporting missing data honestly.
+*Capstone (6.6):* A worked section, with a full-page figure, that runs the book's whole workflow on one example. Three yearly wage extracts arrive as a CSV, an Excel workbook, and a Stata file, and one of them renames a column between years without announcing it. `convertanything` reads the three formats, `combineall` stacks them, `srctag` and `srcfind` record where each value came from and retrieve it later, and `datadictionary` writes the codebook. A human reviewer then reads that codebook, spots a wrong data vintage, and corrects the metadata rather than the data; the pipeline applies that correction under an overwrite guard and prints a row-by-row receipt of what changed. The panel that comes out answers "where did this number come from?" on its own. Every command and every printed result in the section comes from a companion do-file that asserts its own output at each step.
 
 ### PART III: TURNING DATA INTO EVIDENCE
 
@@ -131,10 +134,23 @@ The book has five parts, following a project's natural lifecycle from an empty f
 *Point:* Turning a repeated do-file block into a documented, installable Stata package.
 *Contribution:* Shows how to write the `.ado` and its help file, distribute through GitHub with `net install`, write a test battery before the command it tests, drop into Mata or Python only where it pays, and leave behind a replication archive.
 
+### APPENDICES
+Five appendices close the book:
+
+**A. The Setup Guide** (4pp)
+**B. The Causal Quick-Reference Toolbox** (2pp)
+**C. The Book's Toolkit** (2pp)
+**D. Two Hands-On Worked Examples** (4pp)
+**E. A Reproducible Capstone: One Public Dataset, Ingest to Deliverable** (30pp)
+
+Appendix E is the longest of the five and carries one public dataset from the first download to a finished deliverable. A reader can rerun it from the companion do-files and reproduce every number, table, and figure it prints.
+
 ---
 
 ## Sample Chapter
-We drafted the manuscript in LaTeX using the `kaobook` class, which gives a wide margin for notes and figures. The compiled PDF runs to 328 pages across fifteen chapters and four appendices, with live code, real statistical output, and the figures the companion do-files generate. We can send the whole draft, or any single chapter, as PDF or TeX.
+We drafted the manuscript in LaTeX using the `kaobook` class, which gives a wide margin for notes and figures. The compiled PDF runs to 336 pages across fifteen chapters and five appendices, with live code, real statistical output, and the figures the companion do-files generate.
+
+For review we suggest Chapters 1, 2, 6, and 13, which run 92 pages, about a quarter of the book. Chapter 1 frames the evaluator's role and previews the route the book takes. Chapter 2 builds the project scaffold. Chapter 6 works that route end to end and carries the book's argument in miniature. Chapter 13 covers using AI without getting burned, and we know of no competing Stata treatment of it. We can send those four, the whole draft, or any single chapter, as PDF or TeX.
 
 ---
 
@@ -149,7 +165,7 @@ We drafted the manuscript in LaTeX using the `kaobook` class, which gives a wide
 ---
 
 ## Timetable
-We have drafted all fifteen chapters and four appendices, they compile clean, and every number printed in the book comes from a companion do-file we can rerun on request. The current draft is 328 pages in the `kaobook` layout; converting to the Stata Press layout would tighten it, and we expect some reference material would move to a technical appendix or a companion website. We have written and tested every custom package the book teaches, and all but `sparkta2` are already installable.
+We have drafted all fifteen chapters and five appendices, they compile clean, and every number printed in the book comes from a companion do-file we can rerun on request. The current draft is 336 pages in the `kaobook` layout; converting to the Stata Press layout would tighten it, and we expect some reference material would move to a technical appendix or a companion website. We have written and tested every custom package the book teaches, and all but `sparkta2` are already installable.
 
 - **Final manuscript delivery:** within three months of contract, plus time for peer review, layout conversion, and copyediting. Because parts of this material track fast-moving tools, we would like the option to revise close to press time.
 - **Target publication:** 2027.

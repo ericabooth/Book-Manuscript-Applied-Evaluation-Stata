@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.15.0 (TeX Live 2022)  (format=lualatex 2022.9.27)  1 AUG 2026 11:23
+This is LuaHBTeX, Version 1.15.0 (TeX Live 2022)  (format=lualatex 2022.9.27)  16 AUG 2026 09:31
  restricted system commands enabled.
 **stata_press_proposal.tex
 (./stata_press_proposal.tex
@@ -1214,99 +1214,106 @@ Underfull \hbox (badness 10000) in paragraph at lines 20--22
 
 ]
 LaTeX Font Info:    Font shape `TU/Menlo(0)/m/n' will be
-(Font)              scaled to size 8.6pt on input line 40.
+(Font)              scaled to size 8.6pt on input line 37.
 
-Overfull \hbox (5.1347pt too wide) in paragraph at lines 46--47
+[2]
+Overfull \hbox (5.1347pt too wide) in paragraph at lines 48--49
 []\TU/Montserrat(0)/b/n/10.95 The difference-in-differences lit-er-a-ture has mo
 ved. \TU/Montserrat(0)/m/n/10.95 Ap-plied re-searchers are work-
  []
 
 
-Overfull \hbox (2.57184pt too wide) in paragraph at lines 47--48
+Overfull \hbox (2.57184pt too wide) in paragraph at lines 49--50
 \TU/Montserrat(0)/m/n/10.95 do-files: Socrata and other API pipelines, in-ter-ac
 -tive charts, and JavaScript-powered
  []
 
-[2]
-Overfull \hbox (6.37463pt too wide) in paragraph at lines 55--56
+
+Overfull \hbox (6.37463pt too wide) in paragraph at lines 57--58
 []\TU/Montserrat(0)/b/n/10.95 Ap-plied data sci-en-tists: \TU/Montserrat(0)/m/n
 /10.95 re-searchers mod-ern-iz-ing a Stata work-flow with APIs, scrap-
  []
 
-
-Overfull \hbox (1.22597pt too wide) in paragraph at lines 69--72
+[3]
+Overfull \hbox (1.22597pt too wide) in paragraph at lines 71--74
 \TU/Montserrat(0)/m/n/10.95 We do \TU/Montserrat(0)/m/it/10.95 not \TU/Montserr
 at(0)/m/n/10.95 as-sume a back-ground in com-puter sci-ence, web de-vel-op-ment,
  or ad-vanced
  []
 
-[3]
-Overfull \hbox (0.17484pt too wide) in paragraph at lines 81--84
+
+Overfull \hbox (0.17484pt too wide) in paragraph at lines 83--86
 \TU/Montserrat(0)/m/it/10.95 Contribution: \TU/Montserrat(0)/m/n/10.95 In-tro-du
 ces the num-bered pipeline, pack-age pin-ning, the track-ing spine,
  []
 
-
-Overfull \hbox (47.74098pt too wide) in paragraph at lines 90--93
+[4]
+Overfull \hbox (47.74098pt too wide) in paragraph at lines 92--95
 \TU/Montserrat(0)/m/it/10.95 Contribution: \TU/Montserrat(0)/m/n/10.95 Cov-ers 
 re-spon-si-ble scrap-ing, stream-ing files too large to load, and [][][][][][]
  []
 
 
-Overfull \hbox (2.18806pt too wide) in paragraph at lines 94--97
+Overfull \hbox (2.18806pt too wide) in paragraph at lines 96--99
 \TU/Montserrat(0)/m/it/10.95 Point: \TU/Montserrat(0)/m/n/10.95 Con-nect-ing Sta
 ta to live sur-vey plat-forms (Qualtrics, RED-Cap) to watch re-sponse
  []
 
 
-Overfull \hbox (1.61539pt too wide) in paragraph at lines 94--97
+Overfull \hbox (1.61539pt too wide) in paragraph at lines 96--99
 \TU/Montserrat(0)/m/it/10.95 Contribution: \TU/Montserrat(0)/m/n/10.95 Teaches 
 to-tal sur-vey er-ror, scale con-struc-tion ([][][][][][]), non-re-sponse
  []
 
 
-Overfull \hbox (6.83606pt too wide) in paragraph at lines 98--101
+Overfull \hbox (6.83606pt too wide) in paragraph at lines 100--104
 \TU/Montserrat(0)/m/it/10.95 Contribution: \TU/Montserrat(0)/m/n/10.95 Cov-ers 
 prob-a-bilis-tic record link-age (clean-ing, block-ing, Jaro-Winkler scor-
  []
 
-[4]
-Overfull \hbox (5.18105pt too wide) in paragraph at lines 107--110
+
+Overfull \hbox (5.6806pt too wide) in paragraph at lines 100--104
+\TU/Montserrat(0)/m/n/10.95 and [][][][][][] record where each value came from 
+and re-trieve it later, and [][][][][][]
+ []
+
+[5]
+Overfull \hbox (5.18105pt too wide) in paragraph at lines 110--113
 \TU/Montserrat(0)/m/it/10.95 Point: \TU/Montserrat(0)/m/n/10.95 Match-ing the cl
 aim to the de-sign, cen-tered on mod-ern difference-in-differences. 
  []
 
 
-Overfull \hbox (45.28984pt too wide) in paragraph at lines 120--123
+Overfull \hbox (45.28984pt too wide) in paragraph at lines 123--126
 \TU/Montserrat(0)/m/it/10.95 Contribution: \TU/Montserrat(0)/m/n/10.95 Teaches 
 the never-typed-number rule, us-ing [][][][][][], [][][][][][], and [][][][][][
 ]
  []
 
-[5] [6] [7] (./stata_press_proposal.aux)
+[6] [7] [8] (./stata_press_proposal.aux)
 Package rerunfilecheck Info: File `stata_press_proposal.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
 )
 
 Here is how much of LuaTeX's memory you used:
- 35127 strings out of 477785
+ 35128 strings out of 477785
  100000,1144653 words of node,token memory allocated
  1396 words of node memory still in use:
    30 hlist, 2 vlist, 14 rule, 2 glue, 4 kern, 1 glyph, 79 attribute, 77 glue_sp
 ec, 79 attribute_list, 2 write, 24 pdf_literal, 24 pdf_colorstack nodes
-   avail lists: 1:1,2:485,3:142,4:256,5:1570,6:46,7:8834,8:8,9:301,10:6,11:548
+   avail lists: 1:1,2:515,3:148,4:330,5:1635,6:46,7:8967,8:14,9:327,10:8,11:570
  54591 multiletter control sequences out of 65536+600000
  64 fonts using 13793463 bytes
- 105i,11n,108p,738b,1118s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 105i,12n,108p,1093b,1118s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </System/Library/Fonts/Menlo.ttc></usr/local/texlive/2022/texmf-dist/fonts/opent
 ype/public/montserrat/Montserrat-Italic.otf></usr/local/texlive/2022/texmf-dist/
 fonts/opentype/public/montserrat/Montserrat-Bold.otf></usr/local/texlive/2022/te
 xmf-dist/fonts/opentype/public/montserrat/Montserrat-Regular.otf></usr/local/tex
 live/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb>
-Output written on stata_press_proposal.pdf (7 pages, 60668 bytes).
+Output written on stata_press_proposal.pdf (8 pages, 67170 bytes).
 
-PDF statistics: 114 PDF objects out of 1000 (max. 8388607)
- 67 compressed objects within 1 object stream
- 14 named destinations out of 1000 (max. 131072)
+PDF statistics: 118 PDF objects out of 1000 (max. 8388607)
+ 70 compressed objects within 1 object stream
+ 15 named destinations out of 1000 (max. 131072)
  256 words of extra memory for PDF output out of 10000 (max. 100000000)
 
