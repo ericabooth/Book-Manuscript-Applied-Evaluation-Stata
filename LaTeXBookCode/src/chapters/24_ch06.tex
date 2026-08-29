@@ -204,7 +204,31 @@ Sometimes the data is bad for a known reason, and flagging that period tells you
 \section{Where did the rows go?}\label{sec:ch06-mergemap}
 A build runs clean and the estimation sample comes out smaller than the roster. The roster holds 2,400 programme participants; the file the models run on holds 1,293. Nobody wrote down where the other 1,107 went, and the instinct in the room is to blame the merge that attached outcomes, because that is the step that feels risky. This section gives you a way to answer the question from the code itself, in two modes: one that reads the build without running it, and one that runs it and counts.
 
-\texttt{mergemap}\index{mergemap@\texttt{mergemap}} reads a sequence of do-files and reports every join, every reshaping step around it, and every filter that quietly changes the row count. By default it executes nothing, which is what makes it usable on a project you have just inherited, on code that will not currently run, and on files whose data you were never sent. Point it at the folder, in the order the build runs:
+\begin{kaobox}[frametitle=Package Integration: \texttt{mergemap}]
+\textbf{Integrated command:} \texttt{mergemap}\index{mergemap@\texttt{mergemap}} reads the do-files of a build and reports every \texttt{merge}, \texttt{append}, \texttt{joinby}, \texttt{frlink} and \texttt{frget}, together with the reshaping and filtering steps around them that change the row count. Install with the house idiom:
+\par
+{\footnotesize
+\begin{verbatim}
+local gh "https://raw.githubusercontent.com/ericabooth"
+net install mergemap, ///
+    from("`gh'/mergemap-stata-public/main/") replace force
+\end{verbatim}
+}
+Point it at the files in the order the build runs them, as a folder, a list, or a pattern. Add \texttt{run} when you want the counts as well as the shape:
+\par
+{\footnotesize
+\begin{verbatim}
+mergemap build/                    // scan: executes nothing
+mergemap 01_clean.do 02_merge.do   // or name them in order
+mergemap run build/                // run: the same build, instrumented
+mergemap draw, export(png) saving("pipeline")
+mergemap detail 7                  // one join, in full
+\end{verbatim}
+}
+A scan leaves \texttt{r(N\_events)} behind and writes a journal that \texttt{draw}, \texttt{detail} and \texttt{export} all read, so the map costs nothing to redraw. Start with \texttt{mergemap demo}, which writes three small do-files built from \texttt{sysuse auto} and \texttt{sysuse census}, scans them, and shows you the output. One caution: a scan reads the folder it is given, so re-scanning after a run reads a folder that now also holds the datasets the run saved.
+\end{kaobox}
+
+Scanning executes nothing, which is what makes it usable on a project you have just inherited, on code that will not currently run, and on files whose data you were never sent. Point it at the folder, in the order the build runs:
 \par
 {\footnotesize
 \begin{verbatim}
@@ -237,10 +261,10 @@ All 2 joins clean.
 12 events. Severity: !! marks warn and stop.
 \end{verbatim}
 }
-That is the pipeline written down, in execution order, before anyone has read a line of the code. It also contains the answer in outline. Three of the twelve events can remove rows silently on their own terms: event~7 keeps only matched rows, and events 10 and 11 are filters. A scan is cheap enough to run on someone else's project before the handover meeting, which is the moment its value is highest, and the receipt prints as plain text in every output format, so it survives a log file and a monochrome printout. A loop over a file list appears once as \texttt{$\times$3} rather than as three near-identical lines.
+That is the pipeline written down, in execution order, before anyone has read a line of the code. Read the second line of the output before you trust the first: \texttt{mergemap} took the folder's do-files in name order, which is execution order here only because someone numbered them \texttt{10\_}, \texttt{20\_}, \texttt{30\_}. The inherited project is usually the one whose files are called \texttt{clean.do}, \texttt{merge.do} and \texttt{analysis.do}, which sorts analysis to the front, so on that project name the files yourself in the order the master do-file calls them, \texttt{mergemap clean.do merge.do analysis.do}, and the receipt is right again. It also contains the answer in outline. Three of the twelve events can remove rows from the analysis file on their own terms: event~7 keeps only matched rows, and events 10 and 11 are filters. Event~3, the \texttt{collapse}, changes a row count too, but it does so on the earnings file before that file meets the roster, so it cannot explain a shortfall in the roster's own rows. Run a scan on someone else's project before the handover meeting, which is the moment its value is highest. The receipt prints as plain text in every output format, so it survives a log file and a monochrome printout. Where a build loops over a file list, the receipt folds the repeats into one row marked \texttt{$\times$3} rather than printing three near-identical lines; this build has no loop, so no row carries the mark.
 
 \subsection{Run mode, and coverage as a share of each side}
-Counts come only from run mode, which executes the build with instrumentation wrapped around each join and records what actually happened. The wrappers call the real commands and pass your options through untouched, so the datasets that come out are the same ones the plain build produces; the package's own regression suite runs the pipeline both ways and requires every saved file to match on \texttt{datasignature}, \texttt{cf \_all}, the sort flag and \texttt{describe}, down to the random-number state.
+Counts come only from run mode, which executes the build with instrumentation wrapped around each join and records what actually happened. That mode asks for what a scan does not: the data, a build that executes cleanly end to end, and the time to sit through it. It also does everything the build does, including overwriting the files the build saves, so the first time you run it on someone else's project, run it on a copy of the folder. The wrappers call the real commands and pass your options through untouched, so the datasets that come out are the same ones the plain build produces. The package's own regression suite runs the pipeline both ways and requires every saved file to match on \texttt{datasignature}, \texttt{cf \_all}, the sort flag and \texttt{describe}, down to the random-number state. Two words in that output are Stata's own: the \emph{master} is the dataset in memory when the merge runs, here the roster, and the \emph{using} file is the one named after \texttt{using}, here the earnings file. Coverage is reported for both because a merge can fail from either side. The wrappers call the real commands and pass your options through untouched, so the datasets that come out are the same ones the plain build produces; the package's own regression suite runs the pipeline both ways and requires every saved file to match on \texttt{datasignature}, \texttt{cf \_all}, the sort flag and \texttt{describe}, down to the random-number state.
 \par
 {\footnotesize
 \begin{verbatim}
@@ -264,11 +288,11 @@ mergemap: keep if cohort >= 2023                         (30_analyze.do line 4)
     removed 612 rows (32.1%), 1,293 remaining
 \end{verbatim}
 }
-The suspect is innocent. The earnings merge matched 97.0 percent of the roster and used every row of the earnings file, and because it was written \texttt{keep(1 3)} the 73 unmatched participants stayed in the data with a missing outcome, which is what you want. The step that actually cut the sample is the county lookup: 433 participants, 18 percent of the roster, dropped because the crosswalk covers 210 counties and the roster contains people in counties it does not list. Nobody would have guessed that from the code, because \texttt{merge m:1 county} on a lookup table is the least suspicious line in the build.
+The suspect is innocent. The earnings merge matched 97.0 percent of the roster and used every row of the earnings file, and because it was written \texttt{keep(1 3)} the 73 unmatched participants stayed in the data with a missing outcome, which is what you want. The step that actually cut the sample is the county lookup: 433 participants, 18 percent of the roster, dropped because the crosswalk covers 210 counties and the roster contains people in counties it does not list. Nobody would have guessed that from the code, because \texttt{merge m:1 county} on a lookup table is the least suspicious line in the build. Now that you know it, write the tolerance into the call rather than into your memory. \texttt{warn()} and \texttt{stop()} take either a count of unmatched rows or a share of them, and a \texttt{stop} returns a nonzero return code, so \texttt{mergemap run build/, warn(.05) stop(.20)} lets a five percent miss through with a flag and halts the build when a stale crosswalk starts dropping a fifth of the roster. That is the rulebook discipline of Section~\ref{sec:ch06-defenses} applied to the join instead of to a variable's values, and it is what turns a diagnosis into a guard the next analyst inherits.
 
 \texttt{mergemap} reports coverage as a share of each side because the same count means different things at different sizes: 500 unmatched rows reads one way at 2 percent and another at 40. A lookup table that goes mostly unused is usually a sign the key is wrong rather than a sign the data are thin, which is why the second percentage is there. The unmatched-keys line does the other half of the work: it separates \enquote{433 rows failed to match} from \enquote{one county failed to match 433 times}. Here the top three offenders account for 49 between them, so the misses are spread thinly across many counties, which points at a crosswalk built from an incomplete county list; a handful of bad codes would pile up in a few keys.
 
-The two filters are honest work, and worth reading anyway. The \texttt{drop if} removes 62 rows, three percent, and it is the step analysts usually blame for a shortfall it did not cause. The \texttt{keep if} removes 612, a third of what is left, and is a deliberate design choice about which cohorts the study covers. Both belong in the methods note; only one of them is a decision a reader might question.
+The two filters are honest work, and worth reading anyway. The \texttt{drop if} removes 62 rows, three percent, and it is the step analysts usually blame for a shortfall it did not cause. The \texttt{keep if} removes 612, a third of what is left, and is a deliberate design choice about which cohorts the study covers. Both belong in the methods note; only one of them is a decision a reader might question. One line turns any of this into a check the build runs on itself: a scan leaves \texttt{r(N\_events)} behind, so \texttt{assert r(N\_events) == 12} at the end of a build fails the day somebody adds a join nobody mentioned.
 
 \begin{figure*}[htbp]
 \centering
@@ -278,7 +302,7 @@ The two filters are honest work, and worth reading anyway. The \texttt{drop if} 
 \end{figure*}
 
 \subsection{Keeping the map readable, and what to do with it}
-Figure~\ref{fig:ch06-mergemap} already shows a chosen view, and on a real build that choice stops being optional. A real build is bigger than three files, and the map of one can be enormous: in the pipeline we use to test the package, 3,092 recorded events drew a map 220,000 pixels tall, of which 2,527 were \texttt{keep} and \texttt{drop} statements. The journal and the receipt always keep every event, and what you choose is the drawing. Each option hides one kind of event, and the options combine. \texttt{draw} prints a line saying exactly what it hid, so a reader knows which events the map leaves out; that line belongs in the caption when the figure goes into an appendix.
+Figure~\ref{fig:ch06-mergemap} already shows a chosen view, and on a real build that choice stops being optional. A real build is bigger than three files, and the map of one can be enormous: in the pipeline we use to test the package, 3,092 recorded events drew a map 220,000 pixels tall, of which 2,527 were \texttt{keep} and \texttt{drop} statements. The journal and the receipt always keep every event, and what you choose is the drawing. Each option hides one kind of event, and the options combine. \texttt{draw} prints a line saying exactly what it hid, so a reader knows which events the map leaves out.
 \par
 {\footnotesize
 \begin{verbatim}

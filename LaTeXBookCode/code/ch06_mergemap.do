@@ -7,8 +7,7 @@ clear all
 set varabbrev off
 version 16.0
 
-* c(tmpdir) ends with a separator on macOS, so joining a name to it makes a
-* doubled slash that some path handling downstream does not survive.  Trim it.
+* c(tmpdir) ends with a separator on macOS, so trim it before joining a name.
 local tmp "`c(tmpdir)'"
 if inlist(substr("`tmp'", -1, 1), "/", "\") local tmp = substr("`tmp'", 1, strlen("`tmp'") - 1)
 local work "`tmp'/ch06_mergemap"
@@ -16,6 +15,12 @@ capture mkdir "`work'"
 cd "`work'"
 foreach d in raw build {
     capture mkdir "`d'"
+}
+* Start from a clean build folder.  A scan reads the folder it is given, and
+* re-running this file over the datasets the previous run saved there is a
+* different scan from the one the chapter prints.
+foreach f in annual_earnings analysis estimation {
+    capture erase "build/`f'.dta"
 }
 
 * ---- the three raw files a workforce programme hands you -------------------
