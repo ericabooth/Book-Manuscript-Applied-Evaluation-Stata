@@ -127,6 +127,19 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit, backgrounds, calc}
 % Reusable node styles for the book's pipeline diagrams
+% kaobook turns every margin note into a float, so a chapter with figures and
+% a run of margin notes can exhaust LaTeX's 18-slot float queue ("Too many
+% unprocessed floats").  Ask the kernel for more slots rather than moving the
+% figures around; this changes no layout.
+\extrafloats{512}
+% Full-page-width figures without the double-float machinery.  \begin{figure*}
+% queues on LaTeX's separate double-float list, which a tufte-style book with
+% hundreds of margin notes exhausts quickly ("Too many unprocessed floats").
+% An ordinary float whose graphic spans the text block plus the margin column
+% gives the same printed width and costs one ordinary float slot.
+\newlength{\fullpagewidth}
+\setlength{\fullpagewidth}{\dimexpr\textwidth+\marginparsep+\marginparwidth\relax}
+
 \tikzset{
     stage/.style={rectangle, rounded corners=3pt, draw=vizRule, line width=0.9pt,
         fill=vizBg, text width=1.7cm, align=center, minimum height=1.0cm, font=\sffamily\footnotesize},
@@ -2146,6 +2159,81 @@ last-step change:  -3.63 pp (still moving at threshold .5)
 When the series drifts, you are seeing evidence that the reluctant differ: treat the final number as provisional and pair it with the frame comparison above. Ships in the companion repository's \texttt{code/} folder.
 \end{kaobox}
 
+\subsection{Refusal or routing? The two blanks that look alike}\label{sec:ch05-surveymap}
+Item nonresponse arrives as one number and hides two problems. Suppose the six-month follow-up for a workforce programme comes back and two items look badly answered: the hourly-wage item has answers from half the sample, and the household-income item from about two thirds. The obvious reading is that income did better. Here is what Stata's own missing-value summary shows, and notice that it counts two kinds of blank without saying which is which:
+\par
+{\footnotesize
+\begin{verbatim}
+. misstable summarize wage hh_income
+                                                               Obs<.
+                                                +----------------------
+               |                                | Unique
+      Variable |     Obs=.     Obs>.     Obs<.  | values   Min     Max
+  -------------+--------------------------------+----------------------
+          wage |       386        57       457  |     25    17      23
+     hh_income |        31       290       579  |   >500  8813  251684
+\end{verbatim}
+}
+The split between \texttt{Obs=.} and \texttt{Obs>.} is the whole answer, and it is easy to read past. A system missing (\texttt{.}) is where skip logic lands: the respondent was never shown the question. An extended missing (\texttt{.a} to \texttt{.z}) is a person who was shown it and declined. Wage has 386 of the first kind and 57 of the second; income has 31 and 290. So the item that looks worse is the healthier one. Wage is mostly blank because 386 people said they were not working and the instrument correctly routed them past a question about their hourly pay. Income is blank because the instrument asked 290 people and they refused. These are opposite problems with opposite fixes: routing is the questionnaire working, so you fix the denominator you report, if anything; refusal is a question-wording or placement problem, so you fix the instrument itself or carry the gap in a weighting model.
+
+\texttt{surveymap}\index{surveymap@\texttt{surveymap}} decomposes every item that way at once, and reads the routing out of the responses rather than a questionnaire specification, which you often do not have in a usable form. Point it at the data in memory and name the gate:
+\par
+{\footnotesize
+\begin{verbatim}
+. surveymap, branch(employed)
+
+-------------------------------------------------------------------------
+surveymap receipt: followup_journal.tsv  (8 items, 900 respondents, 1 gate)
+-------------------------------------------------------------------------
+   #  item         answered      declined    not shown   routed around by
+-------------------------------------------------------------------------
+   1  resp_id             900 (100.0%)       0       0
+   2  consent             900 (100.0%)       0       0
+   3  employed            869 (96.6%)        0      31    consent==0
+   4  hours               496 (55.1%)       18     386    consent==0; empl~
+   5  wage                457 (50.8%)       57     386    consent==0; empl~
+   6  searching           355 (39.4%)        0     545    employed==1
+   7  useful              849 (94.3%)       20      31    consent==0
+   8  hh_income           579 (64.3%)      290      31    consent==0
+-------------------------------------------------------------------------
+balance: answered + declined + not shown = the sample, at every item.
+\end{verbatim}
+}
+Three columns, three different things, and the last one names the gate that closed. \texttt{surveymap} checks the arithmetic itself: every respondent in scope has to land in exactly one of the three at every item, so the three counts must sum to 900 on every row, and \texttt{r(N\_unbalanced)} reports how many rows failed. Put \texttt{assert r(N\_unbalanced) == 0} in the do-file and a map whose arithmetic has quietly gone wrong stops the run instead of getting drawn.
+
+One number in that table needs its denominator stated, because the same item carries a different percentage in the map. The receipt divides by the whole sample in scope:
+\par
+{\footnotesize
+\begin{verbatim}
+* what the receipt reports, for item v of N respondents in scope
+local pct = 100 * `n_answered' / `N'          //  wage: 100 * 457 / 900 = 50.8%
+
+* what a lane of the flow map reports, for a lane of size nlane
+local rt  = 100 * `n_answered' / `nlane'      //  wage: 100 * 457 / 514 = 88.9%
+\end{verbatim}
+}
+So \texttt{wage} is 50.8 percent of everybody and 88.9 percent of the people who were actually asked, and both numbers are correct answers to different questions. Quote the first when you report how much of the sample an item covers, and the second when you report how well the item performed among its intended respondents. Writing 88.9 percent in a table headed \enquote{item response rate} without saying that the denominator is the employed subsample is how a survey report ends up overstating its own completeness.
+
+Read down the \texttt{not shown} column and the instrument's shape appears. Thirty-one people consented to nothing, so they are absent from every later item. The 386 who were not working never saw \texttt{hours} or \texttt{wage}; the 545 who were working never saw \texttt{searching}. Read down \texttt{declined} instead and only one number is alarming: 290 refusals on income, against 57 on wage and 20 on the training-usefulness item. Take that number to the survey team; a table of percent missing hides it.
+
+Figure~\ref{fig:ch05-band} draws the same journal as one column per item, which is the view to use when the instrument is long: it has no node budget, so a two-hundred-item questionnaire is still one page, and the eye finds the item where the answers stop coming without reading a single number.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.80\linewidth]{ch05_surveymap_band.png}
+\caption[Item status across the questionnaire]{Every item of the follow-up survey, in questionnaire order, each column split into the three fates and stacked to the whole sample. This view has no node budget, so a two-hundred-item questionnaire is still one page. The two problem items look nothing alike here: \texttt{wage} carries a tall dark block, which is people who were never asked, while \texttt{hh\_income} carries a mid-grey block, which is people who were asked and declined. A percent-missing table renders those two identical. \texttt{surveymap} scales each band to the journal's own counts rather than to an assumed hundred, so a column that fails the balance check comes out visibly short. Built by \texttt{ch05\_surveymap.do}.}
+\label{fig:ch05-band}
+\end{figure*}
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=\linewidth]{ch05_surveymap_flow.png}
+\caption[The spine of the survey, with one gate]{The same survey as a flow map, cut to four items so it stays legible in print. Questionnaire order runs left to right; the gate on \texttt{employed} opens three lanes, one per answer including the 31 who never reached it, and each lane is labelled with its size. A solid box is an item that lane was asked, a dashed box one the gate routed it around, which is why \texttt{wage} appears three times and is dashed twice. \texttt{hh\_income} carries the flag \texttt{!! nonresp 290}: the grey block of Figure~\ref{fig:ch05-band}, seen from the other side. A flow map is a picture of structure rather than of length, and structure stops being legible on a page at about six columns, so the full instrument belongs in the browser page, which scrolls and keeps every number on hover.}
+\label{fig:ch05-flow}
+\end{figure*}
+
+Two cautions apply before you trust a map like this. \texttt{surveymap} infers the routing, so a category that merely happened not to answer a later item looks the same as one the instrument skipped past, and the receipt flags that inference once: read a detected gate as a claim to check against the questionnaire. And a delivered survey file is wider than the questionnaire, carrying record ids, sample-frame columns, interviewer admin and verbatim text, none of which were questions and all of which can look like branching. Name them in \texttt{exclude()} and the map is about the instrument again.
+
 \section{The cross-wave codebook}\label{sec:cxchangelog}
 A survey that runs for years accumulates a quiet liability: questions get reworded, response options get added, items get dropped, and by wave nine nobody can say for certain what changed when. Reconstructing that history by hand, comparing spreadsheets wave against wave, is an afternoon's work every cycle and a source of error each time. The \texttt{cxchangelog}\index{cxchangelog@\texttt{cxchangelog}} tool regenerates the item-changes inventory automatically from a long-format crosswalk of the instrument, assigning each concept a lifecycle code (added, same, reworded, re-optioned, removed, or not asked) derived from wave-to-wave differences in wording and options.
 
@@ -2511,6 +2599,96 @@ The message names the count of offending rows, the do-file stops at the exact li
 
 \subsection{Flagging a known-bad year, not smoothing it}\label{sec:ch06-pollutedyear}
 Sometimes the data is bad for a known reason, and flagging that period tells your reader more than smoothing over it does. The 2016 Texas STAAR results are the standing example: a vendor transition and a cut-score change corrupted that year's comparability, so we mark 2016 explicitly in the pipeline and keep the caveat attached to it rather than letting a bad year masquerade as a data point (Appendix~\ref{app:walkthroughs}). Document the flag today and you spare next year's analyst a wrong finding, because in a replicable pipeline a trap you found once stays found. The flag marks a real event: the 2016 STAAR online-testing failure hit tens of thousands of students, whose sessions were disrupted or answers lost, and the state ultimately excluded the affected results from that year's accountability ratings. Write the flag into the data as a variable so it survives every merge, because a caveat stored only in a memo dies at the first append.
+
+\section{Where did the rows go?}\label{sec:ch06-mergemap}
+A build runs clean and the estimation sample comes out smaller than the roster. The roster holds 2,400 programme participants; the file the models run on holds 1,293. Nobody wrote down where the other 1,107 went, and the instinct in the room is to blame the merge that attached outcomes, because that is the step that feels risky. This section gives you a way to answer the question from the code itself, in two modes: one that reads the build without running it, and one that runs it and counts.
+
+\texttt{mergemap}\index{mergemap@\texttt{mergemap}} reads a sequence of do-files and reports every join, every reshaping step around it, and every filter that quietly changes the row count. By default it executes nothing, which is what makes it usable on a project you have just inherited, on code that will not currently run, and on files whose data you were never sent. Point it at the folder, in the order the build runs:
+\par
+{\footnotesize
+\begin{verbatim}
+. mergemap build/
+mergemap: build/ is a folder; scanning 3 do-file(s) in name order
+
+All 2 joins clean.
++---------------------------------------------------------------------+
+| mergemap receipt: 3 do-files  (12 events, scan mode - nothing run)  |
++---------------------------------------------------------------------+
+  # file          line command   keys   using/result   F flags
+-----------------------------------------------------------------------
+  1 10_stack.do      2 use              raw/wages.dta
+  2 10_stack.do      3 drop if          missin...ings)
+  3 10_stack.do      4 collapse  pid
+  4 10_stack.do      5 save             build/...s.dta
+  5 20_link.do       2 use              raw/roster.dta
+  6 20_link.do       3 merge 1:1 pid    build/...s.dta   keep(1 3): using-only
+                                                         will be dropped
+  7 20_link.do       4 merge m:1 county raw/co...y.dta   keep(match):
+                                                         master-only and
+                                                         using-only will be
+                                                         dropped
+  8 20_link.do       5 save             build/...s.dta
+  9 30_analyze.do    2 use              build/...s.dta
+ 10 30_analyze.do    3 drop if          missin...ings)
+ 11 30_analyze.do    4 keep if          cohort >= 2023
+ 12 30_analyze.do    5 save             build/...n.dta
+-----------------------------------------------------------------------
+12 events. Severity: !! marks warn and stop.
+\end{verbatim}
+}
+That is the pipeline written down, in execution order, before anyone has read a line of the code. It also contains the answer in outline. Three of the twelve events can remove rows silently on their own terms: event~7 keeps only matched rows, and events 10 and 11 are filters. A scan is cheap enough to run on someone else's project before the handover meeting, which is the moment its value is highest, and the receipt prints as plain text in every output format, so it survives a log file and a monochrome printout. A loop over a file list appears once as \texttt{$\times$3} rather than as three near-identical lines.
+
+\subsection{Run mode, and coverage as a share of each side}
+Counts come only from run mode, which executes the build with instrumentation wrapped around each join and records what actually happened. The wrappers call the real commands and pass your options through untouched, so the datasets that come out are the same ones the plain build produces; the package's own regression suite runs the pipeline both ways and requires every saved file to match on \texttt{datasignature}, \texttt{cf \_all}, the sort flag and \texttt{describe}, down to the random-number state.
+\par
+{\footnotesize
+\begin{verbatim}
+. mergemap run build/
+
+mergemap: merge 1:1 pid using build/annual_earnings.dta  (20_link.do line 3)
+    key: pid   pid: long vs long
+    master 2,400 | using 2,327 | matched 2,327 | result 2,400
+    coverage: 97.0% of master matched, 100.0% of using used
+
+mergemap: merge m:1 county using raw/county_key.dta      (20_link.do line 4)
+    key: county   county: str5 vs str5
+    master 2,400 | using 210 | matched 1,967 | result 1,967
+    coverage: 82.0% of master matched, 100.0% of using used
+    top unmatched keys: 48439 (18), 48431 (16), 48461 (15)
+    433 master-only dropped by keep(match)
+
+mergemap: drop if missing(earnings)                      (30_analyze.do line 3)
+    removed 62 rows (3.2%), 1,905 remaining
+mergemap: keep if cohort >= 2023                         (30_analyze.do line 4)
+    removed 612 rows (32.1%), 1,293 remaining
+\end{verbatim}
+}
+The suspect is innocent. The earnings merge matched 97.0 percent of the roster and used every row of the earnings file, and because it was written \texttt{keep(1 3)} the 73 unmatched participants stayed in the data with a missing outcome, which is what you want. The step that actually cut the sample is the county lookup: 433 participants, 18 percent of the roster, dropped because the crosswalk covers 210 counties and the roster contains people in counties it does not list. Nobody would have guessed that from the code, because \texttt{merge m:1 county} on a lookup table is the least suspicious line in the build.
+
+\texttt{mergemap} reports coverage as a share of each side because the same count means different things at different sizes: 500 unmatched rows reads one way at 2 percent and another at 40. A lookup table that goes mostly unused is usually a sign the key is wrong rather than a sign the data are thin, which is why the second percentage is there. The unmatched-keys line does the other half of the work: it separates \enquote{433 rows failed to match} from \enquote{one county failed to match 433 times}. Here the top three offenders account for 49 between them, so the misses are spread thinly across many counties, which points at a crosswalk built from an incomplete county list; a handful of bad codes would pile up in a few keys.
+
+The two filters are honest work, and worth reading anyway. The \texttt{drop if} removes 62 rows, three percent, and it is the step analysts usually blame for a shortfall it did not cause. The \texttt{keep if} removes 612, a third of what is left, and is a deliberate design choice about which cohorts the study covers. Both belong in the methods note; only one of them is a decision a reader might question.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=\linewidth]{ch06_mergemap_flow.png}
+\caption[The linking step, drawn from the run]{The linking do-file after \texttt{mergemap run}, drawn horizontally with the run's observed counts inside each box. The figure draws one do-file of the three, because four boxes stay readable at page size where twelve do not; \texttt{mergemap} reported the choice as \enquote{hidden: 8 by the if; 4 of 12 events drawn}, and that line belongs in a caption whenever a map goes into a document, since the reader sees a chosen view rather than the record. The receipt above holds all twelve events. The roster's 2,400 rows meet the earnings file at a 1:1 merge covering 97 percent of the master and every row of the using file, and 73 unmatched participants stay in the data because the call said \texttt{keep(1 3)}. The county merge below it is where the file narrows to 1,967: coverage falls to 82 percent of the master, and the flagged line reads \texttt{!! 433 master-only dropped by keep(match)}. Built by \texttt{ch06\_mergemap.do}.}
+\label{fig:ch06-mergemap}
+\end{figure*}
+
+\subsection{Keeping the map readable, and what to do with it}
+Figure~\ref{fig:ch06-mergemap} already shows a chosen view, and on a real build that choice stops being optional. A real build is bigger than three files, and the map of one can be enormous: in the pipeline we use to test the package, 3,092 recorded events drew a map 220,000 pixels tall, of which 2,527 were \texttt{keep} and \texttt{drop} statements. The journal and the receipt always keep every event, and what you choose is the drawing. Each option hides one kind of event, and the options combine. \texttt{draw} prints a line saying exactly what it hid, so a reader knows which events the map leaves out; that line belongs in the caption when the figure goes into an appendix.
+\par
+{\footnotesize
+\begin{verbatim}
+mergemap draw, joinsonly        // no filters, no transforms
+mergemap draw, filesonly        // joins between named files only
+mergemap draw if class == "join" & n_out < n_in   // only joins that lost rows
+\end{verbatim}
+}
+\texttt{mergemap} evaluates the \texttt{if} against the journal's own columns, with the counts as numbers, so you can page a long pipeline by do-file, by line range, or by what happened. On that 3,092-event journal, \texttt{filesonly} brought the map from 221,997 pixels to 14,144.
+
+There are three things worth doing with the output once you have it. Put the receipt in the methods appendix, where it documents the build in a form a replicator can follow. Put the drawn map in the data-management memo, where it does the job a paragraph does badly: showing a client how twelve raw files became one analysis file. And keep the run-mode numbers, because \enquote{the county crosswalk covers 82 percent of our participants} is a finding about the data infrastructure that outlives this study, and it is the kind of sentence that gets a crosswalk fixed.
 
 \section{One workflow carries the year files to a panel that explains itself}\label{sec:ch06-ecosystem}
 Each tool in this book so far solved one problem in isolation: a folder layout in Chapter~\ref{ch:workshop}, a converter and a stacker in Chapter~\ref{ch:noapi}, a codebook in Chapter~\ref{ch:surveys}, lineage tags in Section~\ref{sec:lineage}. A real project meets all of those problems in the same week, so this section connects the tools into one workflow and walks it end to end on a small, complete example. The workflow extends the discipline \textcite{long2009workflow} built for a single analyst's do-files out into the parts of a project Long's book could take as given and an evaluation shop cannot: metadata that must survive years of merges, column names that drift across vintages, extracts that arrive with undocumented surprises, and a reviewer who needs to correct the record without touching the data. Figure~\ref{fig:ch06-ecosystem} shows the whole route on one page; everything below runs it for real, and the companion do-file \texttt{ch06\_provenance.do} reruns every step with assertions attached.
