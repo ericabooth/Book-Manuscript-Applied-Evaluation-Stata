@@ -1,0 +1,192 @@
+[
+  [
+    "43_ch11.tex",
+    "\\subsection{The earnings table, generated not typed}",
+    "\\subsection{Generating the earnings table}"
+  ],
+  [
+    "43_ch11.tex",
+    "The same stored estimates that wrote the \\LaTeX{} table also write the Excel tab a program manager opens, and \\texttt{putexcel} places each value and its formatting cell by cell:",
+    "We now restore the controlled regression and write selected results to Excel. Restore it immediately before reading \\texttt{\\_b[]} and \\texttt{e()} so another estimation command cannot change which results you export:"
+  ],
+  [
+    "43_ch11.tex",
+    "putexcel set \"$output/summary.xlsx\", replace",
+    "estimates restore m2\nputexcel set \"$output/summary.xlsx\", replace"
+  ],
+  [
+    "43_ch11.tex",
+    "and the workbook cannot fall out of step with the model.",
+    "and you can compare the rewritten workbook with the stored model."
+  ],
+  [
+    "43_ch11.tex",
+    "the Sheet stays both usable and correct",
+    "the Sheet can be checked against the computed summary"
+  ],
+  [
+    "43_ch11.tex",
+    "Once the numbers arrive from code, you no longer trade correctness for convenience.",
+    "Check the results and the team's editing permissions after each rebuild."
+  ],
+  [
+    "43_ch11.tex",
+    "The earnings table earlier in this chapter and the enrollment tracker here are the same idea pointed at two audiences. One writes a static number into a \\LaTeX{} appendix and an Excel tab from stored estimates; the other writes a living number into a shared sheet on a schedule. Neither one leaves room for a hand-edited cell, because the hand-edited cell is where a deliverable stops being reproducible and starts being a liability, and the Reinhart--Rogoff correction \\parencite{herndon2014debt} is the standing reminder of what one such cell can cost. That refusal, held consistently, is what lets an evaluator hand over the pipeline and not just the printout.",
+    "For both the earnings workbook and the enrollment tracker, the handoff includes the do-file, its inputs, the update schedule, and the checks that confirm a successful run. Keep editable source records and team annotations separate from computed results. That makes a correction traceable: the team changes the source record, and the next approved run updates the summary."
+  ],
+  [
+    "43_ch11.tex",
+    "\\paragraph{Where this leaves you.} You can now deliver formatted Excel from code, ingest a \\LaTeX{} table straight from the do-file that computed it, run a live Google Sheet as a shared channel, and hand a program team a tool they keep using, all built from the do-file so the pipeline stays intact. Those are the accessible and actionable principles, delivered in the client's own tools. The same habits apply in every format: the spec agreed before the build, the skeleton signed off before the wiring, and the next-quarter test passed before the handoff. Chapter~\\ref{ch:portals} covers the last delivery format, the self-contained report or portal that runs offline behind any firewall.",
+    "\\paragraph{Where this leaves you.} You can generate Excel and report tables from stored results, refresh a shared Google Sheet, and help a program team maintain a tracker. Agree on the structure before building it, compare exports with their source results, and have a colleague rehearse the refresh before handoff. Chapter~\\ref{ch:portals} extends this work to reports and portals that readers can open in a browser."
+  ],
+  [
+    "44_ch12.tex",
+    "contains the runnable version of this sketch, folder setup included",
+    "documents the implemented stages and folder setup"
+  ],
+  [
+    "44_ch12.tex",
+    "so it cannot drift from the numbers (Section~\\ref{sec:versioning})",
+    "for comparison with the build record (Section~\\ref{sec:versioning})"
+  ],
+  [
+    "44_ch12.tex",
+    "The result is a folder the committee opens on any laptop, with no server and no logins, that the evaluator rebuilds next quarter with a single command, and that records its own provenance so no copy is ever mistaken for another.",
+    "Test the resulting folder on a recipient's laptop, record which panels require internet access, and include a version stamp and rebuild instructions."
+  ],
+  [
+    "44_ch12.tex",
+    "\\paragraph{Where this leaves you.} This chapter opened with an IT department blocking everything that needs a server and closes with the deliverable that does not care: a stamped folder of static files that rebuilds from one do-file, opens on any laptop, and answers for itself. Building it, you learned to compile the report from the analysis and review its narrative against the refreshed results, to add interactivity that the page itself runs, to pick the format by asking whether the reader will act inside the artifact or only read it, and to stamp every delivery with its version, commit, and data vintage so no one ever confuses which numbers a board saw. That stamped, rebuildable folder is the four principles in one object: replicable from a tagged commit, extensible by rerun, accessible offline when its dependencies are bundled and local files are permitted, and actionable the day it lands. You ship it with three disciplines: a five-line release checklist with three sign-offs, a rebuild rehearsal that finds the broken link before the board does, and a scheduled build that leaves only the judgment to you. Part~V turns to sustaining the practice over time, beginning with the careful use of AI in Chapter~\\ref{ch:ai}.",
+    "\\paragraph{Where this leaves you.} You can combine a generated report, interactive panels, and supporting data in a versioned folder. An offline release needs all its viewing dependencies bundled and tested; a refreshed release needs the narrative reviewed against the new results. Keep the code revision, data vintage, and delivery record together, and rehearse the rebuild from a clean location. Part~V turns to sustaining this practice, beginning with the use of AI in Chapter~\\ref{ch:ai}."
+  ],
+  [
+    "44_ch12.tex",
+    "which read their data from an inlined \\texttt{data/} folder. The one arrow that matters points to the browser: double-click \\texttt{index.html} and the whole portal opens offline, with no server and nothing to install. Because it is only files, it cannot break when a server goes down, and the client can reopen it years later.",
+    "with data embedded in each page or stored in bundled files. Open \\texttt{index.html} with the network disconnected to check that the intended offline panels work. Preserve the folder structure when copying the release."
+  ],
+  [
+    "44_ch12.tex",
+    "Stamp & Where it lives & Question it answers",
+    "Stamp & Where to record it & Question it answers"
+  ],
+  [
+    "51_ch13.tex",
+    "\\tfrac{2\\widehat{\\operatorname{Cov}}(y^{\\text{ML}},y^{\\text{human}}-y^{\\text{ML}})}{N}",
+    "\\tfrac{2\\widehat C}{N}"
+  ],
+  [
+    "51_ch13.tex",
+    "The covariance term accounts for their overlap.",
+    "The covariance term accounts for their overlap: $\\widehat C$ is the sample covariance of the machine label and the human-minus-machine difference on the gold notes."
+  ],
+  [
+    "51_ch13.tex",
+    "In the simulated example, compare the machine-only estimate with the corrected estimate and their intervals in the companion log.",
+    "In the verified simulated run, the machine-only estimate is 0.234, while the corrected estimate is 0.288 with a 95 percent population interval of [0.232, 0.343]. Compare these with the population prevalence of 0.30 used to generate the data; the wider corrected interval reflects uncertainty in the human-coded subset."
+  ],
+  [
+    "51_ch13.tex",
+    "The gold standard does double duty, validation first and rectifier second, and that second job is the deeper reason we keep insisting the human sample be random rather than convenient.",
+    "A random gold subset supports both validation and estimation of the label-error correction. If you use the gold labels to revise the prompt, reserve separate labels for the final evaluation or use a method that accounts for that reuse; otherwise the measured accuracy can be optimistic."
+  ],
+  [
+    "51_ch13.tex",
+    "a privacy gate that halts the do-file before identified text leaves your machine",
+    "a privacy scan that halts the do-file on recognized identifier patterns before a hosted call"
+  ],
+  [
+    "51_ch13.tex",
+    "the log decides whether it worked.",
+    "you inspect the log to see what ran and which checks passed."
+  ],
+  [
+    "51_ch13.tex",
+    "The stable pair differs by two characters out of thirty-eight, a delta of 0.05, well under the 0.10 line, so the sieve accepts it without a human.",
+    "The stable pair differs by two characters out of thirty-eight, a delta of 0.05, below the illustrative 0.10 routing threshold. In this exercise it is unflagged, subject to the separate validation of accepted cases."
+  ],
+  [
+    "51_ch13.tex",
+    "A delta near zero across LLMs with different lineages is a stronger signal than the same delta across two versions of one LLM, because the first is consensus among genuinely different sensors and the second is a sensor agreeing with itself.",
+    "Using different LLMs may reduce some shared errors, but different product names or development lineages do not establish independence."
+  ],
+  [
+    "51_ch13.tex",
+    "the sieve tells you where the LLMs are confident, and confidence is a proxy for correctness only as far as the LLMs are independent and the gold standard confirms it.",
+    "the sieve identifies stable wording, whose relation to correctness must be checked against human labels."
+  ],
+  [
+    "51_ch13.tex",
+    "so label error does not bias the prevalence or the model built on it.",
+    "and use an estimand-specific correction if the labels enter a regression."
+  ],
+  [
+    "51_ch13.tex",
+    "Cohen's kappa is for exactly two raters; Fleiss' generalizes to three or more. If you validate the LLM against a single human coder, Cohen's is the right statistic; if you pool several coders' labels or compare several LLMs, reach for Fleiss'.",
+    "Cohen's kappa compares two categorical ratings. With multiple raters, choose a coefficient suited to the rating design, including whether the same raters rate every note; Fleiss' kappa is one option, rather than an automatic choice whenever more raters are present."
+  ],
+  [
+    "52_ch14.tex",
+    "\\paragraph{Where this leaves you.} The sharing toolkit is complete: you can measure re-identification risk, coarsen and suppress to bring it down, ship synthetic stand-ins, and gate raw intake with an auditable receipt. \\marginnote{The worked example made the danger concrete: in an ordinary two-thousand-record file, twenty-four people were unique on four plain columns and another sixty-three sat in cells of four or fewer. Coarsening one of those columns cut the unique count from twenty-four to three.} These tools support a documented disclosure assessment; their outputs do not guarantee that a release cannot identify someone. Three of those steps are now installable commands rather than hand-built do-files: \\texttt{riskscan} puts the re-identification count in a return scalar a release script can gate on, \\texttt{suppress} enforces primary and complementary blanking so a published table stays both safe and honest, and \\texttt{synthgen} writes the stand-in file with a receipt stating how faithful it is and how many of its rows duplicate a real one. Where those tools stop, at the boundary where many overlapping releases can still be triangulated, the field turns to the differentially private methods that \\S\\ref{sec:frontier-dp} maps. Every release those tools protect adds one row to the disclosure-review checklist, the one page that collects the six fields of a release, from the quasi-identifier list to the archive location. In Chapter~\\ref{ch:tools} we close the book by turning the do-files you have written, this chapter's \\texttt{ch14\\_kanon.do} among them, into shared tools and a lasting archive.",
+    "\\paragraph{Where this leaves you.} You can count quasi-identifier combinations, examine sensitive-value diversity, coarsen a proposed file, and apply primary and complementary suppression to a table. You can also generate a synthetic stand-in and screen intake files for likely protected information. Record the fields assessed, the release standard, the checks performed, and the reviewer responsible for the decision. These checks support disclosure review within their stated limits; overlapping releases and outside information still matter. Chapter~\\ref{ch:tools} shows how to turn repeated do-file steps into shared commands and preserve the project in a replication archive."
+  ],
+  [
+    "52_ch14.tex",
+    "since a publicly known zero reveals nothing",
+    "under the positive-count rule used by this command"
+  ],
+  [
+    "52_ch14.tex",
+    "The hidden threes cannot be recovered",
+    "The hidden positive counts cannot be recovered"
+  ],
+  [
+    "52_ch14.tex",
+    "Complementary suppression is the table-level version of $l$-diversity, the check that accompanies $k$-anonymity: one keeps a blanked cell from being reconstructed out of its total, the other keeps a group's sensitive value from being read off the group.",
+    "Complementary suppression and $l$-diversity address different disclosures: the former limits reconstruction of hidden counts from totals; the latter examines variation in sensitive values within quasi-identifier groups."
+  ],
+  [
+    "53_ch15.tex",
+    "Three colleagues run three slightly different copies of the same cleaning do-file, and they get three different answers to the same question.",
+    "Colleagues may accumulate slightly different copies of a cleaning do-file and obtain different answers from what they thought was the same procedure."
+  ],
+  [
+    "53_ch15.tex",
+    "The dashed return edge is the payoff that repays the packaging effort.",
+    "The dashed return edge shows how a later project can reuse the installed tool."
+  ],
+  [
+    "53_ch15.tex",
+    "A tool without documentation dies with its author's memory,",
+    "A colleague needs documentation to use a tool without its author present,"
+  ],
+  [
+    "53_ch15.tex",
+    "a short spine you can copy",
+    "a short structure you can adapt"
+  ],
+  [
+    "53_ch15.tex",
+    "One claim runs underneath:",
+    "Throughout, we consider how"
+  ],
+  [
+    "53_ch15.tex",
+    "Throughout, we consider how colleagues treat a tool as a standard only after you package it, document it, distribute it, and preserve it.",
+    "Throughout, we consider how packaging, documentation, distribution, and preservation let colleagues depend on the same implementation."
+  ],
+  [
+    "53_ch15.tex",
+    "An evaluator needs the seams between languages, not fluency in all of them, and those seams are few enough to cover in one section.",
+    "You can begin by identifying which part of the task would benefit from another language, while keeping the main analysis in Stata."
+  ],
+  [
+    "53_ch15.tex",
+    "An evaluator learns the seams rather than the whole of each language to keep effort in proportion: their time is better spent on the pipeline than on reimplementing it in a faster language that the work does not need. Turn to Mata or Python where it counts, and nowhere else, and the trifecta of Stata, Mata, and Python stays a help rather than a distraction.",
+    "Use the timing results to decide whether the additional language solves a measured problem. When it does, document the inputs, outputs, and dependencies of that step so a colleague can rerun it with the rest of the analysis."
+  ],
+  [
+    "53_ch15.tex",
+    "\\paragraph{Where this leaves you.} By now, you can turn a repeated do-file into a documented, distributed command, complete with a version-locked \\texttt{.ado} skeleton, a short help file, and the two-file \\texttt{.pkg} plus \\texttt{stata.toc} that make it a one-line install. In real timer output, you have seen why you reach for a vectorized \\texttt{gen} first, Mata only for genuine matrix work, and an explicit loop last. Beyond the command itself, you can package a project into a manifest-driven replication archive that survives the engagement. Those are extensibility and replicability applied to the practice itself, so the work outlasts any single project. And \\texttt{rateshrink}, one of the book's own packages, served as the worked case: you walked it through the seven-row checklist a colleague uses to decide whether to depend on a shared tool, the template for hardening any of your own scripts the same way. The habits underneath the checklist apply to every tool you build next: draft the syntax line and the test battery before the code, generalize only what a real call site needs, and never change behavior under a version number a colleague has pinned. The appendices that follow collect the setup guide, the causal quick-reference, the full toolkit, two complete worked examples, a capstone you can run end to end in minutes, and a registry of every dataset the book uses.",
+    "\\paragraph{Where this leaves you.} You can extract repeated code into an ado-file, document its syntax and examples, test its behavior, and distribute a versioned package. You can also time a slow step before deciding whether Mata or Python is useful, and prepare an archive containing the data, code, documentation, and software versions needed to reproduce the work. Use the \\texttt{rateshrink} checklist as a starting point for reviewing your own tools, then add tests for the cases your projects actually encounter. The appendices collect the setup guide, toolkit, worked examples, capstone, and dataset registry."
+  ]
+]

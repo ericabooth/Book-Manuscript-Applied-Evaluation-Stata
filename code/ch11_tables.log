@@ -1,0 +1,348 @@
+
+  ___  ____  ____  ____  ____ ®
+ /__    /   ____/   /   ____/      StataNow 19.5
+___/   /   /___/   /   /___/       MP—Parallel Edition
+
+ Statistics and Data Science       Copyright 1985-2025 StataCorp LLC
+                                   StataCorp
+                                   4905 Lakeway Drive
+                                   College Station, Texas 77845 USA
+                                   800-782-8272        https://www.stata.com
+                                   979-696-4600        service@stata.com
+
+Stata license: 4-user 4-core network, expiring  6 May 2027
+Serial number: 501909369296
+  Licensed to: Eric Booth
+               Texas 2036
+
+Notes:
+      1. Stata is running in batch mode.
+      2. Unicode is supported; see help unicode_advice.
+      3. More than 2 billion observations are allowed; see help obs_advice.
+      4. Maximum number of variables is set to 5,000 but can be increased;
+          see help set_maxvar.
+
+
+Running /Users/ericbooth/Documents/Stata/ado/personal/profile.do ...
+-------------------------------------------------------------------------------
+  [1]  (BASE)      "/Applications/StataNow/ado/base/"
+  [2]  (SITE)      "/Users/ericbooth/Library/CloudStorage/GoogleDrive-eric.boot
+> h@texas2036.org/Shared drives/Data and Research Team//_codeshare/"
+  [3]              "."
+  [4]  (PERSONAL)  "/Users/ericbooth/Documents/Stata/ado/personal/"
+  [5]  (PLUS)      "/Users/ericbooth/Library/Application Support/Stata/ado/plus
+> /"
+  [6]  (OLDPLACE)  "~/ado/"
+ [view] [edit] [do]  00_control.do 
+ [view] [edit] [do]  01_install.do 
+ [view] [edit] [do]  20_ch03_apis.do 
+ [view] [edit] [do]  capstone_chr.do 
+ [view] [edit] [do]  ch01_reach.do 
+ [view] [edit] [do]  ch02_benchmark.do 
+ [view] [edit] [do]  ch02_projectbuilder.do 
+ [view] [edit] [do]  ch03_educationdata.do 
+ [view] [edit] [do]  ch03_webapi.do 
+ [view] [edit] [do]  ch04_chr.do 
+ [view] [edit] [do]  ch05_datadictionary.do 
+ [view] [edit] [do]  ch05_monitoring.do 
+ [view] [edit] [do]  ch06_frames.do 
+ [view] [edit] [do]  ch06_longitudinal.do 
+ [view] [edit] [do]  ch06_reshapehelper.do 
+ [view] [edit] [do]  ch07_trust.do 
+ [view] [edit] [do]  ch08_did.do 
+ [view] [edit] [do]  ch08_oaxaca.do 
+ [view] [edit] [do]  ch08_subgroups.do 
+ [view] [edit] [do]  ch09_graphs.do 
+ [view] [edit] [do]  ch10_googlechart.do 
+ [view] [edit] [do]  ch10_smallmult.do 
+ [view] [edit] [do]  ch11_googlesheets.do 
+ [view] [edit] [do]  ch11_tables.do 
+ [view] [edit] [do]  ch12_dashboardbuilder.do 
+ [view] [edit] [do]  ch12_portal.do 
+ [view] [edit] [do]  ch13_backbone.do 
+ [view] [edit] [do]  ch13_injection_gate.do 
+ [view] [edit] [do]  ch13_parallel.do 
+ [view] [edit] [do]  ch13_validation.do 
+ [view] [edit] [do]  ch14_kanon.do 
+ [view] [edit] [do]  ch15_bench.do 
+
+Click [here] for other links
+-------------------------------------------------------------------------------
+
+. do ch11_tables.do 
+
+. *============================================================================
+> ==*
+. * ch11_tables.do  --  Chapter 11: delivering through spreadsheets
+. * The reproducible-reporting thesis made physical:
+. *   (a) simulate a workforce program's participant earnings dataset,
+. *   (b) estimate a simple earnings model by cohort,
+. *   (c) write a booktabs-FREE LaTeX table fragment with -esttab-,
+. *       which the book -\input-s directly (no hand editing), and
+. *   (d) show the -putexcel- path that ships the same table to Excel.
+. * The earnings data are SIMULATED with seed 20260704 (labeled so in text).
+. *============================================================================
+> ==*
+. * Globals defined locally so this file runs standalone; in the full book
+. * project they are set once by code/00_control.do instead.
+. global root    "`c(pwd)'"
+
+. global raw     "$root/raw"
+
+. global clean   "$root/clean"
+
+. global output  "$root/output"
+
+. global figures "$root/figures"
+
+. capture mkdir "$raw"
+
+. capture mkdir "$clean"
+
+. capture mkdir "$output"
+
+. capture mkdir "$figures"
+
+. 
+. version 18
+
+. clear all
+
+. set more off
+
+. set linesize 90
+
+. 
+. *--- (a) Simulate a workforce program's participant earnings ------------------*
+. * 900 participants across three enrollment cohorts. Post-program quarterly
+. * earnings rise with a training-hours dose and with prior work experience.
+. set seed 20260704
+
+. set obs 900
+Number of observations (_N) was 0, now 900.
+
+. gen id       = _n
+
+. gen cohort   = 1 + mod(_n, 3)            // cohorts 1, 2, 3 (roughly equal)
+
+. label define coh 1 "2022 cohort" 2 "2023 cohort" 3 "2024 cohort"
+
+. label values cohort coh
+
+. 
+. gen female   = runiform() < 0.54
+
+. gen exper    = max(0, round(rnormal(6, 4)))      // years of prior work
+
+. gen hours    = round(20 + 60*runiform())         // training hours 20-80
+
+. 
+. * True data-generating process (dollars per quarter):
+. gen earn = 3800 + 22*hours + 140*exper - 260*female ///
+>            + 300*(cohort==2) + 640*(cohort==3) + rnormal(0, 900)
+
+. replace earn = round(earn)
+(900 real changes made)
+
+. label var earn   "Quarterly earnings ($)"
+
+. label var hours  "Training hours"
+
+. label var exper  "Prior experience (yrs)"
+
+. label var female "Female"
+
+. 
+. save "$clean/ch11_earnings.dta", replace
+file /Users/ericbooth/Library/CloudStorage/GoogleDrive-eric.booth@texas2036.org/My
+    Drive/Book-Manuscript-Applied-Evaluation-Stata/code/clean/ch11_earnings.dta saved
+
+. 
+. *--- (b) Two nested models: raw dose, then dose plus controls -----------------*
+. eststo clear
+
+. eststo m1: regress earn hours
+
+      Source |       SS           df       MS      Number of obs   =       900
+-------------+----------------------------------   F(1, 898)       =     87.92
+       Model |  98892321.3         1  98892321.3   Prob > F        =    0.0000
+    Residual |  1.0101e+09       898  1124804.74   R-squared       =    0.0892
+-------------+----------------------------------   Adj R-squared   =    0.0882
+       Total |  1.1090e+09       899  1233556.15   Root MSE        =    1060.6
+
+------------------------------------------------------------------------------
+        earn | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       hours |   19.28699   2.056941     9.38   0.000     15.25002    23.32396
+       _cons |   4955.186   108.9349    45.49   0.000     4741.389    5168.983
+------------------------------------------------------------------------------
+
+. eststo m2: regress earn hours exper female i.cohort
+
+      Source |       SS           df       MS      Number of obs   =       900
+-------------+----------------------------------   F(5, 894)       =    116.39
+       Model |   437262041         5  87452408.2   Prob > F        =    0.0000
+    Residual |   671704938       894  751347.805   R-squared       =    0.3943
+-------------+----------------------------------   Adj R-squared   =    0.3909
+       Total |  1.1090e+09       899  1233556.15   Root MSE        =     866.8
+
+------------------------------------------------------------------------------
+        earn | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       hours |   20.01252   1.688187    11.85   0.000     16.69925    23.32579
+       exper |   148.3839   7.754543    19.14   0.000     133.1647    163.6032
+      female |  -308.6457   58.37006    -5.29   0.000     -423.204   -194.0874
+             |
+      cohort |
+2023 cohort  |   67.15401   70.90121     0.95   0.344    -71.99821    206.3062
+2024 cohort  |   428.0127   70.88809     6.04   0.000     288.8862    567.1391
+             |
+       _cons |   4029.993    109.955    36.65   0.000     3814.193    4245.793
+------------------------------------------------------------------------------
+
+. 
+. di "---MODEL 2 KEY COEFFICIENTS---"
+---MODEL 2 KEY COEFFICIENTS---
+
+. esttab m2, se b(%9.1f) se(%9.1f) nostar noobs ///
+>     keep(hours exper female)
+
+-------------------------
+                      (1)
+                     earn
+-------------------------
+hours                20.0
+                    (1.7)
+
+exper               148.4
+                    (7.8)
+
+female             -308.6
+                   (58.4)
+-------------------------
+Standard errors in parentheses
+
+. 
+. *--- (c) Write a booktabs-FREE LaTeX fragment the book -\input-s --------------*
+. * -esttab- writes the .tex; the book ingests exactly what this line produced.
+. * No -booktabs- option -> plain \hline rules, matching the book's table style.
+. local frag "ch11_wage_table.tex"
+
+. * Step 1: -esttab- writes the table body (rows only) with -fragment-.
+. * Force a .tex target so esttab emits LaTeX, not fixed-format text.
+. local body "$output/ch11_wage_body.tex"
+
+. esttab m1 m2 using "`body'", replace fragment ///
+>     label collabels(none) nonotes nostar ///
+>     b(%9.1f) se(%9.1f) ///
+>     stats(N r2, fmt(%9.0fc %9.3f) ///
+>         labels("Participants" "R-squared")) ///
+>     order(hours exper female) ///
+>     varlabels(_cons Constant) ///
+>     mtitle("Dose only" "Dose + controls")
+(output written to /Users/ericbooth/Library/CloudStorage/GoogleDrive-eric.booth@texas2036.
+> org/My Drive/Book-Manuscript-Applied-Evaluation-Stata/code/output/ch11_wage_body.tex)
+
+. 
+. * Step 2: wrap that body in a complete, self-contained -tabular- with
+. * plain \hline rules, so the book -\input-s one ready-to-typeset file.
+. tempname fh fb
+
+. file open `fh' using "$output/`frag'", write replace text
+
+. file write `fh' "% ch11_wage_table.tex" _n
+
+. file write `fh' "% Generated by ch11_tables.do -- do not edit by hand." _n
+
+. file write `fh' "\begin{tabular}{l*{2}{c}}" _n
+
+. file write `fh' "\hline\hline" _n
+
+. file open `fb' using "`body'", read text
+
+. file read `fb' line
+
+. while r(eof) == 0 {
+  2.     file write `fh' `"`line'"' _n
+  3.     file read `fb' line
+  4. }
+
+. file close `fb'
+
+. file write `fh' "\hline\hline" _n
+
+. file write `fh' "\end{tabular}" _n
+
+. file close `fh'
+
+. 
+. di "---FRAGMENT WRITTEN---"
+---FRAGMENT WRITTEN---
+
+. type "$output/`frag'"
+% ch11_wage_table.tex
+% Generated by ch11_tables.do -- do not edit by hand.
+\begin{tabular}{l*{2}{c}}
+\hline\hline
+                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}\\
+                    &\multicolumn{1}{c}{Dose only}&\multicolumn{1}{c}{Dose + controls}\\
+\hline
+Training hours      &        19.3&        20.0\\
+                    &       (2.1)&       (1.7)\\
+Prior experience (yrs)&            &       148.4\\
+                    &            &       (7.8)\\
+Female              &            &      -308.6\\
+                    &            &      (58.4)\\
+2022 cohort         &            &         0.0\\
+                    &            &         (.)\\
+2023 cohort         &            &        67.2\\
+                    &            &      (70.9)\\
+2024 cohort         &            &       428.0\\
+                    &            &      (70.9)\\
+Constant            &      4955.2&      4030.0\\
+                    &     (108.9)&     (110.0)\\
+\hline
+Participants        &         900&         900\\
+R-squared           &       0.089&       0.394\\
+\hline\hline
+\end{tabular}
+
+. 
+. *--- (d) The same numbers, shipped to Excel with -putexcel- (display path) ----*
+. * This block writes a formatted one-tab workbook a funder opens in Excel.
+. * Shown for reference; the .xlsx is a delivery artifact, not a book input.
+. putexcel set "$output/ch11_earnings_summary.xlsx", replace
+note: file will be replaced when the first putexcel command is issued.
+
+. putexcel A1 = "Program earnings model (simulated)", bold
+file /Users/ericbooth/Library/CloudStorage/GoogleDrive-eric.booth@texas2036.org/My Drive/B
+> ook-Manuscript-Applied-Evaluation-Stata/code/output/ch11_earnings_summary.xlsx saved
+
+. putexcel A2 = "Term"        B2 = "Dose only"  C2 = "Dose + controls", bold
+file /Users/ericbooth/Library/CloudStorage/GoogleDrive-eric.booth@texas2036.org/My Drive/B
+> ook-Manuscript-Applied-Evaluation-Stata/code/output/ch11_earnings_summary.xlsx saved
+
+. putexcel A3 = "Training hours ($ per qtr each)"
+file /Users/ericbooth/Library/CloudStorage/GoogleDrive-eric.booth@texas2036.org/My Drive/B
+> ook-Manuscript-Applied-Evaluation-Stata/code/output/ch11_earnings_summary.xlsx saved
+
+. putexcel B3 = (_b[hours])   C3 = (0)     // filled from stored estimates
+file /Users/ericbooth/Library/CloudStorage/GoogleDrive-eric.booth@texas2036.org/My Drive/B
+> ook-Manuscript-Applied-Evaluation-Stata/code/output/ch11_earnings_summary.xlsx saved
+
+. putexcel A4 = "Participants"
+file /Users/ericbooth/Library/CloudStorage/GoogleDrive-eric.booth@texas2036.org/My Drive/B
+> ook-Manuscript-Applied-Evaluation-Stata/code/output/ch11_earnings_summary.xlsx saved
+
+. putexcel B4 = (e(N))
+file /Users/ericbooth/Library/CloudStorage/GoogleDrive-eric.booth@texas2036.org/My Drive/B
+> ook-Manuscript-Applied-Evaluation-Stata/code/output/ch11_earnings_summary.xlsx saved
+
+. putexcel save
+
+. 
+. di "DONE"
+DONE
+
+. 
+end of do-file

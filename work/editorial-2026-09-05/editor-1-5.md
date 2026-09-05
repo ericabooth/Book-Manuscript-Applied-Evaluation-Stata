@@ -170,7 +170,7 @@ Before:
 > stamp the filename with the date so runs never overwrite each other:
 
 After:
-> stamp the filename with the date so a new day	extquotesingle s run preserves the previous day	extquotesingle s log:
+> stamp the filename with the date so a new day\textquotesingle s run preserves the previous day\textquotesingle s log:
 
 ### 17. 12_ch02.tex — Editorial correction
 
@@ -402,7 +402,7 @@ Before:
 > You end up owning a thirteen-year Texas education panel almost no one else in the room will have: you write a short script that walks the state's download form, which has no API behind it, and pulls each year in turn. That ownership is the point for an embedded evaluator. When the state posts the files but ships no bulk extract, everyone at the table can see the same eighty-four buttons, but only the person who scripted the walk holds the assembled panel, and only that person can rebuild it next fall in an afternoon.
 
 After:
-> We now use the state	extquotesingle s download form to assemble a Texas education panel across thirteen years. You can save colleagues the repeated work of opening that form and selecting each year by recording those selections in a script they can rerun.
+> We now use the state\textquotesingle s download form to assemble a Texas education panel across thirteen years. You can save colleagues the repeated work of opening that form and selecting each year by recording those selections in a script they can rerun.
 
 ### 40. 22_ch04.tex — Editorial correction
 
@@ -747,3 +747,383 @@ Before:
 
 After:
 > The \texttt{dryrun} option prints the call without sending it. Use a placeholder token for demonstrations and shared logs: a dry run that prints a real token can expose it just as a live call can.
+
+### 73. 11_ch01.tex — Editorial correction
+
+Reason: Avoid leap from descriptive reach to site relocation.
+
+Before:
+> so the live question is no longer whether reach is uneven but which sites to move.
+
+After:
+> so the next discussion can focus on why particular sites missed the target and what changes staff could make.
+
+### 74. 12_ch02.tex — Editorial correction
+
+Reason: Remove impossible guarantee and decorative time promise.
+
+Before:
+> How do you set up a project once so that these failures cannot happen? A folder layout, a control file, and a few habits are the answer, and they take about ten minutes to put in place.
+
+After:
+> A consistent folder layout and a control file help you find the right files and make the paths work on another machine. We begin with that setup and then check whether a colleague can rebuild the results.
+
+### 75. 12_ch02.tex — Editorial correction
+
+Reason: Installation alone does not pin package versions.
+
+Before:
+> The control file and install file close the first three failures directly;
+
+After:
+> The control file, install file, and project package archive address the first three failures;
+
+### 76. 21_ch03.tex — Editorial correction
+
+Reason: Resolve leftover universal count after URL correction.
+
+Before:
+> every portal we present in this chapter is built from the same three parts:
+
+After:
+> the addresses in this chapter use a common structure:
+
+### 77. 21_ch03.tex — Editorial correction
+
+Reason: Retain existing values while removing invalid completeness inference.
+
+Before:
+> By 2022 the count had not just recovered but passed the old peak, reaching 5.52 million. The \texttt{n\_dist} column climbs steadily from 1{,}226 to 1{,}252 reporting districts, so the dip is a real loss of students, not an artifact of districts dropping out of the file.
+
+After:
+> By 2022 the count exceeded the earlier peak, reaching 5.52 million. The \texttt{n\_dist} column increases from 1{,}226 to 1{,}252 reporting districts, which is a useful completeness check. The number of reporting districts alone cannot rule out changes in which districts or students were counted, so compare district identifiers and coverage before interpreting the statewide change.
+
+### 78. 21_ch03.tex — Editorial correction
+
+Reason: A plausible geographic ordering is not external verification.
+
+Before:
+> The ordering is the external check on the pull:
+
+After:
+> The ordering is worth comparing with independent published values:
+
+### 79. 21_ch03.tex — Editorial correction
+
+Reason: Remove unsupported bound on revisions.
+
+Before:
+> since revised quarters shift by dollars, not hundreds.
+
+After:
+> using saved copies of the same quarter to identify revisions separately from changes over time.
+
+### 80. 21_ch03.tex — Editorial correction
+
+Reason: Replace tool praise with useful next check.
+
+Before:
+> You supplied a URL and received variables; no parsing step ever became your problem.
+
+After:
+> After import, inspect the identifier and the nested fields you plan to use, because flattening a reply does not establish that its rows match your intended unit of analysis.
+
+### 81. 21_ch03.tex — Editorial correction
+
+Reason: Remove marketing flourish and universal speed claim.
+
+Before:
+> Once JSON is no harder than CSV, meeting a short deadline no longer means settling for the handful of agencies that publish flat files: most modern APIs serve JSON, and that far larger set answers on the same twenty-minute budget. You can work across the whole open-data landscape, not just its friendly corner.
+
+After:
+> With a working JSON example to adapt, you can consider sources that publish nested records as well as flat tables. Allow time to check the record structure, authentication, and pagination before promising a new source on a short deadline.
+
+### 82. 22_ch04.tex — Editorial correction
+
+Reason: Remove idiom.
+
+Before:
+> Before automating a download, read the site the way a guest reads a house.
+
+After:
+> Before automating a download, inspect the site\textquotesingle s instructions and try a representative file manually.
+
+### 83. 22_ch04.tex — Editorial correction
+
+Reason: Replace rhetorical contrast with reason and action.
+
+Before:
+> Pushing a public server too hard can cost you the method itself, not just the afternoon. A scraper that gets an evaluator blocked has failed even if it ran, because the next quarter's update is now impossible. Politeness here is less a courtesy than maintenance on your own pipeline.
+
+After:
+> If the server blocks repeated requests, your next update may fail. Follow the agency\textquotesingle s limits and save successful downloads locally so routine debugging does not repeat requests unnecessarily.
+
+### 84. 22_ch04.tex — Editorial correction
+
+Reason: Remove enumeration teaser.
+
+Before:
+> Under \texttt{cmethod(append)}, three options do the combine half.
+
+After:
+> With \texttt{cmethod(append)}, you can use the year and rename-map options to align files before appending them.
+
+### 85. 22_ch04.tex — Editorial correction
+
+Reason: Remove dramatic language and clarify import mechanics.
+
+Before:
+> The header is where the real work starts, and it fails in two ways at once. First, the file's actual first data row is a second, machine-readable label row, so every column imports as a string and the numbers do not exist until you drop that row. Second, the real column names are long human phrases like \texttt{Premature Death raw value} that Stata munges into one lowercase token. You inspect the damage before you touch it:
+
+After:
+> Inspect the header before cleaning. The first imported observation contains machine-readable labels, which can cause otherwise numeric columns to import as strings. Stata also converts long header phrases such as \texttt{Premature Death raw value} into legal variable names. We examine the imported types and names before dropping the label observation and converting the measures:
+
+### 86. 22_ch04.tex — Editorial correction
+
+Reason: Avoid claiming every download error is a moved path.
+
+Before:
+> if a \texttt{copy} ever fails outright, the path has moved, and you repair it by finding the current address on the successor project's documentation page and updating the two macros, nothing else.
+
+After:
+> if \texttt{copy} fails, inspect the error and confirm the published address before changing the script. A moved file, a temporary server failure, and a local connection problem call for different responses.
+
+### 87. 22_ch04.tex — Editorial correction
+
+Reason: Remove metaphorical location verb.
+
+Before:
+> and land a modest Stata dataset at the end,
+
+After:
+> and write the selected records to a Stata dataset,
+
+### 88. 22_ch04.tex — Editorial correction
+
+Reason: Remove metaphor in streaming caption.
+
+Before:
+> matched records land in a modest \texttt{.dta}.
+
+After:
+> matched records are written to a \texttt{.dta}.
+
+### 89. 22_ch04.tex — Editorial correction
+
+Reason: Remove triumphant chapter conclusion.
+
+Before:
+> The agency that offers only download buttons can no longer stall you: you harvest the files anyway, survive the munged headers and stray label rows they arrive with, filter streams too large to hold, and absorb the mixed-format files that partners drop in a shared drive, all as scripted, replicable steps.
+
+After:
+> You can now plan a scripted download, check the downloaded files, clean irregular headers, and convert a partner\textquotesingle s mixed-format folder into Stata datasets. For larger files, you can assess whether streaming will reduce memory use enough to make the job practical.
+
+### 90. 23_ch05.tex — Editorial correction
+
+Reason: Remove counted preamble.
+
+Before:
+> Two design commitments frame everything that follows. The first is tailored design:
+
+After:
+> Survey design begins before the download. In their account of tailored design,
+
+### 91. 23_ch05.tex — Editorial correction
+
+Reason: Maintain transition after enumeration removal.
+
+Before:
+> The second is a shared vocabulary for what a response rate even is.
+
+After:
+> You also need a shared definition of a response rate.
+
+### 92. 23_ch05.tex — Editorial correction
+
+Reason: Remove rhetorical teaser in new source section.
+
+Before:
+> Here is what Stata's own missing-value summary shows:
+
+After:
+> We start with Stata\textquotesingle s missing-value summary:
+
+### 93. 23_ch05.tex — Editorial correction
+
+Reason: Remove absolute claim about manual downloads.
+
+Before:
+> \marginnote{Hand-downloading is the survey version of spreadsheet analysis: it works once and reproduces never.}
+
+After:
+> \marginnote{For any manual download, record the export settings and preserve the original. Scripting reduces the settings a colleague must reconstruct on the next pull.}
+
+### 94. 23_ch05.tex — Editorial correction
+
+Reason: Correct count and remove meta-praise.
+
+Before:
+> Those five locals are one small piece of statistical machinery.
+
+After:
+> We can express the reference lines and the alarm rule mathematically.
+
+### 95. 23_ch05.tex — Editorial correction
+
+Reason: Do not imply simulated calls caused recovery or hide material monitoring issues.
+
+Before:
+> The funder sees none of the mid-field churn, only the final response-rate narrative: the closing rate, the two sites that lagged, and the calls that recovered them, which presents monitoring as stewardship rather than trouble.
+
+After:
+> For the funder, report the closing response rate, the sites that lagged, the follow-up undertaken, and any unresolved gaps that affect interpretation. Describe a recovery only if the later records show it.
+
+### 96. 23_ch05.tex — Editorial correction
+
+Reason: Remove idiom and decorative time estimate.
+
+Before:
+> The changelog tracks the questions you asked; the data they produced needs a codebook of its own. When a new dataset lands on your desk, you spend the first hour learning it.
+
+After:
+> The changelog records the questions you asked; the resulting data need a codebook of their own. When you receive a new dataset, begin by inspecting its contents.
+
+### 97. 23_ch05.tex — Editorial correction
+
+Reason: Remove metaphorical location verb.
+
+Before:
+> and each figure sits in the same row as the label that names the variable it describes.
+
+After:
+> with each statistic next to the relevant variable label.
+
+### 98. 23_ch05.tex — Editorial correction
+
+Reason: Remove negate-assert transition.
+
+Before:
+> That covers any single file. A survey you field year after year raises a harder question: not only what this wave contains, but what moved since the last one.
+
+After:
+> For a repeated survey, compare the contents of each wave with the previous one before estimating a trend.
+
+### 99. 23_ch05.tex — Teaching weakspot
+
+Reason: Explain composition ratio versus response rate without rhetorical exaggeration.
+
+Before:
+> Read the ratio column the way a program officer would: the \enquote{Other} group arrived at 12~percent of its intended size, not slightly under-covered but nearly absent, and no amount of averaging over the full sample will speak for the group that is not in the room.
+
+After:
+> The ratio of 0.12 compares the \enquote{Other} category\textquotesingle s respondent share with its hypothetical target share: approximately 1.2 percent divided by 10 percent. It is not that group\textquotesingle s response rate, which would require the number invited in that category. Check the category definitions and the source of the targets before interpreting the gap.
+
+### 100. 23_ch05.tex — Teaching weakspot
+
+Reason: Explain limits of name-based relabel receipt.
+
+Before:
+> That receipt turns a silent mislabeling into a line you read before you trust the file: it says plainly that \texttt{q4} came back as \texttt{q4\_manage}, so seven of the eight variables were relabeled and one needs a human decision, rather than quietly attaching \texttt{q4}'s workload label to whatever column happened to abbreviate to it.
+
+After:
+> The receipt reports that \texttt{q4} is absent and \texttt{q4\_manage} is present; it cannot establish that they are the same item. Ask the collaborator whether the column was renamed, recoded, or replaced, then compare its values and meaning with the original before restoring a label. Seven variables matched by name, but those matches also require review if the collaborator changed any coding.
+
+### 101. 23_ch05.tex — Teaching weakspot
+
+Reason: Remove punchy coda and teach dataset-specific missing codes.
+
+Before:
+> The split between \texttt{Obs=.} and \texttt{Obs>.} is the whole answer, and it is easy to read past.
+
+After:
+> In this simulated file, ordinary missing values (\texttt{.}) identify items not shown and extended missing values identify refusals. Read those definitions with the summary; Stata\textquotesingle s missing-value codes do not assign those meanings automatically.
+
+### 102. 23_ch05.tex — Editorial correction
+
+Reason: Replace performative reversal with explanation.
+
+Before:
+> So the item that looks worse is the healthier one.
+
+After:
+> The intended denominators differ, so the overall completion percentages alone are misleading.
+
+### 103. 23_ch05.tex — Editorial correction
+
+Reason: Avoid diagnosing refusal from missingness alone.
+
+Before:
+> These are opposite problems with opposite fixes: routing is the questionnaire working, so you fix the denominator you report, if anything; refusal is a question-wording or placement problem, so you fix the instrument itself or carry the gap in a weighting model.
+
+After:
+> For correctly routed cases, use the number actually eligible for the item as its response-rate denominator. For refusals, discuss wording, placement, sensitivity, and other possible causes with the survey team; the missing-value code records what happened, but cannot establish why or whether weighting would address the resulting bias.
+
+### 104. 23_ch05.tex — Editorial correction
+
+Reason: Remove staccato counted opener.
+
+Before:
+> Three columns, three different things, and the last one names the gate that closed.
+
+After:
+> Read answered, declined, and not shown as mutually exclusive statuses, with the final column identifying the inferred routing condition.
+
+### 105. 23_ch05.tex — Editorial correction
+
+Reason: Remove numbered teaser and clarify denominator.
+
+Before:
+> One number in that table needs its denominator stated, because the same item carries a different percentage in the flow map of Figure~\ref{fig:ch05-flow}, where a gate splits the sample into lanes and each item is counted inside its own lane.
+
+After:
+> The receipt and flow map use different denominators. In Figure~\ref{fig:ch05-flow}, the branching question divides the sample into groups and the response percentage is calculated within the relevant group.
+
+### 106. 23_ch05.tex — Editorial correction
+
+Reason: Avoid stigmatizing and imprecise language.
+
+Before:
+> Thirty-one people consented to nothing, so they are absent from every later item.
+
+After:
+> In this simulation, 31 people declined consent and have no answers to later items.
+
+### 107. 23_ch05.tex — Editorial correction
+
+Reason: Remove metaphor and unsupported one-page scalability promise.
+
+Before:
+> \caption[Item status across the questionnaire]{Every item of the follow-up survey, in questionnaire order, each column split into the three fates and stacked to the whole sample. This view has no node budget, so a two-hundred-item questionnaire is still one page. The two problem items look nothing alike here: \texttt{wage} carries a tall dark block, which is people who were never asked, while \texttt{hh\_income} carries a mid-grey block, which is people who were asked and declined. A percent-missing table renders those two identical.
+
+After:
+> \caption[Item status across the questionnaire]{Items in the simulated follow-up survey, in questionnaire order, divided into answered, declined, and not shown. For \texttt{wage}, the dark block represents people who were never asked; for \texttt{hh\_income}, the mid-grey block represents those asked who declined. A single overall missing percentage would combine these reasons. For a longer instrument, check label legibility and divide the chart into sections if necessary.
+
+### 108. 23_ch05.tex — Editorial correction
+
+Reason: Remove metaphorical carry.
+
+Before:
+> \texttt{hh\_income} carries the flag
+
+After:
+> Beside \texttt{hh\_income}, you can read the flag
+
+### 109. 23_ch05.tex — Editorial correction
+
+Reason: Do not misclassify all verbatim responses as non-questionnaire data.
+
+Before:
+> One more caution, beyond the inference the box warns about. A delivered survey file is wider than the questionnaire, carrying record ids, sample-frame columns, interviewer admin and verbatim text, none of which were questions and all of which can look like branching.
+
+After:
+> Before scanning your own file, distinguish questionnaire items from record identifiers, sampling variables, and interviewer administration fields. Verbatim text may be an answer to an open question, so decide whether excluding it suits the purpose of the map.
+
+## Final verification and remaining limits
+
+- Applied 109 targeted edits, including 24 teaching weakspots. Read the added surveymap material when it appeared in the active source and included it in the pass. Broad voice retained in chapters 1–3; no chapter restructuring.
+- New arithmetic checked directly: (1+0)/2 = 0.5; 457/900*100 = 50.7778 and 457/514*100 = 88.9105; K/(K-1) decreases for integer K > 1. Printed surveymap counts sum to 900 in every row. Retained pre-existing numerical outputs otherwise; no claim that all empirical source facts were re-audited.
+- Primary-source cross-checks read 2026-09-05: Census ACS five-year comparison guidance, https://www2.census.gov/about/training-workshops/2026/2026-01-22-2020-2024-acs-5-year-prerelease-transcript.pdf ; Socrata pagination, https://dev.socrata.com/docs/paging.html ; Stata alpha reference, https://www.stata.com/manuals/mvalpha.pdf . QCEW path distinction checked against the literal URL already in the chapter; chrono/logging and simulation limitations checked against the displayed commands and companion do-files.
+- No new executable examples were added. Existing code was inspected, including code/ch04_chr.do and code/ch05_monitoring.do. Their simulation and reporting limits now appear beside the prose claims. Assembly/compilation is assigned to root.
+- Existing issues needing a broader code/example audit: chapter 2 CountyBudgets demonstration uses auto variables price/foreign; chapter 4 displayed keep command has an ellipsis and therefore is a fragment; chapter 5 scheduler examples are schematic and point at the simulation rather than a production platform pull; chapter 5 undummy invocation/options merit checking against shipped help. Root should distinguish these existing fragments from the newly added prose.
+- Existing legal and empirical claims (scraping risk, CHR successor/end date, survey-platform entitlements, detailed external-study summaries) were not globally verified by this editorial pass. Corrections above address changed/new technical explanations. Avoid describing this as a comprehensive legal or evidence audit.
+- The manuscript already does well at giving concrete evaluator situations, retaining complete Stata output, and connecting recurring datasets across chapters. The edits preserve that structure.

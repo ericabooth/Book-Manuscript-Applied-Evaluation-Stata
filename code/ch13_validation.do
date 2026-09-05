@@ -126,15 +126,22 @@ quietly summarize ml
 local p_naive = r(mean)
 local se_naive = sqrt(`p_naive'*(1-`p_naive')/_N)
 
-* PPI: machine mean on all N, plus the human-machine gap on the gold n
+* Nested gold sample: covariance matters because gold is included in all N.
+* Population-sampling variance under iid notes; no finite-population target.
 quietly summarize ml
 local p_ml_all = r(mean)
+local N = r(N)
+local v_ml = r(Var)
 gen diff = transport - ml if gold
 quietly summarize diff
-local rect    = r(mean)                           // the "rectifier"
-local se_rect = r(sd)/sqrt(r(N))
-local p_corr  = `p_ml_all' + `rect'
-local se_corr = sqrt(`se_naive'^2 + `se_rect'^2)
+local p_corr = `p_ml_all' + r(mean)
+local v_gap = r(Var)/r(N)
+quietly correlate ml diff if gold, covariance
+local cov_md = r(cov_12)
+local var_corr = `v_ml'/`N' + `v_gap' + 2*`cov_md'/`N'
+assert `var_corr' > 0
+local se_corr = sqrt(`var_corr')
+di "Nested-sample covariance = " %9.6f `cov_md'
 
 quietly summarize transport
 di as txt "true prevalence (all 5,000, for reference): " as res %5.3f r(mean)

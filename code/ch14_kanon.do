@@ -72,7 +72,7 @@ di "--- SUPPRESSION SOURCE TABLE (collgrad x goods industry) ---"
 tabulate collgrad industry if industry<=4
 
 * Demonstrate primary + complementary suppression with a tiny algorithm on the
-* 2x4 goods table. Threshold: blank any cell < 5 (primary). Then, in any row or
+* 2x4 goods table. Threshold: blank positive cells < 5 (primary). Then, in any row or
 * column that has exactly one blank against a visible total, blank a second cell
 * (complementary) so the total can no longer be differenced to the hidden value.
 preserve
@@ -80,8 +80,8 @@ preserve
     contract collgrad industry, freq(n)
     fillin collgrad industry
     replace n = 0 if missing(n)
-    gen byte primary = n < 5
-    di "--- PRIMARY BLANKS (n<5) ---"
+    gen byte primary = n > 0 & n < 5
+    di "--- PRIMARY BLANKS (0<n<5) ---"
     list collgrad industry n if primary, clean noobs
     * Complementary pass: in any column with exactly one blanked cell, the
     * visible cell plus the column total reveals the blank, so blank the

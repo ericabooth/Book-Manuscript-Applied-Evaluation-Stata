@@ -367,3 +367,202 @@ After: \textbf{The build.} For the county brief, use the static spark wall built
 
 ## Verification and remaining issues
 Read revised prose and checked source-code alignment for transition cutpoints and the time_fe simulation. No TeX assembly or compile run (parent owns build). New mathematical quantile definition requires parent factual QA against conformal implementation. Existing chapter 8 subgroup code uses r(N) after regression; parent notified. Chapter 6 database guidance remains overly categorical and its salary estimates unsupported; parent should review scope. Preserve concrete examples, direct reader address and author technical vocabulary that already teach well.
+
+### Follow-up 24_ch06
+Reason: Remove remainder of replaced margin note, restore brace balance.
+Before: .}, Stata's multiple-imputation machinery, which fits the model on every imputed copy and pools the results, never by filling in a single \enquote{best guess} that hides the uncertainty you just admitted to.}
+After: .}
+
+### Follow-up 24_ch06
+Reason: Replace pedigree marketing with explanation.
+Before: \subsection{Why the method holds up: a four-decade pedigree}
+After: \subsection{How agreement patterns become match weights}
+
+### Follow-up 24_ch06
+Reason: Remove negate/assert lead.
+Before: None of this machinery is improvised. The clean-block-score-threshold pattern
+After: The clean-block-score-threshold pattern
+
+### Follow-up 24_ch06
+Reason: Replace command personification with clear mechanism.
+Before: The \texttt{lower} option is the whole reason to reach for the command rather than a rounded merge: it refuses to attach a payment to a spell that started after the money moved, which a nearest-in-either-direction match would happily do.
+After: With \texttt{lower}, you restrict candidate spells to those beginning on or before the payment date. Without a directional restriction, the closest date could be a later spell.
+
+### Follow-up 24_ch06
+Reason: Remove emotive framing.
+Before: \section{Schema drift and the polluted year}
+After: \section{Checking changes in extract structure and comparability}
+
+### Follow-up 24_ch06
+Reason: Remove negation contrast.
+Before: We build the pipeline to refuse bad data loudly rather than average over it quietly.
+After: We check each extract before adding it to the analysis, because a changed field can alter a result even when the do-file still runs.
+
+### Follow-up 24_ch06
+Reason: Reduce staccato enumeration while preserving output.
+Before: The receipt is the point. Two rows changed, eight were already current, and nothing was overwritten silently;
+After: The report distinguishes changed tags from those already current;
+
+### Follow-up 24_ch06
+Reason: Remove negation pattern.
+Before: Notice what did not happen. The industry file never lost its level:
+After: After linking, the industry file retains its original level:
+
+### Follow-up 24_ch06
+Reason: Clarify refresh needs summary recomputation.
+Before: The women's file never gained rows. And when next quarter's extract arrives, the same two lines rebuild the comparison.
+After: The women's file also retains its row count. Rebuild the industry summary and link it again when a new extract arrives.
+
+### Follow-up 24_ch06
+Reason: Remove categorical database claims and unsupported salary fraction.
+Before: The case for staying in code is not sentiment. \textcite{long2009workflow} built the workflow this book extends on one idea, that every step from raw file to result is recorded in an auditable chain of do-files, and a database strains that idea at its strongest point: a database stores the current answer, while the do-file chain stores the reasoning, the commented line where you can see which source wins and why. Changing a definition mid-project, which research does weekly, is one line and a rerun in code; in a database it is a structure edit, a reload, and a conversation with whoever owns the dashboard. The costs also run one way. Storage is the cheapest thing in the shop and analyst time the most expensive, the license is the smallest line in a database budget, and the biggest line is the quarter-to-half of a salary for the person who keeps it running, a job that in a small shop otherwise falls, unfunded, to whoever was most enthusiastic in the meeting. The one discipline all of this depends on costs nothing and is already this book's rule: code makes data; people do not edit data.
+After: For a small team, a documented chain of do-files may be enough to manage the analysis. \textcite{long2009workflow} emphasizes recording the steps from raw files to results so that an analyst can repeat and inspect them. A database can support the same principle when its loading and transformation queries are versioned. Compare the alternatives using the work your team actually performs: the size of joins, how often files arrive, who needs simultaneous access, and who will maintain the system. Include staff time in the cost estimate and retain a reproducible record of cleaning decisions whichever storage system you choose.
+
+### Follow-up 24_ch06
+Reason: Remove false hard limits and overenumeration.
+Before: To hold that position credibly we have to be honest about the other side, where three limits are real walls. Stata works in memory, so when the largest file you routinely open stops fitting with room to merge, the work does not slow down, it stops. A person-triggered rebuild falls quietly behind data that arrive daily. And no amount of do-file discipline produces a log of which person read which rows, so a data-use agreement that demands one has made the decision for you.
+After: A database becomes worth investigating when routine files exceed available memory, several users need controlled access at the same time, or a data-use agreement requires detailed access logs. Frequent data arrivals may instead be manageable with a scheduled do-file. Diagnose the constraint before choosing the system: a slow manual refresh and a need for row-level access controls are different problems.
+
+### Follow-up 24_ch06
+Reason: Replace arbitrary prohibitions with reproducible alternative.
+Before: Table~\ref{tab:ch06-dbdecision} turns the choice into two groups of questions rather than a score, because the factors are not interchangeable: the first group are limits code cannot get around, the second are conditions that must all hold before buying helps. If you do buy, keep the build code as the source of truth and load \emph{cleaned} data into the database, never move the cleaning decisions into it; and never query it live from an analysis do-file. Have the database write files on a schedule and Stata read files, which keeps do-files portable and takes the fragile driver, the per-machine ODBC setup, and the single-sign-on dance off the critical path.\marginnote[-6mm]{A middle path worth knowing: DuckDB runs SQL over plain files with no server, no license, and nothing to administer, and handles joins bigger than memory. The robust arrangement is the same either way: let it write files and let every tool read files, rather than wiring tools to it live.}
+After: Use Table~\ref{tab:ch06-dbdecision} to discuss requirements with the team responsible for maintaining the data. A dated extract gives an analysis a stable input even when the database changes, and it can spare collaborators a separate connection setup. If you query a database directly, record the query and preserve the result used for the analysis so that another analyst can reproduce the reported numbers.
+
+### Follow-up 24_ch06
+Reason: Remove hard decision algorithm in caption.
+Before: \caption[The database decision in seven questions]{The database decision in seven questions, reached only after Figure~\ref{fig:ch06-combine} has ruled out appending, merging, and frames. Any \enquote{yes} in the first group is a limit code cannot get around; only then do the second group's conditions matter, and every one must hold or the purchase makes things worse. No yes in the first group means the decision is finished: stay in code.}
+\label{tab:ch06-dbdecision}
+\begin{tabular}{@{}p{9.8cm}p{4.2cm}@{}}
+\hline
+\multicolumn{2}{@{}p{14.2cm}@{}}{\emph{Limits code cannot get around: any yes points to a database}} \\
+\hline
+Does your largest working file crowd half the machine's memory? & Yes: a real wall \\
+Do data arrive faster than a person can rerun the build? & Yes: a real wall \\
+Does an agreement require a log of who read which rows? & Yes: a real wall \\
+\hline
+\multicolumn{2}{@{}p{14.2cm}@{}}{\emph{Conditions that must all hold before buying helps}} \\
+\hline
+Is a quarter to half of a salary funded, permanently, to run it? & No: fix this first \\
+Will researchers who know the variables still do the cleaning? & No: do not buy \\
+Can a definition change land in days, not weeks? & No: do not buy \\
+Can every tool read the output without a fragile driver? & No: write files instead \\
+\hline
+\end{tabular}
+\end{table*}
+After: \caption[Questions to ask before adopting a database]{Questions for the evaluation team and the people who would maintain a database. Use the answers to identify the actual constraint, compare alternatives, and budget implementation and continuing support.}
+
+### Follow-up 24_ch06
+Reason: Correct categorical table.
+Before: Limits code cannot get around: any yes points to a database
+After: Requirements to investigate before choosing storage
+
+### Follow-up 24_ch06
+Reason: Remove arbitrary half memory cutoff.
+Before: Does your largest working file crowd half the machine's memory? & Yes: a real wall
+After: Do routine joins exceed available memory? & Compare larger-memory and database options
+
+### Follow-up 24_ch06
+Reason: Correct schedulable process.
+Before: Do data arrive faster than a person can rerun the build? & Yes: a real wall
+After: Do data arrive faster than the manual refresh? & Consider a scheduled build
+
+### Follow-up 24_ch06
+Reason: Make access requirement actionable.
+Before: Does an agreement require a log of who read which rows? & Yes: a real wall
+After: Does an agreement require row-level access logs? & Consult the data steward on supported systems
+
+### Follow-up 24_ch06
+Reason: Remove categorical claim.
+Before: Conditions that must all hold before buying helps
+After: Implementation and maintenance questions
+
+### Follow-up 24_ch06
+Reason: Remove unsupported numeric estimate.
+Before: Is a quarter to half of a salary funded, permanently, to run it? & No: fix this first
+After: Is continuing technical support funded? & Estimate staff time and assign responsibility
+
+### Follow-up 24_ch06
+Reason: Concrete review.
+Before: Will researchers who know the variables still do the cleaning? & No: do not buy
+After: Will domain experts review the cleaning rules? & Document and review transformations
+
+### Follow-up 24_ch06
+Reason: Remove arbitrary deadline.
+Before: Can a definition change land in days, not weeks? & No: do not buy
+After: Can staff revise a definition and reproduce old results? & Version queries and retain dated extracts
+
+### Follow-up 24_ch06
+Reason: Remove prescription.
+Before: Can every tool read the output without a fragile driver? & No: write files instead
+After: Can collaborators read the output with their tools? & Test connections or supply dated files
+
+### Follow-up 31_ch07
+Reason: Remove arbitrary alpha permissions.
+Before: Alpha is not a fixed target: it rises mechanically with the number of items, so a long scale can clear 0.80 on padding alone. The conventional floor is 0.70 for research and 0.80 for high-stakes decisions, but a value above 0.95 usually signals redundant items, not virtue.
+After: Alpha depends on both the number of items and their covariance. Interpret it alongside the content of the questions and the intended use of the score; a high value can reflect repetitive items and cannot by itself establish validity.
+
+### Follow-up 31_ch07
+Reason: Correct coefficient versus proportion of signal.
+Before: we built item~6 to contain only 15\% of the shared signal
+After: we gave item~6 a latent-variable coefficient of 0.15, compared with 1 for the other items
+
+### Follow-up 31_ch07
+Reason: Weakspot: reliability meaning.
+Before: A site pulled halfway to the grand mean has a raw rate that is exactly 50\% reliable.
+After: When the fitted weight is 0.5, the adjusted estimate gives equal weight to the site rate and the prior mean. Reliability here names that model-based weight; it is not a probability that the site rate is correct.
+
+### Follow-up 31_ch07
+Reason: Remove normative arithmetic fairness claim.
+Before: The beneficiaries here are the small sites themselves. A stabilized rate protects a five-person program from a statistical accident, and a dashboard that offers every site that protection is fair enough to publish.\marginnote{Shrinkage is fairness expressed as arithmetic: it gives every site, however small, the same protection from statistical accident.}
+After: Shrinkage can reduce the influence of chance variation in small sites, but it also pulls genuinely unusual sites toward the common mean. Show the raw rate, adjusted rate, and uncertainty together, and investigate whether sites serve populations too different to justify a shared prior.
+
+### Follow-up 31_ch07
+Reason: Correct repeated visual guarantee.
+Before: the model only proposes the center; the calibration residuals set the width, which is why a wrong model costs width, never coverage
+After: the fitted predictor sets the center; calibration residuals set the width. Coverage requires exchangeable new cases and the adjusted quantile
+
+### Follow-up 31_ch07
+Reason: Remove caption enumeration.
+Before: Three steps, three named products. The split spends half the data on measuring the model's errors; the quantile turns those errors into a half-width; every new prediction then uses the same $\pm Q$.
+After: We fit the predictor on one subset and use absolute prediction errors in a separate calibration subset to choose $Q$. Each new prediction then uses the same $\pm Q$.
+
+### Follow-up 31_ch07
+Reason: Reconcile scorecard with corrected alpha, weighting, conformal and ICC claims without restating unrelated sample numbers.
+Before: \textbf{The safeguards, in the order the calendar needs them.} At the pilot, run \texttt{alpha} with the \texttt{item} option on the six-item scale: the whole-scale 0.76 hides a dead item, and pruning it lifts reliability to 0.79, licensed for cohort comparisons and withheld from individual-level flags. Before quoting any population rate, declare the design with \texttt{svyset} and compare weighted against unweighted: in the NHANES~II demonstration that gap was 0.42 raw against 0.37 weighted, and only the weighted figure describes the people served. Before the ranking ships, stabilize the small sites with \texttt{rateshrink}: on the section's own draw, the seven-case site that posted zero completions moves to 0.160 with its reliability printed beside it, and any site below the agreed reliability floor stays out of the bottom-five list. And before the next study is priced, put the budget on the power curve: at $N=300$ the design sees a four-point gain at 93~percent power, a three-point gain at 74, and a two-point gain at only 41, so the proposal promises the effect the design can find and no more. Alongside those four, run the two newer checks: a conformal band ($\pm 5.77$ wage-dollars in this chapter's example) answers \enquote{where will the next case land} without trusting the model, and the ICC (0.089 here) says how much signal a site ranking contains. Each check writes one line into the scorecard's methods note, and each line is the answer to a question the skeptical program officer of this chapter's opening was always going to ask.
+\end{appliedexample}
+After: \textbf{Applying the checks.} At the pilot, inspect the survey items and their coding before deciding whether to revise the engagement score. Before making a population claim, identify the target population and sampling design, then compare the estimate with and without the supplied weights. For site comparisons, examine caseloads and adjusted rates together with their uncertainty; discuss which differences are useful enough to act on. During planning, calculate power for effects that would change the program decision and revisit the design if those effects are hard to detect. Prediction intervals can inform planning for individual cases when new cases resemble the calibration sample, while the ICC describes clustering rather than authorizing a ranking. Record what each check showed and the decision it informed in the scorecard's methods note.
+
+### Follow-up 31_ch07
+Reason: Remove repeated guarantees and list-like ending.
+Before: \paragraph{Where this leaves you.} Your scales measure one thing, with the dead-weight item pruned; your sample stands in for its population rather than for itself; your small-site rates no longer let one unlucky family sink a ranking; and your studies are sized on the whiteboard rather than in the final report. Applied Example~\ref{ae:ch07-scorecard} collects the chapter's numbers in one place.\marginnote{One distinction matters for the next chapter: a confidence interval brackets the \emph{average} effect, a prediction interval brackets where the \emph{next} site or person will land. The second is always wider, and a program director planning for one clinic wants the prediction interval, not the confidence interval you will be tempted to quote.} You can now also quote a prediction interval whose coverage does not depend on the model being right, and say how much of an outcome's variation sites can even explain before you rank sites at all. Because you ran the four checks against the planning calendar rather than the reporting deadline, there was time to repair each failure instead of footnoting it. Those four safeguards make the numbers trustworthy enough to compare, and in Chapter~\ref{ch:claims} we do the comparing, turning trustworthy numbers into defensible claims.
+After: \paragraph{Where this leaves you.} You can now examine how a score was constructed, check the design behind a weighted estimate, and report small-site rates with appropriate uncertainty. Power calculations help you plan the study before enrollment, while prediction intervals and variance components address different questions about individual outcomes and clustering. These checks document the limits of the numbers you will compare in Chapter~\ref{ch:claims}; none removes the need to match the eventual claim to the study design.
+
+### Follow-up 32_ch08
+Reason: Remove nested numbered prose.
+Before: First, treat the mediator as an outcome in its own right:
+After: You can begin by treating the mediator as an outcome in its own right:
+
+### Follow-up 32_ch08
+Reason: Remove numbered prose.
+Before: Second, if the client needs the formal decomposition,
+After: If the client needs the formal decomposition,
+
+### Follow-up 32_ch08
+Reason: Remove enumeration.
+Before: Two honest moves fit in an evaluation report.
+After: The reporting choice depends on the question the evidence can support.
+
+### Follow-up 41_ch09
+Reason: Avoid comparative uncertainty across unlike units.
+Before: the experience interval reaches back almost to it, so that difference is the shakiest of the three.
+After: the experience interval approaches zero. Compare each interval in its own outcome units before deciding whether the corresponding association matters for the program.
+
+Final follow-up: parent confirmed code/ch08_subgroups.do has a count after regress, so r(N) is valid in that file; initial flag closed. Database section revised to remove unsupported salary and memory cutoffs. No new code added.
+
+
+## Final checks
+All five chapter sources have matching brace and environment counts. All verbatim examples are identical to the frozen source baseline. Added narrative, revised captions and table guidance; added no executable examples. Parent owns compilation and numeric control runs. Removed remaining static-output immunity claim, corrected color-vision caption terminology and contrast-formula explanation.
+
+Primary-source checks retrieved 2026-09-05: Stata mi impute/mi estimate distinction https://www.stata.com/features/overview/multiple-imputation/ and https://www.stata.com/support/faqs/statistics/clustering-and-mi-impute/ ; adjusted conformal quantile and exchangeability https://people.eecs.berkeley.edu/~angelopoulos/publications/downloads/gentle_intro_conformal_dfuq.pdf ; text contrast https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum . Existing references retained.
+
+Novice improvements exceed 10 across these chapters: transition timing and denominator; missingness mechanisms; imputation workflow; alpha/validity troubleshooting; relative weight diagnostics; conformal calibration versus independent evaluation; ICC versus ranking precision; cohort-versus-treatment coding; ROI versus benefit-cost ratio; coefficient units; comparison of subgroup significance; simulation versus observed animation; county-versus-state tool boundaries; database requirements versus arbitrary cutoffs.

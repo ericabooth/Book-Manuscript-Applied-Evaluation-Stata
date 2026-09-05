@@ -1,0 +1,566 @@
+
+  ___  ____  ____  ____  ____ ®
+ /__    /   ____/   /   ____/      StataNow 19.5
+___/   /   /___/   /   /___/       MP—Parallel Edition
+
+ Statistics and Data Science       Copyright 1985-2025 StataCorp LLC
+                                   StataCorp
+                                   4905 Lakeway Drive
+                                   College Station, Texas 77845 USA
+                                   800-782-8272        https://www.stata.com
+                                   979-696-4600        service@stata.com
+
+Stata license: 4-user 4-core network, expiring  6 May 2027
+Serial number: 501909369296
+  Licensed to: Eric Booth
+               Texas 2036
+
+Notes:
+      1. Stata is running in batch mode.
+      2. Unicode is supported; see help unicode_advice.
+      3. More than 2 billion observations are allowed; see help obs_advice.
+      4. Maximum number of variables is set to 5,000 but can be increased;
+          see help set_maxvar.
+
+
+Running /Users/ericbooth/Documents/Stata/ado/personal/profile.do ...
+-------------------------------------------------------------------------------
+  [1]  (BASE)      "/Applications/StataNow/ado/base/"
+  [2]  (SITE)      "/Users/ericbooth/Library/CloudStorage/GoogleDrive-eric.boot
+> h@texas2036.org/Shared drives/Data and Research Team//_codeshare/"
+  [3]              "."
+  [4]  (PERSONAL)  "/Users/ericbooth/Documents/Stata/ado/personal/"
+  [5]  (PLUS)      "/Users/ericbooth/Library/Application Support/Stata/ado/plus
+> /"
+  [6]  (OLDPLACE)  "~/ado/"
+ [view] [edit] [do]  00_control.do 
+ [view] [edit] [do]  01_install.do 
+ [view] [edit] [do]  20_ch03_apis.do 
+ [view] [edit] [do]  capstone_chr.do 
+ [view] [edit] [do]  ch01_reach.do 
+ [view] [edit] [do]  ch02_benchmark.do 
+ [view] [edit] [do]  ch02_projectbuilder.do 
+ [view] [edit] [do]  ch03_educationdata.do 
+ [view] [edit] [do]  ch03_webapi.do 
+ [view] [edit] [do]  ch04_chr.do 
+ [view] [edit] [do]  ch05_datadictionary.do 
+ [view] [edit] [do]  ch05_monitoring.do 
+ [view] [edit] [do]  ch06_frames.do 
+ [view] [edit] [do]  ch06_longitudinal.do 
+ [view] [edit] [do]  ch06_reshapehelper.do 
+ [view] [edit] [do]  ch07_trust.do 
+ [view] [edit] [do]  ch08_did.do 
+ [view] [edit] [do]  ch08_oaxaca.do 
+ [view] [edit] [do]  ch08_subgroups.do 
+ [view] [edit] [do]  ch09_graphs.do 
+ [view] [edit] [do]  ch10_googlechart.do 
+ [view] [edit] [do]  ch10_smallmult.do 
+ [view] [edit] [do]  ch11_googlesheets.do 
+ [view] [edit] [do]  ch11_tables.do 
+ [view] [edit] [do]  ch12_dashboardbuilder.do 
+ [view] [edit] [do]  ch12_portal.do 
+ [view] [edit] [do]  ch13_backbone.do 
+ [view] [edit] [do]  ch13_injection_gate.do 
+ [view] [edit] [do]  ch13_parallel.do 
+ [view] [edit] [do]  ch13_validation.do 
+ [view] [edit] [do]  ch14_kanon.do 
+ [view] [edit] [do]  ch15_bench.do 
+
+Click [here] for other links
+-------------------------------------------------------------------------------
+
+. do ch13_validation.do 
+
+. *============================================================================
+> ==*
+. * ch13_validation.do  --  Chapter 13: using AI without getting burned
+. * (a) gold-standard validation: 150 hand labels vs ~85% model, Cohen's kappa
+. * (b) multi-model consensus: 3 models, agreement share, routing action
+. * (c) fairness audit: simulated risk scores + group offset, cutoff,
+. *     selection rates and the four-fifths ratio (faircheck's logic in 12 line
+> s)
+. * (d) optional ch13_agreement.png: per-category agreement bar
+. * (e) prediction-powered inference: correct a biased machine-label prevalence
+. * ALL blocks are SIMULATED with seed 20260704 and labeled simulated in text.
+. *============================================================================
+> ==*
+. * Globals defined locally so this file runs standalone; in the full book
+. * project they are set once by code/00_control.do instead.
+. global root    "`c(pwd)'"
+
+. global figures "$root/figures"
+
+. capture mkdir "$figures"
+
+. 
+. version 19
+
+. clear all
+
+. 
+. *--- (a) Gold standard: 150 hand labels, model agrees ~85% of the time ------
+> -*
+. * Five barrier categories. Truth is the human gold standard; the model
+. * copies the truth 85% of the time and picks a random other label 15%.
+. set seed 20260704
+
+. set obs 150
+Number of observations (_N) was 0, now 150.
+
+. gen truth = 1 + int(5 * runiform())          // 1..5 barrier categories
+
+. gen byte hit = runiform() < 0.85              // model agrees 85% of the time
+
+. gen model = truth
+
+. replace model = 1 + mod(truth + int(4*runiform()), 5) if !hit
+(21 real changes made)
+
+. label define bar 1 "transport" 2 "childcare" 3 "schedule" ///
+>     4 "none" 5 "other"
+
+. label values truth model bar
+
+. 
+. di "---KAP: model vs human gold standard---"
+---KAP: model vs human gold standard---
+
+. kap truth model
+
+             Expected
+Agreement   agreement     Kappa   Std. err.         Z      Prob>Z
+-----------------------------------------------------------------
+  86.00%      20.40%     0.8241     0.0411      20.05      0.0000
+
+. 
+. *--- (b) Multi-model consensus: three models over the same 150 notes --------
+> *
+. * Model A is the 85% model above. Models B and C are independent draws
+. * that each agree with truth ~80% and ~78% of the time. We report, per
+. * note, how many of the three agree with the modal label.
+. gen mA = model
+
+. foreach m in B C {
+  2.     local p = cond("`m'"=="B", 0.80, 0.78)
+  3.     gen byte hit`m' = runiform() < `p'
+  4.     gen m`m' = truth
+  5.     replace m`m' = 1 + mod(truth + int(4*runiform()), 5) if !hit`m'
+  6.     label values m`m' bar
+  7. }
+(31 real changes made)
+(34 real changes made)
+
+. * how many of the three models back the modal (most common) label:
+. * count how many models share each model's label, take the row max.
+. gen byte cA = (mA==mA) + (mB==mA) + (mC==mA)
+
+. gen byte cB = (mA==mB) + (mB==mB) + (mC==mB)
+
+. gen byte cC = (mA==mC) + (mB==mC) + (mC==mC)
+
+. egen byte n_agree = rowmax(cA cB cC)
+
+. label define agr 3 "3/3 unanimous" 2 "2/3 majority" 1 "1/3 split"
+
+. label values n_agree agr
+
+. di "---CONSENSUS: how many of 3 models back the modal label---"
+---CONSENSUS: how many of 3 models back the modal label---
+
+. tab n_agree
+
+      n_agree |      Freq.     Percent        Cum.
+--------------+-----------------------------------
+    1/3 split |         12        8.00        8.00
+ 2/3 majority |         58       38.67       46.67
+3/3 unanimous |         80       53.33      100.00
+--------------+-----------------------------------
+        Total |        150      100.00
+
+. 
+. *--- (c) Fairness audit: risk scores with a group offset, cutoff, 4/5 rule --
+> *
+. * faircheck's logic in 12 lines. Two groups A and B; group B's latent
+. * risk is shifted down by a fixed offset, so an identical cutoff selects
+. * B at a lower rate. We compute selection rates and the four-fifths ratio.
+. clear
+
+. set seed 20260704
+
+. set obs 2000
+Number of observations (_N) was 0, now 2,000.
+
+. gen byte groupB = runiform() < 0.5
+
+. gen risk = invlogit(rnormal(0,1) - 0.55*groupB)   // B shifted down
+
+. gen byte select = risk > 0.5                       // outreach cutoff
+
+. label define grp 0 "Group A" 1 "Group B"
+
+. label values groupB grp
+
+. di "---SELECTION RATE BY GROUP---"
+---SELECTION RATE BY GROUP---
+
+. tabstat select, by(groupB) stat(mean n) nototal
+
+Summary for variables: select
+Group variable: groupB 
+
+ groupB |      Mean         N
+--------+--------------------
+Group A |  .4826176       978
+Group B |  .2651663      1022
+-----------------------------
+
+. * four-fifths ratio: lower group's rate over higher group's rate
+. quietly summarize select if groupB==0
+
+. local rA = r(mean)
+
+. quietly summarize select if groupB==1
+
+. local rB = r(mean)
+
+. local ratio = min(`rA',`rB') / max(`rA',`rB')
+
+. di "---FOUR-FIFTHS RATIO (flag if < 0.80)---"
+---FOUR-FIFTHS RATIO (flag if < 0.80)---
+
+. di "Group A rate = " %5.3f `rA'
+Group A rate = 0.483
+
+. di "Group B rate = " %5.3f `rB'
+Group B rate = 0.265
+
+. di "4/5 ratio     = " %5.3f `ratio' ///
+>     cond(`ratio' < 0.80, "  <-- ADVERSE IMPACT", "  ok")
+4/5 ratio     = 0.549  <-- ADVERSE IMPACT
+
+. 
+. *--- (d) Optional figure: per-category agreement of model vs gold standard --
+> *
+. * Rebuild the gold-standard frame to chart where the model agrees least.
+. clear
+
+. set seed 20260704
+
+. set obs 150
+Number of observations (_N) was 0, now 150.
+
+. gen truth = 1 + int(5 * runiform())
+
+. gen byte hit = runiform() < 0.85
+
+. gen model = truth
+
+. replace model = 1 + mod(truth + int(4*runiform()), 5) if !hit
+(21 real changes made)
+
+. label define bar 1 "transport" 2 "childcare" 3 "schedule" ///
+>     4 "none" 5 "other"
+
+. label values truth bar
+
+. gen byte agree = truth==model
+
+. graph bar (mean) agree, over(truth, label(labsize(small))) ///
+>     ytitle("Share model matches gold standard") ///
+>     title("Model-human agreement by barrier category", ///
+>         size(medium)) ///
+>     note("Simulated 150-note gold standard, seed 20260704", ///
+>         size(vsmall)) ///
+>     bar(1, color(navy)) blabel(bar, format(%4.2f)) ///
+>     graphregion(margin(l=2 r=6))
+
+. graph export "$figures/ch13_agreement.png", replace width(2400)
+file /Users/ericbooth/Library/CloudStorage/GoogleDrive-eric.booth@texas2036.org
+> /My Drive/Book-Manuscript-Applied-Evaluation-Stata/code/figures/ch13_agreemen
+> t.png written in PNG format
+
+. 
+. *--- (e) Prediction-powered inference: correct the downstream estimate ------
+> -*
+. * Validation (a) certifies the LABELS; this block corrects the ESTIMATE built
+. * from them. 5,000 notes, true transport prevalence 0.30; the LLM under-detec
+> ts
+. * transport (sensitivity 0.70) and rarely invents it (specificity 0.95), so t
+> he
+. * naive machine-label prevalence is biased low even though agreement looks hi
+> gh.
+. * The fix (Angelopoulos et al. 2023, Science): estimate on ALL machine labels
+> ,
+. * then add back the human-minus-machine gap measured on a RANDOM gold subset.
+. clear
+
+. set seed 20260704
+
+. set obs 5000
+Number of observations (_N) was 0, now 5,000.
+
+. gen byte transport = runiform() < 0.30           // truth (human coding)
+
+. gen byte ml = cond(transport, runiform() < 0.70, runiform() >= 0.95)
+
+. gen byte gold = _n <= 150                         // random: obs order is ran
+> dom
+
+.                                                   // by construction here; in
+.                                                   // practice draw with sampl
+> e
+. 
+. * naive: treat 5,000 machine labels as if they were the data
+. quietly summarize ml
+
+. local p_naive = r(mean)
+
+. local se_naive = sqrt(`p_naive'*(1-`p_naive')/_N)
+
+. 
+. * Nested gold sample: covariance matters because gold is included in all N.
+. * Population-sampling variance under iid notes; no finite-population target.
+. quietly summarize ml
+
+. local p_ml_all = r(mean)
+
+. local N = r(N)
+
+. local v_ml = r(Var)
+
+. gen diff = transport - ml if gold
+(4,850 missing values generated)
+
+. quietly summarize diff
+
+. local p_corr = `p_ml_all' + r(mean)
+
+. local v_gap = r(Var)/r(N)
+
+. quietly correlate ml diff if gold, covariance
+
+. local cov_md = r(cov_12)
+
+. local var_corr = `v_ml'/`N' + `v_gap' + 2*`cov_md'/`N'
+
+. assert `var_corr' > 0
+
+. local se_corr = sqrt(`var_corr')
+
+. di "Nested-sample covariance = " %9.6f `cov_md'
+Nested-sample covariance = -0.047159
+
+. 
+. quietly summarize transport
+
+. di as txt "true prevalence (all 5,000, for reference): " as res %5.3f r(mean)
+true prevalence (all 5,000, for reference): 0.291
+
+. di as txt "naive ML estimate:  " as res %5.3f `p_naive' ///
+>     as txt "  95% CI [" as res %5.3f `p_naive'-1.96*`se_naive' ///
+>     as txt ", " as res %5.3f `p_naive'+1.96*`se_naive' as txt "]"
+naive ML estimate:  0.234  95% CI [0.223, 0.246]
+
+. di as txt "PPI corrected:      " as res %5.3f `p_corr' ///
+>     as txt "  95% CI [" as res %5.3f `p_corr'-1.96*`se_corr' ///
+>     as txt ", " as res %5.3f `p_corr'+1.96*`se_corr' as txt "]"
+PPI corrected:      0.288  95% CI [0.232, 0.343]
+
+. 
+. * tripwires: the naive CI misses the truth; the corrected CI covers it
+. assert `p_naive' + 1.96*`se_naive' < 0.30
+
+. assert (`p_corr'-1.96*`se_corr') < 0.30 & 0.30 < (`p_corr'+1.96*`se_corr')
+
+. assert abs(`p_corr' - 0.30) < 0.06
+
+. 
+. di "DONE"
+DONE
+
+. 
+. *============================================================================
+> ==*
+. * (f) ai_privacy_gate demo: 12 simulated case notes, 3+ seeded with PII
+. *     Printed in ch13 "A gate the pipeline cannot skip".
+. *============================================================================
+> ==*
+. adopath ++ "`c(pwd)'/ai_privacy_gate"
+  [1]              "/Users/ericbooth/Library/CloudStorage/GoogleDrive-eric.boot
+> h@texas2036.org/My Drive/Book-Manuscript-Applied-Evaluation-Stata/code/ai_pri
+> vacy_gate"
+  [2]  (BASE)      "/Applications/StataNow/ado/base/"
+  [3]  (SITE)      "/Users/ericbooth/Library/CloudStorage/GoogleDrive-eric.boot
+> h@texas2036.org/Shared drives/Data and Research Team//_codeshare/"
+  [4]              "."
+  [5]  (PERSONAL)  "/Users/ericbooth/Documents/Stata/ado/personal/"
+  [6]  (PLUS)      "/Users/ericbooth/Library/Application Support/Stata/ado/plus
+> /"
+  [7]  (OLDPLACE)  "~/ado/"
+
+. clear
+
+. input str244 notes
+
+                                                                               
+>                                                                              
+>                                                                              
+>            notes
+  1. "Client reports progress on transportation barrier this week."
+  2. "Follow up scheduled; SSN 123-45-6789 recorded at intake."
+  3. "Call back at (512) 555-1234 after Tuesday."
+  4. "Emailed jane.doe@example.org the schedule."
+  5. "DOB 03/14/1987 confirmed against roster."
+  6. "Lives at 4412 Maple Street since March."
+  7. "MRN: 88471 transferred from the clinic."
+  8. "No barriers reported; attended all sessions."
+  9. "Second contact 512-555-9876 belongs to the sister."
+ 10. "Prefers morning appointments; no changes."
+ 11. "Case# 100234 flagged for review by supervisor."
+ 12. "Discussed goals; nothing identifying shared."
+ 13. end
+
+. gen str60 comments = "clean text here"
+
+. replace comments = "reach me at bob@test.io" in 10
+(1 real change made)
+
+. ai_privacy_gate notes comments, genflag(pii)
+
+AI privacy gate: 2 text variable(s) scanned, action = report
+----------------------------------------------------------
+class         flagged rows
+----------------------------------------------------------
+ssn                      1
+phone                    2
+email                    2
+date                     1
+address                  1
+idnum                    2
+----------------------------------------------------------
+any class                9
+
+. assert r(rows) == 9
+
+. preserve
+
+. ai_privacy_gate notes comments, action(mask) noreport
+
+. capture noisily ai_privacy_gate notes comments, action(stop) noreport
+
+. assert _rc == 0
+
+. restore
+
+. di "AIGATE_DEMO_OK"
+AIGATE_DEMO_OK
+
+. 
+. *============================================================================
+> ==*
+. * (g) llmsieve demo: convergence delta on four two-pass answers
+. *============================================================================
+> ==*
+. adopath ++ "`c(pwd)'/llmsieve"
+  [1]              "/Users/ericbooth/Library/CloudStorage/GoogleDrive-eric.boot
+> h@texas2036.org/My Drive/Book-Manuscript-Applied-Evaluation-Stata/code/llmsie
+> ve"
+  [2]              "/Users/ericbooth/Library/CloudStorage/GoogleDrive-eric.boot
+> h@texas2036.org/My Drive/Book-Manuscript-Applied-Evaluation-Stata/code/ai_pri
+> vacy_gate"
+  [3]  (BASE)      "/Applications/StataNow/ado/base/"
+  [4]  (SITE)      "/Users/ericbooth/Library/CloudStorage/GoogleDrive-eric.boot
+> h@texas2036.org/Shared drives/Data and Research Team//_codeshare/"
+  [5]              "."
+  [6]  (PERSONAL)  "/Users/ericbooth/Documents/Stata/ado/personal/"
+  [7]  (PLUS)      "/Users/ericbooth/Library/Application Support/Stata/ado/plus
+> /"
+  [8]  (OLDPLACE)  "~/ado/"
+
+. clear
+
+. input str60 pass1 str60 pass2
+
+                                                            pass1              
+>                                            pass2
+  1. "transportation barrier"          "transportation barrier"
+  2. "childcare gap on Tuesdays"       "childcare gap on Tuesday"
+  3. "no barrier reported"             "no barrier reported"
+  4. "schedule conflict with work"     "client lost housing in March"
+  5. end
+
+. llmsieve pass1 pass2, gendelta(delta) genflag(review)
+
+llmsieve: convergence delta between pass1 and pass2 (N = 4)
+  mean delta  0.206, max  0.786
+  rows above threshold(0.15), routed to human review: 1 of 4
+  a low delta certifies stability, not correctness; keep the gold-standard kapp
+> a.
+
+. assert r(flagged) == 1
+
+. di "LLMSIEVE_DEMO_OK"
+LLMSIEVE_DEMO_OK
+
+. 
+. *============================================================================
+> ==*
+. * (h) faircheck: equalized-odds view of the four-fifths sim (needs realized)
+. *============================================================================
+> ==*
+. adopath ++ "`c(pwd)'/faircheck"
+  [1]              "/Users/ericbooth/Library/CloudStorage/GoogleDrive-eric.boot
+> h@texas2036.org/My Drive/Book-Manuscript-Applied-Evaluation-Stata/code/fairch
+> eck"
+  [2]              "/Users/ericbooth/Library/CloudStorage/GoogleDrive-eric.boot
+> h@texas2036.org/My Drive/Book-Manuscript-Applied-Evaluation-Stata/code/llmsie
+> ve"
+  [3]              "/Users/ericbooth/Library/CloudStorage/GoogleDrive-eric.boot
+> h@texas2036.org/My Drive/Book-Manuscript-Applied-Evaluation-Stata/code/ai_pri
+> vacy_gate"
+  [4]  (BASE)      "/Applications/StataNow/ado/base/"
+  [5]  (SITE)      "/Users/ericbooth/Library/CloudStorage/GoogleDrive-eric.boot
+> h@texas2036.org/Shared drives/Data and Research Team//_codeshare/"
+  [6]              "."
+  [7]  (PERSONAL)  "/Users/ericbooth/Documents/Stata/ado/personal/"
+  [8]  (PLUS)      "/Users/ericbooth/Library/Application Support/Stata/ado/plus
+> /"
+  [9]  (OLDPLACE)  "~/ado/"
+
+. clear
+
+. set seed 20260704
+
+. set obs 2000
+Number of observations (_N) was 0, now 2,000.
+
+. gen byte groupB = runiform() < 0.5
+
+. gen risk = invlogit(rnormal(0,1) - 0.55*groupB)
+
+. gen select = risk > 0.5
+
+. gen byte need = runiform() < risk
+
+. faircheck need select, by(groupB)
+
+faircheck: select against need, by groupB (N = 2000)
+----------------------------------------------------------------
+group              N    base  select     TPR     FPR    prec
+----------------------------------------------------------------
+0                978   0.522   0.483   0.650   0.300   0.703
+1              1,022   0.377   0.265   0.444   0.157   0.631
+----------------------------------------------------------------
+selection-rate parity ratio 0.549 below the 0.80 line
+largest gaps across groups: TPR 0.206, FPR 0.143
+equal TPR and equal FPR cannot both hold when base rates differ; decide which e
+> rror matters and defend the choice.
+
+. assert abs(r(tpr_gap) - .206) < .01
+
+. di "FAIRCHECK_DEMO_OK"
+FAIRCHECK_DEMO_OK
+
+. 
+. 
+end of do-file

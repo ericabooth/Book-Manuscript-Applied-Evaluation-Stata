@@ -1,0 +1,575 @@
+[
+  {
+    "path": "LaTeXBookCode/src/00_preamble.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "LaTeXBookCode/src/README.md",
+    "kind": "text",
+    "findings": [
+      {
+        "path": "LaTeXBookCode/src/README.md",
+        "line": 6,
+        "col": 37,
+        "kind": "typography",
+        "severity": "low",
+        "codepoint": 8212,
+        "name": "EM DASH",
+        "detail": "style fingerprint, not a hidden mark; ASCII form is '-'",
+        "payload": ""
+      }
+    ],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "LaTeXBookCode/src/main_assembled.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "LaTeXBookCode/src/chapters/10_frontmatter.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "LaTeXBookCode/src/chapters/11_ch01.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "LaTeXBookCode/src/chapters/12_ch02.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "LaTeXBookCode/src/chapters/20_partII.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "LaTeXBookCode/src/chapters/21_ch03.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "LaTeXBookCode/src/chapters/22_ch04.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "LaTeXBookCode/src/chapters/23_ch05.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "LaTeXBookCode/src/chapters/24_ch06.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "LaTeXBookCode/src/chapters/30_partIII.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "LaTeXBookCode/src/chapters/31_ch07.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "LaTeXBookCode/src/chapters/32_ch08.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "LaTeXBookCode/src/chapters/40_partIV.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "LaTeXBookCode/src/chapters/41_ch09.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "LaTeXBookCode/src/chapters/42_ch10.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "LaTeXBookCode/src/chapters/43_ch11.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "LaTeXBookCode/src/chapters/44_ch12.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "LaTeXBookCode/src/chapters/50_partV.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "LaTeXBookCode/src/chapters/51_ch13.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "LaTeXBookCode/src/chapters/52_ch14.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "LaTeXBookCode/src/chapters/53_ch15.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "LaTeXBookCode/src/chapters/60_appendices.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/00_control.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/01_install.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/20_ch03_apis.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/README.md",
+    "kind": "text",
+    "findings": [
+      {
+        "path": "code/README.md",
+        "line": 1,
+        "col": 18,
+        "kind": "typography",
+        "severity": "low",
+        "codepoint": 8212,
+        "name": "EM DASH",
+        "detail": "style fingerprint, not a hidden mark; ASCII form is '-'",
+        "payload": ""
+      },
+      {
+        "path": "code/README.md",
+        "line": 16,
+        "col": 57,
+        "kind": "typography",
+        "severity": "low",
+        "codepoint": 8212,
+        "name": "EM DASH",
+        "detail": "style fingerprint, not a hidden mark; ASCII form is '-'",
+        "payload": ""
+      },
+      {
+        "path": "code/README.md",
+        "line": 68,
+        "col": 143,
+        "kind": "typography",
+        "severity": "low",
+        "codepoint": 8594,
+        "name": "RIGHTWARDS ARROW",
+        "detail": "style fingerprint, not a hidden mark; ASCII form is '->'",
+        "payload": ""
+      },
+      {
+        "path": "code/README.md",
+        "line": 68,
+        "col": 160,
+        "kind": "typography",
+        "severity": "low",
+        "codepoint": 8594,
+        "name": "RIGHTWARDS ARROW",
+        "detail": "style fingerprint, not a hidden mark; ASCII form is '->'",
+        "payload": ""
+      },
+      {
+        "path": "code/README.md",
+        "line": 68,
+        "col": 172,
+        "kind": "typography",
+        "severity": "low",
+        "codepoint": 8594,
+        "name": "RIGHTWARDS ARROW",
+        "detail": "style fingerprint, not a hidden mark; ASCII form is '->'",
+        "payload": ""
+      },
+      {
+        "path": "code/README.md",
+        "line": 79,
+        "col": 70,
+        "kind": "typography",
+        "severity": "low",
+        "codepoint": 8594,
+        "name": "RIGHTWARDS ARROW",
+        "detail": "style fingerprint, not a hidden mark; ASCII form is '->'",
+        "payload": ""
+      },
+      {
+        "path": "code/README.md",
+        "line": 79,
+        "col": 95,
+        "kind": "typography",
+        "severity": "low",
+        "codepoint": 8594,
+        "name": "RIGHTWARDS ARROW",
+        "detail": "style fingerprint, not a hidden mark; ASCII form is '->'",
+        "payload": ""
+      }
+    ],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/capstone_chr.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch01_reach.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch02_benchmark.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch02_projectbuilder.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch03_educationdata.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch03_webapi.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch04_chr.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch05_datadictionary.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch05_monitoring.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch06_frames.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch06_longitudinal.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch06_reshapehelper.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch07_trust.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch08_did.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch08_oaxaca.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch08_subgroups.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch09_graphs.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch10_googlechart.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch10_smallmult.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch11_googlesheets.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch11_tables.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch12_dashboardbuilder.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch12_portal.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch13_backbone.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch13_parallel.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch13_validation.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch14_kanon.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ch15_bench.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/ai_privacy_gate/test_ai_privacy_gate.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/surveypull/test_surveypull.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/llmsieve/test_llmsieve.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/rawsweep/test_rawsweep.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/reachcheck/test_reachcheck.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/srctag/test_srctag.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/loebias/test_loebias.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/nonresponse/test_nonresponse.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/likertscale/test_likertscale.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/output/ch11_wage_body.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/output/ch11_wage_table.tex",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/faircheck/test_faircheck.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  },
+  {
+    "path": "code/surveytracker/test_surveytracker.do",
+    "kind": "text",
+    "findings": [],
+    "error": "",
+    "scanned": true
+  }
+]

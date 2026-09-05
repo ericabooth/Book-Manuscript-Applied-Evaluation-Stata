@@ -71,8 +71,8 @@ where $m$ is the count of matching characters between strings $s_1$ and $s_2$, $
 \label{fig:ch06-viz-linkpipe}
 \end{figure*}
 
-\subsection{Why the method holds up: a four-decade pedigree}\label{sec:ch06-fspedigree}
-None of this machinery is improvised. The clean-block-score-threshold pattern is the Fellegi-Sunter framework\index{Fellegi-Sunter framework}\index{match weight} made operational, and the framework defines exactly what the score should be. In words first: the weight measures how much more often this exact pattern of field agreements shows up among true matches than among random pairings, and taking the log base~2 turns that ratio into points you can add across fields. Formally, for a candidate pair with agreement pattern $\gamma$ across the compared fields, the match weight is the base-2 log-likelihood ratio
+\subsection{How agreement patterns become match weights}\label{sec:ch06-fspedigree}
+The clean-block-score-threshold pattern is the Fellegi-Sunter framework\index{Fellegi-Sunter framework}\index{match weight} made operational, and the framework defines exactly what the score should be. In words first: the weight measures how much more often this exact pattern of field agreements shows up among true matches than among random pairings, and taking the log base~2 turns that ratio into points you can add across fields. Formally, for a candidate pair with agreement pattern $\gamma$ across the compared fields, the match weight is the base-2 log-likelihood ratio
 \[
   w(\gamma)=\log_2\frac{\Pr(\gamma\mid\text{true match})}{\Pr(\gamma\mid\text{non-match})}
            =\log_2\frac{m_\gamma}{u_\gamma},
@@ -97,7 +97,7 @@ nearmrg id using spells, nearvar(paydate=startdate) ///
 gen days = paydate - spellstart
 \end{verbatim}
 }
-The \texttt{lower} option is the whole reason to reach for the command rather than a rounded merge: it refuses to attach a payment to a spell that started after the money moved, which a nearest-in-either-direction match would happily do. \texttt{genmatch()} keeps the matched date as a variable, so the gap is auditable rather than assumed, and the printed result is the audit:
+With \texttt{lower}, you restrict candidate spells to those beginning on or before the payment date. Without a directional restriction, the closest date could be a later spell. \texttt{genmatch()} keeps the matched date as a variable, so the gap is auditable rather than assumed, and the printed result is the audit:
 \par
 {\footnotesize
 \begin{verbatim}
@@ -174,8 +174,8 @@ q_hours         TWC wage file (2026q2)
 }
 \texttt{srctag} confirms it stamped both variables, and \texttt{srcfind} reads the stamps back: each variable prints beside its source table and, in parentheses, its vintage, so you answer the provenance question from the files themselves rather than from anyone's memory.
 
-\section{Schema drift and the polluted year}
-We build the pipeline to refuse bad data loudly rather than average over it quietly. Administrative extracts drift\index{schema drift}: a variable changes type, a code that was never legal appears, an ID that should be unique repeats. You defend against that drift with a validation step that checks each new extract against a rulebook of required variables, legal values, and uniqueness constraints, and stops with a clear message when the data violates them. Native Stata already contains everything that rulebook needs: \texttt{confirm}\index{confirm@\texttt{confirm}} verifies that a variable exists with the expected type, \texttt{isid}\index{isid@\texttt{isid}} halts if the identifier is not unique, and \texttt{assert}\index{assert@\texttt{assert}} halts if any observation violates a stated condition. Put these four lines at the top of the do-file that ingests an extract and they become a contract the data must satisfy before a single analysis line runs:
+\section{Checking changes in extract structure and comparability}
+We check each extract before adding it to the analysis, because a changed field can alter a result even when the do-file still runs. Administrative extracts drift\index{schema drift}: a variable changes type, a code that was never legal appears, an ID that should be unique repeats. You defend against that drift with a validation step that checks each new extract against a rulebook of required variables, legal values, and uniqueness constraints, and stops with a clear message when the data violates them. Native Stata already contains everything that rulebook needs: \texttt{confirm}\index{confirm@\texttt{confirm}} verifies that a variable exists with the expected type, \texttt{isid}\index{isid@\texttt{isid}} halts if the identifier is not unique, and \texttt{assert}\index{assert@\texttt{assert}} halts if any observation violates a stated condition. Put these four lines at the top of the do-file that ingests an extract and they become a contract the data must satisfy before a single analysis line runs:
 \par
 {\footnotesize
 \begin{verbatim}
@@ -332,7 +332,7 @@ srctag apply: 2 tag(s) applied, 8 already current
               signing time over the edited tags
 \end{verbatim}
 }
-The receipt is the point. Two rows changed, eight were already current, and nothing was overwritten silently; without \texttt{replace}, the two changes would have been held back and named. The hint after the counts is the discipline that keeps the record honest, and it takes four lines: re-sign, save, and regenerate both documentation files, because a relabel file generated before the correction would restore the wrong vintage on the next data round trip:
+The report distinguishes changed tags from those already current; without \texttt{replace}, the two changes would have been held back and named. The hint after the counts is the discipline that keeps the record honest, and it takes four lines: re-sign, save, and regenerate both documentation files, because a relabel file generated before the correction would restore the wrong vintage on the next data round trip:
 \par
 {\footnotesize
 \begin{verbatim}
@@ -690,44 +690,49 @@ at or below |      1,442       64.61       64.61
 }
 About a third of the women earn above their own industry's average, which is the shape you would expect when a few high earners pull each industry mean upward. The companion \texttt{ch06\_frames.do} runs this example end to end and asserts every count printed here, so you can rebuild it before trusting it.
 
-Notice what did not happen. The industry file never lost its level: it is still twelve rows, and if a reviewer asks how many women stand behind the mining average you can answer four, because \texttt{n\_women} came across with it. The women's file never gained rows. And when next quarter's extract arrives, the same two lines rebuild the comparison. A \texttt{merge m:1} would have produced the same \texttt{above} variable here, and for a one-off comparison it is a perfectly good choice; frames are useful when you need that second level again later in the same do-file, when several lookups would each require their own merge, or when you want the industry table itself as an output rather than as scaffolding you discard.
+After linking, the industry file retains its original level: it is still twelve rows, and if a reviewer asks how many women stand behind the mining average you can answer four, because \texttt{n\_women} came across with it. The women's file also retains its row count. Rebuild the industry summary and link it again when a new extract arrives. A \texttt{merge m:1} would have produced the same \texttt{above} variable here, and for a one-off comparison it is a perfectly good choice; frames are useful when you need that second level again later in the same do-file, when several lookups would each require their own merge, or when you want the industry table itself as an output rather than as scaffolding you discard.
 
 \subsection{When a database is the right call}\label{sec:ch06-dbcase}
 Now the meeting question can be answered properly. Someone proposes a database; you owe that a real answer rather than a reflex, and the way to give one is to unbundle three decisions that people lump under a single word.
 
 How results reach non-Stata readers is a \emph{delivery} question, and Part~IV's dashboards and portals answer it with or without a database underneath. Who may see what is an \emph{access} question, and folder permissions plus the de-identified extracts of Chapter~\ref{ch:sharing} answer it for a team where everyone with access is cleared for the data. Only the third decision, how the data are stored and combined, is actually a database question, and for most small evaluation shops the previous two subsections have already answered it.
 
-The case for staying in code is not sentiment. \textcite{long2009workflow} built the workflow this book extends on one idea, that every step from raw file to result is recorded in an auditable chain of do-files, and a database strains that idea at its strongest point: a database stores the current answer, while the do-file chain stores the reasoning, the commented line where you can see which source wins and why. Changing a definition mid-project, which research does weekly, is one line and a rerun in code; in a database it is a structure edit, a reload, and a conversation with whoever owns the dashboard. The costs also run one way. Storage is the cheapest thing in the shop and analyst time the most expensive, the license is the smallest line in a database budget, and the biggest line is the quarter-to-half of a salary for the person who keeps it running, a job that in a small shop otherwise falls, unfunded, to whoever was most enthusiastic in the meeting. The one discipline all of this depends on costs nothing and is already this book's rule: code makes data; people do not edit data.
+For a small team, a documented chain of do-files may be enough to manage the analysis. \textcite{long2009workflow} emphasizes recording the steps from raw files to results so that an analyst can repeat and inspect them. A database can support the same principle when its loading and transformation queries are versioned. Compare the alternatives using the work your team actually performs: the size of joins, how often files arrive, who needs simultaneous access, and who will maintain the system. Include staff time in the cost estimate and retain a reproducible record of cleaning decisions whichever storage system you choose.
 
-To hold that position credibly we have to be honest about the other side, where three limits are real walls. Stata works in memory, so when the largest file you routinely open stops fitting with room to merge, the work does not slow down, it stops. A person-triggered rebuild falls quietly behind data that arrive daily. And no amount of do-file discipline produces a log of which person read which rows, so a data-use agreement that demands one has made the decision for you.
+A database becomes worth investigating when routine files exceed available memory, several users need controlled access at the same time, or a data-use agreement requires detailed access logs. Frequent data arrivals may instead be manageable with a scheduled do-file. Diagnose the constraint before choosing the system: a slow manual refresh and a need for row-level access controls are different problems.
 
-Table~\ref{tab:ch06-dbdecision} turns the choice into two groups of questions rather than a score, because the factors are not interchangeable: the first group are limits code cannot get around, the second are conditions that must all hold before buying helps. If you do buy, keep the build code as the source of truth and load \emph{cleaned} data into the database, never move the cleaning decisions into it; and never query it live from an analysis do-file. Have the database write files on a schedule and Stata read files, which keeps do-files portable and takes the fragile driver, the per-machine ODBC setup, and the single-sign-on dance off the critical path.\marginnote[-6mm]{A middle path worth knowing: DuckDB runs SQL over plain files with no server, no license, and nothing to administer, and handles joins bigger than memory. The robust arrangement is the same either way: let it write files and let every tool read files, rather than wiring tools to it live.}
+Use Table~\ref{tab:ch06-dbdecision} to discuss requirements with the team responsible for maintaining the data. A dated extract gives an analysis a stable input even when the database changes, and it can spare collaborators a separate connection setup. If you query a database directly, record the query and preserve the result used for the analysis so that another analyst can reproduce the reported numbers.
 
 \begin{table*}[htbp]
 \centering
 \footnotesize
-\caption[The database decision in seven questions]{The database decision in seven questions, reached only after Figure~\ref{fig:ch06-combine} has ruled out appending, merging, and frames. Any \enquote{yes} in the first group is a limit code cannot get around; only then do the second group's conditions matter, and every one must hold or the purchase makes things worse. No yes in the first group means the decision is finished: stay in code.}
+\caption[Questions to ask before adopting a database]{Questions for the evaluation team and the people who would maintain a database. Use the answers to identify the actual constraint, compare alternatives, and budget implementation and continuing support.}
 \label{tab:ch06-dbdecision}
 \begin{tabular}{@{}p{9.8cm}p{4.2cm}@{}}
 \hline
-\multicolumn{2}{@{}p{14.2cm}@{}}{\emph{Limits code cannot get around: any yes points to a database}} \\
+\multicolumn{2}{@{}p{14.2cm}@{}}{\emph{Requirements to investigate before choosing storage}} \\
 \hline
-Does your largest working file crowd half the machine's memory? & Yes: a real wall \\
-Do data arrive faster than a person can rerun the build? & Yes: a real wall \\
-Does an agreement require a log of who read which rows? & Yes: a real wall \\
+Do routine joins exceed available memory? & Compare larger-memory and database options \\
+Do data arrive faster than the manual refresh? & Consider a scheduled build \\
+Does an agreement require row-level access logs? & Consult the data steward on supported systems \\
 \hline
-\multicolumn{2}{@{}p{14.2cm}@{}}{\emph{Conditions that must all hold before buying helps}} \\
+\multicolumn{2}{@{}p{14.2cm}@{}}{\emph{Implementation and maintenance questions}} \\
 \hline
-Is a quarter to half of a salary funded, permanently, to run it? & No: fix this first \\
-Will researchers who know the variables still do the cleaning? & No: do not buy \\
-Can a definition change land in days, not weeks? & No: do not buy \\
-Can every tool read the output without a fragile driver? & No: write files instead \\
+Is continuing technical support funded? & Estimate staff time and assign responsibility \\
+Will domain experts review the cleaning rules? & Document and review transformations \\
+Can staff revise a definition and reproduce old results? & Version queries and retain dated extracts \\
+Can collaborators read the output with their tools? & Test connections or supply dated files \\
 \hline
 \end{tabular}
 \end{table*}
 
 \section{Missing data honestly}
 Before fitting a model, find out which observations its missing-value exclusions would remove. We use \texttt{misstable patterns}\index{misstable@\texttt{misstable}} to see which variables are missing together, then compare the retained observations with those excluded. These checks help you describe the loss of information and investigate how it arose.\marginnote{The usual distinctions are missing completely at random, missing at random conditional on observed information, and missing not at random, where missingness still depends on the unobserved value after conditioning \parencite{rubin1987imputation}. A pattern table alone cannot distinguish these mechanisms. Ask how the agency collected the variable and why a value could be absent.} The following output summarizes a sample of the panel:
+\par
+{\footnotesize
+\begin{verbatim}
+misstable patterns ln_wage hours tenure ///
+    union wks_ue msp, frequency
 
   Missing-value patterns (1 means complete)
     Frequency |  1  2  3  4
@@ -744,7 +749,7 @@ Before fitting a model, find out which observations its missing-value exclusions
   Variables: (1) hours (2) tenure (3) wks_ue (4) union
 \end{verbatim}
 }
-Reading down the rows of the table, you see which variables go missing together: \texttt{union} alone in 59 of the 200 rows, \texttt{wks\_ue} alone in 45, and only a handful of rows where anything else drops out, so \texttt{ln\_wage} and \texttt{msp} are complete (Stata leaves them off the pattern list). What the table does not put on one scale is how \emph{much} each variable is missing, and that is the question a remedy turns on. Figure~\ref{fig:missmap} answers it: a bar for each variable's share of missing rows, sorted, so you find \texttt{union} at 30~percent and \texttt{wks\_ue} at 23 while the rest sit near zero. The two views together tell you that casewise deletion would drop over half the sample, 108 of the 200 rows, with most exclusions attributable to the missing union and unemployment records. The concentration of gaps does not establish whether the excluded observations differ systematically from the retained ones. When the missingness mechanism and available predictors make the assumptions credible, consider multiple imputation\index{multiple imputation} \parencite{rubin1987imputation}, which propagates the added uncertainty into the standard errors rather than pretending the gaps were never there.\marginnote{Create imputed datasets with \texttt{mi impute}; then fit and pool the analysis with \texttt{mi estimate}. Include variables that predict the missing values and missingness, respect the panel structure, and examine the imputation diagnostics. Choose enough imputations for stable estimates and Monte Carlo errors rather than treating the fraction of missing cells as an automatic prescription.}, Stata's multiple-imputation machinery, which fits the model on every imputed copy and pools the results, never by filling in a single \enquote{best guess} that hides the uncertainty you just admitted to.}
+Reading down the rows of the table, you see which variables go missing together: \texttt{union} alone in 59 of the 200 rows, \texttt{wks\_ue} alone in 45, and only a handful of rows where anything else drops out, so \texttt{ln\_wage} and \texttt{msp} are complete (Stata leaves them off the pattern list). What the table does not put on one scale is how \emph{much} each variable is missing, and that is the question a remedy turns on. Figure~\ref{fig:missmap} answers it: a bar for each variable's share of missing rows, sorted, so you find \texttt{union} at 30~percent and \texttt{wks\_ue} at 23 while the rest sit near zero. The two views together tell you that casewise deletion would drop over half the sample, 108 of the 200 rows, with most exclusions attributable to the missing union and unemployment records. The concentration of gaps does not establish whether the excluded observations differ systematically from the retained ones. When the missingness mechanism and available predictors make the assumptions credible, consider multiple imputation\index{multiple imputation} \parencite{rubin1987imputation}, which propagates the added uncertainty into the standard errors rather than pretending the gaps were never there.\marginnote{Create imputed datasets with \texttt{mi impute}; then fit and pool the analysis with \texttt{mi estimate}. Include variables that predict the missing values and missingness, respect the panel structure, and examine the imputation diagnostics. Choose enough imputations for stable estimates and Monte Carlo errors rather than treating the fraction of missing cells as an automatic prescription.}
 
 The chart is a horizontal bar of the percent missing per variable. Count the missing rows for each variable into a small dataset, then sort the bars so the worst offenders sit on top:
 \par
