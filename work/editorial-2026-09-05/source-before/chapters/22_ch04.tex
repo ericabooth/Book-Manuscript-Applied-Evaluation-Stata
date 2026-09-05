@@ -1,0 +1,347 @@
+\chapter{Harvesting data when there is no API}\label{ch:noapi}
+
+The data you need is right there on the state's website: exactly the report you want, published as eighty-four separate files behind eighty-four download buttons, one per district per year. There is no API. In this chapter we get that data into Stata without spending eighty-four afternoons on it, and we do it in a way you could show the agency without embarrassment.
+
+We start with reading a site responsibly and the methods literature that backs the practice, work a real thirteen-year scrape of Texas school report cards, and then pull a national health file down a plain URL and clean the mess it arrives in. From there we look at how to filter data too large to download whole, and finish with absorbing the mixed-format files that partners simply drop in your shared drive. You will finish this chapter able to write a download loop that keeps a manifest and resumes where it stopped, stack thirteen vintages of mutating column names into one harmonized panel, rebuild a county need index and the figure that goes with it by changing a year in two macros, and convert a partner's folder of spreadsheets into clean datasets with a single call. In each case you replace a manual, unrepeatable chore with a scripted step, and \enquote{getting the data} stops being a heroic weekend and becomes a replicable part of the pipeline you can hand to a partner, who then refreshes the numbers next fall without you.
+
+\section{Reading the site before you scrape}
+Before automating a download, read the site the way a guest reads a house. Spend half an hour here and you walk away with two things you will use in every loop that follows: a count of how many files you are actually after, and a written decision about what a rerun does with files already on disk. Check the terms of use; learn how the download form is structured and what parameters it sends, because those parameters are what your loop will vary; space your requests so you are not hammering a public server; and make the job resumable so a dropped connection at file seventy does not cost you the first sixty-nine. Often you are better off not scraping at all, and instead emailing the agency to ask for the bulk file; embedded evaluators depend on agency goodwill, and the cheapest way to keep it is to behave like someone who will need to email them again next week.\marginnote{Check \texttt{robots.txt} and the terms of use before the first request, and set a real \texttt{User-Agent} that names you and gives a contact address. An admin who can see who you are and why is far more likely to email a question than to reach for a block.}
+
+The reading ends with a recon pass, done by hand before any code exists. Count the files, download one the way a visitor would, and time it: eighty-four files at forty seconds each is under an hour of machine time, so the loop is about reliability, not speed. Use that count to decide whether to script at all: up to about a dozen files, clicking beats debugging, and past that the script wins even before the first rerun. Note the hand-pulled file's size and shape, the benchmark every scripted download is checked against. Resumability belongs in the same pre-loop conversation, a design decision rather than a patch after a crash: decide now whether the script skips a file it finds already on disk or re-pulls it because the agency revises silently, and write the answer into the loop before the loop exists.
+
+Pushing a public server too hard can cost you the method itself, not just the afternoon. A scraper that gets an evaluator blocked has failed even if it ran, because the next quarter's update is now impossible. Politeness here is less a courtesy than maintenance on your own pipeline.\marginnote{A workable default: one request every one to two seconds, never more than a handful of parallel connections, and a nightly window for the heavy pulls. If the site publishes a \texttt{Crawl-delay} in \texttt{robots.txt}, that number wins over your default.}
+
+\section{Scraping public files is a method, not a workaround}\label{sec:ch04-scrapelit}
+Researchers across psychology and the social sciences have written a methods literature for scraping, and you can cite it when a funder, a reviewer, or an IRB asks what exactly you did to get the data. \textcite{landers2016scraping} give the canonical treatment for psychology: before scraping, write down a \emph{data source theory}, the explicit assumptions about who put the data on the page, why, on what schedule, and with what omissions, because the scrape inherits every one of those decisions as a property of the measurement. The Texas report-card walk of the next section relies on exactly such a theory, mostly implicit: the agency publishes each fall, masks small cells for FERPA, and revises prior years without announcement. Write those assumptions into the do-file header and they stop being folklore and become methods documentation the next analyst can check. You are doing to a data source what a logic model does to a program theory.
+
+The recon pass is where you first test the theory against the site: count three files per district where the theory says one, and you have learned something about the source, cheaper to resolve before the loop runs than to diagnose as a tripled panel after.
+
+\subsection{Which pulls are fair to script}\label{sec:ch04-legalrisk}
+The legal exposure is smaller than evaluators tend to fear for the files this chapter targets, and the ethics work is correspondingly larger. We work through what the legal and public-records literature says, and you finish with a three-row triage you can run against your own pull before writing a line of code, and explain to a funder or an IRB that asks how the data got into your hands. \textcite{krotov2020legality} sort the legal theories that have been raised against scrapers (terms-of-use breach, copyright, trespass, the Computer Fraud and Abuse Act), and \textcite{luscombe2022scraping} walk social scientists through the technical, legal, and ethical hurdles in sequence; both land near the same place. Publicly posted government files, published precisely so the public will download them, fall at the low-risk end of the spectrum; scraping personal data, or a commercial site against its terms, falls at the other. We suggest you sort your own pulls the same way: an agency's public accountability files are fair to script, a login-walled portal is a question for the data-sharing agreement, and anything touching individuals' pages is a different method with a different review (Table~\ref{tab:ch04-viz-risk}).\marginnote[-14mm]{For any pull past public accountability files, a one-paragraph memo to counsel before the loop runs costs less than the same conversation after.}
+
+\begin{table*}[htbp]
+\centering
+\caption[Which channel for which source]{The working rule, laid out as a triage table. Read down to the row that matches what you are
+about to script, and across to the channel it calls for; the risk rises
+as the source moves from files posted for the public to pages about
+individuals, and so does the review the pull requires.}
+\label{tab:ch04-viz-risk}
+\begin{tabular}{@{}p{4.2cm}p{1.8cm}p{8.8cm}@{}}
+\toprule
+Source & Risk & Right channel \\
+\midrule
+Public accountability files & Low & Script the walk freely \\
+Login-walled portal & Medium & Data-sharing agreement first \\
+Individuals' pages, personal data & High & Different method; formal review \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+You can approach the same work from the other side, through public-records law. \textcite{walby2019foi} collect social-science practice built on freedom-of-information requests, treating the request not as journalism but as research design: you specify records, fields, and years the way you would specify a sample. For an embedded evaluator the two channels are siblings. When the state posts the files, the script we build in this chapter retrieves them at zero marginal cost to the agency; when it does not, a public-information request reaches the same records by another route, and the same habits (name the years, name the fields, keep the correspondence in the project folder) make the released extract replicable.\marginnote{An evaluator who works both channels, the scripted walk and the public-information request, can tell a partner exactly where a given file came from, which matters the day a board member asks.}
+
+\pagelayout{wide}
+\section{A real case: thirteen years of Texas school report cards}
+You end up owning a thirteen-year Texas education panel almost no one else in the room will have: you write a short script that walks the state's download form, which has no API behind it, and pulls each year in turn. That ownership is the point for an embedded evaluator. When the state posts the files but ships no bulk extract, everyone at the table can see the same eighty-four buttons, but only the person who scripted the walk holds the assembled panel, and only that person can rebuild it next fall in an afternoon. In a research--practice partnership the payoff is not the panel itself but the do-file behind it: hand a partner a rerunnable extract and they can refresh the numbers without you, which is the difference between a consultant's deliverable and a shared capability \parencite{coburn2016partnerships}. Evaluators in the utilization-focused tradition call this building for use \parencite{patton2008utilization}.
+
+The Texas Academic Performance Reports (TAPR) are the state's campus and district accountability files: test performance, graduation, attendance, staffing, finance, thousands of columns, one set per year and level, and, at this writing, no API or bulk extract. The authors' downloader walks the agency's download form, discovers which data categories exist for each year and geography, and loops across every posted year, 2013--2025 as this book went to press, and across campus, district, region, county, and state levels, writing the files into an organized \texttt{year/level/} tree with polite delays between requests. To keep anyone from back-calculating individual students, the agency masks small cells for FERPA, so a rate may arrive as \texttt{-1}, \texttt{-3}, or a coded asterisk rather than a number; import those as strings and decode deliberately, or a masked \texttt{-1} silently becomes a real proficiency of minus one.
+
+When a loop runs this long, give it a download manifest, this chapter's instance of the tracking-spine pattern of Chapter~\ref{ch:workshop}: one CSV, one row per file the walk intends to fetch, recording the URL, the expected filename, a status (\texttt{pending}, \texttt{done}, \texttt{failed}), the byte size, and the download date. The loop writes each row as its file finishes downloading, and the rerun reads the manifest first and skips every row marked \texttt{done}, which is resumability implemented as data rather than as cleverness. The same file answers, at a glance, which of the eighty-four failed, whether a crash left a truncated file (the size column betrays it), and when each vintage was pulled, which matters once the agency revises without announcement. The authors' downloader keeps such a record internally; in your own loop, keep the manifest as a plain file the whole team can open, not as state buried in the script.
+
+Between the walk and the combine, spend ten minutes on a triage read that can save you days. Sort the manifest by size: a zero-byte file is a failed download that the manifest still marks \texttt{done}, and a file a tenth the size of its siblings is usually an error page saved under a data filename. Then compare each vintage's column count against the prior year's; a year that gained or lost forty columns has changed shape and is the vintage the rename map studies first. Run those two checks in that order: if the sizes pass, go on to the shape check; if a size fails, re-pull that file before anything else touches the tree. The triage read is also a hand-run preview of the checks we turn into a formal contract in Chapter~\ref{ch:panels}: once they stabilize, write them as \texttt{confirm}, \texttt{isid}, and \texttt{assert} lines at the top of the combine do-file, and every refresh applies the re-pull rule without anyone remembering to sort the manifest.
+
+\subsection{When column names change between years}\label{sec:ch04-combine}
+The harder work comes at the combine step, not at the download. By the end of this section you will have a rename map and a stacking call small enough to run against two vintages of the \texttt{auto} data, shaped exactly like the one that harmonizes thirteen years of report cards. Element names mutate across years: a column called one thing in 2015 is renamed or split by 2020, so a naive append stacks unrelated variables. Keep a master reference of element names and a rename map that the \texttt{combineall}\index{combineall@\texttt{combineall}} command of the next box applies per vintage, so the panel is harmonized deliberately rather than by accident. That is the work hiding inside what sounds like a simple task, downloading and combining a multi-year panel, and documenting the rename decisions is what makes the resulting panel replicable by someone who was not there when you built it. The download loop and the combine step are two halves of one job: the walk writes one file per vintage into a \texttt{raw/} tree, and the harmonizer stacks that tree into a single panel while remembering which column came from which year.
+
+\begin{kaobox}[frametitle=Package Integration: \texttt{combineall}]
+\textbf{Shipped tool:} \texttt{combineall} (v2.0.0, the release this book's examples were tested against), an engine the first author has used since 2011 to combine every file in a directory (append, merge, joinby, or convert-only), extended for this book with a vintage-aware harmonization layer. Point it at the \texttt{raw/} tree the download loop filled, and it stacks the files into the panel the chapter promised. Install it the house way:
+\par
+{\footnotesize
+\begin{verbatim}
+local gh "https://raw.githubusercontent.com/ericabooth"
+net install combineall, ///
+    from("`gh'/combineall-stata-public/main/") replace force
+\end{verbatim}
+}
+Under \texttt{cmethod(append)}, three options do the combine half. The \texttt{year()} option reads a four-digit year out of each filename and writes it into a \texttt{year} variable, so the files sort and stack in vintage order. The \texttt{map()} option takes a small CSV, one row per rename (\texttt{oldname,newname,firstyear,lastyear}), and applies each rename to the vintages it names before the append, which is how a column split in 2020 lands in the same variable as its 2015 self. And a \texttt{varname[source]} characteristic, a per-variable text tag that Stata stores with the dataset (\texttt{help char}), records on each harmonized variable which file and year the values came from, so you can read the provenance back out of the built \texttt{.dta}. The command writes a harmonization table (which variable is present in which year) and reports \texttt{r(n\_files)}, \texttt{r(years)}, and \texttt{r(n\_missing)} for a quick sanity check. Keep the map CSV outside the \texttt{directory()} you point at, or it is swept up as an input file; and because the 2011 engine appends with \texttt{force}, a variable that is a string in one vintage and numeric in another coerces to missing rather than erroring, so read the harmonization table before you trust the stack.
+\end{kaobox}
+
+A two-vintage sketch shows the pattern the full TAPR walk scales up. The \texttt{raw/} folder contains two files, one per year, and the 2020 file renamed \texttt{price} to \texttt{price\_usd}; a one-row map heals the split, and the stacked panel includes a \texttt{year} variable and a source characteristic for free (Exercise~6 builds the two CSVs from the \texttt{auto} data, so the sketch runs verbatim):
+\par
+{\footnotesize
+\begin{verbatim}
+* map.csv rows: oldname,newname,firstyear,lastyear
+*              price_usd,price,2020,
+combineall using "built/cars_panel",        ///
+    cmethod(append) directory("raw/")       ///
+    map("map.csv")
+use "built/cars_panel.dta", clear
+char list price[source]
+\end{verbatim}
+}
+When the call finishes, the harmonization table confirms \texttt{price} is present in both vintages rather than split across two columns, \texttt{tabulate year} shows the two years stacked (74 rows each from the \texttt{auto} seed), and \texttt{char list price[source]} reports \texttt{price\_usd (cars\_2020.csv, 2020)}, the exact provenance you would otherwise reconstruct by memory. For the full TAPR panel the map is longer and the walk fills \texttt{raw/} first, but the call is the same: point \texttt{combineall} at the tree, hand it the rename map, and read the table. That harmonization table is the triage read automated for the combine step: a variable present in twelve vintages and absent in one is either a genuine gap or a rename the map missed, and reading the table with that question in mind grows the map one confirmed rename at a time.
+
+The download half of the same job is packaged too: the box below points you to the authors' TAPR downloader, so you can fill the \texttt{raw/} tree without writing the form parser yourself.
+
+\begin{kaobox}[frametitle=Package Integration: \texttt{TEA-TAPR-download}]
+\textbf{Existing tool:} the authors' TAPR downloader (Python, no browser) parses the agency form, discovers categories dynamically, and organizes multi-year output with resumability. A companion downloader handles TEA Summary-of-Finances workbooks. Both are on the authors' GitHub; the Stata code to merge the flat files via the scraped reference sheet pairs with \texttt{combineall}.
+\end{kaobox}
+
+\pagelayout{margin}
+\section{A file behind a download button: County Health Rankings}\label{sec:chr}
+Not every no-API source is a scrape. Some agencies post a single flat file at a stable web address, and the whole job is to pull it down cleanly and survive the header. For years County Health Rankings published one national analytic file per year, one row per county, covering premature death, child poverty, insurance, and clinical-care measures, at a URL that changed only in the year; the 2025 release closed that annual series, with the program's data assets passing to a community-run successor as this book went to press.\marginnote{We grabbed this same file in one line during the endpoint tour of Chapter~\ref{ch:apis}; here we work it through in full, because the pull was never the hard part.} A plain \texttt{copy}\index{copy@\texttt{copy}} then \texttt{import delimited}\index{import delimited@\texttt{import delimited}} pulls all 3{,}143 counties with no key and no login. Split the address across a couple of local macros, so a vintage swap touches one number and nothing else:
+\par
+{\footnotesize
+\begin{verbatim}
+local site "https://www.countyhealthrankings.org"
+local path "sites/default/files/media/document"
+copy "`site'/`path'/analytic_data2024.csv" ///
+     "$raw/chr2024.csv", replace
+import delimited "$raw/chr2024.csv", clear varnames(1)
+\end{verbatim}
+}
+The copy is a real download of roughly 3{,}200 rows and several hundred columns. Swap \texttt{2024} for \texttt{2025} in the same two macros and the final annual vintage rebuilds; the acquisition is now a rerunnable script rather than a one-time click. A series that ends without warning is precisely why the script matters: if a \texttt{copy} ever fails outright, the path has moved, and you repair it by finding the current address on the successor project's documentation page and updating the two macros, nothing else.\marginnote{CHR ships national and per-state summary rows in the same file as the counties (the state rows contain a county FIPS of \texttt{000}). Filter to real counties before you compute anything, or a national average sneaks into your county mean and quietly biases every statistic downstream.}
+
+Give even a one-file pull the triage read before any cleaning: the byte size in last year's neighborhood (a ninety percent drop means an error page, not a smaller country), the row count near the counties plus summary rows you expect, and the column count steady, because CHR adds and retires measures between vintages. When a check fails, treat it as a fork rather than a footnote: a wrong size means you re-download, and a changed column set means the rename list below needs a fresh look before it runs.
+
+The header is where the real work starts, and it fails in two ways at once. First, the file's actual first data row is a second, machine-readable label row, so every column imports as a string and the numbers do not exist until you drop that row. Second, the real column names are long human phrases like \texttt{Premature Death raw value} that Stata munges into one lowercase token. You inspect the damage before you touch it:
+\par
+{\footnotesize
+\begin{verbatim}
+. describe prematuredeathrawvalue childreninpovertyrawvalue
+
+              storage   display    value
+variable name   type    format     label
+-----------------------------------------------
+prematuredea~e  str12   %12s
+childreninpo~e  str11   %11s
+\end{verbatim}
+}
+Both are strings, both names are truncated to junk in the middle\marginnote{\texttt{prematuredea\textasciitilde e} is not a name anyone will read in six months.}. Fix both in two moves: drop the label row, then rename the handful of columns you actually need into short, readable names and \texttt{destring}\index{destring@\texttt{destring}} them.
+\par
+{\footnotesize
+\begin{verbatim}
+drop in 1                                  // the label row
+rename prematuredeathrawvalue    yrslost
+rename childreninpovertyrawvalue childpov
+rename digitfipscode             fips
+keep fips state name yrslost childpov ...
+destring yrslost childpov, replace
+\end{verbatim}
+}
+Set the before beside the after. What imported as \texttt{premature\allowbreak death\allowbreak raw\allowbreak value}, stored \texttt{str12}, is now \texttt{yrslost}, stored as a number; \texttt{childrenin\allowbreak poverty\allowbreak raw\allowbreak value} is now \texttt{childpov}. Because you wrote the rename down, rather than clicking through a point-and-click cleanup, the next analyst can reproduce the file without you in the room. This is a small preview of the harmonization work of Chapter~\ref{ch:panels}; here it is a pair of renames, there it is a rename map across thirteen vintages, but the instinct is identical.\marginnote{Child poverty and the uninsured rate arrive as proportions in \texttt{[0,1]}, not percents. Multiply by 100 once, right after \texttt{destring}, and label the units, or a board reads \enquote{0.34} and hears a third of a percent instead of a third of the children.}
+
+\subsection{Two measures pick out the highest-need counties}\label{sec:ch04-needindex}
+With Texas counties kept\marginnote{Texas has 254 counties; the analysis keeps the county rows only.}, we can ask the question a health foundation actually asks: where is the need highest? We combine two standardized measures, premature death and child poverty, into a simple need index\index{need index} (the mean of the two \emph{z}-scores\index{z-score@\emph{z}-score}), sort, and read off the top five:
+\par
+{\footnotesize
+\begin{verbatim}
+egen zd = std(yrslost)
+egen zp = std(childpov)
+gen need = (zd + zp)/2
+gsort -need
+list cname yrslost childpov uninsured in 1/5, ///
+    clean noobs
+\end{verbatim}
+}
+What those three lines compute is the object a numerate colleague will
+want to see. For each county $i$, \texttt{egen std} standardizes each
+measure to a \emph{z}-score, and the index averages the two:
+\[
+z^{d}_i=\frac{d_i-\bar d}{s_d},\qquad
+z^{p}_i=\frac{p_i-\bar p}{s_p},\qquad
+\text{need}_i=\tfrac{1}{2}\!\left(z^{d}_i+z^{p}_i\right).
+\]
+Here $d_i$ is county $i$'s years of life lost and $p_i$ its child-poverty
+rate; $\bar d,\bar p$ are the sample means and $s_d,s_p$ the sample
+standard deviations across the 254 counties. Standardizing first puts the two
+measures on equal footing even though their scales differ (a rate per
+100{,}000 and a percent), so a county is high-need only when it runs
+high on both.
+
+The five highest-need Texas counties are in Table~\ref{tab:chr}, and they are the five labeled in Figure~\ref{fig:chr}. The list reads the way Texas poverty geography reads: these are small, rural, majority-Hispanic or historically underserved counties\marginnote{Brooks and Duval sit in the South Texas brush country, Zavala in the Winter Garden, Cochran on the High Plains, and Red River on the northeast border.} where child poverty runs from 27 to 47 percent against a statewide 19, and premature death runs about twice the state rate. A foundation reading this does not need a briefing to see where a place-based grant would do the most work.
+
+\begin{table*}[htbp]
+\centering
+\caption[Five highest-need Texas counties]{The five highest-need Texas counties by a simple need index (the mean of the premature-death and child-poverty \emph{z}-scores), from the County Health Rankings 2024 analytic file. \enquote{Years lost} is years of life lost before age~75 per 100{,}000; the statewide figures are 7{,}875 years, 19.2\% child poverty, and 20.3\% uninsured. Rows follow the need-index order; these are the five counties labeled in Figure~\ref{fig:chr}, and every cell comes from the \texttt{list} that \texttt{ch04\_chr.do} prints.}
+\label{tab:chr}
+\begin{tabular}{lrrr}
+\hline
+County & Years lost & Child pov.\ (\%) & Uninsured (\%) \\
+\hline
+Brooks    & 15{,}100 & 47.1 & 21.1 \\
+Zavala    & 13{,}700 & 41.9 & 20.4 \\
+Duval     & 14{,}300 & 38.7 & 23.3 \\
+Red River & 17{,}300 & 27.3 & 18.2 \\
+Cochran   & 13{,}500 & 38.6 & 28.6 \\
+\hline
+Texas     &  7{,}875 & 19.2 & 20.3 \\
+\hline
+\end{tabular}
+\end{table*}
+
+To make the exhibit a board can act on, you write two lines: a label variable that names only the five highest-need counties (the data are already sorted by need), then a single \texttt{scatter} with the statewide values drawn as dashed reference lines, so every county falls into one of four quadrants and the high-need corner reads at a glance:
+\par
+{\footnotesize
+\begin{verbatim}
+gen mlab = cname if _n <= 5   // five highest-need
+scatter yrslost childpov, msymbol(Oh)      ///
+    mcolor(navy%60) mlabel(mlab)           ///
+    xline(19.2, lpattern(dash))            ///
+    yline(7875, lpattern(dash))            ///
+    xtitle("Children in poverty (%)")      ///
+    ytitle("Years of life lost, per 100k")
+graph export "$figures/ch04_chr_scatter.png", ///
+    replace width(2400)
+\end{verbatim}
+}
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=\linewidth]{ch04_chr_scatter.png}
+\caption[Premature death vs child poverty, Texas counties]{Premature death against child poverty across all 254 Texas counties, from the County Health Rankings 2024 analytic file, built end to end by \texttt{ch04\_chr.do} from a plain CSV with no API key. Dashed lines mark the official statewide values; the five labeled counties, in the upper-right high-need quadrant, are the five of Table~\ref{tab:chr}. The command that made this figure is printed above it, and two macros set the vintage, so the same script rebuilds it against any year the archive serves.}
+\label{fig:chr}
+\end{figure*}
+
+Two measures explain most of the spread, and together they sort the counties cleanly: the upper-right quadrant, high poverty and high premature death, is a short, defensible list to take to a board.\marginnote{The whole example, download to figure, is one do-file (\texttt{ch04\_chr.do}) that anyone can rerun from the same URL, as replicable as harvesting a no-API file gets.}
+
+\section{Streaming files too large to download whole}
+When public data is too big to download whole, we suggest you stop trying to hold it all at once. You do not need the example file on your own machine to use this section: you will finish it able to size a filtering job before you start it, decide which records are worth keeping, and restart a job that died overnight without losing the hours already spent. Federal insurer price-transparency\index{price transparency files} files (their hospital siblings are smaller and follow a CMS template) run past 100\,GB as single cloud-hosted JSON documents, far beyond a laptop's memory or patience. The pattern that works is a sieve (Figure~\ref{fig:ch04-viz-sieve}): stream\index{streaming large files} the file from the cloud, keep only the records that match the procedure codes you care about, and land a modest Stata dataset at the end, never holding more than a slice at once. The authors' price-transparency pipeline does exactly this, extracting negotiated rates for a target set of codes into a \texttt{.dta} that fits comfortably in memory.\marginnote[50mm]{The enabling tool is a streaming JSON parser (\texttt{ijson} in Python, or \texttt{jq --stream} at the shell), which never holds the whole document in memory; a plain \texttt{json.load} on that file simply dies.}
+
+\begin{figure*}[htbp]
+\centering
+\begin{tikzpicture}[node distance=7mm]
+  \node[io] (cloud) {100\,GB JSON\\in the cloud};
+  \node[stage, right=of cloud] (stream) {Stream\\event by\\event};
+  \node[decision, right=12mm of stream] (match) {Code\\match?};
+  \node[stage, right=12mm of match] (keep) {Keep the\\record};
+  \node[io, below=11mm of keep] (dta) {Modest\\\texttt{.dta}};
+  \node[substep, below=8mm of match] (drop) {discard,\\free memory};
+  \draw[flow] (cloud) -- (stream);
+  \draw[flow] (stream) -- (match);
+  \draw[flow] (match) -- node[annot,above]{yes} (keep);
+  \draw[flow] (match) -- node[annot,right]{no} (drop);
+  \draw[flow] (keep) -- (dta);
+  \draw[flow] (drop.west) -- ++(-1.1,0) |- (stream.south);
+\end{tikzpicture}
+\caption[The streaming sieve]{The sieve reads no more than a slice at a time.
+A streaming parser walks the cloud file event by event; each record is
+tested against the target procedure codes, kept if it matches and
+discarded if it does not, so memory is freed at every step and only the
+matched records land in a modest \texttt{.dta}. Because the document is
+never loaded whole, a laptop can process a file far larger than its
+memory.}
+\label{fig:ch04-viz-sieve}
+\end{figure*}
+
+The recon pass scales down to streams: time the first few thousand records and multiply, because a filter that will run for thirty hours is worth knowing about before hour one. A keep-count printed every million records serves as the stream's running manifest; when the job dies at hour nine, you can read from that count where it died and what a restart can skip\marginnote{Whether a restart resumes or begins again is the download loop's resumability decision, faced before the stream opens.}.
+
+What you take from the example matters more than the specific dataset: a small shop can work with enormous public data by filtering at the source rather than downloading first and filtering later. That idea extends well beyond price files, to any stream larger than your hardware; it is the filter-on-import instinct we used on the STAAR panel in Chapter~\ref{ch:workshop}, carried as far as it will go.
+
+\section{Converting whatever arrives in the shared drive}
+Much of an evaluator's data never comes from a server at all; it arrives as a folder of spreadsheets, CSVs, and stray \texttt{.dta} files that a partner dropped in a shared drive. The \texttt{convertanything}\index{convertanything@\texttt{convertanything}} command walks such a folder tree, detects each file's format, imports it (every worksheet of every workbook, if you ask), mirrors the directory structure, and standardizes names, so a chaotic drop becomes a clean set of datasets in one pass.\marginnote{The one format that still fights you is the legacy \texttt{.xls} binary: Stata's \texttt{import excel} reads \texttt{.xlsx} cleanly but stumbles on old \texttt{.xls} from a 2009 mainframe export. Convert those to \texttt{.xlsx} first, or the character encoding turns accented names into garbled characters.} The command takes files as they actually arrive, not as you wish they had been sent; that is the accessible principle turned inward, toward the evaluator drowning in formats.
+
+You can replace an afternoon of opening files by hand with one call: point it at the top of the drop with \texttt{recursive}, name a clean output folder with \texttt{saving()}, and it rebuilds the same subfolder tree in \texttt{.dta}, converting every file it recognizes along the way. The options fit the pass to the drop: \texttt{allsheets} splits each workbook into one dataset per worksheet, \texttt{cleannames} makes every variable name Stata-legal and lowercase, \texttt{destring} turns text-coded numbers back into numbers, \texttt{compress} shrinks each file, and \texttt{extension()} restricts the pass to the formats you trust. Because the source tree is copied rather than flattened, the provenance of each dataset (which year, which agency folder) survives in the path.
+
+The mirrored tree is also where the triage read happens for a shared-drive drop. Sort \texttt{\_converted} by file size and open the outliers first: a worksheet that arrived empty converts to an empty dataset without complaint, and a workbook whose header row slid down a line yields variables named for spreadsheet columns rather than concepts. Spend ten minutes with the smallest and strangest files before any harmonizing: if they pass, proceed to Chapter~\ref{ch:panels}'s harmonization; if one fails, go back to the partner with a specific filename rather than a vague complaint.\marginnote{The pass extends without you: when the partner drops three more files next month, the same call at the same tree absorbs them into the same layout, the download loop's rerun habit aimed at a folder instead of a site.}
+
+\begin{kaobox}[frametitle=Package Integration: \texttt{convertanything}]
+\textbf{Integrated command:} \texttt{convertanything}. Converts a single file or a whole directory tree of mixed formats into clean \texttt{.dta} in one pass. Install it from the authors' GitHub, then convert a drop:
+\par
+{\footnotesize
+\begin{verbatim}
+local gh "https://raw.githubusercontent.com/ericabooth"
+net install convertanything, ///
+    from("`gh'/convertanything-stata-public/main/") replace force
+
+convertanything using "$raw/partner_drop", recursive ///
+    saving("$raw/_converted") replace clear         ///
+    cleannames compress
+\end{verbatim}
+}
+Every \texttt{.csv}, \texttt{.xlsx}, and \texttt{.dta} under \texttt{partner\_drop/} arrives as a cleaned dataset under \texttt{\_converted/}, in the same subfolders, ready for the harmonization step of Chapter~\ref{ch:panels}.
+\end{kaobox}
+
+The one dialect \texttt{convertanything} does not read is R's own. When a partner works in R and hands you an \texttt{.Rdata} or \texttt{.rds} file, \texttt{importr}\index{importr@\texttt{importr}} bridges it\marginnote{\texttt{importr} prefers a local R installation, calling \texttt{Rscript} with the \texttt{haven} package, and falls back to Stata's Python link with \texttt{pyreadstat}, so it works with whichever of the two the machine has.}. That keeps an R-shop collaborator inside the same reproducible pipeline instead of forcing a manual export through CSV, which is one more place a value can silently change.
+\par
+{\footnotesize
+\begin{verbatim}
+local gh "https://raw.githubusercontent.com/ericabooth"
+net install importr, ///
+    from("`gh'/importR-stata/main/") replace force
+importr using "partner_model_frame.Rdata", clear
+\end{verbatim}
+}
+The call loads the R data frame into memory as an ordinary Stata dataset. Run \texttt{describe} on the result and compare the observation count and variable names against what your collaborator reports from R, because a conversion problem is cheapest to catch at this border, before any analysis builds on the file.
+
+\subsection{When the layout is irregular, document the map}\label{sec:ch04-irregular}
+Some workbooks resist any general tool because they were built for human eyes, with stacked blocks, title rows, and several tables per sheet. Here you write the import by hand instead of calling a tool, and what you produce is a do-file that records its own map of the workbook: sheet, cell range, and the contents of each block. The CDC PRAMS workbooks (the 2016--2022 maternal-and-child-health indicators release, the current one at this writing) are the standing example: each indicator occupies its own block of a title row, a label row, a header row, then the jurisdictions, several blocks to a sheet, with no clean rectangle to import.\marginnote{PRAMS's future is uncertain after the 2025 federal staffing cuts, so keep the workbook itself with the project's replication materials; the geometry header below is what makes that archived copy usable years later.} When you meet a workbook like that, we suggest you hand-craft an \texttt{import excel}\index{import excel@\texttt{import excel}} call with an explicit \texttt{cellrange()} per block, and write a do-file header that documents the geometry you assumed:
+\par
+{\footnotesize
+\begin{verbatim}
+import excel using "$fname", ///
+    sheet("Depression") cellrange(A4:F36) clear
+rename (A D) (state dep_before)
+merge 1:1 state using "prams22_master.dta", nogen
+\end{verbatim}
+}
+This is the counterpoint to \texttt{convertanything}: when the layout is irregular, you do not force a tool; you document the map. Write the row geometry down and the next analyst can reproduce an import that no automatic detector could have guessed.\marginnote{Appendix~\ref{app:walkthroughs} works this PRAMS example end to end.}
+
+One shared-drive problem remains that no format converter touches: two files that describe the same people but share no common ID to merge on. The box below names the existing linkage tools for that job, so you can reach for them before writing your own.
+
+\begin{kaobox}[frametitle=Existing tools: probabilistic linkage with \texttt{dtalink} and \texttt{matchit}]
+\textbf{Use what exists:} probabilistic record linkage\index{record linkage}, scoring candidate record pairs by how well fields like name and birthdate agree instead of demanding an exact key, is already well served on SSC. \texttt{dtalink} (Kranker) implements weighted deterministic and probabilistic linkage at administrative scale, and \texttt{matchit} (Raffo) handles fuzzy string matching between files. Neither one estimates match weights without hand-labeled pairs, the way R's \texttt{fastLink} does, and at this writing that is the one genuine gap; search SSC before you build your own, and see Chapter~\ref{ch:panels}'s linkage material for how far the existing tools take an evaluator before that gap matters.
+\end{kaobox}
+
+\paragraph{Where this leaves you.} The agency that offers only download buttons can no longer stall you: you harvest the files anyway, survive the munged headers and stray label rows they arrive with, filter streams too large to hold, and absorb the mixed-format files that partners drop in a shared drive, all as scripted, replicable steps. The recon pass, the manifest, and the triage read each cost minutes, and together they make the rerun an afternoon instead of a forensic investigation. The hardest of the harvests, the mutating-name panel, previews the harmonization work of Chapter~\ref{ch:panels}; first, though, in Chapter~\ref{ch:surveys} we turn to data you collect yourself, through survey platforms.
+
+\section*{Exercises}\addcontentsline{toc}{section}{Exercises}
+\begin{enumerate}
+  \item \emph{Try it on your own data.} Pick one flat file your
+    agency posts at a stable web address, and write a do-file that
+    downloads it with \texttt{copy} and reads it with
+    \texttt{import delimited}, splitting the address into a
+    \texttt{site} macro and a \texttt{path} macro so next year's
+    edit touches only the year. Run \texttt{describe} on the result
+    and confirm that the columns you need imported as numbers, not
+    strings.
+  \item Rerun \texttt{ch04\_chr.do} against the final annual County
+    Health Rankings file by changing \texttt{2024} to \texttt{2025}
+    in the two address macros, and report whether the five
+    highest-need Texas counties are the same five as in
+    Table~\ref{tab:chr}. That the annual series ended with that
+    file is part of the lesson: a scripted pull outlives the
+    schedule it was written for.
+  \item Before you drop the label row, predict how many observations
+    the imported County Health Rankings file contains; then run
+    \texttt{count} and reconcile the total: one label row, one
+    national row, the per-state summary rows, and the 3{,}143 county
+    rows the chapter names. The exercise is done when you can
+    say what every row in the count is.
+  \item Break the FIPS filter on purpose: keep the national and
+    per-state summary rows (county FIPS \texttt{000}) in the file,
+    recompute the mean of \texttt{yrslost}, and confirm that the
+    inflated average is what the margin note warns will bias every
+    downstream statistic.
+  \item Take one irregular CDC PRAMS workbook and write an
+    \texttt{import excel} call with an explicit \texttt{cellrange()}
+    for a single indicator block, then document the row geometry you
+    assumed in a comment at the top of the do-file so the next
+    analyst can reproduce the import.
+  \item \emph{Stack two vintages with \texttt{combineall}.} From
+    \texttt{sysuse auto}, export \texttt{cars\_2019.csv} and, after
+    \texttt{rename price price\_usd}, \texttt{cars\_2020.csv} into a
+    \texttt{raw/} folder. Write a one-row map CSV
+    (\texttt{price\_usd,price,2020,}) outside that folder, run
+    \texttt{combineall using "built/cars\_panel", cmethod(append)
+    directory("raw/") map("map.csv")}, then \texttt{use} the result
+    and confirm from the harmonization table and
+    \texttt{char list price[source]} that the two years stacked into
+    a single \texttt{price} column that records its 2020 provenance.
+  \item \emph{Give a loop a manifest.} Extend the do-file of
+    Exercise~1 to pull the same source for three years, writing one
+    row per file (URL, filename, status, size, date) to a manifest
+    CSV as each download completes. Then delete one file, mark its
+    row \texttt{pending}, and rerun; confirm the loop re-fetches
+    only the missing year.
+\end{enumerate}
+

@@ -1,0 +1,118 @@
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	BOOK INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title[Embedded Evaluation]{Applied Program Evaluation \\ Using Stata}
+\subtitle{A Practical Workflow from Data to Deliverables}
+
+\author{Eric Booth \hspace{0.5in} Elizabeth Teas}
+
+\date{July 2026}
+
+%\publishers{} % set when the press is confirmed
+
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%	FRONT MATTER
+%----------------------------------------------------------------------------------------
+
+\frontmatter
+
+\makeatletter
+\lowertitleback{
+    \textbf{Applied Program Evaluation Using Stata}\\
+    © 2026 Eric Booth \& Elizabeth Teas \vspace{0.5in}
+
+    \textbf{Colophon} \\
+    This document was typeset using the \texttt{kaobook} class. Every figure, table, and number in the worked examples is produced by a do-file in the companion \texttt{code/} folder, which downloads only public data.
+}
+\makeatother
+
+\pagelayout{wide}
+\tableofcontents
+\listoffigures
+\listoftables
+
+%----------------------------------------------------------------------------------------
+%	MAIN BODY
+%----------------------------------------------------------------------------------------
+
+\mainmatter
+\setchapterstyle{kao}
+
+\pagelayout{wide}
+\chapter*{Preface}
+\markboth{Preface}{Preface}
+
+Real evaluation work rarely looks like a textbook exercise. The data are messy, the deadline draws near, and the audience's comfort with numbers varies. This book is about doing that job well, and doing all of it in one place with Stata at its core: a single project that you or anyone on your team can rerun next year and get the same answer. We want to help applied researchers and evaluators pull public data through an API, combine it with local program or survey data, build an ongoing, updating longitudinal file as data are refreshed, produce a claim at the right level of rigor, and ship a client-ready product, all from scripted and logged Stata. In our daily practice, we have found this workflow is particularly important for a small or bootstrapped organization, and for analysts who support or are embedded in a team that is improving a program or policy and studying that change as it happens.
+
+
+\paragraph{Four principles, and a test for each.} How do you know the work is good before the client tells you? We ask four questions of every product in this book. Does it tell a decision-maker or stakeholder what to do on Monday, in a form that scaffolds their daily work (\emph{actionable})? Could you add the next wave, site, or client to the workflow code without a rewrite (\emph{extensible})? Can a partner or funder open what you deliver and understand it (\emph{accessible})? Could a colleague rerun it next month from the raw files and get the same numbers (\emph{replicable})? We use \emph{replicable} in the strict sense: same code and same data yield the same result. That is a lower bar than \emph{reproducible}, where a fresh team collecting fresh data works from the same code workflow, and it is the bar an embedded evaluator can actually guarantee. Researchers use these two words inconsistently, sometimes with the meanings swapped, so we fix them here and hold to them throughout. When we teach a new approach, we say which of these four principles the method answers and what your partners gain from it.
+
+\paragraph{A word on AI.} Large language models appear throughout this book, always in a supporting role. An LLM can draft code, debug error logs, and summarize messy text faster than any team could by hand, and it can just as easily leak confidential data or invent a classification. Nor can you count on getting the same answer twice: most hosted LLMs return different output on the same prompt, and the vendor can change the weights under a fixed name without notice, so a conclusion that leaned on the LLM may not survive tomorrow's rerun. We treat an LLM the way a shop treats a power tool: useful in the right jig, dangerous when waved around freely. Wherever we hand work to an LLM in these pages, we pair it with a verification step, a privacy check, and a logged, reproducible trail, and we have Stata, not the LLM, produce the results (Chapter~\ref{ch:ai}).
+
+\paragraph{Everything here runs.} This is not a book of pseudocode: every worked example runs, and the handful of boxed tool \emph{proposals} scattered through the chapters are labeled as exactly that. Each example is a do-file in the companion \texttt{code/} folder that downloads only public data (or uses Stata's built-in datasets via \texttt{sysuse}), most of it with a single \texttt{import delimited} from a URL and no login. Those do-files produced the figures in these pages. You can rerun any of them, change a county or a year, and watch the result change on the page.
+
+\paragraph{Who this book is for.} We wrote this book for evaluators, applied researchers, and analysts who already know some Stata and want a practical workflow for embedded, real-world evaluation, especially in the nonprofits, agencies, and foundations where the data are messy, the stakes are real, and the team is small.
+
+\paragraph{The arc of the book.} We follow one project from an empty folder to a delivered portal, across five parts that build on each other. You start by setting up a project you can reuse long after its first deadline has passed (the \emph{extensible} principle in practice). You get the data, wherever it is stored: behind an API, buried in a website with no download button, or arriving as survey waves you have to stitch into a defensible panel. You turn that data into evidence at the level of rigor the claim needs, from a careful descriptive comparison up to a difference-in-differences when the question demands it. You deliver the result in a form the client already opens: a chart, a spreadsheet, or a self-contained web portal. And you sustain the practice, selectively using AI without getting burned, sharing data without identifying anyone, and turning a one-off do-file into a tool the whole team reuses.
+
+\bigskip
+{\centering
+\begin{tikzpicture}[node distance=0.45cm and 0.62cm]
+  \node[stage, text width=2.15cm, align=center] (p1) {\textbf{Part I}\\[2pt]Set up to move fast};
+  \node[stage, right=of p1, text width=2.15cm, align=center] (p2) {\textbf{Part II}\\[2pt]Get any public data};
+  \node[stage, right=of p2, text width=2.15cm, align=center] (p3) {\textbf{Part III}\\[2pt]Make defensible claims};
+  \node[stage, right=of p3, text width=2.15cm, align=center] (p4) {\textbf{Part IV}\\[2pt]Deliver what clients open};
+  \node[stage, right=of p4, text width=2.15cm, align=center] (p5) {\textbf{Part V}\\[2pt]Sustain the practice};
+  \draw[flow] (p1) -- (p2);
+  \draw[flow] (p2) -- (p3);
+  \draw[flow] (p3) -- (p4);
+  \draw[flow] (p4) -- (p5);
+  \node[substep, below=0.3cm of p1, text width=2.05cm, align=center] {Ch.\,1--2};
+  \node[substep, below=0.3cm of p2, text width=2.05cm, align=center] {Ch.\,3--6};
+  \node[substep, below=0.3cm of p3, text width=2.05cm, align=center] {Ch.\,7--8};
+  \node[substep, below=0.3cm of p4, text width=2.05cm, align=center] {Ch.\,9--12};
+  \node[substep, below=0.3cm of p5, text width=2.05cm, align=center] {Ch.\,13--15};
+\end{tikzpicture}
+\par}
+\nopagebreak
+\medskip
+{\small\noindent The five parts as one arc: each equips you to do the next. Set up the project in Part~I and the data harvesting of Part~II becomes reproducible; build the panel in Part~II and the claims of Part~III become defensible; keep going and you finish with a delivered, sustainable product. Chapter~\ref{ch:embedded} opens with the same journey drawn as an evaluation workflow.\par}
+\bigskip
+
+\paragraph{How to read it.} You can read these chapters in any order, because each one stands on its own, so skip ahead to whatever you need for this week's deadline. If you would rather follow a path through the book, start from your role:
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{@{}p{3.5cm}p{4.6cm}p{5.0cm}@{}}
+\toprule
+\textbf{If you are\ldots} & \textbf{and you work from\ldots} & \textbf{start with these chapters} \\
+\midrule
+the nonprofit program evaluator & survey and program data you collect yourself & \ref{ch:embedded}, \ref{ch:workshop}, \ref{ch:surveys}, \ref{ch:panels}, \ref{ch:trust}, \ref{ch:graphs}, \ref{ch:sheets} \\
+\addlinespace
+the agency or foundation analyst & public administrative data others publish & \ref{ch:embedded}, \ref{ch:apis}, \ref{ch:noapi}, \ref{ch:panels}, \ref{ch:claims}, \ref{ch:interactive}, \ref{ch:portals} \\
+\addlinespace
+the research-shop tool-builder & code the rest of the team will reuse & \ref{ch:workshop}, \ref{ch:ai}, \ref{ch:sharing}, \ref{ch:tools}, and the appendices \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent Whichever path you take, four kinds of boxed callout recur throughout the book; here is how to recognize each at a glance. An \emph{Applied Example}, numbered within each chapter so later text can point back to it exactly, works one scenario end to end with runnable code. Wherever we hand you a statistical guarantee, a \emph{What this depends on} box lists the few conditions that guarantee needs, each paired with the symptom you would see if one of them failed. A \emph{Visualization to build} callout specifies a chart and the story it has to tell. And an \emph{ado-file idea} box flags a tool you can install from SSC or from our GitHub.
+
+%----------------------------------------------------------------------------------------
+% PART I
+%----------------------------------------------------------------------------------------
+
+\pagelayout{margin}
+\pagelayout{wide}
+\setpartpreamble[uc][.75\textwidth]{%
+\vspace*{2\baselineskip}\normalsize\noindent
+After Part~I we assume you have a working shop: a project that rebuilds itself, an environment a colleague can reproduce, and the four principles we measure every deliverable against. In these first two chapters we build that shop with you. The Thursday-afternoon email that opens Chapter~1 is the standing test: when a question arrives with a deadline, you either have a workflow that answers it or you do not.}
+\addpart{Part I: The Embedded Evaluator Workflow \newline Foundations, Environment, and the Four Principles}
+\pagelayout{margin}
+

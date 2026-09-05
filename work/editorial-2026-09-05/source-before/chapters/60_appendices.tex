@@ -1,0 +1,278 @@
+
+%----------------------------------------------------------------------------------------
+% APPENDICES
+%----------------------------------------------------------------------------------------
+
+\appendix
+\pagelayout{wide}
+\addpart{Appendices}
+
+\pagelayout{margin}
+\setchapterstyle{kao}
+\chapter{The Setup Guide}\label{app:setup}
+Do the blocks below once and every example in the book runs. Keys, environments, and credentials are startup friction, not evaluation, so we collected them here in one place; work through them now, before any chapter needs them.
+
+\paragraph{Packages.} Running \texttt{01\_install.do} from the companion folder once fetches everything: the community packages from SSC (\texttt{estout}, \texttt{coefplot}, \texttt{gtools}, \texttt{ftools}, \texttt{reghdfe}, \texttt{getcensus}, \texttt{educationdata}), the authors' three SSC packages (\texttt{webapi}, \texttt{googlesheets}, \texttt{googlechart}), and the remaining suite packages from the authors' GitHub. Each also installs on its own with the one line shown in its Package Integration box, and Appendix~\ref{app:toolkit} collects both patterns.
+
+\paragraph{API keys and \texttt{profile.do} hygiene.} Several sources need a free key. Request them once (Census at \texttt{api.census.gov/data/key\_signup.html}; FRED at \texttt{fred.stlouisfed.org}), then store them where shared code will never see them:
+\begin{itemize}
+    \item Put \texttt{global censuskey "YOUR\_KEY"} in your \texttt{profile.do}, which Stata runs at startup, so the key loads automatically and stays out of your do-files.
+    \item For FRED, run \texttt{set fredkey YOUR\_KEY, permanently} once; Stata remembers it.
+    \item Never paste a key into a do-file you will commit to a repository. A key in public version control is a key someone else will spend, and deleting it in a later commit does not help: git keeps every past commit, so anyone with a copy of the repository can still read the key out of its history. If a key does reach a repository, revoke it at the provider and reissue a new one, because that is the only step that actually ends the exposure; tools like \texttt{git-secrets} or GitHub push protection catch the mistake before the push.
+\end{itemize}
+
+\paragraph{Python: two different arrangements.} Two kinds of tools in this book use Python, and they ask different things of you, so it is worth separating them once. The book's LLM examples run through Stata's own Python integration. Check which interpreter Stata sees with \texttt{python query}, and keep project dependencies in a virtual environment so one project's package versions do not disturb another's. One compatibility note applies only to this route: Stata talks to Python over a shared C API, so the interpreter must be a shared-library build (\texttt{--enable-shared}); the stripped Pythons some package managers ship will pass \texttt{python query} yet fail to load, and \texttt{python set exec} lets you point at a working one. The web-API tools take the other arrangement and ask less. \texttt{webapi} and \texttt{googlesheets} each run a helper script with the \texttt{python3} already on your system path rather than through Stata's integration, so the only requirement is that \texttt{python3} answers when you type \texttt{shell python3 -{}-version}. \texttt{webapi} needs nothing beyond Python's standard library; \texttt{googlesheets} needs Google's client libraries and installs them itself, into a private environment it builds on first run, so you never manage those packages by hand.
+
+\paragraph{Google Cloud OAuth for \texttt{googlesheets}.} Because \texttt{googlesheets} reads and writes documents that belong to you, Google has to be satisfied that the commands really are acting on your behalf. The setup below arranges exactly that: you authorize this copy of Stata, once, to act as you inside your own account. It takes six steps, done once per machine.
+\begin{enumerate}
+    \item Create a free project at \texttt{console.cloud.google.com}; any name will do. The project is only a container Google uses to track the permission you are about to grant.
+    \item Inside that project, switch on both the Google Sheets API and the Google Drive API. Stata calls both, so enabling one and not the other is the most common reason a first run fails.
+    \item On the consent screen, choose \emph{External}, add your own Google address as a test user, and grant the two scopes the package needs, \texttt{.../auth/spreadsheets} and \texttt{.../auth/drive}. This is where you say which account Stata may act as, and what it may touch.
+    \item Create credentials of type \emph{Desktop app} and download the small \texttt{.json} file Google gives you. That file identifies the package to Google; save it somewhere stable, such as \texttt{\~{}/.config/stata-googlesheets/client.json}.
+    \item Point Stata at that file with one global, \texttt{global GS\_CLIENT "\ldots"}. We suggest you put that line in your \texttt{profile.do} so you set the path once and never paste it into a script you share.
+    \item Run any \texttt{googlesheets} command. A browser opens, you pick your account and click \emph{Allow}, and Stata saves a reusable token beside the credentials file. Every later call runs silently.
+\end{enumerate}
+Two terms in those steps are worth defining. \emph{OAuth} is the standard way to let one program act inside your account without ever giving it your password; you approve it once in the browser. The reusable token Stata saves afterward is a \emph{refresh token}, which is why only the first call opens a browser. Google imposes one limit on this arrangement, and it is milder than it first sounds. Leave the app in \enquote{Testing} status and keep your own address under Test users, or Google blocks the token. You do not need to publish the app: under that Testing consent screen a refresh token lasts about six months, and when it does expire the next call simply opens the browser again, where one click on \emph{Allow} restores it. For scheduled runs with nobody present to click \emph{Allow}, point the package at a \emph{service-account credential} instead, a stand-in Google login for a program rather than a person, which signs in on its own. If you only need to \emph{read} a link-shared response sheet, you can skip all of this and use the credential-free one-line \texttt{import delimited} of Chapter~\ref{ch:surveys}.
+
+\paragraph{LLM setup, hosted and local.} For hosted LLMs, install the vendor's SDK (for example \texttt{pip install google-genai}) and store the API key in an environment variable, never in a do-file. For protected data that cannot leave the building, install Ollama locally, pull an LLM (\texttt{ollama pull llama3} or a Gemma model), and confirm the local server is running before Stata calls it. Budget for the download: a quantized 7B LLM is 4--5\,GB and a laptop with 16\,GB of RAM can run it, but the larger LLMs that rival hosted quality need a GPU. Ollama serves on \texttt{localhost:11434} by default, so a \texttt{curl} to that port is the fastest check that the server is running. The LLM-agnostic wrapper of Chapter~\ref{ch:ai} lets you switch between the two by changing one macro.
+
+\paragraph{Setup as a checklist your team can run.} Once the blocks above work on your machine, get them out of your head and into the project repository as a checklist. Commit a \texttt{SETUP.md} (or a commented header in \texttt{01\_install.do}) listing each block in order, and have every new team member run it top to bottom on their first day, noting where it stalls. Two things come out of that first run: the new hire is running the book's examples by lunch, and the stall points show which step's instructions have drifted since the last machine was configured.
+
+\pagelayout{margin}
+\setchapterstyle{kao}
+\chapter{The Causal Quick-Reference Toolbox}\label{app:causal}
+Chapter~\ref{ch:claims} teaches one causal method in full, difference-in-differences (Section~\ref{sec:did}), because it is the design an applied evaluator meets most often. This appendix is the quick reference for the neighboring designs: here we give you enough to recognize which design a situation calls for, name the Stata command that implements it, and find where you can read more. It is a map, not a manual; before you commit to a design, read the deeper treatment in the specialist texts at the end. When two designs both seem to fit, write the claim sentence first and read the design off it: the sentence names the units, the comparison, and the timing, and usually only one design can deliver all three (Chapter~\ref{ch:claims}). A staggered rollout across districts points to the first entry below; a single flagship site points to synthetic control. You settle the design in that sentence before you pick the estimator.
+
+\begin{description}
+    \item[Staggered treatment timing.] When units adopt a policy at different times, use \texttt{csdid} (Callaway and Sant'Anna) or \texttt{jwdid} (Wooldridge) rather than plain two-way fixed effects, which can weight already-treated units as controls and mislead. Check pre-trends with an event-study plot. \emph{Caveat:} the design still requires parallel trends, which the plot supports but cannot prove.\marginnote{Goodman-Bacon (2021) is why plain TWFE misleads here: the estimate is a weighted average of all $2\times2$ comparisons, and the ones that use already-treated units as controls can receive negative weights, so part of the average can enter with the wrong sign. The naive fix, throwing lags and leads into one TWFE regression, inherits the same contaminated comparisons; build the event study from \texttt{csdid} or its kin instead.}
+    \item[Sharp eligibility cutoff.] When a rule assigns treatment at a threshold (a test score, an income line), regression discontinuity compares units just above and just below. Estimate with \texttt{rdrobust}, test for manipulation of the running variable with \texttt{rddensity}, and plot the jump with \texttt{rdplot}. \emph{Caveat:} the estimate is local to the cutoff and may not generalize away from it.\marginnote{The whole result can hinge on the bandwidth, how far from the cutoff you include points. Let \texttt{rdrobust} pick it: its default, from Calonico, Cattaneo, and Titiunik, chooses the window from the data and pairs it with a confidence interval widened to pay for that choice, which beats an eyeballed window.}
+    \item[A single treated unit.] When one state or flagship site is treated, synthetic control (\texttt{synth}) builds a weighted combination of untreated units matching the treated unit's pre-period path, and in-space and in-time placebo tests gauge significance. \emph{Caveat:} it needs a credible donor pool and a stable pre-period.\marginnote{The donor pool is where synthetic control quietly goes wrong: drop units contaminated by the same shock (a neighboring state that copied the policy), yet keep enough of them that the pre-period fit is not just interpolation. A weight vector that loads almost entirely on one donor is a warning, not a match.}
+    \item[Panels with time-varying shocks.] Synthetic difference-in-differences (\texttt{sdid}) adds unit and time weights to a DiD, adjusting for pre-trends and common shocks at once. \emph{Caveat:} interpretability of the weights is a communication task in itself (Chapter~\ref{ch:graphs}).
+    \item[High-dimensional confounding.] When many covariates threaten confounding, double/debiased machine learning (\texttt{ddml}, with \texttt{pystacked}) uses machine learning for the nuisance parts, the models of who gets treated and what drives the outcome, while keeping valid inference on the treatment effect; the lasso family (\texttt{cvlasso}) supports selection. The doubly robust construction behind these estimators gives you two chances to be right: model who gets treated or model what drives the outcome, and the effect estimate stays consistent if either model is correct. \emph{Caveat:} valid inference depends on honest sample splitting, fitting the machine-learning pieces on different observations than the effect, not just a good fit.
+    \item[Effects that differ by subgroup.] When the question is \enquote{for whom} rather than \enquote{on average,} Stata~19's \texttt{cate} estimates group-average effects for prespecified groups and for data-driven groupings of the predicted effect; causal forests \parencite{wager2018forests} are the machinery underneath. \emph{Caveat:} data-driven subgroups inherit the winner's curse, so shrink or validate before anyone funds the loudest cell (Section~\ref{ch08-sc-shrinkfx}).
+    \item[Treatment that spreads.] When treated and comparison units can share the treatment, through siblings, shared staff, or neighboring markets, every design above quietly mismeasures the effect. The first answer is design, not estimation: compare units the program cannot reach, or compare at the level where the leaking stops. \emph{Caveat:} estimation under interference is a specialist field; \textcite{huber2023causal} devotes a chapter to it.
+\end{description}
+
+\paragraph{Sensitivity, not just point estimates.} Because parallel trends and unconfoundedness cannot be proven, bound them. The \texttt{honestdid} package (Rambachan and Roth) reports how large a trend violation would have to be to overturn a DiD finding, and Oster's \texttt{psacalc} gauges robustness to omitted-variable bias.\marginnote{Oster's rule of thumb is a useful anchor: a result survives if the selection on unobservables would have to exceed the selection on observables (her $\delta > 1$) to drive the effect to zero. Report the $\delta$, not just a reassuring word.} And when attrition differs between treated and comparison groups, the panel problem Chapter~\ref{ch:panels} diagnoses, \texttt{leebounds} \parencite{lee2009bounds,tauchmann2014leebounds} brackets the effect without pretending the dropouts were random. Applied researchers increasingly report these bounds rather than a bare pass/fail pre-trend test.
+
+\paragraph{Further reading.} For applied depth beyond this map: \textcite{cunningham2021mixtape}, \emph{Causal Inference: The Mixtape}, for intuition and Stata/R code; \textcite{huntingtonklein2022effect}, \emph{The Effect}, for design-first reasoning in plain language; and \textcite{cameron2022microeconometrics}, \emph{Microeconometrics Using Stata} (Vol.~II), for the econometric treatment of treatment effects; and \textcite{huber2023causal}, \emph{Causal Analysis}, for the estimator-by-estimator treatment of these designs and their machine-learning extensions, written for graduate courses in R. These are where the designs sketched here become methods you can defend.
+
+\pagelayout{margin}
+\setchapterstyle{kao}
+\chapter{The Book's Toolkit}\label{app:toolkit}
+Use this appendix to find any tool the book uses and jump straight to the chapter that puts it to work. It lists every package and proposed tool in one place, so when you remember a capability but not its name you can recover both. Three of these packages, \texttt{webapi}, \texttt{googlesheets}, and \texttt{googlechart}, are published on SSC, so a single line installs each of them:
+\par
+{\footnotesize
+\begin{verbatim}
+ssc install webapi
+ssc install googlesheets
+ssc install googlechart
+\end{verbatim}
+}
+The rest install from the authors' GitHub. One \texttt{net install} line does it, and you swap in the repository name for each package:
+\par
+{\footnotesize
+\begin{verbatim}
+local gh "https://raw.githubusercontent.com/ericabooth"
+net install statashiny, ///
+    from("`gh'/StataShiny-public/main/") replace force
+\end{verbatim}
+}
+\begin{itemize}
+    \item \texttt{StataShiny-public}
+    \item \texttt{dashboardbuilder-stata-public}
+    \item \texttt{webdoc2-stata-public} (also needs \texttt{ssc install webdoc} and a follow-up \texttt{net get webdoc2} for its header template; its Chapter~\ref{ch:portals} box shows all three lines)
+\end{itemize}
+The one exception is \texttt{sparkta2}, whose source is not yet released. The companion \texttt{01\_install.do} contains every one of these lines ready to run.
+
+\paragraph{Published packages.}
+\begin{itemize}
+    \item \texttt{webapi} -- fetch an authenticated JSON web API into Stata as a dataset, standard-library Python only (Chapter~\ref{ch:apis}).
+    \item \textbf{The fourteen packages built for this book}, each in its own \texttt{-stata-public} repository with tests and help: \texttt{projectbuilder} (scaffold the Chapter~\ref{ch:workshop} project layout), \texttt{combineall} (append, merge, or convert a whole folder, with vintage-aware harmonization; Chapters~\ref{ch:apis} and~\ref{ch:noapi}), \texttt{cxchangelog} (cross-wave survey codebooks), \texttt{datadictionary} (the over-time data codebook: per-wave stats, missingness, value-label diffs, Excel export), and \texttt{undummy} (recombine one-hot columns into one categorical), all Chapter~\ref{ch:surveys}; \texttt{reshapehelper} (diagnose the data and suggest the likely \texttt{reshape} command, Chapter~\ref{ch:panels}); \texttt{rateshrink} (empirical-Bayes rate stabilization), \texttt{conformalpred} (distribution-free prediction intervals), and \texttt{hlmr2} (Nakagawa multilevel $R^2$), all Chapter~\ref{ch:trust}; \texttt{twinmatch} (Mahalanobis policy twins) and \texttt{roisim} (Monte Carlo ROI), both Chapter~\ref{ch:claims}; and \texttt{suppress} (small-cell and complementary suppression), \texttt{riskscan} ($k$-anonymity scan), and \texttt{synthgen} (rank-preserving synthetic stand-ins with a utility-and-safety receipt), all Chapter~\ref{ch:sharing}; plus twelve commands that ship in the companion repository's \texttt{code/} folder, each with its own help file and test battery: \texttt{reachcheck} (respondents against target margins), \texttt{surveypull} (platform pulls, dry-run first), \texttt{nonresponse} (frame gaps, response model, raking weights), \texttt{loebias} (level-of-effort sensitivity), \texttt{surveytracker} (wave-tagged instrument snapshots), and \texttt{likertscale} (index, alpha, and percent-agree in one step), all Chapter~\ref{ch:surveys}; \texttt{srctag} and \texttt{srcfind} (source lineage, Chapter~\ref{ch:panels}); \texttt{ai\_privacy\_gate} (the pre-flight PII gate), \texttt{llmsieve} (convergence-delta routing), and \texttt{faircheck} (group-wise parity and error audit), all Chapter~\ref{ch:ai}; and \texttt{rawsweep} (intake manifest with PII flags, Chapter~\ref{ch:sharing}).
+    \item \texttt{googlechart} -- 14 interactive chart types from one command (Chapter~\ref{ch:interactive}).
+    \item \texttt{googlesheets} -- read, write, format, and chart Google Sheets from Stata (Chapters~\ref{ch:sheets}, \ref{ch:surveys}, \ref{ch:apis}).
+    \item \texttt{statashiny} -- serverless interactive HTML dashboards (Chapter~\ref{ch:portals}).
+    \item \texttt{dashboardbuilder} -- self-contained KPI dashboards: tiles, tabs, benchmark selector, per-panel CSV/PNG, no CDN (Chapter~\ref{ch:portals}).
+    \item \texttt{webdoc2} -- Bootstrap-5 dynamic HTML reports over \texttt{webdoc} (Chapter~\ref{ch:portals}).
+    \item \texttt{sparkta2} -- inline sparklines and offline graphics (Chapter~\ref{ch:interactive}; source publication pending).
+    \item \texttt{statplot} -- one-call summary-statistic charts of a cleaned dataset, ranked, ordered, and labeled from its variable labels; with N. Cox (Chapter~\ref{ch:graphs}).
+    \item \texttt{convertanything} -- folder trees of mixed formats to clean datasets (Chapter~\ref{ch:noapi}).
+    \item \texttt{nearmrg} -- nearest-value merges on dates and amounts, optionally within exact-match groups and with a match direction and a distance limit (Chapter~\ref{ch:panels}).
+    \item \texttt{validemail} -- three-tier email validation (Chapter~\ref{ch:surveys}).
+    \item \texttt{gemini} -- the LLM bridge (Chapter~\ref{ch:ai}).
+    \item \texttt{writeinput}, \texttt{editanything}, \texttt{usepackage}, \texttt{scrapessc}, \texttt{driveuse}, \texttt{importr}, \texttt{lstrfun} -- reproducibility, packaging, and interop utilities (Chapters~\ref{ch:workshop}, \ref{ch:tools}).
+\end{itemize}
+
+\paragraph{Proposed tools (roadmap, not yet code).}
+\begin{itemize}
+    \item \texttt{fastmatch}, \texttt{trackflow} -- EM-based probabilistic record linkage and flow shaping (Chapter~\ref{ch:panels}).
+\end{itemize}
+
+\pagelayout{margin}
+\setchapterstyle{kao}
+\chapter{Two Hands-On Worked Examples}\label{app:walkthroughs}
+
+In the chapters we lay out the workflow one piece at a time; in the two examples here we run it end to end on real files, so you can watch the pieces connect. They bracket the two kinds of trouble an embedded evaluator meets most. Example D.1 is small but messy: a set of human-formatted PRAMS workbooks that fight every import. Example D.2 is large but clean: a stack of multi-hundred-megabyte STAAR files that will not fit in memory at once. Both walk the same path from raw ingest to an honest finding, and both end the way we end every analysis in this book, on a claim pitched at the level of rigor the data can actually support.
+
+\section*{Example D.1: Maternal Health, a Messy Workbook to an Ecological Regression}
+You can set this example up before reading on: the box below lists the files to download, the do-file to run, and the outputs to expect.
+\begin{kaobox}[frametitle=Get the files: \texttt{221043-V2/}]
+\textbf{Data:} CDC PRAMS Maternal and Child Health Indicators, 2016--2022 (public; eight Excel workbooks; openICPSR study 221043).
+\textbf{Run:} \texttt{prams\_2022\_analysis.do}. \textbf{Outputs:} \texttt{output\_2022/} (a master \Option{.dta}/\Option{.csv} and seven figures).
+\textbf{Unit:} state/jurisdiction ($N=32$). Runs in seconds; no special hardware. \emph{Install note:} depends on \texttt{estout} and \texttt{coefplot} (\texttt{ssc install}).
+\end{kaobox}
+
+\paragraph{The question.} Do state-level rates of being uninsured before pregnancy predict pre-pregnancy depression among postpartum women? It is a clean ecological question with an obvious-seeming hypothesis, and, as it turns out, a useful lesson in why the obvious hypothesis is not always the one the data support.
+
+\paragraph{How you would plan this.} You would make three decisions before writing any code. The unit of analysis is the state, not the woman: PRAMS publishes weighted jurisdiction estimates, so the claim can only ever rank states ($N=32$). The join map is one master file keyed on state name, with each indicator block reduced to two columns and merged in one at a time. And the good-enough bar is deliberately low: with 32 observations, a three-model OLS progression is the ceiling, so there is nothing fancier to plan for.
+
+\paragraph{Why it is a good teaching case.} The PRAMS workbook is exactly the kind of \enquote{published-for-humans, hostile-to-code} spreadsheet evaluators face constantly: each health indicator occupies its own stacked block (title row, label row, header row, then 32 jurisdictions), several blocks per sheet. There is no clean rectangle to import. We meet that honestly: the do-file runs a sequence of targeted \texttt{import excel} calls with an explicit \texttt{cellrange()} per block, each reduced to state $+$ the weighted estimate, then merged on state name into one analytic file:
+\par
+{\footnotesize
+\begin{verbatim}
+import excel using "$fname", ///
+    sheet("Depression") cellrange(A4:F36) clear
+rename (A D) (state dep_before)
+merge 1:1 state using "prams22_master.dta", nogen
+\end{verbatim}
+}
+This is the counterpoint to \texttt{convertanything} (Chapter~\ref{ch:noapi}): when a layout is irregular, you hand-craft the import and \emph{document the geometry} (the do-file header literally maps the row blocks) rather than forcing a tool.\marginnote{Hard-coded \texttt{cellrange()} calls are brittle by design: the day the agency inserts one header row, every block shifts and the import silently reads the wrong cells. You can guard against that cheaply: \texttt{assert} that a known label appears in the cell you expect before you trust the numbers below it.} The do-file then builds two crosswalks, state abbreviation and Census region, so later merges can key on the abbreviation and summaries can group by region; Chapter~\ref{ch:panels} teaches this harmonization step in full.
+
+\paragraph{The analysis and the honest finding.} A three-model OLS progression (bivariate $\rightarrow$ add smoking $\rightarrow$ add Medicaid share) shows the hypothesized uninsurance effect is \emph{not} statistically significant and shrinks toward zero as confounders enter. The real story: smoking before pregnancy is the dominant correlate of state depression rates ($r \approx 0.72$), and a higher Medicaid share is protective.\marginnote{Beware the ecological fallacy: a correlation across \emph{states} need not hold across \emph{women}. Robinson's 1950 study is the canonical warning, state-level literacy and immigration correlated positively even though immigrants were individually less literate. This regression can rank states, not diagnose a person.} This is the \enquote{bad news} scenario of Chapter~\ref{ch:embedded} in miniature: by pre-specifying the models and reporting all three, the analyst turns a disconfirmed hypothesis into a credible, more interesting finding rather than a failure.
+
+\paragraph{Concepts it illustrates.} Irregular-spreadsheet ingestion and crosswalks (Chapters~\ref{ch:noapi} and~\ref{ch:panels}); ecological regression and its interpretation caveats; the forest/caterpillar plot and coefficient plot (Chapter~\ref{ch:graphs}); and honest reporting of a null primary hypothesis (Chapter~\ref{ch:embedded}). The seven exported figures (bar, forest with 95\% CIs, scatter-with-fit, scatter matrix, coefplot, fitted-vs-observed, and residuals) double as a gallery of the evaluation graphics this book recommends.
+
+\section*{Example D.2: Education Policy, Big Administrative Data and a Careful Counterfactual}
+In the box below we collect the files, the run command, and the outputs for this example.
+\begin{kaobox}[frametitle=Get the files: \texttt{edc-3.0-texas/}]
+\textbf{Data:} Texas school performance (STAAR), 2012--2025, school level (Texas Education Agency STAAR results via Zelma, a public research export that republishes the agency's files as analysis-ready CSVs; $\approx$400\,MB per year).
+\textbf{Run:} \texttt{analyze\_performance.do}. \textbf{Outputs:} \texttt{analytic\_performance.dta}, four trend figures, a log.
+\textbf{Unit:} school-grade-subject-year panel ($\approx$289K observations). \emph{Ship note:} distribute the 15.6\,MB \texttt{analytic\_performance.dta} checkpoint rather than the $\approx$5\,GB of raw CSVs, with download instructions for the raw layer.
+\end{kaobox}
+
+\paragraph{The question.} How did Grade~4 and Grade~8 proficiency shift after the 2023 STAAR redesign (HB~3906), and did the shift differ for reading versus math? This is a real, contested Texas policy question, the kind an embedded evaluator gets asked.
+
+\paragraph{How you would plan this.} You would settle three things before touching the CSVs. The unit is the school-grade-subject-year, chosen because the redesign question turns on grade and subject, not campus totals. The join map is an append, not a merge: the yearly files share a column layout, so the plan is filter on import, stack, and build the panel ID afterward. The good-enough bar is a defensible pre/post contrast with school fixed effects plus one sensitivity check on the baseline, agreed before estimation so a shrinking coefficient reads as diligence rather than retreat.
+
+\paragraph{Why it is a good teaching case.} This is the large-administrative-data workflow from Chapters~\ref{ch:embedded} and~\ref{ch:workshop} at full scale: a dozen multi-hundred-megabyte CSVs that must be appended without exhausting memory. The do-file loops the yearly files and filters aggressively \emph{on import} (school level, Grades 4/8, \enquote{All Students}, English assessment) so Stata never loads more than the needed slice into memory, then collapses to one row per school-grade-subject-year and builds a panel ID:
+\par
+{\footnotesize
+\begin{verbatim}
+local files : dir . files "edc-3.0-texas-*.csv"
+foreach f in `files' {
+    import delimited using "`f'", varnames(1) clear
+    keep if lower(datalevel)=="school"
+    keep if inlist(upper(gradelevel),"G04","G08")
+    append using `master'
+    save `master', replace
+}
+\end{verbatim}
+}
+The do-file also models good data-quality hygiene, documenting and flagging the 2016 \enquote{polluted} year (a vendor-transition testing failure plus a cut-score change), exactly the kind of caveat Chapter~\ref{ch:panels} argues you must carry forward rather than silently average over.\marginnote{Why single out 2016? Texas switched testing vendors that spring and the online platform failed mid-administration; a redrawn cut score on top of that means a 2016-vs-2015 change mixes a real shift, a scoring rule change, and a measurement glitch. Dropping the year is defensible; \emph{silently} keeping it is not.}
+
+\paragraph{The analysis and the honest finding.} The do-file estimates a pre/post redesign indicator with school fixed effects and standard errors clustered by school (\texttt{xtreg, fe vce(cluster ...)}), then runs a sensitivity analysis that widens the pre-period baseline from 2021--2022 to 2018+.\marginnote{You get honest inference from clustering at the school level only when the clusters are many; the rule of thumb is 40--50 clusters before you can trust the standard errors. Thousands of Texas schools clear that easily, but had the policy varied at the \emph{district} level the count could fall low enough to need a wild-cluster bootstrap (\texttt{boottest}).} The math \enquote{redesign gain} collapses from roughly $+6.9$ to $+1.7$ percentage points once the cleaner baseline is used, while the ELA gain changes little under the same check. That single comparison is the central lesson of Section~\ref{sec:did} made concrete: \textbf{the estimate is only as credible as the comparison group}, and a \enquote{bump} measured off a pandemic trough is mostly recovery, not effect. The do-file's notes go further, triangulating against NAEP and the Education Recovery Scorecard, an example of external-validity checking.
+
+\paragraph{Concepts it illustrates.} Large-data ingestion and memory-aware filtering without Stata/MP (Chapters~\ref{ch:embedded} and~\ref{ch:workshop}); longitudinal panel construction and data-quality flagging (Chapter~\ref{ch:panels}); fixed-effects policy estimation with clustered errors and the comparison-group caution behind difference-in-differences (Section~\ref{sec:did}); sensitivity analysis and triangulation against external benchmarks; and trend visualization with an event reference line (Chapter~\ref{ch:graphs}).
+
+\pagelayout{margin}
+\setchapterstyle{kao}
+\chapter{A Reproducible Capstone: One Public Dataset, Ingest to Deliverable}\label{app:capstone}\index{capstone}
+
+The two examples in Appendix~\ref{app:walkthroughs} teach the workflow on data that is either messy or large. Here you trade that realism for something the earlier examples cannot offer: you can run the whole thing yourself in a few minutes, start to finish, with no account, no API key, and one download. We walk a single public file through every stage this book teaches (ingest, clean, guard, analyze, visualize, deliver) to show how the chapters connect when a real question runs end to end. The companion do-file is \texttt{capstone\_chr.do}; every number below traces to its log.
+
+\begin{kaobox}[frametitle={Get the files: \texttt{capstone\_chr.do}}]
+\textbf{Data:} County Health Rankings \& Roadmaps 2024 analytic file, one CSV, US counties, public and key-free \parencite{chr2024}. \textbf{Run:} \texttt{do capstone\_chr.do}. \textbf{Outputs:} \texttt{chr\_2024\_clean.dta}, \texttt{cap\_ypll\_poverty.png}, and a log. \textbf{Unit:} one row per county ($\approx$3,100 usable). \emph{No key required:} the do-file's first act is a plain \texttt{copy} of a public URL.
+\end{kaobox}
+
+\paragraph{The question.} Do higher-poverty counties lose more years of life, and does health-insurance coverage explain part of the gap? The outcome is years of potential life lost before age~75 per 100,000 residents (YPLL), the standard premature-death measure. This is the kind of descriptive, comparison-first question Section~\ref{sec:did} argues most evaluations should start with and often stay at.
+
+\paragraph{How you would plan this.} You work through the same three decisions again here. The unit is the county row, so the state roll-up codes get dropped first. No join map is needed, one file supplies everything, so the planning effort shifts to identifiers: FIPS codes read as strings or the leading zeros vanish. And the good-enough bar is descriptive, a within-state gradient that survives state fixed effects rather than a causal claim, which is why the guard stage gets more lines than the regression.
+
+\paragraph{Stage 1, ingest (Chapter~\ref{ch:noapi}).} There is no API here, just a file at a stable URL, so the do-file copies it and reads it, the pattern from the no-API chapter. It reads the first three columns as strings so the county FIPS identifiers keep their leading zeros, the habit from Chapter~\ref{ch:panels}, and lower-cases the variable names so the munged column names are predictable:
+\par
+{\footnotesize
+\begin{verbatim}
+copy "`site'/`path'/analytic_data2024.csv" "chr_2024.csv", replace
+import delimited "chr_2024.csv", clear varnames(1) ///
+    case(lower) stringcols(1 2 3)
+\end{verbatim}
+}
+
+\paragraph{Stage 2, clean (Chapters~\ref{ch:noapi}--\ref{ch:panels}).} The CHR file includes a second header row of human-readable labels; the do-file drops it, then keeps only true county rows (the codes ending in \texttt{000} are state roll-ups that would double-count if left in). It renames four munged columns to working names and rescales the two rates from proportions to percentage points so the coefficients later read in units people plan in.
+
+\paragraph{Stage 3, guard (Chapter~\ref{ch:trust}).} Before trusting a single number, the do-file sets tripwires that fail loudly if the file drifts. It predicts the county count and asserts it, and bounds each variable to a sane range:
+\par
+{\footnotesize
+\begin{verbatim}
+count
+assert r(N) > 2900 & r(N) < 3200
+assert ypll > 0 & ypll < 50000
+assert childpov >= 0 & childpov <= 100
+\end{verbatim}
+}
+This is the predict-then-check discipline in one block. In an early run, the do-file bounded YPLL below 40,000 and the \texttt{assert} stopped the run: one county (a small reservation county) genuinely records about 41,000 YPLL.\marginnote{A tripwire that fires is doing its job, but only you can say whether it caught an error or a real outlier. Here it was real, so we moved the bound to 50,000. Had the count come back at 300 instead of 3,088, the same \texttt{assert} would have caught a botched \texttt{keep} filter before it reached the regression.} The guard did exactly what Chapter~\ref{ch:trust} asks: it turned a silent assumption into a line that has to pass.
+
+\paragraph{Stage 4, analyze (Chapter~\ref{ch:claims}).} With 3,088 counties in hand, we regress premature death on child poverty and the uninsured rate: each 10-percentage-point rise in child poverty goes with about 2,990 more years of life lost per 100,000, and the two rates together account for a little over half the variation across counties ($R^2 = 0.55$). Because a state's Medicaid rules and reporting quirks could drive that association, the do-file re-fits it with state fixed effects, comparing counties only against others in the same state (\texttt{areg \ldots, absorb(state)}). The slope barely moves, to about 2,780 YPLL per 10 points. That stability is the finding: the poverty gradient in premature death is a within-state pattern, not an artifact of which states are poor.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=\linewidth]{images/cap_ypll_poverty.png}
+\caption{Premature death rises steadily with county child poverty. Each point is the mean YPLL per 100,000 for counties in a five-point poverty bin; we drop bins with fewer than ten counties. A county at 30 percent child poverty averages about 12,900 YPLL, roughly double the 6,800 at 10 percent. County Health Rankings 2024, produced by \texttt{capstone\_chr.do}.}
+\label{fig:capstone}
+\end{figure*}
+
+\paragraph{Stage 5, visualize (Chapter~\ref{ch:graphs}).} The regression gives one slope; you see the shape behind it more clearly in a picture. The do-file bins counties by poverty rate, averages YPLL within each bin, and plots the means (Figure~\ref{fig:capstone}), and the binned means climb in a near-straight line from the lowest-poverty counties to the highest. Binning is an honest simplification here: it shows the gradient the regression summarizes without asking the reader to trust a single slope, and dropping the thin top bins keeps a handful of tiny counties from reading as a trend.
+
+\paragraph{Stage 6, deliver (Chapters~\ref{ch:sheets}--\ref{ch:portals}).} The do-file ends by shipping the small cleaned extract, not the raw file: it labels the data with the do-file that made it, \texttt{compress}es, and saves \texttt{chr\_2024\_clean.dta}. A collaborator who opens that file can see where it came from and rerun the do-file to remake the figure. That is the replicable principle from Chapter~\ref{ch:embedded} closed in one line.
+
+\paragraph{The honest caveat.} This is a correlation across counties, not a causal claim about people, and not a claim about any one resident. Beware the ecological fallacy: a pattern across counties need not hold across individuals, the same warning attached to Example D.1. What the capstone establishes is narrower and still useful, a defensible, reproducible description of how premature death tracks child poverty across US counties, built the way this book builds everything: guarded, traced to its source, and handed off in a form someone else can run.
+
+\paragraph{Make it yours.} Swap the outcome for a different CHR measure (say, the uninsured-adults rate), or add a third predictor, and rerun. If the county count changes, the \texttt{assert} in Stage~3 will tell you before the regression does. That edit-and-rerun loop, on data you chose, is what keeps the workflow extensible: the structure survives a new outcome or predictor without a rewrite.
+
+\backmatter
+\pagelayout{margin}
+\chapter{Data Used in This Book}\label{app:data}
+Every worked example in this book runs on data you can put your hands on, and this registry is the one place they are all named. The two shipped datasets load with a single command and no download; each public file's entry names its source, so a fresh copy is one URL away; and every simulated dataset states its seed in the do-file that builds it, so the exact numbers in the text rebuild on your machine.
+
+\begin{table*}[htbp]
+\centering
+\footnotesize
+\caption[Datasets used in this book]{Every dataset the book's examples use, where it comes from, and the chapters that use it.}
+\label{tab:app-data}
+\begin{tabular}{p{3.4cm}p{4.6cm}p{2.6cm}p{2.2cm}}
+\hline
+Data & Where it comes from & One row per & Chapters \\
+\hline
+\texttt{auto} & Ships with Stata (\texttt{sysuse auto}); 1978 automobile listings & car model & 4, 5, 8, 9, 12 \\
+\texttt{nlsw88} & Ships with Stata (\texttt{sysuse nlsw88}); 1988 NLS extract of working women & woman, age 34--46 & 1, 2, 5, 7, 8, 9, 13, 14 \\
+\texttt{nlswork} & Stata's website (\texttt{webuse nlswork}); NLS young women panel, 1968--1988 & woman-year & 6 \\
+\texttt{nhanes2f} & Stata's website (\texttt{webuse nhanes2f}); NHANES~II with survey design variables & respondent & 7 \\
+County Health Rankings & One national analytic CSV per year from \texttt{countyhealthrankings.org} & county, plus state and national summary rows & 1, 3, 4, 10, 11, 12 \\
+Texas Academic Performance Reports & Scraped from the state's download form (Chapter~\ref{ch:noapi}) & campus- or district-year & 4 \\
+BLS QCEW & Quarterly wage API at \texttt{data.bls.gov/cew} & county-quarter & 1, 3, 10 \\
+Census and ACS endpoints & The API patterns of Chapter~\ref{ch:apis} & varies by pull & 3 \\
+Simulated data & Built in each chapter's do-file, \texttt{set seed 20260704} & varies by demonstration & 5, 7, 8, 9, 13, 15 \\
+\hline
+\end{tabular}
+\end{table*}
+
+\pagelayout{margin}
+
+\chapter*{Afterword}
+\addcontentsline{toc}{chapter}{Afterword}
+Return, one more time, to the Thursday-afternoon email that opened Chapter~\ref{ch:embedded}: are we actually reaching the rural students we promised? The analyst who met that question on page one had a spreadsheet and a weekend. You have a pipeline: the number comes from an endpoint you can pull, inside a project that reruns on any machine, feeding a scale you have tested, a comparison you can defend, and a deliverable the program director will actually open. The four principles you have applied chapter by chapter, actionable, extensible, accessible, replicable, were never really rules about code. They are a way of being trustworthy in a room where decisions get made, and by now they should feel less like a checklist than a reflex.
+
+If one habit recurred more than any other across these chapters, it was writing the decision down before the data could argue with it. You wrote a scoping note before opening the file, an extraction contract before the first request, a pre-analysis memo before the estimator ran, a deliverable spec before anyone formatted a cell, and a disclosure record before the file left the building; in Chapter~\ref{ch:tools} you drafted the help file's syntax line before the command existed at all. Those are the same move at six different scales, and it is the cheapest one in the book. You make the judgment while you are calm rather than at 4 p.m.\ on the day of the board meeting, and you keep something you can show a partner who asks, a year later, how you decided.
+
+A second lesson took longer to surface: the four principles compound rather than compete. A pipeline that reruns is what lets you afford to extend it, because the second version costs a rerun instead of a rebuild; work you can extend is work you can afford to make accessible; and only work someone can open ever becomes work someone acts on. That order is worth remembering the week a deadline tempts you to skip the first step. Replicability is not the virtuous extra at the end of the list; it is what pays for the other three.
+
+The tools will change. Packages update, endpoints move, the language models of Chapter~\ref{ch:ai} will be unrecognizable in five to ten years, and some page of this book is already aging as you read it. The posture is what lasts: state what you expect before you compute it, write down what would change your mind, let the pipeline remember so that people are free to think, and never hand a decision-maker a number you cannot trace. Everything in this book reruns from its seeds and its sources, which means everything in it can be checked, broken, and improved, and that is an invitation. Rebuild the capstone on your own state's data. Fork a tool and make it fit your shop. When you find the better way, and someone will, share it the way Chapter~\ref{ch:tools} taught, so the next embedded evaluator inherits your version instead of your workaround.
+
+And keep the last habit of all. Behind every row is a person who answered a survey, enrolled a child, showed up on a Tuesday. The care we have asked of you, the asserts, the caveats, the $k$-anonymity checks, is finally just respect for those people, expressed in code.
+
+\pagelayout{wide}
+\printbibliography[heading=bibintoc, title=Bibliography]
+
+\printindex
+
+\end{document}
