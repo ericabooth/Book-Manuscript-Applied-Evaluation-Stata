@@ -127,6 +127,19 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit, backgrounds, calc}
 % Reusable node styles for the book's pipeline diagrams
+% kaobook turns every margin note into a float, so a chapter with figures and
+% a run of margin notes can exhaust LaTeX's 18-slot float queue ("Too many
+% unprocessed floats").  Ask the kernel for more slots rather than moving the
+% figures around; this changes no layout.
+\extrafloats{512}
+% Full-page-width figures without the double-float machinery.  \begin{figure*}
+% queues on LaTeX's separate double-float list, which a tufte-style book with
+% hundreds of margin notes exhausts quickly ("Too many unprocessed floats").
+% An ordinary float whose graphic spans the text block plus the margin column
+% gives the same printed width and costs one ordinary float slot.
+\newlength{\fullpagewidth}
+\setlength{\fullpagewidth}{\dimexpr\textwidth+\marginparsep+\marginparwidth\relax}
+
 \tikzset{
     stage/.style={rectangle, rounded corners=3pt, draw=vizRule, line width=0.9pt,
         fill=vizBg, text width=1.7cm, align=center, minimum height=1.0cm, font=\sffamily\footnotesize},
