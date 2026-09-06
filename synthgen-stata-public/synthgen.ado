@@ -7,7 +7,7 @@
 *! synthetic value is an observed value), and the rank (Spearman)
 *! correlations between variables are preserved through a joint normal
 *! draw.  Refuses ID-shaped and string variables loudly, with no override.
-*! Returns a utility-and-safety receipt: worst standardized mean gap,
+*! Returns a fidelity and match diagnostic: worst standardized mean gap,
 *! worst rank-correlation gap, and the count of synthetic rows that
 *! duplicate a real record.
 
@@ -118,9 +118,9 @@ program define synthgen, rclass
             frame `landing': label values `v' `vall'
         }
     }
-    frame `landing': label data "SYNTHETIC stand-in (synthgen); no real records"
+    frame `landing': label data "SYNTHETIC stand-in (synthgen); assess before release"
 
-    * ----- utility-and-safety receipt ------------------------------------
+    * ----- fidelity and exact-match diagnostic ---------------------------
     tempname D
     mata: _synthgen_receipt("`varlist'", "`touse'", "`landing'", `K', "`D'")
     local maxdmean = `D'[1,1]

@@ -1,5 +1,5 @@
 % $ biblatex auxiliary file $
-% $ biblatex bbl format version 3.2 $
+% $ biblatex bbl format version 3.3 $
 % Do not modify the above lines!
 %
 % This is an auxiliary file used by the 'biblatex' package.
@@ -18,8 +18,8 @@
 
 
 \refsection{0}
-  \datalist[entry]{nyt/global//global/global}
-    \entry{abadie2021synth}{article}{}
+  \datalist[entry]{nyt/global//global/global/global}
+    \entry{abadie2021synth}{article}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=da499bff747c5f6cd0ec9185c820ba4d}{%
            family={Abadie},
@@ -30,14 +30,16 @@
       }
       \strng{namehash}{da499bff747c5f6cd0ec9185c820ba4d}
       \strng{fullhash}{da499bff747c5f6cd0ec9185c820ba4d}
+      \strng{fullhashraw}{da499bff747c5f6cd0ec9185c820ba4d}
       \strng{bibnamehash}{da499bff747c5f6cd0ec9185c820ba4d}
       \strng{authorbibnamehash}{da499bff747c5f6cd0ec9185c820ba4d}
       \strng{authornamehash}{da499bff747c5f6cd0ec9185c820ba4d}
       \strng{authorfullhash}{da499bff747c5f6cd0ec9185c820ba4d}
+      \strng{authorfullhashraw}{da499bff747c5f6cd0ec9185c820ba4d}
       \field{sortinit}{A}
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of Economic Literature}
@@ -51,7 +53,7 @@
       \verb 10.1257/jel.20191450
       \endverb
     \endentry
-    \entry{abowd2018census}{inproceedings}{}
+    \entry{abowd2018census}{inproceedings}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=591e867111b9dfeb65cfa6fc98005584}{%
            family={Abowd},
@@ -65,14 +67,16 @@
       }
       \strng{namehash}{591e867111b9dfeb65cfa6fc98005584}
       \strng{fullhash}{591e867111b9dfeb65cfa6fc98005584}
+      \strng{fullhashraw}{591e867111b9dfeb65cfa6fc98005584}
       \strng{bibnamehash}{591e867111b9dfeb65cfa6fc98005584}
       \strng{authorbibnamehash}{591e867111b9dfeb65cfa6fc98005584}
       \strng{authornamehash}{591e867111b9dfeb65cfa6fc98005584}
       \strng{authorfullhash}{591e867111b9dfeb65cfa6fc98005584}
+      \strng{authorfullhashraw}{591e867111b9dfeb65cfa6fc98005584}
       \field{sortinit}{A}
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Proceedings of the 24th ACM SIGKDD International Conference on Knowledge Discovery \& Data Mining (KDD '18)}
@@ -84,7 +88,7 @@
       \verb 10.1145/3219819.3226070
       \endverb
     \endentry
-    \entry{abramitzky2021linking}{article}{}
+    \entry{abramitzky2021linking}{article}{}{1}
       \name{author}{5}{}{%
         {{un=0,uniquepart=base,hash=dfaa0bfe014fce7344fad0782d0d0d01}{%
            family={Abramitzky},
@@ -119,14 +123,16 @@
       }
       \strng{namehash}{f51b7a0ef8aadb16af296a6db90fb0f8}
       \strng{fullhash}{a7f4d7fa343236a48bdacd33f1748897}
+      \strng{fullhashraw}{a7f4d7fa343236a48bdacd33f1748897}
       \strng{bibnamehash}{f51b7a0ef8aadb16af296a6db90fb0f8}
       \strng{authorbibnamehash}{f51b7a0ef8aadb16af296a6db90fb0f8}
       \strng{authornamehash}{f51b7a0ef8aadb16af296a6db90fb0f8}
       \strng{authorfullhash}{a7f4d7fa343236a48bdacd33f1748897}
+      \strng{authorfullhashraw}{a7f4d7fa343236a48bdacd33f1748897}
       \field{sortinit}{A}
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of Economic Literature}
@@ -140,7 +146,7 @@
       \verb 10.1257/jel.20201599
       \endverb
     \endentry
-    \entry{aapor2023standard}{report}{}
+    \entry{aapor2023standard}{report}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=c4718659b72f12367fa7e3465a5a1f68}{%
            family={{American Association for Public Opinion Research}},
@@ -151,14 +157,16 @@
       }
       \strng{namehash}{c4718659b72f12367fa7e3465a5a1f68}
       \strng{fullhash}{c4718659b72f12367fa7e3465a5a1f68}
+      \strng{fullhashraw}{c4718659b72f12367fa7e3465a5a1f68}
       \strng{bibnamehash}{c4718659b72f12367fa7e3465a5a1f68}
       \strng{authorbibnamehash}{c4718659b72f12367fa7e3465a5a1f68}
       \strng{authornamehash}{c4718659b72f12367fa7e3465a5a1f68}
       \strng{authorfullhash}{c4718659b72f12367fa7e3465a5a1f68}
+      \strng{authorfullhashraw}{c4718659b72f12367fa7e3465a5a1f68}
       \field{sortinit}{A}
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{note}{10th edition}
@@ -172,7 +180,7 @@
       \verb https://aapor.org/standards-and-ethics/standard-definitions/
       \endverb
     \endentry
-    \entry{aea2018principles}{misc}{}
+    \entry{aea2018principles}{misc}{}{2}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=e1f93e7f382f9f205397f213617e1322}{%
            family={{American Evaluation Association}},
@@ -180,14 +188,16 @@
       }
       \strng{namehash}{e1f93e7f382f9f205397f213617e1322}
       \strng{fullhash}{e1f93e7f382f9f205397f213617e1322}
+      \strng{fullhashraw}{e1f93e7f382f9f205397f213617e1322}
       \strng{bibnamehash}{e1f93e7f382f9f205397f213617e1322}
       \strng{authorbibnamehash}{e1f93e7f382f9f205397f213617e1322}
       \strng{authornamehash}{e1f93e7f382f9f205397f213617e1322}
       \strng{authorfullhash}{e1f93e7f382f9f205397f213617e1322}
+      \strng{authorfullhashraw}{e1f93e7f382f9f205397f213617e1322}
       \field{sortinit}{A}
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{howpublished}{Adopted 1994; revised 2004, 2011, and 2018}
@@ -200,7 +210,7 @@
       \verb https://www.eval.org/About/Guiding-Principles
       \endverb
     \endentry
-    \entry{angelopoulos2023conformal}{article}{}
+    \entry{angelopoulos2023conformal}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=f4d2f42e0342b9eff9fae3b5f334c64d}{%
            family={Angelopoulos},
@@ -217,14 +227,16 @@
       }
       \strng{namehash}{cb07802f042d1fcc451b6d432eafcb2f}
       \strng{fullhash}{cb07802f042d1fcc451b6d432eafcb2f}
+      \strng{fullhashraw}{cb07802f042d1fcc451b6d432eafcb2f}
       \strng{bibnamehash}{cb07802f042d1fcc451b6d432eafcb2f}
       \strng{authorbibnamehash}{cb07802f042d1fcc451b6d432eafcb2f}
       \strng{authornamehash}{cb07802f042d1fcc451b6d432eafcb2f}
       \strng{authorfullhash}{cb07802f042d1fcc451b6d432eafcb2f}
+      \strng{authorfullhashraw}{cb07802f042d1fcc451b6d432eafcb2f}
       \field{sortinit}{A}
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Foundations and Trends in Machine Learning}
@@ -238,7 +250,7 @@
       \verb 10.1561/2200000101
       \endverb
     \endentry
-    \entry{angelopoulos2023ppi}{article}{}
+    \entry{angelopoulos2023ppi}{article}{}{2}
       \name{author}{5}{ul=2}{%
         {{un=0,uniquepart=base,hash=f4d2f42e0342b9eff9fae3b5f334c64d}{%
            family={Angelopoulos},
@@ -273,14 +285,16 @@
       }
       \strng{namehash}{a2559a9948ee7cd0bd271a153bab8a3d}
       \strng{fullhash}{ab62407efc3a015d242b14ee4ad67cd3}
+      \strng{fullhashraw}{ab62407efc3a015d242b14ee4ad67cd3}
       \strng{bibnamehash}{a2559a9948ee7cd0bd271a153bab8a3d}
       \strng{authorbibnamehash}{a2559a9948ee7cd0bd271a153bab8a3d}
       \strng{authornamehash}{a2559a9948ee7cd0bd271a153bab8a3d}
       \strng{authorfullhash}{ab62407efc3a015d242b14ee4ad67cd3}
+      \strng{authorfullhashraw}{ab62407efc3a015d242b14ee4ad67cd3}
       \field{sortinit}{A}
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Science}
@@ -294,7 +308,7 @@
       \verb 10.1126/science.adi6000
       \endverb
     \endentry
-    \entry{athey2016recursive}{article}{}
+    \entry{athey2016recursive}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=cab7b4f39472e6c01dc0fc30a32c6d89}{%
            family={Athey},
@@ -311,14 +325,16 @@
       }
       \strng{namehash}{c53b3b5c487a444612e3513df3e8a9d3}
       \strng{fullhash}{c53b3b5c487a444612e3513df3e8a9d3}
+      \strng{fullhashraw}{c53b3b5c487a444612e3513df3e8a9d3}
       \strng{bibnamehash}{c53b3b5c487a444612e3513df3e8a9d3}
       \strng{authorbibnamehash}{c53b3b5c487a444612e3513df3e8a9d3}
       \strng{authornamehash}{c53b3b5c487a444612e3513df3e8a9d3}
       \strng{authorfullhash}{c53b3b5c487a444612e3513df3e8a9d3}
+      \strng{authorfullhashraw}{c53b3b5c487a444612e3513df3e8a9d3}
       \field{sortinit}{A}
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Proceedings of the National Academy of Sciences}
@@ -332,7 +348,7 @@
       \verb 10.1073/pnas.1510489113
       \endverb
     \endentry
-    \entry{athey2017state}{article}{}
+    \entry{athey2017state}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=cab7b4f39472e6c01dc0fc30a32c6d89}{%
            family={Athey},
@@ -349,14 +365,16 @@
       }
       \strng{namehash}{8cbf8bcf95e7f16940efed82c7127652}
       \strng{fullhash}{8cbf8bcf95e7f16940efed82c7127652}
+      \strng{fullhashraw}{8cbf8bcf95e7f16940efed82c7127652}
       \strng{bibnamehash}{8cbf8bcf95e7f16940efed82c7127652}
       \strng{authorbibnamehash}{8cbf8bcf95e7f16940efed82c7127652}
       \strng{authornamehash}{8cbf8bcf95e7f16940efed82c7127652}
       \strng{authorfullhash}{8cbf8bcf95e7f16940efed82c7127652}
+      \strng{authorfullhashraw}{8cbf8bcf95e7f16940efed82c7127652}
       \field{sortinit}{A}
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of Economic Perspectives}
@@ -370,7 +388,7 @@
       \verb 10.1257/jep.31.2.3
       \endverb
     \endentry
-    \entry{bailey2020linking}{article}{}
+    \entry{bailey2020linking}{article}{}{1}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=ab1252bb8abba981bb3e9e4778b3f3a9}{%
            family={Bailey},
@@ -399,14 +417,16 @@
       }
       \strng{namehash}{535fc5930fe312af1f7da75af226fa8c}
       \strng{fullhash}{9d82cb9241a27496617fd99da5833858}
+      \strng{fullhashraw}{9d82cb9241a27496617fd99da5833858}
       \strng{bibnamehash}{535fc5930fe312af1f7da75af226fa8c}
       \strng{authorbibnamehash}{535fc5930fe312af1f7da75af226fa8c}
       \strng{authornamehash}{535fc5930fe312af1f7da75af226fa8c}
       \strng{authorfullhash}{9d82cb9241a27496617fd99da5833858}
+      \strng{authorfullhashraw}{9d82cb9241a27496617fd99da5833858}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of Economic Literature}
@@ -420,7 +440,7 @@
       \verb 10.1257/jel.20191526
       \endverb
     \endentry
-    \entry{ball2012tier}{article}{}
+    \entry{ball2012tier}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=46f5e5f99b6847f174828742778f3684}{%
            family={Ball},
@@ -437,14 +457,16 @@
       }
       \strng{namehash}{e7c29c702b36600c19468a9f3f175e90}
       \strng{fullhash}{e7c29c702b36600c19468a9f3f175e90}
+      \strng{fullhashraw}{e7c29c702b36600c19468a9f3f175e90}
       \strng{bibnamehash}{e7c29c702b36600c19468a9f3f175e90}
       \strng{authorbibnamehash}{e7c29c702b36600c19468a9f3f175e90}
       \strng{authornamehash}{e7c29c702b36600c19468a9f3f175e90}
       \strng{authorfullhash}{e7c29c702b36600c19468a9f3f175e90}
+      \strng{authorfullhashraw}{e7c29c702b36600c19468a9f3f175e90}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{The Journal of Economic Education}
@@ -458,58 +480,7 @@
       \verb 10.1080/00220485.2012.659647
       \endverb
     \endentry
-    \entry{bender2021parrots}{inproceedings}{}
-      \name{author}{4}{}{%
-        {{un=0,uniquepart=base,hash=e579c650beb31c286389278140fadd63}{%
-           family={Bender},
-           familyi={B\bibinitperiod},
-           given={Emily\bibnamedelima M.},
-           giveni={E\bibinitperiod\bibinitdelim M\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=f2b0ffb56c5d1e4220c16c0258e02eae}{%
-           family={Gebru},
-           familyi={G\bibinitperiod},
-           given={Timnit},
-           giveni={T\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=698aa56654e49949b5a9ea038d23587e}{%
-           family={McMillan-Major},
-           familyi={M\bibinithyphendelim M\bibinitperiod},
-           given={Angelina},
-           giveni={A\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=c3721cea1e5538fe0b83526d8333dbab}{%
-           family={Shmitchell},
-           familyi={S\bibinitperiod},
-           given={Shmargaret},
-           giveni={S\bibinitperiod},
-           givenun=0}}%
-      }
-      \list{publisher}{1}{%
-        {ACM}%
-      }
-      \strng{namehash}{c73d9460425aeddbb561b189551a3a98}
-      \strng{fullhash}{c4b1a296df1a50ba514ab947970f1784}
-      \strng{bibnamehash}{c73d9460425aeddbb561b189551a3a98}
-      \strng{authorbibnamehash}{c73d9460425aeddbb561b189551a3a98}
-      \strng{authornamehash}{c73d9460425aeddbb561b189551a3a98}
-      \strng{authorfullhash}{c4b1a296df1a50ba514ab947970f1784}
-      \field{sortinit}{B}
-      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{booktitle}{Proceedings of the 2021 ACM Conference on Fairness, Accountability, and Transparency (FAccT '21)}
-      \field{title}{On the Dangers of Stochastic Parrots: Can Language Models Be Too Big?}
-      \field{year}{2021}
-      \field{pages}{610\bibrangedash 623}
-      \range{pages}{14}
-      \verb{doi}
-      \verb 10.1145/3442188.3445922
-      \endverb
-    \endentry
-    \entry{biemer2010tse}{article}{}
+    \entry{biemer2010tse}{article}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=1fab3d9a6541968dcb6bbe47cbb71224}{%
            family={Biemer},
@@ -520,14 +491,16 @@
       }
       \strng{namehash}{1fab3d9a6541968dcb6bbe47cbb71224}
       \strng{fullhash}{1fab3d9a6541968dcb6bbe47cbb71224}
+      \strng{fullhashraw}{1fab3d9a6541968dcb6bbe47cbb71224}
       \strng{bibnamehash}{1fab3d9a6541968dcb6bbe47cbb71224}
       \strng{authorbibnamehash}{1fab3d9a6541968dcb6bbe47cbb71224}
       \strng{authornamehash}{1fab3d9a6541968dcb6bbe47cbb71224}
       \strng{authorfullhash}{1fab3d9a6541968dcb6bbe47cbb71224}
+      \strng{authorfullhashraw}{1fab3d9a6541968dcb6bbe47cbb71224}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Public Opinion Quarterly}
@@ -541,7 +514,7 @@
       \verb 10.1093/poq/nfq058
       \endverb
     \endentry
-    \entry{blinder1973wage}{article}{}
+    \entry{blinder1973wage}{article}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=c747dbf34ee9a12f5efc12158d6650c7}{%
            family={Blinder},
@@ -552,14 +525,16 @@
       }
       \strng{namehash}{c747dbf34ee9a12f5efc12158d6650c7}
       \strng{fullhash}{c747dbf34ee9a12f5efc12158d6650c7}
+      \strng{fullhashraw}{c747dbf34ee9a12f5efc12158d6650c7}
       \strng{bibnamehash}{c747dbf34ee9a12f5efc12158d6650c7}
       \strng{authorbibnamehash}{c747dbf34ee9a12f5efc12158d6650c7}
       \strng{authornamehash}{c747dbf34ee9a12f5efc12158d6650c7}
       \strng{authorfullhash}{c747dbf34ee9a12f5efc12158d6650c7}
+      \strng{authorfullhashraw}{c747dbf34ee9a12f5efc12158d6650c7}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{The Journal of Human Resources}
@@ -573,7 +548,7 @@
       \verb 10.2307/144855
       \endverb
     \endentry
-    \entry{blischak2016git}{article}{}
+    \entry{blischak2016git}{article}{}{1}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=2f5e7eff1ecea61dc6faa885ab2fdf03}{%
            family={Blischak},
@@ -596,14 +571,16 @@
       }
       \strng{namehash}{475717815cde8b823fb8ad2c659e33e2}
       \strng{fullhash}{475717815cde8b823fb8ad2c659e33e2}
+      \strng{fullhashraw}{475717815cde8b823fb8ad2c659e33e2}
       \strng{bibnamehash}{475717815cde8b823fb8ad2c659e33e2}
       \strng{authorbibnamehash}{475717815cde8b823fb8ad2c659e33e2}
       \strng{authornamehash}{475717815cde8b823fb8ad2c659e33e2}
       \strng{authorfullhash}{475717815cde8b823fb8ad2c659e33e2}
+      \strng{authorfullhashraw}{475717815cde8b823fb8ad2c659e33e2}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{PLOS Computational Biology}
@@ -617,7 +594,7 @@
       \verb 10.1371/journal.pcbi.1004668
       \endverb
     \endentry
-    \entry{booth2011usepackage}{misc}{}
+    \entry{booth2011usepackage}{misc}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=f1cb45b3993770614e7816a92a35dfcd}{%
            family={Booth},
@@ -628,14 +605,16 @@
       }
       \strng{namehash}{f1cb45b3993770614e7816a92a35dfcd}
       \strng{fullhash}{f1cb45b3993770614e7816a92a35dfcd}
+      \strng{fullhashraw}{f1cb45b3993770614e7816a92a35dfcd}
       \strng{bibnamehash}{f1cb45b3993770614e7816a92a35dfcd}
       \strng{authorbibnamehash}{f1cb45b3993770614e7816a92a35dfcd}
       \strng{authornamehash}{f1cb45b3993770614e7816a92a35dfcd}
       \strng{authorfullhash}{f1cb45b3993770614e7816a92a35dfcd}
+      \strng{authorfullhashraw}{f1cb45b3993770614e7816a92a35dfcd}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{howpublished}{Statistical Software Components S459828, Boston College Department of Economics}
@@ -643,7 +622,7 @@
       \field{title}{{USEPACKAGE}: Stata module to find, verify, and install the user-written packages (and data) a do-file needs}
       \field{year}{2026}
     \endentry
-    \entry{borkin2016beyond}{article}{}
+    \entry{borkin2016beyond}{article}{}{1}
       \name{author}{8}{}{%
         {{un=0,uniquepart=base,hash=fa555f049ff63f2147b8ce5402a51b55}{%
            family={Borkin},
@@ -696,14 +675,16 @@
       }
       \strng{namehash}{599b9a1aa8b3b62e58f65216913030a0}
       \strng{fullhash}{3015fc8bf39489fd0a6a724a8ed4568e}
+      \strng{fullhashraw}{3015fc8bf39489fd0a6a724a8ed4568e}
       \strng{bibnamehash}{599b9a1aa8b3b62e58f65216913030a0}
       \strng{authorbibnamehash}{599b9a1aa8b3b62e58f65216913030a0}
       \strng{authornamehash}{599b9a1aa8b3b62e58f65216913030a0}
       \strng{authorfullhash}{3015fc8bf39489fd0a6a724a8ed4568e}
+      \strng{authorfullhashraw}{3015fc8bf39489fd0a6a724a8ed4568e}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{IEEE Transactions on Visualization and Computer Graphics}
@@ -717,7 +698,7 @@
       \verb 10.1109/TVCG.2015.2467732
       \endverb
     \endentry
-    \entry{boy2015storytelling}{inproceedings}{}
+    \entry{boy2015storytelling}{inproceedings}{}{1}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=c089a2e4b01c7b01e4b750553e4fed99}{%
            family={Boy},
@@ -743,14 +724,16 @@
       }
       \strng{namehash}{892adfce763cf9d1af6a7491250dcda2}
       \strng{fullhash}{892adfce763cf9d1af6a7491250dcda2}
+      \strng{fullhashraw}{892adfce763cf9d1af6a7491250dcda2}
       \strng{bibnamehash}{892adfce763cf9d1af6a7491250dcda2}
       \strng{authorbibnamehash}{892adfce763cf9d1af6a7491250dcda2}
       \strng{authornamehash}{892adfce763cf9d1af6a7491250dcda2}
       \strng{authorfullhash}{892adfce763cf9d1af6a7491250dcda2}
+      \strng{authorfullhashraw}{892adfce763cf9d1af6a7491250dcda2}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Proceedings of the 33rd Annual ACM Conference on Human Factors in Computing Systems (CHI '15)}
@@ -762,7 +745,7 @@
       \verb 10.1145/2702123.2702452
       \endverb
     \endentry
-    \entry{broman2018spreadsheets}{article}{}
+    \entry{broman2018spreadsheets}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=f6b11da7cc4b4eeed3c4895d06d05126}{%
            family={Broman},
@@ -779,14 +762,16 @@
       }
       \strng{namehash}{45a1500a7e81c24e9cf8eb8ea18037eb}
       \strng{fullhash}{45a1500a7e81c24e9cf8eb8ea18037eb}
+      \strng{fullhashraw}{45a1500a7e81c24e9cf8eb8ea18037eb}
       \strng{bibnamehash}{45a1500a7e81c24e9cf8eb8ea18037eb}
       \strng{authorbibnamehash}{45a1500a7e81c24e9cf8eb8ea18037eb}
       \strng{authornamehash}{45a1500a7e81c24e9cf8eb8ea18037eb}
       \strng{authorfullhash}{45a1500a7e81c24e9cf8eb8ea18037eb}
+      \strng{authorfullhashraw}{45a1500a7e81c24e9cf8eb8ea18037eb}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{The American Statistician}
@@ -800,7 +785,7 @@
       \verb 10.1080/00031305.2017.1375989
       \endverb
     \endentry
-    \entry{bryan2018version}{article}{}
+    \entry{bryan2018version}{article}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=0f88b724c9f070dbceda00a5027d25bb}{%
            family={Bryan},
@@ -811,14 +796,16 @@
       }
       \strng{namehash}{0f88b724c9f070dbceda00a5027d25bb}
       \strng{fullhash}{0f88b724c9f070dbceda00a5027d25bb}
+      \strng{fullhashraw}{0f88b724c9f070dbceda00a5027d25bb}
       \strng{bibnamehash}{0f88b724c9f070dbceda00a5027d25bb}
       \strng{authorbibnamehash}{0f88b724c9f070dbceda00a5027d25bb}
       \strng{authornamehash}{0f88b724c9f070dbceda00a5027d25bb}
       \strng{authorfullhash}{0f88b724c9f070dbceda00a5027d25bb}
+      \strng{authorfullhashraw}{0f88b724c9f070dbceda00a5027d25bb}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{The American Statistician}
@@ -832,7 +819,7 @@
       \verb 10.1080/00031305.2017.1399928
       \endverb
     \endentry
-    \entry{bryk2015improve}{book}{}
+    \entry{bryk2015improve}{book}{}{2}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=b3635643871b0313d3f33fbbbb3ce18e}{%
            family={Bryk},
@@ -867,21 +854,23 @@
       }
       \strng{namehash}{f281751831e4e19e179faacedfe16648}
       \strng{fullhash}{ea8e65b4dc60d3e00f837a288237413e}
+      \strng{fullhashraw}{ea8e65b4dc60d3e00f837a288237413e}
       \strng{bibnamehash}{f281751831e4e19e179faacedfe16648}
       \strng{authorbibnamehash}{f281751831e4e19e179faacedfe16648}
       \strng{authornamehash}{f281751831e4e19e179faacedfe16648}
       \strng{authorfullhash}{ea8e65b4dc60d3e00f837a288237413e}
+      \strng{authorfullhashraw}{ea8e65b4dc60d3e00f837a288237413e}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{isbn}{978-1-61250-791-0}
       \field{title}{Learning to Improve: How America's Schools Can Get Better at Getting Better}
       \field{year}{2015}
     \endentry
-    \entry{callaway2021did}{article}{}
+    \entry{callaway2021did}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=4a5a67b3788b4a3653a14d9ab03fba0e}{%
            family={Callaway},
@@ -898,14 +887,16 @@
       }
       \strng{namehash}{ad085d57563a91bbe53422c59ebffdd2}
       \strng{fullhash}{ad085d57563a91bbe53422c59ebffdd2}
+      \strng{fullhashraw}{ad085d57563a91bbe53422c59ebffdd2}
       \strng{bibnamehash}{ad085d57563a91bbe53422c59ebffdd2}
       \strng{authorbibnamehash}{ad085d57563a91bbe53422c59ebffdd2}
       \strng{authornamehash}{ad085d57563a91bbe53422c59ebffdd2}
       \strng{authorfullhash}{ad085d57563a91bbe53422c59ebffdd2}
+      \strng{authorfullhashraw}{ad085d57563a91bbe53422c59ebffdd2}
       \field{sortinit}{C}
       \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of Econometrics}
@@ -919,7 +910,7 @@
       \verb 10.1016/j.jeconom.2020.12.001
       \endverb
     \endentry
-    \entry{cameron2022microeconometrics}{book}{}
+    \entry{cameron2022microeconometrics}{book}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=dab37900e0b3d1bbd6b945d99fef4b06}{%
            family={Cameron},
@@ -942,14 +933,16 @@
       }
       \strng{namehash}{c9ed462534b8f45616884f53043295aa}
       \strng{fullhash}{c9ed462534b8f45616884f53043295aa}
+      \strng{fullhashraw}{c9ed462534b8f45616884f53043295aa}
       \strng{bibnamehash}{c9ed462534b8f45616884f53043295aa}
       \strng{authorbibnamehash}{c9ed462534b8f45616884f53043295aa}
       \strng{authornamehash}{c9ed462534b8f45616884f53043295aa}
       \strng{authorfullhash}{c9ed462534b8f45616884f53043295aa}
+      \strng{authorfullhashraw}{c9ed462534b8f45616884f53043295aa}
       \field{sortinit}{C}
       \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{edition}{2}
@@ -958,7 +951,7 @@
       \field{title}{Microeconometrics Using Stata}
       \field{year}{2022}
     \endentry
-    \entry{card2010administrative}{report}{}
+    \entry{card2010administrative}{report}{}{1}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=a9e88233ec6ce30d2d31e294961e3e76}{%
            family={Card},
@@ -990,14 +983,16 @@
       }
       \strng{namehash}{2869c176fe21083112c1a25e394d6261}
       \strng{fullhash}{eb0848246cb332f92913f0f54f5d6071}
+      \strng{fullhashraw}{eb0848246cb332f92913f0f54f5d6071}
       \strng{bibnamehash}{2869c176fe21083112c1a25e394d6261}
       \strng{authorbibnamehash}{2869c176fe21083112c1a25e394d6261}
       \strng{authornamehash}{2869c176fe21083112c1a25e394d6261}
       \strng{authorfullhash}{eb0848246cb332f92913f0f54f5d6071}
+      \strng{authorfullhashraw}{eb0848246cb332f92913f0f54f5d6071}
       \field{sortinit}{C}
       \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{title}{Expanding Access to Administrative Data for Research in the United States}
@@ -1010,7 +1005,7 @@
       \verb https://eml.berkeley.edu/~saez/card-chetty-feldstein-saezNSF10dataaccess.pdf
       \endverb
     \endentry
-    \entry{cattaneo2025scpi}{article}{}
+    \entry{cattaneo2025scpi}{article}{}{1}
       \name{author}{4}{ul=3}{%
         {{un=0,uniquepart=base,hash=fe7c83baa6764134988a29cce14ed162}{%
            family={Cattaneo},
@@ -1039,14 +1034,16 @@
       }
       \strng{namehash}{4597d6833c8eeed0d4b8c7fbadd49899}
       \strng{fullhash}{fc0ef51344db95b52d5dcca91c9639bd}
+      \strng{fullhashraw}{fc0ef51344db95b52d5dcca91c9639bd}
       \strng{bibnamehash}{4597d6833c8eeed0d4b8c7fbadd49899}
       \strng{authorbibnamehash}{4597d6833c8eeed0d4b8c7fbadd49899}
       \strng{authornamehash}{4597d6833c8eeed0d4b8c7fbadd49899}
       \strng{authorfullhash}{fc0ef51344db95b52d5dcca91c9639bd}
+      \strng{authorfullhashraw}{fc0ef51344db95b52d5dcca91c9639bd}
       \field{sortinit}{C}
       \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of Statistical Software}
@@ -1060,7 +1057,7 @@
       \verb 10.18637/jss.v113.i01
       \endverb
     \endentry
-    \entry{cattaneo2021prediction}{article}{}
+    \entry{cattaneo2021prediction}{article}{}{1}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=fe7c83baa6764134988a29cce14ed162}{%
            family={Cattaneo},
@@ -1083,14 +1080,16 @@
       }
       \strng{namehash}{07a6f27ceab4e0df1a8dd8d4ddc1c1e6}
       \strng{fullhash}{07a6f27ceab4e0df1a8dd8d4ddc1c1e6}
+      \strng{fullhashraw}{07a6f27ceab4e0df1a8dd8d4ddc1c1e6}
       \strng{bibnamehash}{07a6f27ceab4e0df1a8dd8d4ddc1c1e6}
       \strng{authorbibnamehash}{07a6f27ceab4e0df1a8dd8d4ddc1c1e6}
       \strng{authornamehash}{07a6f27ceab4e0df1a8dd8d4ddc1c1e6}
       \strng{authorfullhash}{07a6f27ceab4e0df1a8dd8d4ddc1c1e6}
+      \strng{authorfullhashraw}{07a6f27ceab4e0df1a8dd8d4ddc1c1e6}
       \field{sortinit}{C}
       \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of the American Statistical Association}
@@ -1104,7 +1103,7 @@
       \verb 10.1080/01621459.2021.1979561
       \endverb
     \endentry
-    \entry{chen2023drift}{misc}{}
+    \entry{chen2023drift}{misc}{}{1}
       \name{author}{3}{}{%
         {{un=1,uniquepart=given,hash=4722d1c517fb1393cd8f82862ffc9746}{%
            family={Chen},
@@ -1127,14 +1126,16 @@
       }
       \strng{namehash}{a4e726228d1a1c5296ab3556cae89810}
       \strng{fullhash}{a4e726228d1a1c5296ab3556cae89810}
+      \strng{fullhashraw}{a4e726228d1a1c5296ab3556cae89810}
       \strng{bibnamehash}{a4e726228d1a1c5296ab3556cae89810}
       \strng{authorbibnamehash}{a4e726228d1a1c5296ab3556cae89810}
       \strng{authornamehash}{a4e726228d1a1c5296ab3556cae89810}
       \strng{authorfullhash}{a4e726228d1a1c5296ab3556cae89810}
+      \strng{authorfullhashraw}{a4e726228d1a1c5296ab3556cae89810}
       \field{sortinit}{C}
       \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{howpublished}{arXiv:2307.09009}
@@ -1144,7 +1145,7 @@
       \verb 10.48550/arXiv.2307.09009
       \endverb
     \endentry
-    \entry{chen2023pot}{article}{}
+    \entry{chen2023pot}{article}{}{1}
       \name{author}{4}{}{%
         {{un=1,uniquepart=given,hash=63d99bafe6679fb5e11e960687f909b1}{%
            family={Chen},
@@ -1173,14 +1174,16 @@
       }
       \strng{namehash}{1dfe5106e6e785f2c3882e8277aa1485}
       \strng{fullhash}{ce7eac094eed2d8315e99ef8f2a9c7e0}
+      \strng{fullhashraw}{ce7eac094eed2d8315e99ef8f2a9c7e0}
       \strng{bibnamehash}{1dfe5106e6e785f2c3882e8277aa1485}
       \strng{authorbibnamehash}{1dfe5106e6e785f2c3882e8277aa1485}
       \strng{authornamehash}{1dfe5106e6e785f2c3882e8277aa1485}
       \strng{authorfullhash}{ce7eac094eed2d8315e99ef8f2a9c7e0}
+      \strng{authorfullhashraw}{ce7eac094eed2d8315e99ef8f2a9c7e0}
       \field{sortinit}{C}
       \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Transactions on Machine Learning Research}
@@ -1193,7 +1196,7 @@
       \verb https://openreview.net/forum?id=YfZ4ZPt8zd
       \endverb
     \endentry
-    \entry{chingos2018portal}{misc}{}
+    \entry{chingos2018portal}{misc}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=92e4d8bb0225040991ab3dc46c37621f}{%
            family={Chingos},
@@ -1210,14 +1213,16 @@
       }
       \strng{namehash}{cec7024ceb643fa3c5fb4692d31871fe}
       \strng{fullhash}{cec7024ceb643fa3c5fb4692d31871fe}
+      \strng{fullhashraw}{cec7024ceb643fa3c5fb4692d31871fe}
       \strng{bibnamehash}{cec7024ceb643fa3c5fb4692d31871fe}
       \strng{authorbibnamehash}{cec7024ceb643fa3c5fb4692d31871fe}
       \strng{authornamehash}{cec7024ceb643fa3c5fb4692d31871fe}
       \strng{authorfullhash}{cec7024ceb643fa3c5fb4692d31871fe}
+      \strng{authorfullhashraw}{cec7024ceb643fa3c5fb4692d31871fe}
       \field{sortinit}{C}
       \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{howpublished}{Data@Urban, Urban Institute, October 2, 2018}
@@ -1230,7 +1235,7 @@
       \verb https://urban-institute.medium.com/why-we-built-the-education-data-portal-3cae85048b48
       \endverb
     \endentry
-    \entry{christen2012matching}{book}{}
+    \entry{christen2012matching}{book}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=2df88d211fd24d931ebe3bf0dd661f93}{%
            family={Christen},
@@ -1247,14 +1252,16 @@
       }
       \strng{namehash}{2df88d211fd24d931ebe3bf0dd661f93}
       \strng{fullhash}{2df88d211fd24d931ebe3bf0dd661f93}
+      \strng{fullhashraw}{2df88d211fd24d931ebe3bf0dd661f93}
       \strng{bibnamehash}{2df88d211fd24d931ebe3bf0dd661f93}
       \strng{authorbibnamehash}{2df88d211fd24d931ebe3bf0dd661f93}
       \strng{authornamehash}{2df88d211fd24d931ebe3bf0dd661f93}
       \strng{authorfullhash}{2df88d211fd24d931ebe3bf0dd661f93}
+      \strng{authorfullhashraw}{2df88d211fd24d931ebe3bf0dd661f93}
       \field{sortinit}{C}
       \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{title}{Data Matching: Concepts and Techniques for Record Linkage, Entity Resolution, and Duplicate Detection}
@@ -1263,7 +1270,7 @@
       \verb 10.1007/978-3-642-31164-2
       \endverb
     \endentry
-    \entry{christensen2019transparent}{book}{}
+    \entry{christensen2019transparent}{book}{}{1}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=96343d5ad4bc082da3d8300f17b743d8}{%
            family={Christensen},
@@ -1292,21 +1299,23 @@
       }
       \strng{namehash}{12411c6b13cad77c4e1e479bd80d9c27}
       \strng{fullhash}{12411c6b13cad77c4e1e479bd80d9c27}
+      \strng{fullhashraw}{12411c6b13cad77c4e1e479bd80d9c27}
       \strng{bibnamehash}{12411c6b13cad77c4e1e479bd80d9c27}
       \strng{authorbibnamehash}{12411c6b13cad77c4e1e479bd80d9c27}
       \strng{authornamehash}{12411c6b13cad77c4e1e479bd80d9c27}
       \strng{authorfullhash}{12411c6b13cad77c4e1e479bd80d9c27}
+      \strng{authorfullhashraw}{12411c6b13cad77c4e1e479bd80d9c27}
       \field{sortinit}{C}
       \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{isbn}{978-0-520-29695-4}
       \field{title}{Transparent and Reproducible Social Science Research: How to Do Open Science}
       \field{year}{2019}
     \endentry
-    \entry{cleveland1984graphical}{article}{}
+    \entry{cleveland1984graphical}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=891ad1f1560d4ca4d59acb11065fd649}{%
            family={Cleveland},
@@ -1323,14 +1332,16 @@
       }
       \strng{namehash}{933e04cdb7bd9960de63d2179b223a10}
       \strng{fullhash}{933e04cdb7bd9960de63d2179b223a10}
+      \strng{fullhashraw}{933e04cdb7bd9960de63d2179b223a10}
       \strng{bibnamehash}{933e04cdb7bd9960de63d2179b223a10}
       \strng{authorbibnamehash}{933e04cdb7bd9960de63d2179b223a10}
       \strng{authornamehash}{933e04cdb7bd9960de63d2179b223a10}
       \strng{authorfullhash}{933e04cdb7bd9960de63d2179b223a10}
+      \strng{authorfullhashraw}{933e04cdb7bd9960de63d2179b223a10}
       \field{sortinit}{C}
       \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of the American Statistical Association}
@@ -1344,7 +1355,7 @@
       \verb 10.1080/01621459.1984.10478080
       \endverb
     \endentry
-    \entry{coburn2016partnerships}{article}{}
+    \entry{coburn2016partnerships}{article}{}{2}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=0ea7418b385d35c783919d80a9d247b9}{%
            family={Coburn},
@@ -1361,14 +1372,16 @@
       }
       \strng{namehash}{06b87f8a97b958c9de4f701ab6d58254}
       \strng{fullhash}{06b87f8a97b958c9de4f701ab6d58254}
+      \strng{fullhashraw}{06b87f8a97b958c9de4f701ab6d58254}
       \strng{bibnamehash}{06b87f8a97b958c9de4f701ab6d58254}
       \strng{authorbibnamehash}{06b87f8a97b958c9de4f701ab6d58254}
       \strng{authornamehash}{06b87f8a97b958c9de4f701ab6d58254}
       \strng{authorfullhash}{06b87f8a97b958c9de4f701ab6d58254}
+      \strng{authorfullhashraw}{06b87f8a97b958c9de4f701ab6d58254}
       \field{sortinit}{C}
       \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Educational Researcher}
@@ -1382,7 +1395,7 @@
       \verb 10.3102/0013189X16631750
       \endverb
     \endentry
-    \entry{connelly2016administrative}{article}{}
+    \entry{connelly2016administrative}{article}{}{1}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=6b5fe8b9f9e2604b0b38b6de7108d3ba}{%
            family={Connelly},
@@ -1411,14 +1424,16 @@
       }
       \strng{namehash}{43e03a46c743d8333b27ff66e22648e0}
       \strng{fullhash}{6bd09faad932735ebcd12600db0e8c80}
+      \strng{fullhashraw}{6bd09faad932735ebcd12600db0e8c80}
       \strng{bibnamehash}{43e03a46c743d8333b27ff66e22648e0}
       \strng{authorbibnamehash}{43e03a46c743d8333b27ff66e22648e0}
       \strng{authornamehash}{43e03a46c743d8333b27ff66e22648e0}
       \strng{authorfullhash}{6bd09faad932735ebcd12600db0e8c80}
+      \strng{authorfullhashraw}{6bd09faad932735ebcd12600db0e8c80}
       \field{sortinit}{C}
       \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Social Science Research}
@@ -1431,7 +1446,7 @@
       \verb 10.1016/j.ssresearch.2016.04.015
       \endverb
     \endentry
-    \entry{cousins1992participatory}{article}{}
+    \entry{cousins1992participatory}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=156cc11445ff93e7ac4129f9225341ca}{%
            family={Cousins},
@@ -1448,14 +1463,16 @@
       }
       \strng{namehash}{6955ba0a516b82183915e897fffef216}
       \strng{fullhash}{6955ba0a516b82183915e897fffef216}
+      \strng{fullhashraw}{6955ba0a516b82183915e897fffef216}
       \strng{bibnamehash}{6955ba0a516b82183915e897fffef216}
       \strng{authorbibnamehash}{6955ba0a516b82183915e897fffef216}
       \strng{authornamehash}{6955ba0a516b82183915e897fffef216}
       \strng{authorfullhash}{6955ba0a516b82183915e897fffef216}
+      \strng{authorfullhashraw}{6955ba0a516b82183915e897fffef216}
       \field{sortinit}{C}
       \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Educational Evaluation and Policy Analysis}
@@ -1469,7 +1486,7 @@
       \verb 10.3102/01623737014004397
       \endverb
     \endentry
-    \entry{cox2002lists}{article}{}
+    \entry{cox2002lists}{article}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=9cab010545ec29dcb0d9a2f517ed1050}{%
            family={Cox},
@@ -1480,14 +1497,16 @@
       }
       \strng{namehash}{9cab010545ec29dcb0d9a2f517ed1050}
       \strng{fullhash}{9cab010545ec29dcb0d9a2f517ed1050}
+      \strng{fullhashraw}{9cab010545ec29dcb0d9a2f517ed1050}
       \strng{bibnamehash}{9cab010545ec29dcb0d9a2f517ed1050}
       \strng{authorbibnamehash}{9cab010545ec29dcb0d9a2f517ed1050}
       \strng{authornamehash}{9cab010545ec29dcb0d9a2f517ed1050}
       \strng{authorfullhash}{9cab010545ec29dcb0d9a2f517ed1050}
+      \strng{authorfullhashraw}{9cab010545ec29dcb0d9a2f517ed1050}
       \field{sortinit}{C}
       \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{The Stata Journal}
@@ -1501,7 +1520,7 @@
       \verb 10.1177/1536867X0200200208
       \endverb
     \endentry
-    \entry{cronbach1951alpha}{article}{}
+    \entry{cronbach1951alpha}{article}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=535f1fcde8830899a17499b42476a71a}{%
            family={Cronbach},
@@ -1512,14 +1531,16 @@
       }
       \strng{namehash}{535f1fcde8830899a17499b42476a71a}
       \strng{fullhash}{535f1fcde8830899a17499b42476a71a}
+      \strng{fullhashraw}{535f1fcde8830899a17499b42476a71a}
       \strng{bibnamehash}{535f1fcde8830899a17499b42476a71a}
       \strng{authorbibnamehash}{535f1fcde8830899a17499b42476a71a}
       \strng{authornamehash}{535f1fcde8830899a17499b42476a71a}
       \strng{authorfullhash}{535f1fcde8830899a17499b42476a71a}
+      \strng{authorfullhashraw}{535f1fcde8830899a17499b42476a71a}
       \field{sortinit}{C}
       \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Psychometrika}
@@ -1533,7 +1554,7 @@
       \verb 10.1007/BF02310555
       \endverb
     \endentry
-    \entry{cunningham2021mixtape}{book}{}
+    \entry{cunningham2021mixtape}{book}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=4dcc5a18019c71f8991659bdbf42b2b7}{%
            family={Cunningham},
@@ -1550,21 +1571,23 @@
       }
       \strng{namehash}{4dcc5a18019c71f8991659bdbf42b2b7}
       \strng{fullhash}{4dcc5a18019c71f8991659bdbf42b2b7}
+      \strng{fullhashraw}{4dcc5a18019c71f8991659bdbf42b2b7}
       \strng{bibnamehash}{4dcc5a18019c71f8991659bdbf42b2b7}
       \strng{authorbibnamehash}{4dcc5a18019c71f8991659bdbf42b2b7}
       \strng{authornamehash}{4dcc5a18019c71f8991659bdbf42b2b7}
       \strng{authorfullhash}{4dcc5a18019c71f8991659bdbf42b2b7}
+      \strng{authorfullhashraw}{4dcc5a18019c71f8991659bdbf42b2b7}
       \field{sortinit}{C}
       \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{isbn}{9780300251685}
       \field{title}{Causal Inference: The Mixtape}
       \field{year}{2021}
     \endentry
-    \entry{deaton2018rcts}{article}{}
+    \entry{deaton2018rcts}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=49e860b4f71d798fa4f5cf1c90103fc4}{%
            family={Deaton},
@@ -1581,14 +1604,16 @@
       }
       \strng{namehash}{3d95639008956ef2b50765b12aa28b5a}
       \strng{fullhash}{3d95639008956ef2b50765b12aa28b5a}
+      \strng{fullhashraw}{3d95639008956ef2b50765b12aa28b5a}
       \strng{bibnamehash}{3d95639008956ef2b50765b12aa28b5a}
       \strng{authorbibnamehash}{3d95639008956ef2b50765b12aa28b5a}
       \strng{authornamehash}{3d95639008956ef2b50765b12aa28b5a}
       \strng{authorfullhash}{3d95639008956ef2b50765b12aa28b5a}
+      \strng{authorfullhashraw}{3d95639008956ef2b50765b12aa28b5a}
       \field{sortinit}{D}
       \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Social Science \& Medicine}
@@ -1601,7 +1626,7 @@
       \verb 10.1016/j.socscimed.2017.12.005
       \endverb
     \endentry
-    \entry{deming1940raking}{article}{}
+    \entry{deming1940raking}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=3b10d88d2c27a6d7249236cfa47c4be9}{%
            family={Deming},
@@ -1618,14 +1643,16 @@
       }
       \strng{namehash}{9d1ee8a98cc04081cc0cf1d3e9e43cf8}
       \strng{fullhash}{9d1ee8a98cc04081cc0cf1d3e9e43cf8}
+      \strng{fullhashraw}{9d1ee8a98cc04081cc0cf1d3e9e43cf8}
       \strng{bibnamehash}{9d1ee8a98cc04081cc0cf1d3e9e43cf8}
       \strng{authorbibnamehash}{9d1ee8a98cc04081cc0cf1d3e9e43cf8}
       \strng{authornamehash}{9d1ee8a98cc04081cc0cf1d3e9e43cf8}
       \strng{authorfullhash}{9d1ee8a98cc04081cc0cf1d3e9e43cf8}
+      \strng{authorfullhashraw}{9d1ee8a98cc04081cc0cf1d3e9e43cf8}
       \field{sortinit}{D}
       \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{The Annals of Mathematical Statistics}
@@ -1639,7 +1666,7 @@
       \verb 10.1214/aoms/1177731829
       \endverb
     \endentry
-    \entry{dillman2014tailored}{book}{}
+    \entry{dillman2014tailored}{book}{}{1}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=7b075cdeecc33ec2b8272339a26fdc0a}{%
            family={Dillman},
@@ -1668,14 +1695,16 @@
       }
       \strng{namehash}{a284b0258743868f1c792e91eb57ea3d}
       \strng{fullhash}{a284b0258743868f1c792e91eb57ea3d}
+      \strng{fullhashraw}{a284b0258743868f1c792e91eb57ea3d}
       \strng{bibnamehash}{a284b0258743868f1c792e91eb57ea3d}
       \strng{authorbibnamehash}{a284b0258743868f1c792e91eb57ea3d}
       \strng{authornamehash}{a284b0258743868f1c792e91eb57ea3d}
       \strng{authorfullhash}{a284b0258743868f1c792e91eb57ea3d}
+      \strng{authorfullhashraw}{a284b0258743868f1c792e91eb57ea3d}
       \field{sortinit}{D}
       \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{edition}{4}
@@ -1683,7 +1712,7 @@
       \field{title}{Internet, Phone, Mail, and Mixed-Mode Surveys: The Tailored Design Method}
       \field{year}{2014}
     \endentry
-    \entry{doidge2019linkage}{article}{}
+    \entry{doidge2019linkage}{article}{}{2}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=4fbad4ecaf73fbbc22312b384fa574ad}{%
            family={Doidge},
@@ -1700,14 +1729,16 @@
       }
       \strng{namehash}{3056d0677ed434b4afc79bfc9a972df7}
       \strng{fullhash}{3056d0677ed434b4afc79bfc9a972df7}
+      \strng{fullhashraw}{3056d0677ed434b4afc79bfc9a972df7}
       \strng{bibnamehash}{3056d0677ed434b4afc79bfc9a972df7}
       \strng{authorbibnamehash}{3056d0677ed434b4afc79bfc9a972df7}
       \strng{authornamehash}{3056d0677ed434b4afc79bfc9a972df7}
       \strng{authorfullhash}{3056d0677ed434b4afc79bfc9a972df7}
+      \strng{authorfullhashraw}{3056d0677ed434b4afc79bfc9a972df7}
       \field{sortinit}{D}
       \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{International Journal of Epidemiology}
@@ -1721,7 +1752,7 @@
       \verb 10.1093/ije/dyz203
       \endverb
     \endentry
-    \entry{dwork2006diffpriv}{inproceedings}{}
+    \entry{dwork2006diffpriv}{inproceedings}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=c6d8866083f4c03af5e37e032df87089}{%
            family={Dwork},
@@ -1735,14 +1766,16 @@
       }
       \strng{namehash}{c6d8866083f4c03af5e37e032df87089}
       \strng{fullhash}{c6d8866083f4c03af5e37e032df87089}
+      \strng{fullhashraw}{c6d8866083f4c03af5e37e032df87089}
       \strng{bibnamehash}{c6d8866083f4c03af5e37e032df87089}
       \strng{authorbibnamehash}{c6d8866083f4c03af5e37e032df87089}
       \strng{authornamehash}{c6d8866083f4c03af5e37e032df87089}
       \strng{authorfullhash}{c6d8866083f4c03af5e37e032df87089}
+      \strng{authorfullhashraw}{c6d8866083f4c03af5e37e032df87089}
       \field{sortinit}{D}
       \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Automata, Languages and Programming (ICALP 2006)}
@@ -1756,7 +1789,7 @@
       \verb 10.1007/11787006_1
       \endverb
     \endentry
-    \entry{dworkroth2014found}{article}{}
+    \entry{dworkroth2014found}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=c6d8866083f4c03af5e37e032df87089}{%
            family={Dwork},
@@ -1773,14 +1806,16 @@
       }
       \strng{namehash}{4d8bf63261aefa96e8725c0b5785f3b3}
       \strng{fullhash}{4d8bf63261aefa96e8725c0b5785f3b3}
+      \strng{fullhashraw}{4d8bf63261aefa96e8725c0b5785f3b3}
       \strng{bibnamehash}{4d8bf63261aefa96e8725c0b5785f3b3}
       \strng{authorbibnamehash}{4d8bf63261aefa96e8725c0b5785f3b3}
       \strng{authornamehash}{4d8bf63261aefa96e8725c0b5785f3b3}
       \strng{authorfullhash}{4d8bf63261aefa96e8725c0b5785f3b3}
+      \strng{authorfullhashraw}{4d8bf63261aefa96e8725c0b5785f3b3}
       \field{sortinit}{D}
       \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Foundations and Trends in Theoretical Computer Science}
@@ -1794,7 +1829,7 @@
       \verb 10.1561/0400000042
       \endverb
     \endentry
-    \entry{efron1975data}{article}{}
+    \entry{efron1975data}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=5470455fc7dceb3ccf6db38cb22a113d}{%
            family={Efron},
@@ -1811,14 +1846,16 @@
       }
       \strng{namehash}{05a5d797b9c4e693cf68d8b7d36ce57a}
       \strng{fullhash}{05a5d797b9c4e693cf68d8b7d36ce57a}
+      \strng{fullhashraw}{05a5d797b9c4e693cf68d8b7d36ce57a}
       \strng{bibnamehash}{05a5d797b9c4e693cf68d8b7d36ce57a}
       \strng{authorbibnamehash}{05a5d797b9c4e693cf68d8b7d36ce57a}
       \strng{authornamehash}{05a5d797b9c4e693cf68d8b7d36ce57a}
       \strng{authorfullhash}{05a5d797b9c4e693cf68d8b7d36ce57a}
+      \strng{authorfullhashraw}{05a5d797b9c4e693cf68d8b7d36ce57a}
       \field{sortinit}{E}
       \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of the American Statistical Association}
@@ -1832,7 +1869,7 @@
       \verb 10.1080/01621459.1975.10479864
       \endverb
     \endentry
-    \entry{einav2014bigdata}{article}{}
+    \entry{einav2014bigdata}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=90a9c1a4ebb4644cf3924ef7ca2335b8}{%
            family={Einav},
@@ -1849,14 +1886,16 @@
       }
       \strng{namehash}{47b2efc0b933d049ce5ef418e7e5d0e6}
       \strng{fullhash}{47b2efc0b933d049ce5ef418e7e5d0e6}
+      \strng{fullhashraw}{47b2efc0b933d049ce5ef418e7e5d0e6}
       \strng{bibnamehash}{47b2efc0b933d049ce5ef418e7e5d0e6}
       \strng{authorbibnamehash}{47b2efc0b933d049ce5ef418e7e5d0e6}
       \strng{authornamehash}{47b2efc0b933d049ce5ef418e7e5d0e6}
       \strng{authorfullhash}{47b2efc0b933d049ce5ef418e7e5d0e6}
+      \strng{authorfullhashraw}{47b2efc0b933d049ce5ef418e7e5d0e6}
       \field{sortinit}{E}
       \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Science}
@@ -1870,7 +1909,7 @@
       \verb 10.1126/science.1243089
       \endverb
     \endentry
-    \entry{elemam2008kanon}{article}{}
+    \entry{elemam2008kanon}{article}{}{2}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=1dd8692541a241b5c6db3a4d1baac0d5}{%
            family={El\bibnamedelima Emam},
@@ -1887,14 +1926,16 @@
       }
       \strng{namehash}{4d92f8f5453252be6062281f3bbe4a61}
       \strng{fullhash}{4d92f8f5453252be6062281f3bbe4a61}
+      \strng{fullhashraw}{4d92f8f5453252be6062281f3bbe4a61}
       \strng{bibnamehash}{4d92f8f5453252be6062281f3bbe4a61}
       \strng{authorbibnamehash}{4d92f8f5453252be6062281f3bbe4a61}
       \strng{authornamehash}{4d92f8f5453252be6062281f3bbe4a61}
       \strng{authorfullhash}{4d92f8f5453252be6062281f3bbe4a61}
+      \strng{authorfullhashraw}{4d92f8f5453252be6062281f3bbe4a61}
       \field{sortinit}{E}
       \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of the American Medical Informatics Association}
@@ -1908,7 +1949,7 @@
       \verb 10.1197/jamia.M2716
       \endverb
     \endentry
-    \entry{enamorado2019linkage}{article}{}
+    \entry{enamorado2019linkage}{article}{}{1}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=b78dcd139fdd4b23969983e9fc9ccc3d}{%
            family={Enamorado},
@@ -1931,14 +1972,16 @@
       }
       \strng{namehash}{787dbaf0c17698761da22249fd531d77}
       \strng{fullhash}{787dbaf0c17698761da22249fd531d77}
+      \strng{fullhashraw}{787dbaf0c17698761da22249fd531d77}
       \strng{bibnamehash}{787dbaf0c17698761da22249fd531d77}
       \strng{authorbibnamehash}{787dbaf0c17698761da22249fd531d77}
       \strng{authornamehash}{787dbaf0c17698761da22249fd531d77}
       \strng{authorfullhash}{787dbaf0c17698761da22249fd531d77}
+      \strng{authorfullhashraw}{787dbaf0c17698761da22249fd531d77}
       \field{sortinit}{E}
       \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{American Political Science Review}
@@ -1952,7 +1995,7 @@
       \verb 10.1017/S0003055418000783
       \endverb
     \endentry
-    \entry{farquhar2024semantic}{article}{}
+    \entry{farquhar2024semantic}{article}{}{1}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=bdbdbe1bd8dfd8cfa7ea2ddf5a869771}{%
            family={Farquhar},
@@ -1981,14 +2024,16 @@
       }
       \strng{namehash}{1498c4ec6b4b50d968368d84194117dc}
       \strng{fullhash}{3ee0b90be6dbbc2959700aa9a2929ca0}
+      \strng{fullhashraw}{3ee0b90be6dbbc2959700aa9a2929ca0}
       \strng{bibnamehash}{1498c4ec6b4b50d968368d84194117dc}
       \strng{authorbibnamehash}{1498c4ec6b4b50d968368d84194117dc}
       \strng{authornamehash}{1498c4ec6b4b50d968368d84194117dc}
       \strng{authorfullhash}{3ee0b90be6dbbc2959700aa9a2929ca0}
+      \strng{authorfullhashraw}{3ee0b90be6dbbc2959700aa9a2929ca0}
       \field{sortinit}{F}
       \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Nature}
@@ -2008,7 +2053,7 @@
       \verb https://www.nature.com/articles/s41586-024-07421-0
       \endverb
     \endentry
-    \entry{fay1979estimates}{article}{}
+    \entry{fay1979estimates}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=4494322834eda37db1b7fa3a6ed6b5cd}{%
            family={Fay},
@@ -2025,14 +2070,16 @@
       }
       \strng{namehash}{1a2013110af146121179f174d5859452}
       \strng{fullhash}{1a2013110af146121179f174d5859452}
+      \strng{fullhashraw}{1a2013110af146121179f174d5859452}
       \strng{bibnamehash}{1a2013110af146121179f174d5859452}
       \strng{authorbibnamehash}{1a2013110af146121179f174d5859452}
       \strng{authornamehash}{1a2013110af146121179f174d5859452}
       \strng{authorfullhash}{1a2013110af146121179f174d5859452}
+      \strng{authorfullhashraw}{1a2013110af146121179f174d5859452}
       \field{sortinit}{F}
       \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of the American Statistical Association}
@@ -2046,7 +2093,7 @@
       \verb 10.1080/01621459.1979.10482505
       \endverb
     \endentry
-    \entry{fellegi1969linkage}{article}{}
+    \entry{fellegi1969linkage}{article}{}{2}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=3512111ae31e192e17da34a459844765}{%
            family={Fellegi},
@@ -2063,14 +2110,16 @@
       }
       \strng{namehash}{a02762c13c7328d97c299739a13bfd48}
       \strng{fullhash}{a02762c13c7328d97c299739a13bfd48}
+      \strng{fullhashraw}{a02762c13c7328d97c299739a13bfd48}
       \strng{bibnamehash}{a02762c13c7328d97c299739a13bfd48}
       \strng{authorbibnamehash}{a02762c13c7328d97c299739a13bfd48}
       \strng{authornamehash}{a02762c13c7328d97c299739a13bfd48}
       \strng{authorfullhash}{a02762c13c7328d97c299739a13bfd48}
+      \strng{authorfullhashraw}{a02762c13c7328d97c299739a13bfd48}
       \field{sortinit}{F}
       \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of the American Statistical Association}
@@ -2084,7 +2133,7 @@
       \verb 10.1080/01621459.1969.10501049
       \endverb
     \endentry
-    \entry{few2013dashboard}{book}{}
+    \entry{few2013dashboard}{book}{}{2}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=0225846e9c16b1e8389734ceaa2c3c34}{%
            family={Few},
@@ -2101,14 +2150,16 @@
       }
       \strng{namehash}{0225846e9c16b1e8389734ceaa2c3c34}
       \strng{fullhash}{0225846e9c16b1e8389734ceaa2c3c34}
+      \strng{fullhashraw}{0225846e9c16b1e8389734ceaa2c3c34}
       \strng{bibnamehash}{0225846e9c16b1e8389734ceaa2c3c34}
       \strng{authorbibnamehash}{0225846e9c16b1e8389734ceaa2c3c34}
       \strng{authornamehash}{0225846e9c16b1e8389734ceaa2c3c34}
       \strng{authorfullhash}{0225846e9c16b1e8389734ceaa2c3c34}
+      \strng{authorfullhashraw}{0225846e9c16b1e8389734ceaa2c3c34}
       \field{sortinit}{F}
       \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{edition}{2}
@@ -2116,7 +2167,7 @@
       \field{title}{Information Dashboard Design: Displaying Data for At-a-Glance Monitoring}
       \field{year}{2013}
     \endentry
-    \entry{field2026betabin}{unpublished}{}
+    \entry{field2026betabin}{unpublished}{}{1}
       \name{author}{5}{}{%
         {{un=0,uniquepart=base,hash=7472d95db499b10f2477746071c2e656}{%
            family={Field},
@@ -2151,14 +2202,16 @@
       }
       \strng{namehash}{9ea7e2b87ba7db1b290b2df36809fb3a}
       \strng{fullhash}{d480c087a051d373e682b7f47f28ee6c}
+      \strng{fullhashraw}{d480c087a051d373e682b7f47f28ee6c}
       \strng{bibnamehash}{9ea7e2b87ba7db1b290b2df36809fb3a}
       \strng{authorbibnamehash}{9ea7e2b87ba7db1b290b2df36809fb3a}
       \strng{authornamehash}{9ea7e2b87ba7db1b290b2df36809fb3a}
       \strng{authorfullhash}{d480c087a051d373e682b7f47f28ee6c}
+      \strng{authorfullhashraw}{d480c087a051d373e682b7f47f28ee6c}
       \field{sortinit}{F}
       \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{note}{Pre-print under review, Far Harbor LLC; replication materials at \url{https://github.com/ericabooth/BetaBinomialPaperMaterials}}
@@ -2171,7 +2224,7 @@
       \verb https://github.com/ericabooth/BetaBinomialPaperMaterials
       \endverb
     \endentry
-    \entry{fitzgerald1998attrition}{article}{}
+    \entry{fitzgerald1998attrition}{article}{}{2}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=6092c089931f52cd5fa40c066e7293df}{%
            family={Fitzgerald},
@@ -2194,14 +2247,16 @@
       }
       \strng{namehash}{e5b205ce6025aa932bead8ec4fa60453}
       \strng{fullhash}{e5b205ce6025aa932bead8ec4fa60453}
+      \strng{fullhashraw}{e5b205ce6025aa932bead8ec4fa60453}
       \strng{bibnamehash}{e5b205ce6025aa932bead8ec4fa60453}
       \strng{authorbibnamehash}{e5b205ce6025aa932bead8ec4fa60453}
       \strng{authornamehash}{e5b205ce6025aa932bead8ec4fa60453}
       \strng{authorfullhash}{e5b205ce6025aa932bead8ec4fa60453}
+      \strng{authorfullhashraw}{e5b205ce6025aa932bead8ec4fa60453}
       \field{sortinit}{F}
       \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of Human Resources}
@@ -2215,7 +2270,7 @@
       \verb 10.2307/146433
       \endverb
     \endentry
-    \entry{franconeri2021science}{article}{}
+    \entry{franconeri2021science}{article}{}{4}
       \name{author}{5}{}{%
         {{un=0,uniquepart=base,hash=a3edadba03a354ac1997961e61cd797f}{%
            family={Franconeri},
@@ -2250,14 +2305,16 @@
       }
       \strng{namehash}{89fcbdfd80c8d7b6f52c2071fc30da17}
       \strng{fullhash}{48ee86ab9eb1a338ab2c3444aa0cb744}
+      \strng{fullhashraw}{48ee86ab9eb1a338ab2c3444aa0cb744}
       \strng{bibnamehash}{89fcbdfd80c8d7b6f52c2071fc30da17}
       \strng{authorbibnamehash}{89fcbdfd80c8d7b6f52c2071fc30da17}
       \strng{authornamehash}{89fcbdfd80c8d7b6f52c2071fc30da17}
       \strng{authorfullhash}{48ee86ab9eb1a338ab2c3444aa0cb744}
+      \strng{authorfullhashraw}{48ee86ab9eb1a338ab2c3444aa0cb744}
       \field{sortinit}{F}
       \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Psychological Science in the Public Interest}
@@ -2271,7 +2328,7 @@
       \verb 10.1177/15291006211051956
       \endverb
     \endentry
-    \entry{funnell2011purposeful}{book}{}
+    \entry{funnell2011purposeful}{book}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=3185873afe9e95d53491e9e8dc61a6ea}{%
            family={Funnell},
@@ -2294,21 +2351,23 @@
       }
       \strng{namehash}{bb215c47a0e9e64e630b0015e878ab24}
       \strng{fullhash}{bb215c47a0e9e64e630b0015e878ab24}
+      \strng{fullhashraw}{bb215c47a0e9e64e630b0015e878ab24}
       \strng{bibnamehash}{bb215c47a0e9e64e630b0015e878ab24}
       \strng{authorbibnamehash}{bb215c47a0e9e64e630b0015e878ab24}
       \strng{authornamehash}{bb215c47a0e9e64e630b0015e878ab24}
       \strng{authorfullhash}{bb215c47a0e9e64e630b0015e878ab24}
+      \strng{authorfullhashraw}{bb215c47a0e9e64e630b0015e878ab24}
       \field{sortinit}{F}
       \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{isbn}{978-0-470-47857-8}
       \field{title}{Purposeful Program Theory: Effective Use of Theories of Change and Logic Models}
       \field{year}{2011}
     \endentry
-    \entry{gao2023pal}{inproceedings}{}
+    \entry{gao2023pal}{inproceedings}{}{1}
       \name{author}{8}{}{%
         {{un=0,uniquepart=base,hash=7ef8e07d2bd57499ac7dd40d1123fb5d}{%
            family={Gao},
@@ -2361,14 +2420,16 @@
       }
       \strng{namehash}{33afec8508fadcedb9fb8ffe8cfd4bfa}
       \strng{fullhash}{f77c37020932f837ddf18f0d6e717cd6}
+      \strng{fullhashraw}{f77c37020932f837ddf18f0d6e717cd6}
       \strng{bibnamehash}{33afec8508fadcedb9fb8ffe8cfd4bfa}
       \strng{authorbibnamehash}{33afec8508fadcedb9fb8ffe8cfd4bfa}
       \strng{authornamehash}{33afec8508fadcedb9fb8ffe8cfd4bfa}
       \strng{authorfullhash}{f77c37020932f837ddf18f0d6e717cd6}
+      \strng{authorfullhashraw}{f77c37020932f837ddf18f0d6e717cd6}
       \field{sortinit}{G}
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Proceedings of the 40th International Conference on Machine Learning (ICML 2023)}
@@ -2385,7 +2446,7 @@
       \verb https://proceedings.mlr.press/v202/gao23f.html
       \endverb
     \endentry
-    \entry{gelman2014power}{article}{}
+    \entry{gelman2014power}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=1e1eb60e3b6e222217bf8e9b24070b28}{%
            family={Gelman},
@@ -2402,14 +2463,16 @@
       }
       \strng{namehash}{8dfc0ba09672da6c3db67c012f3dd252}
       \strng{fullhash}{8dfc0ba09672da6c3db67c012f3dd252}
+      \strng{fullhashraw}{8dfc0ba09672da6c3db67c012f3dd252}
       \strng{bibnamehash}{8dfc0ba09672da6c3db67c012f3dd252}
       \strng{authorbibnamehash}{8dfc0ba09672da6c3db67c012f3dd252}
       \strng{authornamehash}{8dfc0ba09672da6c3db67c012f3dd252}
       \strng{authorfullhash}{8dfc0ba09672da6c3db67c012f3dd252}
+      \strng{authorfullhashraw}{8dfc0ba09672da6c3db67c012f3dd252}
       \field{sortinit}{G}
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Perspectives on Psychological Science}
@@ -2423,7 +2486,7 @@
       \verb 10.1177/1745691614551642
       \endverb
     \endentry
-    \entry{gelman2013forking}{unpublished}{}
+    \entry{gelman2013forking}{unpublished}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=1e1eb60e3b6e222217bf8e9b24070b28}{%
            family={Gelman},
@@ -2440,21 +2503,23 @@
       }
       \strng{namehash}{84de34c4320b9350d7f2c5a00d2a3f29}
       \strng{fullhash}{84de34c4320b9350d7f2c5a00d2a3f29}
+      \strng{fullhashraw}{84de34c4320b9350d7f2c5a00d2a3f29}
       \strng{bibnamehash}{84de34c4320b9350d7f2c5a00d2a3f29}
       \strng{authorbibnamehash}{84de34c4320b9350d7f2c5a00d2a3f29}
       \strng{authornamehash}{84de34c4320b9350d7f2c5a00d2a3f29}
       \strng{authorfullhash}{84de34c4320b9350d7f2c5a00d2a3f29}
+      \strng{authorfullhashraw}{84de34c4320b9350d7f2c5a00d2a3f29}
       \field{sortinit}{G}
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{note}{Working paper, Department of Statistics, Columbia University}
       \field{title}{The Garden of Forking Paths}
       \field{year}{2013}
     \endentry
-    \entry{gentzkow2014code}{unpublished}{}
+    \entry{gentzkow2014code}{unpublished}{}{2}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=7f632dc67b8bd2566eae625ec44fafd0}{%
            family={Gentzkow},
@@ -2471,21 +2536,23 @@
       }
       \strng{namehash}{92c50937740f98c1c8504fb8c0007403}
       \strng{fullhash}{92c50937740f98c1c8504fb8c0007403}
+      \strng{fullhashraw}{92c50937740f98c1c8504fb8c0007403}
       \strng{bibnamehash}{92c50937740f98c1c8504fb8c0007403}
       \strng{authorbibnamehash}{92c50937740f98c1c8504fb8c0007403}
       \strng{authornamehash}{92c50937740f98c1c8504fb8c0007403}
       \strng{authorfullhash}{92c50937740f98c1c8504fb8c0007403}
+      \strng{authorfullhashraw}{92c50937740f98c1c8504fb8c0007403}
       \field{sortinit}{G}
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{note}{Manual, University of Chicago and Stanford University}
       \field{title}{Code and Data for the Social Sciences: A Practitioner's Guide}
       \field{year}{2014}
     \endentry
-    \entry{gilardi2023annotation}{article}{}
+    \entry{gilardi2023annotation}{article}{}{1}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=42a4e15ad87c60bc88a71df1348bd4e2}{%
            family={Gilardi},
@@ -2508,14 +2575,16 @@
       }
       \strng{namehash}{0cb15cf82c954c430d43b8c515e70bbd}
       \strng{fullhash}{0cb15cf82c954c430d43b8c515e70bbd}
+      \strng{fullhashraw}{0cb15cf82c954c430d43b8c515e70bbd}
       \strng{bibnamehash}{0cb15cf82c954c430d43b8c515e70bbd}
       \strng{authorbibnamehash}{0cb15cf82c954c430d43b8c515e70bbd}
       \strng{authornamehash}{0cb15cf82c954c430d43b8c515e70bbd}
       \strng{authorfullhash}{0cb15cf82c954c430d43b8c515e70bbd}
+      \strng{authorfullhashraw}{0cb15cf82c954c430d43b8c515e70bbd}
       \field{sortinit}{G}
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Proceedings of the National Academy of Sciences}
@@ -2529,7 +2598,7 @@
       \verb 10.1073/pnas.2305016120
       \endverb
     \endentry
-    \entry{gilbert2018guild}{article}{}
+    \entry{gilbert2018guild}{article}{}{1}
       \name{author}{8}{}{%
         {{un=0,uniquepart=base,hash=ad83c180d206c21526528eaa92857d08}{%
            family={Gilbert},
@@ -2582,14 +2651,16 @@
       }
       \strng{namehash}{bc5fced637d8f55549c4928801fb09dd}
       \strng{fullhash}{3ce4b893d04b52e7b9ad29e6b40f7ab8}
+      \strng{fullhashraw}{3ce4b893d04b52e7b9ad29e6b40f7ab8}
       \strng{bibnamehash}{bc5fced637d8f55549c4928801fb09dd}
       \strng{authorbibnamehash}{bc5fced637d8f55549c4928801fb09dd}
       \strng{authornamehash}{bc5fced637d8f55549c4928801fb09dd}
       \strng{authorfullhash}{3ce4b893d04b52e7b9ad29e6b40f7ab8}
+      \strng{authorfullhashraw}{3ce4b893d04b52e7b9ad29e6b40f7ab8}
       \field{sortinit}{G}
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of Public Health}
@@ -2603,7 +2674,7 @@
       \verb 10.1093/pubmed/fdx037
       \endverb
     \endentry
-    \entry{goodmanbacon2021did}{article}{}
+    \entry{goodmanbacon2021did}{article}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=437b3fad5b4a40d10f45b4fc16dd7730}{%
            family={Goodman-Bacon},
@@ -2614,14 +2685,16 @@
       }
       \strng{namehash}{437b3fad5b4a40d10f45b4fc16dd7730}
       \strng{fullhash}{437b3fad5b4a40d10f45b4fc16dd7730}
+      \strng{fullhashraw}{437b3fad5b4a40d10f45b4fc16dd7730}
       \strng{bibnamehash}{437b3fad5b4a40d10f45b4fc16dd7730}
       \strng{authorbibnamehash}{437b3fad5b4a40d10f45b4fc16dd7730}
       \strng{authornamehash}{437b3fad5b4a40d10f45b4fc16dd7730}
       \strng{authorfullhash}{437b3fad5b4a40d10f45b4fc16dd7730}
+      \strng{authorfullhashraw}{437b3fad5b4a40d10f45b4fc16dd7730}
       \field{sortinit}{G}
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of Econometrics}
@@ -2635,7 +2708,7 @@
       \verb 10.1016/j.jeconom.2021.03.014
       \endverb
     \endentry
-    \entry{greenlund2022places}{article}{}
+    \entry{greenlund2022places}{article}{}{1}
       \true{moreauthor}
       \true{morelabelname}
       \name{author}{6}{}{%
@@ -2678,14 +2751,16 @@
       }
       \strng{namehash}{538ca965e5f280162824df198fab87da}
       \strng{fullhash}{269d9544127471620fde528f1802fff4}
+      \strng{fullhashraw}{269d9544127471620fde528f1802fff4}
       \strng{bibnamehash}{538ca965e5f280162824df198fab87da}
       \strng{authorbibnamehash}{538ca965e5f280162824df198fab87da}
       \strng{authornamehash}{538ca965e5f280162824df198fab87da}
       \strng{authorfullhash}{269d9544127471620fde528f1802fff4}
+      \strng{authorfullhashraw}{269d9544127471620fde528f1802fff4}
       \field{sortinit}{G}
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Preventing Chronic Disease}
@@ -2698,7 +2773,7 @@
       \verb 10.5888/pcd19.210459
       \endverb
     \endentry
-    \entry{greshake2023injection}{inproceedings}{}
+    \entry{greshake2023injection}{inproceedings}{}{1}
       \name{author}{6}{}{%
         {{un=0,uniquepart=base,hash=2cc453b0d8434328d9a6bdbcdc05ad3d}{%
            family={Greshake},
@@ -2739,14 +2814,16 @@
       }
       \strng{namehash}{297d57380594dd1dbb183555c5669f70}
       \strng{fullhash}{9e98937ba501f570356b592c74f15bf2}
+      \strng{fullhashraw}{9e98937ba501f570356b592c74f15bf2}
       \strng{bibnamehash}{297d57380594dd1dbb183555c5669f70}
       \strng{authorbibnamehash}{297d57380594dd1dbb183555c5669f70}
       \strng{authornamehash}{297d57380594dd1dbb183555c5669f70}
       \strng{authorfullhash}{9e98937ba501f570356b592c74f15bf2}
+      \strng{authorfullhashraw}{9e98937ba501f570356b592c74f15bf2}
       \field{sortinit}{G}
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Proceedings of the 16th ACM Workshop on Artificial Intelligence and Security (AISec '23)}
@@ -2764,7 +2841,7 @@
       \verb https://dl.acm.org/doi/10.1145/3605764.3623985
       \endverb
     \endentry
-    \entry{groves2006nonresponse}{article}{}
+    \entry{groves2006nonresponse}{article}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=fc80c28145bfbcb4429404be3befc52a}{%
            family={Groves},
@@ -2775,14 +2852,16 @@
       }
       \strng{namehash}{fc80c28145bfbcb4429404be3befc52a}
       \strng{fullhash}{fc80c28145bfbcb4429404be3befc52a}
+      \strng{fullhashraw}{fc80c28145bfbcb4429404be3befc52a}
       \strng{bibnamehash}{fc80c28145bfbcb4429404be3befc52a}
       \strng{authorbibnamehash}{fc80c28145bfbcb4429404be3befc52a}
       \strng{authornamehash}{fc80c28145bfbcb4429404be3befc52a}
       \strng{authorfullhash}{fc80c28145bfbcb4429404be3befc52a}
+      \strng{authorfullhashraw}{fc80c28145bfbcb4429404be3befc52a}
       \field{sortinit}{G}
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Public Opinion Quarterly}
@@ -2796,7 +2875,7 @@
       \verb 10.1093/poq/nfl033
       \endverb
     \endentry
-    \entry{groves2010tse}{article}{}
+    \entry{groves2010tse}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=fc80c28145bfbcb4429404be3befc52a}{%
            family={Groves},
@@ -2813,14 +2892,16 @@
       }
       \strng{namehash}{7ef56a9c5652c0d135bd4b00ee23758b}
       \strng{fullhash}{7ef56a9c5652c0d135bd4b00ee23758b}
+      \strng{fullhashraw}{7ef56a9c5652c0d135bd4b00ee23758b}
       \strng{bibnamehash}{7ef56a9c5652c0d135bd4b00ee23758b}
       \strng{authorbibnamehash}{7ef56a9c5652c0d135bd4b00ee23758b}
       \strng{authornamehash}{7ef56a9c5652c0d135bd4b00ee23758b}
       \strng{authorfullhash}{7ef56a9c5652c0d135bd4b00ee23758b}
+      \strng{authorfullhashraw}{7ef56a9c5652c0d135bd4b00ee23758b}
       \field{sortinit}{G}
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Public Opinion Quarterly}
@@ -2834,7 +2915,7 @@
       \verb 10.1093/poq/nfq065
       \endverb
     \endentry
-    \entry{groves2008nonresponse}{article}{}
+    \entry{groves2008nonresponse}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=fc80c28145bfbcb4429404be3befc52a}{%
            family={Groves},
@@ -2851,14 +2932,16 @@
       }
       \strng{namehash}{5e68cce57099f4f531e88fae5334e927}
       \strng{fullhash}{5e68cce57099f4f531e88fae5334e927}
+      \strng{fullhashraw}{5e68cce57099f4f531e88fae5334e927}
       \strng{bibnamehash}{5e68cce57099f4f531e88fae5334e927}
       \strng{authorbibnamehash}{5e68cce57099f4f531e88fae5334e927}
       \strng{authornamehash}{5e68cce57099f4f531e88fae5334e927}
       \strng{authorfullhash}{5e68cce57099f4f531e88fae5334e927}
+      \strng{authorfullhashraw}{5e68cce57099f4f531e88fae5334e927}
       \field{sortinit}{G}
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Public Opinion Quarterly}
@@ -2872,7 +2955,7 @@
       \verb 10.1093/poq/nfn011
       \endverb
     \endentry
-    \entry{harron2017challenges}{article}{}
+    \entry{harron2017challenges}{article}{}{1}
       \name{author}{7}{}{%
         {{un=1,uniquepart=given,hash=33b9d668372fc3a2a78e0362c6401a5c}{%
            family={Harron},
@@ -2919,14 +3002,16 @@
       }
       \strng{namehash}{4c30eceb8ee42bd73d027eda721363ad}
       \strng{fullhash}{ae925d6724293df92c62318aa429d167}
+      \strng{fullhashraw}{ae925d6724293df92c62318aa429d167}
       \strng{bibnamehash}{4c30eceb8ee42bd73d027eda721363ad}
       \strng{authorbibnamehash}{4c30eceb8ee42bd73d027eda721363ad}
       \strng{authornamehash}{4c30eceb8ee42bd73d027eda721363ad}
       \strng{authorfullhash}{ae925d6724293df92c62318aa429d167}
+      \strng{authorfullhashraw}{ae925d6724293df92c62318aa429d167}
       \field{sortinit}{H}
       \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Big Data \& Society}
@@ -2938,7 +3023,7 @@
       \verb 10.1177/2053951717745678
       \endverb
     \endentry
-    \entry{hatry2006performance}{book}{}
+    \entry{hatry2006performance}{book}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=1bfc5bed5ed6dc3a29d9fd7d8938713a}{%
            family={Hatry},
@@ -2955,21 +3040,23 @@
       }
       \strng{namehash}{1bfc5bed5ed6dc3a29d9fd7d8938713a}
       \strng{fullhash}{1bfc5bed5ed6dc3a29d9fd7d8938713a}
+      \strng{fullhashraw}{1bfc5bed5ed6dc3a29d9fd7d8938713a}
       \strng{bibnamehash}{1bfc5bed5ed6dc3a29d9fd7d8938713a}
       \strng{authorbibnamehash}{1bfc5bed5ed6dc3a29d9fd7d8938713a}
       \strng{authornamehash}{1bfc5bed5ed6dc3a29d9fd7d8938713a}
       \strng{authorfullhash}{1bfc5bed5ed6dc3a29d9fd7d8938713a}
+      \strng{authorfullhashraw}{1bfc5bed5ed6dc3a29d9fd7d8938713a}
       \field{sortinit}{H}
       \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{edition}{2}
       \field{title}{Performance Measurement: Getting Results}
       \field{year}{2006}
     \endentry
-    \entry{hazlett2020kernel}{article}{}
+    \entry{hazlett2020kernel}{article}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=c3de901751a69bd69e344f3901d6d0cf}{%
            family={Hazlett},
@@ -2980,14 +3067,16 @@
       }
       \strng{namehash}{c3de901751a69bd69e344f3901d6d0cf}
       \strng{fullhash}{c3de901751a69bd69e344f3901d6d0cf}
+      \strng{fullhashraw}{c3de901751a69bd69e344f3901d6d0cf}
       \strng{bibnamehash}{c3de901751a69bd69e344f3901d6d0cf}
       \strng{authorbibnamehash}{c3de901751a69bd69e344f3901d6d0cf}
       \strng{authornamehash}{c3de901751a69bd69e344f3901d6d0cf}
       \strng{authorfullhash}{c3de901751a69bd69e344f3901d6d0cf}
+      \strng{authorfullhashraw}{c3de901751a69bd69e344f3901d6d0cf}
       \field{sortinit}{H}
       \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Statistica Sinica}
@@ -3004,7 +3093,7 @@
       \verb https://www3.stat.sinica.edu.tw/statistica/j30n3/j30n32/j30n32.html
       \endverb
     \endentry
-    \entry{healy2018data}{book}{}
+    \entry{healy2018data}{book}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=096c7ffc8c55053356fe58a20f9ba0c2}{%
            family={Healy},
@@ -3021,21 +3110,23 @@
       }
       \strng{namehash}{096c7ffc8c55053356fe58a20f9ba0c2}
       \strng{fullhash}{096c7ffc8c55053356fe58a20f9ba0c2}
+      \strng{fullhashraw}{096c7ffc8c55053356fe58a20f9ba0c2}
       \strng{bibnamehash}{096c7ffc8c55053356fe58a20f9ba0c2}
       \strng{authorbibnamehash}{096c7ffc8c55053356fe58a20f9ba0c2}
       \strng{authornamehash}{096c7ffc8c55053356fe58a20f9ba0c2}
       \strng{authorfullhash}{096c7ffc8c55053356fe58a20f9ba0c2}
+      \strng{authorfullhashraw}{096c7ffc8c55053356fe58a20f9ba0c2}
       \field{sortinit}{H}
       \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{isbn}{9780691181615}
       \field{title}{Data Visualization: A Practical Introduction}
       \field{year}{2018}
     \endentry
-    \entry{heer2010crowdsourcing}{inproceedings}{}
+    \entry{heer2010crowdsourcing}{inproceedings}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=c1fc05b7156dc351ceebcc7f14fe27ee}{%
            family={Heer},
@@ -3058,14 +3149,16 @@
       }
       \strng{namehash}{97db037cf9aaad63a35732399a6852c8}
       \strng{fullhash}{97db037cf9aaad63a35732399a6852c8}
+      \strng{fullhashraw}{97db037cf9aaad63a35732399a6852c8}
       \strng{bibnamehash}{97db037cf9aaad63a35732399a6852c8}
       \strng{authorbibnamehash}{97db037cf9aaad63a35732399a6852c8}
       \strng{authornamehash}{97db037cf9aaad63a35732399a6852c8}
       \strng{authorfullhash}{97db037cf9aaad63a35732399a6852c8}
+      \strng{authorfullhashraw}{97db037cf9aaad63a35732399a6852c8}
       \field{sortinit}{H}
       \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Proceedings of the SIGCHI Conference on Human Factors in Computing Systems (CHI '10)}
@@ -3077,7 +3170,7 @@
       \verb 10.1145/1753326.1753357
       \endverb
     \endentry
-    \entry{herndon2014debt}{article}{}
+    \entry{herndon2014debt}{article}{}{3}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=e1f11c8d4b74a42d40d83707132342d3}{%
            family={Herndon},
@@ -3100,14 +3193,16 @@
       }
       \strng{namehash}{7cb94ffecb9866ea991ffda7ba1bac52}
       \strng{fullhash}{7cb94ffecb9866ea991ffda7ba1bac52}
+      \strng{fullhashraw}{7cb94ffecb9866ea991ffda7ba1bac52}
       \strng{bibnamehash}{7cb94ffecb9866ea991ffda7ba1bac52}
       \strng{authorbibnamehash}{7cb94ffecb9866ea991ffda7ba1bac52}
       \strng{authornamehash}{7cb94ffecb9866ea991ffda7ba1bac52}
       \strng{authorfullhash}{7cb94ffecb9866ea991ffda7ba1bac52}
+      \strng{authorfullhashraw}{7cb94ffecb9866ea991ffda7ba1bac52}
       \field{sortinit}{H}
       \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Cambridge Journal of Economics}
@@ -3121,7 +3216,7 @@
       \verb 10.1093/cje/bet075
       \endverb
     \endentry
-    \entry{herzog2007quality}{book}{}
+    \entry{herzog2007quality}{book}{}{1}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=68de09b14fcb5684326c11ab805a41f1}{%
            family={Herzog},
@@ -3150,14 +3245,16 @@
       }
       \strng{namehash}{b806df1adfab1bbfad1ee5ac8f9b2e0a}
       \strng{fullhash}{b806df1adfab1bbfad1ee5ac8f9b2e0a}
+      \strng{fullhashraw}{b806df1adfab1bbfad1ee5ac8f9b2e0a}
       \strng{bibnamehash}{b806df1adfab1bbfad1ee5ac8f9b2e0a}
       \strng{authorbibnamehash}{b806df1adfab1bbfad1ee5ac8f9b2e0a}
       \strng{authornamehash}{b806df1adfab1bbfad1ee5ac8f9b2e0a}
       \strng{authorfullhash}{b806df1adfab1bbfad1ee5ac8f9b2e0a}
+      \strng{authorfullhashraw}{b806df1adfab1bbfad1ee5ac8f9b2e0a}
       \field{sortinit}{H}
       \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{isbn}{978-0-387-69502-0}
@@ -3167,7 +3264,7 @@
       \verb 10.1007/0-387-69505-2
       \endverb
     \endentry
-    \entry{huber2023causal}{book}{}
+    \entry{huber2023causal}{book}{}{5}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=62023ef11c8c35aad6d9e4cf52411643}{%
            family={Huber},
@@ -3184,20 +3281,22 @@
       }
       \strng{namehash}{62023ef11c8c35aad6d9e4cf52411643}
       \strng{fullhash}{62023ef11c8c35aad6d9e4cf52411643}
+      \strng{fullhashraw}{62023ef11c8c35aad6d9e4cf52411643}
       \strng{bibnamehash}{62023ef11c8c35aad6d9e4cf52411643}
       \strng{authorbibnamehash}{62023ef11c8c35aad6d9e4cf52411643}
       \strng{authornamehash}{62023ef11c8c35aad6d9e4cf52411643}
       \strng{authorfullhash}{62023ef11c8c35aad6d9e4cf52411643}
+      \strng{authorfullhashraw}{62023ef11c8c35aad6d9e4cf52411643}
       \field{sortinit}{H}
       \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{title}{Causal Analysis: Impact Evaluation and Causal Machine Learning with Applications in {R}}
       \field{year}{2023}
     \endentry
-    \entry{hullman2011rhetoric}{article}{}
+    \entry{hullman2011rhetoric}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=b068fe967c605a4bad2e31b2374698dd}{%
            family={Hullman},
@@ -3214,14 +3313,16 @@
       }
       \strng{namehash}{31d8e35e8e890ab7a502523d1e382ce9}
       \strng{fullhash}{31d8e35e8e890ab7a502523d1e382ce9}
+      \strng{fullhashraw}{31d8e35e8e890ab7a502523d1e382ce9}
       \strng{bibnamehash}{31d8e35e8e890ab7a502523d1e382ce9}
       \strng{authorbibnamehash}{31d8e35e8e890ab7a502523d1e382ce9}
       \strng{authornamehash}{31d8e35e8e890ab7a502523d1e382ce9}
       \strng{authorfullhash}{31d8e35e8e890ab7a502523d1e382ce9}
+      \strng{authorfullhashraw}{31d8e35e8e890ab7a502523d1e382ce9}
       \field{sortinit}{H}
       \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{IEEE Transactions on Visualization and Computer Graphics}
@@ -3235,7 +3336,7 @@
       \verb 10.1109/TVCG.2011.255
       \endverb
     \endentry
-    \entry{huntingtonklein2022effect}{book}{}
+    \entry{huntingtonklein2022effect}{book}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=6887be9a9a480474e5f6f4d0070a8ca6}{%
            family={Huntington-Klein},
@@ -3252,21 +3353,23 @@
       }
       \strng{namehash}{6887be9a9a480474e5f6f4d0070a8ca6}
       \strng{fullhash}{6887be9a9a480474e5f6f4d0070a8ca6}
+      \strng{fullhashraw}{6887be9a9a480474e5f6f4d0070a8ca6}
       \strng{bibnamehash}{6887be9a9a480474e5f6f4d0070a8ca6}
       \strng{authorbibnamehash}{6887be9a9a480474e5f6f4d0070a8ca6}
       \strng{authornamehash}{6887be9a9a480474e5f6f4d0070a8ca6}
       \strng{authorfullhash}{6887be9a9a480474e5f6f4d0070a8ca6}
+      \strng{authorfullhashraw}{6887be9a9a480474e5f6f4d0070a8ca6}
       \field{sortinit}{H}
       \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{isbn}{9781032125787}
       \field{title}{The Effect: An Introduction to Research Design and Causality}
       \field{year}{2022}
     \endentry
-    \entry{openicpsr}{misc}{}
+    \entry{openicpsr}{misc}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=815600c974e28e1b0a3823207d48436c}{%
            family={{Inter-university Consortium for Political and Social Research}},
@@ -3274,14 +3377,16 @@
       }
       \strng{namehash}{815600c974e28e1b0a3823207d48436c}
       \strng{fullhash}{815600c974e28e1b0a3823207d48436c}
+      \strng{fullhashraw}{815600c974e28e1b0a3823207d48436c}
       \strng{bibnamehash}{815600c974e28e1b0a3823207d48436c}
       \strng{authorbibnamehash}{815600c974e28e1b0a3823207d48436c}
       \strng{authornamehash}{815600c974e28e1b0a3823207d48436c}
       \strng{authorfullhash}{815600c974e28e1b0a3823207d48436c}
+      \strng{authorfullhashraw}{815600c974e28e1b0a3823207d48436c}
       \field{sortinit}{I}
       \field{sortinithash}{8d291c51ee89b6cd86bf5379f0b151d8}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{howpublished}{Data repository, University of Michigan}
@@ -3294,7 +3399,7 @@
       \verb https://www.openicpsr.org
       \endverb
     \endentry
-    \entry{jann2008oaxaca}{article}{}
+    \entry{jann2008oaxaca}{article}{}{2}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=fe15a2c6323193f38ebd40cff31e53f8}{%
            family={Jann},
@@ -3305,15 +3410,17 @@
       }
       \strng{namehash}{fe15a2c6323193f38ebd40cff31e53f8}
       \strng{fullhash}{fe15a2c6323193f38ebd40cff31e53f8}
+      \strng{fullhashraw}{fe15a2c6323193f38ebd40cff31e53f8}
       \strng{bibnamehash}{fe15a2c6323193f38ebd40cff31e53f8}
       \strng{authorbibnamehash}{fe15a2c6323193f38ebd40cff31e53f8}
       \strng{authornamehash}{fe15a2c6323193f38ebd40cff31e53f8}
       \strng{authorfullhash}{fe15a2c6323193f38ebd40cff31e53f8}
+      \strng{authorfullhashraw}{fe15a2c6323193f38ebd40cff31e53f8}
       \field{extraname}{1}
       \field{sortinit}{J}
       \field{sortinithash}{b2f54a9081ace9966a7cb9413811edb4}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{The Stata Journal}
@@ -3327,7 +3434,7 @@
       \verb 10.1177/1536867X0800800401
       \endverb
     \endentry
-    \entry{jann2017webdoc}{article}{}
+    \entry{jann2017webdoc}{article}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=fe15a2c6323193f38ebd40cff31e53f8}{%
            family={Jann},
@@ -3338,15 +3445,17 @@
       }
       \strng{namehash}{fe15a2c6323193f38ebd40cff31e53f8}
       \strng{fullhash}{fe15a2c6323193f38ebd40cff31e53f8}
+      \strng{fullhashraw}{fe15a2c6323193f38ebd40cff31e53f8}
       \strng{bibnamehash}{fe15a2c6323193f38ebd40cff31e53f8}
       \strng{authorbibnamehash}{fe15a2c6323193f38ebd40cff31e53f8}
       \strng{authornamehash}{fe15a2c6323193f38ebd40cff31e53f8}
       \strng{authorfullhash}{fe15a2c6323193f38ebd40cff31e53f8}
+      \strng{authorfullhashraw}{fe15a2c6323193f38ebd40cff31e53f8}
       \field{extraname}{2}
       \field{sortinit}{J}
       \field{sortinithash}{b2f54a9081ace9966a7cb9413811edb4}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{The Stata Journal}
@@ -3360,7 +3469,7 @@
       \verb 10.1177/1536867X1701700102
       \endverb
     \endentry
-    \entry{jaro1989tampa}{article}{}
+    \entry{jaro1989tampa}{article}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=9453a224a3d3aa8454917dede043c30f}{%
            family={Jaro},
@@ -3371,14 +3480,16 @@
       }
       \strng{namehash}{9453a224a3d3aa8454917dede043c30f}
       \strng{fullhash}{9453a224a3d3aa8454917dede043c30f}
+      \strng{fullhashraw}{9453a224a3d3aa8454917dede043c30f}
       \strng{bibnamehash}{9453a224a3d3aa8454917dede043c30f}
       \strng{authorbibnamehash}{9453a224a3d3aa8454917dede043c30f}
       \strng{authornamehash}{9453a224a3d3aa8454917dede043c30f}
       \strng{authorfullhash}{9453a224a3d3aa8454917dede043c30f}
+      \strng{authorfullhashraw}{9453a224a3d3aa8454917dede043c30f}
       \field{sortinit}{J}
       \field{sortinithash}{b2f54a9081ace9966a7cb9413811edb4}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of the American Statistical Association}
@@ -3392,7 +3503,7 @@
       \verb 10.1080/01621459.1989.10478785
       \endverb
     \endentry
-    \entry{ji2023survey}{article}{}
+    \entry{ji2023survey}{article}{}{1}
       \name{author}{10}{}{%
         {{un=0,uniquepart=base,hash=24b318d147ffe07cf3d183806694085a}{%
            family={Ji},
@@ -3457,14 +3568,16 @@
       }
       \strng{namehash}{7f1de58d3d36035f2dcbf85d331900f1}
       \strng{fullhash}{49761b2d8905ea2a262c7076dcd0dd8e}
+      \strng{fullhashraw}{49761b2d8905ea2a262c7076dcd0dd8e}
       \strng{bibnamehash}{7f1de58d3d36035f2dcbf85d331900f1}
       \strng{authorbibnamehash}{7f1de58d3d36035f2dcbf85d331900f1}
       \strng{authornamehash}{7f1de58d3d36035f2dcbf85d331900f1}
       \strng{authorfullhash}{49761b2d8905ea2a262c7076dcd0dd8e}
+      \strng{authorfullhashraw}{49761b2d8905ea2a262c7076dcd0dd8e}
       \field{sortinit}{J}
       \field{sortinithash}{b2f54a9081ace9966a7cb9413811edb4}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{ACM Computing Surveys}
@@ -3476,7 +3589,7 @@
       \verb 10.1145/3571730
       \endverb
     \endentry
-    \entry{king1995replication}{article}{}
+    \entry{king1995replication}{article}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=e62a3c431989b28a48ea18aa5cfcfbed}{%
            family={King},
@@ -3487,14 +3600,16 @@
       }
       \strng{namehash}{e62a3c431989b28a48ea18aa5cfcfbed}
       \strng{fullhash}{e62a3c431989b28a48ea18aa5cfcfbed}
+      \strng{fullhashraw}{e62a3c431989b28a48ea18aa5cfcfbed}
       \strng{bibnamehash}{e62a3c431989b28a48ea18aa5cfcfbed}
       \strng{authorbibnamehash}{e62a3c431989b28a48ea18aa5cfcfbed}
       \strng{authornamehash}{e62a3c431989b28a48ea18aa5cfcfbed}
       \strng{authorfullhash}{e62a3c431989b28a48ea18aa5cfcfbed}
+      \strng{authorfullhashraw}{e62a3c431989b28a48ea18aa5cfcfbed}
       \field{sortinit}{K}
       \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{PS: Political Science \& Politics}
@@ -3508,7 +3623,7 @@
       \verb 10.2307/420301
       \endverb
     \endentry
-    \entry{knaflic2015storytelling}{book}{}
+    \entry{knaflic2015storytelling}{book}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=07b6a065f75de1e146193564bb2f8ea7}{%
            family={Knaflic},
@@ -3525,21 +3640,23 @@
       }
       \strng{namehash}{07b6a065f75de1e146193564bb2f8ea7}
       \strng{fullhash}{07b6a065f75de1e146193564bb2f8ea7}
+      \strng{fullhashraw}{07b6a065f75de1e146193564bb2f8ea7}
       \strng{bibnamehash}{07b6a065f75de1e146193564bb2f8ea7}
       \strng{authorbibnamehash}{07b6a065f75de1e146193564bb2f8ea7}
       \strng{authornamehash}{07b6a065f75de1e146193564bb2f8ea7}
       \strng{authorfullhash}{07b6a065f75de1e146193564bb2f8ea7}
+      \strng{authorfullhashraw}{07b6a065f75de1e146193564bb2f8ea7}
       \field{sortinit}{K}
       \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{isbn}{9781119002253}
       \field{title}{Storytelling with Data: A Data Visualization Guide for Business Professionals}
       \field{year}{2015}
     \endentry
-    \entry{knuth1984literate}{article}{}
+    \entry{knuth1984literate}{article}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=ec08e6f01da5f3814f28a70c89c64656}{%
            family={Knuth},
@@ -3550,14 +3667,16 @@
       }
       \strng{namehash}{ec08e6f01da5f3814f28a70c89c64656}
       \strng{fullhash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{fullhashraw}{ec08e6f01da5f3814f28a70c89c64656}
       \strng{bibnamehash}{ec08e6f01da5f3814f28a70c89c64656}
       \strng{authorbibnamehash}{ec08e6f01da5f3814f28a70c89c64656}
       \strng{authornamehash}{ec08e6f01da5f3814f28a70c89c64656}
       \strng{authorfullhash}{ec08e6f01da5f3814f28a70c89c64656}
+      \strng{authorfullhashraw}{ec08e6f01da5f3814f28a70c89c64656}
       \field{sortinit}{K}
       \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{The Computer Journal}
@@ -3571,7 +3690,7 @@
       \verb 10.1093/comjnl/27.2.97
       \endverb
     \endentry
-    \entry{korinek2023genai}{article}{}
+    \entry{korinek2023genai}{article}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=dab33930c422a83048a3f5a13722b8eb}{%
            family={Korinek},
@@ -3582,14 +3701,16 @@
       }
       \strng{namehash}{dab33930c422a83048a3f5a13722b8eb}
       \strng{fullhash}{dab33930c422a83048a3f5a13722b8eb}
+      \strng{fullhashraw}{dab33930c422a83048a3f5a13722b8eb}
       \strng{bibnamehash}{dab33930c422a83048a3f5a13722b8eb}
       \strng{authorbibnamehash}{dab33930c422a83048a3f5a13722b8eb}
       \strng{authornamehash}{dab33930c422a83048a3f5a13722b8eb}
       \strng{authorfullhash}{dab33930c422a83048a3f5a13722b8eb}
+      \strng{authorfullhashraw}{dab33930c422a83048a3f5a13722b8eb}
       \field{sortinit}{K}
       \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of Economic Literature}
@@ -3603,7 +3724,7 @@
       \verb 10.1257/jel.20231736
       \endverb
     \endentry
-    \entry{kosara2013storytelling}{article}{}
+    \entry{kosara2013storytelling}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=540650ebcfacbac5f7578951e91dc136}{%
            family={Kosara},
@@ -3620,14 +3741,16 @@
       }
       \strng{namehash}{7c008e709645ee07c71d3a2a1e22661c}
       \strng{fullhash}{7c008e709645ee07c71d3a2a1e22661c}
+      \strng{fullhashraw}{7c008e709645ee07c71d3a2a1e22661c}
       \strng{bibnamehash}{7c008e709645ee07c71d3a2a1e22661c}
       \strng{authorbibnamehash}{7c008e709645ee07c71d3a2a1e22661c}
       \strng{authornamehash}{7c008e709645ee07c71d3a2a1e22661c}
       \strng{authorfullhash}{7c008e709645ee07c71d3a2a1e22661c}
+      \strng{authorfullhashraw}{7c008e709645ee07c71d3a2a1e22661c}
       \field{sortinit}{K}
       \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Computer}
@@ -3641,7 +3764,7 @@
       \verb 10.1109/MC.2013.36
       \endverb
     \endentry
-    \entry{kreuter2013paradata}{book}{}
+    \entry{kreuter2013paradata}{book}{}{1}
       \name{editor}{1}{}{%
         {{un=0,uniquepart=base,hash=7c91aa8a97e2bf810febcf40b083a72b}{%
            family={Kreuter},
@@ -3658,21 +3781,23 @@
       }
       \strng{namehash}{7c91aa8a97e2bf810febcf40b083a72b}
       \strng{fullhash}{7c91aa8a97e2bf810febcf40b083a72b}
+      \strng{fullhashraw}{7c91aa8a97e2bf810febcf40b083a72b}
       \strng{bibnamehash}{7c91aa8a97e2bf810febcf40b083a72b}
       \strng{editorbibnamehash}{7c91aa8a97e2bf810febcf40b083a72b}
       \strng{editornamehash}{7c91aa8a97e2bf810febcf40b083a72b}
       \strng{editorfullhash}{7c91aa8a97e2bf810febcf40b083a72b}
+      \strng{editorfullhashraw}{7c91aa8a97e2bf810febcf40b083a72b}
       \field{sortinit}{K}
       \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{editor}
       \field{labeltitlesource}{title}
       \field{isbn}{978-0-470-90541-8}
       \field{title}{Improving Surveys with Paradata: Analytic Uses of Process Information}
       \field{year}{2013}
     \endentry
-    \entry{krotov2020legality}{article}{}
+    \entry{krotov2020legality}{article}{}{1}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=b73fb2298c4c046cdc927f3f8ea2f047}{%
            family={Krotov},
@@ -3695,14 +3820,16 @@
       }
       \strng{namehash}{681baa573753c89fc4c0ff56e29ce5ca}
       \strng{fullhash}{681baa573753c89fc4c0ff56e29ce5ca}
+      \strng{fullhashraw}{681baa573753c89fc4c0ff56e29ce5ca}
       \strng{bibnamehash}{681baa573753c89fc4c0ff56e29ce5ca}
       \strng{authorbibnamehash}{681baa573753c89fc4c0ff56e29ce5ca}
       \strng{authornamehash}{681baa573753c89fc4c0ff56e29ce5ca}
       \strng{authorfullhash}{681baa573753c89fc4c0ff56e29ce5ca}
+      \strng{authorfullhashraw}{681baa573753c89fc4c0ff56e29ce5ca}
       \field{sortinit}{K}
       \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Communications of the Association for Information Systems}
@@ -3715,7 +3842,7 @@
       \verb 10.17705/1CAIS.04724
       \endverb
     \endentry
-    \entry{kuhn2023semantic}{inproceedings}{}
+    \entry{kuhn2023semantic}{inproceedings}{}{1}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=2b8f58bcce49cd11f2c9840ebe871823}{%
            family={Kuhn},
@@ -3738,14 +3865,16 @@
       }
       \strng{namehash}{6fde0f66d2cfb4ebe310b61d4140e53a}
       \strng{fullhash}{6fde0f66d2cfb4ebe310b61d4140e53a}
+      \strng{fullhashraw}{6fde0f66d2cfb4ebe310b61d4140e53a}
       \strng{bibnamehash}{6fde0f66d2cfb4ebe310b61d4140e53a}
       \strng{authorbibnamehash}{6fde0f66d2cfb4ebe310b61d4140e53a}
       \strng{authornamehash}{6fde0f66d2cfb4ebe310b61d4140e53a}
       \strng{authorfullhash}{6fde0f66d2cfb4ebe310b61d4140e53a}
+      \strng{authorfullhashraw}{6fde0f66d2cfb4ebe310b61d4140e53a}
       \field{sortinit}{K}
       \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{International Conference on Learning Representations (ICLR)}
@@ -3761,7 +3890,7 @@
       \verb https://arxiv.org/abs/2302.09664
       \endverb
     \endentry
-    \entry{lahiri2005linked}{article}{}
+    \entry{lahiri2005linked}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=dbfc6a59aa6f373afd70ff971b1d1c1e}{%
            family={Lahiri},
@@ -3778,14 +3907,16 @@
       }
       \strng{namehash}{80865759571dd25858727c8c32ff5b71}
       \strng{fullhash}{80865759571dd25858727c8c32ff5b71}
+      \strng{fullhashraw}{80865759571dd25858727c8c32ff5b71}
       \strng{bibnamehash}{80865759571dd25858727c8c32ff5b71}
       \strng{authorbibnamehash}{80865759571dd25858727c8c32ff5b71}
       \strng{authornamehash}{80865759571dd25858727c8c32ff5b71}
       \strng{authorfullhash}{80865759571dd25858727c8c32ff5b71}
+      \strng{authorfullhashraw}{80865759571dd25858727c8c32ff5b71}
       \field{sortinit}{L}
       \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of the American Statistical Association}
@@ -3799,7 +3930,7 @@
       \verb 10.1198/016214504000001277
       \endverb
     \endentry
-    \entry{landers2016scraping}{article}{}
+    \entry{landers2016scraping}{article}{}{1}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=9709de5385915e543eb23ff1650273a1}{%
            family={Landers},
@@ -3828,14 +3959,16 @@
       }
       \strng{namehash}{b664f049cc821a0a1382f8d582507605}
       \strng{fullhash}{3d4035026e4f6eea5efa2c77b6cd9fe7}
+      \strng{fullhashraw}{3d4035026e4f6eea5efa2c77b6cd9fe7}
       \strng{bibnamehash}{b664f049cc821a0a1382f8d582507605}
       \strng{authorbibnamehash}{b664f049cc821a0a1382f8d582507605}
       \strng{authornamehash}{b664f049cc821a0a1382f8d582507605}
       \strng{authorfullhash}{3d4035026e4f6eea5efa2c77b6cd9fe7}
+      \strng{authorfullhashraw}{3d4035026e4f6eea5efa2c77b6cd9fe7}
       \field{sortinit}{L}
       \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Psychological Methods}
@@ -3849,7 +3982,7 @@
       \verb 10.1037/met0000081
       \endverb
     \endentry
-    \entry{lee2009bounds}{article}{}
+    \entry{lee2009bounds}{article}{}{1}
       \name{author}{1}{}{%
         {{un=1,uniquepart=given,hash=95a248b56768f250923ee04ec474cf6c}{%
            family={Lee},
@@ -3860,14 +3993,16 @@
       }
       \strng{namehash}{95a248b56768f250923ee04ec474cf6c}
       \strng{fullhash}{95a248b56768f250923ee04ec474cf6c}
+      \strng{fullhashraw}{95a248b56768f250923ee04ec474cf6c}
       \strng{bibnamehash}{95a248b56768f250923ee04ec474cf6c}
       \strng{authorbibnamehash}{95a248b56768f250923ee04ec474cf6c}
       \strng{authornamehash}{95a248b56768f250923ee04ec474cf6c}
       \strng{authorfullhash}{95a248b56768f250923ee04ec474cf6c}
+      \strng{authorfullhashraw}{95a248b56768f250923ee04ec474cf6c}
       \field{sortinit}{L}
       \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Review of Economic Studies}
@@ -3878,7 +4013,7 @@
       \field{pages}{1071\bibrangedash 1102}
       \range{pages}{32}
     \endentry
-    \entry{lei2018distribution}{article}{}
+    \entry{lei2018distribution}{article}{}{1}
       \name{author}{5}{}{%
         {{un=0,uniquepart=base,hash=5716652c08e70b34048d4a87afff54d5}{%
            family={Lei},
@@ -3913,14 +4048,16 @@
       }
       \strng{namehash}{eccf738f66caa79445934597adfca141}
       \strng{fullhash}{1f9a4f4509acc4d6121494d4eaed584a}
+      \strng{fullhashraw}{1f9a4f4509acc4d6121494d4eaed584a}
       \strng{bibnamehash}{eccf738f66caa79445934597adfca141}
       \strng{authorbibnamehash}{eccf738f66caa79445934597adfca141}
       \strng{authornamehash}{eccf738f66caa79445934597adfca141}
       \strng{authorfullhash}{1f9a4f4509acc4d6121494d4eaed584a}
+      \strng{authorfullhashraw}{1f9a4f4509acc4d6121494d4eaed584a}
       \field{sortinit}{L}
       \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of the American Statistical Association}
@@ -3934,7 +4071,7 @@
       \verb 10.1080/01621459.2017.1307116
       \endverb
     \endentry
-    \entry{liu2024lost}{article}{}
+    \entry{liu2024lost}{article}{}{1}
       \name{author}{7}{}{%
         {{un=0,uniquepart=base,hash=ad8b44fb7f6f1b83fe7fb3b875afaf99}{%
            family={Liu},
@@ -3981,14 +4118,16 @@
       }
       \strng{namehash}{aafa2d245e70b7be840882cd4df991be}
       \strng{fullhash}{e4450a4375cd8e49440f9bc559fef906}
+      \strng{fullhashraw}{e4450a4375cd8e49440f9bc559fef906}
       \strng{bibnamehash}{aafa2d245e70b7be840882cd4df991be}
       \strng{authorbibnamehash}{aafa2d245e70b7be840882cd4df991be}
       \strng{authornamehash}{aafa2d245e70b7be840882cd4df991be}
       \strng{authorfullhash}{e4450a4375cd8e49440f9bc559fef906}
+      \strng{authorfullhashraw}{e4450a4375cd8e49440f9bc559fef906}
       \field{sortinit}{L}
       \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Transactions of the Association for Computational Linguistics}
@@ -4007,7 +4146,7 @@
       \verb https://aclanthology.org/2024.tacl-1.9/
       \endverb
     \endentry
-    \entry{long2009workflow}{book}{}
+    \entry{long2009workflow}{book}{}{6}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=aa55223b47813ca8d57114edbf0bbd4b}{%
            family={Long},
@@ -4024,21 +4163,23 @@
       }
       \strng{namehash}{aa55223b47813ca8d57114edbf0bbd4b}
       \strng{fullhash}{aa55223b47813ca8d57114edbf0bbd4b}
+      \strng{fullhashraw}{aa55223b47813ca8d57114edbf0bbd4b}
       \strng{bibnamehash}{aa55223b47813ca8d57114edbf0bbd4b}
       \strng{authorbibnamehash}{aa55223b47813ca8d57114edbf0bbd4b}
       \strng{authornamehash}{aa55223b47813ca8d57114edbf0bbd4b}
       \strng{authorfullhash}{aa55223b47813ca8d57114edbf0bbd4b}
+      \strng{authorfullhashraw}{aa55223b47813ca8d57114edbf0bbd4b}
       \field{sortinit}{L}
       \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{isbn}{978-1-59718-047-4}
       \field{title}{The Workflow of Data Analysis Using Stata}
       \field{year}{2009}
     \endentry
-    \entry{luscombe2022scraping}{article}{}
+    \entry{luscombe2022scraping}{article}{}{1}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=fb88d9969fa0338c94efd12873909cc2}{%
            family={Luscombe},
@@ -4061,14 +4202,16 @@
       }
       \strng{namehash}{ca51991118c0f322e63b52dfac4f6fa4}
       \strng{fullhash}{ca51991118c0f322e63b52dfac4f6fa4}
+      \strng{fullhashraw}{ca51991118c0f322e63b52dfac4f6fa4}
       \strng{bibnamehash}{ca51991118c0f322e63b52dfac4f6fa4}
       \strng{authorbibnamehash}{ca51991118c0f322e63b52dfac4f6fa4}
       \strng{authornamehash}{ca51991118c0f322e63b52dfac4f6fa4}
       \strng{authorfullhash}{ca51991118c0f322e63b52dfac4f6fa4}
+      \strng{authorfullhashraw}{ca51991118c0f322e63b52dfac4f6fa4}
       \field{sortinit}{L}
       \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Quality \& Quantity}
@@ -4082,7 +4225,7 @@
       \verb 10.1007/s11135-021-01164-0
       \endverb
     \endentry
-    \entry{mckiernan2016open}{article}{}
+    \entry{mckiernan2016open}{article}{}{1}
       \name{author}{15}{}{%
         {{un=0,uniquepart=base,hash=dfc2f2a553bc8e385158d5232d1258fd}{%
            family={McKiernan},
@@ -4177,14 +4320,16 @@
       }
       \strng{namehash}{fd5c80ebb66ddf2e8f3189ad180e53b8}
       \strng{fullhash}{a7525a7b54901af4923cc0d3eedaf67c}
+      \strng{fullhashraw}{a7525a7b54901af4923cc0d3eedaf67c}
       \strng{bibnamehash}{fd5c80ebb66ddf2e8f3189ad180e53b8}
       \strng{authorbibnamehash}{fd5c80ebb66ddf2e8f3189ad180e53b8}
       \strng{authornamehash}{fd5c80ebb66ddf2e8f3189ad180e53b8}
       \strng{authorfullhash}{a7525a7b54901af4923cc0d3eedaf67c}
+      \strng{authorfullhashraw}{a7525a7b54901af4923cc0d3eedaf67c}
       \field{sortinit}{M}
       \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{eLife}
@@ -4197,7 +4342,7 @@
       \verb 10.7554/eLife.16800
       \endverb
     \endentry
-    \entry{meyer2015surveys}{article}{}
+    \entry{meyer2015surveys}{article}{}{2}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=3517ba005ca0b2263e558bdc3fa650fa}{%
            family={Meyer},
@@ -4220,14 +4365,16 @@
       }
       \strng{namehash}{5b8a223651493044d0e72866e846b0d0}
       \strng{fullhash}{5b8a223651493044d0e72866e846b0d0}
+      \strng{fullhashraw}{5b8a223651493044d0e72866e846b0d0}
       \strng{bibnamehash}{5b8a223651493044d0e72866e846b0d0}
       \strng{authorbibnamehash}{5b8a223651493044d0e72866e846b0d0}
       \strng{authornamehash}{5b8a223651493044d0e72866e846b0d0}
       \strng{authorfullhash}{5b8a223651493044d0e72866e846b0d0}
+      \strng{authorfullhashraw}{5b8a223651493044d0e72866e846b0d0}
       \field{sortinit}{M}
       \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of Economic Perspectives}
@@ -4241,7 +4388,7 @@
       \verb 10.1257/jep.29.4.199
       \endverb
     \endentry
-    \entry{nakagawa2013general}{article}{}
+    \entry{nakagawa2013general}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=737589ed49865a9515f816d50029418d}{%
            family={Nakagawa},
@@ -4258,14 +4405,16 @@
       }
       \strng{namehash}{b202715341934364a4ba1920b3503f37}
       \strng{fullhash}{b202715341934364a4ba1920b3503f37}
+      \strng{fullhashraw}{b202715341934364a4ba1920b3503f37}
       \strng{bibnamehash}{b202715341934364a4ba1920b3503f37}
       \strng{authorbibnamehash}{b202715341934364a4ba1920b3503f37}
       \strng{authornamehash}{b202715341934364a4ba1920b3503f37}
       \strng{authorfullhash}{b202715341934364a4ba1920b3503f37}
+      \strng{authorfullhashraw}{b202715341934364a4ba1920b3503f37}
       \field{sortinit}{N}
       \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Methods in Ecology and Evolution}
@@ -4279,7 +4428,7 @@
       \verb 10.1111/j.2041-210x.2012.00261.x
       \endverb
     \endentry
-    \entry{narayanan2008deanon}{inproceedings}{}
+    \entry{narayanan2008deanon}{inproceedings}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=95dc795a2be14c50fb6a924acc135ff8}{%
            family={Narayanan},
@@ -4299,14 +4448,16 @@
       }
       \strng{namehash}{fdb313773cc7bea2d723b5efc4c92af9}
       \strng{fullhash}{fdb313773cc7bea2d723b5efc4c92af9}
+      \strng{fullhashraw}{fdb313773cc7bea2d723b5efc4c92af9}
       \strng{bibnamehash}{fdb313773cc7bea2d723b5efc4c92af9}
       \strng{authorbibnamehash}{fdb313773cc7bea2d723b5efc4c92af9}
       \strng{authornamehash}{fdb313773cc7bea2d723b5efc4c92af9}
       \strng{authorfullhash}{fdb313773cc7bea2d723b5efc4c92af9}
+      \strng{authorfullhashraw}{fdb313773cc7bea2d723b5efc4c92af9}
       \field{sortinit}{N}
       \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{2008 IEEE Symposium on Security and Privacy (SP 2008)}
@@ -4318,7 +4469,7 @@
       \verb 10.1109/SP.2008.33
       \endverb
     \endentry
-    \entry{neter1965mismatch}{article}{}
+    \entry{neter1965mismatch}{article}{}{1}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=1ad29adfd24079278098723ad43f7654}{%
            family={Neter},
@@ -4341,14 +4492,16 @@
       }
       \strng{namehash}{1c921014d872f24d4f74866af859cfab}
       \strng{fullhash}{1c921014d872f24d4f74866af859cfab}
+      \strng{fullhashraw}{1c921014d872f24d4f74866af859cfab}
       \strng{bibnamehash}{1c921014d872f24d4f74866af859cfab}
       \strng{authorbibnamehash}{1c921014d872f24d4f74866af859cfab}
       \strng{authornamehash}{1c921014d872f24d4f74866af859cfab}
       \strng{authorfullhash}{1c921014d872f24d4f74866af859cfab}
+      \strng{authorfullhashraw}{1c921014d872f24d4f74866af859cfab}
       \field{sortinit}{N}
       \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of the American Statistical Association}
@@ -4362,7 +4515,7 @@
       \verb 10.1080/01621459.1965.10480846
       \endverb
     \endentry
-    \entry{oaxaca1973male}{article}{}
+    \entry{oaxaca1973male}{article}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=2b7949159d6f286d1586b677578226ab}{%
            family={Oaxaca},
@@ -4373,14 +4526,16 @@
       }
       \strng{namehash}{2b7949159d6f286d1586b677578226ab}
       \strng{fullhash}{2b7949159d6f286d1586b677578226ab}
+      \strng{fullhashraw}{2b7949159d6f286d1586b677578226ab}
       \strng{bibnamehash}{2b7949159d6f286d1586b677578226ab}
       \strng{authorbibnamehash}{2b7949159d6f286d1586b677578226ab}
       \strng{authornamehash}{2b7949159d6f286d1586b677578226ab}
       \strng{authorfullhash}{2b7949159d6f286d1586b677578226ab}
+      \strng{authorfullhashraw}{2b7949159d6f286d1586b677578226ab}
       \field{sortinit}{O}
       \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{International Economic Review}
@@ -4394,7 +4549,7 @@
       \verb 10.2307/2525981
       \endverb
     \endentry
-    \entry{obama2009transparency}{misc}{}
+    \entry{obama2009transparency}{misc}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=ab7db74fc35a50f0820e04d0079f1918}{%
            family={Obama},
@@ -4405,14 +4560,16 @@
       }
       \strng{namehash}{ab7db74fc35a50f0820e04d0079f1918}
       \strng{fullhash}{ab7db74fc35a50f0820e04d0079f1918}
+      \strng{fullhashraw}{ab7db74fc35a50f0820e04d0079f1918}
       \strng{bibnamehash}{ab7db74fc35a50f0820e04d0079f1918}
       \strng{authorbibnamehash}{ab7db74fc35a50f0820e04d0079f1918}
       \strng{authornamehash}{ab7db74fc35a50f0820e04d0079f1918}
       \strng{authorfullhash}{ab7db74fc35a50f0820e04d0079f1918}
+      \strng{authorfullhashraw}{ab7db74fc35a50f0820e04d0079f1918}
       \field{sortinit}{O}
       \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{howpublished}{Federal Register 74(15): 4685--4686}
@@ -4425,7 +4582,7 @@
       \verb https://www.federalregister.gov/documents/2009/01/26/E9-1777/transparency-and-open-government
       \endverb
     \endentry
-    \entry{okabeito2008cud}{misc}{}
+    \entry{okabeito2008cud}{misc}{}{2}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=c27ff2601673ac082045555895979a95}{%
            family={Okabe},
@@ -4442,14 +4599,16 @@
       }
       \strng{namehash}{aa5d5f4d88871b69e47d294570304877}
       \strng{fullhash}{aa5d5f4d88871b69e47d294570304877}
+      \strng{fullhashraw}{aa5d5f4d88871b69e47d294570304877}
       \strng{bibnamehash}{aa5d5f4d88871b69e47d294570304877}
       \strng{authorbibnamehash}{aa5d5f4d88871b69e47d294570304877}
       \strng{authornamehash}{aa5d5f4d88871b69e47d294570304877}
       \strng{authorfullhash}{aa5d5f4d88871b69e47d294570304877}
+      \strng{authorfullhashraw}{aa5d5f4d88871b69e47d294570304877}
       \field{sortinit}{O}
       \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{howpublished}{J*Fly Data Depository for Drosophila researchers}
@@ -4462,7 +4621,7 @@
       \verb https://jfly.uni-koeln.de/color/
       \endverb
     \endentry
-    \entry{osborne2013cleaning}{book}{}
+    \entry{osborne2013cleaning}{book}{}{2}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=e67969dbc7538543a2bb7d086a6266d5}{%
            family={Osborne},
@@ -4479,14 +4638,16 @@
       }
       \strng{namehash}{e67969dbc7538543a2bb7d086a6266d5}
       \strng{fullhash}{e67969dbc7538543a2bb7d086a6266d5}
+      \strng{fullhashraw}{e67969dbc7538543a2bb7d086a6266d5}
       \strng{bibnamehash}{e67969dbc7538543a2bb7d086a6266d5}
       \strng{authorbibnamehash}{e67969dbc7538543a2bb7d086a6266d5}
       \strng{authornamehash}{e67969dbc7538543a2bb7d086a6266d5}
       \strng{authorfullhash}{e67969dbc7538543a2bb7d086a6266d5}
+      \strng{authorfullhashraw}{e67969dbc7538543a2bb7d086a6266d5}
       \field{sortinit}{O}
       \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{title}{Best Practices in Data Cleaning: A Complete Guide to Everything You Need to Do Before and After Collecting Your Data}
@@ -4495,7 +4656,7 @@
       \verb 10.4135/9781452269948
       \endverb
     \endentry
-    \entry{ouyang2025nondeterminism}{article}{}
+    \entry{ouyang2025nondeterminism}{article}{}{1}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=bfe946a4c5a8c511bd785ca047f6d7bf}{%
            family={Ouyang},
@@ -4524,14 +4685,16 @@
       }
       \strng{namehash}{748fcdb1edf171da9f3fe9078c0551e6}
       \strng{fullhash}{dc308924613e5c1ec25affb332dddd92}
+      \strng{fullhashraw}{dc308924613e5c1ec25affb332dddd92}
       \strng{bibnamehash}{748fcdb1edf171da9f3fe9078c0551e6}
       \strng{authorbibnamehash}{748fcdb1edf171da9f3fe9078c0551e6}
       \strng{authornamehash}{748fcdb1edf171da9f3fe9078c0551e6}
       \strng{authorfullhash}{dc308924613e5c1ec25affb332dddd92}
+      \strng{authorfullhashraw}{dc308924613e5c1ec25affb332dddd92}
       \field{sortinit}{O}
       \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{ACM Transactions on Software Engineering and Methodology}
@@ -4549,7 +4712,7 @@
       \verb https://arxiv.org/abs/2308.02828
       \endverb
     \endentry
-    \entry{panko1998errors}{article}{}
+    \entry{panko1998errors}{article}{}{2}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=1d3884318a9d1c3b66d25bf31fafa778}{%
            family={Panko},
@@ -4560,14 +4723,16 @@
       }
       \strng{namehash}{1d3884318a9d1c3b66d25bf31fafa778}
       \strng{fullhash}{1d3884318a9d1c3b66d25bf31fafa778}
+      \strng{fullhashraw}{1d3884318a9d1c3b66d25bf31fafa778}
       \strng{bibnamehash}{1d3884318a9d1c3b66d25bf31fafa778}
       \strng{authorbibnamehash}{1d3884318a9d1c3b66d25bf31fafa778}
       \strng{authornamehash}{1d3884318a9d1c3b66d25bf31fafa778}
       \strng{authorfullhash}{1d3884318a9d1c3b66d25bf31fafa778}
+      \strng{authorfullhashraw}{1d3884318a9d1c3b66d25bf31fafa778}
       \field{sortinit}{P}
       \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of Organizational and End User Computing}
@@ -4581,7 +4746,7 @@
       \verb 10.4018/joeuc.1998040102
       \endverb
     \endentry
-    \entry{patton2008utilization}{book}{}
+    \entry{patton2008utilization}{book}{}{10}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=e0b4c9529984a916392b3a7250ae5311}{%
            family={Patton},
@@ -4598,14 +4763,16 @@
       }
       \strng{namehash}{e0b4c9529984a916392b3a7250ae5311}
       \strng{fullhash}{e0b4c9529984a916392b3a7250ae5311}
+      \strng{fullhashraw}{e0b4c9529984a916392b3a7250ae5311}
       \strng{bibnamehash}{e0b4c9529984a916392b3a7250ae5311}
       \strng{authorbibnamehash}{e0b4c9529984a916392b3a7250ae5311}
       \strng{authornamehash}{e0b4c9529984a916392b3a7250ae5311}
       \strng{authorfullhash}{e0b4c9529984a916392b3a7250ae5311}
+      \strng{authorfullhashraw}{e0b4c9529984a916392b3a7250ae5311}
       \field{sortinit}{P}
       \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{edition}{4}
@@ -4613,7 +4780,7 @@
       \field{title}{Utilization-Focused Evaluation}
       \field{year}{2008}
     \endentry
-    \entry{peng2011reproducible}{article}{}
+    \entry{peng2011reproducible}{article}{}{2}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=4c07f81b520ea14b34f1539e6f29d185}{%
            family={Peng},
@@ -4624,14 +4791,16 @@
       }
       \strng{namehash}{4c07f81b520ea14b34f1539e6f29d185}
       \strng{fullhash}{4c07f81b520ea14b34f1539e6f29d185}
+      \strng{fullhashraw}{4c07f81b520ea14b34f1539e6f29d185}
       \strng{bibnamehash}{4c07f81b520ea14b34f1539e6f29d185}
       \strng{authorbibnamehash}{4c07f81b520ea14b34f1539e6f29d185}
       \strng{authornamehash}{4c07f81b520ea14b34f1539e6f29d185}
       \strng{authorfullhash}{4c07f81b520ea14b34f1539e6f29d185}
+      \strng{authorfullhashraw}{4c07f81b520ea14b34f1539e6f29d185}
       \field{sortinit}{P}
       \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Science}
@@ -4645,7 +4814,7 @@
       \verb 10.1126/science.1213847
       \endverb
     \endentry
-    \entry{penner2019administrative}{article}{}
+    \entry{penner2019administrative}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=039015f2232cd43fd0801abb4f0393d7}{%
            family={Penner},
@@ -4662,14 +4831,16 @@
       }
       \strng{namehash}{d82ae452e94820568ed10ac234de809a}
       \strng{fullhash}{d82ae452e94820568ed10ac234de809a}
+      \strng{fullhashraw}{d82ae452e94820568ed10ac234de809a}
       \strng{bibnamehash}{d82ae452e94820568ed10ac234de809a}
       \strng{authorbibnamehash}{d82ae452e94820568ed10ac234de809a}
       \strng{authornamehash}{d82ae452e94820568ed10ac234de809a}
       \strng{authorfullhash}{d82ae452e94820568ed10ac234de809a}
+      \strng{authorfullhashraw}{d82ae452e94820568ed10ac234de809a}
       \field{sortinit}{P}
       \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{RSF: The Russell Sage Foundation Journal of the Social Sciences}
@@ -4683,7 +4854,7 @@
       \verb 10.7758/RSF.2019.5.2.01
       \endverb
     \endentry
-    \entry{penuel2015partnerships}{article}{}
+    \entry{penuel2015partnerships}{article}{}{1}
       \name{author}{4}{ul=2}{%
         {{un=0,uniquepart=base,hash=61ed89535eff77687d78275c9deb2963}{%
            family={Penuel},
@@ -4712,14 +4883,16 @@
       }
       \strng{namehash}{850f131efbbcf37bb0ba91c3b14f3368}
       \strng{fullhash}{3a8902c89bb69a8ea2debcfed7874b50}
+      \strng{fullhashraw}{3a8902c89bb69a8ea2debcfed7874b50}
       \strng{bibnamehash}{850f131efbbcf37bb0ba91c3b14f3368}
       \strng{authorbibnamehash}{850f131efbbcf37bb0ba91c3b14f3368}
       \strng{authornamehash}{850f131efbbcf37bb0ba91c3b14f3368}
       \strng{authorfullhash}{3a8902c89bb69a8ea2debcfed7874b50}
+      \strng{authorfullhashraw}{3a8902c89bb69a8ea2debcfed7874b50}
       \field{sortinit}{P}
       \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of Education for Students Placed at Risk}
@@ -4733,7 +4906,7 @@
       \verb 10.1080/10824669.2014.988334
       \endverb
     \endentry
-    \entry{penuel2017creating}{book}{}
+    \entry{penuel2017creating}{book}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=61ed89535eff77687d78275c9deb2963}{%
            family={Penuel},
@@ -4756,21 +4929,23 @@
       }
       \strng{namehash}{eccc30323c8464e2607337d2f33308c3}
       \strng{fullhash}{eccc30323c8464e2607337d2f33308c3}
+      \strng{fullhashraw}{eccc30323c8464e2607337d2f33308c3}
       \strng{bibnamehash}{eccc30323c8464e2607337d2f33308c3}
       \strng{authorbibnamehash}{eccc30323c8464e2607337d2f33308c3}
       \strng{authornamehash}{eccc30323c8464e2607337d2f33308c3}
       \strng{authorfullhash}{eccc30323c8464e2607337d2f33308c3}
+      \strng{authorfullhashraw}{eccc30323c8464e2607337d2f33308c3}
       \field{sortinit}{P}
       \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{isbn}{978-1-68253-047-4}
       \field{title}{Creating Research-Practice Partnerships in Education}
       \field{year}{2017}
     \endentry
-    \entry{perez2022ignore}{inproceedings}{}
+    \entry{perez2022ignore}{inproceedings}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=2fb90c8551b15b85dc01037ee5fd895d}{%
            family={Perez},
@@ -4787,14 +4962,16 @@
       }
       \strng{namehash}{df1cda30cc215b3c3421852625a549ac}
       \strng{fullhash}{df1cda30cc215b3c3421852625a549ac}
+      \strng{fullhashraw}{df1cda30cc215b3c3421852625a549ac}
       \strng{bibnamehash}{df1cda30cc215b3c3421852625a549ac}
       \strng{authorbibnamehash}{df1cda30cc215b3c3421852625a549ac}
       \strng{authornamehash}{df1cda30cc215b3c3421852625a549ac}
       \strng{authorfullhash}{df1cda30cc215b3c3421852625a549ac}
+      \strng{authorfullhashraw}{df1cda30cc215b3c3421852625a549ac}
       \field{sortinit}{P}
       \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{NeurIPS ML Safety Workshop}
@@ -4810,7 +4987,7 @@
       \verb https://arxiv.org/abs/2211.09527
       \endverb
     \endentry
-    \entry{perkel2020code}{article}{}
+    \entry{perkel2020code}{article}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=fceabd42825c0d61d41e323f71942d39}{%
            family={Perkel},
@@ -4821,14 +4998,16 @@
       }
       \strng{namehash}{fceabd42825c0d61d41e323f71942d39}
       \strng{fullhash}{fceabd42825c0d61d41e323f71942d39}
+      \strng{fullhashraw}{fceabd42825c0d61d41e323f71942d39}
       \strng{bibnamehash}{fceabd42825c0d61d41e323f71942d39}
       \strng{authorbibnamehash}{fceabd42825c0d61d41e323f71942d39}
       \strng{authornamehash}{fceabd42825c0d61d41e323f71942d39}
       \strng{authorfullhash}{fceabd42825c0d61d41e323f71942d39}
+      \strng{authorfullhashraw}{fceabd42825c0d61d41e323f71942d39}
       \field{sortinit}{P}
       \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Nature}
@@ -4842,7 +5021,7 @@
       \verb 10.1038/d41586-020-02462-7
       \endverb
     \endentry
-    \entry{pilgrim2023code}{article}{}
+    \entry{pilgrim2023code}{article}{}{2}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=60eef495e19bc52d5a79ed0191f70e7c}{%
            family={Pilgrim},
@@ -4871,14 +5050,16 @@
       }
       \strng{namehash}{18b546e1f6ab2d98446b70b50e7dbe60}
       \strng{fullhash}{cdf5f26c30c751103211071e50137fab}
+      \strng{fullhashraw}{cdf5f26c30c751103211071e50137fab}
       \strng{bibnamehash}{18b546e1f6ab2d98446b70b50e7dbe60}
       \strng{authorbibnamehash}{18b546e1f6ab2d98446b70b50e7dbe60}
       \strng{authornamehash}{18b546e1f6ab2d98446b70b50e7dbe60}
       \strng{authorfullhash}{cdf5f26c30c751103211071e50137fab}
+      \strng{authorfullhashraw}{cdf5f26c30c751103211071e50137fab}
       \field{sortinit}{P}
       \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{PLOS Computational Biology}
@@ -4892,7 +5073,7 @@
       \verb 10.1371/journal.pcbi.1011031
       \endverb
     \endentry
-    \entry{prestonwerner2013semver}{misc}{}
+    \entry{prestonwerner2013semver}{misc}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=86c590c4ef15d0078286562a483eb052}{%
            family={Preston-Werner},
@@ -4903,14 +5084,16 @@
       }
       \strng{namehash}{86c590c4ef15d0078286562a483eb052}
       \strng{fullhash}{86c590c4ef15d0078286562a483eb052}
+      \strng{fullhashraw}{86c590c4ef15d0078286562a483eb052}
       \strng{bibnamehash}{86c590c4ef15d0078286562a483eb052}
       \strng{authorbibnamehash}{86c590c4ef15d0078286562a483eb052}
       \strng{authornamehash}{86c590c4ef15d0078286562a483eb052}
       \strng{authorfullhash}{86c590c4ef15d0078286562a483eb052}
+      \strng{authorfullhashraw}{86c590c4ef15d0078286562a483eb052}
       \field{sortinit}{P}
       \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{howpublished}{Specification}
@@ -4923,7 +5106,7 @@
       \verb https://semver.org
       \endverb
     \endentry
-    \entry{rambachan2023honest}{article}{}
+    \entry{rambachan2023honest}{article}{}{2}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=85edb53244c29c17ce57830271014b46}{%
            family={Rambachan},
@@ -4940,14 +5123,16 @@
       }
       \strng{namehash}{c7db070288680264f6dfa86410e8586f}
       \strng{fullhash}{c7db070288680264f6dfa86410e8586f}
+      \strng{fullhashraw}{c7db070288680264f6dfa86410e8586f}
       \strng{bibnamehash}{c7db070288680264f6dfa86410e8586f}
       \strng{authorbibnamehash}{c7db070288680264f6dfa86410e8586f}
       \strng{authornamehash}{c7db070288680264f6dfa86410e8586f}
       \strng{authorfullhash}{c7db070288680264f6dfa86410e8586f}
+      \strng{authorfullhashraw}{c7db070288680264f6dfa86410e8586f}
       \field{sortinit}{R}
       \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{The Review of Economic Studies}
@@ -4961,7 +5146,7 @@
       \verb 10.1093/restud/rdad018
       \endverb
     \endentry
-    \entry{rao2015small}{book}{}
+    \entry{rao2015small}{book}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=155f0daa52657af9278605ec6bbb499f}{%
            family={Rao},
@@ -4984,14 +5169,16 @@
       }
       \strng{namehash}{224d32dc0840619fae42da304e6b6dbb}
       \strng{fullhash}{224d32dc0840619fae42da304e6b6dbb}
+      \strng{fullhashraw}{224d32dc0840619fae42da304e6b6dbb}
       \strng{bibnamehash}{224d32dc0840619fae42da304e6b6dbb}
       \strng{authorbibnamehash}{224d32dc0840619fae42da304e6b6dbb}
       \strng{authornamehash}{224d32dc0840619fae42da304e6b6dbb}
       \strng{authorfullhash}{224d32dc0840619fae42da304e6b6dbb}
+      \strng{authorfullhashraw}{224d32dc0840619fae42da304e6b6dbb}
       \field{sortinit}{R}
       \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{edition}{2}
@@ -4999,7 +5186,7 @@
       \field{title}{Small Area Estimation}
       \field{year}{2015}
     \endentry
-    \entry{reinhart2010debt}{article}{}
+    \entry{reinhart2010debt}{article}{}{3}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=7e5a248b2b57e8a01faa0b08bd59eecf}{%
            family={Reinhart},
@@ -5016,14 +5203,16 @@
       }
       \strng{namehash}{0dbeb565ec67b0b57232ac8d45059a2b}
       \strng{fullhash}{0dbeb565ec67b0b57232ac8d45059a2b}
+      \strng{fullhashraw}{0dbeb565ec67b0b57232ac8d45059a2b}
       \strng{bibnamehash}{0dbeb565ec67b0b57232ac8d45059a2b}
       \strng{authorbibnamehash}{0dbeb565ec67b0b57232ac8d45059a2b}
       \strng{authornamehash}{0dbeb565ec67b0b57232ac8d45059a2b}
       \strng{authorfullhash}{0dbeb565ec67b0b57232ac8d45059a2b}
+      \strng{authorfullhashraw}{0dbeb565ec67b0b57232ac8d45059a2b}
       \field{sortinit}{R}
       \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{American Economic Review}
@@ -5037,7 +5226,7 @@
       \verb 10.1257/aer.100.2.573
       \endverb
     \endentry
-    \entry{remington2015rankings}{article}{}
+    \entry{remington2015rankings}{article}{}{1}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=a3d1b82edf16d96bb0d2981775fd7295}{%
            family={Remington},
@@ -5060,14 +5249,16 @@
       }
       \strng{namehash}{d3eeb866a063456b79f48e8dc99723e4}
       \strng{fullhash}{d3eeb866a063456b79f48e8dc99723e4}
+      \strng{fullhashraw}{d3eeb866a063456b79f48e8dc99723e4}
       \strng{bibnamehash}{d3eeb866a063456b79f48e8dc99723e4}
       \strng{authorbibnamehash}{d3eeb866a063456b79f48e8dc99723e4}
       \strng{authornamehash}{d3eeb866a063456b79f48e8dc99723e4}
       \strng{authorfullhash}{d3eeb866a063456b79f48e8dc99723e4}
+      \strng{authorfullhashraw}{d3eeb866a063456b79f48e8dc99723e4}
       \field{sortinit}{R}
       \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Population Health Metrics}
@@ -5079,7 +5270,7 @@
       \verb 10.1186/s12963-015-0044-2
       \endverb
     \endentry
-    \entry{roth2023trending}{article}{}
+    \entry{roth2023trending}{article}{}{1}
       \name{author}{4}{}{%
         {{un=1,uniquepart=given,hash=73c1da3266b3c7728f6b1f38a73c7671}{%
            family={Roth},
@@ -5108,14 +5299,16 @@
       }
       \strng{namehash}{939f8adec55fe64296898de93fbee7ff}
       \strng{fullhash}{aa2d55012dfc7f6d1c9ade6453092474}
+      \strng{fullhashraw}{aa2d55012dfc7f6d1c9ade6453092474}
       \strng{bibnamehash}{939f8adec55fe64296898de93fbee7ff}
       \strng{authorbibnamehash}{939f8adec55fe64296898de93fbee7ff}
       \strng{authornamehash}{939f8adec55fe64296898de93fbee7ff}
       \strng{authorfullhash}{aa2d55012dfc7f6d1c9ade6453092474}
+      \strng{authorfullhashraw}{aa2d55012dfc7f6d1c9ade6453092474}
       \field{sortinit}{R}
       \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of Econometrics}
@@ -5129,7 +5322,7 @@
       \verb 10.1016/j.jeconom.2023.03.008
       \endverb
     \endentry
-    \entry{rubin1987imputation}{book}{}
+    \entry{rubin1987imputation}{book}{}{2}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=49a367b6280de8a239f8bbdd573f996f}{%
            family={Rubin},
@@ -5146,14 +5339,16 @@
       }
       \strng{namehash}{49a367b6280de8a239f8bbdd573f996f}
       \strng{fullhash}{49a367b6280de8a239f8bbdd573f996f}
+      \strng{fullhashraw}{49a367b6280de8a239f8bbdd573f996f}
       \strng{bibnamehash}{49a367b6280de8a239f8bbdd573f996f}
       \strng{authorbibnamehash}{49a367b6280de8a239f8bbdd573f996f}
       \strng{authornamehash}{49a367b6280de8a239f8bbdd573f996f}
       \strng{authorfullhash}{49a367b6280de8a239f8bbdd573f996f}
+      \strng{authorfullhashraw}{49a367b6280de8a239f8bbdd573f996f}
       \field{sortinit}{R}
       \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{title}{Multiple Imputation for Nonresponse in Surveys}
@@ -5162,7 +5357,7 @@
       \verb 10.1002/9780470316696
       \endverb
     \endentry
-    \entry{rule2019ten}{article}{}
+    \entry{rule2019ten}{article}{}{2}
       \name{author}{11}{}{%
         {{un=0,uniquepart=base,hash=03a1dc8e3925337c5a7b29afa5ef5346}{%
            family={Rule},
@@ -5233,14 +5428,16 @@
       }
       \strng{namehash}{63df10d962a7114735fc147947c57ed9}
       \strng{fullhash}{86f9d25f8992f8de794c0d56e081ce8a}
+      \strng{fullhashraw}{86f9d25f8992f8de794c0d56e081ce8a}
       \strng{bibnamehash}{63df10d962a7114735fc147947c57ed9}
       \strng{authorbibnamehash}{63df10d962a7114735fc147947c57ed9}
       \strng{authornamehash}{63df10d962a7114735fc147947c57ed9}
       \strng{authorfullhash}{86f9d25f8992f8de794c0d56e081ce8a}
+      \strng{authorfullhashraw}{86f9d25f8992f8de794c0d56e081ce8a}
       \field{sortinit}{R}
       \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{PLOS Computational Biology}
@@ -5254,7 +5451,7 @@
       \verb 10.1371/journal.pcbi.1007007
       \endverb
     \endentry
-    \entry{sandve2013reproducible}{article}{}
+    \entry{sandve2013reproducible}{article}{}{1}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=563f412962e47abb351da8376e8c7d0b}{%
            family={Sandve},
@@ -5283,14 +5480,16 @@
       }
       \strng{namehash}{1b4f77f20ed642a30f346a44eb14e42a}
       \strng{fullhash}{fcf1c4dd64b173c183ef6911c8af959e}
+      \strng{fullhashraw}{fcf1c4dd64b173c183ef6911c8af959e}
       \strng{bibnamehash}{1b4f77f20ed642a30f346a44eb14e42a}
       \strng{authorbibnamehash}{1b4f77f20ed642a30f346a44eb14e42a}
       \strng{authornamehash}{1b4f77f20ed642a30f346a44eb14e42a}
       \strng{authorfullhash}{fcf1c4dd64b173c183ef6911c8af959e}
+      \strng{authorfullhashraw}{fcf1c4dd64b173c183ef6911c8af959e}
       \field{sortinit}{S}
       \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{PLoS Computational Biology}
@@ -5304,7 +5503,7 @@
       \verb 10.1371/journal.pcbi.1003285
       \endverb
     \endentry
-    \entry{schwabish2014economist}{article}{}
+    \entry{schwabish2014economist}{article}{}{3}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=d225b26a62b374d736ffe61c264cbdaf}{%
            family={Schwabish},
@@ -5315,14 +5514,16 @@
       }
       \strng{namehash}{d225b26a62b374d736ffe61c264cbdaf}
       \strng{fullhash}{d225b26a62b374d736ffe61c264cbdaf}
+      \strng{fullhashraw}{d225b26a62b374d736ffe61c264cbdaf}
       \strng{bibnamehash}{d225b26a62b374d736ffe61c264cbdaf}
       \strng{authorbibnamehash}{d225b26a62b374d736ffe61c264cbdaf}
       \strng{authornamehash}{d225b26a62b374d736ffe61c264cbdaf}
       \strng{authorfullhash}{d225b26a62b374d736ffe61c264cbdaf}
+      \strng{authorfullhashraw}{d225b26a62b374d736ffe61c264cbdaf}
       \field{sortinit}{S}
       \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of Economic Perspectives}
@@ -5336,7 +5537,7 @@
       \verb 10.1257/jep.28.1.209
       \endverb
     \endentry
-    \entry{segel2010narrative}{article}{}
+    \entry{segel2010narrative}{article}{}{4}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=da511b2ba49d6d6fcb812bcd5b4c91e6}{%
            family={Segel},
@@ -5353,14 +5554,16 @@
       }
       \strng{namehash}{e52d58a4ab6dc5705dbfb9c7ea160066}
       \strng{fullhash}{e52d58a4ab6dc5705dbfb9c7ea160066}
+      \strng{fullhashraw}{e52d58a4ab6dc5705dbfb9c7ea160066}
       \strng{bibnamehash}{e52d58a4ab6dc5705dbfb9c7ea160066}
       \strng{authorbibnamehash}{e52d58a4ab6dc5705dbfb9c7ea160066}
       \strng{authornamehash}{e52d58a4ab6dc5705dbfb9c7ea160066}
       \strng{authorfullhash}{e52d58a4ab6dc5705dbfb9c7ea160066}
+      \strng{authorfullhashraw}{e52d58a4ab6dc5705dbfb9c7ea160066}
       \field{sortinit}{S}
       \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{IEEE Transactions on Visualization and Computer Graphics}
@@ -5374,7 +5577,7 @@
       \verb 10.1109/TVCG.2010.179
       \endverb
     \endentry
-    \entry{shafer2008tutorial}{article}{}
+    \entry{shafer2008tutorial}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=071635b97777823135be2ea970911b06}{%
            family={Shafer},
@@ -5391,14 +5594,16 @@
       }
       \strng{namehash}{a6ee580e8a3818d8687ac445e26257a3}
       \strng{fullhash}{a6ee580e8a3818d8687ac445e26257a3}
+      \strng{fullhashraw}{a6ee580e8a3818d8687ac445e26257a3}
       \strng{bibnamehash}{a6ee580e8a3818d8687ac445e26257a3}
       \strng{authorbibnamehash}{a6ee580e8a3818d8687ac445e26257a3}
       \strng{authornamehash}{a6ee580e8a3818d8687ac445e26257a3}
       \strng{authorfullhash}{a6ee580e8a3818d8687ac445e26257a3}
+      \strng{authorfullhashraw}{a6ee580e8a3818d8687ac445e26257a3}
       \field{sortinit}{S}
       \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of Machine Learning Research}
@@ -5414,7 +5619,7 @@
       \verb https://jmlr.org/papers/v9/shafer08a.html
       \endverb
     \endentry
-    \entry{smith2016software}{article}{}
+    \entry{smith2016software}{article}{}{1}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=fe49386c965e830f91089719343b5648}{%
            family={Smith},
@@ -5437,14 +5642,16 @@
       }
       \strng{namehash}{af0328ce0151580d1c2aae78c535df50}
       \strng{fullhash}{af0328ce0151580d1c2aae78c535df50}
+      \strng{fullhashraw}{af0328ce0151580d1c2aae78c535df50}
       \strng{bibnamehash}{af0328ce0151580d1c2aae78c535df50}
       \strng{authorbibnamehash}{af0328ce0151580d1c2aae78c535df50}
       \strng{authornamehash}{af0328ce0151580d1c2aae78c535df50}
       \strng{authorfullhash}{af0328ce0151580d1c2aae78c535df50}
+      \strng{authorfullhashraw}{af0328ce0151580d1c2aae78c535df50}
       \field{sortinit}{S}
       \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{PeerJ Computer Science}
@@ -5457,7 +5664,7 @@
       \verb 10.7717/peerj-cs.86
       \endverb
     \endentry
-    \entry{spracklen2025packages}{inproceedings}{}
+    \entry{spracklen2025packages}{inproceedings}{}{1}
       \name{author}{6}{}{%
         {{un=0,uniquepart=base,hash=cc55f89f0bff04dddd587f2175292c31}{%
            family={Spracklen},
@@ -5498,14 +5705,16 @@
       }
       \strng{namehash}{c989dafd05d82633cd8129dbfda4ba84}
       \strng{fullhash}{26fac2170ea0359945b8183777238b88}
+      \strng{fullhashraw}{26fac2170ea0359945b8183777238b88}
       \strng{bibnamehash}{c989dafd05d82633cd8129dbfda4ba84}
       \strng{authorbibnamehash}{c989dafd05d82633cd8129dbfda4ba84}
       \strng{authornamehash}{c989dafd05d82633cd8129dbfda4ba84}
       \strng{authorfullhash}{26fac2170ea0359945b8183777238b88}
+      \strng{authorfullhashraw}{26fac2170ea0359945b8183777238b88}
       \field{sortinit}{S}
       \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Proceedings of the 34th USENIX Security Symposium (USENIX Security '25)}
@@ -5518,7 +5727,7 @@
       \verb https://arxiv.org/abs/2406.10279
       \endverb
     \endentry
-    \entry{stodden2018reproducibility}{article}{}
+    \entry{stodden2018reproducibility}{article}{}{2}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=2f18fc23a917fe1f0c74958b593f4e71}{%
            family={Stodden},
@@ -5541,14 +5750,16 @@
       }
       \strng{namehash}{76bcb73b02c078fb52b0ff7bde7fd4fd}
       \strng{fullhash}{76bcb73b02c078fb52b0ff7bde7fd4fd}
+      \strng{fullhashraw}{76bcb73b02c078fb52b0ff7bde7fd4fd}
       \strng{bibnamehash}{76bcb73b02c078fb52b0ff7bde7fd4fd}
       \strng{authorbibnamehash}{76bcb73b02c078fb52b0ff7bde7fd4fd}
       \strng{authornamehash}{76bcb73b02c078fb52b0ff7bde7fd4fd}
       \strng{authorfullhash}{76bcb73b02c078fb52b0ff7bde7fd4fd}
+      \strng{authorfullhashraw}{76bcb73b02c078fb52b0ff7bde7fd4fd}
       \field{sortinit}{S}
       \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Proceedings of the National Academy of Sciences}
@@ -5562,7 +5773,7 @@
       \verb 10.1073/pnas.1708290115
       \endverb
     \endentry
-    \entry{sweeney2002kanon}{article}{}
+    \entry{sweeney2002kanon}{article}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=4b70cbf7a64d719bc32e412248e3ff64}{%
            family={Sweeney},
@@ -5573,14 +5784,16 @@
       }
       \strng{namehash}{4b70cbf7a64d719bc32e412248e3ff64}
       \strng{fullhash}{4b70cbf7a64d719bc32e412248e3ff64}
+      \strng{fullhashraw}{4b70cbf7a64d719bc32e412248e3ff64}
       \strng{bibnamehash}{4b70cbf7a64d719bc32e412248e3ff64}
       \strng{authorbibnamehash}{4b70cbf7a64d719bc32e412248e3ff64}
       \strng{authornamehash}{4b70cbf7a64d719bc32e412248e3ff64}
       \strng{authorfullhash}{4b70cbf7a64d719bc32e412248e3ff64}
+      \strng{authorfullhashraw}{4b70cbf7a64d719bc32e412248e3ff64}
       \field{sortinit}{S}
       \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{International Journal of Uncertainty, Fuzziness and Knowledge-Based Systems}
@@ -5594,7 +5807,7 @@
       \verb 10.1142/S0218488502001648
       \endverb
     \endentry
-    \entry{tabassi2023airmf}{report}{}
+    \entry{tabassi2023airmf}{report}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=da4d6f760817f258d4447d01266d3298}{%
            family={Tabassi},
@@ -5609,14 +5822,16 @@
       }
       \strng{namehash}{da4d6f760817f258d4447d01266d3298}
       \strng{fullhash}{da4d6f760817f258d4447d01266d3298}
+      \strng{fullhashraw}{da4d6f760817f258d4447d01266d3298}
       \strng{bibnamehash}{da4d6f760817f258d4447d01266d3298}
       \strng{authorbibnamehash}{da4d6f760817f258d4447d01266d3298}
       \strng{authornamehash}{da4d6f760817f258d4447d01266d3298}
       \strng{authorfullhash}{da4d6f760817f258d4447d01266d3298}
+      \strng{authorfullhashraw}{da4d6f760817f258d4447d01266d3298}
       \field{sortinit}{T}
       \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{number}{NIST AI 100-1}
@@ -5633,7 +5848,7 @@
       \verb https://doi.org/10.6028/NIST.AI.100-1
       \endverb
     \endentry
-    \entry{tauchmann2014leebounds}{article}{}
+    \entry{tauchmann2014leebounds}{article}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=38f09c63499828818f57ef44d465722b}{%
            family={Tauchmann},
@@ -5644,14 +5859,16 @@
       }
       \strng{namehash}{38f09c63499828818f57ef44d465722b}
       \strng{fullhash}{38f09c63499828818f57ef44d465722b}
+      \strng{fullhashraw}{38f09c63499828818f57ef44d465722b}
       \strng{bibnamehash}{38f09c63499828818f57ef44d465722b}
       \strng{authorbibnamehash}{38f09c63499828818f57ef44d465722b}
       \strng{authornamehash}{38f09c63499828818f57ef44d465722b}
       \strng{authorfullhash}{38f09c63499828818f57ef44d465722b}
+      \strng{authorfullhashraw}{38f09c63499828818f57ef44d465722b}
       \field{sortinit}{T}
       \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Stata Journal}
@@ -5662,7 +5879,7 @@
       \field{pages}{884\bibrangedash 894}
       \range{pages}{11}
     \endentry
-    \entry{trisovic2022code}{article}{}
+    \entry{trisovic2022code}{article}{}{1}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=847c66c3c8a2d14adee00c7786662b86}{%
            family={Trisovic},
@@ -5691,14 +5908,16 @@
       }
       \strng{namehash}{c91124d4e1d5c553305f4d53163e6046}
       \strng{fullhash}{0fee2abde3fe7622ec5ce37f6fee3337}
+      \strng{fullhashraw}{0fee2abde3fe7622ec5ce37f6fee3337}
       \strng{bibnamehash}{c91124d4e1d5c553305f4d53163e6046}
       \strng{authorbibnamehash}{c91124d4e1d5c553305f4d53163e6046}
       \strng{authornamehash}{c91124d4e1d5c553305f4d53163e6046}
       \strng{authorfullhash}{0fee2abde3fe7622ec5ce37f6fee3337}
+      \strng{authorfullhashraw}{0fee2abde3fe7622ec5ce37f6fee3337}
       \field{sortinit}{T}
       \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Scientific Data}
@@ -5711,7 +5930,7 @@
       \verb 10.1038/s41597-022-01143-6
       \endverb
     \endentry
-    \entry{tseng2012uses}{article}{}
+    \entry{tseng2012uses}{article}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=65dc374fafb3bdc3a180456baf15c4a5}{%
            family={Tseng},
@@ -5722,14 +5941,16 @@
       }
       \strng{namehash}{65dc374fafb3bdc3a180456baf15c4a5}
       \strng{fullhash}{65dc374fafb3bdc3a180456baf15c4a5}
+      \strng{fullhashraw}{65dc374fafb3bdc3a180456baf15c4a5}
       \strng{bibnamehash}{65dc374fafb3bdc3a180456baf15c4a5}
       \strng{authorbibnamehash}{65dc374fafb3bdc3a180456baf15c4a5}
       \strng{authornamehash}{65dc374fafb3bdc3a180456baf15c4a5}
       \strng{authorfullhash}{65dc374fafb3bdc3a180456baf15c4a5}
+      \strng{authorfullhashraw}{65dc374fafb3bdc3a180456baf15c4a5}
       \field{sortinit}{T}
       \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Social Policy Report}
@@ -5744,7 +5965,7 @@
       \verb https://wtgrantfoundation.org/wp-content/uploads/2015/10/The-Uses-of-Research-in-Policy-and-Practice.pdf
       \endverb
     \endentry
-    \entry{tufte1983visual}{book}{}
+    \entry{tufte1983visual}{book}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=41187f886abb9d98f33e5b3f52276d12}{%
            family={Tufte},
@@ -5761,22 +5982,24 @@
       }
       \strng{namehash}{41187f886abb9d98f33e5b3f52276d12}
       \strng{fullhash}{41187f886abb9d98f33e5b3f52276d12}
+      \strng{fullhashraw}{41187f886abb9d98f33e5b3f52276d12}
       \strng{bibnamehash}{41187f886abb9d98f33e5b3f52276d12}
       \strng{authorbibnamehash}{41187f886abb9d98f33e5b3f52276d12}
       \strng{authornamehash}{41187f886abb9d98f33e5b3f52276d12}
       \strng{authorfullhash}{41187f886abb9d98f33e5b3f52276d12}
+      \strng{authorfullhashraw}{41187f886abb9d98f33e5b3f52276d12}
       \field{extraname}{1}
       \field{sortinit}{T}
       \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{isbn}{9780961392109}
       \field{title}{The Visual Display of Quantitative Information}
       \field{year}{1983}
     \endentry
-    \entry{tufte2006beautiful}{book}{}
+    \entry{tufte2006beautiful}{book}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=41187f886abb9d98f33e5b3f52276d12}{%
            family={Tufte},
@@ -5793,21 +6016,23 @@
       }
       \strng{namehash}{41187f886abb9d98f33e5b3f52276d12}
       \strng{fullhash}{41187f886abb9d98f33e5b3f52276d12}
+      \strng{fullhashraw}{41187f886abb9d98f33e5b3f52276d12}
       \strng{bibnamehash}{41187f886abb9d98f33e5b3f52276d12}
       \strng{authorbibnamehash}{41187f886abb9d98f33e5b3f52276d12}
       \strng{authornamehash}{41187f886abb9d98f33e5b3f52276d12}
       \strng{authorfullhash}{41187f886abb9d98f33e5b3f52276d12}
+      \strng{authorfullhashraw}{41187f886abb9d98f33e5b3f52276d12}
       \field{extraname}{2}
       \field{sortinit}{T}
       \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{title}{Beautiful Evidence}
       \field{year}{2006}
     \endentry
-    \entry{census2020acs}{misc}{}
+    \entry{census2020acs}{misc}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=fb461c0c6976b357452502c0cb338c70}{%
            family={{U.S. Census Bureau}},
@@ -5815,14 +6040,16 @@
       }
       \strng{namehash}{fb461c0c6976b357452502c0cb338c70}
       \strng{fullhash}{fb461c0c6976b357452502c0cb338c70}
+      \strng{fullhashraw}{fb461c0c6976b357452502c0cb338c70}
       \strng{bibnamehash}{fb461c0c6976b357452502c0cb338c70}
       \strng{authorbibnamehash}{fb461c0c6976b357452502c0cb338c70}
       \strng{authornamehash}{fb461c0c6976b357452502c0cb338c70}
       \strng{authorfullhash}{fb461c0c6976b357452502c0cb338c70}
+      \strng{authorfullhashraw}{fb461c0c6976b357452502c0cb338c70}
       \field{sortinit}{U}
       \field{sortinithash}{6901a00e45705986ee5e7ca9fd39adca}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{howpublished}{Handbook, U.S. Government Publishing Office, Washington, DC}
@@ -5835,7 +6062,7 @@
       \verb https://www.census.gov/programs-surveys/acs/library/handbooks/general.html
       \endverb
     \endentry
-    \entry{congress2019evidence}{misc}{}
+    \entry{congress2019evidence}{misc}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=85e6c92db93e0b02864ac243ca3e4acf}{%
            family={{U.S. Congress}},
@@ -5843,14 +6070,16 @@
       }
       \strng{namehash}{85e6c92db93e0b02864ac243ca3e4acf}
       \strng{fullhash}{85e6c92db93e0b02864ac243ca3e4acf}
+      \strng{fullhashraw}{85e6c92db93e0b02864ac243ca3e4acf}
       \strng{bibnamehash}{85e6c92db93e0b02864ac243ca3e4acf}
       \strng{authorbibnamehash}{85e6c92db93e0b02864ac243ca3e4acf}
       \strng{authornamehash}{85e6c92db93e0b02864ac243ca3e4acf}
       \strng{authorfullhash}{85e6c92db93e0b02864ac243ca3e4acf}
+      \strng{authorfullhashraw}{85e6c92db93e0b02864ac243ca3e4acf}
       \field{sortinit}{U}
       \field{sortinithash}{6901a00e45705986ee5e7ca9fd39adca}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{howpublished}{Public Law 115--435, 132 Stat. 5529}
@@ -5863,7 +6092,7 @@
       \verb https://www.congress.gov/115/plaws/publ435/PLAW-115publ435.pdf
       \endverb
     \endentry
-    \entry{chr2024}{misc}{}
+    \entry{chr2024}{misc}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=c77a8182a309550a6c46bde04477dbff}{%
            family={{University of Wisconsin Population Health Institute}},
@@ -5871,14 +6100,16 @@
       }
       \strng{namehash}{c77a8182a309550a6c46bde04477dbff}
       \strng{fullhash}{c77a8182a309550a6c46bde04477dbff}
+      \strng{fullhashraw}{c77a8182a309550a6c46bde04477dbff}
       \strng{bibnamehash}{c77a8182a309550a6c46bde04477dbff}
       \strng{authorbibnamehash}{c77a8182a309550a6c46bde04477dbff}
       \strng{authornamehash}{c77a8182a309550a6c46bde04477dbff}
       \strng{authorfullhash}{c77a8182a309550a6c46bde04477dbff}
+      \strng{authorfullhashraw}{c77a8182a309550a6c46bde04477dbff}
       \field{sortinit}{U}
       \field{sortinithash}{6901a00e45705986ee5e7ca9fd39adca}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{howpublished}{Analytic data file, public}
@@ -5891,7 +6122,7 @@
       \verb https://www.countyhealthrankings.org
       \endverb
     \endentry
-    \entry{vanderweele2015explanation}{book}{}
+    \entry{vanderweele2015explanation}{book}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=ba96229639c6eae3740881fb282dd436}{%
            family={VanderWeele},
@@ -5908,20 +6139,22 @@
       }
       \strng{namehash}{ba96229639c6eae3740881fb282dd436}
       \strng{fullhash}{ba96229639c6eae3740881fb282dd436}
+      \strng{fullhashraw}{ba96229639c6eae3740881fb282dd436}
       \strng{bibnamehash}{ba96229639c6eae3740881fb282dd436}
       \strng{authorbibnamehash}{ba96229639c6eae3740881fb282dd436}
       \strng{authornamehash}{ba96229639c6eae3740881fb282dd436}
       \strng{authorfullhash}{ba96229639c6eae3740881fb282dd436}
+      \strng{authorfullhashraw}{ba96229639c6eae3740881fb282dd436}
       \field{sortinit}{V}
       \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{title}{Explanation in Causal Inference: Methods for Mediation and Interaction}
       \field{year}{2015}
     \endentry
-    \entry{kellogg2004logic}{report}{}
+    \entry{kellogg2004logic}{report}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=1b3a5699d368686ce9ef3b0591e37b06}{%
            family={{W. K. Kellogg Foundation}},
@@ -5935,21 +6168,23 @@
       }
       \strng{namehash}{1b3a5699d368686ce9ef3b0591e37b06}
       \strng{fullhash}{1b3a5699d368686ce9ef3b0591e37b06}
+      \strng{fullhashraw}{1b3a5699d368686ce9ef3b0591e37b06}
       \strng{bibnamehash}{1b3a5699d368686ce9ef3b0591e37b06}
       \strng{authorbibnamehash}{1b3a5699d368686ce9ef3b0591e37b06}
       \strng{authornamehash}{1b3a5699d368686ce9ef3b0591e37b06}
       \strng{authorfullhash}{1b3a5699d368686ce9ef3b0591e37b06}
+      \strng{authorfullhashraw}{1b3a5699d368686ce9ef3b0591e37b06}
       \field{sortinit}{W}
       \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{title}{Logic Model Development Guide}
       \field{type}{techreport}
       \field{year}{2004}
     \endentry
-    \entry{wager2018forests}{article}{}
+    \entry{wager2018forests}{article}{}{2}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=e22c2c3bb1bd12e43f46c07ea788b581}{%
            family={Wager},
@@ -5966,14 +6201,16 @@
       }
       \strng{namehash}{d4c64d08a4af7035a4061fd6e82a6d2d}
       \strng{fullhash}{d4c64d08a4af7035a4061fd6e82a6d2d}
+      \strng{fullhashraw}{d4c64d08a4af7035a4061fd6e82a6d2d}
       \strng{bibnamehash}{d4c64d08a4af7035a4061fd6e82a6d2d}
       \strng{authorbibnamehash}{d4c64d08a4af7035a4061fd6e82a6d2d}
       \strng{authornamehash}{d4c64d08a4af7035a4061fd6e82a6d2d}
       \strng{authorfullhash}{d4c64d08a4af7035a4061fd6e82a6d2d}
+      \strng{authorfullhashraw}{d4c64d08a4af7035a4061fd6e82a6d2d}
       \field{sortinit}{W}
       \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Journal of the American Statistical Association}
@@ -5987,7 +6224,7 @@
       \verb 10.1080/01621459.2017.1319839
       \endverb
     \endentry
-    \entry{walby2019foi}{book}{}
+    \entry{walby2019foi}{book}{}{1}
       \name{editor}{2}{}{%
         {{un=0,uniquepart=base,hash=2230f29be5dea94eac53962131b90aa2}{%
            family={Walby},
@@ -6010,21 +6247,23 @@
       }
       \strng{namehash}{4fa4a7d6a12c9064fc1286a8492ee918}
       \strng{fullhash}{4fa4a7d6a12c9064fc1286a8492ee918}
+      \strng{fullhashraw}{4fa4a7d6a12c9064fc1286a8492ee918}
       \strng{bibnamehash}{4fa4a7d6a12c9064fc1286a8492ee918}
       \strng{editorbibnamehash}{4fa4a7d6a12c9064fc1286a8492ee918}
       \strng{editornamehash}{4fa4a7d6a12c9064fc1286a8492ee918}
       \strng{editorfullhash}{4fa4a7d6a12c9064fc1286a8492ee918}
+      \strng{editorfullhashraw}{4fa4a7d6a12c9064fc1286a8492ee918}
       \field{sortinit}{W}
       \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{editor}
       \field{labeltitlesource}{title}
       \field{isbn}{978-1-138-34574-4}
       \field{title}{Freedom of Information and Social Science Research Design}
       \field{year}{2019}
     \endentry
-    \entry{walton2020seed}{article}{}
+    \entry{walton2020seed}{article}{}{1}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=d16cfe0616ca760675b473fa47608d4a}{%
            family={Walton},
@@ -6041,14 +6280,16 @@
       }
       \strng{namehash}{d8b0ba17d760aa644141e47921c37142}
       \strng{fullhash}{d8b0ba17d760aa644141e47921c37142}
+      \strng{fullhashraw}{d8b0ba17d760aa644141e47921c37142}
       \strng{bibnamehash}{d8b0ba17d760aa644141e47921c37142}
       \strng{authorbibnamehash}{d8b0ba17d760aa644141e47921c37142}
       \strng{authornamehash}{d8b0ba17d760aa644141e47921c37142}
       \strng{authorfullhash}{d8b0ba17d760aa644141e47921c37142}
+      \strng{authorfullhashraw}{d8b0ba17d760aa644141e47921c37142}
       \field{sortinit}{W}
       \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Current Directions in Psychological Science}
@@ -6062,7 +6303,7 @@
       \verb 10.1177/0963721420904453
       \endverb
     \endentry
-    \entry{weiss1998evaluation}{book}{}
+    \entry{weiss1998evaluation}{book}{}{2}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=78f5afcfb847b74551053bb12d493c94}{%
            family={Weiss},
@@ -6079,21 +6320,23 @@
       }
       \strng{namehash}{78f5afcfb847b74551053bb12d493c94}
       \strng{fullhash}{78f5afcfb847b74551053bb12d493c94}
+      \strng{fullhashraw}{78f5afcfb847b74551053bb12d493c94}
       \strng{bibnamehash}{78f5afcfb847b74551053bb12d493c94}
       \strng{authorbibnamehash}{78f5afcfb847b74551053bb12d493c94}
       \strng{authornamehash}{78f5afcfb847b74551053bb12d493c94}
       \strng{authorfullhash}{78f5afcfb847b74551053bb12d493c94}
+      \strng{authorfullhashraw}{78f5afcfb847b74551053bb12d493c94}
       \field{sortinit}{W}
       \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{edition}{2}
       \field{title}{Evaluation: Methods for Studying Programs and Policies}
       \field{year}{1998}
     \endentry
-    \entry{wwc2022handbook}{report}{}
+    \entry{wwc2022handbook}{report}{}{3}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=18d1c4b719ed3623ed79d9ab3eb76e6e}{%
            family={{What Works Clearinghouse}},
@@ -6105,14 +6348,16 @@
       }
       \strng{namehash}{18d1c4b719ed3623ed79d9ab3eb76e6e}
       \strng{fullhash}{18d1c4b719ed3623ed79d9ab3eb76e6e}
+      \strng{fullhashraw}{18d1c4b719ed3623ed79d9ab3eb76e6e}
       \strng{bibnamehash}{18d1c4b719ed3623ed79d9ab3eb76e6e}
       \strng{authorbibnamehash}{18d1c4b719ed3623ed79d9ab3eb76e6e}
       \strng{authornamehash}{18d1c4b719ed3623ed79d9ab3eb76e6e}
       \strng{authorfullhash}{18d1c4b719ed3623ed79d9ab3eb76e6e}
+      \strng{authorfullhashraw}{18d1c4b719ed3623ed79d9ab3eb76e6e}
       \field{sortinit}{W}
       \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{title}{What Works Clearinghouse Procedures and Standards Handbook, Version 5.0}
@@ -6125,7 +6370,7 @@
       \verb https://ies.ed.gov/ncee/wwc/handbooks
       \endverb
     \endentry
-    \entry{wilkinson2016fair}{article}{}
+    \entry{wilkinson2016fair}{article}{}{2}
       \true{moreauthor}
       \true{morelabelname}
       \name{author}{6}{}{%
@@ -6168,14 +6413,16 @@
       }
       \strng{namehash}{f324cd0f485d0aaf63321d014f1f638f}
       \strng{fullhash}{56e59ba72bdd71b064419a0e1864d169}
+      \strng{fullhashraw}{56e59ba72bdd71b064419a0e1864d169}
       \strng{bibnamehash}{f324cd0f485d0aaf63321d014f1f638f}
       \strng{authorbibnamehash}{f324cd0f485d0aaf63321d014f1f638f}
       \strng{authornamehash}{f324cd0f485d0aaf63321d014f1f638f}
       \strng{authorfullhash}{56e59ba72bdd71b064419a0e1864d169}
+      \strng{authorfullhashraw}{56e59ba72bdd71b064419a0e1864d169}
       \field{sortinit}{W}
       \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Scientific Data}
@@ -6188,7 +6435,7 @@
       \verb 10.1038/sdata.2016.18
       \endverb
     \endentry
-    \entry{willison2023dual}{online}{}
+    \entry{willison2023dual}{online}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=3628e5ac9802968a5493c692724dd71a}{%
            family={Willison},
@@ -6199,14 +6446,16 @@
       }
       \strng{namehash}{3628e5ac9802968a5493c692724dd71a}
       \strng{fullhash}{3628e5ac9802968a5493c692724dd71a}
+      \strng{fullhashraw}{3628e5ac9802968a5493c692724dd71a}
       \strng{bibnamehash}{3628e5ac9802968a5493c692724dd71a}
       \strng{authorbibnamehash}{3628e5ac9802968a5493c692724dd71a}
       \strng{authornamehash}{3628e5ac9802968a5493c692724dd71a}
       \strng{authorfullhash}{3628e5ac9802968a5493c692724dd71a}
+      \strng{authorfullhashraw}{3628e5ac9802968a5493c692724dd71a}
       \field{sortinit}{W}
       \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{title}{The Dual {LLM} Pattern for Building AI Assistants That Can Resist Prompt Injection}
@@ -6222,7 +6471,7 @@
       \verb https://simonwillison.net/2023/Apr/25/dual-llm-pattern/
       \endverb
     \endentry
-    \entry{wilson2017good}{article}{}
+    \entry{wilson2017good}{article}{}{2}
       \name{author}{6}{}{%
         {{un=0,uniquepart=base,hash=fda30198609a1ab29a82b93d4e8f347b}{%
            family={Wilson},
@@ -6263,14 +6512,16 @@
       }
       \strng{namehash}{4996f01033f1e72efe036963c2f02dac}
       \strng{fullhash}{dab138b482fe11ec8f4505195cc57670}
+      \strng{fullhashraw}{dab138b482fe11ec8f4505195cc57670}
       \strng{bibnamehash}{4996f01033f1e72efe036963c2f02dac}
       \strng{authorbibnamehash}{4996f01033f1e72efe036963c2f02dac}
       \strng{authornamehash}{4996f01033f1e72efe036963c2f02dac}
       \strng{authorfullhash}{dab138b482fe11ec8f4505195cc57670}
+      \strng{authorfullhashraw}{dab138b482fe11ec8f4505195cc57670}
       \field{sortinit}{W}
       \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{PLOS Computational Biology}
@@ -6284,7 +6535,7 @@
       \verb 10.1371/journal.pcbi.1005510
       \endverb
     \endentry
-    \entry{wong2011color}{article}{}
+    \entry{wong2011color}{article}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=d5217f31a40807a396425b68acbf4698}{%
            family={Wong},
@@ -6295,14 +6546,16 @@
       }
       \strng{namehash}{d5217f31a40807a396425b68acbf4698}
       \strng{fullhash}{d5217f31a40807a396425b68acbf4698}
+      \strng{fullhashraw}{d5217f31a40807a396425b68acbf4698}
       \strng{bibnamehash}{d5217f31a40807a396425b68acbf4698}
       \strng{authorbibnamehash}{d5217f31a40807a396425b68acbf4698}
       \strng{authornamehash}{d5217f31a40807a396425b68acbf4698}
       \strng{authorfullhash}{d5217f31a40807a396425b68acbf4698}
+      \strng{authorfullhashraw}{d5217f31a40807a396425b68acbf4698}
       \field{sortinit}{W}
       \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Nature Methods}
@@ -6316,7 +6569,7 @@
       \verb 10.1038/nmeth.1618
       \endverb
     \endentry
-    \entry{w3c2018wcag}{misc}{}
+    \entry{w3c2018wcag}{misc}{}{2}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=bdea812935506778c291249971f80655}{%
            family={{World Wide Web Consortium}},
@@ -6324,14 +6577,16 @@
       }
       \strng{namehash}{bdea812935506778c291249971f80655}
       \strng{fullhash}{bdea812935506778c291249971f80655}
+      \strng{fullhashraw}{bdea812935506778c291249971f80655}
       \strng{bibnamehash}{bdea812935506778c291249971f80655}
       \strng{authorbibnamehash}{bdea812935506778c291249971f80655}
       \strng{authornamehash}{bdea812935506778c291249971f80655}
       \strng{authorfullhash}{bdea812935506778c291249971f80655}
+      \strng{authorfullhashraw}{bdea812935506778c291249971f80655}
       \field{sortinit}{W}
       \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{howpublished}{W3C Recommendation}
@@ -6339,7 +6594,7 @@
       \field{title}{Web Content Accessibility Guidelines ({WCAG}) 2.1}
       \field{year}{2018}
     \endentry
-    \entry{xie2015dynamic}{book}{}
+    \entry{xie2015dynamic}{book}{}{1}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=25ce25b9d444076e0963bcf9fa3a6f92}{%
            family={Xie},
@@ -6357,14 +6612,16 @@
       }
       \strng{namehash}{25ce25b9d444076e0963bcf9fa3a6f92}
       \strng{fullhash}{25ce25b9d444076e0963bcf9fa3a6f92}
+      \strng{fullhashraw}{25ce25b9d444076e0963bcf9fa3a6f92}
       \strng{bibnamehash}{25ce25b9d444076e0963bcf9fa3a6f92}
       \strng{authorbibnamehash}{25ce25b9d444076e0963bcf9fa3a6f92}
       \strng{authornamehash}{25ce25b9d444076e0963bcf9fa3a6f92}
       \strng{authorfullhash}{25ce25b9d444076e0963bcf9fa3a6f92}
+      \strng{authorfullhashraw}{25ce25b9d444076e0963bcf9fa3a6f92}
       \field{sortinit}{X}
       \field{sortinithash}{1965c258adceecf23ce3d67b05113442}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{edition}{2}
@@ -6372,7 +6629,7 @@
       \field{title}{Dynamic Documents with {R} and \texttt{knitr}}
       \field{year}{2015}
     \endentry
-    \entry{yarbrough2011standards}{book}{}
+    \entry{yarbrough2011standards}{book}{}{1}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=5c0d48864b4121222d39871ac4a149d0}{%
            family={Yarbrough},
@@ -6407,14 +6664,16 @@
       }
       \strng{namehash}{d3ff6a6f9c619339930e71770c1ae7e1}
       \strng{fullhash}{1c16805b13bed0f319b15c548d26e492}
+      \strng{fullhashraw}{1c16805b13bed0f319b15c548d26e492}
       \strng{bibnamehash}{d3ff6a6f9c619339930e71770c1ae7e1}
       \strng{authorbibnamehash}{d3ff6a6f9c619339930e71770c1ae7e1}
       \strng{authornamehash}{d3ff6a6f9c619339930e71770c1ae7e1}
       \strng{authorfullhash}{1c16805b13bed0f319b15c548d26e492}
+      \strng{authorfullhashraw}{1c16805b13bed0f319b15c548d26e492}
       \field{sortinit}{Y}
       \field{sortinithash}{fd67ad5a9ef0f7456bdd9aab10fe1495}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{edition}{3}
@@ -6423,7 +6682,7 @@
       \field{title}{The Program Evaluation Standards: A Guide for Evaluators and Evaluation Users}
       \field{year}{2011}
     \endentry
-    \entry{yeager2019mindset}{article}{}
+    \entry{yeager2019mindset}{article}{}{2}
       \true{moreauthor}
       \true{morelabelname}
       \name{author}{6}{}{%
@@ -6466,14 +6725,16 @@
       }
       \strng{namehash}{6ebaa51c1563c08d1f33f7222bcda909}
       \strng{fullhash}{7a60fd6e7d47607d73d9416268fdd229}
+      \strng{fullhashraw}{7a60fd6e7d47607d73d9416268fdd229}
       \strng{bibnamehash}{6ebaa51c1563c08d1f33f7222bcda909}
       \strng{authorbibnamehash}{6ebaa51c1563c08d1f33f7222bcda909}
       \strng{authornamehash}{6ebaa51c1563c08d1f33f7222bcda909}
       \strng{authorfullhash}{7a60fd6e7d47607d73d9416268fdd229}
+      \strng{authorfullhashraw}{7a60fd6e7d47607d73d9416268fdd229}
       \field{sortinit}{Y}
       \field{sortinithash}{fd67ad5a9ef0f7456bdd9aab10fe1495}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Nature}
@@ -6487,7 +6748,7 @@
       \verb 10.1038/s41586-019-1466-y
       \endverb
     \endentry
-    \entry{ziems2024css}{article}{}
+    \entry{ziems2024css}{article}{}{1}
       \name{author}{6}{}{%
         {{un=0,uniquepart=base,hash=130d482f66f76db8906aa1d3d9810264}{%
            family={Ziems},
@@ -6528,14 +6789,16 @@
       }
       \strng{namehash}{fe5bdafc0193592adaf4a6792aa9bd86}
       \strng{fullhash}{7a6915f27ab9ab4b960129ae3aaf0a5d}
+      \strng{fullhashraw}{7a6915f27ab9ab4b960129ae3aaf0a5d}
       \strng{bibnamehash}{fe5bdafc0193592adaf4a6792aa9bd86}
       \strng{authorbibnamehash}{fe5bdafc0193592adaf4a6792aa9bd86}
       \strng{authornamehash}{fe5bdafc0193592adaf4a6792aa9bd86}
       \strng{authorfullhash}{7a6915f27ab9ab4b960129ae3aaf0a5d}
+      \strng{authorfullhashraw}{7a6915f27ab9ab4b960129ae3aaf0a5d}
       \field{sortinit}{Z}
       \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
       \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
+      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Computational Linguistics}

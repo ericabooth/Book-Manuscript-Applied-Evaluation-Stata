@@ -68,28 +68,28 @@ sample size.
 {opt seed(#)} sets the random-number seed, making the draw reproducible.
 
 {phang}
-{opt noreport} suppresses the utility-and-safety report.
+{opt noreport} suppresses the fidelity and match report.
 
 
-{title:The receipt}
+{title:The diagnostic}
 
 {pstd}
-Every run prints (and returns) a utility-and-safety receipt: the worst
+Every run prints (and returns) a fidelity and match diagnostic: the worst
 standardized mean gap between source and synthetic variables, the worst gap
 in pairwise rank correlations, and the count of synthetic rows that duplicate
-a real record on the synthesized variables.  A duplicate is not automatically
-a leak when the variables are coarse, but it is the first thing to check, and
-the count belongs in the data-sharing agreement's synthetic-release clause.
+a source row on the synthesized variables. An exact match is a review flag.
+Its disclosure risk depends on source rarity, sensitive attributes, recipient
+knowledge, prior releases, and the release setting.
 
 
 {title:Remarks}
 
 {pstd}
-A synthetic file is a development surface, not a substitute for the real
-analysis, and synthetic does not automatically mean safe: run a
-re-identification scan (for example {helpb riskscan}) on the synthetic file
-before it travels, and state in the sharing agreement that no record
-corresponds to a real person.
+A synthetic file is a development surface rather than a substitute for the
+source analysis. Compare generated matches with unique and rare combinations
+in the source, assess the intended analyses, and document the release decision.
+Do not state that no generated row corresponds to a source person unless a
+case-specific disclosure assessment supports that statement.
 
 {pstd}
 Limitations, stated plainly: associations are preserved through rank

@@ -81,6 +81,7 @@ Launch Stata in the project folder, then either:
 | `ch13_backbone.do` | 13 | The Stata-as-backbone loop: an LLM-proposed step made trustworthy by `assert` tripwires and a batch log. |
 | `ch13_parallel.do` | 13 | Parallel patterns: a 4-way bootstrap split across instances, and a fan-out QC harness (judge by log, not exit code). |
 | `ch13_validation.do` | 13 | Simulated AI validation: kappa, multi-model consensus, four-fifths fairness check, and the prediction-powered correction of a biased machine-label prevalence. |
+| `ch13_injection_gate.do` | 13 | Tests the output allowlist: rejected labels stop the checked program, resolved labels pass, and an incorrect allowed label demonstrates the gate's limit. |
 | `ch14_kanon.do` | 14 | k-anonymity on `nlsw88` as an admin stand-in; coarsening; small-cell suppression. |
 | `ch15_bench.do` | 15 | Mata vs loop vs vectorized timing benchmark. |
 

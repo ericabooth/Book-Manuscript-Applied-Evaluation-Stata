@@ -96,7 +96,7 @@ list cname yrslost childpov uninsured in 1/5, clean noobs
 
 save "$clean/chr2024_tx.dta", replace
 
-*--- 6. The payoff figure: premature death vs child poverty --------------------*
+*--- 6. Summary figure: premature death vs child poverty --------------------*
 gen mlab = cname if _n<=5      // label only the five highest-need counties
 scatter yrslost childpov, ///
     msymbol(Oh) mcolor(navy%60) ///

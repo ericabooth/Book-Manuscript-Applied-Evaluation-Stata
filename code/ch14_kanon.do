@@ -146,8 +146,8 @@ di "RAWSWEEP_DEMO_OK"
 
 *==============================================================================*
 * (s) Synthetic stand-in with synthgen: same quasi-identifiers plus wage,
-*     rank-preserving copula draw, and the utility-and-safety receipt the
-*     sharing agreement quotes. Numbers frozen in the chapter prose.
+*     rank-preserving copula draw, and fidelity and source-match diagnostics.
+*     Numbers frozen in the chapter prose.
 *==============================================================================*
 adopath ++ "`c(pwd)'/../synthgen-stata-public"
 sysuse nlsw88, clear
@@ -161,4 +161,26 @@ assert `sg_maxdmean' < 0.10
 assert `sg_maxdrho'  < 0.15
 frame synth: quietly count
 assert r(N) == 2246
+
+* Compare exact matches with their frequency in the source. A match to a
+* unique or rare source combination deserves closer disclosure review.
+preserve
+keep race married collgrad industry wage
+bysort race married collgrad industry wage: gen long source_n = _N
+bysort race married collgrad industry wage: keep if _n == 1
+capture frame drop sg_source_cells
+frame put race married collgrad industry wage source_n, into(sg_source_cells)
+restore
+frame synth: frlink m:1 race married collgrad industry wage, ///
+    frame(sg_source_cells) generate(_source_match)
+frame synth: frget source_n, from(_source_match)
+frame synth: quietly count if source_n == 1
+local sg_unique_matches = r(N)
+frame synth: quietly count if inrange(source_n, 1, 4)
+local sg_rare_matches = r(N)
+assert `sg_unique_matches' <= `sg_rare_matches'
+assert `sg_rare_matches' <= `sg_dupes'
+di "SYNTHGEN source matches: unique = " `sg_unique_matches' ///
+   "  source frequency 1-4 = " `sg_rare_matches'
+frame drop sg_source_cells
 di "SYNTHGEN_DEMO_OK"

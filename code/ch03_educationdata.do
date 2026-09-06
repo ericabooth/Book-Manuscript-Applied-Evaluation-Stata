@@ -42,7 +42,7 @@ list year enrollment n_dist, clean noobs
 *--- Save the analysis-ready series -------------------------------------------*
 save "$clean/ccd_tx_state_enrollment.dta", replace
 
-*--- The payoff figure: state enrollment with the COVID year marked -----------*
+*--- Summary figure: state enrollment with the COVID year marked -----------*
 twoway connected enroll_m year, ///
     lcolor(navy) mcolor(navy) msize(medsmall) ///
     xline(2020, lpattern(dash) lcolor(gs9)) ///

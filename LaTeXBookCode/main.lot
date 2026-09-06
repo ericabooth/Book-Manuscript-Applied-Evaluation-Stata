@@ -1,56 +1,57 @@
 \babel@toc {english}{}\relax
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {1.1}{\ignorespaces The four principles, with pass/fail tests}}{7}{table.caption.21}%
-\contentsline {table}{\numberline {1.2}{\ignorespaces The one-page charter's four clauses}}{14}{table.caption.23}%
-\contentsline {table}{\numberline {1.3}{\ignorespaces The book's running datasets}}{16}{table.caption.25}%
+\contentsline {table}{\numberline {1.1}{\ignorespaces The four principles, with pass/fail tests}}{7}{table.caption.15}%
+\contentsline {table}{\numberline {1.2}{\ignorespaces The one-page charter's four clauses}}{14}{table.caption.17}%
+\contentsline {table}{\numberline {1.3}{\ignorespaces The book's running datasets}}{16}{table.caption.19}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {2.1}{\ignorespaces The four ``works on my machine'' failures}}{31}{table.caption.32}%
-\contentsline {table}{\numberline {2.2}{\ignorespaces gtools timings on two million rows}}{35}{table.caption.34}%
+\contentsline {table}{\numberline {2.1}{\ignorespaces The four ``works on my machine'' failures}}{31}{table.caption.24}%
+\contentsline {table}{\numberline {2.2}{\ignorespaces gtools timings on two million rows}}{35}{table.caption.26}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {3.1}{\ignorespaces Three routes from Stata to any API}}{53}{table.caption.44}%
+\contentsline {table}{\numberline {3.1}{\ignorespaces Three routes from Stata to any API}}{52}{table.caption.34}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {4.1}{\ignorespaces Which channel for which source}}{61}{table.caption.48}%
-\contentsline {table}{\numberline {4.2}{\ignorespaces Five highest-need Texas counties}}{67}{table.caption.49}%
+\contentsline {table}{\numberline {4.1}{\ignorespaces Which channel for which source}}{61}{table.caption.36}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces Five highest-need Texas counties}}{66}{table.caption.37}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {5.1}{\ignorespaces Percent agree by site, simulated coaching battery}}{84}{table.caption.57}%
+\contentsline {table}{\numberline {5.1}{\ignorespaces Percent agree by site, simulated coaching battery}}{82}{table.caption.43}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {6.1}{\ignorespaces What reshapehelper settles and what it hands back}}{119}{table.caption.70}%
-\contentsline {table}{\numberline {6.2}{\ignorespaces Wage-quartile transition matrix}}{120}{table.caption.71}%
-\contentsline {table}{\numberline {6.3}{\ignorespaces Append, merge, or frames}}{122}{table.caption.72}%
-\contentsline {table}{\numberline {6.4}{\ignorespaces The database decision in seven questions}}{125}{table.caption.74}%
+\contentsline {table}{\numberline {6.1}{\ignorespaces What reshapehelper settles and what it hands back}}{113}{table.caption.53}%
+\contentsline {table}{\numberline {6.2}{\ignorespaces Wage-quartile transition matrix}}{114}{table.caption.54}%
+\contentsline {table}{\numberline {6.3}{\ignorespaces Append, merge, or frames}}{116}{table.caption.55}%
+\contentsline {table}{\numberline {6.4}{\ignorespaces Questions to ask before adopting a database}}{119}{table.caption.57}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {7.1}{\ignorespaces The chapter's safeguards and the question each answers}}{132}{table.caption.81}%
-\contentsline {table}{\numberline {7.2}{\ignorespaces Weighted versus unweighted means, NHANES~II}}{134}{table.caption.82}%
+\contentsline {table}{\numberline {7.1}{\ignorespaces The chapter's safeguards and the question each answers}}{125}{table.caption.62}%
+\contentsline {table}{\numberline {7.2}{\ignorespaces Weighted versus unweighted means, NHANES~II}}{128}{table.caption.63}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {8.1}{\ignorespaces TWFE vs.\ Callaway--Sant'Anna on a known truth}}{155}{table.caption.92}%
+\contentsline {table}{\numberline {8.1}{\ignorespaces TWFE vs.\ Callaway--Sant'Anna on a known truth}}{148}{table.caption.71}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {9.1}{\ignorespaces The Cleveland--McGill encoding ranking, mapped to this chapter}}{174}{table.caption.102}%
-\contentsline {table}{\numberline {9.2}{\ignorespaces Before and after the intervention}}{183}{table.caption.108}%
+\contentsline {table}{\numberline {9.1}{\ignorespaces The Cleveland--McGill encoding ranking, mapped to this chapter}}{166}{table.caption.79}%
+\contentsline {table}{\numberline {9.2}{\ignorespaces Before and after the intervention}}{174}{table.caption.85}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {10.1}{\ignorespaces The visualization suite at a glance}}{187}{table.caption.113}%
-\contentsline {table}{\numberline {10.2}{\ignorespaces Choosing static, interactive, or animated}}{198}{table.caption.120}%
-\contentsline {table}{\numberline {10.3}{\ignorespaces The Okabe--Ito colorblind-safe palette}}{200}{table.caption.121}%
+\contentsline {table}{\numberline {10.1}{\ignorespaces The visualization suite at a glance}}{179}{table.caption.88}%
+\contentsline {table}{\numberline {10.2}{\ignorespaces Choosing static, interactive, or animated}}{189}{table.caption.95}%
+\contentsline {table}{\numberline {10.3}{\ignorespaces The Okabe--Ito colorblind-safe palette}}{191}{table.caption.96}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {11.1}{\ignorespaces Reproducible earnings table, ingested from a do-file}}{209}{table.caption.126}%
-\contentsline {table}{\numberline {11.2}{\ignorespaces Choosing among put's writing modes}}{214}{table.caption.129}%
+\contentsline {table}{\numberline {11.1}{\ignorespaces Reproducible earnings table, ingested from a do-file}}{199}{table.caption.99}%
+\contentsline {table}{\numberline {11.2}{\ignorespaces Choosing among put's writing modes}}{203}{table.caption.102}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {12.1}{\ignorespaces Delivery formats compared}}{234}{table.caption.137}%
-\contentsline {table}{\numberline {12.2}{\ignorespaces What to stamp on a delivered portal}}{237}{table.caption.139}%
-\addvspace {10\p@ }
-\addvspace {10\p@ }
-\contentsline {table}{\numberline {14.1}{\ignorespaces $k$-anonymity of four ordinary columns}}{278}{table.caption.163}%
-\contentsline {table}{\numberline {14.2}{\ignorespaces Coarsening industry collapses unique records}}{280}{table.caption.165}%
-\contentsline {table}{\numberline {14.3}{\ignorespaces Primary and complementary suppression}}{282}{table.caption.166}%
-\addvspace {10\p@ }
-\contentsline {table}{\numberline {15.1}{\ignorespaces The seven-row tool-hardening checklist}}{295}{table.caption.173}%
-\contentsline {table}{\numberline {15.2}{\ignorespaces Three ways to build one variable, one million rows}}{298}{table.caption.174}%
-\contentsline {table}{\numberline {15.3}{\ignorespaces A replication-archive manifest}}{299}{table.caption.175}%
+\contentsline {table}{\numberline {12.1}{\ignorespaces Delivery formats compared}}{221}{table.caption.108}%
+\contentsline {table}{\numberline {12.2}{\ignorespaces What to stamp on a delivered portal}}{223}{table.caption.110}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
+\contentsline {table}{\numberline {14.1}{\ignorespaces $k$-anonymity of four ordinary columns}}{259}{table.caption.127}%
+\contentsline {table}{\numberline {14.2}{\ignorespaces Coarsening industry collapses unique records}}{262}{table.caption.129}%
+\contentsline {table}{\numberline {14.3}{\ignorespaces Primary and complementary suppression}}{264}{table.caption.130}%
 \addvspace {10\p@ }
+\contentsline {table}{\numberline {15.1}{\ignorespaces The seven-row tool-hardening checklist}}{277}{table.caption.135}%
+\contentsline {table}{\numberline {15.2}{\ignorespaces Three ways to build one variable, one million rows}}{279}{table.caption.136}%
+\contentsline {table}{\numberline {15.3}{\ignorespaces A replication-archive manifest}}{280}{table.caption.137}%
+\def \@chapapp {\appendixname }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {E.1}{\ignorespaces Datasets used in this book}}{319}{table.caption.245}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {1}{\ignorespaces Datasets used in this book}}{301}{table.caption.173}%
 \addvspace {10\p@ }
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file

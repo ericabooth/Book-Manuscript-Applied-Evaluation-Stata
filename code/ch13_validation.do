@@ -1,5 +1,5 @@
 *==============================================================================*
-* ch13_validation.do  --  Chapter 13: using AI without getting burned
+* ch13_validation.do  --  Chapter 13: validation and governance for AI-assisted work
 * (a) gold-standard validation: 150 hand labels vs ~85% model, Cohen's kappa
 * (b) multi-model consensus: 3 models, agreement share, routing action
 * (c) fairness audit: simulated risk scores + group offset, cutoff,
@@ -190,6 +190,20 @@ assert _rc == 0
 restore
 di "AIGATE_DEMO_OK"
 
+* Known false negatives: the gate is a pattern screen, not de-identification.
+clear
+input str244 notes
+"Maria Alvarez requested a callback."
+"The only welder in Marfa missed the appointment."
+"Call five one two, five five five, one two three four."
+"Date of birth is March fourteenth, nineteen eighty-seven."
+"Badge code TXA88471 was copied from the roster."
+end
+ai_privacy_gate notes, genflag(pattern_hit) noreport
+assert r(rows) == 0
+assert pattern_hit == 0
+di "AIGATE_LIMIT_TESTS_PASSED: contextual review is still required"
+
 *==============================================================================*
 * (g) llmsieve demo: convergence delta on four two-pass answers
 *==============================================================================*
@@ -219,4 +233,3 @@ gen byte need = runiform() < risk
 faircheck need select, by(groupB)
 assert abs(r(tpr_gap) - .206) < .01
 di "FAIRCHECK_DEMO_OK"
-

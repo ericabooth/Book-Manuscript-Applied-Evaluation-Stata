@@ -159,7 +159,7 @@ lists the ones with at least one match.{p_end}
 {title:Audits: enforcing a tagging discipline}
 
 {pstd}
-Tagging pays off only if it is complete, and completeness is checkable.
+Tagging is useful when it is complete, and completeness can be checked.
 {cmd:srcfind, untagged} lists the variables that carry no lineage tag;
 an empty answer means the file is fully documented. Two lines make it a
 contract at the top of a do-file:{p_end}

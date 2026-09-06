@@ -71,7 +71,7 @@ When a portfolio has forty sites, forty separate trend charts is not communicati
 One honest caveat applies to this tool. As of this writing the \texttt{sparkta2} source is not yet published, only rendered galleries are public, so read this section as a description of what the engine renders, not an install you can run today.
 
 \subsection{The spark wall you can build today}\label{sec:sparkwall}
-You do not have to wait for \texttt{sparkta2} to get the sparkline's payoff, because native Stata already draws small multiples\index{small multiples}\marginnote{Small multiples: a wall of tiny panels that strip their axes to almost nothing so the shape is all that is left to read.}. A regional workforce board wants to know whether the wage recovery after 2020 looked the same across its labor markets, or whether some counties bounced and others stalled, because it targets its programs county by county. Six separate wage charts would be six page-turns; a spark wall puts all six side by side so the divergence is one glance.
+Native Stata can produce a related compact display with small multiples\index{small multiples}\marginnote{Small multiples: a wall of tiny panels that strip their axes to almost nothing so the shape is all that is left to read.}. A regional workforce board wants to know whether the wage recovery after 2020 looked the same across its labor markets, or whether some counties bounced and others stalled, because it targets its programs county by county. Six separate wage charts would be six page-turns; a spark wall puts all six side by side so the divergence is one glance.
 
 We build the wall from the same no-key BLS files Chapter~\ref{ch:apis} introduced, assembling the county-quarter panel that chapter promised: one \texttt{import delimited} per county-quarter, looped over six Texas counties and twenty-four quarters. The Quarterly Census of Employment and Wages posts one CSV per county-year-quarter at a stable URL, and we keep the total private-sector line (ownership code~5, industry code~10) from each:
 \par
@@ -235,7 +235,7 @@ googlechart, type(table)                          ///
     export("`OUT'/05_table.html")
 \end{verbatim}
 }
-The payoff is in Figure~\ref{fig:gc-table}: a client opens the page, types their state name into the search box, and reads their own row without a spreadsheet, or clicks a column header to sort every state by that measure. That is the accessible principle served directly, and because the file is written by the do-file it refreshes when the CHR data does.\marginnote{Column choice is the planning decision: lead \texttt{tooltipvars()} with the identifier the reader will search on and the two or three measures they came for. If a table opens on eight columns of equal weight, the reader has to do the triage the builder skipped.}
+Figure~\ref{fig:gc-table} shows the intended use: a client opens the page, types their state name into the search box, and reads their own row without a spreadsheet, or clicks a column header to sort every state by that measure. That is the accessible principle served directly, and because the file is written by the do-file it refreshes when the CHR data does.\marginnote{Column choice is the planning decision: lead \texttt{tooltipvars()} with the identifier the reader will search on and the two or three measures they came for. If a table opens on eight columns of equal weight, the reader has to do the triage the builder skipped.}
 
 \begin{figure*}[htbp]
 \centering

@@ -116,7 +116,7 @@ local rc_ccn   = r(cc_n)
 assert `rc_dupes' >= 0 & `rc_dupes' < .
 assert `rc_srcn' == 2244 | `rc_srcn' == 2246
 assert `rc_ccn' > 0 & `rc_ccn' <= `rc_srcn'
-di as res "TEST 9 OK: receipt returns (dupes=`rc_dupes')"
+di as res "TEST 9 OK: diagnostic returns (dupes=`rc_dupes')"
 
 *--- (10) categorical variables: values snap to observed categories -----------*
 synthgen race married collgrad industry, frame(s5) seed(5)

@@ -112,7 +112,7 @@ egen mean 24 grp   native vs gtools:  0.63 vs  0.10  (x 6.3)
 egen mean 200k grp native vs gtools:  0.62 vs  0.10  (x 6.2)
 
 . 
-. *--- The payoff figure: seconds per run, native vs gtools -------------------
+. *--- Timing figure: seconds per run, native vs gtools -------------------
 > ---*
 . preserve
 

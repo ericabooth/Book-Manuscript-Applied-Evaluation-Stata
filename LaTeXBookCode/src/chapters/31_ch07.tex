@@ -64,7 +64,7 @@ item6    400   +     0.3821     0.1760    .6639919  0.7939
 Test scale                                .4993496  0.7576
 \end{verbatim}
 }
-The whole-scale alpha is 0.7576, just over the 0.70 floor, so a manager glancing at the bottom line would ship all six items. Read the item rows, though, and you would not. Item~6 correlates only 0.18 with the rest of the scale where the others sit near 0.55, and the last column reports the payoff: drop item~6 and alpha rises to 0.7939. Dropping any of the other five would lower it. Refitting on the five good items confirms the number:
+The whole-scale alpha is 0.7576, just over the 0.70 floor, so a manager glancing at the bottom line would ship all six items. Read the item rows, though, and you would not. Item~6 correlates only 0.18 with the rest of the scale where the others sit near 0.55, and the last column reports the result: drop item~6 and alpha rises to 0.7939. Dropping any of the other five would lower it. Refitting on the five good items confirms the number:
 \par
 {\footnotesize
 \begin{verbatim}
@@ -209,7 +209,7 @@ rateshrink, success(y) denominator(n) ///
     generate(pshrunk) ci(95) rel(reliab)
 \end{verbatim}
 }
-The header prints the fitted prior as $\alpha=24.4$, $\beta=89.1$, a prior sample size of 113.5, and the most-moved site as a raw 0.000 pulled to 0.206\marginnote{A raw 0.000 pulled to 0.206 is the same kind of hard lift shrinkage gave Site~26's zero-out-of-seven earlier in the chapter.}. The \texttt{rel()} column is the new payoff: it reports each site's reliability as $n/(n+\alpha+\beta)$, and on this draw the mean is 0.48, so across these mostly small sites the raw rate contains under half the information a fully reliable measure would.
+The header prints the fitted prior as $\alpha=24.4$, $\beta=89.1$, a prior sample size of 113.5, and the most-moved site as a raw 0.000 pulled to 0.206\marginnote{A raw 0.000 pulled to 0.206 is the same kind of hard lift shrinkage gave Site~26's zero-out-of-seven earlier in the chapter.}. The \texttt{rel()} column adds a useful diagnostic: it reports each site's reliability as $n/(n+\alpha+\beta)$, and on this draw the mean is 0.48, so across these mostly small sites the raw rate contains under half the information a fully reliable measure would.
 
 Read that reliability column again and you are reading this section's shrinkage under another name. \textcite{field2026betabin} prove that a unit's Beta-binomial reliability equals the empirical-Bayes weight placed on its own data, so the fraction $n/(n+M)$ that decides how far a site is pulled toward the mean \emph{is} that site's reliability:
 \begin{equation}

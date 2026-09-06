@@ -6,12 +6,12 @@
 **Status:** 🚧 *Preprint Draft in Progress* 🚧
 
 ---
-<img width="508" height="754" alt="Screenshot 2026-07-26 at 7 03 25 PM" src="https://github.com/user-attachments/assets/1674bad6-e203-4646-8747-0e5a7eb436e9" />
+<img width="508" height="754" alt="Screenshot 2026-07-26 at 7 03 25 PM" src="https://github.com/user-attachments/assets/1674bad6-e203-4646-8747-0e5a7eb436e9" />
 
 ## Overview
-*Applied Program Evaluation Using Stata* is a practical guide designed to equip professionals in implementation science, applied research, and evaluation with the skills to harness **Stata’s** power for real-world challenges. This book bridges the gap between advanced statistical programming and actionable insights tailored to foundations, nonprofits, and implementation programs.
+*Applied Program Evaluation Using Stata* shows implementation scientists, applied researchers, and evaluators how to carry a project from source data to a checked, reproducible deliverable in Stata. The examples address work in foundations, nonprofits, public agencies, and implementation programs.
 
-The focus is on moving beyond "parachute research" toward **embedded evaluation**—building sustained, strategic relationships between researchers and practitioners.
+The book treats **embedded evaluation** as an ongoing working relationship between researchers and practitioners. Its examples emphasize data and tools that program staff can inspect, rerun, and use after a study ends.
 
 ## Target Audience
 - **Practitioner-Researchers** working within or alongside nonprofit organizations conducting applied monitoring, evaluation, and learning (MEL) activities.
@@ -20,22 +20,22 @@ The focus is on moving beyond "parachute research" toward **embedded evaluation*
 - **Implementation Scientists** focused on fidelity, adaptation, and real-time monitoring.
 
 ## Key Topics
-This repository and the accompanying book cover modern research techniques often omitted from traditional evaluation texts:
-- **AI-integrated or supported workflows:** Leveraging the `gemini` Stata package to run LLM prompts directly from do-files for data cleaning and narrative reporting.
-- **Modern/recent causal methods:** Implementing staggered-adoption Difference-in-Differences (`csdid`, `jwdid`) and Synthetic Diff-in-Diff (`sdid`).
-- **High-performance Stata:** Using `gtools` and `ftools` to process millions of administrative records in seconds.
-- **Dynamic visualization:** Building high-density dashboards using Fahad Mirza's `sparkta` package integrated with `webdoc` for auto-updating HTML portals.
-- **Tool building:** From do-files to custom `.ado` commands and leveraging **Mata** for scalability.
+This repository and the accompanying book cover methods and workflows often omitted from evaluation texts:
+- **Language-model workflows:** Calling a language model from a do-file while keeping statistical computation, validation, and logs in Stata.
+- **Recent causal methods:** Applying staggered-adoption difference-in-differences (`csdid`, `jwdid`) and synthetic difference-in-differences (`sdid`).
+- **Large administrative files:** Using `gtools` and `ftools` where benchmarks show a useful speed gain.
+- **Interactive displays:** Building compact dashboards with Fahad Mirza's `sparkta` package and `webdoc`.
+- **Stata tools:** Turning repeated code into documented `.ado` commands and using **Mata** when it improves performance.
 
 ## Repository Contents
-This GitHub repository serves as the digital companion to the book. At this stage of development, the following are available:
+This repository contains the book manuscript and its companion materials:
 - **`LaTeXBookCode/`**: The source code for the book's manuscript (compiled using the `kaobook` class).
 - **`draft_book_outline.pdf`**: A high-level overview of the chapters and technical goals.
 - **Example Data & Scripts**: (Coming Soon) Implementation examples for each chapter.
 - **Custom Tools**: Integration scripts for the Gemini CLI and specific evaluation templates.
 
 ## Status Note
-**Only the book outline is currently available publicly.** Full chapter content is being developed for a 2026/27 release. We are currently sharing the architecture of the book to solicit feedback from the applied evaluation community.
+**Only the book outline is currently available publicly.** Full chapter content is being developed for a 2026/27 release. We are sharing the outline to invite feedback from the applied evaluation community.
 
 ## Citation & Contact
 If you are interested in reviewing early drafts or collaborating on specific implementation science modules, please contact:

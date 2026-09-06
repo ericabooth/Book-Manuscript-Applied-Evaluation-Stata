@@ -1,6 +1,6 @@
 # synthgen
 
-Generate a rank-preserving **synthetic stand-in dataset** in Stata: a file that behaves like the source without containing any of its records, so an outside collaborator can write and test code against realistic data while the real records never leave the secure environment.
+Generate a rank-preserving **synthetic stand-in dataset** in Stata. Collaborators can use the stand-in to develop code while the source file remains in its approved environment. Assess the generated file before release because it may reproduce source-row combinations.
 
 ```stata
 sysuse nlsw88, clear
@@ -14,7 +14,7 @@ frame synth: summarize
 - **Rank correlations preserved.** A Gaussian copula correlates normal scores on the source's complete cases and maps the joint draw back through each variable's empirical quantiles, so Spearman correlations survive.
 - **Missingness re-imposed** per variable (independently; documented limitation).
 - **Loud refusals, no overrides.** String variables are refused (encode categories first); numeric variables whose nonmissing values are all distinct are refused as ID-shaped — synthetic identifiers are a re-identification hazard, not a feature.
-- **A utility-and-safety receipt** on every run: worst standardized mean gap, worst pairwise rank-correlation gap, and the count of synthetic rows that exactly duplicate a real record — the number a data-sharing agreement's synthetic clause needs.
+- **A fidelity and match diagnostic** on every run: worst standardized mean gap, worst pairwise rank-correlation gap, and the count of generated rows that exactly match a source row. These statistics do not establish that the generated file is safe to release.
 
 ## Install
 

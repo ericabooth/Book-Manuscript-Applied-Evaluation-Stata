@@ -8,7 +8,7 @@ d observed value), the rank (Spearman) correlations between
 d variables are preserved through a Gaussian-copula draw, and each
 d variable's missing share is re-imposed.  Refuses string and
 d ID-shaped variables loudly, with no override.  Every run returns
-d a utility-and-safety receipt: worst standardized mean gap, worst
+d a fidelity and match diagnostic: worst standardized mean gap, worst
 d rank-correlation gap, and the count of synthetic rows duplicating
 d a real record.
 d

@@ -42,7 +42,7 @@ list county month3_emplvl avg_wkly_wage, clean noobs
 *--- Save the analysis-ready extract ------------------------------------------*
 save "$clean/qcew_tx_metro_2023q1.dta", replace
 
-*--- The payoff figure: average weekly wage by county -------------------------*
+*--- Summary figure: average weekly wage by county -------------------------*
 graph hbar (asis) avg_wkly_wage, ///
     over(county, sort(1) descending label(labsize(small))) ///
     bar(1, color(navy)) blabel(bar, format(%9.0fc) size(small)) ///

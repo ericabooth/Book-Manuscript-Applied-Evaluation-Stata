@@ -45,7 +45,7 @@ drop noise
 di "SIMULATED  obs = " _N
 list site target observed, clean noobs
 
-*--- 2. The payoff figure: observed vs target rural share by site -------------*
+*--- 2. Diagnostic figure: observed vs target rural share by site -------------*
 graph bar (asis) target observed, ///
     over(site, label(labsize(small))) ///
     bar(1, color(gs10)) bar(2, color(navy)) ///

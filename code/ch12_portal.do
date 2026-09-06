@@ -88,7 +88,7 @@ if 0 {   // DISPLAY-ONLY: requires -statashiny-
 *   webdoc2 wraps Ben Jann's -webdoc-. wdinit opens (and injects the BS5
 *   header), wputh1/wput write narrative, wd...wdclose logs a code block,
 *   button...buttonclose makes a collapsible one, and `webdoc close' writes
-*   the html. wdimg / wdiframe are the load-bearing embed commands: they
+*   the html. wdimg / wdiframe are the core embed commands: they
 *   pull the charts and dashboards above into ONE page.
 *   Needs the webdoc2 package (Ch12); shown display-only.
 *   Live example: https://ericabooth.github.io/Webdoc2_Example_Site/

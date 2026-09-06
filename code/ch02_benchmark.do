@@ -101,7 +101,7 @@ di as txt "egen mean 24 grp   native vs gtools: " ///
 di as txt "egen mean 200k grp native vs gtools: " ///
     as res %5.2f `t7' " vs " %5.2f `t8' "  (x" %4.1f `t7'/`t8' ")"
 
-*--- The payoff figure: seconds per run, native vs gtools ----------------------*
+*--- Timing figure: seconds per run, native vs gtools ----------------------*
 preserve
 clear
 set obs 8

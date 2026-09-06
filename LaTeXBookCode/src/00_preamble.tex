@@ -48,6 +48,7 @@
 
 \newcounter{appliedexample}
 \counterwithin{appliedexample}{chapter}
+\renewcommand*{\theHappliedexample}{\thechapter.\arabic{appliedexample}}
 
 \newmdenv[
     skipabove=1.2\topskip, skipbelow=0.8\topskip,
