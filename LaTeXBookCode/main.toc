@@ -213,8 +213,8 @@
 \contentsline {mtocsubsection}{\numberline {6.10.1}First ask: one row per what?}{118}{subsection.6.10.1}%
 \contentsline {subsection}{\numberline {6.10.2}Three ways to put two files together}{119}{subsection.6.10.2}%
 \contentsline {mtocsubsection}{\numberline {6.10.2}Three ways to put two files together}{119}{subsection.6.10.2}%
-\contentsline {subsection}{\numberline {6.10.3}Frames: a second dataset open at the same time}{120}{subsection.6.10.3}%
-\contentsline {mtocsubsection}{\numberline {6.10.3}Frames: a second dataset open at the same time}{120}{subsection.6.10.3}%
+\contentsline {subsection}{\numberline {6.10.3}Frames: a second dataset open at the same time}{119}{subsection.6.10.3}%
+\contentsline {mtocsubsection}{\numberline {6.10.3}Frames: a second dataset open at the same time}{119}{subsection.6.10.3}%
 \contentsline {subsection}{\numberline {6.10.4}When a database is the right call}{121}{subsection.6.10.4}%
 \contentsline {mtocsubsection}{\numberline {6.10.4}When a database is the right call}{121}{subsection.6.10.4}%
 \contentsline {section}{\numberline {6.11}Missing data honestly}{122}{section.6.11}%
@@ -229,12 +229,12 @@
 \contentsline {mtocsubsection}{\numberline {7.1.1}Fixing a low alpha before the wave closes}{131}{subsection.7.1.1}%
 \contentsline {section}{\numberline {7.2}Weights that restore the population}{131}{section.7.2}%
 \contentsline {mtocsection}{\numberline {7.2}Weights that restore the population}{131}{section.7.2}%
-\contentsline {section}{\numberline {7.3}Stabilizing noisy small-site rates}{132}{section.7.3}%
-\contentsline {mtocsection}{\numberline {7.3}Stabilizing noisy small-site rates}{132}{section.7.3}%
+\contentsline {section}{\numberline {7.3}Stabilizing noisy small-site rates}{133}{section.7.3}%
+\contentsline {mtocsection}{\numberline {7.3}Stabilizing noisy small-site rates}{133}{section.7.3}%
 \contentsline {subsection}{\numberline {7.3.1}Reliability and shrinkage are one number}{134}{subsection.7.3.1}%
 \contentsline {mtocsubsection}{\numberline {7.3.1}Reliability and shrinkage are one number}{134}{subsection.7.3.1}%
-\contentsline {section}{\numberline {7.4}Power and the smallest effect you can see}{135}{section.7.4}%
-\contentsline {mtocsection}{\numberline {7.4}Power and the smallest effect you can see}{135}{section.7.4}%
+\contentsline {section}{\numberline {7.4}Power and the smallest effect you can see}{136}{section.7.4}%
+\contentsline {mtocsection}{\numberline {7.4}Power and the smallest effect you can see}{136}{section.7.4}%
 \contentsline {section}{\numberline {7.5}Calibrating prediction intervals for new cases}{138}{section.7.5}%
 \contentsline {mtocsection}{\numberline {7.5}Calibrating prediction intervals for new cases}{138}{section.7.5}%
 \contentsline {section}{\numberline {7.6}How much of the variation is the site, and how much the person?}{141}{section.7.6}%

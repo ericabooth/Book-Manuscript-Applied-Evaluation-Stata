@@ -87,7 +87,7 @@
 \indexentry{cxchangelog@\texttt{cxchangelog}|hyperpage}{90}
 \indexentry{cxchangelog@\texttt{cxchangelog}|hyperpage}{90}
 \indexentry{datadictionary@\texttt{datadictionary}|hyperpage}{91}
-\indexentry{datadictionary@\texttt{datadictionary}|hyperpage}{93}
+\indexentry{datadictionary@\texttt{datadictionary}|hyperpage}{94}
 \indexentry{surveypull@\texttt{surveypull}|hyperpage}{94}
 \indexentry{probabilistic record linkage|hyperpage}{97}
 \indexentry{Jaro-Winkler distance|hyperpage}{97}
@@ -111,7 +111,7 @@
 \indexentry{reshapehelper@\texttt{reshapehelper}|hyperpage}{114}
 \indexentry{level of a dataset|hyperpage}{118}
 \indexentry{isid@\texttt{isid}|hyperpage}{118}
-\indexentry{frames@frames (Stata)|hyperpage}{120}
+\indexentry{frames@frames (Stata)|hyperpage}{119}
 \indexentry{frame create@\texttt{frame create}|hyperpage}{120}
 \indexentry{frlink@\texttt{frlink}|hyperpage}{120}
 \indexentry{frget@\texttt{frget}|hyperpage}{120}
@@ -123,10 +123,10 @@
 \indexentry{factor@\texttt{factor}|hyperpage}{130}
 \indexentry{item response theory|hyperpage}{130}
 \indexentry{irt@\texttt{irt}|hyperpage}{130}
-\indexentry{svyset@\texttt{svyset}|hyperpage}{131}
-\indexentry{post-stratification|hyperpage}{131}
-\indexentry{raking|hyperpage}{131}
-\indexentry{empirical Bayes shrinkage|hyperpage}{132}
+\indexentry{svyset@\texttt{svyset}|hyperpage}{132}
+\indexentry{post-stratification|hyperpage}{132}
+\indexentry{raking|hyperpage}{132}
+\indexentry{empirical Bayes shrinkage|hyperpage}{133}
 \indexentry{rateshrink@\texttt{rateshrink}|hyperpage}{134}
 \indexentry{minimum detectable effect|hyperpage}{136}
 \indexentry{power@\texttt{power}|hyperpage}{136}

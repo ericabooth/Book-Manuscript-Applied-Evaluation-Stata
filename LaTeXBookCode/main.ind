@@ -49,7 +49,7 @@
   \item data dictionary, \hyperpage{8}
   \item data-ink ratio, \hyperpage{169}
   \item \texttt{datadictionary}, \hyperpage{10}, \hyperpage{91}, 
-		\hyperpage{93}, \hyperpage{215}, \hyperpage{248}
+		\hyperpage{94}, \hyperpage{215}, \hyperpage{248}
   \item design effect, \hyperpage{136}
   \item \texttt{destring}, \hyperpage{66}
   \item difference-in-differences, \hyperpage{149}
@@ -65,7 +65,7 @@
   \item \texttt{egen}, \hyperpage{35}
   \item embarrassingly parallel, \hyperpage{250}
   \item embedded evaluation, \hyperpage{6}
-  \item empirical Bayes shrinkage, \hyperpage{132}, \hyperpage{292}
+  \item empirical Bayes shrinkage, \hyperpage{133}, \hyperpage{292}
   \item \texttt{esttab}, \hyperpage{206}
   \item evaluation literacy, \hyperpage{8}
   \item event study, \hyperpage{153}
@@ -81,7 +81,7 @@
   \item four principles, \hyperpage{6}
   \item four-fifths rule, \hyperpage{265}
   \item \texttt{frame create}, \hyperpage{120}
-  \item frames (Stata), \hyperpage{120}
+  \item frames (Stata), \hyperpage{119}
   \item FRED (Federal Reserve Economic Data), \hyperpage{49}
   \item \texttt{frget}, \hyperpage{120}
   \item \texttt{frlink}, \hyperpage{120}
@@ -186,7 +186,7 @@
   \item paradata, \hyperpage{84}
   \item parallel trends, \hyperpage{154}
   \item Plan-Do-Study-Act cycle, \hyperpage{8}
-  \item post-stratification, \hyperpage{131}
+  \item post-stratification, \hyperpage{132}
   \item \texttt{power}, \hyperpage{136}
   \item pre-registered analysis plan, \hyperpage{7}
   \item pre-registration, \hyperpage{162}
@@ -207,7 +207,7 @@
 
   \indexspace
 
-  \item raking, \hyperpage{131}
+  \item raking, \hyperpage{132}
   \item \texttt{rateshrink}, \hyperpage{134}, \hyperpage{290}, 
 		\hyperpage{292}
   \item \texttt{rawsweep}, \hyperpage{281}
@@ -252,7 +252,7 @@
   \item \texttt{surveymap}, \hyperpage{87}
   \item \texttt{surveypull}, \hyperpage{94}
   \item \texttt{surveytracker}, \hyperpage{80}
-  \item \texttt{svyset}, \hyperpage{131}
+  \item \texttt{svyset}, \hyperpage{132}
   \item \texttt{syntax}, \hyperpage{286}
   \item \texttt{synth}, \hyperpage{155}
   \item synthetic control, \hyperpage{155}
