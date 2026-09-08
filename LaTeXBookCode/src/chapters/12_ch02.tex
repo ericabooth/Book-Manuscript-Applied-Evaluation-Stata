@@ -338,7 +338,7 @@ It is worth building a loop small before you build it wide, because you meet the
 \end{figure*}
 
 \section{Leave a paper trail: logging every run}\label{sec:logging}
-When a pipeline rebuilds silently, you are left with no evidence of what it did. A log file gives you that evidence: it captures every command and every line of output to a text file, so weeks later you can answer \enquote{what did the January run actually print?} without rerunning anything. Open a log at the top of each do-file and close it at the bottom, and stamp the filename with the date so a new day\textquotesingle s run preserves the previous day\textquotesingle s log:
+When a pipeline rebuilds silently, you are left with no evidence of what it did. A log file gives you that evidence: it captures every command and every line of output to a text file, so weeks later you can answer \enquote{what did the January run actually print?} without rerunning anything. Open a log at the top of each do-file and close it at the bottom, and stamp the filename with the date so a new day's run preserves the previous day's log:
 \par
 {\footnotesize
 \begin{verbatim}
@@ -450,7 +450,7 @@ The benchmark above times commands against a file already sitting in memory, whi
 
 Appendix~\ref{app:walkthroughs} works one project at that scale from end to end. It builds a school-level panel from STAAR, the statewide assessment Texas gives every year, reading one file per year from 2012 through 2025 at roughly 400\,MB apiece.\marginnote{Read whole, those fourteen files would put about 5.6\,GB in front of Stata before a single recode ran.} The analysis needs a few grades and subjects out of each one, so the pipeline filters as it reads and never holds a whole file in memory. Apply the same habit at any size: drop the variables and rows you will not use immediately after ingestion, and run \texttt{compress} before you save. Speed belongs in a chapter about replication for a blunt reason. You will rerun a pipeline that finishes in minutes, and you will hand-patch one that takes a day.\marginnote{One number worth a comment at the top of the control file: the full rebuild time. A successor deciding whether to rerun before a meeting needs to know if the answer is four minutes or four hours.}
 
-\paragraph{Where this leaves you.} Your projects now have a five-folder layout, a control file that sets every path in one place and rebuilds the pipeline on command, a dated log for every run, and benchmarked speed habits that keep reruns fast and honest. You can reuse that setup when the next project begins. Beside them, the tracking spine records the decisions the code executes but cannot explain. Part~II turns to filling the project with data, beginning with the public APIs in Chapter~\ref{ch:apis}.
+\paragraph{Where this leaves you.} Your projects now have a five-folder layout, a control file that sets every path in one place and rebuilds the pipeline on command, a dated log for every run, and benchmarked speed habits that keep reruns fast and honest. Those are the replicable and extensible principles, banked once for every project ahead. Beside them, the tracking spine records the decisions the code executes but cannot explain. Part~II turns to filling the project with data, beginning with the public APIs in Chapter~\ref{ch:apis}.
 
 \section*{Exercises}\addcontentsline{toc}{section}{Exercises}
 \begin{enumerate}
