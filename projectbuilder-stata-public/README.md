@@ -29,6 +29,9 @@ net get projectbuilder, from("https://raw.githubusercontent.com/ericabooth/proje
 
 Requires Stata 16.0 or newer. No hard dependencies.
 
+
+<img width="2400" height="1260" alt="projectbuilder_srctag_suite" src="https://github.com/user-attachments/assets/f4aa142e-d63d-46b7-a805-247bac2fc10d" />
+
 ## Quick start
 
 **Workflow A — the data already exists.** Point `data()` at a folder of files
@@ -194,6 +197,18 @@ by naming the package folder:
 stata-mp -b do test_projectbuilder.do
 stata-mp -b do test_projectbuilder.do "/path/to/projectbuilder-stata-public"
 ```
+
+## Changes in 2.1.1
+
+- A leading `~` in `path()`, `projectbuilder sitebuild, path()`, and
+  `data()` now means the home folder (`HOME`; on Windows `USERPROFILE`,
+  then `HOMEDRIVE`+`HOMEPATH`). Before, `path("~/projects")` was joined to
+  the current directory and failed with a misleading "base path not
+  found", the help's own `sitebuild, path("~/projects")` example failed,
+  and `path("~")` silently scaffolded into a literal folder named `~`.
+- The test battery checks folders with Mata `direxists()` instead of
+  `confirm file "dir/."`, and its bare-install test no longer assumes the
+  optional companions were installed before it ran.
 
 ## Changes in 2.1.0
 
