@@ -679,8 +679,8 @@ global clean   "$root/clean"     // analysis-ready data
 global code    "$root/code"      // the do-files
 global output  "$root/output"    // logs and tables
 global figures "$root/figures"   // exported graphs
-capture confirm file "$root/."   // fail here, not three do-files later
-if _rc {
+mata: st_local("ok", strofreal(direxists("$root")))
+if !`ok' {                        // fail here, not three do-files later
     display as error "root does not exist: $root"
     exit 601
 }
@@ -691,7 +691,7 @@ foreach f in raw clean output figures {
 set scheme s2color    // one graphics style project-wide
 \end{verbatim}
 }
-Now every downstream do-file refers to \texttt{\$clean} and \texttt{\$figures} rather than a literal path, so a script written on a Mac runs unedited on a Windows laptop once the one \texttt{root} line is changed. Pinning \texttt{version}\index{version@\texttt{version}} and turning off \texttt{varabbrev}\index{varabbrev@\texttt{varabbrev}} are small reproducibility insurance: the first makes today's code behave the same next year, the second turns a silently-wrong abbreviation into a clear error.\marginnote{Concretely: with \texttt{varabbrev} on, typing \texttt{gen x = inc} happily resolves \texttt{inc} to \texttt{income} \emph{until} the day a new \texttt{income\_adj} lands in the file and the abbreviation turns ambiguous, or worse, silently binds to the wrong one. Turning it off makes you spell the name out, so the code says what it means.} This one file is the extensible principle in practice: the project extends across people, not just across time.
+Now every downstream do-file refers to \texttt{\$clean} and \texttt{\$figures} rather than a literal path, so a script written on a Mac runs unedited on a Windows laptop once the one \texttt{root} line is changed.\marginnote{The folder check uses Mata's \texttt{direxists()} because the common shortcut, \texttt{capture confirm file "\$root/."}, depends on how the operating system treats a folder. It works on macOS and Linux, where every folder contains an entry named ``\texttt{.}'', but Windows does not open a folder as if it were a file, so the shortcut can report a missing folder that is really there. \texttt{direxists()} asks the question directly and gives the same answer on every system.} Pinning \texttt{version}\index{version@\texttt{version}} and turning off \texttt{varabbrev}\index{varabbrev@\texttt{varabbrev}} are small reproducibility insurance: the first makes today's code behave the same next year, the second turns a silently-wrong abbreviation into a clear error.\marginnote{Concretely: with \texttt{varabbrev} on, typing \texttt{gen x = inc} happily resolves \texttt{inc} to \texttt{income} \emph{until} the day a new \texttt{income\_adj} lands in the file and the abbreviation turns ambiguous, or worse, silently binds to the wrong one. Turning it off makes you spell the name out, so the code says what it means.} This one file is the extensible principle in practice: the project extends across people, not just across time.
 
 Paths are not the only values worth hoisting to the top: give a global to anything that changes on a schedule. A project that evaluates fiscal year 2026 will evaluate 2027 next, so the year belongs beside \texttt{root} as \texttt{global fy 2026}, along with a \texttt{global counties} list if the sites rotate, and every downstream do-file reads \texttt{\$fy} rather than a literal 2026. Next year's update is then a one-line edit, not a hunt for every buried 2026, including the one in a filter that would silently return last year's rows.
 
@@ -6316,7 +6316,62 @@ The agent version of this pattern replaces the \texttt{grep} with a reviewer LLM
 \textbf{The backbone run.} You do not reopen the chat and ask again, because that LLM is gone. You open the project folder. The \texttt{TODO.md} shows every step and its status; the numbered do-files rerun from raw data with one command; the \texttt{webdoc2} report shows what the assistant found and decided last time; the logs show every \texttt{assert} that passed. You point a fresh LLM at the checklist, ask it to add one robustness check, run it in batch, triangulate the new number against the old log, and answer the funder in an hour, with a result that does not depend on any LLM remembering anything. The LLM changed; the analysis did not, because the LLM was never the analysis.
 \end{appliedexample}
 
-\paragraph{Where this leaves you.} A language model can propose one bounded coding step at a time while Stata computes the results. The checklist records the plan, batch logs and \texttt{assert} statements verify execution, and an independent calculation checks the main finding. The sections that follow add controls for privacy, validation, reproducibility, untrusted text, and group-specific performance.
+\subsection{Testing for the machines you do not have}\label{sec:ch13-environments}
+Code that passes every check on your own computer can still fail on a colleague's, because the colleague runs a different Stata version or a different operating system. If you write do-files or ado-files that other people run, those differences decide whether they can run your work at all. An LLM can help you find the differences, but only when you ask it to look, and it cannot run a machine that you do not have.
+
+The failures below came from Stata packages we wrote, several of them used in this book. Each passed its tests on a Mac running StataNow 19.5 and then broke for users elsewhere:
+\begin{itemize}
+\item An option declared as \texttt{TX2036STyle} worked in StataNow 19.5 but was rejected as ``not allowed'' in older Stata. Stata reads the capital letters in a \texttt{syntax} option as its minimum abbreviation, and older and newer versions treat a capital that follows a digit differently, so the full option name differed by version. Adding \texttt{version 16} to the file does not bring back the older rule; only the older Stata does.
+\item A folder check written as \texttt{confirm file "dir/."} worked on macOS and Linux but is unreliable on Windows, which does not open a folder as if it were a file (Section~\ref{sec:control}).
+\item A path that began with \texttt{\textasciitilde} worked when Stata opened the file, because Stata on macOS expands \texttt{\textasciitilde} to the home folder, and failed when the same path was handed to a Python helper, which does not.
+\item Text containing a line break, such as an open-ended survey answer, became several rows after a round trip through \texttt{export delimited} and \texttt{import delimited}, until the export added the \texttt{quote} option and the import added \texttt{bindquote(strict)}.
+\end{itemize}
+Each of these survived review because the reviewer, human or LLM, tested only the environment in front of them. The remedy is to make the other environments part of the test plan.
+
+\paragraph{Ask for the inventory before the tests.} Give the LLM your ado-file or do-file and ask it to list every line that depends on the environment: file paths and folder checks, shell commands, temporary files, calls to Python or R, text encodings, the \texttt{version} statement, and the option names in \texttt{syntax}. You can check a list like this faster than a test suite, and it tells you which tests to write. Treat it as a draft and confirm each item against the code before you act on it.
+
+\paragraph{Turn each item into a test that stops on failure.} For each item, write a short do-file that exercises it and stops with an error when the behavior is wrong. Stata's \texttt{assert} checks a condition and \texttt{rcof} checks the return code of a command, so a test can require that an option is accepted or that a bad input is refused with the right error. The test below checks the option from the first example:
+\par
+{\footnotesize
+\begin{verbatim}
+* test_options.do: run it under every Stata version you have
+capture program drop optdemo
+program define optdemo
+    syntax , [TX2036STyle]
+    display as text "option accepted"
+end
+rcof "noisily optdemo, tx2036style" == 0
+display as result "PASS: the option is accepted"
+\end{verbatim}
+}
+StataNow 19.5 prints the \texttt{PASS} line. Stata 16.1 stops at \texttt{rcof}:
+\par
+{\footnotesize
+\begin{verbatim}
+. rcof "noisily optdemo, tx2036style" == 0
+option tx2036style not allowed
+rcof:  _rc  == 0 *NOT TRUE* from
+       noisily optdemo, tx2036style
+       _rc == 198
+r(9);
+\end{verbatim}
+}
+Declaring the option as \texttt{TX2036style}, with every letter after the abbreviation in lowercase, passes in both versions.
+
+\paragraph{Run the tests under every environment you can reach.} Run the test files in batch under each Stata version installed on your machine; if your license allows it, keep an older version installed for this purpose. Then change the environment around the test while leaving the code alone: put the working folder in a path that contains spaces and an accented character, point the home and temporary folders at a scratch folder, and run once after \texttt{clear all} and once after \texttt{mata clear}. On macOS and Linux you can set the home and temporary folders for a single run from the shell:
+\par
+{\footnotesize
+\begin{verbatim}
+HOME="$PWD/fakehome" TMPDIR="$PWD/tmp dir/" stata-mp -b do test_paths.do
+\end{verbatim}
+}
+Pointing the home folder at a scratch folder also keeps a test that writes to \texttt{\textasciitilde} away from your real files. Section~\ref{sec:backbone-parallel} shows how to run many test files at once and read their logs.
+
+\paragraph{Review twice, with different methods, and try to refute each finding.} One review reads the code against a list of known failure types, such as the four above. A second review starts from the help file and tests every documented option and example before reading any code, which finds the places where the help file and the code disagree. The two methods start from different evidence, so a problem that one misses can surface in the other. Before you fix a finding, give it to a fresh reviewer whose only instruction is to reproduce it or show that it is wrong. Findings that survive go into the fix list; the rest go into the log with the reason they were dropped.
+
+\paragraph{Name what you could not test.} You may have no Windows machine, no Linux machine, or no copy of Stata 17. Write those gaps into the test log, mark any claim about them as reasoned rather than run, and ask a colleague who has that setup to run a short diagnostic do-file that writes its own log. A sentence such as ``tested in Stata 16.1 and 19.5 on macOS; Windows behavior reasoned from the documentation, not run'' tells a user how far to trust the code.
+
+\paragraph{Where this leaves you.} A language model can propose one bounded coding step at a time while Stata computes the results. When other people will run your code, the tests in Section~\ref{sec:ch13-environments} extend the same checks to Stata versions and operating systems you do not use yourself. The checklist records the plan, batch logs and \texttt{assert} statements verify execution, and an independent calculation checks the main finding. The sections that follow add controls for privacy, validation, reproducibility, untrusted text, and group-specific performance.
 
 \section{What never leaves the building}
 Before using a hosted service, determine which data it may receive. FERPA, HIPAA, a contract, or a data-use agreement may prohibit sending administrative records to an outside server. Record the approved data boundary and review the vendor's retention period, training terms, subprocessors, access controls, and deletion process.\marginnote{A training opt-out does not state how long the vendor retains a copy or which subprocessors can access it. Review those terms separately.} A local model may be appropriate for some restricted work, subject to review of its network access, telemetry, logs, storage, and user permissions. The command below screens for several formatted identifier patterns; the broader eligibility decision remains with the authorized reviewer.

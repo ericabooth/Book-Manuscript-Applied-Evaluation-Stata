@@ -31,10 +31,14 @@ set seed 20260707
 * -projectbuilder- refuses to overwrite an existing project (error 602), which
 * is the guard Chapter 2 describes, so a leftover demo would stop a second run.
 local demo "`c(tmpdir)'/projectbuilder_demo"
-capture confirm file "`demo'/."
-if !_rc {
-    if lower("`c(os)'") == "windows"  shell rmdir /s /q "`demo'"
-    else                              shell rm -rf "`demo'"
+* direxists() works on every OS; confirm file "dir/." fails on Windows.
+mata: st_local("isdir", strofreal(direxists(st_local("demo"))))
+if `isdir' {
+    if lower("`c(os)'") == "windows" {
+        local wdemo : subinstr local demo "/" "\", all   // cmd reads / as a switch
+        shell rmdir /s /q "`wdemo'"
+    }
+    else shell rm -rf "`demo'"
 }
 capture mkdir "`demo'"
 cd "`demo'"

@@ -208,44 +208,44 @@
 \indexentry{datadictionary@\texttt{datadictionary}|hyperpage}{248}
 \indexentry{assert@\texttt{assert}|hyperpage}{249}
 \indexentry{embarrassingly parallel|hyperpage}{250}
-\indexentry{ai\_privacy\_gate@\texttt{ai\_privacy\_gate}|hyperpage}{253}
-\indexentry{inter-rater reliability|hyperpage}{255}
-\indexentry{kappa!Cohen's and Fleiss'|hyperpage}{255}
-\indexentry{kappa!formula|hyperpage}{255}
-\indexentry{kap@\texttt{kap}|hyperpage}{255}
-\indexentry{llmsieve@\texttt{llmsieve}|hyperpage}{256}
-\indexentry{convergence delta|hyperpage}{258}
-\indexentry{prompt injection|hyperpage}{263}
-\indexentry{four-fifths rule|hyperpage}{265}
-\indexentry{faircheck@\texttt{faircheck}|hyperpage}{266}
-\indexentry{k-anonymity@$k$-anonymity|hyperpage}{271}
-\indexentry{quasi-identifiers|hyperpage}{271}
-\indexentry{l-diversity@$l$-diversity|hyperpage}{271}
-\indexentry{riskscan@\texttt{riskscan}|hyperpage}{272}
-\indexentry{re-identification|hyperpage}{273}
-\indexentry{sysuse@\texttt{sysuse}|hyperpage}{273}
-\indexentry{coarsening|hyperpage}{276}
-\indexentry{collect@\texttt{collect}|hyperpage}{276}
-\indexentry{suppress@\texttt{suppress}|hyperpage}{277}
-\indexentry{complementary suppression|hyperpage}{278}
-\indexentry{synthetic data|hyperpage}{280}
-\indexentry{synthgen@\texttt{synthgen}|hyperpage}{280}
-\indexentry{rawsweep@\texttt{rawsweep}|hyperpage}{281}
-\indexentry{disclosure-review checklist|hyperpage}{282}
-\indexentry{dsload@\texttt{dsload}|hyperpage}{286}
-\indexentry{net install@\texttt{net install}|hyperpage}{286}
-\indexentry{syntax@\texttt{syntax}|hyperpage}{286}
-\indexentry{version@\texttt{version}|hyperpage}{287}
-\indexentry{SMCL|hyperpage}{287}
-\indexentry{editanything@\texttt{editanything}|hyperpage}{287}
-\indexentry{writeinput@\texttt{writeinput}|hyperpage}{288}
-\indexentry{scrapessc@\texttt{scrapessc}|hyperpage}{289}
-\indexentry{rateshrink@\texttt{rateshrink}|hyperpage}{290}
-\indexentry{empirical Bayes shrinkage|hyperpage}{292}
+\indexentry{ai\_privacy\_gate@\texttt{ai\_privacy\_gate}|hyperpage}{255}
+\indexentry{inter-rater reliability|hyperpage}{257}
+\indexentry{kappa!Cohen's and Fleiss'|hyperpage}{257}
+\indexentry{kappa!formula|hyperpage}{257}
+\indexentry{kap@\texttt{kap}|hyperpage}{257}
+\indexentry{llmsieve@\texttt{llmsieve}|hyperpage}{258}
+\indexentry{convergence delta|hyperpage}{260}
+\indexentry{prompt injection|hyperpage}{265}
+\indexentry{four-fifths rule|hyperpage}{267}
+\indexentry{faircheck@\texttt{faircheck}|hyperpage}{268}
+\indexentry{k-anonymity@$k$-anonymity|hyperpage}{273}
+\indexentry{quasi-identifiers|hyperpage}{273}
+\indexentry{l-diversity@$l$-diversity|hyperpage}{273}
+\indexentry{riskscan@\texttt{riskscan}|hyperpage}{274}
+\indexentry{re-identification|hyperpage}{275}
+\indexentry{sysuse@\texttt{sysuse}|hyperpage}{275}
+\indexentry{coarsening|hyperpage}{278}
+\indexentry{collect@\texttt{collect}|hyperpage}{278}
+\indexentry{suppress@\texttt{suppress}|hyperpage}{279}
+\indexentry{complementary suppression|hyperpage}{280}
+\indexentry{synthetic data|hyperpage}{282}
+\indexentry{synthgen@\texttt{synthgen}|hyperpage}{282}
+\indexentry{rawsweep@\texttt{rawsweep}|hyperpage}{283}
+\indexentry{disclosure-review checklist|hyperpage}{284}
+\indexentry{dsload@\texttt{dsload}|hyperpage}{288}
+\indexentry{net install@\texttt{net install}|hyperpage}{288}
+\indexentry{syntax@\texttt{syntax}|hyperpage}{288}
+\indexentry{version@\texttt{version}|hyperpage}{289}
+\indexentry{SMCL|hyperpage}{289}
+\indexentry{editanything@\texttt{editanything}|hyperpage}{289}
+\indexentry{writeinput@\texttt{writeinput}|hyperpage}{290}
+\indexentry{scrapessc@\texttt{scrapessc}|hyperpage}{291}
 \indexentry{rateshrink@\texttt{rateshrink}|hyperpage}{292}
-\indexentry{Mata|hyperpage}{293}
-\indexentry{lstrfun@\texttt{lstrfun}|hyperpage}{293}
-\indexentry{timer@\texttt{timer}|hyperpage}{293}
-\indexentry{openICPSR|hyperpage}{295}
-\indexentry{replication archive|hyperpage}{295}
-\indexentry{capstone|hyperpage}{311}
+\indexentry{empirical Bayes shrinkage|hyperpage}{294}
+\indexentry{rateshrink@\texttt{rateshrink}|hyperpage}{294}
+\indexentry{Mata|hyperpage}{295}
+\indexentry{lstrfun@\texttt{lstrfun}|hyperpage}{295}
+\indexentry{timer@\texttt{timer}|hyperpage}{295}
+\indexentry{openICPSR|hyperpage}{297}
+\indexentry{replication archive|hyperpage}{297}
+\indexentry{capstone|hyperpage}{313}

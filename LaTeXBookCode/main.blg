@@ -1,15 +1,8 @@
-[0] Config.pm:307> INFO - This is Biber 2.17
-[0] Config.pm:310> INFO - Logfile is 'main.blg'
-[66] biber-darwin:340> INFO - === Tue Sep  8, 2026, 13:02:27
-[81] Biber.pm:418> INFO - Reading 'main.bcf'
-[212] Biber.pm:972> INFO - Found 157 citekeys in bib section 0
-[227] Biber.pm:4383> INFO - Processing section 0
-[236] Biber.pm:4574> INFO - Looking for bibtex file 'main.bib' for section 0
-[240] bibtex.pm:1713> INFO - LaTeX decoding ...
-[369] bibtex.pm:1518> INFO - Found BibTeX data source 'main.bib'
-[1146] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[1146] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[1146] Biber.pm:4203> INFO - Sorting list 'nyt/global//global/global' of type 'entry' with template 'nyt' and locale 'en-US'
-[1147] Biber.pm:4209> INFO - No sort tailoring available for locale 'en-US'
-[1298] bbl.pm:654> INFO - Writing 'main.bbl' with encoding 'UTF-8'
-[1387] bbl.pm:757> INFO - Output to main.bbl
+[0] Config.pm:329> INFO - This is Biber 2.22
+[0] Config.pm:332> INFO - Logfile is 'main.blg'
+[37] biber:342> INFO - === Mon Nov  9, 2026, 06:53:46
+[47] Biber.pm:421> INFO - Reading 'main.bcf'
+[97] Utils.pm:480> ERROR - Error: Found biblatex control file version 3.8, expected version 3.11.
+This means that your biber (2.22) and biblatex (3.17) versions are incompatible.
+See compat matrix in biblatex or biber PDF documentation.
+[98] Biber.pm:137> INFO - ERRORS: 1

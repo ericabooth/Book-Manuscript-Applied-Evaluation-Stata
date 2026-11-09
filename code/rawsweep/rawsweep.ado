@@ -11,8 +11,9 @@ program define rawsweep, rclass
     }
 
     if "`patterns'" == "" local patterns "*.csv *.txt"
-    capture confirm file `"`directory'/."'
-    if _rc {
+    * direxists() works on every OS; confirm file "dir/." fails on Windows
+    mata: st_local("isdir", strofreal(direxists(st_local("directory"))))
+    if !`isdir' {
         di as error `"rawsweep: directory not found: `directory'"'
         exit 601
     }

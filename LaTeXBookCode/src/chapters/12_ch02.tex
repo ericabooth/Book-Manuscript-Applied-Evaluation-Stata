@@ -123,8 +123,8 @@ global clean   "$root/clean"     // analysis-ready data
 global code    "$root/code"      // the do-files
 global output  "$root/output"    // logs and tables
 global figures "$root/figures"   // exported graphs
-capture confirm file "$root/."   // fail here, not three do-files later
-if _rc {
+mata: st_local("ok", strofreal(direxists("$root")))
+if !`ok' {                        // fail here, not three do-files later
     display as error "root does not exist: $root"
     exit 601
 }
@@ -135,7 +135,7 @@ foreach f in raw clean output figures {
 set scheme s2color    // one graphics style project-wide
 \end{verbatim}
 }
-Now every downstream do-file refers to \texttt{\$clean} and \texttt{\$figures} rather than a literal path, so a script written on a Mac runs unedited on a Windows laptop once the one \texttt{root} line is changed. Pinning \texttt{version}\index{version@\texttt{version}} and turning off \texttt{varabbrev}\index{varabbrev@\texttt{varabbrev}} are small reproducibility insurance: the first makes today's code behave the same next year, the second turns a silently-wrong abbreviation into a clear error.\marginnote{Concretely: with \texttt{varabbrev} on, typing \texttt{gen x = inc} happily resolves \texttt{inc} to \texttt{income} \emph{until} the day a new \texttt{income\_adj} lands in the file and the abbreviation turns ambiguous, or worse, silently binds to the wrong one. Turning it off makes you spell the name out, so the code says what it means.} This one file is the extensible principle in practice: the project extends across people, not just across time.
+Now every downstream do-file refers to \texttt{\$clean} and \texttt{\$figures} rather than a literal path, so a script written on a Mac runs unedited on a Windows laptop once the one \texttt{root} line is changed.\marginnote{The folder check uses Mata's \texttt{direxists()} because the common shortcut, \texttt{capture confirm file "\$root/."}, depends on how the operating system treats a folder. It works on macOS and Linux, where every folder contains an entry named ``\texttt{.}'', but Windows does not open a folder as if it were a file, so the shortcut can report a missing folder that is really there. \texttt{direxists()} asks the question directly and gives the same answer on every system.} Pinning \texttt{version}\index{version@\texttt{version}} and turning off \texttt{varabbrev}\index{varabbrev@\texttt{varabbrev}} are small reproducibility insurance: the first makes today's code behave the same next year, the second turns a silently-wrong abbreviation into a clear error.\marginnote{Concretely: with \texttt{varabbrev} on, typing \texttt{gen x = inc} happily resolves \texttt{inc} to \texttt{income} \emph{until} the day a new \texttt{income\_adj} lands in the file and the abbreviation turns ambiguous, or worse, silently binds to the wrong one. Turning it off makes you spell the name out, so the code says what it means.} This one file is the extensible principle in practice: the project extends across people, not just across time.
 
 Paths are not the only values worth hoisting to the top: give a global to anything that changes on a schedule. A project that evaluates fiscal year 2026 will evaluate 2027 next, so the year belongs beside \texttt{root} as \texttt{global fy 2026}, along with a \texttt{global counties} list if the sites rotate, and every downstream do-file reads \texttt{\$fy} rather than a literal 2026. Next year's update is then a one-line edit, not a hunt for every buried 2026, including the one in a filter that would silently return last year's rows.
 
