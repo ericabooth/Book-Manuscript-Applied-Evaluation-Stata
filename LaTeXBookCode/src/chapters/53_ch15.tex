@@ -183,10 +183,11 @@ The pieces so far, the \texttt{.ado} skeleton, the help file, the two distributi
 
 A maintainer owes a user seven checklist rows, and \texttt{rateshrink} fills all seven. It ships a \emph{help file} (\texttt{rateshrink.sthlp}) with a runnable example, so a reader learns the command by pasting rather than by reading source. It opens with a \emph{version line} in the \texttt{.ado} header, \texttt{*! version 0.1.1  06jul2026}, that identifies the package release. This comment is distinct from the executable \texttt{version} statement that selects Stata's language rules. It includes a \emph{test battery} (\texttt{test\_rateshrink.do}) whose six blocks assert that the shrunken rates fall in the unit interval, that reliability rises with the denominator, and that an unsupported option combination exits with an error rather than a wrong answer. It supplies the \emph{\texttt{.pkg} and \texttt{stata.toc}} manifests that let \texttt{net install} copy the right files. It ships a \emph{README} that states what the command does, when to reach for it, and where the method comes from. And it has an \emph{install URL}, a raw GitHub folder a colleague pastes once. The seventh row is easy to postpone but necessary for controlled upgrades: a \emph{semantic version}, so a user knows what a version jump means before they upgrade.\marginnote{The version string \texttt{0.1.1} is a promise in three numbers \parencite{prestonwerner2013semver}: the leading zero says the public interface may still change, the middle digit counts backward-compatible features, and the trailing digit counts fixes. When \texttt{rateshrink} added the \texttt{rel()} reliability option it moved from a patch to a minor bump, signalling \enquote{new capability, old calls still work} without a word of prose.}
 
-\begin{table*}[htbp]
+\begin{table}[htbp]
 \centering
 \caption[The seven-row tool-hardening checklist]{Artifacts to inspect before depending on a shared tool. Presence is an initial check; read the examples, limits, and tests to assess whether they cover your intended use.}
 \label{tab:ch15-viz-checklist}
+\footnotesize
 \begin{tabular}{lll}
 \hline
 Row & Artifact & What to check \\
@@ -200,7 +201,7 @@ Install URL   & raw GitHub folder            & One paste to install \\
 Semantic ver. & \texttt{major.minor.patch}    & What a version jump means \\
 \hline
 \end{tabular}
-\end{table*}
+\end{table}
 
 \subsection{Checking the tests and the statistical method}\label{sec:ch15-trust-rows}
 Read the test battery alongside the documented statistical method. When your command computes a statistic nobody can check by eye (a shrunken rate is a weighted blend of a raw rate and a prior), you need a test that fails loudly when the arithmetic drifts, because the alternative is a dashboard that shows plausible-but-wrong numbers to a board. The method reference in the README gives you a way to check the intended calculation. \texttt{rateshrink}'s help file, README, and \texttt{.ado} header all point at the same companion methods paper, so a reader who wants to know why the reliability weight is defined the way it is can follow one trail from the command to the statistics.\marginnote{Naming the software and the method it implements so both can be cited and found does for one small tool what \textcite{smith2016software} asked of all research code: their six software-citation principles are importance, credit and attribution, unique identification, persistence, accessibility, and specificity.}

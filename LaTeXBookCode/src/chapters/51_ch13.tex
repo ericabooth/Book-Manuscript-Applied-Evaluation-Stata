@@ -283,10 +283,10 @@ Figure~\ref{fig:ch13-aigate} shows where the pattern screen belongs. Flagged tex
 \begin{tikzpicture}[node distance=0.55cm and 1.3cm]
   \node[stage] (notes) {Case\\notes};
   \node[stage, right=of notes] (gate) {\texttt{ai\_privacy\_gate}\\\texttt{action(stop)}};
-  \node[stage, above right=0.45cm and 1.3cm of gate] (api) {Hosted\\LLM};
-  \node[stage, below right=0.45cm and 1.3cm of gate] (mask) {Mask a\\copy};
+  \node[stage, above right=0.9cm and 5.2cm of gate] (api) {Hosted\\LLM};
+  \node[stage, below right=0.9cm and 5.2cm of gate] (mask) {Mask a\\copy};
   \draw[flow] (notes) -- (gate);
-  \draw[flow] (gate) -- node[annot, above, sloped] {no listed pattern; review eligibility} (api);
+  \draw[flow] (gate) -- node[annot, above, sloped] {no listed pattern: review eligibility} (api);
   \draw[flow] (gate) -- node[annot, below, sloped] {flagged: halts} (mask);
   \draw[flow] (mask) -- node[annot, right=2pt] {re-gate, then send the copy} (api);
   \node[substep, below=0.55cm of notes, text width=2.6cm] {Unmasked originals stay local, always};

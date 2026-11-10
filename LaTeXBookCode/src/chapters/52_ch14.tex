@@ -273,7 +273,7 @@ Inside \texttt{suppress}, complementary suppression runs as a loop: over each \t
 
 \draw[flow] (cell) -- (d1);
 \draw[flow] (d1) -- node[annot,above]{yes} (prim);
-\draw[flow] (d1) |- node[annot,pos=0.22,left]{no} (pub);
+\draw[flow] (d1.south) -- node[annot,left]{no} ++(0,-7mm) -- ++(-24mm,0) |- (pub);
 \draw[flow] (prim) -- (d2);
 \draw[flow] (d2) -- node[annot,above]{yes} (comp);
 \draw[flow] (comp) -- ($(comp.north)+(0,6mm)$) -| node[annot,pos=0.25,above]{recheck} (d2.north);
