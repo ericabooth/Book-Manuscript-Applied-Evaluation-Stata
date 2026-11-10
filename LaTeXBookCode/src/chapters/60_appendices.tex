@@ -81,9 +81,10 @@ net install statashiny, ///
 \begin{itemize}
     \item \texttt{StataShiny-public}
     \item \texttt{dashboardbuilder-stata-public}
+    \item \texttt{sparkta2-stata-public} (the first map call downloads its drawing code and boundary files; Section~\ref{sec:sparkta2})
     \item \texttt{webdoc2-stata-public} (also needs \texttt{ssc install webdoc} and a follow-up \texttt{net get webdoc2} for its header template; its Chapter~\ref{ch:portals} box shows all three lines)
 \end{itemize}
-The one exception is \texttt{sparkta2}, whose source is not yet released. The companion \texttt{01\_install.do} contains every one of these lines ready to run.
+The companion \texttt{01\_install.do} contains every one of these lines ready to run.
 
 \paragraph{Published packages.}
 \begin{itemize}
@@ -98,7 +99,7 @@ The one exception is \texttt{sparkta2}, whose source is not yet released. The co
     \item \texttt{statashiny} -- serverless interactive HTML dashboards (Chapter~\ref{ch:portals}).
     \item \texttt{dashboardbuilder} -- self-contained KPI dashboards: tiles, tabs, benchmark selector, per-panel CSV/PNG, no CDN (Chapter~\ref{ch:portals}).
     \item \texttt{webdoc2} -- Bootstrap-5 dynamic HTML reports over \texttt{webdoc} (Chapter~\ref{ch:portals}).
-    \item \texttt{sparkta2} -- inline sparklines and offline graphics (Chapter~\ref{ch:interactive}; source publication pending).
+    \item \texttt{sparkta2} -- interactive county, school-district, and other maps plus five chart types, each written as one HTML file that opens offline (Chapter~\ref{ch:interactive}).
     \item \texttt{statplot} -- one-call summary-statistic charts of a cleaned dataset, ranked, ordered, and labeled from its variable labels; with N. Cox (Chapter~\ref{ch:graphs}).
     \item \texttt{convertanything} -- folder trees of mixed formats to clean datasets (Chapter~\ref{ch:noapi}).
     \item \texttt{nearmrg} -- nearest-value merges on dates and amounts, optionally within exact-match groups and with a match direction and a distance limit (Chapter~\ref{ch:panels}).
@@ -264,15 +265,15 @@ Simulated data & Built in each chapter's do-file, \texttt{set seed 20260704} & v
 
 \chapter*{Afterword}
 \addcontentsline{toc}{chapter}{Afterword}
-Return to the Thursday-afternoon email that opened Chapter~\ref{ch:embedded}: are we reaching the rural students we promised? An answer now begins with the agreed definition of rural, counts each enrolled student once, reports missing locations, and compares the resulting share with the program's target. The analyst retains the source files, code, log, and dated exhibit so a colleague can check the number and repeat the analysis. The four principles describe what the program gains from that work: an answer tied to a decision, a structure that can accept the next data delivery, an explanation the intended audience can understand, and a result another analyst can trace.
+Return to the Thursday-afternoon email that opened Chapter~\ref{ch:embedded}, in which a foundation officer asked whether the program was reaching the rural students it promised. You can now answer it by Monday, and you can say how you got the answer. You start from the definition of rural that you and the officer agreed on. You count each enrolled student once, you report how many have no location on file, and you compare the rural share with the program's target. You keep the source files, the code, the log, and the dated exhibit, so that a colleague can check the number and run the analysis again next quarter. The four principles of Chapter~\ref{ch:embedded} describe what the program gains from working this way. The answer is tied to a decision, so it is actionable. The pipeline accepts the next data delivery, so it is extensible. The intended audience can read the result, so it is accessible. Another analyst can trace it from the raw files, so it is replicable.
 
-Throughout the book, you record consequential choices before seeing the result they can change. The scoping note defines the decision and deadline; the extraction contract records the expected response from a data source; the analysis plan names the comparison; the deliverable specification identifies what the audience will receive; and the disclosure record explains what left the protected environment. In Chapter~\ref{ch:tools}, the syntax statement defines how another researcher will use a command. These records let you explain which choices preceded the analysis and which changed in response to new evidence.
+One habit runs through every chapter: you write down a consequential choice before you see the result it could change. In the scoping note you define the decision and the deadline. In the extraction contract you record what you expect a data source to return. In the analysis plan you name the comparison, in the deliverable specification you state what the audience will receive, and in the disclosure record you explain what left the protected environment. When you write a command of your own, as in Chapter~\ref{ch:tools}, the syntax statement plays the same role for the researchers who will use it. With these records in hand, you can show a skeptical reader which choices you made before the analysis and which you changed because of new evidence.
 
-The principles also support one another. A repeatable pipeline reduces the effort needed to add a year or site. A stable structure leaves more time to improve labels, explanations, and the form in which readers receive the result. Readers can then use the work while analysts retain a record of how it was produced. Under a short deadline, begin with the source files, code, and log because later updates and explanations depend on them.
+The four principles also support one another, and that is useful to remember when time is short. When your pipeline reruns from the raw files, adding a year or a site takes little effort. The time you save goes into better labels, clearer explanations, and a format your readers can use. Your readers then act on the work while you keep the record of how you produced it. If a deadline forces you to choose, we suggest you secure the source files, the code, and the log first, because every later update and every later explanation depends on them.
 
-Packages, data endpoints, and hosted LLMs will change after publication. A durable workflow records the software and data version, states the expected result before computing it, and identifies the evidence that would change the conclusion. When an endpoint moves or a definition changes, those records help the next analyst locate the break and decide whether earlier results remain comparable. You can practice that work by rebuilding the capstone with data from your state, checking each assertion, and documenting any changes needed to reproduce the analysis.
+Some of what this book teaches will go out of date. Packages will be revised, data endpoints will move, and hosted LLMs will be replaced. We have tried to teach a workflow that survives those changes. You record the software and data versions, you state the result you expect before you compute it, and you name the evidence that would change your conclusion. When an endpoint moves or an agency changes a definition, those records help the next analyst find where the pipeline broke and decide whether the earlier results are still comparable. A good way to practice is to rebuild the capstone of Appendix~\ref{app:capstone} with data from your own state, check each assertion, and write down every change you had to make.
 
-The records in an evaluation describe people who answered a survey, enrolled a child, or received a service. Assertions, interpretation caveats, access controls, and disclosure checks protect the quality of the decisions made from their information and reduce the risk that the analysis harms them.
+We close with the people in the data. Each record in an evaluation describes someone who answered a survey, enrolled a child, or received a service. The assertions, the interpretation caveats, the access controls, and the disclosure checks in this book protect the decisions that are made from their information, and they lower the risk that your analysis harms the people it describes. We hope the book helps you do that work well.
 
 \pagelayout{wide}
 \printbibliography[heading=bibintoc, title=Bibliography]
