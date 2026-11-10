@@ -332,7 +332,7 @@ Raw agreement overstates how well an LLM is doing, because two raters will match
 \[
 \kappa \;=\; \frac{p_o - p_e}{1 - p_e},
 \]
-where $p_o$ is the observed share of records the LLM and the human labelled the same, and $p_e$ is the share they would match on by chance alone given how often each category is used. The denominator is the room left above chance, so $\kappa=1$ is perfect agreement and $\kappa=0$ is no better than luck. To see it work, we take a simulated gold standard of 150 case notes hand-coded into five barrier categories, run an LLM that copies the human label 85\% of the time, and compare the two with \texttt{kap}\index{kap@\texttt{kap}}:
+where $p_o$ is the observed share of records the LLM and the human labeled the same, and $p_e$ is the share they would match on by chance alone given how often each category is used. The denominator is the room left above chance, so $\kappa=1$ is perfect agreement and $\kappa=0$ is no better than luck. To see it work, we take a simulated gold standard of 150 case notes hand-coded into five barrier categories, run an LLM that copies the human label 85\% of the time, and compare the two with \texttt{kap}\index{kap@\texttt{kap}}:
 \par
 {\footnotesize
 \begin{verbatim}

@@ -334,7 +334,7 @@ Data archives worked out the answer decades ago, and we can borrow it. ICPSR\ind
 \end{figure*}
 
 \subsection{A worked example: one extract, three languages}\label{sec:deposit-example}
-We work through a handoff from start to finish with an extract of \texttt{nlsw88}, so you can run every line. The extract needs the kind of documentation a real survey file has, so we first store the wording of two questions in characteristics, attach a note to the wage variable, and mark some of the missing union answers as \enquote{Don't know}. That last step is for illustration only: it gives the file a labelled missing code, which real survey files usually have. The deposit itself is the final command:
+We work through a handoff from start to finish with an extract of \texttt{nlsw88}, so you can run every line. The extract needs the kind of documentation a real survey file has, so we first store the wording of two questions in characteristics, attach a note to the wage variable, and mark some of the missing union answers as \enquote{Don't know}. That last step is for illustration only: it gives the file a labeled missing code, which real survey files usually have. The deposit itself is the final command:
 \par
 {\footnotesize
 \begin{verbatim}
@@ -448,7 +448,7 @@ datadeposit, changes("Top-coded wages set to missing")
 Two practical points decide how you use the command day to day. First, a deposit multiplies storage, because the full form writes the data three times. The command estimates sizes before it writes anything and stops when a file would pass 5 GB; the \texttt{lean} option then keeps the Stata file and one csv, and \texttt{onlarge(lean)} makes that switch automatic, which is the form to use when the deposit is the last line of a do-file whose data grow every month. Second, the command reads more than Stata files. Point \texttt{files()} or \texttt{folder()} at text, Excel, or SPSS files and it identifies each one by its contents, so a pipe-delimited export named \texttt{.txt} deposits correctly, a column of ZIP codes keeps its leading zeros, and a file that is not a table is refused with the reason.
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{datadeposit}]
-\textbf{Integrated command:} \texttt{datadeposit}\index{datadeposit@\texttt{datadeposit}} writes an archive-style folder from the data in memory, from named files, or from every data file in a folder: the data as csv, \texttt{.dta}, and \texttt{.rds}; a codebook in Markdown, Excel, and DDI form; and setup scripts that rebuild the labelled data in Stata, R, and Python. Subcommands load a deposit (\texttt{use}), check one (\texttt{verify}), write the documentation without the data (\texttt{codebook}), and apply labels edited in Excel (\texttt{apply}). It needs Stata 16 or later and no other community-contributed commands.
+\textbf{Integrated command:} \texttt{datadeposit}\index{datadeposit@\texttt{datadeposit}} writes an archive-style folder from the data in memory, from named files, or from every data file in a folder: the data as csv, \texttt{.dta}, and \texttt{.rds}; a codebook in Markdown, Excel, and DDI form; and setup scripts that rebuild the labeled data in Stata, R, and Python. Subcommands load a deposit (\texttt{use}), check one (\texttt{verify}), write the documentation without the data (\texttt{codebook}), and apply labels edited in Excel (\texttt{apply}). It needs Stata 16 or later and no other community-contributed commands.
 \par
 {\footnotesize
 \begin{verbatim}
