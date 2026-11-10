@@ -1,22 +1,44 @@
 * ===========================================================================
-* test_datadictionary.do -- test battery for datadictionary v1.0.0
-* Run in batch from the package directory:
-*     stata-mp -b do test_datadictionary.do
+* test_datadictionary.do -- test battery for datadictionary v1.0.2
+* Run in batch:
+*     stata-mp -b do test_datadictionary.do ["/path/to/pkg" ["/out/dir"]]
+*   arg 1: folder holding datadictionary.ado (default: the working directory
+*          when it holds datadictionary.ado, else found on the adopath)
+*   arg 2: folder for the Excel outputs (default: the package folder)
 * Judge the run by the log: no r(NNN) errors, no "assertion is false".
 * ---------------------------------------------------------------------------
-* All paths live in globals set in this header (the package will move to its
-* own repo; edit $pkgroot only).  Excel outputs land in the package folder
-* (covered by .gitignore); every .dta goes to a temp directory, never the
-* repo folder.
+* All paths live in globals set in this header.  Excel outputs land in the
+* package folder unless arg 2 is given (*.xlsx is covered by .gitignore);
+* every .dta goes to a temp directory, never the repo folder.
 * ===========================================================================
-global pkgroot "/Users/ebooth/Documents/GitHub/Book Manuscript:Applied Evaluation-Stata/datadictionary-stata-public"
-global ddout   "$pkgroot"
+global pkgroot ""
+if `"`1'"' != "" global pkgroot `"`1'"'
+if `"$pkgroot"' == "" {
+    capture confirm file "`c(pwd)'/datadictionary.ado"
+    if !_rc global pkgroot `"`c(pwd)'"'
+}
+if `"$pkgroot"' == "" {
+    capture findfile datadictionary.ado
+    if !_rc {
+        local fp `"`r(fn)'"'
+        local s = max(strrpos(`"`fp'"', "/"), strrpos(`"`fp'"', "\"))
+        if `s' > 1 global pkgroot = substr(`"`fp'"', 1, `s' - 1)
+    }
+}
+if `"$pkgroot"' == "" {
+    di as err "test_datadictionary: cannot locate datadictionary.ado; pass its folder as argument 1"
+    exit 601
+}
+confirm file "$pkgroot/datadictionary.ado"
+global ddout "$pkgroot"
+if `"`2'"' != "" global ddout `"`2'"'
 
 version 16.0
 clear all
 set more off
 set seed 20260714
-adopath + "$pkgroot"
+* prepend, so the repo version under test beats any installed copy
+adopath ++ "$pkgroot"
 
 * temp directory for the synthetic wave files and all .dta outputs
 global ddtmp "`c(tmpdir)'"
@@ -66,8 +88,8 @@ format hours %5.1f
 label variable hours "Weekly work hours (self-report)"
 note q2: Core supervisor-support item; fielded every wave.
 note hours: Self-reported average weekly hours.
-char q2[source] "staff_survey_w1.dta"
-char hours[source] "staff_survey_w1.dta"
+char q2[srctag] "staff_survey_w1.dta"
+char hours[srctag] "staff_survey_w1.dta"
 char q2[module] "core"
 label data "Staff wellbeing survey, wave 1 (2019)"
 save "$ddtmp/staff_survey_w1.dta", replace
@@ -103,8 +125,8 @@ format hours %5.1f
 label variable hours "Weekly work hours (self-report)"
 note q2: Core supervisor-support item; fielded every wave.
 note hours: Self-reported average weekly hours.
-char q2[source] "staff_survey_w2.dta"
-char hours[source] "staff_survey_w2.dta"
+char q2[srctag] "staff_survey_w2.dta"
+char hours[srctag] "staff_survey_w2.dta"
 char q2[module] "core"
 label data "Staff wellbeing survey, wave 2 (2021)"
 save "$ddtmp/staff_survey_w2.dta", replace
@@ -145,8 +167,8 @@ format hours %5.1f
 label variable hours "Weekly work hours (self-report)"
 note q2: Recoded from 4-point (agree4) to 5-point (agree5) in 2023.
 note hours: Self-reported average weekly hours.
-char q2[source] "staff_survey_w3.dta"
-char hours[source] "staff_survey_w3.dta"
+char q2[srctag] "staff_survey_w3.dta"
+char hours[srctag] "staff_survey_w3.dta"
 char q2[module] "core"
 label data "Staff wellbeing survey, wave 3 (2023)"
 save "$ddtmp/staff_survey_w3.dta", replace
@@ -199,8 +221,7 @@ quietly count if name == "q1" & before == "Overall job satisfaction (1-5)" ///
     & after == "Overall satisfaction with job (1-5 scale)"
 assert r(N) == 1
 
-* --- the saving() dta: one row per variable-wave, char[source] harvested
-*     into the column named srctag (after the tool, not the char) ---
+* --- the saving() dta: one row per variable-wave, srctag harvested ---
 use "$ddtmp/datadictionary_codebook.dta", clear
 assert _N == 25
 quietly count if wave == "2019"
@@ -307,7 +328,7 @@ assert `hasmiss' == 0
 * ---------------------------------------------------------------------------
 * 3b. Relabel do-file and dictionary: the export / edit / re-import round-trip
 *     (both are in-memory features; run on wave 1, which has value labels,
-*      notes, and source/module chars)
+*      notes, and srctag/module chars)
 * ---------------------------------------------------------------------------
 cd "$ddtmp"
 use "staff_survey_w1.dta", clear
@@ -329,7 +350,7 @@ local ll2 : value label q2
 assert "`ll2'" == "agree4"
 local vl2 : variable label q2
 assert `"`vl2'"' == "I feel supported by my supervisor"
-local st : char q2[source]
+local st : char q2[srctag]
 assert "`st'" == "staff_survey_w1.dta"
 local mod : char q2[module]
 assert "`mod'" == "core"
@@ -412,6 +433,88 @@ import excel using "$ddtmp/dd_auto.xlsx", describe
 assert r(N_worksheet) == 3
 
 * ---------------------------------------------------------------------------
+* 3d. flow(): the surveymap journal bridge.  A tiny fake survey plus a
+*     hand-written journal TSV; the codebook gains pct_answered_sm and
+*     skipped_by_sm, matched on name, appended at the end of the Variables
+*     sheet and the saving() dataset.  A non-journal file is error 459, and
+*     a run without flow() carries no trace of the bridge.
+* ---------------------------------------------------------------------------
+clear
+set obs 40
+gen byte consent = cond(_n <= 36, 1, 0)
+label variable consent "Consented to interview"
+gen byte rating = runiformint(1, 5) if consent == 1
+label variable rating "Service rating (1-5)"
+gen byte followup = runiformint(0, 1) if consent == 1 & rating <= 2
+label variable followup "Wants follow-up call"
+tempfile flowdat
+quietly save `flowdat'
+
+* a minimal surveymap journal: read by column name, so these four columns
+* are the whole contract (class var pct_answered gated_by); ghostvar has no
+* codebook row and must be skipped, not merged
+tempname jh
+file open `jh' using "$ddtmp/sm_journal.tsv", write text replace
+file write `jh' "class" _tab "var" _tab "pct_answered" _tab "gated_by" _n
+file write `jh' "survey" _tab "." _tab "." _tab "." _n
+file write `jh' "item" _tab "consent" _tab "100.0" _tab "." _n
+file write `jh' "item" _tab "rating" _tab "90.0" _tab "." _n
+file write `jh' "item" _tab "followup" _tab "22.5" _tab "consent==0" _n
+file write `jh' "item" _tab "ghostvar" _tab "55.0" _tab "." _n
+file close `jh'
+
+use `flowdat', clear
+datadictionary, excel("$ddtmp/dd_flow.xlsx") flow("$ddtmp/sm_journal.tsv") ///
+    saving("$ddtmp/dd_flow.dta") replace
+* the caller's data came back untouched
+assert _N == 40
+assert c(k) == 3
+
+* saving() dataset: the two columns exist, sit last, and carry the journal's
+* values; a codebook variable absent from the journal would be missing/empty
+use "$ddtmp/dd_flow.dta", clear
+assert _N == 3
+confirm variable pct_answered_sm skipped_by_sm
+unab flowv : _all
+local kf : word count `flowv'
+assert "`: word `kf' of `flowv''" == "skipped_by_sm"
+assert "`: word `= `kf' - 1' of `flowv''" == "pct_answered_sm"
+assert pct_answered_sm == 22.5 if name == "followup"
+assert skipped_by_sm == "consent==0" if name == "followup"
+assert pct_answered_sm == 90 if name == "rating"
+assert skipped_by_sm == "" if name == "rating"
+assert pct_answered_sm == 100 if name == "consent"
+quietly count if name == "ghostvar"
+assert r(N) == 0
+
+* Variables sheet: same columns, at the end
+import excel using "$ddtmp/dd_flow.xlsx", sheet("Variables") firstrow clear
+assert _N == 3
+unab flowx : _all
+local kx : word count `flowx'
+assert "`: word `kx' of `flowx''" == "skipped_by_sm"
+assert "`: word `= `kx' - 1' of `flowx''" == "pct_answered_sm"
+assert pct_answered_sm == 22.5 if name == "followup"
+
+* a file that is not a surveymap journal -> 459 (w1.csv exists from 3b)
+use `flowdat', clear
+capture datadictionary, flow("$ddtmp/w1.csv")
+assert _rc == 459
+* a flow file that does not exist -> 601
+capture datadictionary, flow("$ddtmp/no_such_journal.tsv")
+assert _rc == 601
+
+* without flow() the codebook is exactly as before: 17 columns, no _sm pair
+use `flowdat', clear
+datadictionary, saving("$ddtmp/dd_noflow.dta") replace
+use "$ddtmp/dd_noflow.dta", clear
+assert c(k) == 17
+capture confirm variable pct_answered_sm
+assert _rc != 0
+capture confirm variable skipped_by_sm
+assert _rc != 0
+
+* ---------------------------------------------------------------------------
 * 4. Edge cases: graceful errors and label-free data
 * ---------------------------------------------------------------------------
 * empty if/in selection -> clear message, rc 2000
@@ -454,6 +557,141 @@ capture datadictionary, folder("$ddtmp") pattern("zzz*.dta")
 assert _rc == 601
 capture datadictionary, files("$ddtmp/does_not_exist.dta")
 assert _rc == 601
+
+* ---------------------------------------------------------------------------
+* 4b. $ and backticks in data text (1.0.1).  Labels, chars, notes, value-label
+*     text, and string values must reach the codebook, the screen, and the
+*     relabel do-file verbatim.  1.0.0 expanded $USD to "" (and wrote the
+*     mangled label into the do-file) and stopped with r(132) on a backtick.
+*     The texts are built with char() so this file never holds a live $ or `.
+* ---------------------------------------------------------------------------
+global USD "EXPANDED"                    // a live global the bug would leak
+local vlab   = "Price in " + char(36) + "USD"
+local ulab   = char(36) + "USD nominal"
+local ntxt   = "cost in " + char(36) + "USD, it" + char(96) + "s firm"
+local olab   = "Dom " + char(36) + "HOME"
+local oblab  = "For" + char(96) + "eign"
+sysuse auto, clear
+keep price foreign make
+label variable price `"`macval(vlab)'"'
+char price[unit] `"`macval(ulab)'"'
+char price[note1] `"`macval(ntxt)'"'
+char price[note0] "1"
+label define origin 0 `"`macval(olab)'"' 1 `"`macval(oblab)'"', modify
+replace make = "save " + char(36) + "HOME today" in 1
+replace make = "it" + char(96) + "s fine" in 2
+replace make = "a" in 3/l
+datadictionary, saving("$ddtmp/dd_macro.dta") dofile("$ddtmp/dd_macro_relabel.do") ///
+    examples(3) replace
+assert r(nvars) == 3
+tempfile macsrc
+quietly save `macsrc'
+use "$ddtmp/dd_macro.dta", clear
+assert varlab == "Price in " + char(36) + "USD" if name == "price"
+assert chars  == "unit=" + char(36) + "USD nominal" if name == "price"
+assert notes  == "1. cost in " + char(36) + "USD, it" + char(96) + "s firm" if name == "price"
+assert strpos(examples, "Dom " + char(36) + "HOME (") == 1 if name == "foreign"
+assert strpos(examples, "For" + char(96) + "eign (") > 0  if name == "foreign"
+assert strpos(examples, "save " + char(36) + "HOME today") > 0 if name == "make"
+assert strpos(examples, "it" + char(96) + "s fine") > 0      if name == "make"
+assert strpos(varlab + chars + notes + examples, "EXPANDED") == 0
+* the relabel do-file restores the same text onto a stripped copy
+use `macsrc', clear
+label variable price ""
+char price[unit]
+char price[note1]
+char price[note0]
+label drop origin
+do "$ddtmp/dd_macro_relabel.do"
+local got : variable label price
+assert `"`macval(got)'"' == `"`macval(vlab)'"'
+local got : char price[unit]
+assert `"`macval(got)'"' == `"`macval(ulab)'"'
+local got : char price[note1]
+assert `"`macval(got)'"' == `"`macval(ntxt)'"'
+local got : char price[note0]
+assert "`got'" == "1"
+local got : label origin 0
+assert `"`macval(got)'"' == `"`macval(olab)'"'
+local got : label origin 1
+assert `"`macval(got)'"' == `"`macval(oblab)'"'
+* a backtick in a string value alone used to stop the command with r(132)
+clear
+set obs 3
+gen str60 txt = "plain"
+replace txt = "it" + char(96) + "s fine" in 2
+datadictionary txt, saving("$ddtmp/dd_tick.dta") replace
+use "$ddtmp/dd_tick.dta", clear
+assert examples == "it" + char(96) + "s fine, plain"
+macro drop USD
+
+* ---------------------------------------------------------------------------
+* 4c. 1.0.2 fixes: char[source] fills the srctag column; the relabel recipe
+*     keeps multi-line text in one row; an empty dataset gets its own
+*     message; open links expand ~ and keep \ paths absolute
+* ---------------------------------------------------------------------------
+sysuse auto, clear
+keep price mpg
+char price[source] "EPA extract 2026"
+char price[source_vintage] "2026-07"
+char mpg[srctag] "legacy tag"
+datadictionary, saving("$ddtmp/dd_source.dta") replace
+use "$ddtmp/dd_source.dta", clear
+assert srctag == "EPA extract 2026" if name == "price"
+assert chars == "source_vintage=2026-07" if name == "price"
+assert srctag == "legacy tag" if name == "mpg"
+assert chars == "" if name == "mpg"
+
+* the documented round trip keeps a value with a line break in one row
+clear
+set obs 3
+gen id = _n
+gen str40 comment = "plain"
+replace comment = "line one" + char(10) + "line two" in 2
+datadictionary, dofile("$ddtmp/rt_relabel.do") replace
+export delimited using "$ddtmp/rt_share.csv", nolabel quote replace
+import delimited using "$ddtmp/rt_share.csv", varnames(1) case(preserve) bindquote(strict) clear
+assert _N == 3
+assert comment[2] == "line one" + char(10) + "line two"
+do "$ddtmp/rt_relabel.do"
+tempname rh
+local hits 0
+file open `rh' using "$ddtmp/rt_relabel.do", read text
+file read `rh' line
+while r(eof) == 0 {
+    if strpos(`"`macval(line)'"', "bindquote(strict)") local ++hits
+    if strpos(`"`macval(line)'"', "nolabel quote replace") local ++hits
+    file read `rh' line
+}
+file close `rh'
+assert `hits' >= 2
+
+* variables but 0 observations: error 2000 with its own message
+clear
+set obs 0
+gen x = .
+gen str5 s = ""
+capture noisily datadictionary
+assert _rc == 2000
+
+* open links: ~ expands from HOME; a C:\ path keeps its drive and folder
+discard
+capture program drop datadictionary
+quietly run "$pkgroot/datadictionary.ado"
+local hm : environment HOME
+if "`c(os)'" != "Windows" & `"`hm'"' != "" {
+    global DD_NLINK
+    _dd_link, path("~/dd_tilde.xlsx") tag("open")
+    assert `"$DD_OPEN1"' == `"`hm'/dd_tilde.xlsx"'
+    _dd_link, path("~/dd_tilde.xlsx") tag("folder") folder
+    assert `"$DD_OPEN2"' == `"`hm'"'
+    _dd_link, path("C:\data\w1.xlsx") tag("folder") folder
+    assert `"$DD_OPEN3"' == "C:\data"
+    _dd_link, path("\\server\share\w1.xlsx") tag("open")
+    assert `"$DD_OPEN4"' == "\\server\share\w1.xlsx"
+    macro drop DD_*
+}
+discard
 
 * ---------------------------------------------------------------------------
 * 5. Summary block: the key numbers for the book's worked example
