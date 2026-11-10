@@ -66,4 +66,5 @@ if `run_all' {
     do "$code/ch13_validation.do"
     do "$code/ch14_kanon.do"
     do "$code/ch15_bench.do"
+    do "$code/ch15_deposit.do"
 }

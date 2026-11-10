@@ -16,7 +16,7 @@
 
   \indexspace
 
-  \item capstone, \hyperpage{313}
+  \item capstone, \hyperpage{317}
   \item \texttt{catplot}, \hyperpage{173}
   \item \texttt{char define}, \hyperpage{80}
   \item choropleth, \hyperpage{189}
@@ -48,6 +48,7 @@
   \item \texttt{dashboardbuilder}, \hyperpage{184}, \hyperpage{227}
   \item data dictionary, \hyperpage{8}
   \item data-ink ratio, \hyperpage{169}
+  \item \texttt{datadeposit}, \hyperpage{297}, \hyperpage{300}
   \item \texttt{datadictionary}, \hyperpage{10}, \hyperpage{91}, 
 		\hyperpage{94}, \hyperpage{215}, \hyperpage{248}
   \item design effect, \hyperpage{136}
@@ -60,7 +61,7 @@
 
   \indexspace
 
-  \item \texttt{editanything}, \hyperpage{289}
+  \item \texttt{editanything}, \hyperpage{290}
   \item \texttt{educationdata}, \hyperpage{46}
   \item \texttt{egen}, \hyperpage{35}
   \item embarrassingly parallel, \hyperpage{250}
@@ -109,6 +110,7 @@
 
   \indexspace
 
+  \item ICPSR, \hyperpage{297}
   \item \texttt{import delimited}, \hyperpage{65}
   \item \texttt{import excel}, \hyperpage{70}
   \item \texttt{import fred}, \hyperpage{49}
@@ -179,7 +181,7 @@
 
   \item OAuth, \hyperpage{209}
   \item \texttt{oaxaca}, \hyperpage{148}
-  \item openICPSR, \hyperpage{297}
+  \item openICPSR, \hyperpage{301}
 
   \indexspace
 
@@ -221,7 +223,7 @@
   \item \texttt{reghdfe}, \hyperpage{35}
   \item regression discontinuity, \hyperpage{155}
   \item replicable workflow, \hyperpage{6}
-  \item replication archive, \hyperpage{297}
+  \item replication archive, \hyperpage{301}
   \item reproducible reporting, \hyperpage{206}
   \item research-practice partnership, \hyperpage{12}
   \item \texttt{reshapehelper}, \hyperpage{114}

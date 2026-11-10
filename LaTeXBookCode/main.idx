@@ -237,7 +237,7 @@
 \indexentry{syntax@\texttt{syntax}|hyperpage}{288}
 \indexentry{version@\texttt{version}|hyperpage}{289}
 \indexentry{SMCL|hyperpage}{289}
-\indexentry{editanything@\texttt{editanything}|hyperpage}{289}
+\indexentry{editanything@\texttt{editanything}|hyperpage}{290}
 \indexentry{writeinput@\texttt{writeinput}|hyperpage}{290}
 \indexentry{scrapessc@\texttt{scrapessc}|hyperpage}{291}
 \indexentry{rateshrink@\texttt{rateshrink}|hyperpage}{292}
@@ -246,6 +246,9 @@
 \indexentry{Mata|hyperpage}{295}
 \indexentry{lstrfun@\texttt{lstrfun}|hyperpage}{295}
 \indexentry{timer@\texttt{timer}|hyperpage}{295}
-\indexentry{openICPSR|hyperpage}{297}
-\indexentry{replication archive|hyperpage}{297}
-\indexentry{capstone|hyperpage}{313}
+\indexentry{ICPSR|hyperpage}{297}
+\indexentry{datadeposit@\texttt{datadeposit}|hyperpage}{297}
+\indexentry{datadeposit@\texttt{datadeposit}|hyperpage}{300}
+\indexentry{openICPSR|hyperpage}{301}
+\indexentry{replication archive|hyperpage}{301}
+\indexentry{capstone|hyperpage}{317}

@@ -7275,7 +7275,7 @@ You reach for the page at two moments. Before release, an incomplete row is reas
 
 Colleagues may accumulate slightly different copies of a cleaning do-file and obtain different answers from what they thought was the same procedure. Shared, versioned tools can help the team make its implementations consistent. In this final chapter we turn the scripts you repeat into shared, versioned tools, document them so others can use them, distribute them, and archive the whole project so it outlives the engagement.
 
-We move from a repeated do-file block, through help files and distribution, to one finished tool walked through the seven-row checklist, then to where Mata and Python each do what Stata's main language cannot, and end on the replication archive. Work through it and you will be able to turn a block you keep pasting into a version-locked \texttt{.ado} command with a help file and a test battery behind it, distribute it through the \texttt{.pkg} and \texttt{stata.toc} pair a colleague installs with one \texttt{net install} line, and leave the finished project as a manifest-driven replication archive. You will want all of that the first time a program team runs the tool without asking you to sit with them, and the first time a funder asks whether last year's tables can still be rebuilt. Throughout, we consider how packaging, documentation, distribution, and preservation let colleagues depend on the same implementation. We have asked of every analysis that others can rerun it and build on it; here we ask the same of the code itself. Figure~\ref{fig:ch15-viz-lifecycle} maps that arc, and the dashed edge is the point: the next engagement starts from the tool, not from the pasted block.
+We move from a repeated do-file block, through help files and distribution, to one finished tool walked through the seven-row checklist, then to where Mata and Python each do what Stata's main language cannot, then to packaging an analysis file for colleagues who work in R and Python, and end on the replication archive. Work through it and you will be able to turn a block you keep pasting into a version-locked \texttt{.ado} command with a help file and a test battery behind it, distribute it through the \texttt{.pkg} and \texttt{stata.toc} pair a colleague installs with one \texttt{net install} line, and leave the finished project as a manifest-driven replication archive. You will want all of that the first time a program team runs the tool without asking you to sit with them, and the first time a funder asks whether last year's tables can still be rebuilt. Throughout, we consider how packaging, documentation, distribution, and preservation let colleagues depend on the same implementation. We have asked of every analysis that others can rerun it and build on it; here we ask the same of the code itself. Figure~\ref{fig:ch15-viz-lifecycle} maps that arc, and the dashed edge is the point: the next engagement starts from the tool, not from the pasted block.
 
 \begin{figure*}[htbp]
 \centering
@@ -7572,6 +7572,169 @@ Hold extra languages out of a pipeline the way you hold unrequested options out 
 
 Use the timing results to decide whether the additional language solves a measured problem. When it does, document the inputs, outputs, and dependencies of that step so a colleague can rerun it with the rest of the analysis.
 
+\section{Handing the file to colleagues who work in other statistical software}\label{sec:deposit}
+The analysis file is finished, and the three people who need it next do not use Stata. The modeler on the partner's team works in R, the data engineer at the agency works in Python, and the program officer will open whatever arrives in Excel. In this section we package the file for all of them at once. You will write one command at the end of the do-file that produces a folder each of them can open in their own software, with your variable labels, value labels, notes, and question wording intact, and you will see how a colleague's later change to the data comes back to you as a documented second version.
+
+A plain export loses more than most analysts expect. When you send a \texttt{.csv}, the labels stay behind. When you send the \texttt{.dta}, an R user who reads it with the \texttt{haven} package gets the variable and value labels, but the notes and the characteristics are dropped, and characteristics are where survey exports usually store the wording of each question. A code such as \texttt{.d} for \enquote{Don't know} often arrives as an ordinary missing value. Section~\ref{sec:datadictionary-roundtrip} handled the Stata side of this problem with a do-file that reapplies labels after a round trip through a spreadsheet. Here we need the same repair in three languages, and we need the three to agree.
+
+Data archives worked out the answer decades ago, and we can borrow it. ICPSR\index{ICPSR} distributes a study as a folder that contains the data in plain text, a codebook, and \emph{setup files}, short scripts that read the plain-text data and apply the labels in each statistical package. Nobody who downloads the study has to own the software the depositor used. The \texttt{datadeposit}\index{datadeposit@\texttt{datadeposit}} command writes that kind of folder, which it calls a \emph{deposit}, from the data in memory. The same command exists as an R package and a Python package, so a colleague can write a deposit back to you, and the three versions are tested to produce matching files.\marginnote{The idea is to treat a colleague the way an archive treats a stranger. If the folder would satisfy a reader who has never met you and does not own your software, it will satisfy the analyst down the hall.} Figure~\ref{fig:ch15-deposit-flow} shows when to use it and which form of the deposit fits the file in front of you.
+
+\begin{figure*}[htbp]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[font=\footnotesize]
+\node[io] (file) at (0,0) {the finished\\analysis file};
+\node[decision] (big) at (3.0,0) {any file\\over 5 GB?};
+\node[stage, text width=2.9cm] (full) at (7.0,1.7) {\texttt{datadeposit}\\csv + dta + rds,\\codebook, setup scripts};
+\node[stage, text width=2.9cm] (lean) at (7.0,0) {\texttt{lean}\\dta + one csv,\\codebook, setup scripts};
+\node[stage, text width=2.9cm] (nod) at (7.0,-1.7) {\texttt{nodata}\\codebook and setup\\scripts only};
+\node[io] (team) at (11.0,0) {Stata, R, Python,\\and Excel users\\open it};
+\node[stage, text width=2.4cm] (v2) at (14.4,1.4) {a change comes\\back as version 2,\\naming its parent};
+\node[io] (arc) at (14.4,-1.4) {\texttt{verify}, then\\the archive\\(\S\ref{sec:archive})};
+\draw[flow] (file) -- (big);
+\draw[flow] (big) |- node[pos=0.75, above] {\scriptsize no} (full);
+\draw[flow] (big) -- node[above] {\scriptsize yes} (lean);
+\draw[flow] (big) |- node[pos=0.28, left, align=right, font=\scriptsize] {data shared\\another way} (nod);
+\draw[flow] (full) -| (team);
+\draw[flow] (lean) -- (team);
+\draw[flow] (nod) -| (team);
+\draw[flow] (team) |- (v2);
+\draw[flow] (team) |- (arc);
+\end{tikzpicture}%
+}
+\caption[When and how to write a data deposit]{When to write a deposit, and which kind. Most files take the top lane and get every format. A file over the 5 GB limit takes the middle lane, which keeps the Stata file and one portable csv and leaves the R and Python copies to the setup scripts. When the data are shared some other way, the bottom lane sends the documentation alone. Every lane ends with a folder that each colleague opens in their own software; a change they make returns as a new version, and the checked folder is what goes to the archive.}
+\label{fig:ch15-deposit-flow}
+\end{figure*}
+
+\subsection{A worked example: one extract, three languages}\label{sec:deposit-example}
+We work through a handoff from start to finish with an extract of \texttt{nlsw88}, so you can run every line. The extract needs the kind of documentation a real survey file has, so we first store the wording of two questions in characteristics, attach a note to the wage variable, and mark some of the missing union answers as \enquote{Don't know}. That last step is for illustration only: it gives the file a labelled missing code, which real survey files usually have. The deposit itself is the final command:
+\par
+{\footnotesize
+\begin{verbatim}
+sysuse nlsw88, clear
+keep idcode age race married collgrad union wage hours tenure
+char union[question] "Are you covered by a union contract at work?"
+char wage[question]  "What is your hourly pay, before taxes?"
+notes wage: Hourly wage in 1988 dollars; the survey top-codes it at 40.75.
+replace union = .d if missing(union) & mod(idcode, 3) == 0
+label define unionlbl .d "Don't know", modify
+
+datadeposit, to(nlsw88_deposit) authors("Evaluation team") replace ///
+    title("NLSW 1988 extract for the wage team")
+\end{verbatim}
+}
+Stata answers with a short receipt, and the line to read first is the last one:
+\par
+{\footnotesize
+\begin{verbatim}
+datadeposit wrote .../nlsw88_deposit
+  profile full, datasets: nlsw88
+  nlsw88: 2246 obs, 9 vars
+  data formats: csv dta rds
+  Stata round trip (csv + setup.do vs. the data): passed
+\end{verbatim}
+}
+The round-trip line reports a test the command ran on its own output. It rebuilt the dataset from the plain-text csv with the Stata setup script it had just written, then compared the result with the data in memory: values, storage types, formats, labels, notes, and characteristics. \marginnote{The \texttt{.rds} copy is written by R, which the command finds by itself. On a machine without R the deposit is still written; the receipt says the \texttt{.rds} was skipped and how to add it, and R users rebuild the data from the csv instead.}When it says \texttt{passed}, you know the portable copy contains everything the Stata file contains. Figure~\ref{fig:ch15-deposit-folder} lists what is now in the folder.
+
+\begin{figure*}[htbp]
+\centering
+{\footnotesize
+\begin{mdframed}[backgroundcolor=aeBg,linecolor=aeRule,linewidth=0.6pt,%
+roundcorner=3pt,innertopmargin=5pt,innerbottommargin=5pt,%
+innerleftmargin=8pt,innerrightmargin=8pt]
+\begin{verbatim}
+nlsw88_deposit/
+  README.md                       how to open the data in Stata, R, Python, and Excel
+  MANIFEST.json                   the size and sha256 hash of every file
+  datapackage.json                a machine-readable description (Frictionless standard)
+  data/
+    nlsw88.csv                    the portable copy: plain text, codes rather than labels
+    nlsw88.dta                    for Stata
+    nlsw88.rds                    for R
+  metadata/
+    nlsw88_variables.csv          one row per variable: type, format, label
+    nlsw88_valuelabels.csv        every value label, including .d "Don't know"
+    nlsw88_chars.csv              notes and characteristics: the question wording is here
+    nlsw88_dataset.csv            dataset label, size, sort order
+    nlsw88_summary.csv            statistics for each variable
+    nlsw88_frequencies.csv        counts for every labelled variable
+  codebook/
+    nlsw88_codebook.md            the codebook to read
+    nlsw88_codebook.xlsx          the same tables as Excel sheets
+    nlsw88_ddi.xml                DDI Codebook, the format archives exchange
+  setup/
+    nlsw88_setup.do               rebuilds the labelled data in Stata
+    nlsw88_setup.R                rebuilds it in R
+    nlsw88_setup.py               rebuilds it in Python
+\end{verbatim}
+\end{mdframed}
+}
+\caption[What a data deposit contains]{The folder \texttt{datadeposit} wrote for the \texttt{nlsw88} extract, with a note on each file. The \texttt{metadata} tables are plain csv files that the three setup scripts read when they run, so a colleague who corrects a label in a table and reruns the script gets the corrected label. Reproduced by \texttt{ch15\_deposit.do}.}
+\label{fig:ch15-deposit-folder}
+\end{figure*}
+
+Now take the R colleague's seat. They have the folder and base R, and they have never installed \texttt{datadeposit}. They run the setup script and ask for the things a plain export would have lost:
+\par
+{\footnotesize
+\begin{verbatim}
+source("setup/nlsw88_setup.R")        # creates the data frame nlsw88
+attr(nlsw88$union, "question")
+attr(nlsw88$wage, "notes")
+table(haven::as_factor(nlsw88$union), useNA = "ifany")
+\end{verbatim}
+}
+R returns the question wording, the note, and a tabulation in which \enquote{Don't know} is still its own category:
+\par
+{\footnotesize
+\begin{verbatim}
+[1] "Are you covered by a union contract at work?"
+[1] "Hourly wage in 1988 dollars; the survey top-codes it at 40.75."
+
+  Nonunion      Union Don't know       <NA>
+      1417        461        134        234
+\end{verbatim}
+}
+The 134 respondents coded \texttt{.d} in Stata are 134 \enquote{Don't know} answers in R, kept apart from the 234 who have no answer recorded. That distinction matters to the analysis: a modeler who cannot tell the two groups apart will either drop both or impute both, and neither choice is the one you made. The Python colleague reaches the same place with \texttt{pandas}, where the labels and question text arrive as dictionaries attached to the data frame:
+\par
+{\footnotesize
+\begin{verbatim}
+import runpy
+df = runpy.run_path("setup/nlsw88_setup.py")["load"]()
+df.attrs["datadeposit"]["questions"]["union"]
+df.attrs["variable_value_labels"]["union"]
+\end{verbatim}
+}
+The second line returns the same question wording, and the third returns \texttt{\{0: 'Nonunion', 1: 'Union', '.d': "Don't know"\}}. The program officer needs no script at all: \texttt{nlsw88.csv} and \texttt{nlsw88\_codebook.xlsx} open in Excel.
+
+\subsection{When a colleague changes the data}\label{sec:deposit-versions}
+Sooner or later someone picks up the deposit, fixes something, and wants to send it back, and the question is whether they should edit the folder or make a new one. We suggest you treat a deposit as a snapshot and never edit it, for the reason archives give: anyone who already ran an analysis on version~1 must be able to get version~1 again. A change therefore becomes a new deposit that names the old one as its parent. In Stata the whole exchange is three lines:
+\par
+{\footnotesize
+\begin{verbatim}
+datadeposit use nlsw88_deposit, clear
+replace wage = . if wage > 40
+datadeposit, changes("Top-coded wages set to missing")
+\end{verbatim}
+}
+\texttt{datadeposit use} loads the data and remembers where they came from. Because of that, the last line needs no folder name: it writes \texttt{nlsw88\_deposit\_v2} beside the original, marks it version~2, prints your description of the change in its README, and records in its \texttt{MANIFEST.json} the folder, version, and hash of the deposit it was derived from. The R and Python packages offer the same pair (\texttt{deposit\_use()}, then \texttt{datadeposit()}), so the modeler can be the one who writes version~2 and you can be the one who opens it. Before you rely on a deposit that someone sends you, run \texttt{datadeposit verify} on the folder. It checks every file against the hashes in the manifest and repeats the round-trip test, and for the example it reports \texttt{files: 17 checked, 0 problems}.\marginnote{Only a draft that nobody else has used should be overwritten. The \texttt{replace} option does that, and it refuses to touch a folder that is not a deposit.}
+
+Two practical points decide how you use the command day to day. First, a deposit multiplies storage, because the full form writes the data three times. The command estimates sizes before it writes anything and stops when a file would pass 5 GB; the \texttt{lean} option then keeps the Stata file and one csv, and \texttt{onlarge(lean)} makes that switch automatic, which is the form to use when the deposit is the last line of a do-file whose data grow every month. Second, the command reads more than Stata files. Point \texttt{files()} or \texttt{folder()} at text, Excel, or SPSS files and it identifies each one by its contents, so a pipe-delimited export named \texttt{.txt} deposits correctly, a column of ZIP codes keeps its leading zeros, and a file that is not a table is refused with the reason.
+
+\begin{kaobox}[frametitle=Package Integration: \texttt{datadeposit}]
+\textbf{Integrated command:} \texttt{datadeposit}\index{datadeposit@\texttt{datadeposit}} writes an archive-style folder from the data in memory, from named files, or from every data file in a folder: the data as csv, \texttt{.dta}, and \texttt{.rds}; a codebook in Markdown, Excel, and DDI form; and setup scripts that rebuild the labelled data in Stata, R, and Python. Subcommands load a deposit (\texttt{use}), check one (\texttt{verify}), write the documentation without the data (\texttt{codebook}), and apply labels edited in Excel (\texttt{apply}). It needs Stata 16 or later and no other community-contributed commands.
+\par
+{\footnotesize
+\begin{verbatim}
+local gh "https://raw.githubusercontent.com/ericabooth"
+net install datadeposit, ///
+    from("`gh'/datadeposit/main/") replace force
+\end{verbatim}
+}
+The R and Python packages install from the same repository; its README gives the line for each.
+\end{kaobox}
+
+A deposit and the replication archive of the next section do different jobs, and a finished project wants both. The deposit makes one analysis file usable by people who do not share your software. The archive preserves the whole project, raw data and code included, so the work can be rebuilt. The deposit folder is a natural item to place inside that archive, and it fills the codebook row of the manifest below with something a reader in any language can use.
+
 \section{A replication archive that outlives the engagement}\label{sec:archive}
 Years after the engagement ends, someone will ask how a number in the final report was computed, and a workflow that cannot be rerun then has failed replicability, the first principle this book asks of every analysis.\marginnote{The replication standard, that a study should ship enough for someone else to reproduce every number, was argued for social science by \textcite{king1995replication} long before it was routine. \textcite{stodden2018reproducibility} later showed the sobering sequel: even journals that require data and code achieve reproducibility far below 100\%, because an archive is only as good as what actually goes in it.} Build the replication archive in two tiers: a canonical copy on a repository like openICPSR\index{openICPSR} \parencite{openicpsr}, which gives the deposit a permanent DOI, versioning, and longevity, paired with a convenience mirror on GitHub, from which a single \texttt{use} of the file's raw URL loads the data with no login.\marginnote{Cite the openICPSR DOI in the paper: it resolves for decades and freezes an exact version. A GitHub raw URL can move or vanish, so never cite it as the archival record.} The canonical copy is for permanence and citation; the mirror is for the colleague who just wants to run the code today.
 
@@ -7589,6 +7752,7 @@ Raw data          & QCEW CSVs (Ch.~\ref{ch:apis})  & Start from the unedited sou
 Cleaning code     & \texttt{ch03\_*.do}  & See how the raw files became the analytic file \\
 Analysis code     & \texttt{ch07\_trust.do} & Rebuild the tables and figures the report shows \\
 Codebook          & \texttt{datadictionary}  & Learn what each variable contains and how it was coded \\
+Portable data     & \texttt{datadeposit} (\S\ref{sec:deposit}) & Open the analysis file, with its labels and question wording, in R, Python, or Excel \\
 Shared tools      & \texttt{dsload.ado}  & Run the custom commands your do-files call \\
 Environment note  & \texttt{version 17.0} & Match the Stata and package state that produced the numbers \\
 Read-me           & \texttt{00\_control.do} & Know which file to run first, and in what order \\
@@ -7599,7 +7763,7 @@ DOI record        & openICPSR            & Cite the archive, and find it again i
 
 The manifest is worth assembling because each row answers a question a replicator would otherwise have to email you. The environment note is the row most often left out, and the one most often wanted later: without a record of which Stata version and which community-package releases produced the tables, a rerun can differ. Record exact package releases or commits, and retain their source where redistribution is permitted; the \texttt{version 17.0} statement does not freeze community-contributed ado-files or external Python libraries.\marginnote{Pin shared tools too: record the exact release of every house command the code calls, \texttt{rateshrink 0.1.1} rather than \texttt{rateshrink}, because a replicator who installs today's release may be running behavior the original analysis never saw.} Into the archive go the data, the code, the codebooks, and a record of the environment, everything a stranger would need to reproduce the work without asking. That is the four principles kept after the contract ends: the analysis stays replicable, the next team can extend it, a reader can access it, and the findings remain something someone can act on. An evaluation that is archived this way is one whose credibility does not expire with its funding.
 
-\paragraph{Where this leaves you.} You can extract repeated code into an ado-file, document its syntax and examples, test its behavior, and distribute a versioned package. You can also time a slow step before deciding whether Mata or Python is useful, and prepare an archive containing the data, code, documentation, and software versions needed to reproduce the work. Use the \texttt{rateshrink} checklist as a starting point for reviewing your own tools, then add tests for the cases your projects actually encounter. The appendices collect the setup guide, toolkit, worked examples, capstone, and dataset registry.
+\paragraph{Where this leaves you.} You can extract repeated code into an ado-file, document its syntax and examples, test its behavior, and distribute a versioned package. You can also time a slow step before deciding whether Mata or Python is useful, hand an analysis file to colleagues who work in R and Python as a deposit they can open and check, and prepare an archive containing the data, code, documentation, and software versions needed to reproduce the work. Use the \texttt{rateshrink} checklist as a starting point for reviewing your own tools, then add tests for the cases your projects actually encounter. The appendices collect the setup guide, toolkit, worked examples, capstone, and dataset registry.
 
 \section*{Exercises}\addcontentsline{toc}{section}{Exercises}
 \begin{enumerate}
@@ -7610,6 +7774,7 @@ The manifest is worth assembling because each row answers a question a replicato
     \item Break the benchmark on purpose: change the loop body in \texttt{ch15\_bench.do} so it computes \texttt{x\textasciicircum 3} instead of \texttt{x\textasciicircum 2}, rerun the do-file, and confirm that the \texttt{assert} comparing the three columns stops the run rather than letting the mismatched result pass silently.
     \item \emph{Read a real tool against the checklist.} Install \texttt{rateshrink} with the house install idiom, then open its help file, README, and \texttt{.ado} header and confirm that all seven checklist rows are filled: a help file with a runnable example, a version line, a test battery, the \texttt{.pkg}/\texttt{stata.toc} pair, a README, an install URL, and a semantic version. Then run the worked example from this chapter and check that \texttt{r(meanrel)} and \texttt{r(maxmove)} match the values reported here.
     \item \emph{Design before you build.} Pick a block you intend to turn into a command, draft its help-file syntax block and a five-assert test battery before touching the \texttt{.ado}, then code until the battery passes, noting which design decisions the syntax draft forced you to settle early.
+    \item Run \texttt{ch15\_deposit.do}. In the deposit's \texttt{metadata} folder, open \texttt{nlsw88\_variables.csv} in a spreadsheet, improve the label of one variable, and rerun the Stata setup script in the \texttt{setup} folder. Confirm with \texttt{describe} that your label arrived, and say in one sentence why \texttt{datadeposit verify} now reports a problem with the folder and what you would do about it before sharing the change.
 \end{enumerate}
 
 %----------------------------------------------------------------------------------------
@@ -7702,6 +7867,7 @@ The one exception is \texttt{sparkta2}, whose source is not yet released. The co
 \begin{itemize}
     \item \texttt{webapi} -- fetch an authenticated JSON web API into Stata as a dataset, standard-library Python only (Chapter~\ref{ch:apis}).
     \item \textbf{The fourteen packages built for this book}, each in its own \texttt{-stata-public} repository with tests and help: \texttt{projectbuilder} (scaffold the Chapter~\ref{ch:workshop} project layout), \texttt{combineall} (append, merge, or convert a whole folder, with vintage-aware harmonization; Chapters~\ref{ch:apis} and~\ref{ch:noapi}), \texttt{cxchangelog} (cross-wave survey codebooks), \texttt{datadictionary} (the over-time data codebook: per-wave stats, missingness, value-label diffs, Excel export), and \texttt{undummy} (recombine one-hot columns into one categorical), all Chapter~\ref{ch:surveys}; \texttt{reshapehelper} (diagnose the data and suggest the likely \texttt{reshape} command, Chapter~\ref{ch:panels}); \texttt{rateshrink} (empirical-Bayes rate stabilization), \texttt{conformalpred} (distribution-free prediction intervals), and \texttt{hlmr2} (Nakagawa multilevel $R^2$), all Chapter~\ref{ch:trust}; \texttt{twinmatch} (Mahalanobis policy twins) and \texttt{roisim} (Monte Carlo ROI), both Chapter~\ref{ch:claims}; and \texttt{suppress} (small-cell and complementary suppression), \texttt{riskscan} ($k$-anonymity scan), and \texttt{synthgen} (rank-preserving synthetic stand-ins with fidelity and match diagnostics), all Chapter~\ref{ch:sharing}; plus twelve commands that ship in the companion repository's \texttt{code/} folder, each with its own help file and test battery: \texttt{reachcheck} (respondents against target margins), \texttt{surveypull} (platform pulls, dry-run first), \texttt{nonresponse} (frame gaps, response model, raking weights), \texttt{loebias} (level-of-effort sensitivity), \texttt{surveytracker} (wave-tagged instrument snapshots), and \texttt{likertscale} (index, alpha, and percent-agree in one step), all Chapter~\ref{ch:surveys}; \texttt{srctag} and \texttt{srcfind} (source lineage, Chapter~\ref{ch:panels}); \texttt{ai\_privacy\_gate} (a formatted-identifier pattern screen), \texttt{llmsieve} (convergence-delta routing), and \texttt{faircheck} (group-wise parity and error audit), all Chapter~\ref{ch:ai}; and \texttt{rawsweep} (intake manifest with sampled pattern flags, Chapter~\ref{ch:sharing}).
+    \item \texttt{datadeposit} -- archive-style folders that open the same way in Stata, R, Python, and Excel: data, codebook, and setup scripts, with matching R and Python packages in the same repository (Chapter~\ref{ch:tools}, Section~\ref{sec:deposit}).
     \item \texttt{googlechart} -- 14 interactive chart types from one command (Chapter~\ref{ch:interactive}).
     \item \texttt{googlesheets} -- read, write, format, and chart Google Sheets from Stata (Chapters~\ref{ch:sheets}, \ref{ch:surveys}, \ref{ch:apis}).
     \item \texttt{statashiny} -- serverless interactive HTML dashboards (Chapter~\ref{ch:portals}).

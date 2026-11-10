@@ -503,47 +503,53 @@
 \contentsline {mtocsection}{\numberline {15.5}When to drop into Mata or Python}{295}{section.15.5}%
 \contentsline {subsection}{\numberline {15.5.1}A worked example: vectorize first, loop last}{295}{subsection.15.5.1}%
 \contentsline {mtocsubsection}{\numberline {15.5.1}A worked example: vectorize first, loop last}{295}{subsection.15.5.1}%
-\contentsline {section}{\numberline {15.6}A replication archive that outlives the engagement}{297}{section.15.6}%
-\contentsline {mtocsection}{\numberline {15.6}A replication archive that outlives the engagement}{297}{section.15.6}%
-\contentsline {paragraph}{\nonumberline Where this leaves you.}{297}{paragraph*.187}%
-\contentsline {section}{Exercises}{298}{section*.188}%
-\contentsline {part}{\nonumberline Appendices}{299}{part*.190}%
-\contentsline {chapter}{\numberline {A}The Setup Guide}{301}{appendix.A}%
-\contentsline {paragraph}{\nonumberline Packages.}{301}{paragraph*.192}%
-\contentsline {paragraph}{\nonumberline API keys and \texttt {profile.do} hygiene.}{301}{paragraph*.194}%
-\contentsline {paragraph}{\nonumberline Python: two different arrangements.}{301}{paragraph*.196}%
-\contentsline {paragraph}{\nonumberline Google Cloud OAuth for \texttt {googlesheets}.}{302}{paragraph*.198}%
-\contentsline {paragraph}{\nonumberline LLM setup, hosted and local.}{302}{paragraph*.200}%
-\contentsline {paragraph}{\nonumberline Setup instructions for your team.}{303}{paragraph*.202}%
-\contentsline {chapter}{\numberline {B}The Causal Quick-Reference Toolbox}{305}{appendix.B}%
-\contentsline {paragraph}{\nonumberline Sensitivity, not just point estimates.}{306}{paragraph*.204}%
-\contentsline {paragraph}{\nonumberline Further reading.}{306}{paragraph*.206}%
-\contentsline {chapter}{\numberline {C}The Book's Toolkit}{307}{appendix.C}%
-\contentsline {paragraph}{\nonumberline Published packages.}{307}{paragraph*.208}%
-\contentsline {paragraph}{\nonumberline Proposed tools (roadmap, not yet code).}{308}{paragraph*.210}%
-\contentsline {chapter}{\numberline {D}Two Hands-On Worked Examples}{309}{appendix.D}%
-\contentsline {paragraph}{\nonumberline The question.}{309}{paragraph*.213}%
-\contentsline {paragraph}{\nonumberline How you would plan this.}{309}{paragraph*.215}%
-\contentsline {paragraph}{\nonumberline Why it is a good teaching case.}{309}{paragraph*.217}%
-\contentsline {paragraph}{\nonumberline The analysis and its limits.}{310}{paragraph*.219}%
-\contentsline {paragraph}{\nonumberline Concepts it illustrates.}{310}{paragraph*.221}%
-\contentsline {paragraph}{\nonumberline The question.}{311}{paragraph*.224}%
-\contentsline {paragraph}{\nonumberline How you would plan this.}{311}{paragraph*.226}%
-\contentsline {paragraph}{\nonumberline Why it is a good teaching case.}{311}{paragraph*.228}%
-\contentsline {paragraph}{\nonumberline The analysis and its interpretation.}{311}{paragraph*.230}%
-\contentsline {paragraph}{\nonumberline Concepts it illustrates.}{312}{paragraph*.232}%
-\contentsline {chapter}{\numberline {E}A Reproducible Capstone: One Public Dataset, Ingest to Deliverable}{313}{appendix.E}%
-\contentsline {paragraph}{\nonumberline The question.}{313}{paragraph*.234}%
-\contentsline {paragraph}{\nonumberline How you would plan this.}{313}{paragraph*.236}%
-\contentsline {paragraph}{\nonumberline Stage 1, ingest (Chapter~\ref {ch:noapi}).}{313}{paragraph*.238}%
-\contentsline {paragraph}{\nonumberline Stage 2, clean (Chapters~\ref {ch:noapi}--\ref {ch:panels}).}{314}{paragraph*.240}%
-\contentsline {paragraph}{\nonumberline Stage 3, guard (Chapter~\ref {ch:trust}).}{314}{paragraph*.242}%
-\contentsline {paragraph}{\nonumberline Stage 4, analyze (Chapter~\ref {ch:claims}).}{314}{paragraph*.244}%
-\contentsline {paragraph}{\nonumberline Stage 5, visualize (Chapter~\ref {ch:graphs}).}{314}{paragraph*.247}%
-\contentsline {paragraph}{\nonumberline Stage 6, deliver (Chapters~\ref {ch:sheets}--\ref {ch:portals}).}{314}{paragraph*.249}%
-\contentsline {paragraph}{\nonumberline The honest caveat.}{315}{paragraph*.251}%
-\contentsline {paragraph}{\nonumberline Make it yours.}{315}{paragraph*.253}%
-\contentsline {chapter}{\nonumberline Data Used in This Book}{317}{chapter*.254}%
-\contentsline {chapter}{Afterword}{319}{chapter*.256}%
-\contentsline {chapter}{\nonumberline Bibliography}{321}{chapter*.257}%
-\contentsline {chapter}{Alphabetical Index}{329}{section*.258}%
+\contentsline {section}{\numberline {15.6}Handing the file to colleagues who work in other statistical software}{297}{section.15.6}%
+\contentsline {mtocsection}{\numberline {15.6}Handing the file to colleagues who work in other statistical software}{297}{section.15.6}%
+\contentsline {subsection}{\numberline {15.6.1}A worked example: one extract, three languages}{298}{subsection.15.6.1}%
+\contentsline {mtocsubsection}{\numberline {15.6.1}A worked example: one extract, three languages}{298}{subsection.15.6.1}%
+\contentsline {subsection}{\numberline {15.6.2}When a colleague changes the data}{299}{subsection.15.6.2}%
+\contentsline {mtocsubsection}{\numberline {15.6.2}When a colleague changes the data}{299}{subsection.15.6.2}%
+\contentsline {section}{\numberline {15.7}A replication archive that outlives the engagement}{301}{section.15.7}%
+\contentsline {mtocsection}{\numberline {15.7}A replication archive that outlives the engagement}{301}{section.15.7}%
+\contentsline {paragraph}{\nonumberline Where this leaves you.}{301}{paragraph*.189}%
+\contentsline {section}{Exercises}{302}{section*.190}%
+\contentsline {part}{\nonumberline Appendices}{303}{part*.192}%
+\contentsline {chapter}{\numberline {A}The Setup Guide}{305}{appendix.A}%
+\contentsline {paragraph}{\nonumberline Packages.}{305}{paragraph*.194}%
+\contentsline {paragraph}{\nonumberline API keys and \texttt {profile.do} hygiene.}{305}{paragraph*.196}%
+\contentsline {paragraph}{\nonumberline Python: two different arrangements.}{305}{paragraph*.198}%
+\contentsline {paragraph}{\nonumberline Google Cloud OAuth for \texttt {googlesheets}.}{306}{paragraph*.200}%
+\contentsline {paragraph}{\nonumberline LLM setup, hosted and local.}{306}{paragraph*.202}%
+\contentsline {paragraph}{\nonumberline Setup instructions for your team.}{307}{paragraph*.204}%
+\contentsline {chapter}{\numberline {B}The Causal Quick-Reference Toolbox}{309}{appendix.B}%
+\contentsline {paragraph}{\nonumberline Sensitivity, not just point estimates.}{310}{paragraph*.206}%
+\contentsline {paragraph}{\nonumberline Further reading.}{310}{paragraph*.208}%
+\contentsline {chapter}{\numberline {C}The Book's Toolkit}{311}{appendix.C}%
+\contentsline {paragraph}{\nonumberline Published packages.}{311}{paragraph*.210}%
+\contentsline {paragraph}{\nonumberline Proposed tools (roadmap, not yet code).}{312}{paragraph*.212}%
+\contentsline {chapter}{\numberline {D}Two Hands-On Worked Examples}{313}{appendix.D}%
+\contentsline {paragraph}{\nonumberline The question.}{313}{paragraph*.215}%
+\contentsline {paragraph}{\nonumberline How you would plan this.}{313}{paragraph*.217}%
+\contentsline {paragraph}{\nonumberline Why it is a good teaching case.}{313}{paragraph*.219}%
+\contentsline {paragraph}{\nonumberline The analysis and its limits.}{314}{paragraph*.221}%
+\contentsline {paragraph}{\nonumberline Concepts it illustrates.}{314}{paragraph*.223}%
+\contentsline {paragraph}{\nonumberline The question.}{315}{paragraph*.226}%
+\contentsline {paragraph}{\nonumberline How you would plan this.}{315}{paragraph*.228}%
+\contentsline {paragraph}{\nonumberline Why it is a good teaching case.}{315}{paragraph*.230}%
+\contentsline {paragraph}{\nonumberline The analysis and its interpretation.}{315}{paragraph*.232}%
+\contentsline {paragraph}{\nonumberline Concepts it illustrates.}{316}{paragraph*.234}%
+\contentsline {chapter}{\numberline {E}A Reproducible Capstone: One Public Dataset, Ingest to Deliverable}{317}{appendix.E}%
+\contentsline {paragraph}{\nonumberline The question.}{317}{paragraph*.236}%
+\contentsline {paragraph}{\nonumberline How you would plan this.}{317}{paragraph*.238}%
+\contentsline {paragraph}{\nonumberline Stage 1, ingest (Chapter~\ref {ch:noapi}).}{317}{paragraph*.240}%
+\contentsline {paragraph}{\nonumberline Stage 2, clean (Chapters~\ref {ch:noapi}--\ref {ch:panels}).}{318}{paragraph*.242}%
+\contentsline {paragraph}{\nonumberline Stage 3, guard (Chapter~\ref {ch:trust}).}{318}{paragraph*.244}%
+\contentsline {paragraph}{\nonumberline Stage 4, analyze (Chapter~\ref {ch:claims}).}{318}{paragraph*.246}%
+\contentsline {paragraph}{\nonumberline Stage 5, visualize (Chapter~\ref {ch:graphs}).}{318}{paragraph*.249}%
+\contentsline {paragraph}{\nonumberline Stage 6, deliver (Chapters~\ref {ch:sheets}--\ref {ch:portals}).}{318}{paragraph*.251}%
+\contentsline {paragraph}{\nonumberline The honest caveat.}{319}{paragraph*.253}%
+\contentsline {paragraph}{\nonumberline Make it yours.}{319}{paragraph*.255}%
+\contentsline {chapter}{\nonumberline Data Used in This Book}{321}{chapter*.256}%
+\contentsline {chapter}{Afterword}{323}{chapter*.258}%
+\contentsline {chapter}{\nonumberline Bibliography}{325}{chapter*.259}%
+\contentsline {chapter}{Alphabetical Index}{333}{section*.260}%
