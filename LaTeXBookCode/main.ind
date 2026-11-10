@@ -32,7 +32,7 @@
   \item \texttt{confirm}, \hyperpage{104}
   \item conformal prediction, \hyperpage{138}
   \item \texttt{conformalpred}, \hyperpage{139}
-  \item control chart, \hyperpage{75}, \hyperpage{180}
+  \item control chart, \hyperpage{76}, \hyperpage{180}
   \item control file, \hyperpage{26}
   \item convergence delta, \hyperpage{263}
   \item \texttt{convertanything}, \hyperpage{9}, \hyperpage{30}, 
@@ -146,7 +146,7 @@
   \item level of a dataset, \hyperpage{119}
   \item level-of-effort, \hyperpage{84}
   \item Likert scale, \hyperpage{173}, \hyperpage{196}
-  \item \texttt{likertscale}, \hyperpage{80}
+  \item \texttt{likertscale}, \hyperpage{81}
   \item linkage error, \hyperpage{101}
   \item literate programming, \hyperpage{224}
   \item \texttt{llmsieve}, \hyperpage{261}
@@ -215,7 +215,7 @@
   \item \texttt{rawsweep}, \hyperpage{285}
   \item \texttt{rdrobust}, \hyperpage{155}
   \item re-identification, \hyperpage{277}
-  \item \texttt{reachcheck}, \hyperpage{80}
+  \item \texttt{reachcheck}, \hyperpage{79}
   \item read-back verification, \hyperpage{217}
   \item \texttt{reclink}, \hyperpage{98}
   \item record linkage, \hyperpage{71}

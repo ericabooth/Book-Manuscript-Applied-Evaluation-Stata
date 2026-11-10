@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.27)  10 NOV 2026 07:13
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.27)  10 NOV 2026 07:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -4873,10 +4873,6 @@ Underfull \hbox (badness 2875) in paragraph at lines 1835--1835
 
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
 Package mdframed Info: mdframed works in twoside mode on input line 1841.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
@@ -4887,6 +4883,10 @@ Package mdframed Info: mdframed detected package amsthm
 \openout4 = `main.mw'.
 
  [76] (./main.mw)
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
 \openout4 = `main.mw'.
 
 LaTeX Font Info:    Font shape `OT1/zplTLF/b/n' will be
@@ -4917,13 +4917,15 @@ Package mdframed Info: mdframed detected package amsthm
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
 (mdframed)              on input line 1972.
-Package mdframed Info: Not enough space on this page on input line 1972.
 \openout4 = `main.mw'.
 
  [79] (./main.mw)
 \openout4 = `main.mw'.
 
-Package mdframed Info: Not enough space on this page on input line 1972.
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
 
 Underfull \hbox (badness 1383) in paragraph at lines 1979--1980
 []\T1/zplLF/m/n/10 Across waves, the same idea scales into an in-stru-ment his-
@@ -4941,17 +4943,13 @@ Package mdframed Info: mdframed detected package amsthm
 
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
 
-[80] (./main.mw)
-\openout4 = `main.mw'.
+Underfull \vbox (badness 1308) has occurred while \output is active []
 
 \openout4 = `main.mw'.
 
-\openout4 = `main.mw'.
-
-\openout4 = `main.mw'.
-
+ [80]
+(./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -4965,6 +4963,10 @@ Package mdframed Info: mdframed detected package amsthm
 \openout4 = `main.mw'.
 
  [81] (./main.mw)
+\openout4 = `main.mw'.
+
+\openout4 = `main.mw'.
+
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -5048,8 +5050,7 @@ Package mdframed Info: mdframed detected package amsthm
 
  [84
 
-]
-(./main.mw)
+] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -5081,7 +5082,7 @@ Package mdframed Info: mdframed detected package amsthm
 (mdframed)              on input line 2156.
 \openout4 = `main.mw'.
 
- [85] (./main.mw)
+[85] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -5139,7 +5140,7 @@ Package pdftex.def Info: images//ch05_surveymap_flow.png  used on input line 22
 (pdftex.def)             Requested size: 456.37767pt x 177.30272pt.
 \openout4 = `main.mw'.
 
-[89 <./images//ch05_surveymap_band.png>] (./main.mw)
+ [89 <./images//ch05_surveymap_band.png>] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
@@ -5258,13 +5259,13 @@ Package mdframed Info: mdframed detected package amsthm
 
  [95
 
-]
-(./main.mw)
+] (./main.mw)
 \openout4 = `main.mw'.
 
 \openout4 = `main.mw'.
 
- [96
+
+[96
 
 
 ] (./main.mw)
@@ -13157,7 +13158,7 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 Here is how much of TeX's memory you used:
  66110 strings out of 478268
  1305894 string characters out of 5846347
- 2748923 words of memory out of 5000000
+ 2748917 words of memory out of 5000000
  81347 multiletter control sequences out of 15000+600000
  668763 words of font info for 264 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -13185,7 +13186,7 @@ lic/newpx/zplb.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/newpx
 /zplbi.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/newpx/zplr.pf
 b></usr/local/texlive/2022/texmf-dist/fonts/type1/public/newpx/zplri.pfb></usr/
 local/texlive/2022/texmf-dist/fonts/type1/public/boondox/zxxrw8a.pfb>
-Output written on main.pdf (348 pages, 5993067 bytes).
+Output written on main.pdf (348 pages, 5993375 bytes).
 PDF statistics:
  6115 PDF objects out of 6186 (max. 8388607)
  5603 compressed objects within 57 object streams

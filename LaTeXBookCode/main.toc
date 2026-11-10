@@ -140,12 +140,12 @@
 \contentsline {mtocsection}{\numberline {5.2}Watching response rates while the survey is open}{75}{section.5.2}%
 \contentsline {subsection}{\numberline {5.2.1}Building the control chart on a simulated field}{76}{subsection.5.2.1}%
 \contentsline {mtocsubsection}{\numberline {5.2.1}Building the control chart on a simulated field}{76}{subsection.5.2.1}%
-\contentsline {subsection}{\numberline {5.2.2}Getting the monitor to the people who act}{78}{subsection.5.2.2}%
-\contentsline {mtocsubsection}{\numberline {5.2.2}Getting the monitor to the people who act}{78}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.2}Getting the monitor to the people who act}{79}{subsection.5.2.2}%
+\contentsline {mtocsubsection}{\numberline {5.2.2}Getting the monitor to the people who act}{79}{subsection.5.2.2}%
 \contentsline {section}{\numberline {5.3}From platform metadata to labeled variables}{80}{section.5.3}%
 \contentsline {mtocsection}{\numberline {5.3}From platform metadata to labeled variables}{80}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Building scales from Likert batteries}{80}{section.5.4}%
-\contentsline {mtocsection}{\numberline {5.4}Building scales from Likert batteries}{80}{section.5.4}%
+\contentsline {section}{\numberline {5.4}Building scales from Likert batteries}{81}{section.5.4}%
+\contentsline {mtocsection}{\numberline {5.4}Building scales from Likert batteries}{81}{section.5.4}%
 \contentsline {subsection}{\numberline {5.4.1}Screening for careless responses}{82}{subsection.5.4.1}%
 \contentsline {mtocsubsection}{\numberline {5.4.1}Screening for careless responses}{82}{subsection.5.4.1}%
 \contentsline {section}{\numberline {5.5}Who did not answer, and does it matter}{84}{section.5.5}%
