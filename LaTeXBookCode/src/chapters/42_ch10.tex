@@ -2,7 +2,7 @@
 
 The board wants \enquote{something like the newspaper does,} an interactive map they can hover, a chart that animates, and they want it for the quarterly meeting. Static figures are right for a printed report, but a client who will explore the data, or an audience you want to give a tool they keep, calls for something they can touch. The risk is that interactivity leaves the replicable pipeline and becomes a designer's one-off; in this chapter we keep it inside Stata.
 
-In this chapter we build small panels for comparing trends, an interactive state map, a searchable table, and an animated chart. We then test whether the intended readers can use the pages and document how to refresh them. You will learn to choose a form that fits the reader's task and preserve the source data, code, and dated output needed to reproduce a release.\marginnote{Some chart pages fetch a plotting library from an outside server when opened. Test the page on the client's network before delivery, because a blocked request can prevent the chart from appearing.}
+In this chapter we build small panels for comparing trends, an offline county map, an interactive state map, a searchable table, and an animated chart. We then test whether the intended readers can use the pages and document how to refresh them. You will learn to choose a form that fits the reader's task and preserve the source data, code, and dated output needed to reproduce a release.\marginnote{Some chart pages fetch a plotting library from an outside server when opened. Test the page on the client's network before delivery, because a blocked request can prevent the chart from appearing.}
 
 \section{The visualization suite: one toolkit, seven tools}\label{sec:suite}
 Where does a deliverable like the board's interactive map actually come from? In this book, from a short chain of commands: across this chapter and the two that follow we draw on seven of our own Stata packages, built to work together, each a single command that takes a Stata dataset one step closer to something a client can open in a browser. The packages cover different stages of the work. Two of them bring data \emph{in}, four \emph{render} it as a chart or dashboard, and one \emph{wraps} the results into a finished report or web portal. Once you know where each tool sits in that pipeline, you assemble the next deliverable from parts instead of hand-building it every time.
@@ -64,15 +64,9 @@ Tool & Layer & Renders & Net at view & Best for \\
 In this chapter we build out the two chart tools in the render column, \texttt{googlechart}\index{googlechart@\texttt{googlechart}} online and \texttt{sparkta2} offline\marginnote{A chart is the atom of every deliverable the suite ships, which is why the render column's two chart tools come first.}. Chapter~\ref{ch:sheets} covers \texttt{googlesheets}\index{googlesheets@\texttt{googlesheets}}, the live-data connector, and Chapter~\ref{ch:portals} covers the three containers, \texttt{statashiny}, \texttt{dashboardbuilder}, and \texttt{webdoc2}, that wrap these charts into a single dashboard, report, or portal. Keep the grid in mind as we go: every command below is an instance of one cell in it.
 
 \section{Sparklines: the word-sized trend}
-When a portfolio has forty sites, forty separate trend charts make a stack no one reads. A sparkline\index{sparkline}, a word-sized line with no axes, solves this by fitting a whole trajectory into a table cell,\marginnote{\textcite{tufte2006beautiful} coined \enquote{sparkline} in \emph{Beautiful Evidence}, defining it as a \enquote{small, intense, word-sized graphic.} The point is that it sits inline with text, at the resolution of the surrounding type.} so a reader scans one column and sees every site's trend at once, the rising ones and the falling ones jumping out. The \texttt{sparkta2} engine generates these inline trends and places them in dashboard tables.
+When a portfolio has forty sites, forty separate trend charts make a stack no one reads. A sparkline\index{sparkline}, a word-sized line with no axes, solves this by fitting a whole trajectory into a table cell,\marginnote{\textcite{tufte2006beautiful} coined \enquote{sparkline} in \emph{Beautiful Evidence}, defining it as a \enquote{small, intense, word-sized graphic.} The point is that it sits inline with text, at the resolution of the surrounding type.} so a reader scans one column and sees every site's trend at once, the rising ones and the falling ones jumping out. You can build this display in native Stata, and the next subsection does so with public wage data.
 
-\begin{kaobox}[frametitle=Package Integration: \texttt{sparkta2}]
-\textbf{Integrated command:} \texttt{sparkta2}. The suite's \emph{offline} chart tool (Table~\ref{tab:suite-matrix}): an engine built on D3, the JavaScript charting library many newsroom graphics teams build on, that generates high-density inline trend sparklines and sub-state maps, rendering fully offline.
-\end{kaobox}
-
-One honest caveat applies to this tool. As of this writing the \texttt{sparkta2} source is not yet published, only rendered galleries are public, so read this section as a description of what the engine renders, not an install you can run today.
-
-\subsection{The spark wall you can build today}\label{sec:sparkwall}
+\subsection{A spark wall from public wage data}\label{sec:sparkwall}
 Native Stata can produce a related compact display with small multiples\index{small multiples}\marginnote{Small multiples: a wall of tiny panels that strip their axes to almost nothing so the shape is all that is left to read.}. A regional workforce board wants to know whether the wage recovery after 2020 looked the same across its labor markets, or whether some counties bounced and others stalled, because it targets its programs county by county. Six separate wage charts would be six page-turns; a spark wall puts all six side by side so the divergence is one glance.
 
 We build the wall from the same no-key BLS files Chapter~\ref{ch:apis} introduced, assembling the county-quarter panel that chapter promised: one \texttt{import delimited} per county-quarter, looped over six Texas counties and twenty-four quarters. The Quarterly Census of Employment and Wages posts one CSV per county-year-quarter at a stable URL, and we keep the total private-sector line (ownership code~5, industry code~10) from each:
@@ -133,10 +127,61 @@ The whole exhibit is one short do-file (\texttt{ch10\_smallmult.do}) that reruns
 
 Notice which lines of the do-file do the steering. Everything that will change next quarter is defined in exactly two places, the \texttt{counties} local and the \texttt{forvalues yr} range, and everything below them is machinery that never needs touching. That separation is worth building on purpose: hoist every value you expect to edit, the geography list, the year range, the output path, into a header block of locals at the top of the file, and the quarterly refresh becomes a one-line edit a successor can make without reading the loop.\marginnote{A quick test of whether you have parameterized enough: ask what next quarter's update requires; if the answer names any line below the header, move that value up.}
 
-\subsection{What \texttt{sparkta2} adds: offline maps (source not yet released)}\label{sec:sparkta2}
-The spark wall is native Stata; \texttt{sparkta2} is the suite tool that generalizes it, and it occupies the one grid cell \texttt{googlechart} cannot reach: an interactive chart that draws with the internet off, and a map below the state level. Where \texttt{googlechart}'s geographic type stops at US states (Section~\ref{sec:gc-geo}), \texttt{sparkta2} renders Texas \emph{county} and even \emph{school-district} choropleths, the sub-state geography an education or workforce evaluator actually reports in. It does this by bundling its drawing engine (D3, a JavaScript charting library) \emph{inside} the HTML file, so there is no live library to fetch and nothing to blank behind a firewall.\marginnote{\enquote{D3} is a widely used JavaScript library for data-driven graphics. The point for us is not the library but where it lives: \texttt{sparkta2} ships it inside the file, so the page is truly self-contained. \texttt{googlechart} instead links out to Google's copy at view time, which is the online-versus-offline split of Table~\ref{tab:suite-matrix}.}
+\section{County maps that open offline}\label{sec:sparkta2}
+The spark wall is a static image, and two requests that evaluators hear often need more than that: a page the reader can explore with the internet off, and a map drawn below the state level. In this section we use \texttt{sparkta2} to meet both requests with one command, and you will finish with a county map of Texas that a client can open on a laptop with no connection. This is the offline chart cell of Table~\ref{tab:suite-matrix}. Where the geographic type of \texttt{googlechart} stops at US states (Section~\ref{sec:gc-geo}), \texttt{sparkta2} draws the sub-state geography that an education or workforce evaluator reports in. The package includes boundary files for the 254 Texas counties and for 1,016 Texas school districts, and it accepts a boundary file you supply for any other geography.\marginnote{\enquote{D3} is a widely used JavaScript library for data-driven graphics. With its \texttt{offline} option, \texttt{sparkta2} copies D3 and the boundaries into the HTML file, so the page is self-contained. \texttt{googlechart} instead links out to Google's copy at view time, which is the online-versus-offline split of Table~\ref{tab:suite-matrix}.}
 
-Its planned type list reads like the offline complement to \texttt{googlechart}: multi-series lines, diverging bars, donuts, a bar-race animation, hexbin density maps, bivariate two-variable choropleths, and the sub-state maps that are its signature. The decision between the two siblings comes down to two questions, both drawn straight from Table~\ref{tab:suite-matrix}. Must the page render with no internet, for an air-gapped agency or an embargoed report? Choose \texttt{sparkta2}. Do you need geography finer than the state, a map of Texas counties or independent school districts? Choose \texttt{sparkta2}, because \texttt{googlechart}'s \texttt{geo} type cannot draw it. For everything else, native filter dropdowns, an animated bubble with a Play button, a searchable table, US-state maps, \texttt{googlechart} is the richer tool, and we spend the rest of this chapter on its worked examples. The caveat in the heading still applies: \texttt{sparkta2} is not yet published.
+The box below gives the install line. We suggest you run it once on a connected machine before the first map, because the first call also downloads the package's drawing code and boundary files.
+
+\begin{kaobox}[frametitle=Package Integration: \texttt{sparkta2}]
+\textbf{Integrated command:} \texttt{sparkta2}. The suite's \emph{offline} chart tool (Table~\ref{tab:suite-matrix}). It writes one HTML file that contains an interactive map or chart drawn with D3, the JavaScript charting library many newsroom graphics teams build on. It needs Stata~17 or newer, and it installs from the authors' GitHub:
+\par
+{\footnotesize
+\begin{verbatim}
+local gh "https://raw.githubusercontent.com/ericabooth"
+net install sparkta2, ///
+    from("`gh'/sparkta2-stata-public/main/") replace force
+\end{verbatim}
+}
+The first map or chart call downloads the JavaScript and boundary files into your \texttt{PLUS} folder, and later calls reuse them. On a machine that will never be connected, copy those files over yourself with \texttt{net get sparkta2} from the same address.
+\end{kaobox}
+
+\subsection{Worked example: a Texas county choropleth}\label{sec:sp2-county}
+A state health foundation asks where in Texas the uninsured are concentrated, because it funds enrollment help county by county. The data are the County Health Rankings extract that Chapter~\ref{ch:noapi} cleaned and saved, one row for each of the 254 counties, with the county FIPS code in \texttt{fips}. The companion \texttt{ch10\_sparkta2.do} loads that file and draws the map:
+\par
+{\footnotesize
+\begin{verbatim}
+use "`HERE'/clean/chr2024_tx.dta", clear
+destring fips, replace
+isid fips
+label variable uninsured "Uninsured (%)"
+sparkta2 uninsured, id(fips) name(cname)        ///
+    type(choropleth) classes(jenks) scheme(blues) ///
+    tooltipvars(childpov hhincome)                ///
+    search download datatable                     ///
+    title("Uninsured rate by Texas county, 2024") ///
+    width(960) height(620) offline noopen         ///
+    export("`OUT'/01_county_uninsured.html")
+\end{verbatim}
+}
+Read the command in three parts. The first part joins your data to the map: \texttt{id(fips)} names the variable that matches each row to a county boundary, and \texttt{name(cname)} names the label a reader sees on hover. The \texttt{isid} line before the command confirms that the file has one row per county, which matters because a second row for the same county would silently replace the first.\marginnote{\texttt{sparkta2} pads a numeric \texttt{id()} to five digits, so a FIPS code stored as a number still matches. If your identifier is a string, keep its leading zeros, the habit Chapter~\ref{ch:apis} taught for merges.} The second part sets how values become colors. \texttt{classes(jenks)} groups the counties at natural breaks in the data instead of the default quantiles, and the legend prints the cut values, so a reader can see what each shade means. The legend title comes from the variable label, which is why we label \texttt{uninsured} first. The third part adds what the reader can do on the page: \texttt{search} adds a box that finds a county by name, \texttt{tooltipvars()} adds child poverty and median income to the hover table, and \texttt{download datatable} adds an Export menu with the picture and the underlying rows.
+
+The option that makes the page work offline is \texttt{offline}. With it, the drawing code is written into the HTML file. Without it, the page fetches D3 from a public server each time it opens, and it will be blank behind a firewall just as an online chart would be. If the deliverable is going to an air-gapped agency, include \texttt{offline} and then open the file with your own network turned off before you send it.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=\linewidth]{ch10_sp2_county.png}
+\caption[A sparkta2 county choropleth]{The \texttt{type(choropleth)} map of the uninsured rate in the 254 Texas counties, County Health Rankings 2024, written by \texttt{ch10\_sparkta2.do} with the command printed above. Darker is higher, and the legend shows the seven natural-breaks classes. In the browser a reader can hover a county for its values, type a name in the search box, zoom, and export the picture or the data.}
+\label{fig:sp2-county}
+\end{figure*}
+
+Figure~\ref{fig:sp2-county} shows the result. The county rates run from about 5 percent to 46 percent around a median of 22 percent. The darkest counties sit along the Rio Grande, in far West Texas, and in the Panhandle, and the palest include the large suburban counties north of Dallas, with Collin and Denton near 11 and 12 percent. Check the map against what you already know before you circulate it, as you would any figure. Texas's uninsured residents are known to be concentrated in border and rural counties, and the map shows that pattern, which is evidence that the join put each value on the right county. Then look at the two extremes. Kenedy County is the single darkest county at 46 percent and Loving County is the palest at 5 percent, and each has fewer than 500 residents, so their rates rest on very small counts. We suggest you say so in the note under the map, or apply the shrinkage of Chapter~\ref{ch:trust} first, so that a reader does not take the map's most visible county for its most important one.
+
+The same file drives a second map in the companion do-file. When you give \texttt{sparkta2} two variables and \texttt{type(bivariate)}, here child poverty and the uninsured rate, it shades each county by both at once and adds buttons that switch among the joint view, each variable alone, and their difference. That page answers the foundation's follow-up question, which counties are high on both, without a second dataset.
+
+\subsection{What else \texttt{sparkta2} draws, and when to choose it}\label{sec:sp2-types}
+Maps are the main reason to choose \texttt{sparkta2}, and it has four map types: \texttt{choropleth}, \texttt{bivariate}, \texttt{hexbin} for density, and \texttt{points} for locations given by latitude and longitude. It also draws five chart types with the same engine and the same offline option: \texttt{donut}, \texttt{bar2}, \texttt{line2}, \texttt{divbar} for diverging Likert bars, and \texttt{barrace} for an animated ranking. For any other chart type, \texttt{sparkta2} passes the call to \texttt{sparkta}, a separate package by Fahad Mirza that you install on its own.
+
+You choose between \texttt{sparkta2} and \texttt{googlechart} with two questions, both taken from Table~\ref{tab:suite-matrix}. If the page must render with no internet, for an air-gapped agency or an embargoed report, choose \texttt{sparkta2}. If you need geography finer than the state, such as Texas counties or school districts, choose \texttt{sparkta2}, because the \texttt{geo} type of \texttt{googlechart} cannot draw it. For native filter dropdowns, an animated bubble with a Play button, a searchable table, or a US-state map on a public website, \texttt{googlechart} has more to offer, and we spend the rest of this chapter on its worked examples.
 
 \section{Fourteen chart types from one command}
 You hand a client a page they can explore rather than a figure they can only look at, and you build it without leaving the do-file. Four worked examples follow, a state choropleth, an animated bubble with a Play button, a searchable table, and a diverging Likert bar, and once you have built those four you will be able to reach the other ten chart types from the same grammar, so answering a client's next question means changing one option rather than starting a new build.
@@ -181,7 +226,7 @@ Four options configure this chart type. The two geography settings, \texttt{geor
 \begin{figure*}[htbp]
 \centering
 \includegraphics[width=\linewidth]{ch10_gc_geo.png}
-\caption[A googlechart US-state choropleth]{The \texttt{type(geo)} choropleth of the uninsured rate by state, 2025, written by \texttt{ch10\_googlechart.do} with the command printed above. Darker is higher; the legend runs from 2.9 to 18.8 percent. In the browser this map is interactive: hover a state and its exact value appears. \texttt{googlechart}'s \texttt{geo} type stops at the state level; for a Texas county map, use the offline sibling \texttt{sparkta2} (Section~\ref{sec:sparkta2}).}
+\caption[A googlechart US-state choropleth]{The \texttt{type(geo)} choropleth of the uninsured rate by state, 2025, written by \texttt{ch10\_googlechart.do} with the command printed above. Darker is higher; the legend runs from 2.9 to 18.8 percent. In the browser this map is interactive: hover a state and its exact value appears. \texttt{googlechart}'s \texttt{geo} type stops at the state level; for a Texas county map, use \texttt{sparkta2} (Section~\ref{sec:sparkta2}).}
 \label{fig:gc-geo}
 \end{figure*}
 
@@ -251,7 +296,7 @@ Figure~\ref{fig:gc-table} shows the intended use: a client opens the page, types
 \end{figure*}
 
 \subsection{Worked example 4: a diverging stacked bar}\label{sec:gc-divbar}
-The last type is the one survey work needs most and general tools handle worst: the diverging stacked bar\index{diverging stacked bar} for Likert data. A \emph{Likert}\index{Likert scale} item is the familiar strongly-disagree-to-strongly-agree scale, and the honest way to chart it is to center the neutral response on zero, push disagreement left and agreement right, so the balance of opinion reads at a glance. \texttt{type(divbar)} does exactly this. It needs two roles: \texttt{name()} for the question and \texttt{level()} for the response category, plus \texttt{levelorder()} to fix the stack order and \texttt{centerlevel()} to name the neutral level that sits on zero:
+The last type is the one survey work needs most and general tools handle worst: the diverging stacked bar\index{diverging stacked bar} for Likert data. Chapter~\ref{ch:graphs} built this chart by hand for Likert\index{Likert scale} items and explained why centering the neutral response on zero lets a reader see the balance of opinion (Section~\ref{sec:likert-div}). \texttt{type(divbar)} draws the same layout in one command and makes it interactive. It needs two roles: \texttt{name()} for the question and \texttt{level()} for the response category, plus \texttt{levelorder()} to fix the stack order and \texttt{centerlevel()} to name the neutral level that sits on zero:
 \par
 {\footnotesize
 \begin{verbatim}
@@ -269,7 +314,7 @@ googlechart share, name(q) level(response)        ///
     export("`OUT'/06_divbar.html")
 \end{verbatim}
 }
-The data here is a small synthetic set, three policy statements each with five Likert levels, written inline in the do-file so the shape is illustrative rather than a real poll. Figure~\ref{fig:gc-divbar} shows the result: each statement is one horizontal bar split at zero, disagreement in reds to the left and agreement in blues to the right, with the neutral slice straddling the center line.
+The data are the three illustrative policy statements that Chapter~\ref{ch:graphs} drew as a static diverging bar (Figure~\ref{fig:likert-div}), each with five Likert levels, written inline in the do-file; they are not a real poll. Figure~\ref{fig:gc-divbar} shows the result: each statement is one horizontal bar split at zero, disagreement in reds to the left and agreement in blues to the right, with the neutral slice straddling the center line.
 
 \begin{figure*}[htbp]
 \centering
@@ -416,7 +461,7 @@ When the trigger is a calendar date, consider taking the rerun out of human memo
 \textbf{Scenario.} The workforce board wants the county wage story in three places: a one-page printed brief, an exploratory portal on the agency website, and a two-minute clip in the director's talk.
 
 \medskip
-\textbf{The build.} For the printed brief, use the static spark wall built by \texttt{ch10\_smallmult.do}. For the portal, an interactive table presents the same county-quarter values once you adapt the table example's columns and labels to those data; a county map is the harder half, because the \texttt{googlechart} geographic example in this chapter uses a different, state-level CHR file and cannot produce one from the QCEW panel, so reach for a mapping tool that carries county boundaries or deliver a static map (\texttt{sparkta2} remains a proposed option until its source is released). For the director's clip, keep the state animation as a teaching demonstration rather than a deliverable, because its earlier frames are simulated. Document the source and build command for each deliverable so that a colleague can refresh the intended dataset.
+\textbf{The build.} For the printed brief, use the static spark wall built by \texttt{ch10\_smallmult.do}. For the portal, an interactive table presents the same county-quarter values once you adapt the table example's columns and labels to those data; the county map comes from \texttt{sparkta2} (Section~\ref{sec:sparkta2}), because the \texttt{googlechart} geographic type stops at the state level. Widen the \texttt{counties} local to the board's full service area, keep the latest quarter, and pass the wage to \texttt{sparkta2} with \texttt{id(area\_fips)} and the \texttt{offline} option. For the director's clip, keep the state animation as a teaching demonstration rather than a deliverable, because its earlier frames are simulated. Document the source and build command for each deliverable so that a colleague can refresh the intended dataset.
 \end{appliedexample}
 
 \paragraph{Where this leaves you.} This chapter opened with a board asking for \enquote{something like the newspaper does} and closes with you able to build it without leaving the do-file: spark walls for scanning a portfolio, interactive maps and searchable tables, an animated bubble for the one story that really is a trajectory, each written by code that reruns when the data refreshes. The judgments you picked up along the way matter more than any single command. Before the first \texttt{googlechart} call, you place the deliverable on the author-driven to reader-driven spectrum and write down the drill-downs a named stakeholder will actually perform, treating interactivity as a hypothesis about a clicker rather than a default. You build the static floor first, so a blocked CDN costs a feature rather than the deliverable. You check the palette, the contrast, and the shipped numbers so the readers in the actual room can read the page. And at ship time you write the refresh calendar, who reruns, on what trigger, what gets archived, then hand the rerun itself to a scheduler and keep only the looking, because a live dashboard is a promise to keep its pipeline current and a promise is easier to keep when a machine does the remembering. Chapter~\ref{ch:sheets} turns to the format most clients actually live in, the spreadsheet, and how to deliver through it without giving up the pipeline.

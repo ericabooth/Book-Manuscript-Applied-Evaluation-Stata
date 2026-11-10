@@ -74,6 +74,7 @@ Launch Stata in the project folder, then either:
 | `ch09_graphs.do` | 9 | Before/after data-ink pair; coefficient small-multiples; annotated run chart. |
 | `ch10_smallmult.do` | 10 | QCEW quarterly wage small-multiples ("spark wall") for six Texas counties. |
 | `ch10_googlechart.do` | 10 | Six `googlechart` interactive HTML charts (geo, bar, scatter, animated bubble, searchable table, divbar) on CHR&R 2025 state data; no key, builds offline. |
+| `ch10_sparkta2.do` | 10 | Two `sparkta2` offline maps of the 254 Texas counties (uninsured-rate choropleth, child poverty by uninsured bivariate) from the CHR 2024 file that `ch04_chr.do` saves; needs `sparkta2` installed. |
 | `ch11_tables.do` | 11 | Builds a real LaTeX earnings table the manuscript ingests via `\input`; putexcel. |
 | `ch12_dashboardbuilder.do` | 12 | Two `dashboardbuilder` KPI dashboards (two-minute build; benchmark explorer with selector/refvalue) into `dashboards/`; self-contained HTML, no CDN; tripwires guard the (rawsum) reference row. |
 | `ch12_portal.do` | 12 | Suite capstone: chains webapi/googlesheets → googlechart/statashiny → webdoc2 into one offline portal. |

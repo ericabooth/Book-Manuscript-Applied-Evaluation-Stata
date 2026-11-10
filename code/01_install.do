@@ -46,7 +46,9 @@ if _rc ssc install webapi, replace
 * ssc install webdoc, replace
 * net install webdoc2, from("https://raw.githubusercontent.com/ericabooth/webdoc2-stata-public/main/") replace force
 * net get webdoc2, from("https://raw.githubusercontent.com/ericabooth/webdoc2-stata-public/main/")
-* (sparkta2 is not yet published; its examples in the book are display-only.)
+* sparkta2 (Stata 17+); the first map call downloads its JavaScript and boundary
+* files into PLUS; required by ch10_sparkta2.do (install verified 2026-11-10):
+* net install sparkta2, from("https://raw.githubusercontent.com/ericabooth/sparkta2-stata-public/main/") replace force
 
 *--- The packages built FOR this book -----------------------------------------*
 * All of these are published. Four are on SSC and install like any community

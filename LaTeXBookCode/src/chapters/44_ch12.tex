@@ -93,7 +93,7 @@ webdoc close
 }
 Run the block and \texttt{webdoc2} writes a one-page report: the headings, the line of prose, the first regression with its output in the open, and the second collapsed behind a \enquote{click to view} panel the reader expands on demand. Open the page and check the property that matters: both regression tables are output the run itself printed, so a rerun against new data cannot leave a stale number on the page.
 
-The value of \texttt{webdoc2} for a portal, though, is not the styling but two embed commands that let one page contain the whole suite. \texttt{wdimg} drops a static image into the report, which is how you place an offline \texttt{sparkta2} map (Chapter~\ref{ch:interactive}) into the narrative. \texttt{wdiframe} embeds an entire other HTML file inside a framed panel, which is how a \texttt{statashiny} dashboard, a \texttt{dashboardbuilder} KPI page (Section~\ref{sec:dashboardbuilder}), or a \texttt{googlechart} page becomes a live section of the report rather than a separate link.\marginnote{An \emph{iframe} is a webpage embedded inside another webpage, shown in its own panel. It is the mechanism that lets one report scroll past a paragraph, then a fully interactive dashboard, then another paragraph, with the dashboard behaving exactly as it would on its own.} With those two lines, \texttt{webdoc2} serves as the container that wraps every other tool in the suite:
+The value of \texttt{webdoc2} for a portal, though, is not the styling but two embed commands that let one page contain the whole suite. \texttt{wdimg} drops a static image into the report, which is how you place an exported Stata graph such as the spark wall of Chapter~\ref{ch:interactive} into the narrative. \texttt{wdiframe} embeds an entire other HTML file inside a framed panel, which is how a \texttt{statashiny} dashboard, a \texttt{dashboardbuilder} KPI page (Section~\ref{sec:dashboardbuilder}), a \texttt{googlechart} page, or an offline \texttt{sparkta2} map becomes a live section of the report rather than a separate link.\marginnote{An \emph{iframe} is a webpage embedded inside another webpage, shown in its own panel. It is the mechanism that lets one report scroll past a paragraph, then a fully interactive dashboard, then another paragraph, with the dashboard behaving exactly as it would on its own.} With those two lines, \texttt{webdoc2} serves as the container that wraps every other tool in the suite:
 \par
 {\footnotesize
 \begin{verbatim}
@@ -101,14 +101,14 @@ wdinit "$portal/report", replace
 wputh1 Q3 Site Outcomes
 wput   Enrollment and completion, rebuilt
 wput   from the analytic file.
-wdimg  "charts/county_map.png", ///
-    caption("Completion by county")
+wdimg  "charts/sparkwall.png", ///
+    caption("Weekly wage by county")
 wdiframe "charts/dashboard.html", ///
     height(640)
 webdoc close
 \end{verbatim}
 }
-Read the two embed lines and the pipeline comes into view. The \texttt{wdimg} line pulls in an offline county map that some other tool drew; the \texttt{wdiframe} line pulls in the interactive dashboard \texttt{statashiny} built, whole and live, into the same scrolling page. When embedding, keep every \texttt{wdiframe} and \texttt{wdimg} path relative to the portal folder, never absolute, so the page that works on your machine still works on the laptop the folder is copied to; at the end of this chapter we walk through a rebuild rehearsal that catches exactly this slip. The live \texttt{webdoc2} example site shows a finished report of exactly this shape.\marginnote{See \texttt{ericabooth.github.io/} \texttt{Webdoc2\_Example\_Site} for a full report, and the \texttt{statashiny} example site, which is itself a \texttt{webdoc2} page with a dashboard embedded by \texttt{wdiframe}. Both host free on GitHub Pages, which is the last step of the capstone below.}
+Read the two embed lines and the pipeline comes into view. The \texttt{wdimg} line pulls in a static graph that Stata exported; the \texttt{wdiframe} line pulls in the interactive dashboard \texttt{statashiny} built, whole and live, into the same scrolling page. When embedding, keep every \texttt{wdiframe} and \texttt{wdimg} path relative to the portal folder, never absolute, so the page that works on your machine still works on the laptop the folder is copied to; at the end of this chapter we walk through a rebuild rehearsal that catches exactly this slip. The live \texttt{webdoc2} example site shows a finished report of exactly this shape.\marginnote{See \texttt{ericabooth.github.io/} \texttt{Webdoc2\_Example\_Site} for a full report, and the \texttt{statashiny} example site, which is itself a \texttt{webdoc2} page with a dashboard embedded by \texttt{wdiframe}. Both host free on GitHub Pages, which is the last step of the capstone below.}
 
 \section{Interactive without a server}
 Clients behind strict IT still deserve interactivity, and \texttt{statashiny}\index{statashiny@\texttt{statashiny}} provides it without a server, compiling a Stata dataset into static files that behave like a small app: searchable tables, charts that filter live, value cards, all running in the browser from local files.\marginnote{\texttt{statashiny} is the offline cousin of the interactive charts in Chapter~\ref{ch:interactive}, built for the setting where nothing may be installed and nothing may phone home.}
@@ -496,7 +496,7 @@ webapi get using ///
     params("year=2017|cause_name=All causes") clear
 \end{verbatim}
 }
-With data in memory, the two chart tools write their HTML into the portal's \texttt{charts/} folder (the companion \texttt{ch12\_portal.do} documents the implemented stages and folder setup). \texttt{googlechart} draws the online state choropleth; \texttt{sparkta2} draws the offline county map that the online engine cannot. The \texttt{sparkta2} line is commented because its source is still forthcoming (Chapter~\ref{ch:interactive}), so the sketch shows the intended call rather than promising an install:
+With data in memory, the two chart tools write their HTML into the portal's \texttt{charts/} folder (the companion \texttt{ch12\_portal.do} documents the implemented stages and folder setup). \texttt{googlechart} draws the online state choropleth; \texttt{sparkta2} draws the offline county map that the online engine cannot, with the syntax of Section~\ref{sec:sparkta2}:
 \par
 {\footnotesize
 \begin{verbatim}
@@ -507,10 +507,11 @@ googlechart uninsured, name(geo_code) type(geo) ///
     title("Uninsured rate by state, 2025") ///
     noopen export("$charts/geo_uninsured.html")
 
-* 2b. CHART offline: sparkta2 sub-state map (sketch)
-* sparkta2 completed, name(county) ///
-*     type(choropleth) geo(tx-counties) ///
-*     export("$charts/county_map.html")
+* 2b. CHART offline: sparkta2 county map
+sparkta2 completed, id(fips) name(county) ///
+    type(choropleth) scheme(blues) ///
+    offline noopen ///
+    export("$charts/county_map.html")
 \end{verbatim}
 }
 Next the interactive dashboard, built with the init, add, build workflow from earlier in this chapter, exported into the same \texttt{charts/} folder:
@@ -527,7 +528,7 @@ statashiny cut, input(num) ///
 statashiny, build export("$charts/dashboard.html")
 \end{verbatim}
 }
-Now the wrap. \texttt{webdoc2} writes \texttt{index.html} with the narrative, embeds the dashboard and the online chart as live panels with \texttt{wdiframe}, drops the offline map with \texttt{wdimg}, and stamps the version and date into the footer at build time for comparison with the build record (Section~\ref{sec:versioning}):
+Now the wrap. \texttt{webdoc2} writes \texttt{index.html} with the narrative, embeds the dashboard, the online chart, and the offline map as live panels with \texttt{wdiframe}, and stamps the version and date into the footer at build time for comparison with the build record (Section~\ref{sec:versioning}):
 \par
 {\footnotesize
 \begin{verbatim}
@@ -540,8 +541,7 @@ wdiframe "charts/dashboard.html", height(640)
 wputh2 Uninsured by state
 wdiframe "charts/geo_uninsured.html", height(600)
 wputh2 Completion by county (offline map)
-wdimg  "charts/county_map.png", ///
-    caption("Offline county choropleth")
+wdiframe "charts/county_map.html", height(680)
 wput ---
 wput Version $version, built $S_DATE.
 webdoc close
@@ -561,7 +561,7 @@ The applied example below gathers the whole chapter into a single commission, so
 \textbf{Scenario.} A client wants one folder to share with their steering committee: a narrative report, an interactive dashboard of site outcomes, and a county map, with an optional online chart clearly marked as requiring internet access, and they need to know six months from now exactly which cut the committee approved.
 
 \medskip
-\textbf{The build, end to end.} Scaffold the folder following the \texttt{projectbuilder}\index{projectbuilder@\texttt{projectbuilder}} layout, the installable tool whose folder plan Chapter~\ref{ch:workshop} first lays out by hand. Ingest the data with \texttt{webapi} (Chapter~\ref{ch:apis}) or \texttt{googlesheets} (Chapter~\ref{ch:sheets}). Render the online chart with \texttt{googlechart} and the offline county map with \texttt{sparkta2} into \texttt{charts/} (Chapter~\ref{ch:interactive}); build the drill-down dashboard with \texttt{statashiny}; then wrap narrative, dashboard, chart, and map into \texttt{index.html} with \texttt{webdoc2}, embedding the interactive pieces with \texttt{wdiframe} and the map with \texttt{wdimg}. Stamp the version and date into the footer at build time, tag the commit that built the folder, and name the folder to match (Section~\ref{sec:versioning}). The companion \texttt{ch12\_portal.do} sketches this exact sequence and scaffolds the stamped folder. Test the resulting folder on a recipient's laptop, record which panels require internet access, and include a version stamp and rebuild instructions. The live example sites show the finished form.
+\textbf{The build, end to end.} Scaffold the folder following the \texttt{projectbuilder}\index{projectbuilder@\texttt{projectbuilder}} layout, the installable tool whose folder plan Chapter~\ref{ch:workshop} first lays out by hand. Ingest the data with \texttt{webapi} (Chapter~\ref{ch:apis}) or \texttt{googlesheets} (Chapter~\ref{ch:sheets}). Render the online chart with \texttt{googlechart} and the offline county map with \texttt{sparkta2} into \texttt{charts/} (Chapter~\ref{ch:interactive}); build the drill-down dashboard with \texttt{statashiny}; then wrap narrative, dashboard, chart, and map into \texttt{index.html} with \texttt{webdoc2}, embedding each interactive piece with \texttt{wdiframe}. Stamp the version and date into the footer at build time, tag the commit that built the folder, and name the folder to match (Section~\ref{sec:versioning}). The companion \texttt{ch12\_portal.do} sketches this exact sequence and scaffolds the stamped folder. Test the resulting folder on a recipient's laptop, record which panels require internet access, and include a version stamp and rebuild instructions. The live example sites show the finished form.
 \end{appliedexample}
 
 \paragraph{Where this leaves you.} You can combine a generated report, interactive panels, and supporting data in a versioned folder. An offline release needs all its viewing dependencies bundled and tested; a refreshed release needs the narrative reviewed against the new results. Keep the code revision, data vintage, and delivery record together, and rehearse the rebuild from a clean location. Part~V turns to sustaining this practice, beginning with the use of AI in Chapter~\ref{ch:ai}.

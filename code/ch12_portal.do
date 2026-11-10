@@ -11,10 +11,9 @@
 *
 *   Most of this file is DISPLAY-ONLY. The suite tools are not assumed
 *   installed here, so those blocks are wrapped in `if 0 { ... }' and clearly
-*   commented. Five of the six now install from the authors' GitHub with one
-*   net command each (webapi, googlechart, googlesheets, statashiny, webdoc2;
-*   see 01_install.do and Appendix A); sparkta2's source is still forthcoming,
-*   so its line stays a sketch. What DOES run with no packages and no network
+*   commented. All six install with one command each (webapi, googlechart, googlesheets,
+*   statashiny, webdoc2, sparkta2; see 01_install.do and Appendix C). What
+*   DOES run with no packages and no network
 *   is the folder-scaffolding section at the bottom: it builds the portal
 *   skeleton and a stamped README so you can see the shape of the deliverable
 *   before the tools fill it in.
@@ -113,15 +112,16 @@ if 0 {   // DISPLAY-ONLY: requires -webdoc2- (and -webdoc-)
     webdoc close
 
     * --- the embed commands that wrap the suite into one page ---
-    * wdimg embeds a static image (a sparkta2 SVG/PNG map);
+    * wdimg embeds a static image (an exported Stata graph);
     * wdiframe embeds a whole interactive html (the statashiny
-    * dashboard or a googlechart page) inside a framed panel.
+    * dashboard, a googlechart page, or a sparkta2 map) inside
+    * a framed panel.
     wdinit "$portal/report", replace
     wputh1 Q3 Site Outcomes
     wput   Enrollment and completion, rebuilt ///
            from the analysis file.
-    wdimg  "$charts/county_map.png", ///
-        caption("Completion by county (offline map)")
+    wdimg  "$charts/sparkwall.png", ///
+        caption("Weekly wage by county")
     wdiframe "charts/dashboard.html", height(640)
     webdoc close
 
@@ -133,7 +133,7 @@ if 0 {   // DISPLAY-ONLY: requires -webdoc2- (and -webdoc-)
 *   The whole suite in sequence. Each step names the chapter that teaches it.
 *   Guarded because it needs the whole suite installed and (for the live
 *   ones) network + OAuth. webapi/googlesheets/googlechart/statashiny/webdoc2
-*   install from the authors' GitHub (01_install.do); sparkta2 is a sketch.
+*   sparkta2 install as 01_install.do shows.
 ********************************************************************************
 if 0 {   // DISPLAY-ONLY: full-suite orchestration
 
@@ -156,11 +156,11 @@ if 0 {   // DISPLAY-ONLY: full-suite orchestration
 
     * --- 2b. CHART, OFFLINE: sparkta2 sub-state map (Ch10) ------------------*
     * sparkta2 draws county / school-district choropleths that GeoChart
-    * cannot; it renders offline (D3 bundled inline). Source forthcoming,
-    * so this line is a sketch of the intended call:
-    * sparkta2 completed, name(county) type(choropleth) ///
-    *     geo(tx-counties) ///
-    *     export("$charts/county_map.html")
+    * cannot; with -offline- the D3 code is written into the file
+    * (worked example: ch10_sparkta2.do).
+    sparkta2 completed, id(fips) name(county) type(choropleth) ///
+        scheme(blues) offline noopen ///
+        export("$charts/county_map.html")
 
     * --- 3. INTERACTIVE: statashiny drill-down dashboard (Ch12) -------------*
     statashiny, title("Site Outcomes") replace
@@ -183,8 +183,7 @@ if 0 {   // DISPLAY-ONLY: full-suite orchestration
     wputh2 Uninsured by state
     wdiframe "charts/geo_uninsured.html", height(600)
     wputh2 Completion by county (offline map)
-    wdimg  "charts/county_map.png", ///
-        caption("Offline county choropleth")
+    wdiframe "charts/county_map.html", height(680)
     * stamp the footer at BUILD time so it cannot drift (Sec. versioning):
     wput ---
     wput Version $version, built $S_DATE.

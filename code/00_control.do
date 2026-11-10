@@ -58,6 +58,8 @@ if `run_all' {
     do "$code/ch09_graphs.do"
     do "$code/ch10_smallmult.do"
     do "$code/ch10_googlechart.do"
+    capture which sparkta2              // optional package (01_install.do)
+    if !_rc do "$code/ch10_sparkta2.do"
     do "$code/ch11_tables.do"
     do "$code/ch11_googlesheets.do"
     do "$code/ch12_portal.do"
