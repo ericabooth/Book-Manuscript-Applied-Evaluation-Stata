@@ -6,7 +6,7 @@ We move from a do-file that compiles itself into a webpage, to interactive eleme
 
 The method in this chapter predates the web, and its history explains why the report and code are kept together. \textcite{knuth1984literate} proposed \emph{literate programming}, the practice of writing a program and its explanation as one interleaved document rather than two files that fall out of step. \textcite{peng2011reproducible} carried the same idea into computational science, arguing that when a result cannot be fully re-run by others, publishing the code and data that produced it is the minimum standard a reader should accept. The self-contained portal is that argument made concrete for an evaluator: the report and the analysis are one artifact, so a practitioner reading a completion rate can trace it back to the line of code that computed it, and a successor can rebuild every figure from the same folder.\marginnote{\textcite{jann2017webdoc} built the Stata tool this chapter leans on, and \textcite{xie2015dynamic} built the parallel tool in R, so an evaluation team can follow the same practice in whichever of the two it already runs.}
 
-\subsection{What the software enforces and what still falls to you}
+\section{What the software enforces and what still falls to you}
 Why should a program director trust a completion rate she has no way to re-run herself? Because the document that reports it was built under a discipline. \textcite{rule2019ten} distill a decade of computational-notebook practice into rules a working analyst can follow, and three of them describe exactly what a \texttt{webdoc2} report either enforces or leaves to the author. Tell a story with the narrative, so a reader follows the reasoning and not only the output. Keep the code in the order it runs, so a re-runner reproduces the same result rather than a version that only worked in the author's session. Share the whole notebook, so a successor can rebuild it.
 
 A do-file gives you an explicit execution order, but it does not automatically provide a clean starting state. A report may still depend on a dataset already in memory, a global macro defined earlier, or an output file left by an old run. Start a fresh Stata session, run the control file from the top, and check that it loads its inputs and defines its settings. You also review the narrative: the software will print an outdated interpretation if that is what you wrote in a \texttt{webdoc put} line.
@@ -93,7 +93,7 @@ webdoc close
 }
 Run the block and \texttt{webdoc2} writes a one-page report: the headings, the line of prose, the first regression with its output in the open, and the second collapsed behind a \enquote{click to view} panel the reader expands on demand. Open the page and check the property that matters: both regression tables are output the run itself printed, so a rerun against new data cannot leave a stale number on the page.
 
-The value of \texttt{webdoc2} for a portal, though, is not the styling but two embed commands that let one page contain the whole suite. \texttt{wdimg} drops a static image into the report, which is how you place an offline \texttt{sparkta2} map (Chapter~\ref{ch:interactive}) into the narrative. \texttt{wdiframe} embeds an entire other HTML file inside a framed panel, which is how a \texttt{statashiny} dashboard, a \texttt{dashboardbuilder} KPI page (Section~\ref{sec:dashboardbuilder}), or a \texttt{googlechart} page becomes a live section of the report rather than a separate link.\marginnote{An \emph{iframe} is a webpage embedded inside another webpage, shown in its own panel. It is the mechanism that lets one report scroll past a paragraph, then a fully interactive dashboard, then another paragraph, with the dashboard behaving exactly as it would on its own.} With those two lines, \texttt{webdoc2} stops being a report writer and becomes the container that wraps every other tool in the suite:
+The value of \texttt{webdoc2} for a portal, though, is not the styling but two embed commands that let one page contain the whole suite. \texttt{wdimg} drops a static image into the report, which is how you place an offline \texttt{sparkta2} map (Chapter~\ref{ch:interactive}) into the narrative. \texttt{wdiframe} embeds an entire other HTML file inside a framed panel, which is how a \texttt{statashiny} dashboard, a \texttt{dashboardbuilder} KPI page (Section~\ref{sec:dashboardbuilder}), or a \texttt{googlechart} page becomes a live section of the report rather than a separate link.\marginnote{An \emph{iframe} is a webpage embedded inside another webpage, shown in its own panel. It is the mechanism that lets one report scroll past a paragraph, then a fully interactive dashboard, then another paragraph, with the dashboard behaving exactly as it would on its own.} With those two lines, \texttt{webdoc2} serves as the container that wraps every other tool in the suite:
 \par
 {\footnotesize
 \begin{verbatim}
@@ -454,7 +454,9 @@ Once the stamps are inside the artifact, only the handoff is left, and we manage
 The sign-off list is deliberately short, and keeping it short is the craft. Three names cover a portal release: the analyst who built it confirms the build ran clean from the top; the evaluator who owns the narrative confirms the prose says only what the numbers support; and the program director whose name the board attaches to the figures confirms they are willing to be asked about any number on the page. Each signer answers one question no one else can answer. Add reviewers when the release requires other expertise, such as disclosure review or accessibility testing, and agree on their responsibilities early enough to allow time for changes. If a stakeholder wants visibility without holding the release, send them the shipped folder the same hour it ships rather than a draft the week before.
 
 \section{The whole suite in one folder}\label{sec:capstone}
-Everything in this book that touched the web has been building toward one deliverable, and in this section we assemble it. You will finish the section with a four-stage do-file that ingests the data, draws the charts, wraps them into one \texttt{index.html}, and stamps the build, plus the rebuild rehearsal that has to pass before the folder goes to anyone. The tools introduced across the visualization chapters are not isolated commands; they are a pipeline, and each owns one link in it. The data comes in through \texttt{webapi}\index{webapi@\texttt{webapi}} from a public API (Chapter~\ref{ch:apis}) or through \texttt{googlesheets}\index{googlesheets@\texttt{googlesheets}} from a live team sheet (Chapter~\ref{ch:sheets}). It becomes charts two ways, and you choose between them by where the deliverable has to open: \texttt{googlechart}\index{googlechart@\texttt{googlechart}} for an online interactive page with filter dropdowns, and \texttt{sparkta2}\index{sparkta2@\texttt{sparkta2}} for an offline map that renders without a network, including the county and school-district geography that the online engine cannot draw (both Chapter~\ref{ch:interactive}). The interactive drill-down is a \texttt{statashiny} dashboard; when the committee wants headline tiles against a benchmark instead, a \texttt{dashboardbuilder} page (Section~\ref{sec:dashboardbuilder}) fills the same slot with the same one-line embed. And \texttt{webdoc2} wraps all of it, narrative and charts and dashboard, into one \texttt{index.html}: the data goes in at one end, and a folder the client owns comes out the other.
+Everything in this book that touched the web has been building toward one deliverable, and in this section we assemble it. You will finish the section with a four-stage do-file that ingests the data, draws the charts, wraps them into one \texttt{index.html}, and stamps the build, plus the rebuild rehearsal that has to pass before the folder goes to anyone.
+
+The tools introduced across the visualization chapters are not isolated commands; they are a pipeline, and each owns one link in it. The data comes in through \texttt{webapi}\index{webapi@\texttt{webapi}} from a public API (Chapter~\ref{ch:apis}) or through \texttt{googlesheets}\index{googlesheets@\texttt{googlesheets}} from a live team sheet (Chapter~\ref{ch:sheets}). It becomes charts two ways, and you choose between them by where the deliverable has to open: \texttt{googlechart}\index{googlechart@\texttt{googlechart}} for an online interactive page with filter dropdowns, and \texttt{sparkta2}\index{sparkta2@\texttt{sparkta2}} for an offline map that renders without a network, including the county and school-district geography that the online engine cannot draw (both Chapter~\ref{ch:interactive}). The interactive drill-down is a \texttt{statashiny} dashboard; when the committee wants headline tiles against a benchmark instead, a \texttt{dashboardbuilder} page (Section~\ref{sec:dashboardbuilder}) fills the same slot with the same one-line embed. And \texttt{webdoc2} wraps all of it, narrative and charts and dashboard, into one \texttt{index.html}: the data goes in at one end, and a folder the client owns comes out the other.
 
 You assemble the tools by saving each output where the next step expects to find it. The report then links or embeds those outputs, using paths relative to the delivered folder. Figure~\ref{fig:suiteflow} draws the pipeline, and the do-file sketch that follows walks the same arrows in code.
 
@@ -551,39 +553,7 @@ Before you let the folder go anywhere, rehearse the rebuild. Clone the repositor
 
 One further step takes the assembly, though not the shipping, off your calendar. The build itself, ingest through wrap, runs in batch exactly the way Chapter~\ref{ch:surveys} scheduled its survey pulls: one \texttt{cron} or Task Scheduler line runs the pipeline do-file on the data source's release date, writes the rebuilt folder to a staging location, and leaves a dated log. Resist automating the last mile. The release checklist and its three sign-offs exist because a person, not a scheduler, decides the portal is safe to send, and a pipeline that publishes straight to the client would also auto-publish the one quarter the source quietly rewrote its own history and every rate shifted. Automate up to the staging folder and the quarterly delivery becomes an hour of review instead of a day of assembly, with the judgment kept exactly where it belongs, at the moment of release.
 
-The figures below are real \texttt{googlechart} output from this pipeline on County Health Rankings data, the actual pages a reader opens from the \texttt{charts/} folder.
-
-\begin{figure*}[htbp]
-\centering
-\par
-{\footnotesize
-\begin{verbatim}
-googlechart uninsured, name(geo_code) ///
-    type(geo) georegion("US") ///
-    georesolution("us-states") ///
-    scheme(blues)
-\end{verbatim}
-}
-\includegraphics[width=\linewidth]{ch10_gc_geo.png}
-\caption[The online chart the pipeline embeds]{The \texttt{googlechart} state choropleth from stage 2a of the pipeline, real output on County Health Rankings uninsured rates. In the portal this page is embedded live by \texttt{wdiframe}, so the reader hovers a state and reads its rate without leaving the report.}
-\label{fig:capgeo}
-\end{figure*}
-
-\begin{figure*}[htbp]
-\centering
-\par
-{\footnotesize
-\begin{verbatim}
-googlechart, type(table) tablesearch ///
-    tableheadersticky ///
-    tooltipvars(state uninsured ///
-        median_income premature_death)
-\end{verbatim}
-}
-\includegraphics[width=\linewidth]{ch10_gc_table.png}
-\caption[The searchable table the dashboard mirrors]{A \texttt{googlechart} searchable table on the same data: a reader types a state and the rows filter live in the browser. The \texttt{statashiny} dashboard of stage~3 offers the same interaction offline, and \texttt{webdoc2} embeds one of them into the portal by \texttt{wdiframe}.}
-\label{fig:captable}
-\end{figure*}
+The two \texttt{googlechart} pages this pipeline embeds are the ones you built in Chapter~\ref{ch:interactive}: the state choropleth of Figure~\ref{fig:gc-geo}, from stage~2a, and the searchable table of Figure~\ref{fig:gc-table}. In the portal each is embedded live by \texttt{wdiframe}, so the reader hovers a state or types a name without leaving the report, and the \texttt{statashiny} dashboard of stage~3 offers the same table interaction offline.
 
 The applied example below gathers the whole chapter into a single commission, so you can see each tool appear once, in the order the pipeline runs them.
 
