@@ -175,3 +175,78 @@ frame snapshot {
 di "STATPLOT_TEMPLATE_OK"
 
 di "DONE"
+
+*==============================================================================*
+* (7) Diverging Likert bar in native Stata (ILLUSTRATIVE data). Three survey
+*     items, five response levels, percent of respondents at each level; the
+*     same illustrative numbers Chapter 10 charts interactively. Each segment
+*     is drawn from a left edge to a right edge, and the neutral share is
+*     split in half around zero so agreement and disagreement share a
+*     baseline at the center.
+*==============================================================================*
+clear
+input byte item byte level byte share
+1 1 18
+1 2 20
+1 3 14
+1 4 34
+1 5 14
+2 1 33
+2 2 31
+2 3 16
+2 4 15
+2 5  5
+3 1 22
+3 2 26
+3 3 20
+3 4 26
+3 5  6
+end
+label define item 1 `""K-12 investment is" "on the right track""' ///
+                  2 `""Higher education" "is affordable""'        ///
+                  3 `""Texas is prepared for" "its water needs""'
+label values item item
+
+* every item's shares must sum to 100 before any edge is computed
+bysort item: egen total = total(share)
+assert total == 100
+
+* left edge of the first segment: minus (both disagree levels + half neutral)
+bysort item (level): egen left = total(cond(level < 3, share, ///
+                                       cond(level == 3, share/2, 0)))
+bysort item (level): gen hi = sum(share) - left
+gen lo = hi - share
+* the neutral segment must straddle zero
+assert abs(lo + hi) < 1e-6 if level == 3
+
+twoway (rbar lo hi item if level == 1, horizontal barwidth(.6) ///
+            color("166 97 26")  lwidth(none))                   ///
+       (rbar lo hi item if level == 2, horizontal barwidth(.6) ///
+            color("223 194 125") lwidth(none))                  ///
+       (rbar lo hi item if level == 3, horizontal barwidth(.6) ///
+            color(gs13) lwidth(none))                           ///
+       (rbar lo hi item if level == 4, horizontal barwidth(.6) ///
+            color("128 205 193") lwidth(none))                  ///
+       (rbar lo hi item if level == 5, horizontal barwidth(.6) ///
+            color("1 133 113") lwidth(none)),                   ///
+    xline(0, lcolor(gs6) lwidth(thin))                          ///
+    ylabel(1 2 3, valuelabel angle(0) nogrid labsize(small))    ///
+    yscale(reverse range(0.5 3.5)) ytitle("")                   ///
+    xlabel(-80 "80" -40 "40" 0 "0" 40 "40" 80 "80", nogrid)     ///
+    xtitle("percent of respondents: disagree to the left, agree to the right") ///
+    legend(order(1 "Strongly disagree" 2 "Disagree" 3 "Neutral" ///
+                 4 "Agree" 5 "Strongly agree")                  ///
+           rows(1) position(6) size(small) symxsize(*.5))       ///
+    xsize(7.5) ysize(3.2) name(likert_div, replace)
+graph export "$figures/ch09_likert.png", replace width(2400)
+
+* numbers for the caption: net agreement (agree + strongly agree minus the
+* two disagree levels) for each item
+bysort item: egen agree    = total(cond(level > 3, share, 0))
+bysort item: egen disagree = total(cond(level < 3, share, 0))
+gen net = agree - disagree
+tabstat agree disagree net, by(item) nototal
+assert net == 10  if item == 1
+assert net == -44 if item == 2
+assert net == -16 if item == 3
+di "LIKERT_DIVERGING_OK"

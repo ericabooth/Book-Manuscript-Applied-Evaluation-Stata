@@ -88,7 +88,7 @@ You want the ranking in hand at the sketch stage, not at the debugging stage. Un
 Sooner or later a program director will ask why the dashboard uses sorted bars instead of the pie chart the last consultant delivered, and the ranking turns your answer from house style into a defensible design choice. \enquote{Position and length are the two most accurately read encodings, and a pie uses neither} is the answer, and an embedded evaluator gets asked this in the room, not in a footnote. The applied guides you may already own build their rules on the same hierarchy, \marginnote{\textcite{knaflic2015storytelling} writes for practitioners; \textcite{healy2018data} for analysts who work in code.}so when you cite the ranking to a non-technical team you are speaking the field's common language rather than waving at aesthetics.
 
 \section{Distributions and categories that read at a glance}
-Survey results are where stacked-bar noise hurts most, so we give the categorical graphs special care. In this section we draw three exhibits, and you will be able to build each of them from a single command: a snapshot of who is in your data, that same snapshot rearranged into a funder's template order with its numbers handed back as a dataset you can check, and a ranked comparison across many categories with a confidence interval on each bar the data can support.
+Survey results are where stacked-bar noise hurts most, so we give the categorical graphs special care. In this section we build the following exhibits, each in a few lines of code: a snapshot of who is in your data, that same snapshot rearranged into a funder's template order with its numbers handed back as a dataset you can check, a ranked comparison across many categories with a confidence interval on each bar the data can support, and a diverging bar for survey items answered on an agree-to-disagree scale.
 
 Cox's \texttt{catplot}\index{catplot@\texttt{catplot}} (\texttt{ssc install catplot}) lays out categorical frequency distributions cleanly, \texttt{statplot}\index{statplot@\texttt{statplot}} does the same for summary statistics over categories, and for Likert\index{Likert scale} items a diverging bar\index{diverging bar chart}, centered between agreement and disagreement, shows the balance of opinion far better than a stack that makes the reader do arithmetic.\marginnote{Rule of thumb for a diverging bar: split the neutral category in half, sending one half each direction, or plot it as its own muted segment on the center line. Never let \enquote{neutral} silently pad the agree side.} We suggest you choose the layout that lets the pattern show itself, because the alternative leaves the reader to reconstruct it. The box below introduces \texttt{statplot}, the command the next several examples run, and gives its one-time install line.
 
@@ -179,7 +179,40 @@ Figure~\ref{fig:statplot} is the result, and it reads in one pass because the so
 \label{fig:statplot}
 \end{figure*}
 
-One promise from the section opening remains: the Likert item. A program board reads a diverging Likert bar in seconds and a stacked one not at all, so when a survey result never reaches the board, the layout is usually why. The perceptual reason is the ranking from Section~\ref{sec:perception}. A stacked bar forces the reader to compare the lengths of segments that start at different, floating baselines, the hard version of a length judgment. A diverging layout gives agreement and disagreement a common baseline at the center, so the comparison becomes the accurate kind. \textcite{franconeri2021science} single out exactly this case, noting that segments not anchored to a shared axis are read poorly and that anchoring them is the cheapest fix available. Your job is to match the chart to how the audience will read it, and for survey data that usually means resisting the default stack.\marginnote{Venue matters: a diverging bar that reads at a glance on the page has too many segments for a projected slide. For a deck, collapse five response categories to three and let the slide title state the balance; the full version stays in the report, where the reader has the seconds to use it.}
+\subsection{A diverging bar for Likert items}\label{sec:likert-div}
+The last exhibit in this section is the diverging bar for a Likert item, the familiar strongly-disagree-to-strongly-agree scale. A program board can read the balance of opinion from a diverging bar in a few seconds, and it struggles to read the same balance from a stacked bar, so the layout often decides whether a survey result gets used. The reason is the perceptual ranking from Section~\ref{sec:perception}. A stacked bar forces the reader to compare the lengths of segments that start at different, floating baselines, the hard version of a length judgment. A diverging layout gives agreement and disagreement a common baseline at the center, so the comparison becomes the accurate kind. \textcite{franconeri2021science} single out exactly this case, noting that segments not anchored to a shared axis are read poorly and that anchoring them is the cheapest fix available.
+
+Stata has no built-in diverging bar, but you can draw one with \texttt{twoway rbar}, which draws a bar between any two values you give it. The work is in computing those two values. We start from a small dataset with one row per item and response level, holding the percent of respondents in \texttt{share}, and we use illustrative numbers for three statements about state policy. For each item, the first segment starts at minus the two disagree shares and half of the neutral share, and each later segment starts where the previous one ended:
+\par
+{\footnotesize
+\begin{verbatim}
+bysort item (level): egen left = ///
+    total(cond(level < 3, share,   ///
+          cond(level == 3, share/2, 0)))
+bysort item (level): gen hi = sum(share) - left
+gen lo = hi - share
+assert abs(lo + hi) < 1e-6 if level == 3
+
+twoway ///
+  (rbar lo hi item if level == 1, horizontal) ///
+  (rbar lo hi item if level == 2, horizontal) ///
+  (rbar lo hi item if level == 3, horizontal) ///
+  (rbar lo hi item if level == 4, horizontal) ///
+  (rbar lo hi item if level == 5, horizontal), ///
+  xline(0) ylabel(1 2 3, valuelabel angle(0)) ///
+  xlabel(-80 "80" -40 "40" 0 "0" 40 "40" 80 "80")
+\end{verbatim}
+}
+The \texttt{assert} line checks the layout before anything is drawn: if the neutral segment does not run equally far on each side of zero, the edges are wrong and the do-file stops.\marginnote{The listing leaves out the colors, the legend, and the bar width to show the logic. The companion \texttt{ch09\_graphs.do} has the full command, with a brown-to-green palette that stays distinct for colorblind readers and a muted gray for the neutral segment.} The \texttt{xlabel()} option relabels the negative side with positive numbers, because a reader should see \enquote{40 percent disagree} and not \enquote{minus 40.}
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=\linewidth]{ch09_likert.png}
+\caption[A diverging Likert bar in native Stata]{Three illustrative survey items drawn as diverging bars with \texttt{twoway rbar}. Disagreement extends left of the center line and agreement extends right, and the neutral share is split evenly across it. The affordability item sits furthest left: 64~percent disagree and 20~percent agree. Built by \texttt{ch09\_graphs.do}; the data are illustrative, not a real poll.}
+\label{fig:likert-div}
+\end{figure*}
+
+Figure~\ref{fig:likert-div} is the result. You can rank the three items by eye from where each bar sits against the center line. The K-12 item leans right, with 48~percent agreeing and 38~percent disagreeing. The water item leans left, and the affordability item leans furthest left, with 64~percent disagreeing. In a stacked bar running from 0 to 100, the same reader would have to add two segments on each side for every item before making that comparison. Your job is to match the chart to how the audience will read it, and for survey data that usually means resisting the default stack.\marginnote{Venue matters: a diverging bar that reads at a glance on the page has too many segments for a projected slide. For a deck, collapse five response categories to three and let the slide title state the balance; the full version stays in the report, where the reader has the seconds to use it.} Chapter~\ref{ch:interactive} draws these same three items as an interactive page, where a reader can hover a segment for its value (Section~\ref{sec:gc-divbar}).
 
 \section{Coefficients as pictures}
 A regression table is a wall of numbers that invites no comparison; the same estimates drawn as a coefficient plot invite the eye to compare them at once. By the end of this section you will be able to replace three regression tables with one panel a board reads in seconds, and to render that panel three ways, for a slide, the report, and a technical appendix, from a single do-file. We use \texttt{coefplot}\index{coefplot@\texttt{coefplot}}\marginnote{Ben Jann's \texttt{coefplot} (install once with \texttt{ssc install coefplot}) reads stored estimates straight from \texttt{e()}, so you can plot several models side by side without retyping a single number. Its \texttt{keep()} and \texttt{rename()} options are what tame a busy plot.} to show effects with their confidence intervals as points and whiskers, and for models across several outcomes or subgroups, small multiples\index{small multiples}, one small panel per model on a shared scale, let the reader see instantly where an effect is large, where it is null, and where the uncertainty is wide.
