@@ -7765,7 +7765,7 @@ Data archives worked out the answer decades ago, and we can borrow it. ICPSR\ind
 \end{figure*}
 
 \subsection{A worked example: one extract, three languages}\label{sec:deposit-example}
-We work through a handoff from start to finish with an extract of \texttt{nlsw88}, so you can run every line. The extract needs the kind of documentation a real survey file has, so we first store the wording of two questions in characteristics, attach a note to the wage variable, and mark some of the missing union answers as \enquote{Don't know}. That last step is for illustration only: it gives the file a labeled missing code, which real survey files usually have. The deposit itself is the final command:
+We work through a handoff from start to finish with an extract of \texttt{nlsw88}, so you can run every line. The extract needs the kind of documentation a real survey file has, so we first store the wording of two questions in characteristics, attach a note to the wage variable, and mark some of the missing union answers as \enquote{Don't know}. That last step is for illustration only: it gives the file a labeled missing code, which real survey files usually have. The deposit itself is the final command:\marginnote{We name the folder with \texttt{to()}, and we suggest you do the same in a project do-file. Without \texttt{to()}, the deposit is written to the working directory. It is never written beside the source file, so a cleaned-data folder that other do-files read is left as it was.}
 \par
 {\footnotesize
 \begin{verbatim}
