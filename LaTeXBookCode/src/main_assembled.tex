@@ -118,6 +118,28 @@
 % change next to code blocks; it also garbles text extraction from the PDF.
 \microtypesetup{expansion=false}
 
+% --- Spacing and copy-paste fixes (Nov 2026) ---------------------------------
+% 1. Real space characters in the PDF, so text copied from a PDF viewer keeps
+%    its word breaks (pdfTeX otherwise positions words with no space glyph).
+\input{glyphtounicode}\pdfgentounicode=1
+\pdfinterwordspaceon
+% 2. Straight quotes and backticks in verbatim, so Stata macro code such as
+%    `today' copies from the book and runs.
+\usepackage{upquote}
+% 3. Tighter vertical space around verbatim code blocks: no extra list or
+%    paragraph skip above and below beyond a small fixed gap.
+\makeatletter
+\preto{\@verbatim}{\topsep=6pt plus 1pt minus 1pt \partopsep=0pt \parskip=0pt}
+\makeatother
+% 4. Pages end at their natural height. With bottom justification, TeX
+%    stretched the paragraph skip (0.5\baselineskip plus 0.5\baselineskip)
+%    to fill each page, which opened large gaps after code blocks.
+\raggedbottom
+\AtBeginDocument{\setlength{\parskip}{0.5\baselineskip plus 1pt minus 0.5pt}}
+% 5. Tighter section and subsection headings.
+\RedeclareSectionCommand[beforeskip=-2.6ex plus -0.6ex minus -0.2ex,afterskip=1.0ex plus 0.2ex]{section}
+\RedeclareSectionCommand[beforeskip=-2.0ex plus -0.5ex minus -0.2ex,afterskip=0.6ex plus 0.1ex]{subsection}
+
 % Paths for figures
 \graphicspath{{images/}}
 
