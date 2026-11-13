@@ -8,7 +8,6 @@
 **Read it:** [`LaTeXBookCode/main.pdf`](LaTeXBookCode/main.pdf)
 
 ---
-<img width="508" height="754" alt="Book cover concept" src="https://github.com/user-attachments/assets/1674bad6-e203-4646-8747-0e5a7eb436e9" />
 
 ## What the book covers
 
