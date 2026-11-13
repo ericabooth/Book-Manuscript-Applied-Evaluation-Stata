@@ -27,20 +27,24 @@ capture which libjson
 if _rc ssc install libjson, replace            // educationdata dependency
 
 *--- The book's own packages --------------------------------------------------*
-* Three are published on SSC and install like any community package.
+* Eleven are published on SSC and install like any community package:
+* webapi, googlesheets, googlechart, statashiny, dashboardbuilder,
+* projectbuilder, combineall, convertanything, datadictionary, reshapehelper,
+* and statplot (with N. J. Cox). SSC versions checked 2026-11-13: webapi 0.1.4,
+* googlesheets 0.1.7, googlechart 0.1.7.
 * webapi is required by ch03_webapi.do (and the guarded ch12 portal build);
-* googlesheets and googlechart are optional (verified on SSC 2026-07-31).
+* googlesheets and googlechart are optional.
 capture which webapi
 if _rc ssc install webapi, replace
 * Uncomment the ones you want:
 * ssc install googlechart, replace
 * ssc install googlesheets, replace       // also needs the OAuth setup (Appendix A)
+* ssc install statashiny, replace
+* ssc install dashboardbuilder, replace  // needs Python 3 (stdlib only); required by ch12_dashboardbuilder.do
+* ssc install convertanything, replace
 * The remaining suite packages install from the authors' GitHub:
-* net install statashiny, from("https://raw.githubusercontent.com/ericabooth/StataShiny-public/main/") replace force
-* net install dashboardbuilder, from("https://raw.githubusercontent.com/ericabooth/dashboardbuilder-stata-public/main/") replace force  // needs Python 3 (stdlib only); install verified 2026-07-14; required by ch12_dashboardbuilder.do
-* net install convertanything, from("https://raw.githubusercontent.com/ericabooth/convertanything-stata-public/main/") replace force
 * net install datadeposit, from("https://raw.githubusercontent.com/ericabooth/datadeposit/main/") replace force  // R optional (.rds copy)
-* net install importr, from("https://raw.githubusercontent.com/ericabooth/importR-stata/main/") replace force  // needs R (haven) or python pyreadstat to run
+* ssc install importr, replace  // needs R (haven) or python pyreadstat to run
 * webdoc2 needs Ben Jann's webdoc first, and a separate net get for its
 * Bootstrap header.html (net get drops ancillary files in the current dir):
 * ssc install webdoc, replace

@@ -60,13 +60,21 @@ Chapter~\ref{ch:claims} develops difference-in-differences (Section~\ref{sec:did
 \pagelayout{margin}
 \setchapterstyle{kao}
 \chapter{The Book's Toolkit}\label{app:toolkit}
-Use this appendix to find any tool the book uses and jump straight to the chapter that puts it to work. It lists every package and proposed tool in one place, so when you remember a capability but not its name you can recover both. Three of these packages, \texttt{webapi}, \texttt{googlesheets}, and \texttt{googlechart}, are published on SSC, so a single line installs each of them:
+Use this appendix to find any tool the book uses and jump straight to the chapter that puts it to work. It lists every package and proposed tool in one place, so when you remember a capability but not its name you can recover both. Eleven of the authors' packages are published on SSC, so a single line installs each of them:
 \par
 {\footnotesize
 \begin{verbatim}
 ssc install webapi
 ssc install googlesheets
 ssc install googlechart
+ssc install statashiny
+ssc install dashboardbuilder
+ssc install projectbuilder
+ssc install combineall
+ssc install convertanything
+ssc install datadictionary
+ssc install reshapehelper
+ssc install statplot
 \end{verbatim}
 }
 The rest install from the authors' GitHub. One \texttt{net install} line does it, and you swap in the repository name for each package:
@@ -74,13 +82,11 @@ The rest install from the authors' GitHub. One \texttt{net install} line does it
 {\footnotesize
 \begin{verbatim}
 local gh "https://raw.githubusercontent.com/ericabooth"
-net install statashiny, ///
-    from("`gh'/StataShiny-public/main/") replace force
+net install sparkta2, ///
+    from("`gh'/sparkta2-stata-public/main/") replace force
 \end{verbatim}
 }
 \begin{itemize}
-    \item \texttt{StataShiny-public}
-    \item \texttt{dashboardbuilder-stata-public}
     \item \texttt{sparkta2-stata-public} (the first map call downloads its drawing code and boundary files; Section~\ref{sec:sparkta2})
     \item \texttt{webdoc2-stata-public} (also needs \texttt{ssc install webdoc} and a follow-up \texttt{net get webdoc2} for its header template; its Chapter~\ref{ch:portals} box shows all three lines)
 \end{itemize}

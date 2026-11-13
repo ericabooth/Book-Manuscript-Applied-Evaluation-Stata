@@ -321,29 +321,29 @@
 \contentsline {chapter}{\numberline {C}The Book's Toolkit}{317}{appendix.C}%
 \contentsline {paragraph}{\nonumberline Published packages.}{317}{paragraph*.237}%
 \contentsline {paragraph}{\nonumberline Proposed tools (roadmap, not yet code).}{318}{paragraph*.239}%
-\contentsline {chapter}{\numberline {D}Two Hands-On Worked Examples}{319}{appendix.D}%
-\contentsline {paragraph}{\nonumberline The question.}{319}{paragraph*.242}%
-\contentsline {paragraph}{\nonumberline How you would plan this.}{319}{paragraph*.244}%
-\contentsline {paragraph}{\nonumberline Why it is a good teaching case.}{319}{paragraph*.246}%
-\contentsline {paragraph}{\nonumberline The analysis and its limits.}{320}{paragraph*.248}%
-\contentsline {paragraph}{\nonumberline Concepts it illustrates.}{320}{paragraph*.250}%
-\contentsline {paragraph}{\nonumberline The question.}{321}{paragraph*.253}%
-\contentsline {paragraph}{\nonumberline How you would plan this.}{321}{paragraph*.255}%
-\contentsline {paragraph}{\nonumberline Why it is a good teaching case.}{321}{paragraph*.257}%
-\contentsline {paragraph}{\nonumberline The analysis and its interpretation.}{321}{paragraph*.259}%
-\contentsline {paragraph}{\nonumberline Concepts it illustrates.}{322}{paragraph*.261}%
-\contentsline {chapter}{\numberline {E}A Reproducible Capstone: One Public Dataset, Ingest to Deliverable}{323}{appendix.E}%
-\contentsline {paragraph}{\nonumberline The question.}{323}{paragraph*.263}%
-\contentsline {paragraph}{\nonumberline How you would plan this.}{323}{paragraph*.265}%
-\contentsline {paragraph}{\nonumberline Stage 1, ingest (Chapter~\ref {ch:noapi}).}{323}{paragraph*.267}%
-\contentsline {paragraph}{\nonumberline Stage 2, clean (Chapters~\ref {ch:noapi}--\ref {ch:panels}).}{323}{paragraph*.269}%
-\contentsline {paragraph}{\nonumberline Stage 3, guard (Chapter~\ref {ch:panels}).}{324}{paragraph*.271}%
-\contentsline {paragraph}{\nonumberline Stage 4, analyze (Chapter~\ref {ch:claims}).}{324}{paragraph*.273}%
-\contentsline {paragraph}{\nonumberline Stage 5, visualize (Chapter~\ref {ch:graphs}).}{324}{paragraph*.276}%
-\contentsline {paragraph}{\nonumberline Stage 6, deliver (Chapters~\ref {ch:sheets}--\ref {ch:portals}).}{324}{paragraph*.278}%
-\contentsline {paragraph}{\nonumberline The honest caveat.}{324}{paragraph*.280}%
-\contentsline {paragraph}{\nonumberline Make it yours.}{325}{paragraph*.282}%
-\contentsline {chapter}{\nonumberline Data Used in This Book}{327}{chapter*.283}%
-\contentsline {chapter}{Afterword}{329}{chapter*.285}%
-\contentsline {chapter}{\nonumberline Bibliography}{331}{chapter*.286}%
-\contentsline {chapter}{Alphabetical Index}{339}{section*.287}%
+\contentsline {chapter}{\numberline {D}Two Hands-On Worked Examples}{321}{appendix.D}%
+\contentsline {paragraph}{\nonumberline The question.}{321}{paragraph*.242}%
+\contentsline {paragraph}{\nonumberline How you would plan this.}{321}{paragraph*.244}%
+\contentsline {paragraph}{\nonumberline Why it is a good teaching case.}{321}{paragraph*.246}%
+\contentsline {paragraph}{\nonumberline The analysis and its limits.}{322}{paragraph*.248}%
+\contentsline {paragraph}{\nonumberline Concepts it illustrates.}{322}{paragraph*.250}%
+\contentsline {paragraph}{\nonumberline The question.}{323}{paragraph*.253}%
+\contentsline {paragraph}{\nonumberline How you would plan this.}{323}{paragraph*.255}%
+\contentsline {paragraph}{\nonumberline Why it is a good teaching case.}{323}{paragraph*.257}%
+\contentsline {paragraph}{\nonumberline The analysis and its interpretation.}{323}{paragraph*.259}%
+\contentsline {paragraph}{\nonumberline Concepts it illustrates.}{324}{paragraph*.261}%
+\contentsline {chapter}{\numberline {E}A Reproducible Capstone: One Public Dataset, Ingest to Deliverable}{325}{appendix.E}%
+\contentsline {paragraph}{\nonumberline The question.}{325}{paragraph*.263}%
+\contentsline {paragraph}{\nonumberline How you would plan this.}{325}{paragraph*.265}%
+\contentsline {paragraph}{\nonumberline Stage 1, ingest (Chapter~\ref {ch:noapi}).}{325}{paragraph*.267}%
+\contentsline {paragraph}{\nonumberline Stage 2, clean (Chapters~\ref {ch:noapi}--\ref {ch:panels}).}{325}{paragraph*.269}%
+\contentsline {paragraph}{\nonumberline Stage 3, guard (Chapter~\ref {ch:panels}).}{326}{paragraph*.271}%
+\contentsline {paragraph}{\nonumberline Stage 4, analyze (Chapter~\ref {ch:claims}).}{326}{paragraph*.273}%
+\contentsline {paragraph}{\nonumberline Stage 5, visualize (Chapter~\ref {ch:graphs}).}{326}{paragraph*.276}%
+\contentsline {paragraph}{\nonumberline Stage 6, deliver (Chapters~\ref {ch:sheets}--\ref {ch:portals}).}{326}{paragraph*.278}%
+\contentsline {paragraph}{\nonumberline The honest caveat.}{326}{paragraph*.280}%
+\contentsline {paragraph}{\nonumberline Make it yours.}{327}{paragraph*.282}%
+\contentsline {chapter}{\nonumberline Data Used in This Book}{329}{chapter*.283}%
+\contentsline {chapter}{Afterword}{331}{chapter*.285}%
+\contentsline {chapter}{\nonumberline Bibliography}{333}{chapter*.286}%
+\contentsline {chapter}{Alphabetical Index}{341}{section*.287}%
