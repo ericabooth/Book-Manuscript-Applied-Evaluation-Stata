@@ -75,12 +75,12 @@
 
   \item \texttt{factor}, \hyperpage{130}
   \item factor analysis, \hyperpage{130}
-  \item \texttt{faircheck}, \hyperpage{273}
+  \item \texttt{faircheck}, \hyperpage{274}
   \item Fellegi-Sunter framework, \hyperpage{99}
   \item FIPS codes, \hyperpage{49}
   \item flattening (JSON), \hyperpage{53}
   \item four principles, \hyperpage{6}
-  \item four-fifths rule, \hyperpage{272}
+  \item four-fifths rule, \hyperpage{273}
   \item \texttt{frame create}, \hyperpage{120}
   \item frames (Stata), \hyperpage{120}
   \item FRED (Federal Reserve Economic Data), \hyperpage{48}
@@ -117,7 +117,7 @@
   \item \texttt{importr}, \hyperpage{69}
   \item improvement science, \hyperpage{13}
   \item instrumental use, \hyperpage{12}
-  \item inter-rater reliability, \hyperpage{263}
+  \item inter-rater reliability, \hyperpage{264}
   \item interactive chart, \hyperpage{187}
   \item intraclass correlation, \hyperpage{142}
   \item \texttt{irt}, \hyperpage{130}
@@ -135,7 +135,7 @@
   \item $k$-anonymity, \hyperpage{279}
   \item \texttt{kap}, \hyperpage{264}
   \item kappa
-    \subitem Cohen's and Fleiss', \hyperpage{263}
+    \subitem Cohen's and Fleiss', \hyperpage{264}
     \subitem formula, \hyperpage{264}
   \item \texttt{kbal}, \hyperpage{160}
 
@@ -197,7 +197,7 @@
   \item process use, \hyperpage{12}
   \item program-aided language models, \hyperpage{249}
   \item \texttt  {projectbuilder}, \hyperpage{243}
-  \item \texttt{projectbuilder}, \hyperpage{28}, \hyperpage{251}
+  \item \texttt{projectbuilder}, \hyperpage{28}, \hyperpage{252}
   \item prompt injection, \hyperpage{270}
   \item \texttt{putexcel}, \hyperpage{211}
 
@@ -245,7 +245,7 @@
   \item \texttt{sparkta2}, \hyperpage{187}, \hyperpage{240}
   \item \texttt{srcfind}, \hyperpage{103}
   \item \texttt{srctag}, \hyperpage{31}, \hyperpage{103}, 
-		\hyperpage{251}
+		\hyperpage{252}
   \item \texttt{ssc install}, \hyperpage{23}
   \item \texttt{statashiny}, \hyperpage{187}, \hyperpage{227}
   \item \texttt{statplot}, \hyperpage{175}
@@ -289,7 +289,7 @@
   \item \texttt{webapi}, \hyperpage{52}, \hyperpage{240}
   \item \texttt{webdoc}, \hyperpage{224}
   \item \texttt{webdoc2}, \hyperpage{31}, \hyperpage{188}, 
-		\hyperpage{224}, \hyperpage{251}
+		\hyperpage{224}, \hyperpage{252}
   \item \texttt  {writeinput}, \hyperpage{24}
   \item \texttt{writeinput}, \hyperpage{297}
 

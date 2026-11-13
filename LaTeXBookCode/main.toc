@@ -240,46 +240,46 @@
 \contentsline {subsection}{\numberline {13.1.2}The method in one loop: propose, run, verify, log}{249}{subsection.13.1.2}%
 \contentsline {subsection}{\numberline {13.1.3}Step 1: give the LLM an external checklist it must keep}{250}{subsection.13.1.3}%
 \contentsline {paragraph}{\nonumberline Two more files the assistant reads first.}{251}{paragraph*.153}%
-\contentsline {subsection}{\numberline {13.1.4}Step 2: scaffold the project and its documentation layer}{251}{subsection.13.1.4}%
+\contentsline {subsection}{\numberline {13.1.4}Step 2: scaffold the project and its documentation layer}{252}{subsection.13.1.4}%
 \contentsline {subsection}{\numberline {13.1.5}Step 3: the propose, run, verify loop with tripwires}{252}{subsection.13.1.5}%
 \contentsline {subsection}{\numberline {13.1.6}Step 4: triangulate, and try to break the finding}{253}{subsection.13.1.6}%
-\contentsline {subsection}{\numberline {13.1.7}Going parallel without losing the log: two worked patterns}{253}{subsection.13.1.7}%
+\contentsline {subsection}{\numberline {13.1.7}Going parallel without losing the log: two worked patterns}{254}{subsection.13.1.7}%
 \contentsline {paragraph}{\nonumberline Pattern 1: split a slow estimation across instances.}{254}{paragraph*.155}%
 \contentsline {paragraph}{\nonumberline Pattern 2: fan out the code review.}{254}{paragraph*.157}%
 \contentsline {subsection}{\numberline {13.1.8}Testing for the machines you do not have}{255}{subsection.13.1.8}%
 \contentsline {paragraph}{\nonumberline Ask for the inventory before the tests.}{256}{paragraph*.159}%
 \contentsline {paragraph}{\nonumberline Turn each item into a test that stops on failure.}{256}{paragraph*.161}%
 \contentsline {paragraph}{\nonumberline Run the tests under every environment you can reach.}{256}{paragraph*.163}%
-\contentsline {paragraph}{\nonumberline Review twice, with different methods, and try to refute each finding.}{256}{paragraph*.165}%
+\contentsline {paragraph}{\nonumberline Review twice, with different methods, and try to refute each finding.}{257}{paragraph*.165}%
 \contentsline {paragraph}{\nonumberline Name what you could not test.}{257}{paragraph*.167}%
 \contentsline {paragraph}{\nonumberline What the loop gives you so far.}{257}{paragraph*.169}%
-\contentsline {section}{\numberline {13.2}An evidence ledger for every number and reference}{257}{section.13.2}%
-\contentsline {paragraph}{\nonumberline The analysis saves what it will report.}{257}{paragraph*.171}%
+\contentsline {section}{\numberline {13.2}An evidence ledger for every number and reference}{258}{section.13.2}%
+\contentsline {paragraph}{\nonumberline The analysis saves what it will report.}{258}{paragraph*.171}%
 \contentsline {paragraph}{\nonumberline The ledger states each number as the prose does.}{258}{paragraph*.173}%
-\contentsline {paragraph}{\nonumberline Let the document read its numbers from Stata.}{258}{paragraph*.175}%
+\contentsline {paragraph}{\nonumberline Let the document read its numbers from Stata.}{259}{paragraph*.175}%
 \contentsline {paragraph}{\nonumberline Check each reference against its record.}{259}{paragraph*.177}%
 \contentsline {paragraph}{\nonumberline When the ledger runs.}{259}{paragraph*.179}%
 \contentsline {section}{\numberline {13.3}The assistant as a thought partner}{259}{section.13.3}%
-\contentsline {paragraph}{\nonumberline Plan before the first do-file.}{259}{paragraph*.181}%
-\contentsline {paragraph}{\nonumberline Ask for the alternatives you would rather not run.}{259}{paragraph*.183}%
+\contentsline {paragraph}{\nonumberline Plan before the first do-file.}{260}{paragraph*.181}%
+\contentsline {paragraph}{\nonumberline Ask for the alternatives you would rather not run.}{260}{paragraph*.183}%
 \contentsline {paragraph}{\nonumberline Read inherited code with a check.}{260}{paragraph*.185}%
 \contentsline {paragraph}{\nonumberline Translate, then compare the outputs.}{260}{paragraph*.187}%
 \contentsline {paragraph}{\nonumberline Write the tests and the help file before the command.}{260}{paragraph*.189}%
-\contentsline {paragraph}{\nonumberline What the assistant adds.}{260}{paragraph*.191}%
-\contentsline {section}{\numberline {13.4}What never leaves the building}{260}{section.13.4}%
+\contentsline {paragraph}{\nonumberline What the assistant adds.}{261}{paragraph*.191}%
+\contentsline {section}{\numberline {13.4}What never leaves the building}{261}{section.13.4}%
 \contentsline {subsection}{\numberline {13.4.1}A gate the pipeline cannot skip}{261}{subsection.13.4.1}%
 \contentsline {section}{\numberline {13.5}A measurement, not an oracle}{263}{section.13.5}%
 \contentsline {subsection}{\numberline {13.5.1}The weakest category is the one to spot-check}{265}{subsection.13.5.1}%
-\contentsline {subsection}{\numberline {13.5.2}Consensus across LLMs: disagreement finds the hard cases}{265}{subsection.13.5.2}%
-\contentsline {subsection}{\numberline {13.5.3}The sieve: turning disagreement into a black-box trust proxy}{266}{subsection.13.5.3}%
-\contentsline {subsection}{\numberline {13.5.4}Use the labels, then correct the estimate}{268}{subsection.13.5.4}%
+\contentsline {subsection}{\numberline {13.5.2}Consensus across LLMs: disagreement finds the hard cases}{266}{subsection.13.5.2}%
+\contentsline {subsection}{\numberline {13.5.3}The sieve: turning disagreement into a black-box trust proxy}{267}{subsection.13.5.3}%
+\contentsline {subsection}{\numberline {13.5.4}Use the labels, then correct the estimate}{269}{subsection.13.5.4}%
 \contentsline {section}{\numberline {13.6}Making an LLM's answers reproducible}{269}{section.13.6}%
 \contentsline {subsection}{\numberline {13.6.1}The prompt-and-version log}{269}{subsection.13.6.1}%
 \contentsline {section}{\numberline {13.7}Prompt injection: instructions inside untrusted text}{270}{section.13.7}%
-\contentsline {subsection}{\numberline {13.7.1}The defense in depth: distrust the text, fence it, then validate the output}{270}{subsection.13.7.1}%
-\contentsline {section}{\numberline {13.8}Auditing prediction for fairness}{272}{section.13.8}%
+\contentsline {subsection}{\numberline {13.7.1}The defense in depth: distrust the text, fence it, then validate the output}{271}{subsection.13.7.1}%
+\contentsline {section}{\numberline {13.8}Auditing prediction for fairness}{273}{section.13.8}%
 \contentsline {section}{\numberline {13.9}Governance for a small shop: a one-page AI-use procedure}{274}{section.13.9}%
-\contentsline {paragraph}{\nonumberline Where this leaves you.}{276}{paragraph*.197}%
+\contentsline {paragraph}{\nonumberline Where this leaves you.}{275}{paragraph*.197}%
 \contentsline {section}{Exercises}{276}{section*.198}%
 \contentsline {chapter}{\numberline {14}Sharing data and results safely}{279}{chapter.14}%
 \contentsline {section}{\numberline {14.1}Quasi-identifiers: why removing names is not enough}{279}{section.14.1}%
