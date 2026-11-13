@@ -45,4 +45,6 @@ If you are interested in reviewing early drafts or collaborating on specific imp
 *Elizabeth Teas*, Far Harbor, LLC
 
 ---
-*This work is released under the terms provided in the [LICENSE](LICENSE) file.*
+## License
+
+The code in this repository (do-files, ado-files, help files, and scripts) is released under the MIT License; see [LICENSE](LICENSE). The manuscript itself, meaning the text and figures of the book in `LaTeXBookCode/` (including `main.tex`, `src/`, and the compiled `main.pdf`), is copyright © 2026 Eric A. Booth and Elizabeth Teas, all rights reserved, and is not covered by the MIT License. The packages in the `*-stata-public` folders carry their own MIT licenses.
