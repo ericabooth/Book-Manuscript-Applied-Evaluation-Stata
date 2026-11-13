@@ -61,12 +61,42 @@
     frametitlebackgroundcolor=aeBg,
 ]{appliedexamplebox}
 
-\newenvironment{appliedexample}[1][]{%
+% Applied Examples span the text and margin columns (kaobook's widepar) and
+% never split across pages: the body is set in a box at the wide measure
+% first; if it fits in the space left on the page it is set in place,
+% otherwise it floats to the top of the next page while the text continues. The body is collected as an argument, so an Applied
+% Example cannot contain verbatim code (none does).
+\newsavebox{\aeBoxContent}
+% \aeNoFloat, written just before an Applied Example, makes that example start
+% on the next page instead of floating there. Use it where a float pending at
+% a page break pushes a following \section* heading onto a new page.
+\newif\ifaenofloat
+\newcommand{\aeNoFloat}{\global\aenofloattrue}
+\NewDocumentEnvironment{appliedexample}{O{} +b}{%
+    \par
     \refstepcounter{appliedexample}%
-    \begin{appliedexamplebox}[frametitle={Applied Example~\theappliedexample.~~#1}]%
-}{%
-    \end{appliedexamplebox}%
-}
+    \sbox{\aeBoxContent}{\begin{minipage}{\dimexpr\textwidth+\marginparsep+\marginparwidth\relax}%
+        \begin{appliedexamplebox}[frametitle={Applied Example~\theappliedexample.~~#1},nobreak=true]%
+        #2%
+        \end{appliedexamplebox}%
+    \end{minipage}}%
+    \ifdim\dimexpr\pagegoal-\pagetotal<\dimexpr\ht\aeBoxContent+\dp\aeBoxContent+1.2\topskip\relax
+        \ifaenofloat
+            \newpage
+            \begin{widepar}\noindent\usebox{\aeBoxContent}\end{widepar}%
+            \par
+        \else
+            % Not enough room here: float the box to the top of the next
+            % page, using the same wide float the book's figure* environments
+            % use, and let the following text fill the rest of this page.
+            \begin{figure*}[tp]\noindent\usebox{\aeBoxContent}\end{figure*}%
+        \fi
+    \else
+        \begin{widepar}\noindent\usebox{\aeBoxContent}\end{widepar}%
+        \par
+    \fi
+    \global\aenofloatfalse
+}{}
 
 \newmdenv[
     skipabove=1\topskip, skipbelow=0.6\topskip,
@@ -78,6 +108,7 @@
     frametitlerule=true,
     frametitlefont=\sffamily\bfseries\color{vizRule},
     frametitlebackgroundcolor=vizBg,
+    nobreak=true,
 ]{vizbox}
 
 \newenvironment{vizcallout}[1][Visualization to build]{%
@@ -100,12 +131,22 @@
     frametitlerule=true,
     frametitlefont=\sffamily\bfseries\color{roRule},
     frametitlebackgroundcolor=roBg,
+    nobreak=true,
 ]{restsonbox}
 \newenvironment{restson}[1][What this depends on]{%
     \begin{restsonbox}[frametitle={#1}]%
 }{%
     \end{restsonbox}%
 }
+
+% Keep callout boxes on one page. A box taller than about a page opts out
+% locally with [nobreak=false] (the roisim box in Chapter 8).
+\renewmdenv[
+    style=kaoboxstyle,
+    backgroundcolor=RoyalBlue!25!White,
+    frametitlebackgroundcolor=RoyalBlue!25!White,
+    nobreak=true,
+]{kaobox}
 
 % Narrow text column (kaobook reserves a wide margin) means long monospace
 % command names and compound terms occasionally overrun. emergencystretch lets

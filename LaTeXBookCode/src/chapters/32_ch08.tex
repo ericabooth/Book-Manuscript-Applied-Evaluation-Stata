@@ -391,7 +391,7 @@ graph export "$figures/ch08_tornado.png", ///
 
 When ROI pricing becomes routine, the box below supplies the shortcut: the whole simulation, tornado sweep included, as one installable command.
 
-\begin{kaobox}[frametitle=Package Integration: \texttt{roisim}]
+\begin{kaobox}[frametitle=Package Integration: \texttt{roisim},nobreak=false]
 We wrote the loop out by hand so you can see the machinery once, but when you price programs every month you want the same answer in one line. \texttt{roisim}\index{roisim@\texttt{roisim}} takes the effect estimate and its standard error, a cost range, and the discount and horizon ranges, draws each input ten thousand times, and returns the ROI percentiles, the break-even probability, and the tornado sweep as saved results. Install it from the book's repository:
 \par
 {\footnotesize

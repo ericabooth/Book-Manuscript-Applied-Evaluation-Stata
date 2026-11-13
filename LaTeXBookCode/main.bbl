@@ -370,6 +370,106 @@
       \verb 10.1257/jep.31.2.3
       \endverb
     \endentry
+    \entry{atil2024nondeterminism}{misc}{}
+      \name{author}{13}{}{%
+        {{un=0,uniquepart=base,hash=b676878b548b3d328968b23a651efed4}{%
+           family={Atil},
+           familyi={A\bibinitperiod},
+           given={Berk},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=7bbd71e9c1be6bfc1d8a838199df8821}{%
+           family={Aykent},
+           familyi={A\bibinitperiod},
+           given={Sarp},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=38078bd3c4317277e93b6344176f946f}{%
+           family={Chittams},
+           familyi={C\bibinitperiod},
+           given={Alexa},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c792452bc8aabac87b9a80e9ba138b48}{%
+           family={Fu},
+           familyi={F\bibinitperiod},
+           given={Lisheng},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5c000d0fa94134bfcea523d0e632f78c}{%
+           family={Passonneau},
+           familyi={P\bibinitperiod},
+           given={Rebecca\bibnamedelima J.},
+           giveni={R\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1bff431fe0233158b3e7a51060b814fe}{%
+           family={Radcliffe},
+           familyi={R\bibinitperiod},
+           given={Evan},
+           giveni={E\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6b58fdc5890382838cf4b1dadb83022e}{%
+           family={Rajagopal},
+           familyi={R\bibinitperiod},
+           given={Guru\bibnamedelima Rajan},
+           giveni={G\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=abe696ceddca0ab7e8ffd894d4a746fa}{%
+           family={Sloan},
+           familyi={S\bibinitperiod},
+           given={Adam},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0f99737aef9187210333f63c9139c5af}{%
+           family={Tudrej},
+           familyi={T\bibinitperiod},
+           given={Tomasz},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=bd09fd2d3ef295f8cf65713a7df17b2c}{%
+           family={Ture},
+           familyi={T\bibinitperiod},
+           given={Ferhan},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a262bd551c38285f4dabe3070ad8d1cf}{%
+           family={Wu},
+           familyi={W\bibinitperiod},
+           given={Zhe},
+           giveni={Z\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=679453ab55198606e36e465c7e4fe069}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Lixinyu},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4e44355534bafedc3196ae27a87a720c}{%
+           family={Baldwin},
+           familyi={B\bibinitperiod},
+           given={Breck},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{6e172c9cb385aff905289e02578a1927}
+      \strng{fullhash}{4d0fdd5effaa024c95d64a71ec0602b4}
+      \strng{bibnamehash}{6e172c9cb385aff905289e02578a1927}
+      \strng{authorbibnamehash}{6e172c9cb385aff905289e02578a1927}
+      \strng{authornamehash}{6e172c9cb385aff905289e02578a1927}
+      \strng{authorfullhash}{4d0fdd5effaa024c95d64a71ec0602b4}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{arXiv:2408.04667}
+      \field{title}{Non-Determinism of {``Deterministic''} {LLM} Settings}
+      \field{year}{2024}
+      \verb{doi}
+      \verb 10.48550/arXiv.2408.04667
+      \endverb
+    \endentry
     \entry{bailey2020linking}{article}{}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=ab1252bb8abba981bb3e9e4778b3f3a9}{%
@@ -5972,6 +6072,44 @@
       \field{isbn}{978-1-138-34574-4}
       \field{title}{Freedom of Information and Social Science Research Design}
       \field{year}{2019}
+    \endentry
+    \entry{walters2023fabrication}{article}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=b4ce434d836234895e52c775a9979153}{%
+           family={Walters},
+           familyi={W\bibinitperiod},
+           given={William\bibnamedelima H.},
+           giveni={W\bibinitperiod\bibinitdelim H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d85cffe9f6d199d6c5869929085b863b}{%
+           family={Wilder},
+           familyi={W\bibinitperiod},
+           given={Esther\bibnamedelima Isabelle},
+           giveni={E\bibinitperiod\bibinitdelim I\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{b736c4c30ec0785c916b590bc458627c}
+      \strng{fullhash}{36a7463cb92dd10682cef7015c09764e}
+      \strng{bibnamehash}{b736c4c30ec0785c916b590bc458627c}
+      \strng{authorbibnamehash}{b736c4c30ec0785c916b590bc458627c}
+      \strng{authornamehash}{b736c4c30ec0785c916b590bc458627c}
+      \strng{authorfullhash}{36a7463cb92dd10682cef7015c09764e}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Scientific Reports}
+      \field{number}{1}
+      \field{title}{Fabrication and Errors in the Bibliographic Citations Generated by {ChatGPT}}
+      \field{volume}{13}
+      \field{year}{2023}
+      \field{pages}{14045}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1038/s41598-023-41032-5
+      \endverb
     \endentry
     \entry{walton2020seed}{article}{}
       \name{author}{2}{}{%

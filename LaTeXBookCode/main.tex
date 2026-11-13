@@ -61,12 +61,42 @@
     frametitlebackgroundcolor=aeBg,
 ]{appliedexamplebox}
 
-\newenvironment{appliedexample}[1][]{%
+% Applied Examples span the text and margin columns (kaobook's widepar) and
+% never split across pages: the body is set in a box at the wide measure
+% first; if it fits in the space left on the page it is set in place,
+% otherwise it floats to the top of the next page while the text continues. The body is collected as an argument, so an Applied
+% Example cannot contain verbatim code (none does).
+\newsavebox{\aeBoxContent}
+% \aeNoFloat, written just before an Applied Example, makes that example start
+% on the next page instead of floating there. Use it where a float pending at
+% a page break pushes a following \section* heading onto a new page.
+\newif\ifaenofloat
+\newcommand{\aeNoFloat}{\global\aenofloattrue}
+\NewDocumentEnvironment{appliedexample}{O{} +b}{%
+    \par
     \refstepcounter{appliedexample}%
-    \begin{appliedexamplebox}[frametitle={Applied Example~\theappliedexample.~~#1}]%
-}{%
-    \end{appliedexamplebox}%
-}
+    \sbox{\aeBoxContent}{\begin{minipage}{\dimexpr\textwidth+\marginparsep+\marginparwidth\relax}%
+        \begin{appliedexamplebox}[frametitle={Applied Example~\theappliedexample.~~#1},nobreak=true]%
+        #2%
+        \end{appliedexamplebox}%
+    \end{minipage}}%
+    \ifdim\dimexpr\pagegoal-\pagetotal<\dimexpr\ht\aeBoxContent+\dp\aeBoxContent+1.2\topskip\relax
+        \ifaenofloat
+            \newpage
+            \begin{widepar}\noindent\usebox{\aeBoxContent}\end{widepar}%
+            \par
+        \else
+            % Not enough room here: float the box to the top of the next
+            % page, using the same wide float the book's figure* environments
+            % use, and let the following text fill the rest of this page.
+            \begin{figure*}[tp]\noindent\usebox{\aeBoxContent}\end{figure*}%
+        \fi
+    \else
+        \begin{widepar}\noindent\usebox{\aeBoxContent}\end{widepar}%
+        \par
+    \fi
+    \global\aenofloatfalse
+}{}
 
 \newmdenv[
     skipabove=1\topskip, skipbelow=0.6\topskip,
@@ -78,6 +108,7 @@
     frametitlerule=true,
     frametitlefont=\sffamily\bfseries\color{vizRule},
     frametitlebackgroundcolor=vizBg,
+    nobreak=true,
 ]{vizbox}
 
 \newenvironment{vizcallout}[1][Visualization to build]{%
@@ -100,12 +131,22 @@
     frametitlerule=true,
     frametitlefont=\sffamily\bfseries\color{roRule},
     frametitlebackgroundcolor=roBg,
+    nobreak=true,
 ]{restsonbox}
 \newenvironment{restson}[1][What this depends on]{%
     \begin{restsonbox}[frametitle={#1}]%
 }{%
     \end{restsonbox}%
 }
+
+% Keep callout boxes on one page. A box taller than about a page opts out
+% locally with [nobreak=false] (the roisim box in Chapter 8).
+\renewmdenv[
+    style=kaoboxstyle,
+    backgroundcolor=RoyalBlue!25!White,
+    frametitlebackgroundcolor=RoyalBlue!25!White,
+    nobreak=true,
+]{kaobox}
 
 % Narrow text column (kaobook reserves a wide margin) means long monospace
 % command names and compound terms occasionally overrun. emergencystretch lets
@@ -394,7 +435,7 @@ wage      2246   1782   7.77   1.00  40.7 hourly wage
 }
 Read one row: \texttt{wage} has 2{,}246 observations, 1{,}782 distinct values, and a mean near \$7.77 an hour, which is credible for 1988 dollars and tells a staffer at a glance that the column is populated and plausible. Run this the day an export arrives and a half-empty column or a miscoded category shows up before it reaches a funder's table, not after. These built-in commands audit today's file. For a file that changes over time we ship a companion program with the book, \texttt{datadictionary}\index{datadictionary@\texttt{datadictionary}}, which generates a codebook across waves; Chapter~\ref{ch:surveys} puts it to work on a survey whose items change from one wave to the next.
 
-In the applied example below we return to the Thursday email that opened this chapter and walk it through the full workflow, naming the later chapter where we build each step.
+In Applied Example~\ref{ae:ch01-funder} we return to the Thursday email that opened this chapter and walk it through the full workflow, naming the later chapter where we build each step.
 
 \begin{appliedexample}[From a funder's question to a one-page answer]\label{ae:ch01-funder}
 \textbf{Scenario.} The Thursday email: are we reaching rural students, or mostly suburban ones near the host sites? You have an enrollment spreadsheet and until Monday.
@@ -1427,8 +1468,9 @@ The applied example that closes the chapter pulls from three endpoints at once, 
 \textbf{Integrated command:} \texttt{combineall}\index{combineall@\texttt{combineall}}. The \enquote{combine} half of the download loops above: point it at a folder and it appends (or merges, or converts) every file inside, and with a rename-map CSV (old name, new name, first year, last year) it applies vintage-aware renames, stamps each variable's source into a characteristic, and reports what failed to match, so a multi-year panel becomes one command instead of a fragile copy-and-edit. Chapter~\ref{ch:noapi} works it in full.
 \end{kaobox}
 
-With the stacking step accounted for, we walk you through the full build below, from three separate pulls to one exhibit a workforce board can read.
+With the stacking step accounted for, Applied Example~\ref{ae:ch03-countypanel} walks you through the full build, from three separate pulls to one exhibit a workforce board can read.
 
+\aeNoFloat
 \begin{appliedexample}[A Texas county panel from three APIs]\label{ae:ch03-countypanel}
 \textbf{Scenario.} A county workforce board wants a one-page context exhibit: income, child poverty, and unemployment for its counties, 2015--2023, next to the state.
 
@@ -1436,9 +1478,12 @@ With the stacking step accounted for, we walk you through the full build below, 
 \textbf{The build.} Pull ACS income and poverty with \texttt{getcensus} (county, \texttt{statefips(48)}); pull county unemployment from FRED with \texttt{import fred}; assemble QCEW wages from the no-key CSV loop. Prepare each source at the same county-period unit, then merge the measures on that key; append is appropriate for adding periods of the same measure, not for placing income beside unemployment. Choose explicitly how monthly unemployment and quarterly wages become annual measures, and label ACS five-year estimates with their collection periods. Keep state totals separately so they do not enter county summaries, and record each variable's source. Next year the whole exhibit rebuilds by rerunning the do-file, and it reports in the counties and dollars the board plans in: replicable because it is scripted, actionable because it speaks the board's units.
 \end{appliedexample}
 
-\paragraph{Where this leaves you.} You can now pull public data from the Census, education, economic, and health APIs into Stata, handle a JSON reply in one line with \texttt{webapi}, and place any new endpoint into the three-route pattern. Every one of those downloads is replicable because it runs from a URL rather than a screenshot, and JSON is no longer a reason to reach for a programmer. The habits are as reusable as the commands: write the extraction contract before the loop, add a source-inventory row per endpoint, run the two benchmark checks before you believe the numbers, and the next unfamiliar portal turns into a routine pull.\marginnote{A test worth running this week: find one number your last report copied from a website by hand and pull it through an endpoint instead. Twenty minutes, one URL, and that number never depends on anyone's memory again.} But plenty of agencies publish data with no API at all; Chapter~\ref{ch:noapi} is how you get it anyway.
+\paragraph{Where this leaves you.}\marginnote{A test worth running this week: find one number your last report copied from a website by hand and pull it through an endpoint instead. Twenty minutes, one URL, and that number never depends on anyone's memory again.} You can now pull public data from the Census, education, economic, and health APIs into Stata, handle a JSON reply in one line with \texttt{webapi}, and place any new endpoint into the three-route pattern. Every one of those downloads is replicable because it runs from a URL rather than a screenshot, and JSON is no longer a reason to reach for a programmer. The habits are as reusable as the commands: write the extraction contract before the loop, add a source-inventory row per endpoint, run the two benchmark checks before you believe the numbers, and the next unfamiliar portal turns into a routine pull. But plenty of agencies publish data with no API at all; Chapter~\ref{ch:noapi} is how you get it anyway.
 
 \section*{Exercises}\addcontentsline{toc}{section}{Exercises}
+% Keeps the last two exercise lines with the list instead of alone on the
+% page before Chapter 4 (layout fix, Nov 2026).
+\enlargethispage{2\baselineskip}
 \begin{enumerate}
   \item \emph{Try it on your own data.} Take a dataset your program already tracks that contains a county or state FIPS identifier, import that identifier column as a string, and confirm no leading zeros were lost by listing the shortest codes and checking that every value has the width you expect.
   \item Rerun \texttt{20\_ch03\_apis.do} for two more Texas counties by adding their FIPS codes to the \texttt{counties} local, and report where each new county's private-sector weekly wage falls relative to the five metros already in the exhibit.
@@ -2628,7 +2673,7 @@ Versioning the crosswalk is what makes the pipeline extensible. When next year's
 \section{Where did this number come from?}\label{sec:lineage}
 The simplest question in policy research is often the hardest to answer on the spot: \emph{where did this number come from?} An evaluator who can trace a variable back to its source table and vintage in seconds keeps an agency client's confidence in the numbers that follow, while an evaluator who cannot spends the meeting defending the data instead of discussing the finding. We store that lineage directly in the data, using \texttt{srctag}\index{srctag@\texttt{srctag}} to write the source agency, table, and vintage into each variable's characteristics, so the source tag stays in the file itself and survives every subsequent merge, and \texttt{srcfind}\index{srcfind@\texttt{srcfind}} to search a warehouse of \texttt{.dta} files for variables matching a given source.
 
-The applied example below shows what those stored tags are worth on the day an agency challenges a finding.
+Applied Example~\ref{ae:ch06-lineage} shows what those stored tags are worth on the day an agency challenges a finding.
 
 \begin{appliedexample}[Proving lineage to a skeptical agency]\label{ae:ch06-lineage}
 \textbf{Scenario.} A state workforce commission doubts a report showing that program graduates earn less than the state average. They suspect the wage data was joined wrong or came from a stale ledger.
@@ -3423,13 +3468,13 @@ The data are in; the question becomes what they can honestly support. In Chapter
 
 At a site serving only a few families, one family's departure can change the completion rate enough to alter the site's rank. A funder who uses that ranking needs to know how uncertain the rate is. Similar questions arise when we combine survey items into a score, generalize from respondents to a population, or plan a study around an effect that may be hard to detect.
 
-In this chapter we examine survey scales and weights, stabilize small-site rates, and calculate what a planned study can detect. We then build prediction intervals and estimate how much outcome variation remains between sites after accounting for measured predictors. The examples in \texttt{ch07\_trust.do} let you connect each diagnostic to a reporting decision: which comparisons the evidence supports, what uncertainty to show, and what to investigate before publishing.
+In this chapter we examine survey scales and weights, stabilize small-site rates, and calculate what a planned study can detect. We then build prediction intervals, correct an estimate built on labels that a machine or a hurried coder assigned, and estimate how much outcome variation remains between sites after accounting for measured predictors. The examples in \texttt{ch07\_trust.do} let you connect each diagnostic to a reporting decision: which comparisons the evidence supports, what uncertainty to show, and what to investigate before publishing.
 
 A skeptical program officer will ask each of this chapter's questions out loud: does this scale hold together, do these respondents stand in for our clients, is this small site's rate real or an accident of its size, and could this study have found the effect at all. Program teams already trust performance-measurement systems, logic-model indicators, and What Works Clearinghouse evidence tiers, and every one of those systems assumes someone has answered these four questions, so an evaluator who can show that work is speaking their language. The AEA Guiding Principles oblige an evaluator to systematic inquiry and competence on behalf of the people the program serves, and the checks in this chapter are one concrete way to meet those obligations. Table~\ref{tab:ch07-viz-map} lists each safeguard, the skeptical question it answers, and the Stata command that does the work.
 
 \begin{table*}[htbp]
 \centering
-\caption[The chapter's safeguards and the question each answers]{Read down the middle column for the skeptical program officer's question, then across to the safeguard that answers it and the tool that does the work. The last two rows are newer to evaluation practice, prediction intervals and variance partitioning, and both ship as commands here; model-based small-area estimation, the proposed tool this chapter also names, is not yet one of them.}
+\caption[The chapter's safeguards and the question each answers]{Read down the middle column for the skeptical program officer's question, then across to the safeguard that answers it and the tool that does the work. The last three rows are newer to evaluation practice: prediction intervals and variance partitioning ship as commands here, and the label correction takes a dozen lines in the companion do-file; model-based small-area estimation, the proposed tool this chapter also names, is not yet a command.}
 \label{tab:ch07-viz-map}
 {\footnotesize
 \begin{tabular}{p{2.3cm}p{4.7cm}p{2.4cm}}
@@ -3441,6 +3486,7 @@ Survey weights & Do respondents stand in for the population? & \texttt{svyset}, 
 Rate shrinkage & Is a small site's rate real or an accident of its size? & \texttt{rateshrink} \\
 Study power & Could the study find the effect at all? & \texttt{power} \\
 Conformal bands & Where will the \emph{next} case land? & \texttt{conformalpred} \\
+Label correction & Is a rate built on imperfect labels biased? & \texttt{summarize}, \texttt{correlate} \\
 Variance split & How much of the spread is the site vs.\ the person? & \texttt{mixed}, \texttt{hlmr2} \\
 \hline
 \end{tabular}
@@ -3785,6 +3831,57 @@ The command splits the 2{,}229 respondents with complete wage, grade, and tenure
 
 For an embedded evaluator this closes the confidence-interval-versus-prediction-interval gap: the confidence interval brackets the average, the conformal band brackets where the next case lands, without trusting the model's error assumptions. When a funder wants the range a single new clinic might post, this is the interval to quote, and you can give the funder its guarantee in the same sentence: \enquote{for participants exchangeable with our calibration sample, this procedure targets coverage of at least 90\% across new cases; the interval for this participant is about \$1 to \$13.} The width is then the thing to act on. If a $\pm 5.77$ band is too wide for the decision at hand, look for a stronger predictor set or collect more calibration data; raising \texttt{alpha()} buys a tighter band that simply misses more often, and a program officer handed an 80\% band deserves to hear that one new case in five will land outside it.
 
+\section{Correcting an estimate built on imperfect labels}\label{sec:ppi}
+Many evaluation measures start as labels someone or something assigned: a keyword rule that flags case notes mentioning transportation, a screening instrument, a team of coders working through a backlog, or a language model classifying free text (Chapter~\ref{ch:ai}). Even after you validate the labels, some will be wrong, and when false positives and false negatives do not offset, that error biases any estimate built from them. In this section we measure the bias with a small, randomly drawn set of careful labels and add it back to the estimate, with an interval that reflects how small that set is. The code is part (e) of \texttt{ch07\_trust.do}.
+
+The problem is easy to state with numbers. Suppose transportation is the primary barrier for 30~percent of a caseload. The labeling process detects 70~percent of true transportation notes and marks 5~percent of other notes as transportation. In a sample of 5{,}000 notes, the machine-label prevalence will be about 24~percent. The estimate understates transportation need by about one-fifth, and with 5{,}000 labels its interval is narrow around the wrong value.
+
+The repair uses a gold standard: a random subset of notes that careful human coders label, which you may already have drawn to validate the labels. \textcite{angelopoulos2023ppi} call the method prediction-powered inference, and its logic fits in one sentence: estimate on \emph{all} the machine labels, measure the human-minus-machine gap on the gold subset, and add the gap back, with a standard error that includes the gold subset's extra uncertainty. Written for a prevalence,
+\[
+\hat{p}_{\text{corrected}}
+\;=\;
+\underbrace{\bar{y}^{\,\text{ML}}_{N}}_{\text{all 5{,}000 labels}}
+\;+\;
+\underbrace{\bigl(\bar{y}^{\,\text{human}}_{n} - \bar{y}^{\,\text{ML}}_{n}\bigr)}_{\text{gap on the 150 gold notes}}.
+\]
+Its estimated standard error is
+\[
+\widehat{\text{se}}
+\;=\;
+\sqrt{\tfrac{\widehat{V}_{\text{ML}}}{N} + \tfrac{\widehat{V}_{\text{gap}}}{n} + \tfrac{2\widehat C}{N}}.
+\]
+The gold notes are included in the full set, so the machine mean and the correction are dependent. The covariance term accounts for their overlap: $\widehat C$ is the sample covariance of the machine label and the human-minus-machine difference on the gold notes. The code below includes that covariance for an independent and identically distributed population-sampling interpretation; estimating the fixed caseload's prevalence instead requires a finite-population variance. Decide which population your interval refers to before reporting it.
+\par
+{\footnotesize
+\begin{verbatim}
+quietly summarize ml                   // all machine labels
+local p_ml_all = r(mean)
+local N = r(N)
+local v_ml = r(Var)
+gen diff = transport - ml if gold      // human minus machine
+quietly summarize diff
+local p_corr = `p_ml_all' + r(mean)
+local v_gap = r(Var)/r(N)
+quietly correlate ml diff if gold, covariance
+local cov_md = r(cov_12)
+local se_corr = sqrt(`v_ml'/`N' + `v_gap' ///
+                     + 2*`cov_md'/`N')
+\end{verbatim}
+}
+In the simulated run, the machine-only estimate is 0.234. The corrected estimate is 0.288, with a 95 percent confidence interval of [0.232, 0.343] for the superpopulation prevalence under the stated iid sampling interpretation. The correction adds the average human-minus-machine difference measured in the random gold subset. Its uncertainty depends on that subset, so thousands of machine labels do not provide the same information as thousands of human labels. Compare the interval with the data-generating probability of 0.30 and keep the realized prevalence in this particular 5{,}000-note caseload separate.\marginnote{Prediction-powered inference also covers other estimands \parencite{angelopoulos2023ppi}, but the prevalence correction shown here is not a formula to paste onto a regression coefficient. Use the estimating equation and uncertainty calculation for the intended estimand.}
+
+The conditions that make the correction work are design choices you control before any labeling starts.
+
+\begin{restson}[What the corrected estimate depends on]
+\begin{enumerate}
+\item The gold subset is a \emph{random} draw of the notes, so the gap measured on it stands in for the gap everywhere. \emph{Noticed by:} the sampling code, and nothing after it; notes hand-picked for clarity under deadline shrink the measured gap and let the bias survive.
+\item The human labels are the standard the correction trusts. \emph{Noticed by:} nothing in the output; only the coding protocol vouches for it.
+\item The same labeling process produced the labels on the gold subset and on the other notes: the same rule, the same instrument, the same coders, or the same LLM. \emph{Noticed by:} a record of how each label was produced, such as the prompt-and-version log of Section~\ref{ch13-sc-promptlog} for LLM labels.
+\end{enumerate}
+\end{restson}
+
+A random gold subset supports both validation of the labels and estimation of the correction. If you used the gold labels to tune the labeling rule, reserve separate labels for the final correction or use a method that accounts for that reuse; otherwise the measured gap can be optimistic.
+
 \section{How much of the variation is the site, and how much the person?}\label{sec:icc}
 When clients are nested inside sites, an evaluator's first structural question is how much of the outcome's spread is between sites versus within them, because the answer decides whether site-level comparisons contain any signal at all. If nearly all the variation is between individuals and almost none between sites, ranking sites is ranking noise. The intraclass correlation\index{intraclass correlation} (ICC)\marginnote{The intraclass correlation is the between-cluster share of total variance: the higher it is, the more signal a site-level comparison contains.} answers the question directly. A multilevel model estimates it, and the same model's marginal and conditional $R^2$ \parencite{nakagawa2013general} report how much of the variance the fixed predictors explain alone versus with the site random effects added. By the end of this section you will be able to read both numbers off one fitted model and use them to decide with the program team whether a site ranking should be published at all, and what caveat you must print with it if it is.
 
@@ -3855,7 +3952,7 @@ Use the ICC to describe clustering, then examine uncertainty in the site estimat
 
 Shrinkage in \S\ref{sec:shrink} pulls every small site toward one common mean, whatever kind of site it is, and that is its limit. Fay-Herriot small-area estimation \parencite{fay1979estimates,rao2015small} instead uses the multilevel machinery of this section to pull each site toward the mean of sites like it\marginnote{Pulling each site toward the mean of sites like it is closer to how statistics offices produce the small-area numbers policymakers already cite.}. You pay for that in assumptions: the estimate is only as good as the covariate model behind it, so you trade assumption-light shrinkage for a stronger estimate that depends on a specification a reviewer can question.
 
-In the applied example below we run the chapter's safeguards through a single quarterly scorecard, in the order the calendar requires.
+In Applied Example~\ref{ae:ch07-scorecard} we run the chapter's safeguards through a single quarterly scorecard, in the order the calendar requires.
 
 \begin{appliedexample}[One quarterly scorecard, four safeguards]\label{ae:ch07-scorecard}
 \textbf{Scenario.} A caregiver-support program runs at fifty sites, most of them small. Each quarter the evaluator ships one scorecard: an engagement score from a six-item survey scale, a completion rate per site, and a population claim about the families served. The board wants a site ranking; the director wants to know whether next year's evaluation can detect the improvement the program hopes for.
@@ -3875,6 +3972,7 @@ In the applied example below we run the chapter's safeguards through a single qu
   \item Simulate a single five-person site with three successes, place it among the 50 simulated sites, and compare its raw rate of 0.60 against its shrunken rate: explain in one sentence why empirical Bayes pulls it so far toward the grand mean of 0.195.
   \item Run \texttt{rateshrink} with \texttt{rel()} on the 50-site draw and confirm the reliability identity by hand: for the most-shrunken site, check that its reliability equals $n/(n+\alpha+\beta)$ from the header's $\alpha$ and $\beta$, and say in one sentence why a site pulled halfway to the grand mean has a reliability near 0.5.
   \item Write the one-sentence translation a program officer could act on for each of the chapter's four safeguards, one clause of finding and one of license, using the chapter's own numbers: the 0.79 alpha, the 0.37 weighted rate, site~26's shrunken 0.160, and the 41\% power at a 2-point effect.
+  \item \emph{Break the correction on purpose.} Rerun the prediction-powered correction of Section~\ref{sec:ppi} (part (e) of \texttt{ch07\_trust.do}), but replace the random gold subset with a convenience sample: the 150 notes where the machine label and the truth agree most often. Report the corrected estimate and its interval, say whether the interval still covers 0.30, and explain in one sentence why a hand-picked gold standard cannot repair a bias it was selected not to contain.
 \end{enumerate}
 \chapter{From differences to defensible claims}\label{ch:claims}
 
@@ -4269,7 +4367,7 @@ graph export "$figures/ch08_tornado.png", ///
 
 When ROI pricing becomes routine, the box below supplies the shortcut: the whole simulation, tornado sweep included, as one installable command.
 
-\begin{kaobox}[frametitle=Package Integration: \texttt{roisim}]
+\begin{kaobox}[frametitle=Package Integration: \texttt{roisim},nobreak=false]
 We wrote the loop out by hand so you can see the machinery once, but when you price programs every month you want the same answer in one line. \texttt{roisim}\index{roisim@\texttt{roisim}} takes the effect estimate and its standard error, a cost range, and the discount and horizon ranges, draws each input ten thousand times, and returns the ROI percentiles, the break-even probability, and the tornado sweep as saved results. Install it from the book's repository:
 \par
 {\footnotesize
@@ -6245,7 +6343,7 @@ One further step takes the assembly, though not the shipping, off your calendar.
 
 The two \texttt{googlechart} pages this pipeline embeds are the ones you built in Chapter~\ref{ch:interactive}: the state choropleth of Figure~\ref{fig:gc-geo}, from stage~2a, and the searchable table of Figure~\ref{fig:gc-table}. In the portal each is embedded live by \texttt{wdiframe}, so the reader hovers a state or types a name without leaving the report, and the \texttt{statashiny} dashboard of stage~3 offers the same table interaction offline.
 
-The applied example below gathers the whole chapter into a single commission, so you can see each tool appear once, in the order the pipeline runs them.
+Applied Example~\ref{ae:ch12-onefolder} gathers the whole chapter into a single commission, so you can see each tool appear once, in the order the pipeline runs them.
 
 \begin{appliedexample}[One evaluation, one folder]\label{ae:ch12-onefolder}
 \textbf{Scenario.} A client wants one folder to share with their steering committee: a narrative report, an interactive dashboard of site outcomes, and a county map, with an optional online chart clearly marked as requiring internet access, and they need to know six months from now exactly which cut the committee approved.
@@ -6282,25 +6380,29 @@ A practice that works once still has to survive time, turnover, and new temptati
 
 Suppose a workforce program hands you four thousand free-text case notes and asks which barriers its participants report most often. You have two analysts and three weeks. A language model can read the notes and propose a label for each one, and it can draft the code that tabulates them. Before you rely on either, you have to answer four questions a funder or a privacy officer will ask: whether the notes may leave your building, whether the labels will be the same if you run the job again next month, whether any of them were invented, and how often they are wrong.
 
-In this chapter we answer those questions inside a logged Stata workflow. We keep one division of labor throughout: Stata performs the computations and records their output, and the language model proposes code or classifications that you check. We start with that workflow, then decide which data may be sent to a hosted service, validate the LLM's labels against human coding, make the job reproducible, defend it against instructions hidden in the text, and check its accuracy group by group. By the end of the worked example you will have a reported estimate, the validation evidence behind it, and the records a colleague needs to rerun the job after the LLM changes.\marginnote{The chapter uses a simulated dataset with seed \texttt{20260704} so that every diagnostic can be reproduced. Apply the procedure to human-coded labels from the intended task before using an LLM's output in a decision.}
+In this chapter we answer those questions inside a logged Stata workflow. We keep one division of labor throughout: Stata performs the computations and records their output, and the language model proposes code, classifications, or plans that you check. We start with that workflow and the files that keep a long project anchored, build an evidence ledger that ties every number and reference in a report to the run that produced it, and put the assistant to work as a thought partner on planning, inherited code, and tests. We then decide which data may be sent to a hosted service, validate the LLM's labels against human coding, make the job reproducible, defend it against instructions hidden in the text, and check its accuracy group by group. By the end of the worked example you will have a reported estimate, the validation evidence behind it, and the records a colleague needs to rerun the job after the LLM changes.\marginnote{The chapter uses a simulated dataset with seed \texttt{20260704} so that every diagnostic can be reproduced. Apply the procedure to human-coded labels from the intended task before using an LLM's output in a decision.}
 
 \section{Stata computes; the language model proposes}\label{sec:backbone}
-When you ask a chat window for a regression and it replies with a coefficient, you cannot tell from the reply which commands ran, or whether any ran at all, and you have nothing to rerun next quarter. We suggest you keep every computation in Stata for that reason. You let the language model draft or revise one step, you review the code it proposes, and Stata executes that code in batch. The saved do-file and its log then show you, and any reviewer, what produced each result.
+When you ask a chat window for a regression and it replies with a coefficient, you cannot tell from the reply which commands ran, or whether any ran at all, and you have nothing to rerun next quarter. We suggest you keep every computation in Stata for that reason. The language model drafts or revises one step, you review the code it proposes, and Stata executes that code in batch. The saved do-file and its log then show you, and any reviewer, what produced each result.
 
-The difference matters when someone audits your work. Stata executes documented commands under a version you can name. Some language-model systems can also run code behind the scenes, but the prose they return gives a reviewer nothing to check. For each result you report, you therefore keep four things: the program, its inputs, its output, and the checks it passed.
+Many assistants now do more than draft. A coding assistant can edit the do-files in your project folder, launch Stata in batch, read the log, and revise the code when a check fails. That arrangement meets the same standard, because a result is checkable when its run leaves a do-file and a log on disk, whoever launched it. You still review each change before you accept it, and you still judge every step by its log.
+
+The difference matters when someone audits your work. Stata executes documented commands under a version you can name. Some language-model services run code on a remote machine and return only prose, which gives a reviewer nothing to check; an assistant that runs Stata on your machine leaves the do-file and the log in your project folder, where a reviewer can rerun them. For each result you report, you therefore keep four things: the program, its inputs, its output, and the checks it passed.
+
+When the assistant runs commands itself, decide in advance which ones it may run without asking. Editing files inside the project folder, running do-files in batch, and reading logs are routine steps in the loop below. Pushing to a shared repository, publishing a report, sending data outside the building, and deleting files are actions you approve one at a time, because each is hard to reverse and reaches people beyond the project.
 
 Before you write the first prompt, divide the task into steps in a checklist file, which Step~1 below sets up. For each step, you name its input, the output you expect, the check it must pass, and whether its data may be shown to the LLM. You will use this plan twice: it sets the order in which the steps run, and it tells you early which steps have to stay outside the language-model workflow.
 
 \subsection{Why LLM output requires an executed statistical record}\label{sec:llm-limits}
 You may wonder whether this much record-keeping is necessary when the LLM's answers look right. The four limitations below are the reason we ask for a saved program and a log at every step, and each one has been measured in published studies.
 
-\emph{Forgetting.} An LLM's attention to a long conversation is uneven: it uses information at the beginning and the end of its context window more reliably than information in the middle, a degradation \textcite{liu2024lost} document directly across many LLMs and call \enquote{lost in the middle.}\index{lost in the middle}\marginnote{The curve is U-shaped: accuracy is highest when the needed fact sits at the beginning or end of the context and sags when it sits in the middle. A long analysis buries its early decisions exactly where the LLM attends least.} Over a multi-hour analysis, the LLM loses track of what it already ran, which variable it recoded, and why, and it will redo a step it finished an hour ago with a slightly different definition. Record those decisions in project files that you and the LLM can consult before continuing.
+\emph{Forgetting.} An LLM's attention to a long conversation is uneven: it uses information at the beginning and the end of its context window more reliably than information in the middle, a degradation \textcite{liu2024lost} document directly across many LLMs and call \enquote{lost in the middle.}\index{lost in the middle}\marginnote{The curve is U-shaped: accuracy is highest when the needed fact sits at the beginning or end of the context and sags when it sits in the middle. A long analysis buries its early decisions exactly where the LLM attends least.} Over a multi-hour analysis, the LLM loses track of what it already ran, which variable it recoded, and why, and it will redo a step it finished an hour ago with a slightly different definition. Coding assistants that work for hours also compress or summarize the earlier part of a session to make room for new work, and any decision that was never written to a file can drop out of that summary. Record those decisions in project files that you and the LLM can consult before continuing.
 
-\emph{Drift.} An LLM's output is a probability distribution over text, so the same prompt can yield different code and different numbers on different runs; \textcite{ouyang2025nondeterminism} measure exactly this non-determinism in LLM code generation and show how much it undercuts reproducibility. Compounding it, the LLM behind a fixed API name is updated without notice: \textcite{chen2023drift} tracked two hosted LLMs on fixed tasks and found their accuracy on some tasks shifting sharply between the March and June 2023 versions that shared the same names, so an analysis that ran in January may behave differently in June for reasons you cannot see or log. Saving the code and the returned classifications lets you distinguish a change in the analysis from a change in the LLM response.
+\emph{Drift.} An LLM's output is a probability distribution over text, so the same prompt can yield different code and different numbers on different runs; \textcite{ouyang2025nondeterminism} measure exactly this non-determinism in LLM code generation and show how much it undercuts reproducibility. Compounding it, the LLM behind a fixed API name is updated without notice: \textcite{chen2023drift} tracked two hosted LLMs on fixed tasks and found their accuracy on some tasks shifting sharply between the March and June 2023 versions that shared the same names, so an analysis that ran in January may behave differently in June for reasons you cannot see or log. Setting the temperature to zero does not remove the problem: \textcite{atil2024nondeterminism} ran several LLMs ten times each on the same tasks with settings intended to be deterministic and still found answers that varied from run to run. Saving the code and the returned classifications lets you distinguish a change in the analysis from a change in the LLM response.
 
 \emph{No statistical record in a prose reply.} A language model predicts text from patterns in its training material. Some systems can call an interpreter, but you cannot treat a reply as evidence that a named calculation ran unless you keep the executed code and its output. Program-aided language models\index{program-aided language models} \parencite{gao2023pal} and program-of-thoughts prompting \parencite{chen2023pot} improve numerical performance by sending the calculation to an interpreter. Here Stata is that interpreter, and its do-file and log supply the record a reviewer needs.
 
-\emph{Hallucination.} LLMs produce fluent, confident text that is sometimes simply false, a failure catalogued across generation tasks by \textcite{ji2023survey}. In generated code the problem is concrete: \textcite{spracklen2025packages} find that a large share of the packages LLMs recommend do not exist at all. In a statistical workflow this cuts two ways, and the two are not equally dangerous. A hallucinated command or option, an invented \texttt{regress} suboption that was never written, fails loudly the moment Stata runs it, which is a gift. A hallucinated \emph{number} in a prose summary, a coefficient or a sample size the LLM made up, fails silently and can end up in a funder's report. The defense against both is the same: never let a number reach the page unless a program produced it and a log records it.
+\emph{Hallucination.} LLMs produce fluent, confident text that is sometimes simply false, a failure catalogued across generation tasks by \textcite{ji2023survey}. In generated code the problem is concrete: \textcite{spracklen2025packages} find that a large share of the packages LLMs recommend do not exist at all. In generated prose it reaches the reference list: \textcite{walters2023fabrication} found that many of the citations ChatGPT supplied for literature reviews did not exist, and that many of the genuine ones carried errors. In a statistical workflow this cuts two ways, and the two are not equally dangerous. A hallucinated command or option, an invented \texttt{regress} suboption that was never written, fails loudly the moment Stata runs it, which is a gift. A hallucinated \emph{number} in a prose summary, a coefficient or a sample size the LLM made up, fails silently and can end up in a funder's report. The defense against both is the same: never let a number reach the page unless a program produced it and a log records it, and never let a reference reach the page until its record has been checked. The evidence ledger of Section~\ref{sec:ledger} applies both rules to a whole report.
 
 \textcite{korinek2023genai} describes a related division of labor for economists: language models can assist with research tasks, while the researcher verifies consequential claims with the appropriate tools. In the workflow below, the LLM works on one bounded step and the evaluator accepts it only after the stated Stata check passes.
 
@@ -6327,7 +6429,7 @@ You may wonder whether this much record-keeping is necessary when the LLM's answ
 \end{figure*}
 
 \subsection{The method in one loop: propose, run, verify, log}
-The method is the loop in Figure~\ref{fig:backbone}, and we hold it to four rules. The LLM works one step at a time, drafting or extending a single do-file rather than the whole analysis, so every change is small enough to check. You run every step in batch Stata and judge it by its log, never by the LLM's assurance that the code is correct. You triangulate every passing step against a second method or an adversarial check before you trust it. And the LLM writes down what it did, in the checklist and the running documentation, so the project's memory is stored in files rather than in a context window that will forget.
+The method is the loop in Figure~\ref{fig:backbone}, and we hold it to four rules. The LLM works one step at a time, drafting or extending a single do-file rather than the whole analysis, so every change is small enough to check. Every step runs in batch Stata, whether you or the assistant launches it, and you judge it by its log, never by the LLM's assurance that the code is correct. You triangulate every passing step against a second method or an adversarial check before you trust it. And the LLM writes down what it did, in the checklist and the running documentation, so the project's memory is stored in files rather than in a context window that will forget.
 
 With the work recorded in logged do-files, you can review and resume it outside the conversation. The workflow is reproducible, because it is a sequence of logged do-files, not a conversation. You can step in at any point, because the state of the project is on disk, not in the LLM's head, so you are never held hostage by an LLM that has forgotten what it did. It is more stable, because Stata's behavior is pinned by \texttt{version} while the LLM's is not. And it is extensible: a vetted pipeline becomes the starting point for the next project, which saves both effort and the tokens you would spend re-deriving it. This is the same reproducibility discipline that \textcite{long2009workflow} made the foundation of credible quantitative work in his \emph{Workflow of Data Analysis Using Stata}, now extended to a collaborator that happens not to be human.\marginnote{Long's book predates the LLM entirely, which is the point: nothing about the discipline changes when the code's first draft comes from an LLM. Scripted, documented, logged, replicable, the standards are the same, and the LLM must meet them.}
 
@@ -6352,6 +6454,23 @@ Instruct the LLM, in the system prompt, the standing instructions an assistant r
 A checklist is only as checkable as its steps, and there is a craft to writing them. We suggest you hold each step to one action, one observable check, and one file touched: \texttt{120\_clean} recodes one indicator, asserts one count, and writes one log, so the item can be ticked or left unticked with no judgment call. A step written as \enquote{clean the data} fails the rule three ways at once, and the failure is not cosmetic; a step with no single observable check is a step the LLM can declare finished without being wrong in any way a log could catch.\marginnote{When a draft step resists the one-action form, that resistance is information: the step is really two steps, and splitting it now is cheaper than untangling it after a tripwire fires somewhere in the middle.}
 
 The same planning pass is the moment to draw the data-touching boundary: which steps the LLM may draft (recodes, merges, chart code, robustness variants) and which stay human regardless of the deadline (the gold-standard hand-coding of Section~\ref{sec:aiverify}, the sign-off on any number that ships, anything that moves identified records). Marking each item \texttt{llm} or \texttt{human} costs one column in the checklist, and it lets you settle in writing, and in advance, a question you would otherwise answer badly under deadline pressure.
+
+\paragraph{Two more files the assistant reads first.} The checklist records what to do next. Two companion files record how to work and what has already gone wrong, so the assistant does not relearn either in every session. The first is a standing-instructions file, which many coding assistants read automatically at the start of a session: the project's purpose, the folder layout and control file, the data boundary, the style rules for code and prose, and the commands the assistant may run without asking. The second is a traps log: one entry for each surprise that a run has confirmed, with the symptom, the cause, and the fix, so the same failure costs you time once. We suggest you have the assistant add an entry only after a run demonstrates the problem, and read both files before it touches the checklist.
+\par
+{\footnotesize
+\begin{verbatim}
+# TRAPS.md  (one entry per surprise a run confirmed)
+batch exit code  stata -b exits 0 even after an error;
+                 judge each run by its log (r(#); lines)
+tempfile scope   a tempfile is erased when the program
+                 that created it ends; create it in the
+                 caller and pass the path down
+option names     a capital after a digit in a syntax
+                 option abbreviates differently in
+                 Stata 16; test under each version
+\end{verbatim}
+}
+Each entry is short because its job is to stop a repeat, not to explain the whole episode. The log of the run that confirmed the trap contains the detail, and the entry can name that log.
 
 \subsection{Step 2: scaffold the project and its documentation layer}
 In the second step you hand the LLM a workspace that documents itself. The \texttt{projectbuilder}\index{projectbuilder@\texttt{projectbuilder}} scaffold of Chapter~\ref{ch:workshop} lays down the folders and the control file; the addition here is a documentation layer the LLM writes \emph{as it works}, so the record is a by-product of the analysis rather than a chore at the end. As the LLM cleans and explores, it appends to a running \texttt{webdoc2}\index{webdoc2@\texttt{webdoc2}} report (Chapter~\ref{ch:portals}), regenerates a variable-level codebook, and tags each variable's origin with \texttt{srctag}\index{srctag@\texttt{srctag}} (Chapter~\ref{ch:panels}). The result is the initial pass a careful research assistant would make before the real work begins: distributions, missingness, outliers, and provenance, all written down.
@@ -6380,7 +6499,7 @@ assert r(N) == 757      // expected count, per checklist
 di as result "STEP 120 PASSED"
 \end{verbatim}
 }
-Run it from the shell, not from inside the chat, so the run is real and logged. The \texttt{-b} flag is Stata's batch mode: it runs the do-file top to bottom with no interface and writes the log beside it\marginnote{Swap \texttt{stata-mp} for whichever executable your license installs; the \texttt{-b} flag behaves the same way in each.}:
+Run it in batch from the shell, whether you type the command or the assistant does, so the run is real and its log is on disk. The \texttt{-b} flag is Stata's batch mode: it runs the do-file top to bottom with no interface and writes the log beside it\marginnote{Swap \texttt{stata-mp} for whichever executable your license installs; the \texttt{-b} flag behaves the same way in each.}:
 \par
 {\footnotesize
 \begin{verbatim}
@@ -6398,36 +6517,19 @@ r(9);
 }
 The assertion identifies a discrepancy between the expected count and the computed count. Before changing either, inspect the recode, the source variable, and the sample restriction. If the expectation was only a guess, replace it with a justified value and record how you checked it; if the code implements the wrong definition, repair the code. Changing an assertion merely to match whatever printed would remove the check you intended to perform.
 
-Set the routing rules before the first run. When a tripwire fires, provide the complete log, including the return code, failing line, and observed count. A paraphrase can omit the detail that identifies the cause. After a fix passes, rerun the do-file from a fresh batch instance and compare the logs. Matching clean runs provide evidence that the result does not depend on leftover session state; they do not establish that the definition or estimator is appropriate.
+Set the routing rules before the first run. When a tripwire fires, make sure the LLM sees the complete log, including the return code, failing line, and observed count, either by pasting it or by letting the assistant read the log file itself. A paraphrase can omit the detail that identifies the cause. After a fix passes, rerun the do-file from a fresh batch instance and compare the logs. Matching clean runs provide evidence that the result does not depend on leftover session state; they do not establish that the definition or estimator is appropriate.
 
 \subsection{Step 4: triangulate, and try to break the finding}
-A passing test proves the code ran, not that the answer is right, so in the last step of each loop you reach the number a second way. Recompute a key coefficient with an equivalent command and check agreement, then examine a different subsample as a sensitivity analysis whose estimate may reasonably differ. Hand the finding to a second LLM or a fresh agent whose only instruction is to refute it. Spot-check one computed value by hand against the raw data.\marginnote{This is the same posture as the sensitivity analysis of Chapter~\ref{ch:claims} and the gold-standard validation of Section~\ref{sec:aiverify}, now applied to the whole workflow rather than a single estimate.}
+A passing test proves the code ran, not that the answer is right, so in the last step of each loop you reach the number a second way. Recompute a key coefficient with an equivalent command and check agreement, then examine a different subsample as a sensitivity analysis whose estimate may reasonably differ. Hand the finding to a second LLM or a fresh agent whose only instruction is to refute it. Spot-check one computed value by hand against the raw data.
+
+How you brief that reviewer decides how much the review is worth. Give it the do-file, the data, and the question, but not your conclusion: a reviewer told what you expect to find tends to find it. Treat what comes back as a set of claims to verify, because a reviewer's mistakes arrive in the same confident tone as its correct findings, and confirm each reported problem with a run before you fix it. Finally, review the artifact the client will receive, not only the code that made it. Open the delivered workbook, render the report, and read the file's document properties, because a problem in the final file, such as a stale title in a PDF's metadata or a table split across two pages, is invisible in the do-file that produced it.\marginnote{This is the same posture as the sensitivity analysis of Chapter~\ref{ch:claims} and the gold-standard validation of Section~\ref{sec:aiverify}, now applied to the whole workflow rather than a single estimate.}
 
 Decide the fork before the comparison runs: name the tolerance within which the two numbers count as agreeing, proceed and record both when they do, and when they do not, make the discrepancy its own checklist item that blocks everything downstream until it is resolved. A tolerance chosen after seeing the gap is a tolerance chosen to close it. A finding that survives an honest attempt to break it is one you can defend; a finding that has only ever been agreed with is not.
 
 \subsection{Going parallel without losing the log: two worked patterns}\label{sec:backbone-parallel}
 Parallel batch jobs can reduce time spent on slow estimation or independent review. Each worker still needs a saved specification and log.
 
-\paragraph{Pattern 1: split a slow estimation across instances.} Some estimates are slow by nature: a multilevel model on millions of rows, a bootstrap with thousands of replicates, a specification curve of hundreds of fits. When the pieces are independent, the work is \emph{embarrassingly parallel}\index{embarrassingly parallel}: split it into separate batch jobs, run them on several Stata instances (or several machines) at once, and combine the saved results. Here a bootstrap of a wage regression's tenure coefficient is split four ways. The worker takes a tag, a replicate count, and a seed, and posts its replicate estimates to its own file:
-\par
-{\footnotesize
-\begin{verbatim}
-* boot_worker.do        (args: tag reps seed)
-args tag reps seed
-set seed `seed'
-sysuse nlsw88, clear
-postfile buf double b using "boot_`tag'.dta", replace
-forvalues r = 1/`reps' {
-    preserve
-        bsample
-        quietly regress wage tenure grade age
-        post buf (_b[tenure])
-    restore
-}
-postclose buf
-\end{verbatim}
-}
-\marginnote{The worker depends on three commands: \texttt{postfile} opens a results buffer that writes one row per \texttt{post}, \texttt{bsample} redraws the sample with replacement (the bootstrap's core move), and \texttt{postclose} seals the file for the harvest step.}An orchestrator (a shell loop, or an agent) launches four instances at once, each with its own seed; the trailing \texttt{\&} pushes each run to the background so they overlap, and \texttt{wait} holds the script until all four finish:
+\paragraph{Pattern 1: split a slow estimation across instances.} Some estimates are slow by nature: a bootstrap with thousands of replicates, a specification curve of hundreds of fits. When the pieces are independent, run them as separate batch jobs, each with its own seed and its own output file, and combine the saved results in a step that asserts the expected replicate total. The companion \texttt{ch13\_parallel.do} splits a bootstrap of a wage regression four ways; the launcher starts four instances at once and waits for all of them:
 \par
 {\footnotesize
 \begin{verbatim}
@@ -6436,22 +6538,7 @@ for t in 1 2 3 4; do
 done; wait
 \end{verbatim}
 }
-\marginnote{On an eight-core laptop the four jobs ran together in under two seconds of wall time; the \texttt{\&} backgrounds each job and \texttt{wait} blocks until all four finish.}A short combine step stacks the four files and reads off the bootstrap standard error and interval:
-\par
-{\footnotesize
-\begin{verbatim}
-clear
-forvalues t = 1/4 {
-    append using "boot_`t'.dta"
-}
-summarize b
-local se = r(sd)
-_pctile b, p(2.5 97.5)
-di "reps=" _N "  SE=" %5.3f `se' ///
-   "  95%CI=[" %5.3f r(r1) "," %5.3f r(r2) "]"
-\end{verbatim}
-}
-The real run returns a thousand-replicate bootstrap with a standard error of \texttt{0.019} and a 95\% interval of \texttt{[0.112, 0.187]}, computed in the wall-clock time a two-hundred-fifty-replicate run would take, with every job a do-file you can rerun. Push the same split across machines and the arithmetic scales further; the only rule is that each worker seeds differently so the replicates are independent. Sketch the split in the checklist before launching anything: the number of workers, each worker's seed, and the replicate total the combine step will assert against, so the parallel run is a plan you wrote rather than a pattern the LLM improvised at the shell.
+Sketch the split in the checklist before launching anything: the number of workers, each worker's seed, and the total the combine step will assert, so the parallel run follows a plan you wrote rather than one the LLM improvised at the shell.
 
 \paragraph{Pattern 2: fan out the code review.} On a large pipeline a single review pass is both a bottleneck and a blind spot. Split the codebase into slices, hand each to its own reviewer (an agent, or just its own batch run), and give each the same narrow brief: find the bug, the unhandled missing, the merge that silently drops rows. Independent reviewers in parallel catch what one sequential pass misses, and because each reads only its slice, none is defeated by a context window too small for the whole project. For independent test do-files, a harness can run each file in its own instance and inspect its log. Use a dedicated test folder: analysis steps that read one another's outputs must retain their required order, and workers need distinct output and log filenames. The sketch below illustrates launching independent tests; a production harness also checks that each new log exists and contains an explicit completion marker:
 \par
@@ -6479,7 +6566,7 @@ The agent version of this pattern replaces the \texttt{grep} with a reviewer LLM
 \textbf{Scenario.} A funder asks, on short notice, whether a wage gap in last quarter's analysis holds up. The original was run against an LLM version that has since been updated.
 
 \medskip
-\textbf{The backbone run.} You do not reopen the chat and ask again, because that LLM is gone. You open the project folder. The \texttt{TODO.md} shows every step and its status; the numbered do-files rerun from raw data with one command; the \texttt{webdoc2} report shows what the assistant found and decided last time; the logs show every \texttt{assert} that passed. You point a fresh LLM at the checklist, ask it to add one robustness check, run it in batch, triangulate the new number against the old log, and answer the funder in an hour, with a result that does not depend on any LLM remembering anything. The LLM changed; the analysis did not, because the LLM was never the analysis.
+\textbf{The backbone run.} You do not reopen the chat and ask again, because that LLM is gone. You open the project folder. The \texttt{TODO.md} shows every step and its status; the standing-instructions file and the traps log tell a new assistant how the project works and what has already gone wrong; the numbered do-files rerun from raw data with one command; the \texttt{webdoc2} report shows what the assistant found and decided last time; the logs show every \texttt{assert} that passed. You point a fresh assistant at those files, ask it to add one robustness check and run it in batch, triangulate the new number against the old log, rerun the evidence ledger, and answer the funder in an hour, with a result that does not depend on any LLM remembering anything. The LLM changed; the analysis did not, because the LLM was never the analysis.
 \end{appliedexample}
 
 \subsection{Testing for the machines you do not have}\label{sec:ch13-environments}
@@ -6537,7 +6624,89 @@ Pointing the home folder at a scratch folder also keeps a test that writes to \t
 
 \paragraph{Name what you could not test.} You may have no Windows machine, no Linux machine, or no copy of Stata 17. Write those gaps into the test log, mark any claim about them as reasoned rather than run, and ask a colleague who has that setup to run a short diagnostic do-file that writes its own log. A sentence such as ``tested in Stata 16.1 and 19.5 on macOS; Windows behavior reasoned from the documentation, not run'' tells a user how far to trust the code.
 
-\paragraph{What the loop gives you so far.} You now have a way to let a language model propose one bounded coding step at a time while Stata computes every result. Your checklist records the plan, your batch logs and \texttt{assert} statements show that each step ran as intended, and an independent calculation checks the main finding. If other people will run your code, the tests in Section~\ref{sec:ch13-environments} extend the same checks to Stata versions and operating systems you do not use yourself. So far the loop covers code. In the sections that follow we turn to the data and the labels: which records may be sent to a hosted service, how accurate the LLM's classifications are, how you keep them stable from one run to the next, how you protect the job from instructions hidden in the text, and whether the accuracy holds for each group you serve.
+\paragraph{What the loop gives you so far.} You now have a way to let a language model propose one bounded coding step at a time while Stata computes every result. Your checklist records the plan, your batch logs and \texttt{assert} statements show that each step ran as intended, and an independent calculation checks the main finding. If other people will run your code, the tests in Section~\ref{sec:ch13-environments} extend the same checks to Stata versions and operating systems you do not use yourself. So far the loop covers code. In the next two sections we tie every number and reference in a report to its evidence, and we put the assistant to work on the thinking around the code. We then turn to the data and the labels: which records may be sent to a hosted service, how accurate the LLM's classifications are, how you keep them stable from one run to the next, how you protect the job from instructions hidden in the text, and whether the accuracy holds for each group you serve.
+
+\section{An evidence ledger for every number and reference}\label{sec:ledger}
+How do you show that a number in the final report is the number Stata computed, after the draft has passed through three rounds of editing by you, a colleague, and an LLM? The loop of Section~\ref{sec:backbone} protects the computation, but the prose is edited after the computation ends, and an LLM asked to tighten a paragraph can change a figure while it smooths the sentence around it. In this section we build an evidence ledger, a fact log with one row for every number the report states, check it against the saved results in Stata, have the document read its numbers from a file Stata writes, and check every reference against the record its DOI points to. You finish with a ledger check that runs as the last step of the pipeline, after every editing pass. The companion do-file is \texttt{ch13\_claims.do}.
+
+\paragraph{The analysis saves what it will report.} The ledger can only compare a stated number with a computed one if the analysis keeps the computed numbers. We suggest you have each reporting step post the values it will report to a small results file, under a short claim identifier that the ledger will use:
+\par
+{\footnotesize
+\begin{verbatim}
+sysuse nlsw88, clear
+tempname h
+postfile `h' str12 id double value ///
+    using claims_values, replace
+quietly regress wage grade tenure
+post `h' ("b_grade") (_b[grade])
+post `h' ("b_tenure") (_b[tenure])
+postclose `h'
+\end{verbatim}
+}
+The companion file posts five values this way: the number of workers, the mean wage, the union share among workers whose union status is recorded, and the two coefficients.
+
+\paragraph{The ledger states each number as the prose does.} The ledger has one row per claim: the identifier, the value as the draft states it, a tolerance that matches the rounding the prose uses, and where the claim appears. In the companion file, one row has a dropped digit, 0.07 for a grade coefficient of 0.70, the kind of slip that still reads as plausible in a sentence. A short program, \texttt{checkledger} in the companion file, merges the ledger with the saved results, asserts that every claim has a computed source, and marks each row:
+\par
+{\footnotesize
+\begin{verbatim}
+  +-----------------------------------------------------+
+  |          id   claimed       value   status    where |
+  |-----------------------------------------------------|
+  |   N_workers      2246   2246.0000       ok   para 2 |
+  |     b_grade       .07      0.7043     FAIL   para 3 |
+  |    b_tenure       .15      0.1471       ok   para 3 |
+  | union_share       .25      0.2455       ok   para 3 |
+  |   wage_mean      7.77      7.7669       ok   para 2 |
+  +-----------------------------------------------------+
+LEDGER CHECK: 1 of 5 claims fail
+\end{verbatim}
+}
+The failing row names the claim and the paragraph that states it, so the fix takes a minute: correct the sentence and the ledger together, rerun the check, and keep the passing log. The \texttt{assert} at the end of the check turns a failing ledger into a stopped pipeline, so a report with a mistyped number cannot be rebuilt as though nothing were wrong.
+
+\paragraph{Let the document read its numbers from Stata.} The surest way to keep a number from drifting is never to type it. For a report written in LaTeX or Markdown, the companion file writes each saved value into a small file of named numbers, formatted the way the prose prints them:
+\par
+{\footnotesize
+\begin{verbatim}
+\newcommand{\numNworkers}{2,246}
+\newcommand{\numwagemean}{7.77}
+\newcommand{\numunionshare}{0.25}
+\newcommand{\numbgrade}{0.70}
+\newcommand{\numbtenure}{0.15}
+\end{verbatim}
+}
+The report reads this file once, and each sentence names a number instead of stating it, so rebuilding the pipeline updates every figure in the text. For workbooks and Word documents, \texttt{putexcel} and \texttt{collect} write from the same saved results (Chapter~\ref{ch:sheets}). Keep the ledger alongside this file, because some numbers are copied into places that no file feeds: an email to a program officer, a slide, or a sentence a colleague drafted by hand.
+
+\paragraph{Check each reference against its record.} A fabricated reference often looks real because its DOI is real. An LLM can pair a working DOI with an invented title, and a reader who clicks the link sees a genuine paper and moves on. The check therefore compares the claimed title with the record the DOI returns. The companion file downloads each DOI's record from Crossref with \texttt{copy}, reduces both titles to lowercase letters and digits, and tests whether the record contains the claimed title. The third row below pairs a real DOI with an invented title:
+\par
+{\footnotesize
+\begin{verbatim}
+  +-----------------------------------------------------+
+  |         key                          doi      check |
+  |-----------------------------------------------------|
+  | walters2023   10.1038/s41598-023-41032-5      match |
+  |  ouyang2025              10.1145/3697010      match |
+  |    invented              10.1145/3697010   MISMATCH |
+  +-----------------------------------------------------+
+\end{verbatim}
+}
+The same idea covers the packages an LLM recommends: \texttt{ssc describe} or \texttt{net describe} confirms that a package exists before anyone installs it.\marginnote{The reference check needs an internet connection. When the DOI service cannot be reached, the companion file marks those rows as unreached rather than passing them.}
+
+\paragraph{When the ledger runs.} Add the ledger check to the checklist as the final step before anything ships, and rerun it after every editing pass on the text, whoever made the edits. The ledger also answers the question a reviewer asks most often, where a number came from, in one row: the claim, the value, and the run that produced it.
+
+\section{The assistant as a thought partner}\label{sec:ch13-partner}
+The loop so far uses the LLM to draft code. An assistant can also help with the thinking around the code: planning an analysis, finding the ways a design could fail, reading code someone else wrote, and drafting the tests and help files that turn a do-file into a tool. In this section we work through those uses, and for each we name the check that turns the assistant's draft into something you can rely on. The output in every case is a plan, a list, or an explanation, never a number.
+
+\paragraph{Plan before the first do-file.} Give the assistant the evaluation question, a description of the data you have, and the decision the result will inform, and ask for an analysis plan in the checklist form of Step~1, with one action and one check per step. Then ask separately for a pre-mortem: suppose the finding turns out to be wrong a year from now, and list the reasons why. Many reasons will be generic. Keep the ones that name something you can test, such as a merge that could drop the rural sites or a survey wave fielded during a school break, and turn each into a checklist item with its own check.
+
+\paragraph{Ask for the alternatives you would rather not run.} An analyst who has settled on a specification rarely goes looking for the reasonable alternatives, and every choice that was made after seeing the data widens the garden of forking paths \parencite{gelman2013forking}. Ask the assistant to list the alternative outcome definitions, comparison groups, and specifications a skeptical reviewer would propose. Record each one in the checklist as run or not run, with the reason, before you look at any results; the prespecification habit of Section~\ref{sec:prereg} then covers the alternatives as well as the main estimate.
+
+\paragraph{Read inherited code with a check.} When you inherit a do-file, ask the assistant to explain each block in plain language and to list the assumptions it makes about the data: which variables identify a record, which values a recode expects, which observations a merge keeps. Then test the explanation against Stata rather than accepting it. Run the block on a small extract and compare the counts it reports with the explanation; where the block calls a program, \texttt{set trace on} shows each line the program executes. An explanation that survives the comparison is documentation you can keep.
+
+\paragraph{Translate, then compare the outputs.} Colleagues who work in R or Python often need the same step in their language, and an assistant drafts the translation quickly. Run both versions on the same input, save the results, and compare them in Stata with \texttt{cf}, which reports every variable that differs between the dataset in memory and a saved one. A translation counts as done when the comparison is silent.
+
+\paragraph{Write the tests and the help file before the command.} Chapter~\ref{ch:tools} writes a test battery before the command it tests. An assistant can draft that battery from your description of what the command must do, including the inputs it must refuse, and the tests then serve as the specification it codes against. Ask it next to draft the help file from the \texttt{syntax} line, and check every example in the help file by running it; the second review method of Section~\ref{sec:ch13-environments}, reading from the help file rather than the code, finds the places where the two disagree.
+
+\paragraph{What the assistant adds.} Each of these uses lets a two-person team cover work it would otherwise skip: the pre-mortem nobody had time for, the alternative specification nobody wanted to run, the test suite that would have waited for a quiet week. The checks are what keep that extra output from becoming extra risk.
 
 \section{What never leaves the building}
 Before you send anything to a hosted service, you need to know which of your data it is allowed to receive. FERPA, HIPAA, a contract, or a data-use agreement may prohibit you from sending administrative records to an outside server, and the person who signed that agreement is the one who can tell you. We suggest you write the approved boundary down, and that you read the vendor's terms for five things: how long it retains your data, whether it trains on them, which subprocessors see them, who has access, and how deletion works.\marginnote{A training opt-out does not state how long the vendor retains a copy or which subprocessors can access it. Review those terms separately.} For some restricted work you may be able to use an LLM that runs on your own machine, once someone has reviewed its network access, telemetry, logs, storage, and user permissions. The command in the box below screens your text for several formatted identifier patterns. It supports the eligibility decision, which still belongs to the reviewer your agreement names.
@@ -6606,6 +6775,18 @@ ai_privacy_gate notes comments, action(stop)
 \end{verbatim}
 }
 The second gate run confirms that the recognized patterns were removed. It does not test whether the remaining text identifies a person through context. The companion do-file makes this limit visible with five known misses: a personal name, a rare occupation and town, a phone number written in words, a written-out birth date, and an untagged badge code. Document the human review and the rule that authorized hosted processing.
+
+The data boundary also shapes how you debug. When the code that fails runs on records the assistant may not see, you can still use the assistant on the code itself, as Applied Example~\ref{ae:ch13-harness} shows.
+
+\begin{appliedexample}[Debugging code you cannot run on the real data]\label{ae:ch13-harness}
+\textbf{Scenario.} A colleague's do-file suppresses small cells before a state agency publishes enrollment tables, and it fails inside the agency's secure research environment. Neither you nor the LLM may see the student records, and the colleague can send only the do-file, the codebook, and the error from the log.
+
+\medskip
+\textbf{The approach.} You work from files that contain no records. Give the assistant the do-file and the codebook, and ask it to list every assumption the code makes about the data: the variable names and types, the value ranges, which combinations of identifiers are unique, and which cells can be empty. Then have it write a short do-file that generates fake data meeting those assumptions, plus the edge cases the real data may contain, such as a subgroup with a single student or a grade code the codebook lists but the code never handles. Run the colleague's do-file against the fake data in batch until the reported error reproduces. A fix counts only when it passes on the fake data and on tests that pin the expected suppression pattern. Send the colleague the fix together with a diagnostic do-file that runs inside the secure environment and logs counts but no records, so the confirmation comes from the real data without any record leaving.
+
+\medskip
+\textbf{Why it works.} The assistant only ever sees code and invented data, the error is reproduced before anyone proposes a fix, and the final confirmation is a log from the real run. When someone inside the secure environment can run code on the records, \texttt{synthgen} (Chapter~\ref{ch:sharing}) builds a closer stand-in from the data itself, which then leaves the environment only after the disclosure review that chapter describes.
+\end{appliedexample}
 
 \section{A measurement, not an oracle}\label{sec:aiverify}
 Can an LLM actually code text as well as the humans an evaluator would otherwise hire? The published benchmarks say often yes, and that is precisely why the discipline in this section matters: by the end of it you will be able to report a measured error rate for your LLM's coding, send only the doubtful notes to a human coder, and correct the estimate those labels feed before it reaches a table.
@@ -6790,65 +6971,19 @@ A small delta measures stability, not correctness. LLMs with overlapping trainin
 Character distance can miss an important change expressed with a few characters, such as adding \enquote{not}, and it can flag a long paraphrase that preserves the meaning. For category coding, compare the allowed category labels directly; for longer answers, inspect a sample of both flagged and unflagged pairs. Record how often each set contains a substantive error, then choose a review threshold that fits the cost of missing one. This check gives the threshold a task-specific meaning that the distance alone cannot provide.
 
 \subsection{Use the labels, then correct the estimate}\label{sec:ch13-ppi}
-After validation and review, some labels will still be wrong. When false positives and false negatives do not offset, this error biases the resulting estimate. A large sample can then produce a narrow interval around the wrong value. Suppose transportation is the primary barrier for 30~percent of a caseload. The LLM detects 70~percent of true transportation notes and marks 5~percent of other notes as transportation. In a sample of 5{,}000 notes, the machine-label prevalence will be about 24~percent. The estimate understates transportation need by about one-fifth even though its interval may be narrow.
-
-The repair uses an asset you already paid for: the hand-coded gold standard, provided it was drawn at random. \textcite{angelopoulos2023ppi} call the method prediction-powered inference, and its logic fits in one sentence: estimate on \emph{all} the machine labels, measure the human-minus-machine gap on the gold subset, and add the gap back, with a standard error that includes the gold subset's extra uncertainty. Written for a prevalence,
-\[
-\hat{p}_{\text{corrected}}
-\;=\;
-\underbrace{\bar{y}^{\,\text{ML}}_{N}}_{\text{all 5{,}000 labels}}
-\;+\;
-\underbrace{\bigl(\bar{y}^{\,\text{human}}_{n} - \bar{y}^{\,\text{ML}}_{n}\bigr)}_{\text{gap on the 150 gold notes}}.
-\]
-Its estimated standard error is
-\[
-\widehat{\text{se}}
-\;=\;
-\sqrt{\tfrac{\widehat{V}_{\text{ML}}}{N} + \tfrac{\widehat{V}_{\text{gap}}}{n} + \tfrac{2\widehat C}{N}}.
-\]
-The gold notes are included in the full set, so the machine mean and the correction are dependent. The covariance term accounts for their overlap: $\widehat C$ is the sample covariance of the machine label and the human-minus-machine difference on the gold notes. The accompanying code below includes their covariance for an independent and identically distributed population-sampling interpretation; estimating the fixed caseload's prevalence instead requires a finite-population variance. Decide which population your interval refers to before reporting it.
-\par
-{\footnotesize
-\begin{verbatim}
-quietly summarize ml                   // all machine labels
-local p_ml_all = r(mean)
-local N = r(N)
-local v_ml = r(Var)
-gen diff = transport - ml if gold      // human minus machine
-quietly summarize diff
-local p_corr = `p_ml_all' + r(mean)
-local v_gap = r(Var)/r(N)
-quietly correlate ml diff if gold, covariance
-local cov_md = r(cov_12)
-local se_corr = sqrt(`v_ml'/`N' + `v_gap' ///
-                     + 2*`cov_md'/`N')
-\end{verbatim}
-}
-In the verified simulated run, the machine-only estimate is 0.234. The corrected estimate is 0.288, with a 95 percent confidence interval of [0.232, 0.343] for the superpopulation prevalence under the stated iid sampling interpretation. The correction adds the average human-minus-machine difference measured in the random gold subset. Its uncertainty depends on that subset, so thousands of machine labels do not provide the same information as thousands of human labels. Compare the interval with the data-generating probability of 0.30 and keep the realized prevalence in this particular 5{,}000-note caseload separate.\marginnote{Prediction-powered inference also covers other estimands \parencite{angelopoulos2023ppi}, but the prevalence correction shown here is not a formula to paste onto a regression coefficient. Use the estimating equation and uncertainty calculation for the intended estimand.}
-
-The conditions that make the correction work are design choices you control before any coding starts.
-
-\begin{restson}[What the corrected estimate depends on]
-\begin{enumerate}
-\item The gold subset is a \emph{random} draw of the notes, so the gap measured on it stands in for the gap everywhere. \emph{Noticed by:} the sampling code, and nothing after it; notes hand-picked for clarity under deadline shrink the measured gap and let the bias survive.
-\item The human labels are the standard the correction trusts, the same dependence the kappa already had. \emph{Noticed by:} nothing in the output; only the coding protocol vouches for it.
-\item The LLM that labeled the gold subset is the LLM that labeled the other 4,850. \emph{Noticed by:} the version log of Section~\ref{ch13-sc-promptlog}, when a vendor update arrives mid-run.
-\end{enumerate}
-\end{restson}
-
-A random gold subset supports both validation and estimation of the label-error correction. If you use the gold labels to revise the prompt, reserve separate labels for the final evaluation or use a method that accounts for that reuse; otherwise the measured accuracy can be optimistic.
+After validation and review, some labels will still be wrong, and when false positives and false negatives do not offset, that error biases any estimate built from the labels. A prevalence computed from thousands of machine labels can then come with a narrow interval around the wrong value. Section~\ref{sec:ppi} in Chapter~\ref{ch:trust} shows the repair, prediction-powered inference, which uses the random gold-standard subset you have already hand-coded to measure the gap between human and machine labels and add it back. Two conditions in that section are specific to LLM labels. The LLM that labeled the gold subset must be the LLM that labeled the rest, which the prompt-and-version log of Section~\ref{ch13-sc-promptlog} lets you confirm. And if you used the gold labels to revise the prompt, reserve separate labels for the final correction or use a method that accounts for that reuse; otherwise the measured gap, and the accuracy you report, can be optimistic.
 
 \section{Making an LLM's answers reproducible}
-You pin the LLM's answers down once so your pipeline gives the same result next month as it does today, because a rerun that quietly reclassifies cases fails the replicable principle the whole book is built on. An LLM that answers a prompt one way today may answer differently tomorrow, so we set the temperature to zero to minimize randomness, log the LLM version and any seed, and cache every response locally so that the classifications become a frozen dataset the analysis reads, rather than a live call that could change under us.\marginnote{Temperature zero reduces randomness but does not guarantee it away: floating-point non-associativity across GPU batches, and silent LLM updates behind the same API name, can still shift an answer. It is the cache, not the temperature, that actually freezes the result.} Wrapping the LLM behind a generic interface, so swapping a hosted LLM for a local one changes a single macro, keeps the pipeline LLM-agnostic as prices and terms shift.
+You pin the LLM's answers down once so your pipeline gives the same result next month as it does today, because a rerun that quietly reclassifies cases fails the replicable principle the whole book is built on. An LLM that answers a prompt one way today may answer differently tomorrow, so where the service lets you, we set the temperature to zero to reduce randomness (some LLMs fix their own sampling settings and ignore it), log the exact LLM version identifier, including the dated version the vendor publishes, and any seed, and cache every response locally so that the classifications become a frozen dataset the analysis reads, rather than a live call that could change under us.\marginnote{Temperature zero reduces randomness but does not guarantee it away: floating-point non-associativity across GPU batches, and silent LLM updates behind the same API name, can still shift an answer. It is the cache, not the temperature, that actually freezes the result.} Wrapping the LLM behind a generic interface, so swapping a hosted LLM for a local one changes a single macro, keeps the pipeline LLM-agnostic as prices and terms shift.
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{gemini}]
-\textbf{Integrated command:} \texttt{gemini}. Queries a language model from the Stata command line, with \texttt{csv}/\texttt{json} options that parse the reply straight into memory, and a documented local fallback via Ollama for records that cannot leave the building.
+\textbf{Integrated command:} \texttt{gemini}. Queries a language model from the Stata command line, with \texttt{csv}/\texttt{json} options that parse the reply straight into memory, and a documented local fallback via Ollama for records that cannot leave the building. The pattern does not depend on the vendor: any command or script that sends a prompt, receives the reply, and saves both to disk can fill this role.
 \end{kaobox}
 
 Reproducibility here includes the LLM, not just the code. Cache the responses, and an AI-assisted analysis meets the same replicable standard as any other analysis in the book.
 
 \subsection{The prompt-and-version log}\label{ch13-sc-promptlog}
-The cache freezes the results; a second file makes them auditable, and it is this chapter's instance of the tracking-spine pattern of Chapter~\ref{ch:workshop}. The prompt-and-version log is one plain-text row per batch of LLM calls, five fields wide: the date, the LLM version or API name, the prompt file, the output file, and the check result. Each field answers a question someone will ask a year later. The date and version answer \enquote{what was actually called}; the prompt file answers \enquote{with what instructions}\marginnote{Store prompts in versioned text files rather than chat windows, so the prompt-file column has something to point at.}; the output file names the frozen dataset the analysis read; and the check result records the kappa, delta, or assert outcome that licensed using it.
+The cache freezes the results; a second file makes them auditable, and it is this chapter's instance of the tracking-spine pattern of Chapter~\ref{ch:workshop}. The prompt-and-version log is one plain-text row per batch of LLM calls, five fields wide: the date, the exact LLM version identifier, the prompt file, the output file, and the check result. Each field answers a question someone will ask a year later. The date and version answer \enquote{what was actually called}; the prompt file answers \enquote{with what instructions}\marginnote{Store prompts in versioned text files rather than chat windows, so the prompt-file column has something to point at.}; the output file names the frozen dataset the analysis read; and the check result records the kappa, delta, or assert outcome that licensed using it.
 \par
 {\footnotesize
 \begin{verbatim}
@@ -7048,10 +7183,10 @@ Keep the procedure with the project, assign the owner before work begins, and re
 \begin{enumerate}
     \item \textbf{Gate.} Review hosted-processing eligibility under the data-use agreement, scan and mask recognized identifiers with \texttt{ai\_privacy\_gate}, and inspect indirect identifying detail; use an approved local LLM for local-only records. The pattern scanner does not generally recognize personal names.
     \item \textbf{Gold standard.} Hand-code a random 150 notes as the validation baseline.
-    \item \textbf{Sieve.} Run \texttt{llmsieve} across two LLMs; log prompts and versions; set temperature to zero.
+    \item \textbf{Sieve.} Run \texttt{llmsieve} across two LLMs; log prompts and exact LLM version identifiers; set the temperature to zero where the service allows it.
     \item \textbf{Verify.} Compare to the gold standard; require kappa $\ge 0.75$ before scaling. In the simulated run above, kappa was 0.82: a pass.
     \item \textbf{Cache.} Freeze the verified classifications to a saved dataset so the API is never re-called.
-    \item \textbf{Correct.} When the labels feed an estimate, apply the prediction-powered correction of Section~\ref{sec:ch13-ppi}, using the same random gold subset as the rectifier, and use an estimand-specific correction if the labels enter a regression.
+    \item \textbf{Correct.} When the labels feed an estimate, apply the prediction-powered correction of Section~\ref{sec:ppi}, using the same random gold subset as the rectifier, and use an estimand-specific correction if the labels enter a regression.
     \item \textbf{Disclose.} Report the method, the validation kappa, the correction, and the residual error rate in the write-up.
 \end{enumerate}
 Each of the example's guardrails appears once, and the order is the point: privacy, then validation, then correction and reproducibility, then honest disclosure.
@@ -7067,7 +7202,8 @@ Each of the example's guardrails appears once, and the order is the point: priva
     \item Rerun the four-fifths audit of Section~\ref{sec:fairness} with the group offset lowered from \texttt{0.55} toward zero, and find the offset at which the ratio first climbs back above the \texttt{0.80} line; report the two selection rates at that point.
     \item Take the consensus triage table of Section~\ref{sec:consensus} and hand-resolve the twelve split notes yourself against the gold standard, then state how many of the three simulated LLMs the human agreed with on those hardest cases.
     \item Reconstruct a prompt-and-version log (Section~\ref{ch13-sc-promptlog}) for an LLM-assisted task you have already finished, filling in as many of the five fields per call as your chat history and file dates allow, and list the fields you can no longer recover. The gaps are the argument for starting the log on day one of the next project.
-    \item \emph{Break the correction on purpose.} Rerun the prediction-powered correction of Section~\ref{sec:ch13-ppi}, but replace the random gold subset with a convenience sample: the 150 notes where the LLM and the truth agree most often. Report the corrected estimate and its interval, say whether the interval still covers 0.30, and explain in one sentence why a hand-picked gold standard cannot repair a bias it was selected not to contain.
+    \item Build an evidence ledger for a report you have already delivered: pick five numbers from its text, give each a claim identifier, post the computed values from your do-files as Section~\ref{sec:ledger} does, and run \texttt{checkledger} from \texttt{ch13\_claims.do}. Report how many claims failed and whether each failure was a typing error, a rounding choice, or a number from an older run.
+    \item Ask an assistant for a pre-mortem on an evaluation you are planning (Section~\ref{sec:ch13-partner}). Keep only the reasons you could test, turn each into a checklist item with one observable check, and note how many of the assistant's reasons you discarded as generic.
 \end{enumerate}
 \chapter{Sharing data and results safely}\label{ch:sharing}
 

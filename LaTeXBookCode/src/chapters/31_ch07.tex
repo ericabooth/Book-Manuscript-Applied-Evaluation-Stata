@@ -2,13 +2,13 @@
 
 At a site serving only a few families, one family's departure can change the completion rate enough to alter the site's rank. A funder who uses that ranking needs to know how uncertain the rate is. Similar questions arise when we combine survey items into a score, generalize from respondents to a population, or plan a study around an effect that may be hard to detect.
 
-In this chapter we examine survey scales and weights, stabilize small-site rates, and calculate what a planned study can detect. We then build prediction intervals and estimate how much outcome variation remains between sites after accounting for measured predictors. The examples in \texttt{ch07\_trust.do} let you connect each diagnostic to a reporting decision: which comparisons the evidence supports, what uncertainty to show, and what to investigate before publishing.
+In this chapter we examine survey scales and weights, stabilize small-site rates, and calculate what a planned study can detect. We then build prediction intervals, correct an estimate built on labels that a machine or a hurried coder assigned, and estimate how much outcome variation remains between sites after accounting for measured predictors. The examples in \texttt{ch07\_trust.do} let you connect each diagnostic to a reporting decision: which comparisons the evidence supports, what uncertainty to show, and what to investigate before publishing.
 
 A skeptical program officer will ask each of this chapter's questions out loud: does this scale hold together, do these respondents stand in for our clients, is this small site's rate real or an accident of its size, and could this study have found the effect at all. Program teams already trust performance-measurement systems, logic-model indicators, and What Works Clearinghouse evidence tiers, and every one of those systems assumes someone has answered these four questions, so an evaluator who can show that work is speaking their language. The AEA Guiding Principles oblige an evaluator to systematic inquiry and competence on behalf of the people the program serves, and the checks in this chapter are one concrete way to meet those obligations. Table~\ref{tab:ch07-viz-map} lists each safeguard, the skeptical question it answers, and the Stata command that does the work.
 
 \begin{table*}[htbp]
 \centering
-\caption[The chapter's safeguards and the question each answers]{Read down the middle column for the skeptical program officer's question, then across to the safeguard that answers it and the tool that does the work. The last two rows are newer to evaluation practice, prediction intervals and variance partitioning, and both ship as commands here; model-based small-area estimation, the proposed tool this chapter also names, is not yet one of them.}
+\caption[The chapter's safeguards and the question each answers]{Read down the middle column for the skeptical program officer's question, then across to the safeguard that answers it and the tool that does the work. The last three rows are newer to evaluation practice: prediction intervals and variance partitioning ship as commands here, and the label correction takes a dozen lines in the companion do-file; model-based small-area estimation, the proposed tool this chapter also names, is not yet a command.}
 \label{tab:ch07-viz-map}
 {\footnotesize
 \begin{tabular}{p{2.3cm}p{4.7cm}p{2.4cm}}
@@ -20,6 +20,7 @@ Survey weights & Do respondents stand in for the population? & \texttt{svyset}, 
 Rate shrinkage & Is a small site's rate real or an accident of its size? & \texttt{rateshrink} \\
 Study power & Could the study find the effect at all? & \texttt{power} \\
 Conformal bands & Where will the \emph{next} case land? & \texttt{conformalpred} \\
+Label correction & Is a rate built on imperfect labels biased? & \texttt{summarize}, \texttt{correlate} \\
 Variance split & How much of the spread is the site vs.\ the person? & \texttt{mixed}, \texttt{hlmr2} \\
 \hline
 \end{tabular}
@@ -364,6 +365,57 @@ The command splits the 2{,}229 respondents with complete wage, grade, and tenure
 
 For an embedded evaluator this closes the confidence-interval-versus-prediction-interval gap: the confidence interval brackets the average, the conformal band brackets where the next case lands, without trusting the model's error assumptions. When a funder wants the range a single new clinic might post, this is the interval to quote, and you can give the funder its guarantee in the same sentence: \enquote{for participants exchangeable with our calibration sample, this procedure targets coverage of at least 90\% across new cases; the interval for this participant is about \$1 to \$13.} The width is then the thing to act on. If a $\pm 5.77$ band is too wide for the decision at hand, look for a stronger predictor set or collect more calibration data; raising \texttt{alpha()} buys a tighter band that simply misses more often, and a program officer handed an 80\% band deserves to hear that one new case in five will land outside it.
 
+\section{Correcting an estimate built on imperfect labels}\label{sec:ppi}
+Many evaluation measures start as labels someone or something assigned: a keyword rule that flags case notes mentioning transportation, a screening instrument, a team of coders working through a backlog, or a language model classifying free text (Chapter~\ref{ch:ai}). Even after you validate the labels, some will be wrong, and when false positives and false negatives do not offset, that error biases any estimate built from them. In this section we measure the bias with a small, randomly drawn set of careful labels and add it back to the estimate, with an interval that reflects how small that set is. The code is part (e) of \texttt{ch07\_trust.do}.
+
+The problem is easy to state with numbers. Suppose transportation is the primary barrier for 30~percent of a caseload. The labeling process detects 70~percent of true transportation notes and marks 5~percent of other notes as transportation. In a sample of 5{,}000 notes, the machine-label prevalence will be about 24~percent. The estimate understates transportation need by about one-fifth, and with 5{,}000 labels its interval is narrow around the wrong value.
+
+The repair uses a gold standard: a random subset of notes that careful human coders label, which you may already have drawn to validate the labels. \textcite{angelopoulos2023ppi} call the method prediction-powered inference, and its logic fits in one sentence: estimate on \emph{all} the machine labels, measure the human-minus-machine gap on the gold subset, and add the gap back, with a standard error that includes the gold subset's extra uncertainty. Written for a prevalence,
+\[
+\hat{p}_{\text{corrected}}
+\;=\;
+\underbrace{\bar{y}^{\,\text{ML}}_{N}}_{\text{all 5{,}000 labels}}
+\;+\;
+\underbrace{\bigl(\bar{y}^{\,\text{human}}_{n} - \bar{y}^{\,\text{ML}}_{n}\bigr)}_{\text{gap on the 150 gold notes}}.
+\]
+Its estimated standard error is
+\[
+\widehat{\text{se}}
+\;=\;
+\sqrt{\tfrac{\widehat{V}_{\text{ML}}}{N} + \tfrac{\widehat{V}_{\text{gap}}}{n} + \tfrac{2\widehat C}{N}}.
+\]
+The gold notes are included in the full set, so the machine mean and the correction are dependent. The covariance term accounts for their overlap: $\widehat C$ is the sample covariance of the machine label and the human-minus-machine difference on the gold notes. The code below includes that covariance for an independent and identically distributed population-sampling interpretation; estimating the fixed caseload's prevalence instead requires a finite-population variance. Decide which population your interval refers to before reporting it.
+\par
+{\footnotesize
+\begin{verbatim}
+quietly summarize ml                   // all machine labels
+local p_ml_all = r(mean)
+local N = r(N)
+local v_ml = r(Var)
+gen diff = transport - ml if gold      // human minus machine
+quietly summarize diff
+local p_corr = `p_ml_all' + r(mean)
+local v_gap = r(Var)/r(N)
+quietly correlate ml diff if gold, covariance
+local cov_md = r(cov_12)
+local se_corr = sqrt(`v_ml'/`N' + `v_gap' ///
+                     + 2*`cov_md'/`N')
+\end{verbatim}
+}
+In the simulated run, the machine-only estimate is 0.234. The corrected estimate is 0.288, with a 95 percent confidence interval of [0.232, 0.343] for the superpopulation prevalence under the stated iid sampling interpretation. The correction adds the average human-minus-machine difference measured in the random gold subset. Its uncertainty depends on that subset, so thousands of machine labels do not provide the same information as thousands of human labels. Compare the interval with the data-generating probability of 0.30 and keep the realized prevalence in this particular 5{,}000-note caseload separate.\marginnote{Prediction-powered inference also covers other estimands \parencite{angelopoulos2023ppi}, but the prevalence correction shown here is not a formula to paste onto a regression coefficient. Use the estimating equation and uncertainty calculation for the intended estimand.}
+
+The conditions that make the correction work are design choices you control before any labeling starts.
+
+\begin{restson}[What the corrected estimate depends on]
+\begin{enumerate}
+\item The gold subset is a \emph{random} draw of the notes, so the gap measured on it stands in for the gap everywhere. \emph{Noticed by:} the sampling code, and nothing after it; notes hand-picked for clarity under deadline shrink the measured gap and let the bias survive.
+\item The human labels are the standard the correction trusts. \emph{Noticed by:} nothing in the output; only the coding protocol vouches for it.
+\item The same labeling process produced the labels on the gold subset and on the other notes: the same rule, the same instrument, the same coders, or the same LLM. \emph{Noticed by:} a record of how each label was produced, such as the prompt-and-version log of Section~\ref{ch13-sc-promptlog} for LLM labels.
+\end{enumerate}
+\end{restson}
+
+A random gold subset supports both validation of the labels and estimation of the correction. If you used the gold labels to tune the labeling rule, reserve separate labels for the final correction or use a method that accounts for that reuse; otherwise the measured gap can be optimistic.
+
 \section{How much of the variation is the site, and how much the person?}\label{sec:icc}
 When clients are nested inside sites, an evaluator's first structural question is how much of the outcome's spread is between sites versus within them, because the answer decides whether site-level comparisons contain any signal at all. If nearly all the variation is between individuals and almost none between sites, ranking sites is ranking noise. The intraclass correlation\index{intraclass correlation} (ICC)\marginnote{The intraclass correlation is the between-cluster share of total variance: the higher it is, the more signal a site-level comparison contains.} answers the question directly. A multilevel model estimates it, and the same model's marginal and conditional $R^2$ \parencite{nakagawa2013general} report how much of the variance the fixed predictors explain alone versus with the site random effects added. By the end of this section you will be able to read both numbers off one fitted model and use them to decide with the program team whether a site ranking should be published at all, and what caveat you must print with it if it is.
 
@@ -434,7 +486,7 @@ Use the ICC to describe clustering, then examine uncertainty in the site estimat
 
 Shrinkage in \S\ref{sec:shrink} pulls every small site toward one common mean, whatever kind of site it is, and that is its limit. Fay-Herriot small-area estimation \parencite{fay1979estimates,rao2015small} instead uses the multilevel machinery of this section to pull each site toward the mean of sites like it\marginnote{Pulling each site toward the mean of sites like it is closer to how statistics offices produce the small-area numbers policymakers already cite.}. You pay for that in assumptions: the estimate is only as good as the covariate model behind it, so you trade assumption-light shrinkage for a stronger estimate that depends on a specification a reviewer can question.
 
-In the applied example below we run the chapter's safeguards through a single quarterly scorecard, in the order the calendar requires.
+In Applied Example~\ref{ae:ch07-scorecard} we run the chapter's safeguards through a single quarterly scorecard, in the order the calendar requires.
 
 \begin{appliedexample}[One quarterly scorecard, four safeguards]\label{ae:ch07-scorecard}
 \textbf{Scenario.} A caregiver-support program runs at fifty sites, most of them small. Each quarter the evaluator ships one scorecard: an engagement score from a six-item survey scale, a completion rate per site, and a population claim about the families served. The board wants a site ranking; the director wants to know whether next year's evaluation can detect the improvement the program hopes for.
@@ -454,4 +506,5 @@ In the applied example below we run the chapter's safeguards through a single qu
   \item Simulate a single five-person site with three successes, place it among the 50 simulated sites, and compare its raw rate of 0.60 against its shrunken rate: explain in one sentence why empirical Bayes pulls it so far toward the grand mean of 0.195.
   \item Run \texttt{rateshrink} with \texttt{rel()} on the 50-site draw and confirm the reliability identity by hand: for the most-shrunken site, check that its reliability equals $n/(n+\alpha+\beta)$ from the header's $\alpha$ and $\beta$, and say in one sentence why a site pulled halfway to the grand mean has a reliability near 0.5.
   \item Write the one-sentence translation a program officer could act on for each of the chapter's four safeguards, one clause of finding and one of license, using the chapter's own numbers: the 0.79 alpha, the 0.37 weighted rate, site~26's shrunken 0.160, and the 41\% power at a 2-point effect.
+  \item \emph{Break the correction on purpose.} Rerun the prediction-powered correction of Section~\ref{sec:ppi} (part (e) of \texttt{ch07\_trust.do}), but replace the random gold subset with a convenience sample: the 150 notes where the machine label and the truth agree most often. Report the corrected estimate and its interval, say whether the interval still covers 0.30, and explain in one sentence why a hand-picked gold standard cannot repair a bias it was selected not to contain.
 \end{enumerate}

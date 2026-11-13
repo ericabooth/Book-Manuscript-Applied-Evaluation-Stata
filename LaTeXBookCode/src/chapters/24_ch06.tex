@@ -150,7 +150,7 @@ Versioning the crosswalk is what makes the pipeline extensible. When next year's
 \section{Where did this number come from?}\label{sec:lineage}
 The simplest question in policy research is often the hardest to answer on the spot: \emph{where did this number come from?} An evaluator who can trace a variable back to its source table and vintage in seconds keeps an agency client's confidence in the numbers that follow, while an evaluator who cannot spends the meeting defending the data instead of discussing the finding. We store that lineage directly in the data, using \texttt{srctag}\index{srctag@\texttt{srctag}} to write the source agency, table, and vintage into each variable's characteristics, so the source tag stays in the file itself and survives every subsequent merge, and \texttt{srcfind}\index{srcfind@\texttt{srcfind}} to search a warehouse of \texttt{.dta} files for variables matching a given source.
 
-The applied example below shows what those stored tags are worth on the day an agency challenges a finding.
+Applied Example~\ref{ae:ch06-lineage} shows what those stored tags are worth on the day an agency challenges a finding.
 
 \begin{appliedexample}[Proving lineage to a skeptical agency]\label{ae:ch06-lineage}
 \textbf{Scenario.} A state workforce commission doubts a report showing that program graduates earn less than the state average. They suspect the wage data was joined wrong or came from a stale ledger.

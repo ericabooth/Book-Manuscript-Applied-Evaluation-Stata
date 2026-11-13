@@ -68,7 +68,7 @@ Launch Stata in the project folder, then either:
 | `ch05_datadictionary.do` | 5 | The label round-trip across languages: `datadictionary, dofile()` writes a relabel do-file; export `nolabel` → edit elsewhere → re-import → `do` it back with a re-ingestion receipt; also the `dictionary()` infile read. |
 | `ch06_longitudinal.do` | 6 | `nlswork` panel description; percent-missing-by-variable bar chart; wage-quartile transition matrix; fuzzy merge. |
 | `ch06_reshapehelper.do` | 6 | `reshapehelper` on a grant file (reproduces the chapter figure), a duplicate-blocked widening, and a doubly-wide two-step reshape; runs each suggestion via `$reshapehelper_cmd`. |
-| `ch07_trust.do` | 7 | Reliability alpha; NHANES II weighting; empirical-Bayes shrinkage; power curve. |
+| `ch07_trust.do` | 7 | Reliability alpha; NHANES II weighting; empirical-Bayes shrinkage; power curve; prediction-powered correction of a prevalence built on imperfect labels. |
 | `ch08_did.do` | 8 | Simulated staggered adoption; naive TWFE vs `csdid`; event study; ROI Monte Carlo. |
 | `ch08_oaxaca.do` | 8 | Blinder-Oaxaca decomposition of the white-Black wage gap in `nlsw88` (no key); `oaxaca` + `coefplot`; explained vs unexplained with tripwires. |
 | `ch09_graphs.do` | 9 | Before/after data-ink pair; coefficient small-multiples; annotated run chart. |
@@ -81,7 +81,8 @@ Launch Stata in the project folder, then either:
 | `ch11_googlesheets.do` | 11 | `googlesheets` workflow on CHR data (export, format, put matrix, native live charts); display-only (OAuth). |
 | `ch13_backbone.do` | 13 | The Stata-as-backbone loop: an LLM-proposed step made trustworthy by `assert` tripwires and a batch log. |
 | `ch13_parallel.do` | 13 | Parallel patterns: a 4-way bootstrap split across instances, and a fan-out QC harness (judge by log, not exit code). |
-| `ch13_validation.do` | 13 | Simulated AI validation: kappa, multi-model consensus, four-fifths fairness check, and the prediction-powered correction of a biased machine-label prevalence. |
+| `ch13_claims.do` | 13 | Evidence ledger: saved results checked against the numbers the prose states, a numbers file the report reads, and DOI-record checks of reference titles (needs internet for that part). |
+| `ch13_validation.do` | 13 | Simulated AI validation: kappa, multi-model consensus, and the four-fifths fairness check. |
 | `ch13_injection_gate.do` | 13 | Tests the output allowlist: rejected labels stop the checked program, resolved labels pass, and an incorrect allowed label demonstrates the gate's limit. |
 | `ch14_kanon.do` | 14 | k-anonymity on `nlsw88` as an admin stand-in; coarsening; small-cell suppression. |
 | `ch15_bench.do` | 15 | Mata vs loop vs vectorized timing benchmark. |

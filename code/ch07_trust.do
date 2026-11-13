@@ -4,6 +4,7 @@
 * (b) design weights: NHANES II high blood pressure, weighted vs unweighted
 * (c) empirical-Bayes shrinkage of 50 simulated site completion rates
 * (d) power curves for a two-arm design, read at the budget line
+* (e) prediction-powered inference: correct a prevalence built on imperfect labels
 * Simulated blocks use seed 20260704 and are labeled simulated in the text.
 *==============================================================================*
 * Globals defined locally so this file runs standalone; in the full book
@@ -179,3 +180,56 @@ assert abs(`rs_a' - 24.4) < 0.05
 assert abs(`rs_b' - 89.1) < 0.05
 assert abs(`rs_mr' - 0.48) < 0.005
 di "RATESHRINK_DEMO_OK"
+
+*--- (e) Prediction-powered inference: correct an estimate built on labels ----*
+* Validating the labels (Chapter 13) certifies the LABELS; this block corrects
+* the ESTIMATE built from them. 5,000 notes, true transport prevalence 0.30; the LLM under-detects
+* transport (sensitivity 0.70) and rarely invents it (specificity 0.95), so the
+* naive machine-label prevalence is biased low even though agreement looks high.
+* The fix (Angelopoulos et al. 2023, Science): estimate on ALL machine labels,
+* then add back the human-minus-machine gap measured on a RANDOM gold subset.
+clear
+set seed 20260704
+set obs 5000
+gen byte transport = runiform() < 0.30           // truth (human coding)
+gen byte ml = cond(transport, runiform() < 0.70, runiform() >= 0.95)
+gen byte gold = _n <= 150                         // random: obs order is random
+                                                  // by construction here; in
+                                                  // practice draw with sample
+
+* naive: treat 5,000 machine labels as if they were the data
+quietly summarize ml
+local p_naive = r(mean)
+local se_naive = sqrt(`p_naive'*(1-`p_naive')/_N)
+
+* Nested gold sample: covariance matters because gold is included in all N.
+* Population-sampling variance under iid notes; no finite-population target.
+quietly summarize ml
+local p_ml_all = r(mean)
+local N = r(N)
+local v_ml = r(Var)
+gen diff = transport - ml if gold
+quietly summarize diff
+local p_corr = `p_ml_all' + r(mean)
+local v_gap = r(Var)/r(N)
+quietly correlate ml diff if gold, covariance
+local cov_md = r(cov_12)
+local var_corr = `v_ml'/`N' + `v_gap' + 2*`cov_md'/`N'
+assert `var_corr' > 0
+local se_corr = sqrt(`var_corr')
+di "Nested-sample covariance = " %9.6f `cov_md'
+
+quietly summarize transport
+di as txt "true prevalence (all 5,000, for reference): " as res %5.3f r(mean)
+di as txt "naive ML estimate:  " as res %5.3f `p_naive' ///
+    as txt "  95% CI [" as res %5.3f `p_naive'-1.96*`se_naive' ///
+    as txt ", " as res %5.3f `p_naive'+1.96*`se_naive' as txt "]"
+di as txt "PPI corrected:      " as res %5.3f `p_corr' ///
+    as txt "  95% CI [" as res %5.3f `p_corr'-1.96*`se_corr' ///
+    as txt ", " as res %5.3f `p_corr'+1.96*`se_corr' as txt "]"
+
+* tripwires: the naive CI misses the truth; the corrected CI covers it
+assert `p_naive' + 1.96*`se_naive' < 0.30
+assert (`p_corr'-1.96*`se_corr') < 0.30 & 0.30 < (`p_corr'+1.96*`se_corr')
+assert abs(`p_corr' - 0.30) < 0.06
+di "PPI_DEMO_OK"
