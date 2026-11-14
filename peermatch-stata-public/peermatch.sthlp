@@ -1,24 +1,24 @@
 {smcl}
-{* *! version 0.2.0  2026-11-14}{...}
+{* *! version 0.2.1  2026-11-14}{...}
 {vieweralsosee "[R] teffects nnmatch" "help teffects nnmatch"}{...}
 {vieweralsosee "[MV] cluster kmeans" "help cluster kmeans"}{...}
 {vieweralsosee "[D] frames" "help frames"}{...}
-{viewerjumpto "Syntax" "twinmatch##syntax"}{...}
-{viewerjumpto "Description" "twinmatch##description"}{...}
-{viewerjumpto "Three choices" "twinmatch##choices"}{...}
-{viewerjumpto "Options" "twinmatch##options"}{...}
-{viewerjumpto "What the output shows" "twinmatch##output"}{...}
-{viewerjumpto "Remarks" "twinmatch##remarks"}{...}
-{viewerjumpto "Examples" "twinmatch##examples"}{...}
-{viewerjumpto "Stored results" "twinmatch##results"}{...}
-{viewerjumpto "Related and complementary commands" "twinmatch##related"}{...}
-{viewerjumpto "References" "twinmatch##references"}{...}
-{viewerjumpto "Author" "twinmatch##author"}{...}
+{viewerjumpto "Syntax" "peermatch##syntax"}{...}
+{viewerjumpto "Description" "peermatch##description"}{...}
+{viewerjumpto "Three choices" "peermatch##choices"}{...}
+{viewerjumpto "Options" "peermatch##options"}{...}
+{viewerjumpto "What the output shows" "peermatch##output"}{...}
+{viewerjumpto "Remarks" "peermatch##remarks"}{...}
+{viewerjumpto "Examples" "peermatch##examples"}{...}
+{viewerjumpto "Stored results" "peermatch##results"}{...}
+{viewerjumpto "Related and complementary commands" "peermatch##related"}{...}
+{viewerjumpto "References" "peermatch##references"}{...}
+{viewerjumpto "Author" "peermatch##author"}{...}
 
 {title:Title}
 
 {p2colset 5 18 20 2}{...}
-{p2col :{cmd:twinmatch} {hline 2}}Policy-twin selection by Mahalanobis distance{p_end}
+{p2col :{cmd:peermatch} {hline 2}}Policy-twin selection by Mahalanobis distance (formerly {cmd:twinmatch}){p_end}
 {p2colreset}{...}
 
 
@@ -26,7 +26,7 @@
 {title:Syntax}
 
 {p 8 16 2}
-{cmd:twinmatch} [{varlist}] {ifin}{cmd:,} {cmd:id(}{varname}{cmd:)}
+{cmd:peermatch} [{varlist}] {ifin}{cmd:,} {cmd:id(}{varname}{cmd:)}
 {cmd:treated(}{it:unit}{cmd:)} [{it:options}]
 
 {p 4 6 2}{it:varlist} holds the numeric matching covariates.  It may be
@@ -68,7 +68,7 @@ covariate, strata value, or id are excluded.{p_end}
 {title:Description}
 
 {pstd}
-{cmd:twinmatch} finds the comparison units that most resemble one treated
+{cmd:peermatch} finds the comparison units that most resemble one treated
 unit on a set of covariates {hline 2} its "policy twins."  It computes the
 Mahalanobis distance from every candidate to the treated unit, ranks the
 candidates from nearest to farthest, and reports the {cmd:ntwins()}
@@ -85,8 +85,13 @@ on the outcome's path before the policy, a balance table, a stability check,
 and a ledger file that records the shortlist and the choices behind it.
 
 {pstd}
+The command was called {cmd:twinmatch} through version 0.2.0; the name
+changed to {cmd:peermatch} in 0.2.1 with no change in behaviour, and the
+old repository address redirects to the new one.
+
+{pstd}
 It selects and describes.  It does not weight the twins, estimate effects,
-or compute uncertainty; see {help twinmatch##related:Related and complementary commands}
+or compute uncertainty; see {help peermatch##related:Related and complementary commands}
 for the tools that do those jobs once the twins are chosen.
 
 
@@ -247,7 +252,7 @@ absolute value when it exceeds 0.25.
 {pstd}
 {bf:Singular covariance matrices.}  When the covariates are collinear (for
 example, one is a linear combination of others), the covariance matrix
-cannot be inverted.  {cmd:twinmatch} uses {helpb mf_invsym:invsym()}, which
+cannot be inverted.  {cmd:peermatch} uses {helpb mf_invsym:invsym()}, which
 drops the dependent columns from the metric; the command prints a note
 naming the dropped covariates and continues.  Because Mahalanobis distance
 is unchanged by removing redundant columns, the reported twins are the same
@@ -262,7 +267,7 @@ balance table are there to catch this; "no adequate twins" is a legitimate
 finding, and {cmd:caliper()} turns it into an explicit result.
 
 {pstd}
-{bf:What twinmatch does not do.}  It does not weight the selected twins,
+{bf:What peermatch does not do.}  It does not weight the selected twins,
 estimate effects, or compute intervals.  Treat the twin list as the starting
 point for a comparative case study, or as the donor pool handed to a
 synthetic-control or difference-in-differences command.
@@ -273,57 +278,57 @@ synthetic-control or difference-in-differences command.
 
 {pstd}{bf:Three policy twins for one unit, on three covariates}{p_end}
 {phang2}{cmd:. sysuse auto, clear}{p_end}
-{phang2}{cmd:. twinmatch mpg price weight, id(make) treated("Volvo 260")}{p_end}
+{phang2}{cmd:. peermatch mpg price weight, id(make) treated("Volvo 260")}{p_end}
 
 {pstd}{bf:Five twins, storing every unit's distance for inspection}{p_end}
-{phang2}{cmd:. twinmatch mpg price weight, id(make) treated("Volvo 260") ntwins(5) generate(dist260)}{p_end}
+{phang2}{cmd:. peermatch mpg price weight, id(make) treated("Volvo 260") ntwins(5) generate(dist260)}{p_end}
 {phang2}{cmd:. sort dist260}{p_end}
 {phang2}{cmd:. list make dist260 in 1/10}{p_end}
 
 {pstd}{bf:Z-scored (diagonal) metric when scales differ wildly}{p_end}
-{phang2}{cmd:. twinmatch mpg price weight, id(make) treated("Volvo 260") standardize}{p_end}
+{phang2}{cmd:. peermatch mpg price weight, id(make) treated("Volvo 260") standardize}{p_end}
 
 {pstd}{bf:Only candidates of the same origin may be twins}{p_end}
-{phang2}{cmd:. twinmatch mpg price weight, id(make) treated("Volvo 260") strata(foreign)}{p_end}
+{phang2}{cmd:. peermatch mpg price weight, id(make) treated("Volvo 260") strata(foreign)}{p_end}
 
 {pstd}{bf:A caliper: take up to five twins, but none farther than 1 (two qualify)}{p_end}
-{phang2}{cmd:. twinmatch mpg price weight, id(make) treated("Volvo 260") ntwins(5) caliper(1)}{p_end}
+{phang2}{cmd:. peermatch mpg price weight, id(make) treated("Volvo 260") ntwins(5) caliper(1)}{p_end}
 {phang2}{cmd:. display r(k) " twin(s) within the caliper"}{p_end}
 
 {pstd}{bf:Show the balance and test which covariate drives the list}{p_end}
-{phang2}{cmd:. twinmatch mpg price weight, id(make) treated("Volvo 260") balance stability}{p_end}
+{phang2}{cmd:. peermatch mpg price weight, id(make) treated("Volvo 260") balance stability}{p_end}
 {phang2}{cmd:. matrix list r(balance)}{p_end}
 {phang2}{cmd:. matrix list r(stability)}{p_end}
 
 {pstd}{bf:Write the shortlist to the project ledger}{p_end}
-{phang2}{cmd:. twinmatch mpg price weight, id(make) treated("Volvo 260") saving(twins_volvo.csv, replace)}{p_end}
+{phang2}{cmd:. peermatch mpg price weight, id(make) treated("Volvo 260") saving(twins_volvo.csv, replace)}{p_end}
 
 {pstd}{bf:A panel: firms whose investment moved with firm 1 over 1935-1944, given size}{p_end}
 {phang2}{cmd:. webuse grunfeld, clear}{p_end}
-{phang2}{cmd:. twinmatch mvalue kstock, id(company) treated(1) ntwins(3) time(year) outcome(invest) window(1935 1944) balance}{p_end}
+{phang2}{cmd:. peermatch mvalue kstock, id(company) treated(1) ntwins(3) time(year) outcome(invest) window(1935 1944) balance}{p_end}
 
 {pstd}{bf:The same on the path alone, matching the shape rather than the level}{p_end}
-{phang2}{cmd:. twinmatch, id(company) treated(1) ntwins(3) time(year) outcome(invest) window(1935 1944) growth}{p_end}
+{phang2}{cmd:. peermatch, id(company) treated(1) ntwins(3) time(year) outcome(invest) window(1935 1944) growth}{p_end}
 
 {pstd}{bf:Wide data with one column per year}{p_end}
 {phang2}{cmd:. webuse grunfeld, clear}{p_end}
 {phang2}{cmd:. keep if year <= 1944}{p_end}
 {phang2}{cmd:. keep company year invest mvalue kstock}{p_end}
 {phang2}{cmd:. reshape wide invest mvalue kstock, i(company) j(year)}{p_end}
-{phang2}{cmd:. twinmatch mvalue1944 kstock1944, id(company) treated(1) pretrend(invest1935-invest1944) ntwins(3)}{p_end}
+{phang2}{cmd:. peermatch mvalue1944 kstock1944, id(company) treated(1) pretrend(invest1935-invest1944) ntwins(3)}{p_end}
 
 {pstd}{bf:Let the pre-trend dominate the covariates}{p_end}
-{phang2}{cmd:. twinmatch mvalue1944 kstock1944, id(company) treated(1) pretrend(invest1935-invest1944) preweight(4)}{p_end}
+{phang2}{cmd:. peermatch mvalue1944 kstock1944, id(company) treated(1) pretrend(invest1935-invest1944) preweight(4)}{p_end}
 
 {pstd}{bf:Retrieve the twins programmatically}{p_end}
 {phang2}{cmd:. sysuse auto, clear}{p_end}
-{phang2}{cmd:. twinmatch mpg price weight, id(make) treated("Volvo 260") nodisplay}{p_end}
+{phang2}{cmd:. peermatch mpg price weight, id(make) treated("Volvo 260") nodisplay}{p_end}
 {phang2}{cmd:. display `"`r(twins)'"'}{p_end}
 {phang2}{cmd:. local first : word 1 of `r(twins)'}{p_end}
 {phang2}{cmd:. display `"nearest twin: `first'"'}{p_end}
 
 {pstd}{bf:Keep only the treated unit and its twins for the next step}{p_end}
-{phang2}{cmd:. twinmatch mpg price weight, id(make) treated("Volvo 260") ntwins(5) generate(d)}{p_end}
+{phang2}{cmd:. peermatch mpg price weight, id(make) treated("Volvo 260") ntwins(5) generate(d)}{p_end}
 {phang2}{cmd:. gsort d}{p_end}
 {phang2}{cmd:. keep in 1/6}{p_end}
 
@@ -331,7 +336,7 @@ synthetic-control or difference-in-differences command.
 {marker results}{...}
 {title:Stored results}
 
-{pstd}{cmd:twinmatch} stores in {cmd:r()}:{p_end}
+{pstd}{cmd:peermatch} stores in {cmd:r()}:{p_end}
 {synoptset 18 tabbed}{...}
 {p2col 5 18 22 2: Scalars}{p_end}
 {synopt :{cmd:r(N)}}observations in the estimation sample (units, in the panel form){p_end}
@@ -360,7 +365,7 @@ synthetic-control or difference-in-differences command.
 {title:Related and complementary commands}
 
 {pstd}
-{cmd:twinmatch} chooses and documents the comparison units.  The commands
+{cmd:peermatch} chooses and documents the comparison units.  The commands
 below do the neighbouring jobs; most are on SSC ({cmd:ssc install} {it:name})
 and some are official Stata.{p_end}
 
@@ -380,7 +385,7 @@ D'Haultfoeuille) for staggered adoption.{p_end}
 {phang}{bf:Matching many treated units, with estimation.}  Official
 {cmd:teffects nnmatch} and {cmd:teffects psmatch}; {cmd:psmatch2};
 {cmd:kmatch} (multivariate-distance and propensity-score matching with
-balance diagnostics).  {cmd:twinmatch} is the one-treated-unit case of
+balance diagnostics).  {cmd:peermatch} is the one-treated-unit case of
 {cmd:teffects nnmatch} with the shortlist, not the effect, as the
 product.{p_end}
 
@@ -433,4 +438,4 @@ and a look forward.  {it:Statistical Science} 25: 1-21.
 {pstd}
 Eric A. Booth, Sr Researcher, Texas 2036 (eric.a.booth@gmail.com), 2026.
 MIT-licensed.  Issues and suggestions at the
-{browse "https://github.com/ericabooth/twinmatch-stata-public":GitHub repository}.{p_end}
+{browse "https://github.com/ericabooth/peermatch-stata-public":GitHub repository}.{p_end}

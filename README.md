@@ -70,7 +70,7 @@ ssc install dashboardbuilder
 ssc install statplot
 ```
 
-`statplot` is joint work with Nicholas J. Cox. The fourteen packages built alongside the book, four of which are also among the SSC eleven, live in the `*-stata-public/` folders of this repository, each with its ado-file, help file, and test battery: `combineall`, `conformalpred`, `cxchangelog`, `datadictionary`, `hlmr2`, `projectbuilder`, `rateshrink`, `reshapehelper`, `riskscan`, `roisim`, `suppress`, `synthgen`, `twinmatch`, and `undummy`. Others, such as `sparkta2`, `webdoc2`, `mergemap`, and `surveymap`, install from their own repositories on [github.com/ericabooth](https://github.com/ericabooth). Appendix C of the book lists every package the book uses, ours and other people's, with the chapter that teaches it.
+`statplot` is joint work with Nicholas J. Cox. The fourteen packages built alongside the book, four of which are also among the SSC eleven, live in the `*-stata-public/` folders of this repository, each with its ado-file, help file, and test battery: `combineall`, `conformalpred`, `cxchangelog`, `datadictionary`, `hlmr2`, `projectbuilder`, `rateshrink`, `reshapehelper`, `riskscan`, `roisim`, `suppress`, `synthgen`, `peermatch`, and `undummy`. Others, such as `sparkta2`, `webdoc2`, `mergemap`, and `surveymap`, install from their own repositories on [github.com/ericabooth](https://github.com/ericabooth). Appendix C of the book lists every package the book uses, ours and other people's, with the chapter that teaches it.
 
 ## Repository layout
 

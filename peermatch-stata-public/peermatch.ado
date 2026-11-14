@@ -1,5 +1,6 @@
-*! version 0.2.0  2026-11-14  Eric A. Booth, Sr Researcher, Texas 2036
-*! twinmatch: policy-twin selection by Mahalanobis distance
+*! version 0.2.1  2026-11-14  Eric A. Booth, Sr Researcher, Texas 2036
+*! peermatch: policy-twin selection by Mahalanobis distance (formerly twinmatch)
+* 0.2.1  2026-11-14  renamed from twinmatch; no change in behaviour
 * 0.2.0  2026-11-14  strata() and caliper() shape the pool; pretrend() and
 *                   time()/outcome()/window() match on the outcome path
 *                   before the policy; balance table and support line;
@@ -10,7 +11,7 @@
 *                   leaves no half-made variable behind
 * version 16.0 suffices: uses only long-standing Mata, frames, and syntax.
 
-program define twinmatch, rclass
+program define peermatch, rclass
     version 16.0
     syntax [varlist(default=none numeric)] [if] [in], ///
         ID(varname) Treated(string) ///
@@ -241,7 +242,7 @@ program define twinmatch, rclass
             if "`p2'" != "" local p2opt pretrend(`p2') `growth' preweight(`preweight')
             local sopt ""
             if "`strata'" != "" local sopt strata(`strata')
-            capture quietly twinmatch `c2' if `touse', id(`id_str') treated(`treatval') ntwins(`ntwins') ///
+            capture quietly peermatch `c2' if `touse', id(`id_str') treated(`treatval') ntwins(`ntwins') ///
                 `standardize' `sopt' caliper(`caliper') `p2opt' nodisplay
             if _rc continue
             local ++ns
@@ -343,7 +344,7 @@ program define _tm_panel, rclass
         if "`generate'" != "" local pass `pass' generate(`generate')
         if "`strata'" != ""   local pass `pass' strata(`strata')
         if `"`saving'"' != "" local pass `"`pass' saving(`saving')"'
-        twinmatch `covs', id(`id') treated(`treated') ntwins(`ntwins') `standardize' ///
+        peermatch `covs', id(`id') treated(`treated') ntwins(`ntwins') `standardize' ///
             caliper(`caliper') pretrend(`ycols') `growth' preweight(`preweight') ///
             `balance' `stability' `nodisplay' `pass'
         return add
@@ -392,8 +393,8 @@ program define _tm_save
         else export delimited using `"`fname'"'
     }
     else {
-        label data "twinmatch shortlist for `treated' (`c(current_date)')"
-        note: twinmatch shortlist for `treated' on `c(current_date)': metric `metric'; covariates `varlist'; strata `strata'
+        label data "peermatch shortlist for `treated' (`c(current_date)')"
+        note: peermatch shortlist for `treated' on `c(current_date)': metric `metric'; covariates `varlist'; strata `strata'
         if `replace' quietly save `"`fname'"', replace
         else quietly save `"`fname'"'
     }

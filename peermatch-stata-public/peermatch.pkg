@@ -1,7 +1,7 @@
 v 3
-d twinmatch: policy-twin selection by Mahalanobis distance
+d peermatch: policy-twin selection by Mahalanobis distance (formerly twinmatch)
 d
-d twinmatch finds the comparison units that most resemble one
+d peermatch finds the comparison units that most resemble one
 d treated unit -- its "policy twins" -- for small-N program
 d evaluation: one district, county, campus, hospital, or firm
 d adopted a policy, and the question is which untreated units
@@ -24,5 +24,5 @@ d Support: eric.a.booth@gmail.com
 d
 d Distribution-Date: 20261114
 d
-f twinmatch.ado
-f twinmatch.sthlp
+f peermatch.ado
+f peermatch.sthlp

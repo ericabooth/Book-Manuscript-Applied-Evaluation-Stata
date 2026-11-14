@@ -64,7 +64,7 @@ foreach pkg in projectbuilder combineall datadictionary reshapehelper {
 }
 
 local gh "https://raw.githubusercontent.com/ericabooth"
-foreach pkg in cxchangelog rateshrink conformalpred hlmr2 twinmatch roisim ///
+foreach pkg in cxchangelog rateshrink conformalpred hlmr2 peermatch roisim ///
     suppress riskscan undummy synthgen {
     capture which `pkg'
     if _rc net install `pkg', from("`gh'/`pkg'-stata-public/main/") replace force

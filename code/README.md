@@ -29,7 +29,7 @@ five-sheet Excel export), `undummy`
 (diagnose the data and suggest the likely `reshape` command, never running
 it), `rateshrink`
 (empirical-Bayes rate stabilization), `conformalpred` (split-conformal
-prediction intervals), `hlmr2` (Nakagawa multilevel R-squared), `twinmatch`
+prediction intervals), `hlmr2` (Nakagawa multilevel R-squared), `peermatch`
 (Mahalanobis policy twins), `roisim` (Monte Carlo ROI with tornado export),
 `suppress` (small-cell + complementary suppression), and `riskscan`
 (k-anonymity scan).

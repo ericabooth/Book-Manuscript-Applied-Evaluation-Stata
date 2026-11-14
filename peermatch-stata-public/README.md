@@ -1,8 +1,8 @@
-# twinmatch
+# peermatch
 
-Policy-twin selection by Mahalanobis distance, for Stata 16.0+.
+Policy-twin selection by Mahalanobis distance, for Stata 16.0+. (Called `twinmatch` through version 0.2.0; renamed in 0.2.1 with no change in behaviour. The old repository address redirects here.)
 
-`twinmatch` answers a question that comes up constantly in small-N program
+`peermatch` answers a question that comes up constantly in small-N program
 evaluation: one district, county, campus, hospital, or firm adopted a policy;
 which untreated units look most like it? The command computes the
 Mahalanobis distance from every candidate to the treated unit on a set of
@@ -29,15 +29,15 @@ unchanged:
   metric, covariate list, strata, caliper, and date, as `.dta` or `.csv`,
   so the donor pool is on file before the outcome data arrive.
 
-`twinmatch` selects and describes. It does not weight the twins, estimate
+`peermatch` selects and describes. It does not weight the twins, estimate
 effects, or compute intervals; the help file lists the commands that do
 those jobs once the twins are chosen.
 
 ## Install
 
 ```stata
-net install twinmatch, from("https://raw.githubusercontent.com/ericabooth/twinmatch-stata-public/main/") replace force
-help twinmatch
+net install peermatch, from("https://raw.githubusercontent.com/ericabooth/peermatch-stata-public/main/") replace force
+help peermatch
 ```
 
 ## Quick start
@@ -46,19 +46,19 @@ help twinmatch
 sysuse auto, clear
 
 * three nearest twins for one unit, on three covariates
-twinmatch mpg price weight, id(make) treated("Volvo 260")
+peermatch mpg price weight, id(make) treated("Volvo 260")
 
 * only cars of the same origin; up to five twins, none farther than 1.2
-twinmatch mpg price weight, id(make) treated("Volvo 260") ///
+peermatch mpg price weight, id(make) treated("Volvo 260") ///
     strata(foreign) ntwins(5) caliper(1.2)
 
 * balance, stability, and a ledger file
-twinmatch mpg price weight, id(make) treated("Volvo 260") ///
+peermatch mpg price weight, id(make) treated("Volvo 260") ///
     balance stability saving(twins_volvo.csv, replace)
 
 * a panel: firms whose investment moved with firm 1 over 1935-1944, given size
 webuse grunfeld, clear
-twinmatch mvalue kstock, id(company) treated(1) ntwins(3) ///
+peermatch mvalue kstock, id(company) treated(1) ntwins(3) ///
     time(year) outcome(invest) window(1935 1944) balance
 
 * use the results programmatically (ids keep their internal spaces)
@@ -69,7 +69,7 @@ display `"nearest twin: `nearest'"'
 ## Syntax
 
 ```stata
-twinmatch [varlist] [if] [in], id(varname) treated(unit)
+peermatch [varlist] [if] [in], id(varname) treated(unit)
     [ntwins(#) standardize generate(newvar)
      strata(varlist) caliper(#)
      pretrend(varlist) time(varname) outcome(varname) window(first last) growth preweight(#)
@@ -111,7 +111,7 @@ table shows how much the shortlist changes when each covariate is removed.
 
 ## Stored results
 
-`twinmatch` is rclass:
+`peermatch` is rclass:
 
 | Result | Contents |
 | --- | --- |
@@ -131,7 +131,7 @@ Extract individual twins with `local x : word # of `r(twins)'`.
 
 ## Related and complementary commands
 
-`twinmatch` chooses and documents the comparison units. For the neighbouring
+`peermatch` chooses and documents the comparison units. For the neighbouring
 jobs:
 
 - **Weighting the twins and estimating an effect from a panel:** `synth`
@@ -141,7 +141,7 @@ jobs:
 - **Difference-in-differences once the group is set:** official `didregress`
   and `xtdidregress`; `csdid` and `did_multiplegt` for staggered adoption.
 - **Matching many treated units, with estimation:** official `teffects nnmatch`
-  and `teffects psmatch`; `psmatch2`; `kmatch`. `twinmatch` is the
+  and `teffects psmatch`; `psmatch2`; `kmatch`. `peermatch` is the
   one-treated-unit case with the shortlist, not the effect, as the product.
 - **Other ways to define "comparable":** `cem` (coarsened exact matching),
   `ebalance` (entropy balancing), official `cluster kmeans` (typologies), and
@@ -152,17 +152,19 @@ jobs:
 
 ## Testing
 
-`test_twinmatch.do` is a self-contained battery (synthetic data, `sysuse
+`test_peermatch.do` is a self-contained battery (synthetic data, `sysuse
 auto`, and a constructed panel) that exercises every documented option,
 verifies distances, balance, and the pre-trend metric against hand
 computations, confirms that the panel and wide forms agree, and checks the
 error codes. Run it in batch from any scratch directory and pass the package
-folder as the argument (`stata-mp -b do test_twinmatch.do "<package folder>"`);
-with no argument it uses the current folder, or the `twinmatch.ado` it finds
+folder as the argument (`stata-mp -b do test_peermatch.do "<package folder>"`);
+with no argument it uses the current folder, or the `peermatch.ado` it finds
 on the adopath.
 
 ## Changelog
 
+- 0.2.1 (2026-11-14): renamed from `twinmatch` to `peermatch`; files, help, and
+  repository renamed, behaviour unchanged.
 - 0.2.0 (2026-11-14): `strata()`, `caliper()`, `pretrend()`, the panel form
   (`time()`, `outcome()`, `window()`, `growth`, `preweight()`), `balance`,
   the support line, `stability`, `saving()`, `nodisplay`; new stored results

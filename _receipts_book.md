@@ -827,3 +827,5 @@ GATE: 346pp, 0 errors, 0 undefined references, 0 overfull boxes in the new secti
 
 ## Pass log: ch15 section 15.6 rechecked against datadeposit 0.1.1 (2026-11-12)
 Reran code/ch15_deposit.do on StataNow 19.5 with datadeposit 0.1.1 (GitHub commit 539d50a), then the deposit's setup.R. Every printed result is unchanged: 2246 obs, 9 vars; Nonunion 1417, Union 461, Don't know 134, NA 234; "files: 17 checked, 0 problems"; the same 17 files plus MANIFEST.json. One addition: a margin note in sec:deposit-example saying that a deposit with no to() goes to the working directory and is never written beside the source file (the 0.1.1 default; 0.1.0 wrote beside the source). The sentence that version 2 is written beside the original is still true. The net install line in the box now works against the live repository.
+
+- 2026-11-14 (twinmatch -> peermatch): package renamed to peermatch 0.2.1 (0.2.0 added strata, caliper, pre-trend matching, balance, stability, saving); GitHub repo renamed with redirect; folder, ch08, appendix C, code/01_install.do, code/README.md, README updated; main.tex reassembled. Earlier receipt lines keep the old name as written at the time.
