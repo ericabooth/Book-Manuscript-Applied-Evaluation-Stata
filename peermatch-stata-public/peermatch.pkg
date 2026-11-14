@@ -1,5 +1,5 @@
 v 3
-d peermatch: policy-twin selection by Mahalanobis distance (formerly twinmatch)
+d peermatch: policy-twin selection by Mahalanobis distance
 d
 d peermatch finds the comparison units that most resemble one
 d treated unit -- its "policy twins" -- for small-N program
