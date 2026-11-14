@@ -18,7 +18,7 @@
 {title:Title}
 
 {p2colset 5 18 20 2}{...}
-{p2col :{cmd:peermatch} {hline 2}}Policy-twin selection by Mahalanobis distance (formerly {cmd:twinmatch}){p_end}
+{p2col :{cmd:peermatch} {hline 2}}Policy-twin selection by Mahalanobis distance{p_end}
 {p2colreset}{...}
 
 
