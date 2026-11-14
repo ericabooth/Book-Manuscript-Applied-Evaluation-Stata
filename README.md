@@ -3,7 +3,7 @@
 
 **Eric A. Booth and Elizabeth Teas**
 
-**Status:** complete manuscript draft (preprint). 352 pages: fifteen chapters in five parts, five appendices, 72 figures, and 32 tables. The text may change before publication.
+**Status:** complete manuscript draft (preprint). 356 pages: fifteen chapters in five parts, five appendices, 72 figures, and 32 tables. The text may change before publication.
 
 **Read it:** [`LaTeXBookCode/main.pdf`](LaTeXBookCode/main.pdf)
 
