@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.1.0  2026-07-06}{...}
+{* *! version 0.1.0  2026-11-14}{...}
 {viewerjumpto "Syntax" "riskscan##syntax"}{...}
 {viewerjumpto "Description" "riskscan##description"}{...}
 {viewerjumpto "Options" "riskscan##options"}{...}
@@ -163,8 +163,3 @@ returned scalars is to make that loop scriptable.
 {pstd}
 Eric A. Booth, Sr Researcher, Texas 2036{break}
 Support: {browse "mailto:eric.a.booth@gmail.com":eric.a.booth@gmail.com}
-
-{pstd}
-riskscan accompanies the k-anonymity and disclosure-control workflow
-documented in the authors' applied-evaluation book; the scan formalizes
-that chapter's worked pattern.

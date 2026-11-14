@@ -1,11 +1,24 @@
 * ==========================================================================
-* test_hlmr2.do -- test battery for hlmr2 (v0.1.0)
-* Run in batch from a scratch directory:  stata-mp -b do test_hlmr2.do
+* test_hlmr2.do -- test battery for hlmr2 (v0.1.2)
+* Run in batch from a scratch directory:
+*   stata-mp -b do test_hlmr2.do "<path to the package folder>"
 * Judge by the log: zero r(NNN); no "assertion is false".
 * ==========================================================================
 
 * ---- header: the only place a path appears ------------------------------
-global pkgroot "/Users/ebooth/Documents/GitHub/Book Manuscript:Applied Evaluation-Stata/hlmr2-stata-public"
+* pkgroot: argument 1 if given, else an existing $pkgroot, else the
+* current folder when it holds hlmr2.ado (a repo clone), else the folder
+* of the hlmr2.ado that findfile locates on the adopath.
+if `"`1'"' != "" global pkgroot `"`1'"'
+if `"$pkgroot"' == "" {
+    capture confirm file `"`c(pwd)'/hlmr2.ado"'
+    if !_rc global pkgroot `"`c(pwd)'"'
+    else {
+        findfile hlmr2.ado
+        local _fn `"`r(fn)'"'
+        global pkgroot = substr(`"`_fn'"', 1, strlen(`"`_fn'"') - strlen("/hlmr2.ado"))
+    }
+}
 
 version 16.0
 clear all
@@ -159,6 +172,51 @@ assert _rc == 301
 ereturn clear
 capture noisily hlmr2
 assert _rc == 301
+
+* ==========================================================================
+di as txt "[TEST 8] sample changed after mixed -> r(459); crossed effects no slopes note"
+* ==========================================================================
+sysuse nlsw88, clear
+quietly mixed wage grade || industry:, nolog
+drop in 1/1000
+capture noisily hlmr2
+assert _rc == 459
+
+* crossed effects: R.industry is an intercept, so no random-slopes note
+sysuse nlsw88, clear
+quietly mixed wage grade age || _all: R.industry || occupation:, nolog
+tempfile clog
+log using `"`clog'"', text name(crossed) replace
+hlmr2
+local r2m = r(r2_m)
+local r2c = r(r2_c)
+log close crossed
+assert `r2c' > `r2m' & `r2m' > 0
+tempname fh
+local sawnote 0
+file open `fh' using `"`clog'"', read text
+file read `fh' line
+while r(eof) == 0 {
+    if strpos(`"`macval(line)'"', "random slopes") local sawnote 1
+    file read `fh' line
+}
+file close `fh'
+assert `sawnote' == 0
+
+* the random-slope model still prints the note
+quietly mixed wage grade age || industry: age, nolog
+log using `"`clog'"', text name(slopes) replace
+hlmr2
+log close slopes
+local sawnote 0
+file open `fh' using `"`clog'"', read text
+file read `fh' line
+while r(eof) == 0 {
+    if strpos(`"`macval(line)'"', "random slopes") local sawnote 1
+    file read `fh' line
+}
+file close `fh'
+assert `sawnote' == 1
 
 * ==========================================================================
 di as txt "ALL hlmr2 TESTS PASSED"

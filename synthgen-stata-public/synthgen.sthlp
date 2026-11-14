@@ -1,7 +1,7 @@
 {smcl}
-{* *! version 1.0.0 30jul2026}{...}
+{* *! version 1.0.2 09nov2026}{...}
 {hi:help synthgen}{...}
-{right:v 1.0.0}
+{right:v 1.0.2}
 {hline}
 
 {title:Title}
@@ -47,49 +47,56 @@ the data label marks the file as synthetic.
 variables are refused (encode a category first; a string identifier is a leak,
 not a feature).  Any numeric variable whose nonmissing values are all distinct
 is refused as ID-shaped: synthesizing an identifier manufactures fake people
-with real-looking keys.
+with real-looking keys.  The rule looks only at distinctness, so it also
+refuses a continuous variable whose values happen to be all distinct, such as
+{cmd:price} in {cmd:sysuse auto} or a county-level average; leave such a
+variable out of the varlist.
 
 
 {title:Options}
 
 {phang}
 {opt saving(filename[, replace])} writes the synthetic rows to a {bf:.dta}
-file.
+file ({bf:.dta} is added when {it:filename} has no extension).  Quote a
+{it:filename} that contains spaces.  {cmd:replace} is the only suboption;
+without it an existing file is an error (602), checked before any rows are
+drawn.  A leading {cmd:~} is expanded from {cmd:HOME}.
 
 {phang}
 {opt frame(name)} copies the synthetic rows into a frame, replacing it if it
-exists.
+exists.  It cannot name the current frame, which holds the source data
+(error 110, checked before any work).
 
 {phang}
-{opt n(#)} sets the number of synthetic rows; the default is the source
-sample size.
+{opt n(#)} sets the number of synthetic rows; the default (or {cmd:n(0)})
+is the source sample size.  A negative number is an error (198).
 
 {phang}
 {opt seed(#)} sets the random-number seed, making the draw reproducible.
 
 {phang}
-{opt noreport} suppresses the fidelity and match report.
+{opt noreport} suppresses the utility-and-safety report.
 
 
-{title:The diagnostic}
+{title:The receipt}
 
 {pstd}
-Every run prints (and returns) a fidelity and match diagnostic: the worst
+Every run prints (and returns) a utility-and-safety receipt: the worst
 standardized mean gap between source and synthetic variables, the worst gap
 in pairwise rank correlations, and the count of synthetic rows that duplicate
-a source row on the synthesized variables. An exact match is a review flag.
-Its disclosure risk depends on source rarity, sensitive attributes, recipient
-knowledge, prior releases, and the release setting.
+a real record on the synthesized variables.  A duplicate is not automatically
+a leak when the variables are coarse, but it is the first thing to check, and
+the count belongs in the data-sharing agreement's synthetic-release clause.
 
 
 {title:Remarks}
 
 {pstd}
-A synthetic file is a development surface rather than a substitute for the
-source analysis. Compare generated matches with unique and rare combinations
-in the source, assess the intended analyses, and document the release decision.
-Do not state that no generated row corresponds to a source person unless a
-case-specific disclosure assessment supports that statement.
+A synthetic file is a development surface, not a substitute for the real
+analysis, and synthetic does not automatically mean safe: run a
+re-identification scan (for example {helpb riskscan}) on the synthetic file
+before it travels, and state in the sharing agreement that no record
+corresponds to a real person.
 
 {pstd}
 Limitations, stated plainly: associations are preserved through rank
@@ -132,5 +139,5 @@ Elizabeth Teas, Sr Research Scientist, Far Harbor, LLC
 {title:Also see}
 
 {psee}
-Help: {helpb riskscan}, {helpb suppress}, {helpb frames}
+Help: {helpb riskscan}, {helpb frames}
 {p_end}

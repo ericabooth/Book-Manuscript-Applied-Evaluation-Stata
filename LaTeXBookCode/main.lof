@@ -41,56 +41,56 @@
 \contentsline {figure}{\numberline {8.1}{\ignorespaces The explained half of a wage gap, characteristic by characteristic}}{151}{figure.caption.92}%
 \contentsline {figure}{\numberline {8.2}{\ignorespaces Event-study plot from \texttt {csdid}}}{156}{figure.caption.94}%
 \contentsline {figure}{\numberline {8.3}{\ignorespaces Routing a design to its Stata command}}{157}{figure.caption.95}%
-\contentsline {figure}{\numberline {8.4}{\ignorespaces ROI tornado from a Monte Carlo}}{163}{figure.caption.96}%
+\contentsline {figure}{\numberline {8.4}{\ignorespaces ROI tornado from a Monte Carlo}}{165}{figure.caption.96}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {9.1}{\ignorespaces Data-ink, before and after}}{173}{figure.caption.102}%
-\contentsline {figure}{\numberline {9.2}{\ignorespaces A one-call snapshot of the cleaned extract}}{176}{figure.caption.104}%
-\contentsline {figure}{\numberline {9.3}{\ignorespaces The template version, with section headings}}{177}{figure.caption.105}%
-\contentsline {figure}{\numberline {9.4}{\ignorespaces A ranked, interval-bearing category comparison}}{178}{figure.caption.106}%
-\contentsline {figure}{\numberline {9.5}{\ignorespaces A diverging Likert bar in native Stata}}{180}{figure.caption.107}%
-\contentsline {figure}{\numberline {9.6}{\ignorespaces Coefficient small multiples}}{181}{figure.caption.108}%
-\contentsline {figure}{\numberline {9.7}{\ignorespaces Run chart with an intervention line}}{183}{figure.caption.109}%
+\contentsline {figure}{\numberline {9.1}{\ignorespaces Data-ink, before and after}}{175}{figure.caption.102}%
+\contentsline {figure}{\numberline {9.2}{\ignorespaces A one-call snapshot of the cleaned extract}}{178}{figure.caption.104}%
+\contentsline {figure}{\numberline {9.3}{\ignorespaces The template version, with section headings}}{179}{figure.caption.105}%
+\contentsline {figure}{\numberline {9.4}{\ignorespaces A ranked, interval-bearing category comparison}}{180}{figure.caption.106}%
+\contentsline {figure}{\numberline {9.5}{\ignorespaces A diverging Likert bar in native Stata}}{182}{figure.caption.107}%
+\contentsline {figure}{\numberline {9.6}{\ignorespaces Coefficient small multiples}}{183}{figure.caption.108}%
+\contentsline {figure}{\numberline {9.7}{\ignorespaces Run chart with an intervention line}}{185}{figure.caption.109}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {10.1}{\ignorespaces The visualization suite pipeline}}{188}{figure.caption.114}%
-\contentsline {figure}{\numberline {10.2}{\ignorespaces A spark wall of Texas county wages}}{191}{figure.caption.116}%
-\contentsline {figure}{\numberline {10.3}{\ignorespaces A sparkta2 county choropleth}}{193}{figure.caption.117}%
-\contentsline {figure}{\numberline {10.4}{\ignorespaces A googlechart US-state choropleth}}{196}{figure.caption.118}%
-\contentsline {figure}{\numberline {10.5}{\ignorespaces A googlechart animated bubble}}{197}{figure.caption.119}%
-\contentsline {figure}{\numberline {10.6}{\ignorespaces A googlechart searchable table}}{198}{figure.caption.120}%
-\contentsline {figure}{\numberline {10.7}{\ignorespaces A googlechart diverging stacked bar}}{199}{figure.caption.121}%
-\contentsline {figure}{\numberline {10.8}{\ignorespaces Narrative structures on the control spectrum}}{201}{figure.caption.122}%
+\contentsline {figure}{\numberline {10.1}{\ignorespaces The visualization suite pipeline}}{190}{figure.caption.114}%
+\contentsline {figure}{\numberline {10.2}{\ignorespaces A spark wall of Texas county wages}}{193}{figure.caption.116}%
+\contentsline {figure}{\numberline {10.3}{\ignorespaces A sparkta2 county choropleth}}{195}{figure.caption.117}%
+\contentsline {figure}{\numberline {10.4}{\ignorespaces A googlechart US-state choropleth}}{198}{figure.caption.118}%
+\contentsline {figure}{\numberline {10.5}{\ignorespaces A googlechart animated bubble}}{199}{figure.caption.119}%
+\contentsline {figure}{\numberline {10.6}{\ignorespaces A googlechart searchable table}}{200}{figure.caption.120}%
+\contentsline {figure}{\numberline {10.7}{\ignorespaces A googlechart diverging stacked bar}}{201}{figure.caption.121}%
+\contentsline {figure}{\numberline {10.8}{\ignorespaces Narrative structures on the control spectrum}}{203}{figure.caption.122}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {11.1}{\ignorespaces One do-file, three audiences}}{212}{figure.caption.129}%
-\contentsline {figure}{\numberline {11.2}{\ignorespaces The generated summary tab}}{214}{figure.caption.131}%
-\contentsline {figure}{\numberline {11.3}{\ignorespaces Anatomy of a Google Sheets URL}}{215}{figure.caption.132}%
-\contentsline {figure}{\numberline {11.4}{\ignorespaces Two delivery surfaces, one source}}{220}{figure.caption.134}%
+\contentsline {figure}{\numberline {11.1}{\ignorespaces One do-file, three audiences}}{214}{figure.caption.129}%
+\contentsline {figure}{\numberline {11.2}{\ignorespaces The generated summary tab}}{216}{figure.caption.131}%
+\contentsline {figure}{\numberline {11.3}{\ignorespaces Anatomy of a Google Sheets URL}}{217}{figure.caption.132}%
+\contentsline {figure}{\numberline {11.4}{\ignorespaces Two delivery surfaces, one source}}{222}{figure.caption.134}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {12.1}{\ignorespaces The two-minute dashboard}}{232}{figure.caption.138}%
-\contentsline {figure}{\numberline {12.2}{\ignorespaces The benchmark explorer dashboard}}{234}{figure.caption.139}%
-\contentsline {figure}{\numberline {12.3}{\ignorespaces The self-contained portal folder}}{235}{figure.caption.140}%
-\contentsline {figure}{\numberline {12.4}{\ignorespaces Choosing a delivery format}}{237}{figure.caption.142}%
-\contentsline {figure}{\numberline {12.5}{\ignorespaces Anatomy of a self-describing footer}}{239}{figure.caption.144}%
-\contentsline {figure}{\numberline {12.6}{\ignorespaces The suite pipeline, end to end}}{241}{figure.caption.145}%
+\contentsline {figure}{\numberline {12.1}{\ignorespaces The two-minute dashboard}}{234}{figure.caption.138}%
+\contentsline {figure}{\numberline {12.2}{\ignorespaces The benchmark explorer dashboard}}{236}{figure.caption.139}%
+\contentsline {figure}{\numberline {12.3}{\ignorespaces The self-contained portal folder}}{237}{figure.caption.140}%
+\contentsline {figure}{\numberline {12.4}{\ignorespaces Choosing a delivery format}}{239}{figure.caption.142}%
+\contentsline {figure}{\numberline {12.5}{\ignorespaces Anatomy of a self-describing footer}}{241}{figure.caption.144}%
+\contentsline {figure}{\numberline {12.6}{\ignorespaces The suite pipeline, end to end}}{243}{figure.caption.145}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {13.1}{\ignorespaces The checked proposal loop}}{250}{figure.caption.151}%
-\contentsline {figure}{\numberline {13.2}{\ignorespaces The privacy pattern screen in a coding pipeline}}{262}{figure.caption.192}%
-\contentsline {figure}{\numberline {13.3}{\ignorespaces LLM-human agreement by category}}{266}{figure.caption.193}%
-\contentsline {figure}{\numberline {13.4}{\ignorespaces Prompt-injection defense in depth}}{271}{figure.caption.194}%
+\contentsline {figure}{\numberline {13.1}{\ignorespaces The checked proposal loop}}{252}{figure.caption.151}%
+\contentsline {figure}{\numberline {13.2}{\ignorespaces The privacy pattern screen in a coding pipeline}}{264}{figure.caption.192}%
+\contentsline {figure}{\numberline {13.3}{\ignorespaces LLM-human agreement by category}}{268}{figure.caption.193}%
+\contentsline {figure}{\numberline {13.4}{\ignorespaces Prompt-injection defense in depth}}{273}{figure.caption.194}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {14.1}{\ignorespaces The release pipeline this chapter teaches}}{280}{figure.caption.199}%
-\contentsline {figure}{\numberline {14.2}{\ignorespaces Distribution of quasi-identifier cell sizes}}{283}{figure.caption.201}%
-\contentsline {figure}{\numberline {14.3}{\ignorespaces The suppression decision, cell by cell}}{287}{figure.caption.204}%
+\contentsline {figure}{\numberline {14.1}{\ignorespaces The release pipeline this chapter teaches}}{282}{figure.caption.199}%
+\contentsline {figure}{\numberline {14.2}{\ignorespaces Distribution of quasi-identifier cell sizes}}{285}{figure.caption.201}%
+\contentsline {figure}{\numberline {14.3}{\ignorespaces The suppression decision, cell by cell}}{289}{figure.caption.204}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {15.1}{\ignorespaces The life of a shared tool}}{293}{figure.caption.208}%
-\contentsline {figure}{\numberline {15.2}{\ignorespaces The hardening path from script to installable tool}}{299}{figure.caption.209}%
-\contentsline {figure}{\numberline {15.3}{\ignorespaces When and how to write a data deposit}}{303}{figure.caption.212}%
-\contentsline {figure}{\numberline {15.4}{\ignorespaces What a data deposit contains}}{304}{figure.caption.213}%
-\addvspace {10\p@ }
-\addvspace {10\p@ }
+\contentsline {figure}{\numberline {15.1}{\ignorespaces The life of a shared tool}}{295}{figure.caption.208}%
+\contentsline {figure}{\numberline {15.2}{\ignorespaces The hardening path from script to installable tool}}{301}{figure.caption.209}%
+\contentsline {figure}{\numberline {15.3}{\ignorespaces When and how to write a data deposit}}{305}{figure.caption.212}%
+\contentsline {figure}{\numberline {15.4}{\ignorespaces What a data deposit contains}}{306}{figure.caption.213}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {E.1}{\ignorespaces Premature death rises steadily with county child poverty. Each point is the mean YPLL per 100,000 for counties in a five-point poverty bin; we drop bins with fewer than ten counties. A county at 30 percent child poverty averages about 12,900 YPLL, roughly double the 6,800 at 10 percent. County Health Rankings 2024, produced by \texttt {capstone\_chr.do}.\relax }}{327}{figure.caption.274}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {E.1}{\ignorespaces Premature death rises steadily with county child poverty. Each point is the mean YPLL per 100,000 for counties in a five-point poverty bin; we drop bins with fewer than ten counties. A county at 30 percent child poverty averages about 12,900 YPLL, roughly double the 6,800 at 10 percent. County Health Rankings 2024, produced by \texttt {capstone\_chr.do}.\relax }}{329}{figure.caption.274}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file

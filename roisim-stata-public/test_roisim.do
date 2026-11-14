@@ -1,18 +1,30 @@
 * test_roisim.do -- test battery for roisim
 * Run in batch from any scratch directory:
-*   stata-mp -b do test_roisim.do
+*   stata-mp -b do test_roisim.do "<package folder>"
 * Judge by the log: zero r(NNN) and no "assertion is false".
 
 * ------------------------------------------------------------- header
 * All paths live in globals set here; nothing below is hard-coded.
-global pkgroot   "/Users/ebooth/Documents/GitHub/Book Manuscript:Applied Evaluation-Stata/roisim-stata-public"
+* pkgroot: argument 1 if given, else an existing $pkgroot, else the
+* current folder when it holds roisim.ado (a repo clone), else the folder
+* of the roisim.ado that findfile locates on the adopath.
+if `"`1'"' != "" global pkgroot `"`1'"'
+if `"$pkgroot"' == "" {
+    capture confirm file `"`c(pwd)'/roisim.ado"'
+    if !_rc global pkgroot `"`c(pwd)'"'
+    else {
+        findfile roisim.ado
+        local _fn `"`r(fn)'"'
+        global pkgroot = substr(`"`_fn'"', 1, strlen(`"`_fn'"') - strlen("/roisim.ado"))
+    }
+}
 global scratchdir = c(tmpdir)
 global torncsv   "$scratchdir/roisim_test_tornado.csv"
 
 version 16.0
 clear all
 set more off
-adopath + "$pkgroot"
+adopath ++ "$pkgroot"
 set seed 20260706
 
 di as txt "=== roisim test battery, seed 20260706 ==="
@@ -188,6 +200,24 @@ capture noisily roisim, effect(3000) se(900) costlow(3800) ///
     costhigh(4600) reps(500) seed(20260706) saving("$torncsv")
 local rc = _rc
 assert `rc' == 602
+
+* ---------------------------------------------------- saving() extension (0.1.1)
+* a dot in a folder name must not suppress the .csv extension
+local dotdir "$scratchdir/roisim my.proj"
+capture mkdir `"`dotdir'"'
+capture erase `"`dotdir'/tornado.csv"'
+roisim, effect(3000) se(900) costlow(3800) costhigh(4600) reps(500) ///
+    seed(1) saving(`"`dotdir'/tornado"', replace)
+assert `"`r(saving)'"' == `"`dotdir'/tornado.csv"'
+confirm file `"`dotdir'/tornado.csv"'
+* an explicit extension is kept
+roisim, effect(3000) se(900) costlow(3800) costhigh(4600) reps(500) ///
+    seed(1) saving(`"`dotdir'/tornado.txt"', replace)
+assert `"`r(saving)'"' == `"`dotdir'/tornado.txt"'
+confirm file `"`dotdir'/tornado.txt"'
+erase `"`dotdir'/tornado.csv"'
+erase `"`dotdir'/tornado.txt"'
+capture rmdir `"`dotdir'"'
 
 * ---------------------------------------------------- cleanup
 capture erase "$torncsv"

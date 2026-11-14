@@ -1,5 +1,5 @@
 v 3
-d rateshrink v0.1.1. Empirical-Bayes shrinkage for noisy small-denominator rates.
+d rateshrink v0.1.2. Empirical-Bayes shrinkage for noisy small-denominator rates.
 d
 d Rates computed on small denominators are noisy by construction: one
 d event at a five-person site can move it to the bottom of a ranking.
@@ -21,6 +21,6 @@ d
 d Author: Eric A. Booth, Sr Researcher, Texas 2036
 d Support: eric.a.booth@gmail.com
 d
-d Distribution-Date: 20260706
+d Distribution-Date: 20261109
 f rateshrink.ado
 f rateshrink.sthlp

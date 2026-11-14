@@ -1,7 +1,7 @@
-# reshapehelper
+# ReshapeHelper - Stata program to auto build and diagnose -reshape- syntax
 
-Diagnose the dataset and **suggest** — never run — the likely `reshape`
-command.
+Diagnose the dataset and **suggest** the likely `reshape`
+command based on dataset shape (or minimal guidance). Does not run reshape, but provides code to run successful -reshape-
 
 `reshape` is the Stata command most likely to send an analyst to a
 discussion board: is this wide or long, which variables are `i` and `j`,
@@ -9,14 +9,17 @@ where does `string` go, why `r(9)`, why "no xij variables found"?
 `reshapehelper` answers those questions **before anything is reshaped**, and
 it never modifies your data.
 
+<img width="1214" height="640" alt="reshapehelper" src="assets/reshapehelper.png" />
+
+
 ## What it does
 
 1. **Scans variable names** for wide patterns: numeric suffixes
    (`inc80 inc81`), string suffixes (`bp_before bp_after`), a j buried
-   mid-name (`inc80r` — the `@` notation), a j hiding in the *prefix*
+   mid-name (`inc80r` - the `@` notation), a j hiding in the *prefix*
    (`qld_p nsw_p vic_p`), and doubly-wide names carrying two indices
    (`ht_k1_t2`).
-2. **Hunts for i and j** — declared structure first (`xtset`/`tsset` panel
+2. **Hunts for i and j**- declared structure first (`xtset`/`tsset` panel
    and time variables, the `svyset` PSU), then `isid` tests over id-looking
    variables, then bounded single-and-pair searches (which is how a compound
    i like *(household, year)* gets found).
@@ -26,23 +29,32 @@ it never modifies your data.
    triggers a duplicates diagnosis and one attempt to extend `i()`.
 4. **Reports three ways**:
    - an ASCII **before/after diagram** in the style of the reshape help
-     file, built from your real variable names and values — the AFTER box is
+     file, built from your real variable names and values- the AFTER box is
      the dry run's actual result;
    - the **suggested syntax with a verdict** (`dry-run PASSED` / `FAILED
-     r(#)`), plus notes and cautions — or, when it cannot discern the
+     r(#)`), plus notes and cautions- or, when it cannot discern the
      design, a **numbered checklist** of what to fix or supply;
    - the command **ready to use**: `r(cmd)` (+ `r(cmd2)` for chained pairs),
      the global `$reshapehelper_cmd`, an unwrapped SMCL file, and
      click-to-run / click-to-view links in the Results window.
 
 For a doubly-wide layout it suggests and tests the two chained reshapes.
+
 When the job is really a transpose (observations stored as columns) it says
 so and points at `xpose` (`sxpose` for strings).
 
 ## Install
 
-`reshapehelper` is self-contained — the command and its help file, with no
+`reshapehelper` is self-contained ... the command and its help file, with no
 external Stata dependencies.
+
+From SSC (version 1.0.0):
+
+```stata
+ssc install reshapehelper
+```
+
+From GitHub (version 1.0.2, the latest):
 
 ```stata
 net install reshapehelper, from("https://raw.githubusercontent.com/ericabooth/reshapehelper-stata-public/main/") replace force
@@ -134,21 +146,15 @@ a stale command from an earlier dataset can never fire in a pipeline.
 | ------ | ------- |
 | `r(status)` | `ok`, `blocked` (dry run failed; see `r(diagnosis)`), or `needinfo` (checklist shown) |
 | `r(direction)` | `wide2long`, `long2wide`, `doubly`, `unknown` |
-| `r(cmd)`, `r(cmd2)` | the suggested command(s); also `$reshapehelper_cmd`(`2`) — `r(cmd2)` when applicable (a chained doubly-wide pair) |
-| `r(preclean)` | when applicable, a cleaning line to run first (e.g., strip spaces from a string j) |
+| `r(cmd)`, `r(cmd2)` | the suggested command(s); also `$reshapehelper_cmd`(`2`) |
+| `r(preclean)` | a cleaning line to run first (e.g., strip spaces from a string j) |
 | `r(i)`, `r(j)`, `r(stubs)` | the pieces the suggestion uses |
 | `r(icands)`, `r(jcands)` | the i and j candidate lists considered |
-| `r(note)`, `r(caution)`, `r(diagnosis)` | the annotations printed under the suggestion, each when applicable |
+| `r(note)`, `r(caution)`, `r(diagnosis)` | the annotations printed under the suggestion |
 | `r(tested)`, `r(rc)` | dry-run verdict and final return code |
-| `r(smcl)` | path of the unwrapped-suggestion SMCL file, returned only when that file was written (`r(status)` `ok` or `blocked`); `smcl()` appends `.smcl` when the filename you supply lacks it, so this path need not match what you typed |
+| `r(smcl)` | path of the unwrapped-suggestion SMCL file |
 | `r(xpose)` | 1 when the layout smells like a transpose job |
 | `r(sparse)` | a would-be identifier set aside as too sparse (returned only when that is why no command was found) |
-
-A macro that does not apply to a run is not stored, so it is absent from
-`return list` rather than empty, and which macros survive varies with the run:
-a `needinfo` run has no `r(cmd)` and no `r(smcl)`, though it may still report
-the piece it did settle on in `r(j)` beside its `r(diagnosis)`. Test a macro
-for emptiness rather than assume it is there.
 
 ## Design limits (v1.0.0, deliberate)
 
@@ -158,7 +164,7 @@ for emptiness rather than assume it is there.
   numbers, and mixed suffix widths (a stray `inc2` beside `inc80–inc82`)
   where reshape runs happily and builds a mostly-missing j group.
 - **Bare string suffixes are not guessed.** `incm`/`incf` are handled only
-  through `stubs()` — automatic splitting of such names is the greedy
+  through `stubs()`- automatic splitting of such names is the greedy
   matching the reshape manual itself warns about (stub `age`, j `nda`,
   courtesy of a variable named `agenda`).
 - **One dimension per pass.** Doubly-wide names get the two-step chain;
@@ -169,8 +175,23 @@ for emptiness rather than assume it is there.
   diagnosis. After your own failed attempt, `reshape error` lists the
   offending observations.
 
-## License
+## Changes
+
+- **1.0.2 (2026-11-14):** restores two pieces of the SSC 1.0.0 release that
+  the 1.0.1 source had missed. A failed dry-run verdict prints as text again,
+  so `quietly reshapehelper` no longer leaks a bare `FAILED198`; and the help
+  again documents option abbreviations, the `.smcl` extension `smcl()` adds,
+  which returned macros appear only when they apply, and the 60-value ceiling
+  on j candidates.
+- **1.0.1 (2026-11-09):** documentation release. The help's
+  "no xij variables found" markup now renders, the help points to this README
+  and `example_reshapehelper.do` for runnable versions of the abbreviated
+  `input ...` examples, and the stored-results table above lists `r(icands)`
+  and `r(jcands)`. No change in behavior.
+- **1.0.0 (2026-07-15):** first public release.
+
+## Author and license
+
+Eric A. Booth, Sr Researcher, Texas 2036 (eric.a.booth@gmail.com).
 
 MIT. See [LICENSE](LICENSE). Copyright (c) 2026 Eric A. Booth.
-
-Support: eric.a.booth@gmail.com

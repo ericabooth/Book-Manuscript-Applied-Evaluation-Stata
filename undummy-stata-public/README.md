@@ -71,9 +71,18 @@ undummy varlist [if] [in] [, generate(newvar) valuelab(labelname)
 
 `test_undummy.do` runs the full battery (round trip through
 `tabulate, generate()`, string dummies, mixed types, overlap detection,
-and error cases) using only `sysuse` and synthetic data. Edit the
-`$pkgroot` global at the top, then run in batch and check the log for
-`r(NNN);` errors or failed assertions.
+and error cases) using only `sysuse` and synthetic data. Run it in batch
+with the package folder as the argument
+(`stata-mp -b do test_undummy.do "<package folder>"`; with no argument it
+uses the current folder, or the `undummy.ado` it finds on the adopath),
+then check the log for `r(NNN);` errors or failed assertions.
+
+## Changelog
+
+- 1.1.1 (2026-11-09): with `ignoretype`, a missing value in a numeric
+  dummy now counts as off. Before, it became the string "." and counted
+  as on, so valid sets failed with r(459) or got extra categories.
+- 1.1.0 (2026-07-06): public release.
 
 ## Author
 

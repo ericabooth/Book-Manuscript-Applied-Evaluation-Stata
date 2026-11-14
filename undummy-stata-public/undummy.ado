@@ -1,4 +1,7 @@
 *! undummy -- recombine a set of dummy/indicator variables into one categorical variable
+*! version 1.1.1  09nov2026  Eric A. Booth, Sr Researcher, Texas 2036 (eric.a.booth@gmail.com)
+*! 1.1.1: with ignoretype, missing numeric dummies (. and .a-.z) count as
+*!        off instead of turning into the string "." and counting as on
 *! version 1.1.0  06jul2026  Eric A. Booth, Sr Researcher, Texas 2036 (eric.a.booth@gmail.com)
 *! version 1.0.0  09apr2017  Eric A. Booth
 program define undummy, rclass sortpreserve
@@ -52,7 +55,20 @@ program define undummy, rclass sortpreserve
 		}
 	}
 	if `"`ignoretype'"' != "" & `mixed' {
+		* numeric missing (. and .a-.z) is "off"; tostring would turn it
+		* into the string ".", which would then count as "on"
+		local numclones
+		foreach v of local varlist {
+			capture confirm numeric variable `v'
+			if !_rc {
+				qui replace `v' = . if missing(`v')
+				local numclones `numclones' `v'
+			}
+		}
 		qui tostring `varlist', force replace
+		foreach v of local numclones {
+			qui replace `v' = "" if `v' == "."
+		}
 		local baseformat 1
 	}
 

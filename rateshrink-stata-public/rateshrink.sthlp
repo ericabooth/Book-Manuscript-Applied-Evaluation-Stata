@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.1.1  2026-07-06}{...}
+{* *! version 0.1.2  2026-11-09}{...}
 {viewerjumpto "Syntax" "rateshrink##syntax"}{...}
 {viewerjumpto "Description" "rateshrink##description"}{...}
 {viewerjumpto "Options" "rateshrink##options"}{...}
@@ -94,7 +94,8 @@ for each unit.  For {cmd:ebbeta} the posterior is
 Beta(y + alpha, n − y + beta) and quantiles come from {helpb invibeta()};
 for {cmd:ebgamma} the posterior is Gamma(y + alpha, rate E + beta) and
 quantiles come from {helpb invgammap()}.  {it:#} is a level such as 90 or
-95.{p_end}
+95 and must be strictly between 0 and 100; {cmd:ci(0)} and {cmd:ci(100)}
+are errors.  Omit {cmd:ci()} for no interval.{p_end}
 
 {phang}{opth id(varname)} labels the most-moved unit in the summary line
 with that variable's value (string or numeric) instead of the observation
@@ -196,6 +197,12 @@ near 0.20{p_end}
 {phang2}{cmd:. rateshrink, success(y) denominator(n) generate(pshrunk3) rel(reliab)}{p_end}
 {phang2}{cmd:. display r(meanrel)}{p_end}
 
+{pstd}Plot raw versus shrunken; points off the 45-degree line are the
+small denominators being pulled toward the mean{p_end}
+
+{phang2}{cmd:. gen praw = y/n}{p_end}
+{phang2}{cmd:. twoway (function y = x, range(0 .6) lpattern(dash)) (scatter pshrunk praw [aweight=n], msymbol(Oh))}{p_end}
+
 {pstd}Event rates with exposure: county incidents per person-year{p_end}
 
 {phang2}{cmd:. clear}{p_end}
@@ -205,12 +212,6 @@ near 0.20{p_end}
 {phang2}{cmd:. gen mu     = rgamma(4, .05)}{p_end}
 {phang2}{cmd:. gen events = rpoisson(pyears*mu)}{p_end}
 {phang2}{cmd:. rateshrink, success(events) denominator(pyears) generate(rshrunk) type(ebgamma) ci(90) id(county)}{p_end}
-
-{pstd}Plot raw versus shrunken; points off the 45-degree line are the
-small denominators being pulled toward the mean{p_end}
-
-{phang2}{cmd:. gen praw = y/n}{p_end}
-{phang2}{cmd:. twoway (function y = x, range(0 .6) lpattern(dash)) (scatter pshrunk praw [aweight=n], msymbol(Oh))}{p_end}
 
 
 {marker remarks}{...}

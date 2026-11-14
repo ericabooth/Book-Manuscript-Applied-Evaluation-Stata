@@ -111,16 +111,14 @@ webdoc close
 Read the two embed lines and the pipeline comes into view. The \texttt{wdimg} line pulls in a static graph that Stata exported; the \texttt{wdiframe} line pulls in the interactive dashboard \texttt{statashiny} built, whole and live, into the same scrolling page. When embedding, keep every \texttt{wdiframe} and \texttt{wdimg} path relative to the portal folder, never absolute, so the page that works on your machine still works on the laptop the folder is copied to; at the end of this chapter we walk through a rebuild rehearsal that catches exactly this slip. The live \texttt{webdoc2} example site shows a finished report of exactly this shape.\marginnote{See \texttt{ericabooth.github.io/} \texttt{Webdoc2\_Example\_Site} for a full report, and the \texttt{statashiny} example site, which is itself a \texttt{webdoc2} page with a dashboard embedded by \texttt{wdiframe}. Both host free on GitHub Pages, which is the last step of the capstone below.}
 
 \section{Interactive without a server}
-Clients behind strict IT still deserve interactivity, and \texttt{statashiny}\index{statashiny@\texttt{statashiny}} provides it without a server, compiling a Stata dataset into static files that behave like a small app: searchable tables, charts that filter live, value cards, all running in the browser from local files.\marginnote{\texttt{statashiny} is the offline cousin of the interactive charts in Chapter~\ref{ch:interactive}, built for the setting where nothing may be installed and nothing may phone home.}
+Clients without a server of their own still deserve interactivity, and \texttt{statashiny}\index{statashiny@\texttt{statashiny}} provides it, compiling a Stata dataset into one static file that behaves like a small app: searchable tables, charts that filter live, value cards, all running in the browser.\marginnote{The page loads its two JavaScript libraries from public content-delivery networks when it opens, so the reader needs an internet connection. For a reader who has none, use \texttt{dashboardbuilder} (Section~\ref{sec:dashboardbuilder}), which embeds everything in the file.}
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{statashiny}]
-\textbf{Integrated command:} \texttt{statashiny}. Compiles a Stata dataset into self-contained interactive HTML (searchable tables via DataTables and charts via Chart.js, two small JavaScript libraries embedded in the file, plus filters and value cards) that runs offline in any browser with no server. Install it once from the authors' GitHub (note the repo name differs from the command name):
+\textbf{Integrated command:} \texttt{statashiny}. Compiles a Stata dataset into one interactive HTML file (searchable tables via DataTables and charts via Chart.js, plus filters and value cards) that runs in any browser with no server; the browser fetches the two libraries when the page opens. Install it from SSC:
 \par
 {\footnotesize
 \begin{verbatim}
-local gh "https://raw.githubusercontent.com/ericabooth"
-net install statashiny, ///
-    from("`gh'/StataShiny-public/main/") replace force
+ssc install statashiny
 \end{verbatim}
 }
 \end{kaobox}
@@ -190,16 +188,14 @@ Ask an AI assistant for \enquote{a quick dashboard for the board} and you will g
 
 You can escape the trap by demoting the dashboard from application to artifact. Every figure in this book is an artifact: a do-file builds it from data, and when the data change, you rerun the do-file rather than editing the picture. \texttt{dashboardbuilder}\index{dashboardbuilder@\texttt{dashboardbuilder}} extends that discipline to the interactive dashboard. You describe the page in Stata, panel by panel, and the command writes one self-contained HTML file: the data inlined as JSON, the charts drawn by a small engine of plain JavaScript and SVG (scalable vector graphics, the text-based image format browsers draw natively) embedded in the same file, no framework, no build chain, and no content-delivery network at build time or at view time.\marginnote{One opt-in exception: the \texttt{truepdf} build option adds a one-click PDF button that does pull a JS library from a CDN when clicked, and the build receipt says so whenever you use it. The default \texttt{pdf} button drives the browser's own print dialog and stays offline.} For a refresh, you rerun the do-file and review both its changes and the resulting page. A \texttt{git diff} helps a colleague see which panel definitions changed. When a language model assists with this work, apply the review procedure in Chapter~\ref{ch:ai}: the assistant proposes a change to the panel spec in your do-file, you read the dozen lines, run them, and the page that results is still one your code built.
 
-When should you reach for \texttt{dashboardbuilder} rather than \texttt{statashiny}? The two share a cell in the suite grid (Table~\ref{tab:suite-matrix}), the offline container, so you choose between them by asking what the reader will do with the page. Readers who \emph{explore rows}, searching a table, dragging a slider, filtering to their county, want \texttt{statashiny}. Readers who \emph{read headline numbers against a benchmark}, tiles on top, bars comparing this site against a declared reference below, want \texttt{dashboardbuilder}: its native furniture is KPI tiles, tabs, and a unit selector with a declared reference unit. Boards, funders, and steering committees are usually the second kind of reader.
+When should you reach for \texttt{dashboardbuilder} rather than \texttt{statashiny}? Both are serverless containers in the suite grid (Table~\ref{tab:suite-matrix}), so you choose between them first by the reader's connection, since only \texttt{dashboardbuilder} works with the network off, and then by what the reader will do with the page. Readers who \emph{explore rows}, searching a table, dragging a slider, filtering to their county, want \texttt{statashiny}. Readers who \emph{read headline numbers against a benchmark}, tiles on top, bars comparing this site against a declared reference below, want \texttt{dashboardbuilder}: its native furniture is KPI tiles, tabs, and a unit selector with a declared reference unit. Boards, funders, and steering committees are usually the second kind of reader.
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{dashboardbuilder}]
 \textbf{Integrated command:} \texttt{dashboardbuilder}. Builds self-contained interactive KPI dashboards (tiles; line, bar, horizontal-bar, bullet-compare, and table panels; tabs; a unit selector with a reference benchmark; per-panel CSV and PNG downloads) from a panel-by-panel grammar: \texttt{init}, then \texttt{tab} and \texttt{panel} calls, then \texttt{build}. Requires Stata~16+ and a Python~3 visible to Stata (standard library only; \texttt{python query} shows whether Stata sees one, and \texttt{set python\_exec} points it at yours). Install once from the authors' GitHub:
 \par
 {\footnotesize
 \begin{verbatim}
-local gh "https://raw.githubusercontent.com/ericabooth"
-net install dashboardbuilder, ///
-    from("`gh'/dashboardbuilder-stata-public/main/") replace force
+ssc install dashboardbuilder
 \end{verbatim}
 }
 \end{kaobox}
@@ -553,7 +549,7 @@ Before you let the folder go anywhere, rehearse the rebuild. Clone the repositor
 
 One further step takes the assembly, though not the shipping, off your calendar. The build itself, ingest through wrap, runs in batch exactly the way Chapter~\ref{ch:surveys} scheduled its survey pulls: one \texttt{cron} or Task Scheduler line runs the pipeline do-file on the data source's release date, writes the rebuilt folder to a staging location, and leaves a dated log. Resist automating the last mile. The release checklist and its three sign-offs exist because a person, not a scheduler, decides the portal is safe to send, and a pipeline that publishes straight to the client would also auto-publish the one quarter the source quietly rewrote its own history and every rate shifted. Automate up to the staging folder and the quarterly delivery becomes an hour of review instead of a day of assembly, with the judgment kept exactly where it belongs, at the moment of release.
 
-The two \texttt{googlechart} pages this pipeline embeds are the ones you built in Chapter~\ref{ch:interactive}: the state choropleth of Figure~\ref{fig:gc-geo}, from stage~2a, and the searchable table of Figure~\ref{fig:gc-table}. In the portal each is embedded live by \texttt{wdiframe}, so the reader hovers a state or types a name without leaving the report, and the \texttt{statashiny} dashboard of stage~3 offers the same table interaction offline.
+The two \texttt{googlechart} pages this pipeline embeds are the ones you built in Chapter~\ref{ch:interactive}: the state choropleth of Figure~\ref{fig:gc-geo}, from stage~2a, and the searchable table of Figure~\ref{fig:gc-table}. In the portal each is embedded live by \texttt{wdiframe}, so the reader hovers a state or types a name without leaving the report, and the \texttt{statashiny} dashboard of stage~3 offers the same table interaction from a file the client hosts.
 
 Applied Example~\ref{ae:ch12-onefolder} gathers the whole chapter into a single commission, so you can see each tool appear once, in the order the pipeline runs them.
 

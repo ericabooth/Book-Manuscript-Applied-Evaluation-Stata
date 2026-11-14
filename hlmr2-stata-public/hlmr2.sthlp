@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.1.0  2026-07-06}{...}
+{* *! version 0.1.2  2026-11-09}{...}
 {viewerjumpto "Syntax" "hlmr2##syntax"}{...}
 {viewerjumpto "Description" "hlmr2##description"}{...}
 {viewerjumpto "Options" "hlmr2##options"}{...}
@@ -51,7 +51,8 @@ of the random-effect variance components, and the residual variance.
 The variance components are read from {cmd:estat sd}, and {cmd:hlmr2}
 accepts either the {cmd:sd(...)} or the {cmd:var(...)} parameter labels
 that different Stata versions produce, so the same do-file works across
-versions.  Models with one or more nested random-effects levels are
+versions.  It reads the estimates from {cmd:r(b)}, which {cmd:estat sd}
+returns in Stata 16 and later.  Models with one or more nested random-effects levels are
 supported (for example, students within schools within districts).
 
 {pstd}
@@ -137,8 +138,19 @@ combined correctly.
 sums the random-effect variance components and ignores their covariances.
 This is an approximation: the exact Nakagawa formula for random-slope
 models weights the components by the covariate values (Johnson 2014).
-{cmd:hlmr2} prints a note when it detects random slopes.  Version 0.1.0
-does not implement the Johnson (2014) correction.
+{cmd:hlmr2} prints a note when it detects random slopes.  It
+does not implement the Johnson (2014) correction.  Crossed random
+effects written as {cmd:|| _all: R.}{it:varname} are random intercepts,
+not slopes, and do not trigger the note.
+
+{pstd}
+{bf:The estimation sample must be intact.}  {cmd:hlmr2} computes Var(xb)
+over {cmd:e(sample)}.  If observations were dropped after {cmd:mixed},
+that sample no longer matches the one behind the variance components, so
+{cmd:hlmr2} exits with error 459 when the remaining estimation-sample
+count differs from {cmd:e(N)}.  Refit the model first.  (The check is
+skipped for weighted fits, where {cmd:e(N)} need not equal the
+observation count.)
 
 {pstd}
 {bf:Linear models only.}  {cmd:hlmr2} supports {helpb mixed} (linear

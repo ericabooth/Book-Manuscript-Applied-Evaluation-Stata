@@ -196,7 +196,7 @@ Code that passes every check on your own computer can still fail on a colleague'
 
 The failures below came from Stata packages we wrote, several of them used in this book. Each passed its tests on a Mac running StataNow 19.5 and then broke for users elsewhere:
 \begin{itemize}
-\item An option declared as \texttt{TX2036STyle} worked in StataNow 19.5 but was rejected as ``not allowed'' in older Stata. Stata reads the capital letters in a \texttt{syntax} option as its minimum abbreviation, and older and newer versions treat a capital that follows a digit differently, so the full option name differed by version. Adding \texttt{version 16} to the file does not bring back the older rule; only the older Stata does.
+\item An option declared as \texttt{PLOT2STyle} worked in StataNow 19.5 but was rejected as ``not allowed'' in older Stata. Stata reads the capital letters in a \texttt{syntax} option as its minimum abbreviation, and older and newer versions treat a capital that follows a digit differently, so the full option name differed by version. Adding \texttt{version 16} to the file does not bring back the older rule; only the older Stata does.
 \item A folder check written as \texttt{confirm file "dir/."} worked on macOS and Linux but is unreliable on Windows, which does not open a folder as if it were a file (Section~\ref{sec:control}).
 \item A path that began with \texttt{\textasciitilde} worked when Stata opened the file, because Stata on macOS expands \texttt{\textasciitilde} to the home folder, and failed when the same path was handed to a Python helper, which does not.
 \item Text containing a line break, such as an open-ended survey answer, became several rows after a round trip through \texttt{export delimited} and \texttt{import delimited}, until the export added the \texttt{quote} option and the import added \texttt{bindquote(strict)}.
@@ -212,10 +212,10 @@ Each of these survived review because the reviewer, human or LLM, tested only th
 * test_options.do: run it under every Stata version you have
 capture program drop optdemo
 program define optdemo
-    syntax , [TX2036STyle]
+    syntax , [PLOT2STyle]
     display as text "option accepted"
 end
-rcof "noisily optdemo, tx2036style" == 0
+rcof "noisily optdemo, plot2style" == 0
 display as result "PASS: the option is accepted"
 \end{verbatim}
 }
@@ -223,15 +223,15 @@ StataNow 19.5 prints the \texttt{PASS} line. Stata 16.1 stops at \texttt{rcof}:
 \par
 {\footnotesize
 \begin{verbatim}
-. rcof "noisily optdemo, tx2036style" == 0
-option tx2036style not allowed
+. rcof "noisily optdemo, plot2style" == 0
+option plot2style not allowed
 rcof:  _rc  == 0 *NOT TRUE* from
-       noisily optdemo, tx2036style
+       noisily optdemo, plot2style
        _rc == 198
 r(9);
 \end{verbatim}
 }
-Declaring the option as \texttt{TX2036style}, with every letter after the abbreviation in lowercase, passes in both versions.
+Declaring the option as \texttt{PLOT2style}, with every letter after the abbreviation in lowercase, passes in both versions.
 
 \paragraph{Run the tests under every environment you can reach.} Run the test files in batch under each Stata version installed on your machine; if your license allows it, keep an older version installed for this purpose. Then change the environment around the test while leaving the code alone: put the working folder in a path that contains spaces and an accented character, point the home and temporary folders at a scratch folder, and run once after \texttt{clear all} and once after \texttt{mata clear}. On macOS and Linux you can set the home and temporary folders for a single run from the shell:
 \par

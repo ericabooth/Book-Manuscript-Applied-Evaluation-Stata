@@ -1,4 +1,4 @@
-*! version 0.1.1  06jul2026  Eric A. Booth, Sr Researcher, Texas 2036
+*! version 0.1.2  09nov2026  Eric A. Booth, Sr Researcher, Texas 2036
 *! rateshrink: empirical-Bayes shrinkage for noisy small-denominator rates
 *! Methods paper: Field, Dong, Booth, Hastings, and Malone (2026),
 *!   "Rethinking 'Signal-To-Noise': A Coherent Beta-Binomial Reliability
@@ -6,10 +6,12 @@
 *!   Far Harbor, LLC.  https://github.com/ericabooth/BetaBinomialPaperMaterials
 * version 16.0: needs only invibeta()/invgammap() and standard syntax
 * machinery, all available since well before Stata 16.
+* 0.1.2  09nov2026  ci() is parsed as a string, so an explicit ci(0) is
+*                   rejected like ci(100) instead of meaning "no interval"
 program define rateshrink, rclass
     version 16.0
     syntax [if] [in], Success(varname numeric) Denominator(varname numeric) ///
-        GENerate(name) [TYpe(string) CI(real 0) ID(varname) REL(name)]
+        GENerate(name) [TYpe(string) CI(string) ID(varname) REL(name)]
 
     * ---- option checks -------------------------------------------------
     if "`type'" == "" local type "ebbeta"
@@ -31,8 +33,13 @@ program define rateshrink, rclass
     }
 
     confirm new variable `generate'
-    local haveci = (`ci' != 0)
+    local haveci = (`"`ci'"' != "")
     if `haveci' {
+        capture confirm number `ci'
+        if _rc {
+            display as error "ci() must be a number, a level strictly between 0 and 100, e.g. ci(95)"
+            exit 198
+        }
         if `ci' <= 0 | `ci' >= 100 {
             display as error "ci() must be a level strictly between 0 and 100, e.g. ci(95)"
             exit 198

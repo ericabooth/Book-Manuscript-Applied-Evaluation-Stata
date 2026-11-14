@@ -5463,6 +5463,49 @@
       \verb https://jmlr.org/papers/v9/shafer08a.html
       \endverb
     \endentry
+    \entry{simonsohn2020speccurve}{article}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=4a557b269a909c0560985e798a1584f6}{%
+           family={Simonsohn},
+           familyi={S\bibinitperiod},
+           given={Uri},
+           giveni={U\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=02e82de175e9ae3821be14773de7f892}{%
+           family={Simmons},
+           familyi={S\bibinitperiod},
+           given={Joseph\bibnamedelima P.},
+           giveni={J\bibinitperiod\bibinitdelim P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=34f4dbb8f24e913243a4de9970222896}{%
+           family={Nelson},
+           familyi={N\bibinitperiod},
+           given={Leif\bibnamedelima D.},
+           giveni={L\bibinitperiod\bibinitdelim D\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{afe31231c1dd15e60b2fce44934a74d3}
+      \strng{fullhash}{b0f7aa4432d785e8f89d89ae54e3d263}
+      \strng{bibnamehash}{afe31231c1dd15e60b2fce44934a74d3}
+      \strng{authorbibnamehash}{afe31231c1dd15e60b2fce44934a74d3}
+      \strng{authornamehash}{afe31231c1dd15e60b2fce44934a74d3}
+      \strng{authorfullhash}{b0f7aa4432d785e8f89d89ae54e3d263}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Nature Human Behaviour}
+      \field{title}{Specification Curve Analysis}
+      \field{volume}{4}
+      \field{year}{2020}
+      \field{pages}{1208\bibrangedash 1214}
+      \range{pages}{7}
+      \verb{doi}
+      \verb 10.1038/s41562-020-0912-z
+      \endverb
+    \endentry
     \entry{smith2016software}{article}{}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=fe49386c965e830f91089719343b5648}{%
@@ -5609,6 +5652,38 @@
       \range{pages}{6}
       \verb{doi}
       \verb 10.1073/pnas.1708290115
+      \endverb
+    \endentry
+    \entry{stuart2010matching}{article}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=dc03a90b3074d73967d15ad76c8acf84}{%
+           family={Stuart},
+           familyi={S\bibinitperiod},
+           given={Elizabeth\bibnamedelima A.},
+           giveni={E\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{1d12af83c55e7e37df8565afc306b0e7}
+      \strng{fullhash}{e88216fc7d6cff48c8c039f50e2fa4ed}
+      \strng{bibnamehash}{1d12af83c55e7e37df8565afc306b0e7}
+      \strng{authorbibnamehash}{1d12af83c55e7e37df8565afc306b0e7}
+      \strng{authornamehash}{1d12af83c55e7e37df8565afc306b0e7}
+      \strng{authorfullhash}{e88216fc7d6cff48c8c039f50e2fa4ed}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Statistical Science}
+      \field{number}{1}
+      \field{title}{Matching Methods for Causal Inference: A Review and a Look Forward}
+      \field{volume}{25}
+      \field{year}{2010}
+      \field{pages}{1\bibrangedash 21}
+      \range{pages}{21}
+      \verb{doi}
+      \verb 10.1214/09-STS313
       \endverb
     \endentry
     \entry{sweeney2002kanon}{article}{}

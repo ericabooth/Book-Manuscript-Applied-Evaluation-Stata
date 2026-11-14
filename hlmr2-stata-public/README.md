@@ -27,7 +27,7 @@ the command easy to sanity-check against `estat icc`.
 
 ## Install
 
-From GitHub (once the repository is public):
+From GitHub:
 
 ```stata
 net install hlmr2, from("https://raw.githubusercontent.com/ericabooth/hlmr2-stata-public/main/") replace force
@@ -68,13 +68,30 @@ display "Marginal R2 = " r(r2_m) "  Conditional R2 = " r(r2_c)
 | `r(N)` | observations in the estimation sample |
 | `r(depvar)` | dependent variable name (macro) |
 
-## Limitations (v0.1.0)
+## Limitations (v0.1.2)
 
 - Linear `mixed` models only; `melogit`, `mepoisson`, and other
   generalized linear mixed models are not supported.
 - For random-slope models, `hlmr2` sums the variance components and
   ignores their covariances — an approximation of the exact formula
   (Johnson 2014). A note is printed when random slopes are detected.
+  Crossed effects (`|| _all: R.x`) are intercepts and do not trigger it.
+- `hlmr2` must run on the data `mixed` was fit on. If observations were
+  dropped afterwards, it stops with error 459 instead of computing
+  Var(xb) on a different sample (unweighted fits).
+
+## Changelog
+
+- 0.1.2 (2026-11-09): stop with error 459 when the estimation sample has
+  changed since `mixed` (it used to compute Var(xb) on the remaining
+  rows with no warning). Crossed random effects (`|| _all: R.x`) no
+  longer print the random-slopes note. The test battery finds the
+  package folder itself instead of using a hard-coded path.
+- 0.1.1 (2026-11-09): read the `estat sd` estimates from `r(b)` instead
+  of `r(table)`. Stata 16 returns only `r(b)` and `r(V)` there, so
+  0.1.0 failed on Stata 16 with error 498. Results are unchanged on
+  Stata 17 and later.
+- 0.1.0 (2026-07-06): first release.
 
 ## References
 

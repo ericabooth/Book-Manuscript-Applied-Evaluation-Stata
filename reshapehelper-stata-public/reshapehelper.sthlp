@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.0.0  2026-07-15}{...}
+{* *! version 1.0.2  2026-11-14}{...}
 {viewerjumpto "Syntax" "reshapehelper##syntax"}{...}
 {viewerjumpto "Description" "reshapehelper##description"}{...}
 {viewerjumpto "What you get back" "reshapehelper##output"}{...}
@@ -67,7 +67,7 @@ It works in four moves:
 doubly-wide names carrying two indices ({cmd:ht_k1_t2}).{p_end}
 
 {phang2}2. {bf:Hunt for i and j}.  Declared structure comes first: an
-{help xtset}/{help tsset} panel and time variable and the {help svyset}
+{help xtset} or {help tsset} panel and time variable and the {help svyset}
 primary sampling unit are taken as the analyst's own statement of the
 design.  Then come uniqueness tests ({help isid}) over id-looking variables
 and, when those fail, bounded searches over single variables and pairs
@@ -160,6 +160,10 @@ the header {c 45} useful when the suggestion surprises you.{p_end}
 
 {marker examples}{...}
 {title:Examples}
+
+{pstd}Examples that show {cmd:input ...} abbreviate the data entry.  Complete,
+runnable versions of every tier are in {cmd:example_reshapehelper.do}, which
+{cmd:ssc install reshapehelper, all} copies to the current folder.{p_end}
 
 {pstd}Tier 1 {c 45} the textbook case ({help reshape} Example 1):{p_end}
 {phang2}{cmd:. input id sex inc80 inc81 inc82 ...}{p_end}

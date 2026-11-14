@@ -1,13 +1,19 @@
 *! synthgen - generate a rank-preserving synthetic stand-in dataset
-*! v1.0.0 30jul2026 Eric A. Booth, Sr Researcher, Texas 2036 <eric.a.booth@gmail.com>
+*! v1.0.2 09nov2026 Eric A. Booth, Sr Researcher, Texas 2036 <eric.a.booth@gmail.com>
 *!                  Elizabeth Teas, Sr Research Scientist, Far Harbor, LLC <elizabeth@farharbor.com>
+*! v1.0.2: value labels travel through a tempfile (no fixed-name file left
+*!         in c(tmpdir), no "file saved" lines); frame() naming the current
+*!         frame and a negative n() are refused up front; the default
+*!         varlist no longer prints a ds listing.
+*! v1.0.1: saving() takes a quoted path with spaces (and , replace), checked
+*!         before any rows are drawn.
 *!
 *! Gaussian-copula engine with empirical margins: each synthetic variable
 *! reproduces its source variable's observed distribution exactly (every
 *! synthetic value is an observed value), and the rank (Spearman)
 *! correlations between variables are preserved through a joint normal
 *! draw.  Refuses ID-shaped and string variables loudly, with no override.
-*! Returns a fidelity and match diagnostic: worst standardized mean gap,
+*! Returns a utility-and-safety receipt: worst standardized mean gap,
 *! worst rank-correlation gap, and the count of synthetic rows that
 *! duplicate a real record.
 
@@ -19,17 +25,75 @@ program define synthgen, rclass
 
     * ----- what to synthesize --------------------------------------------
     if "`varlist'" == "" {
-        ds, has(type numeric)
+        quietly ds, has(type numeric)
         local varlist `r(varlist)'
     }
     if "`varlist'" == "" {
         di as err "synthgen: no numeric variables to synthesize."
         exit 102
     }
-    if "`saving'" == "" & "`frame'" == "" {
+    if `"`saving'"' == "" & "`frame'" == "" {
         di as err "synthgen: state where the synthetic rows land:" ///
             " saving(filename) and/or frame(name)."
         exit 198
+    }
+    if `n' < 0 {
+        di as err "synthgen: n() must be a positive number of rows (or omitted for the source size)."
+        exit 198
+    }
+    if "`frame'" != "" & "`frame'" == "`c(frame)'" {
+        di as err "synthgen: frame(`frame') names the current frame, which holds the source data;" ///
+            " choose another frame name."
+        exit 110
+    }
+
+    * ----- saving(filename [, replace]) ----------------------------------
+    * (v1.0.1) Split the filename from its suboptions and keep it quoted,
+    * so a path with spaces works; v1.0.0 passed the bare text to -save-.
+    * Checked here, before any work, so a bad saving() fails fast.
+    local sfile ""
+    local sreplace ""
+    if `"`macval(saving)'"' != "" {
+        gettoken sfile sopts : saving, parse(",")
+        local sfile = strtrim(`"`macval(sfile)'"')
+        local sopts = strtrim(`"`macval(sopts)'"')
+        if substr(`"`macval(sopts)'"', 1, 1) == "," {
+            local sopts = strtrim(substr(`"`macval(sopts)'"', 2, .))
+        }
+        if `"`macval(sfile)'"' == "" {
+            di as err "synthgen: saving() needs a filename."
+            exit 198
+        }
+        if !inlist(`"`macval(sopts)'"', "", "replace") {
+            di as err `"synthgen: saving() allows only the replace suboption, not `macval(sopts)'."'
+            exit 198
+        }
+        local sreplace `sopts'
+        * expand a leading ~ from HOME (USERPROFILE on Windows)
+        if substr(`"`macval(sfile)'"', 1, 1) == "~" & ///
+            inlist(substr(`"`macval(sfile)'"', 2, 1), "/", "\", "") {
+            local hm : environment HOME
+            if `"`macval(hm)'"' == "" local hm : environment USERPROFILE
+            if `"`macval(hm)'"' == "" {
+                di as err "synthgen: cannot expand ~ in saving(): HOME is not set."
+                exit 601
+            }
+            local sfile = `"`macval(hm)'"' + substr(`"`macval(sfile)'"', 2, .)
+        }
+        * .dta when the file name has no extension, as -save- does
+        local sbase = substr(`"`macval(sfile)'"', ///
+            max(strrpos(`"`macval(sfile)'"', "/"), strrpos(`"`macval(sfile)'"', "\")) + 1, .)
+        if strpos(`"`macval(sbase)'"', ".") == 0 {
+            local sfile `"`macval(sfile)'.dta"'
+        }
+        if "`sreplace'" == "" {
+            capture confirm file `"`macval(sfile)'"'
+            if !_rc {
+                di as err `"synthgen: file `macval(sfile)' already exists;"' ///
+                    " use saving(filename, replace)."
+                exit 602
+            }
+        }
     }
 
     marksample touse, novarlist
@@ -105,6 +169,7 @@ program define synthgen, rclass
     }
 
     * carry labels across so the stand-in reads like the source
+    tempfile vlfile
     local j = 0
     foreach v of local varlist {
         local vlab : variable label `v'
@@ -113,14 +178,14 @@ program define synthgen, rclass
             if `"`vlab'"' != "" label variable `v' `"`vlab'"'
         }
         if "`vall'" != "" {
-            label save `vall' using "`c(tmpdir)'/synthgen_vl.do", replace
-            frame `landing': quietly do "`c(tmpdir)'/synthgen_vl.do"
+            quietly label save `vall' using `"`vlfile'"', replace
+            frame `landing': quietly do `"`vlfile'"'
             frame `landing': label values `v' `vall'
         }
     }
-    frame `landing': label data "SYNTHETIC stand-in (synthgen); assess before release"
+    frame `landing': label data "SYNTHETIC stand-in (synthgen); no real records"
 
-    * ----- fidelity and exact-match diagnostic ---------------------------
+    * ----- utility-and-safety receipt ------------------------------------
     tempname D
     mata: _synthgen_receipt("`varlist'", "`touse'", "`landing'", `K', "`D'")
     local maxdmean = `D'[1,1]
@@ -158,8 +223,11 @@ program define synthgen, rclass
         frame copy `landing' `frame'
         di as txt `"  synthetic rows in frame {bf:`frame'}"'
     }
-    if `"`saving'"' != "" {
-        frame `landing': save `saving'
+    if `"`sfile'"' != "" {
+        if "`sreplace'" != "" {
+            frame `landing': save `"`macval(sfile)'"', replace
+        }
+        else frame `landing': save `"`macval(sfile)'"'
     }
     frame drop `landing'
 

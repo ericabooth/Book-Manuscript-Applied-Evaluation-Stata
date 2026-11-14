@@ -1,9 +1,22 @@
 * test_undummy.do -- test battery for the undummy package
-* Run in batch from a scratch directory:  stata-mp -b do test_undummy.do
+* Run in batch from a scratch directory:
+*   stata-mp -b do test_undummy.do "<package folder>"
 * Judge by the log: no r-numbered errors, no failed asserts.
 * ---------------------------------------------------------------------
 * All paths live in globals set here; nothing below is hard-coded.
-global pkgroot "/Users/ebooth/Documents/GitHub/Book Manuscript:Applied Evaluation-Stata/undummy-stata-public"
+* pkgroot: argument 1 if given, else an existing $pkgroot, else the
+* current folder when it holds undummy.ado (a repo clone), else the folder
+* of the undummy.ado that findfile locates on the adopath.
+if `"`1'"' != "" global pkgroot `"`1'"'
+if `"$pkgroot"' == "" {
+    capture confirm file `"`c(pwd)'/undummy.ado"'
+    if !_rc global pkgroot `"`c(pwd)'"'
+    else {
+        findfile undummy.ado
+        local _fn `"`r(fn)'"'
+        global pkgroot = substr(`"`_fn'"', 1, strlen(`"`_fn'"') - strlen("/undummy.ado"))
+    }
+}
 
 version 16.0
 clear all
@@ -164,5 +177,28 @@ tab foreign, gen(fd)
 undummy fd1 fd2 in 1/40, gen(f40) varnames keepdummies
 assert !mi(f40) in 1/40
 assert mi(f40) in 41/74
+
+* =====================================================================
+* Test (1.1.1): ignoretype treats numeric missing as off
+* =====================================================================
+clear
+input byte d1 str1 d2 byte d3
+1 "" .
+. "1" .
+.a "" 1
+0 "" 1
+end
+undummy d1 d2 d3, generate(cat) varnames ignoretype keepdummies
+assert r(k) == 3
+assert cat[1] != cat[2] & cat[2] != cat[3] & cat[3] == cat[4]
+assert "`:label (cat) `=cat[1]''" == "d1"
+assert "`:label (cat) `=cat[2]''" == "d2"
+assert "`:label (cat) `=cat[3]''" == "d3"
+* the originals are untouched
+assert d1[2] == . & d1[3] == .a
+* a true overlap is still caught
+replace d2 = "1" in 1
+capture noisily undummy d1 d2 d3, generate(cat2) ignoretype
+assert _rc == 459
 
 di as txt "ALL TESTS PASSED"

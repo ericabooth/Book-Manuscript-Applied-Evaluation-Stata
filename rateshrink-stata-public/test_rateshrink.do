@@ -1,15 +1,27 @@
 * ==========================================================================
-* test_rateshrink.do -- test battery for rateshrink v0.1.1
-* Run from any scratch directory:  stata-mp -b do test_rateshrink.do
+* test_rateshrink.do -- test battery for rateshrink v0.1.2
+* Run from any scratch directory:  stata-mp -b do test_rateshrink.do "<package folder>"
 * All paths live in globals below; nothing else is hard-coded.
 * ==========================================================================
-global pkgroot "/Users/ebooth/Documents/GitHub/Book Manuscript:Applied Evaluation-Stata/rateshrink-stata-public"
+* pkgroot: argument 1 if given, else an existing $pkgroot, else the
+* current folder when it holds rateshrink.ado (a repo clone), else the folder
+* of the rateshrink.ado that findfile locates on the adopath.
+if `"`1'"' != "" global pkgroot `"`1'"'
+if `"$pkgroot"' == "" {
+    capture confirm file `"`c(pwd)'/rateshrink.ado"'
+    if !_rc global pkgroot `"`c(pwd)'"'
+    else {
+        findfile rateshrink.ado
+        local _fn `"`r(fn)'"'
+        global pkgroot = substr(`"`_fn'"', 1, strlen(`"`_fn'"') - strlen("/rateshrink.ado"))
+    }
+}
 
 version 16.0
 clear all
 set more off
 set seed 20260706
-adopath + "$pkgroot"
+adopath ++ "$pkgroot"
 which rateshrink
 
 * --------------------------------------------------------------------------
@@ -248,6 +260,29 @@ capture confirm variable zz6
 assert _rc != 0
 capture confirm variable r6
 assert _rc != 0
+
+* --------------------------------------------------------------------------
+* Test 7 (0.1.2): ci(0) is an error, like ci(100); no ci() means no bounds
+* --------------------------------------------------------------------------
+display as text "{hline 70}"
+display as text "Test 7: ci() bounds"
+clear
+set obs 20
+gen n = 10 + _n
+gen y = mod(_n, 7)
+capture noisily rateshrink, success(y) denominator(n) generate(c7) ci(0)
+assert _rc == 198
+capture confirm variable c7
+assert _rc != 0
+capture noisily rateshrink, success(y) denominator(n) generate(c7) ci(100)
+assert _rc == 198
+capture noisily rateshrink, success(y) denominator(n) generate(c7) ci(abc)
+assert _rc == 198
+rateshrink, success(y) denominator(n) generate(c7)
+capture confirm variable c7_lb
+assert _rc != 0
+rateshrink, success(y) denominator(n) generate(c7b) ci(0.5)
+confirm variable c7b_lb c7b_ub
 
 * --------------------------------------------------------------------------
 * Done

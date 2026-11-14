@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 2.0.0 08aug2026 Eric A. Booth and Elizabeth Teas}{...}
+{* *! version 2.0.1 09nov2026 Eric A. Booth and Elizabeth Teas}{...}
 {vieweralsosee "srctag" "help srctag"}{...}
 {vieweralsosee "[P] char" "help char"}{...}
 {vieweralsosee "[D] lookfor" "help lookfor"}{...}
@@ -159,7 +159,7 @@ lists the ones with at least one match.{p_end}
 {title:Audits: enforcing a tagging discipline}
 
 {pstd}
-Tagging is useful when it is complete, and completeness can be checked.
+Tagging pays off only if it is complete, and completeness is checkable.
 {cmd:srcfind, untagged} lists the variables that carry no lineage tag;
 an empty answer means the file is fully documented. Two lines make it a
 contract at the top of a do-file:{p_end}
@@ -200,6 +200,7 @@ needed:{p_end}
 
 {cmd}{...}
         . combineall using "panel", cmethod(append) directory("raw") map(renames.csv)
+        . use "panel", clear
         . srcfind 2019               // which mapped variables trace to a 2019 file?
 {txt}{...}
 

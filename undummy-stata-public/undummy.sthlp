@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.1.0  2026-07-06}{...}
+{* *! version 1.1.1  2026-11-09}{...}
 {viewerjumpto "Syntax" "undummy##syntax"}{...}
 {viewerjumpto "Description" "undummy##description"}{...}
 {viewerjumpto "Options" "undummy##options"}{...}
@@ -119,7 +119,9 @@ numbers) under the value label {it:labelname}.  The default label name is
 
 {phang}
 {opt ignoretype} permits {it:varlist} to mix numeric and string dummies.
-The working copies are all converted to string before combining.  Without
+The working copies are all converted to string before combining; a
+missing value in a numeric dummy ({cmd:.} or {cmd:.a}-{cmd:.z}) still
+counts as off, as it does in an all-numeric set.  Without
 this option a mixed varlist exits with return code 109.
 
 

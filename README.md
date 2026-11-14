@@ -91,6 +91,8 @@ cd LaTeXBookCode/src && bash assemble.sh && cp main_assembled.tex ../main.tex &&
 pdflatex main && biber main && makeindex main.idx && pdflatex main && pdflatex main
 ```
 
+If biber will not run on your machine, see [`LaTeXBookCode/BUILD.md`](LaTeXBookCode/BUILD.md) for the build without it and the checks to run after any build.
+
 ## Feedback
 
 We welcome comments on the draft, especially from evaluators who try the workflow on their own projects. Please open an issue in this repository or write to Eric A. Booth at eric.a.booth@gmail.com.

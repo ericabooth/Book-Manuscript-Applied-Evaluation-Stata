@@ -32,7 +32,7 @@ small-N noise drive the ordering.
 
 ## Install
 
-From GitHub (once the repo is public):
+From GitHub:
 
 ```stata
 net install rateshrink, from("https://raw.githubusercontent.com/ericabooth/rateshrink-stata-public/main/") replace force
@@ -58,7 +58,7 @@ return list
 ```
 
 The output reports the estimated Beta prior, then a summary line such as
-`largest move: site = 26, raw 0.0000 -> shrunken 0.1602`. Small
+`largest move: site = 6, raw  0.0000 -> shrunken  0.1688`. Small
 denominators with extreme raw rates move the most; large sites barely
 change. For event rates against exposure, use
 `type(ebgamma)`:
@@ -91,6 +91,14 @@ covariate-adjusted (regression-based) shrinkage are not supported in this
 version; for known structure, shrink within groups using `if`, or fit a
 multilevel model. `rel()` is defined for the Beta-binomial model only;
 combining it with `type(ebgamma)` exits with error 198.
+
+## Changelog
+
+- 0.1.2 (2026-11-09): `ci(0)` is now an error, like `ci(100)`; before,
+  it silently meant "no interval". Omit `ci()` for no interval. The help
+  plot example now runs on the proportions data it needs, and the test
+  battery finds the package folder itself.
+- 0.1.1 (2026-07-06): first public release.
 
 ## References
 

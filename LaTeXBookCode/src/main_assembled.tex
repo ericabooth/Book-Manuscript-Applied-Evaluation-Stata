@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Embedded Evaluation: Stata Tools for Applied Research and Evaluation
+% Applied Program Evaluation Using Stata: A Practical Workflow from Data to Deliverables
 % Eric Booth & Elizabeth Teas
 % 2026 Edition
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -230,10 +230,10 @@
 %	BOOK INFORMATION
 %----------------------------------------------------------------------------------------
 
-\title[Embedded Evaluation]{Applied Program Evaluation \\ Using Stata}
+\title[Applied Program Evaluation Using Stata]{Applied Program Evaluation \\ Using Stata}
 \subtitle{A Practical Workflow from Data to Deliverables}
 
-\author{Eric Booth \hspace{0.5in} Elizabeth Teas}
+\author[Eric Booth and Elizabeth Teas]{Eric Booth \hspace{0.5in} Elizabeth Teas}
 
 \date{July 2026}
 
@@ -1550,13 +1550,11 @@ Between the walk and the combine, spend ten minutes on a triage read that can sa
 The harder work comes at the combine step, not at the download. By the end of this section you will have a rename map and a stacking call small enough to run against two vintages of the \texttt{auto} data, shaped exactly like the one that harmonizes thirteen years of report cards. Element names mutate across years: a column called one thing in 2015 is renamed or split by 2020, so a naive append stacks unrelated variables. Keep a master reference of element names and a rename map that the \texttt{combineall}\index{combineall@\texttt{combineall}} command of the next box applies per vintage, so the panel is harmonized deliberately rather than by accident. That is the work hiding inside what sounds like a simple task, downloading and combining a multi-year panel, and documenting the rename decisions is what makes the resulting panel replicable by someone who was not there when you built it. The download loop and the combine step are two halves of one job: the walk writes one file per vintage into a \texttt{raw/} tree, and the harmonizer stacks that tree into a single panel while remembering which column came from which year.
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{combineall}]
-\textbf{Shipped tool:} \texttt{combineall} (v2.0.0, the release this book's examples were tested against), an engine the first author has used since 2011 to combine every file in a directory (append, merge, joinby, or convert-only), extended for this book with a vintage-aware harmonization layer. Point it at the \texttt{raw/} tree the download loop filled, and it stacks the files into the panel the chapter promised. Install it the house way:
+\textbf{Shipped tool:} \texttt{combineall}, an engine the first author has used since 2011 to combine every file in a directory (append, merge, joinby, or convert-only), extended for this book with a vintage-aware harmonization layer. Point it at the \texttt{raw/} tree the download loop filled, and it stacks the files into the panel the chapter promised. Install it the house way:
 \par
 {\footnotesize
 \begin{verbatim}
-local gh "https://raw.githubusercontent.com/ericabooth"
-net install combineall, ///
-    from("`gh'/combineall-stata-public/main/") replace force
+ssc install combineall
 \end{verbatim}
 }
 With \texttt{cmethod(append)}, three features do the combine half. The \texttt{year()} option reads a four-digit year out of each filename and writes it into a \texttt{year} variable, so the files sort and stack in vintage order. The \texttt{map()} option takes a small CSV, one row per rename (\texttt{oldname,newname,firstyear,lastyear}), and applies each rename to the vintages it names before the append, which aligns an unchanged measure whose variable name changed. A measure split into separate categories requires a substantive rule for combining or comparing those categories; renaming alone cannot establish equivalence. And a \texttt{varname[source]} characteristic, a per-variable text tag that Stata stores with the dataset (\texttt{help char}), records on each harmonized variable which file and year the values came from, so you can read the provenance back out of the built \texttt{.dta}. The command writes a harmonization table (which variable is present in which year) and reports \texttt{r(n\_files)}, \texttt{r(years)}, and \texttt{r(n\_missing)} for a quick sanity check. Keep the map CSV outside the \texttt{directory()} you point at, or it is swept up as an input file; and because the 2011 engine appends with \texttt{force}, a variable that is a string in one vintage and numeric in another coerces to missing rather than erroring, so read the harmonization table before you trust the stack.
@@ -1742,13 +1740,11 @@ You can replace an afternoon of opening files by hand with one call: point it at
 The mirrored tree is also where the triage read happens for a shared-drive drop. Sort \texttt{\_converted} by file size and open the outliers first: a worksheet that arrived empty converts to an empty dataset without complaint, and a workbook whose header row slid down a line yields variables named for spreadsheet columns rather than concepts. Spend ten minutes with the smallest and strangest files before any harmonizing: if they pass, proceed to Chapter~\ref{ch:panels}'s harmonization; if one fails, go back to the partner with a specific filename rather than a vague complaint.\marginnote{The pass extends without you: when the partner drops three more files next month, the same call at the same tree absorbs them into the same layout, the download loop's rerun habit aimed at a folder instead of a site.}
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{convertanything}]
-\textbf{Integrated command:} \texttt{convertanything}. Converts a single file or a whole directory tree of mixed formats into clean \texttt{.dta} in one pass. Install it from the authors' GitHub, then convert a drop:
+\textbf{Integrated command:} \texttt{convertanything}. Converts a single file or a whole directory tree of mixed formats into clean \texttt{.dta} in one pass. Install it from SSC, then convert a drop:
 \par
 {\footnotesize
 \begin{verbatim}
-local gh "https://raw.githubusercontent.com/ericabooth"
-net install convertanything, ///
-    from("`gh'/convertanything-stata-public/main/") replace force
+ssc install convertanything
 
 convertanything using "$raw/partner_drop", recursive ///
     saving("$raw/_converted") replace clear         ///
@@ -1762,9 +1758,7 @@ The one dialect \texttt{convertanything} does not read is R's own. When a partne
 \par
 {\footnotesize
 \begin{verbatim}
-local gh "https://raw.githubusercontent.com/ericabooth"
-net install importr, ///
-    from("`gh'/importR-stata/main/") replace force
+ssc install importr
 importr using "partner_model_frame.Rdata", clear
 \end{verbatim}
 }
@@ -2484,9 +2478,7 @@ The receipt reports that \texttt{q4} is absent and \texttt{q4\_manage} is presen
 \par
 {\footnotesize
 \begin{verbatim}
-local gh "https://raw.githubusercontent.com/ericabooth"
-net install datadictionary, ///
-    from("`gh'/datadictionary-stata-public/main/") replace force
+ssc install datadictionary
 \end{verbatim}
 }
 It extends two community tools worth knowing: Roger Newson's \texttt{descsave} (SSC), which writes a variable-level description dataset, and Kishor Das's \texttt{codebookout} (SSC), which exports names, labels, and types to Excel. \texttt{datadictionary} adds the cross-wave diff, the missingness grid, example values, and the \texttt{notes}/\texttt{srctag} harvest. The three demo wave files are generated by the package's own test battery, so the worked example reproduces from a clean install.
@@ -3155,9 +3147,7 @@ The box below collects the install line and the command's full surface, includin
 \par
 {\footnotesize
 \begin{verbatim}
-local gh "https://raw.githubusercontent.com/ericabooth"
-net install reshapehelper, ///
-    from("`gh'/reshapehelper-stata-public/main/") replace force
+ssc install reshapehelper
 \end{verbatim}
 }
 The suggestion returns in \texttt{r(cmd)} and the global \texttt{\$reshapehelper\_cmd}, so a control file can capture it, and the tool prints click-to-run and click-to-view links for interactive work. For a doubly-wide layout, where two indices are packed into each name, it writes the two chained reshapes and tests both. Where it cannot settle on a command, it returns a diagnosis and a numbered checklist instead. The bundled \texttt{example\_reshapehelper.do} walks seventeen scenarios from the textbook case to the ones that fill discussion boards.
@@ -4266,7 +4256,7 @@ peerpick pov lpop hisp medage, id(fips5) focal(48479) ///
     name(county_name) strata(metro) k(10) outcome(unins)
 \end{verbatim}
 }
-The ten peers average 29.4 percent, so Webb is 6.8 points above them, with an interval of 2.6 to 10.9 that treats the ten as a draw from the counties that could have been chosen. Read the balance table before the gap. It lists, for each factor, Webb's value, the peer mean, and their difference in pool standard deviations, and the Hispanic-share row is $-1.07$: no metro county in Texas matches Webb's 95 percent, and the four border metro counties (Cameron, El Paso, Hidalgo, Maverick) come closest. A standardized difference near zero on every row means the peers resemble the focal unit on the things you chose to match; a large one means the pool has no close match on that factor, which is itself a finding.
+The ten peers average 29.4 percent, so Webb is 6.8 points above them, with a 95 percent interval of 2.6 to 10.9 points. The interval treats the ten peers as one draw from the counties that could have been chosen. Read the balance table before the gap. It lists, for each factor, Webb's value, the peer mean, and the gap between them measured in standard deviations of the pool. The Hispanic-share row is $-1.07$: no metro county in Texas matches Webb's 95 percent, and the four border metro counties (Cameron, El Paso, Hidalgo, Maverick) come closest. A standardized difference near zero on every row means the peers resemble the focal unit on the things you chose to match; a large one means the pool has no close match on that factor, which is itself a finding.
 
 Three further calls replay the same comparison with one thing varied at a time, which is how you learn how much the answer depended on your choices rather than on Webb:
 \par
@@ -4277,7 +4267,7 @@ peerpick placebo
 peerpick stability
 \end{verbatim}
 }
-The first is a specification curve \parencite{simonsohn2020speccurve}: thirty versions of the comparison, varying the number of peers, the distance metric, and the factor set, and the gap runs from 0.3 to 14.9 points across them. The 14.9 appears only when Hispanic share is dropped from the factors; the stability table shows that dropping it also replaces nearly the whole peer list (an overlap of 0.11 with the original ten), while dropping any other factor leaves most of the list in place. That is the sentence for the report: the comparison turns on treating Hispanic share as a matching factor, and the reader should know it. The placebo check makes every other county the focal unit in turn and builds its peers the same way; 4.7 percent of Texas counties show a gap at least as large as Webb's, so the gap is unusual but not unheard of. The checks also show how far the first two decisions reach. With all counties as the pool instead of metro counties, the gap falls to 3.5 points. With the typology cell a dashboard would use (the same rural--urban code and border status, four counties), it is 1.0 point with an interval that spans zero. None of these is wrong. Each answers a different question, and the report should say which question was asked.\marginnote{\texttt{peerpick} offers other methods behind the same syntax: coarsened cells, a propensity score, predicted values, k-means clusters, entropy balancing, a hand-picked list, trajectory distance on a panel, and synthetic-control weights. Two of them, predicted values and trajectory, match on the outcome itself; that is sometimes what the question calls for, and the report must say so, because a group chosen on the outcome has part of the answer built in. See \texttt{help peerpick}.}
+The first is a specification curve \parencite{simonsohn2020speccurve}: thirty versions of the comparison, varying the number of peers, the distance metric, and the factor set, and the gap runs from 0.3 to 14.9 points across them. The 14.9 appears only when Hispanic share is dropped from the factors; the stability table shows that dropping it also replaces nearly the whole peer list (an overlap score of 0.11 with the original ten, on a scale where 1 means the same list), while dropping any other factor leaves most of the list in place. That is the sentence for the report: the comparison turns on treating Hispanic share as a matching factor, and the reader should know it. The placebo check makes every other county the focal unit in turn and builds its peers the same way; 4.7 percent of Texas counties show a gap at least as large as Webb's, so the gap is unusual but not unheard of. The checks also show how far the first two decisions reach. With all counties as the pool instead of metro counties, the gap falls to 3.5 points. With the typology cell a dashboard would use (the same rural--urban code and border status, four counties), it is 1.0 point with an interval that spans zero. None of these is wrong. Each answers a different question, and the report should say which question was asked.\marginnote{\texttt{peerpick} offers other methods behind the same syntax: coarsened cells, a propensity score, predicted values, k-means clusters, entropy balancing, a hand-picked list, trajectory distance on a panel, and synthetic-control weights. Two of them, predicted values and trajectory, match on the outcome itself; that is sometimes what the question calls for, and the report must say so, because a group chosen on the outcome has part of the answer built in. See \texttt{help peerpick}.}
 
 The rule for a report follows directly. State the pool, the factors, and the method in one sentence where the comparison first appears. Print the balance, or at least name the factor on which the peers fall short. Give the range of the gap across the reasonable alternatives rather than the one number, as the ledger of Section~\ref{ch08-sc-ledger} does for estimators. When nothing was treated and the question is where a unit stands, that is the whole method. When one unit adopted a policy and the comparison is the start of a before/after design, the same three decisions carry over, and the next subsection takes them there.
 
@@ -4896,7 +4886,7 @@ We sort the seven tools with two questions. \emph{Online versus offline}: does t
 \end{figure*}
 
 \subsection{Pick the tool: online or offline, chart or container}\label{sec:suite-choose}
-Faced with a tool choice, ask the grid's two questions and let the answers pick for you. Does the page have to work with the internet off? Then you are in the offline row: \texttt{sparkta2}\index{sparkta2@\texttt{sparkta2}} for a chart, \texttt{statashiny}\index{statashiny@\texttt{statashiny}}, \texttt{dashboardbuilder}\index{dashboardbuilder@\texttt{dashboardbuilder}}, or \texttt{webdoc2}\index{webdoc2@\texttt{webdoc2}} for a container. Are you drawing one graphic or combining many? That is the chart-versus-container column. Those two questions narrow the choice to a single tool everywhere except the offline-container cell, which has three. \texttt{webdoc2} is the wrapper you reach for when the deliverable is a whole report; between the two dashboards, pick by the reader's verb: \texttt{statashiny} when readers explore rows with a search box or slider, \texttt{dashboardbuilder} when readers scan headline tiles against a benchmark (Chapter~\ref{ch:portals} works all three). Name the venue and the deliverable, look up the cell where those two answers meet, and where that cell lists more than one tool, choose by what the reader will actually do.
+Faced with a tool choice, ask the grid's two questions and let the answers pick for you. Does the page have to work with the internet off? Then you are in the offline row: \texttt{sparkta2}\index{sparkta2@\texttt{sparkta2}} for a chart, \texttt{dashboardbuilder}\index{dashboardbuilder@\texttt{dashboardbuilder}} or \texttt{webdoc2}\index{webdoc2@\texttt{webdoc2}} for a container (\texttt{webdoc2} pages keep their content offline but take their styling from the web). \texttt{statashiny}\index{statashiny@\texttt{statashiny}} needs no server but does need the internet, so it sits in the online row. Are you drawing one graphic or combining many? That is the chart-versus-container column. Those two questions narrow the choice to a single tool everywhere except the offline-container cell, which has three. \texttt{webdoc2} is the wrapper you reach for when the deliverable is a whole report; between the two dashboards, pick by the reader's verb: \texttt{statashiny} when readers explore rows with a search box or slider, \texttt{dashboardbuilder} when readers scan headline tiles against a benchmark (Chapter~\ref{ch:portals} works all three). Name the venue and the deliverable, look up the cell where those two answers meet, and where that cell lists more than one tool, choose by what the reader will actually do.
 
 Spend one more minute with the grid before any command runs. Ahead of the build, write the deliverable in one sentence that answers both axis questions, something like \enquote{a county wage map for the agency website, refreshed quarterly, firewall status unconfirmed}: the venue clause fixes the row, the refresh clause is where you see that the page is a standing commitment (Section~\ref{ch10-sec:maintenance}), and the unconfirmed firewall is the reason to test with the network off before promising the online tool. Write that sentence where the team can see it, and nobody has to relitigate the tool choice at every revision.
 
@@ -4918,9 +4908,9 @@ Tool & Layer & Renders & Net at view & Best for \\
 \texttt{googlesheets}& Ingest    & (data I/O)     & live & Live Google Sheets as source or surface (Ch.\,11) \\
 \texttt{googlechart} & Chart     & Online (Google)& yes  & Web embeds, filter dropdowns, US-state geo, bubble-with-Play \\
 \texttt{sparkta2}    & Chart     & Offline (D3)   & no   & Air-gapped briefs; TX county / district maps \\
-\texttt{statashiny}  & Container & Offline (JS)   & no   & Single-file dashboards: sliders, search, cards (Ch.\,12) \\
+\texttt{statashiny}  & Container & Online (JS)    & yes  & Single-file dashboards: sliders, search, cards (Ch.\,12) \\
 \texttt{dashboardbuilder} & Container & Offline (SVG) & no & KPI tiles, tabs, benchmark selector (Ch.\,12) \\
-\texttt{webdoc2}     & Container & Offline (BS-5) & no   & The report/portal shell that embeds the above (Ch.\,12) \\
+\texttt{webdoc2}     & Container & Offline (BS-5) & styling & The report/portal shell that embeds the above (Ch.\,12) \\
 \hline
 \end{tabular}
 }
@@ -5937,16 +5927,14 @@ webdoc close
 Read the two embed lines and the pipeline comes into view. The \texttt{wdimg} line pulls in a static graph that Stata exported; the \texttt{wdiframe} line pulls in the interactive dashboard \texttt{statashiny} built, whole and live, into the same scrolling page. When embedding, keep every \texttt{wdiframe} and \texttt{wdimg} path relative to the portal folder, never absolute, so the page that works on your machine still works on the laptop the folder is copied to; at the end of this chapter we walk through a rebuild rehearsal that catches exactly this slip. The live \texttt{webdoc2} example site shows a finished report of exactly this shape.\marginnote{See \texttt{ericabooth.github.io/} \texttt{Webdoc2\_Example\_Site} for a full report, and the \texttt{statashiny} example site, which is itself a \texttt{webdoc2} page with a dashboard embedded by \texttt{wdiframe}. Both host free on GitHub Pages, which is the last step of the capstone below.}
 
 \section{Interactive without a server}
-Clients behind strict IT still deserve interactivity, and \texttt{statashiny}\index{statashiny@\texttt{statashiny}} provides it without a server, compiling a Stata dataset into static files that behave like a small app: searchable tables, charts that filter live, value cards, all running in the browser from local files.\marginnote{\texttt{statashiny} is the offline cousin of the interactive charts in Chapter~\ref{ch:interactive}, built for the setting where nothing may be installed and nothing may phone home.}
+Clients without a server of their own still deserve interactivity, and \texttt{statashiny}\index{statashiny@\texttt{statashiny}} provides it, compiling a Stata dataset into one static file that behaves like a small app: searchable tables, charts that filter live, value cards, all running in the browser.\marginnote{The page loads its two JavaScript libraries from public content-delivery networks when it opens, so the reader needs an internet connection. For a reader who has none, use \texttt{dashboardbuilder} (Section~\ref{sec:dashboardbuilder}), which embeds everything in the file.}
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{statashiny}]
-\textbf{Integrated command:} \texttt{statashiny}. Compiles a Stata dataset into self-contained interactive HTML (searchable tables via DataTables and charts via Chart.js, two small JavaScript libraries embedded in the file, plus filters and value cards) that runs offline in any browser with no server. Install it once from the authors' GitHub (note the repo name differs from the command name):
+\textbf{Integrated command:} \texttt{statashiny}. Compiles a Stata dataset into one interactive HTML file (searchable tables via DataTables and charts via Chart.js, plus filters and value cards) that runs in any browser with no server; the browser fetches the two libraries when the page opens. Install it from SSC:
 \par
 {\footnotesize
 \begin{verbatim}
-local gh "https://raw.githubusercontent.com/ericabooth"
-net install statashiny, ///
-    from("`gh'/StataShiny-public/main/") replace force
+ssc install statashiny
 \end{verbatim}
 }
 \end{kaobox}
@@ -6016,16 +6004,14 @@ Ask an AI assistant for \enquote{a quick dashboard for the board} and you will g
 
 You can escape the trap by demoting the dashboard from application to artifact. Every figure in this book is an artifact: a do-file builds it from data, and when the data change, you rerun the do-file rather than editing the picture. \texttt{dashboardbuilder}\index{dashboardbuilder@\texttt{dashboardbuilder}} extends that discipline to the interactive dashboard. You describe the page in Stata, panel by panel, and the command writes one self-contained HTML file: the data inlined as JSON, the charts drawn by a small engine of plain JavaScript and SVG (scalable vector graphics, the text-based image format browsers draw natively) embedded in the same file, no framework, no build chain, and no content-delivery network at build time or at view time.\marginnote{One opt-in exception: the \texttt{truepdf} build option adds a one-click PDF button that does pull a JS library from a CDN when clicked, and the build receipt says so whenever you use it. The default \texttt{pdf} button drives the browser's own print dialog and stays offline.} For a refresh, you rerun the do-file and review both its changes and the resulting page. A \texttt{git diff} helps a colleague see which panel definitions changed. When a language model assists with this work, apply the review procedure in Chapter~\ref{ch:ai}: the assistant proposes a change to the panel spec in your do-file, you read the dozen lines, run them, and the page that results is still one your code built.
 
-When should you reach for \texttt{dashboardbuilder} rather than \texttt{statashiny}? The two share a cell in the suite grid (Table~\ref{tab:suite-matrix}), the offline container, so you choose between them by asking what the reader will do with the page. Readers who \emph{explore rows}, searching a table, dragging a slider, filtering to their county, want \texttt{statashiny}. Readers who \emph{read headline numbers against a benchmark}, tiles on top, bars comparing this site against a declared reference below, want \texttt{dashboardbuilder}: its native furniture is KPI tiles, tabs, and a unit selector with a declared reference unit. Boards, funders, and steering committees are usually the second kind of reader.
+When should you reach for \texttt{dashboardbuilder} rather than \texttt{statashiny}? Both are serverless containers in the suite grid (Table~\ref{tab:suite-matrix}), so you choose between them first by the reader's connection, since only \texttt{dashboardbuilder} works with the network off, and then by what the reader will do with the page. Readers who \emph{explore rows}, searching a table, dragging a slider, filtering to their county, want \texttt{statashiny}. Readers who \emph{read headline numbers against a benchmark}, tiles on top, bars comparing this site against a declared reference below, want \texttt{dashboardbuilder}: its native furniture is KPI tiles, tabs, and a unit selector with a declared reference unit. Boards, funders, and steering committees are usually the second kind of reader.
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{dashboardbuilder}]
 \textbf{Integrated command:} \texttt{dashboardbuilder}. Builds self-contained interactive KPI dashboards (tiles; line, bar, horizontal-bar, bullet-compare, and table panels; tabs; a unit selector with a reference benchmark; per-panel CSV and PNG downloads) from a panel-by-panel grammar: \texttt{init}, then \texttt{tab} and \texttt{panel} calls, then \texttt{build}. Requires Stata~16+ and a Python~3 visible to Stata (standard library only; \texttt{python query} shows whether Stata sees one, and \texttt{set python\_exec} points it at yours). Install once from the authors' GitHub:
 \par
 {\footnotesize
 \begin{verbatim}
-local gh "https://raw.githubusercontent.com/ericabooth"
-net install dashboardbuilder, ///
-    from("`gh'/dashboardbuilder-stata-public/main/") replace force
+ssc install dashboardbuilder
 \end{verbatim}
 }
 \end{kaobox}
@@ -6379,7 +6365,7 @@ Before you let the folder go anywhere, rehearse the rebuild. Clone the repositor
 
 One further step takes the assembly, though not the shipping, off your calendar. The build itself, ingest through wrap, runs in batch exactly the way Chapter~\ref{ch:surveys} scheduled its survey pulls: one \texttt{cron} or Task Scheduler line runs the pipeline do-file on the data source's release date, writes the rebuilt folder to a staging location, and leaves a dated log. Resist automating the last mile. The release checklist and its three sign-offs exist because a person, not a scheduler, decides the portal is safe to send, and a pipeline that publishes straight to the client would also auto-publish the one quarter the source quietly rewrote its own history and every rate shifted. Automate up to the staging folder and the quarterly delivery becomes an hour of review instead of a day of assembly, with the judgment kept exactly where it belongs, at the moment of release.
 
-The two \texttt{googlechart} pages this pipeline embeds are the ones you built in Chapter~\ref{ch:interactive}: the state choropleth of Figure~\ref{fig:gc-geo}, from stage~2a, and the searchable table of Figure~\ref{fig:gc-table}. In the portal each is embedded live by \texttt{wdiframe}, so the reader hovers a state or types a name without leaving the report, and the \texttt{statashiny} dashboard of stage~3 offers the same table interaction offline.
+The two \texttt{googlechart} pages this pipeline embeds are the ones you built in Chapter~\ref{ch:interactive}: the state choropleth of Figure~\ref{fig:gc-geo}, from stage~2a, and the searchable table of Figure~\ref{fig:gc-table}. In the portal each is embedded live by \texttt{wdiframe}, so the reader hovers a state or types a name without leaving the report, and the \texttt{statashiny} dashboard of stage~3 offers the same table interaction from a file the client hosts.
 
 Applied Example~\ref{ae:ch12-onefolder} gathers the whole chapter into a single commission, so you can see each tool appear once, in the order the pipeline runs them.
 
@@ -6612,7 +6598,7 @@ Code that passes every check on your own computer can still fail on a colleague'
 
 The failures below came from Stata packages we wrote, several of them used in this book. Each passed its tests on a Mac running StataNow 19.5 and then broke for users elsewhere:
 \begin{itemize}
-\item An option declared as \texttt{TX2036STyle} worked in StataNow 19.5 but was rejected as ``not allowed'' in older Stata. Stata reads the capital letters in a \texttt{syntax} option as its minimum abbreviation, and older and newer versions treat a capital that follows a digit differently, so the full option name differed by version. Adding \texttt{version 16} to the file does not bring back the older rule; only the older Stata does.
+\item An option declared as \texttt{PLOT2STyle} worked in StataNow 19.5 but was rejected as ``not allowed'' in older Stata. Stata reads the capital letters in a \texttt{syntax} option as its minimum abbreviation, and older and newer versions treat a capital that follows a digit differently, so the full option name differed by version. Adding \texttt{version 16} to the file does not bring back the older rule; only the older Stata does.
 \item A folder check written as \texttt{confirm file "dir/."} worked on macOS and Linux but is unreliable on Windows, which does not open a folder as if it were a file (Section~\ref{sec:control}).
 \item A path that began with \texttt{\textasciitilde} worked when Stata opened the file, because Stata on macOS expands \texttt{\textasciitilde} to the home folder, and failed when the same path was handed to a Python helper, which does not.
 \item Text containing a line break, such as an open-ended survey answer, became several rows after a round trip through \texttt{export delimited} and \texttt{import delimited}, until the export added the \texttt{quote} option and the import added \texttt{bindquote(strict)}.
@@ -6628,10 +6614,10 @@ Each of these survived review because the reviewer, human or LLM, tested only th
 * test_options.do: run it under every Stata version you have
 capture program drop optdemo
 program define optdemo
-    syntax , [TX2036STyle]
+    syntax , [PLOT2STyle]
     display as text "option accepted"
 end
-rcof "noisily optdemo, tx2036style" == 0
+rcof "noisily optdemo, plot2style" == 0
 display as result "PASS: the option is accepted"
 \end{verbatim}
 }
@@ -6639,15 +6625,15 @@ StataNow 19.5 prints the \texttt{PASS} line. Stata 16.1 stops at \texttt{rcof}:
 \par
 {\footnotesize
 \begin{verbatim}
-. rcof "noisily optdemo, tx2036style" == 0
-option tx2036style not allowed
+. rcof "noisily optdemo, plot2style" == 0
+option plot2style not allowed
 rcof:  _rc  == 0 *NOT TRUE* from
-       noisily optdemo, tx2036style
+       noisily optdemo, plot2style
        _rc == 198
 r(9);
 \end{verbatim}
 }
-Declaring the option as \texttt{TX2036style}, with every letter after the abbreviation in lowercase, passes in both versions.
+Declaring the option as \texttt{PLOT2style}, with every letter after the abbreviation in lowercase, passes in both versions.
 
 \paragraph{Run the tests under every environment you can reach.} Run the test files in batch under each Stata version installed on your machine; if your license allows it, keep an older version installed for this purpose. Then change the environment around the test while leaving the code alone: put the working folder in a path that contains spaces and an accented character, point the home and temporary folders at a scratch folder, and run once after \texttt{clear all} and once after \texttt{mata clear}. On macOS and Linux you can set the home and temporary folders for a single run from the shell:
 \par
@@ -8379,7 +8365,7 @@ peerpick spec, k(5 10 15) distance(all) dropone
 peerpick stability
 \end{verbatim}
 }
-Webb loses 8,126 years of potential life per 100,000 residents; its ten peers (Cameron, Hidalgo, El Paso, Starr, Maverick, and five others) average 10,018, so Webb is about 1,900 below counties that look like it on poverty, coverage, and size, with an interval of $-3{,}341$ to $-442$. The balance table says the peers match on poverty and size and fall short on the uninsured rate (no Texas county of Webb's size has a higher one). The checks hold the sign: across 24 specifications the gap runs from $-3{,}485$ to $-1{,}335$, and dropping any one peer moves it between $-2{,}243$ and $-1{,}531$. The stability table also shows that dropping log population replaces nearly the whole peer list (an overlap of 0.05) while the gap barely moves, which is the useful kind of fragility: the list depends on that factor, the finding does not. Say both in the report. The regression in Stage~4 and this comparison answer different questions, and a reader who sees only the gradient would guess wrong about Webb.
+Webb loses 8,126 years of potential life per 100,000 residents; its ten peers (Cameron, Hidalgo, El Paso, Starr, Maverick, and five others) average 10,018, so Webb is about 1,900 below counties that look like it on poverty, coverage, and size, with an interval of $-3{,}341$ to $-442$. The balance table says the peers match on poverty and size and fall short on the uninsured rate (no Texas county of Webb's size has a higher one). The checks hold the sign: across 24 specifications the gap runs from $-3{,}485$ to $-1{,}335$, and dropping any one peer moves it between $-2{,}243$ and $-1{,}531$. The stability table also shows that dropping log population replaces nearly the whole peer list (an overlap score of 0.05) while the gap stays negative and similar in size ($-2{,}282$), which is the useful kind of fragility: the list depends on that factor, the finding does not. Say both in the report. The regression in Stage~4 and this comparison answer different questions, and a reader who sees only the gradient would guess wrong about Webb.
 
 \paragraph{The honest caveat.} This is a correlation across counties, not a causal claim about people, and not a claim about any one resident. Beware the ecological fallacy: a pattern across counties need not hold across individuals, the same warning attached to Example D.1. What the capstone establishes is narrower and still useful, a defensible, reproducible description of how premature death tracks child poverty across US counties, built the way this book builds everything: guarded, traced to its source, and handed off in a form someone else can run.
 

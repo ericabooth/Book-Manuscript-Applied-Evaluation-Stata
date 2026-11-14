@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 0.1.0  2026-07-06}{...}
+{* *! version 0.1.1  2026-11-09}{...}
 {viewerjumpto "Syntax" "roisim##syntax"}{...}
 {viewerjumpto "Description" "roisim##description"}{...}
 {viewerjumpto "Options" "roisim##options"}{...}
@@ -121,7 +121,8 @@ state is used.{p_end}
 tornado table to a CSV file with columns {it:input}, {it:low},
 {it:central}, {it:high}, {it:roi_low}, {it:roi_high}, {it:swing}, one row
 per swept input, sorted by swing, longest first.  A {cmd:.csv} extension
-is added when the filename has none.  Without {cmd:replace}, an existing
+is added when the file name has none; a dot in a folder name does not
+count, so {cmd:saving(my.proj/tornado)} writes {cmd:my.proj/tornado.csv}.  Without {cmd:replace}, an existing
 file is an error.{p_end}
 
 

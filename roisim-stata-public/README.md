@@ -80,13 +80,22 @@ See `help roisim` for the full model, all options, and more examples.
 | `r(tornado)` | n_swept x 6 matrix: low, central, high, roi_low, roi_high, swing |
 | `r(cmd)`, `r(saving)` | command name; CSV path when `saving()` was given |
 
-## Limitations (v0.1.0)
+## Limitations (v0.1.1)
 
 The effect is Normal, the cost is Uniform, and draws are independent across
 inputs; correlated draws and other distribution families are not supported.
 Fix the accounting perspective (whose costs, whose benefits) before reaching
 for the command, and consider reporting results at more than one discount
 rate.
+
+## Changelog
+
+- 0.1.1 (2026-11-09): `saving()` adds `.csv` when the file name has no
+  extension even if a folder in the path contains a dot (before,
+  `saving("my.proj/tornado")` wrote a file with no extension). A file
+  name in compound quotes is no longer rejected as empty. The test
+  battery finds the package folder itself.
+- 0.1.0 (2026-07-06): first release.
 
 ## License
 

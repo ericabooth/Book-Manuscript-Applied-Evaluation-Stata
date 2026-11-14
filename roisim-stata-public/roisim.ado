@@ -1,5 +1,8 @@
-*! version 0.1.0  06jul2026  Eric A. Booth, Sr Researcher, Texas 2036
+*! version 0.1.1  09nov2026  Eric A. Booth, Sr Researcher, Texas 2036
 *! roisim: Monte Carlo return-on-investment simulation with tornado export
+* 0.1.1  09nov2026  saving() adds .csv when the file name (not the whole
+*                   path) has no extension, so "my.proj/tornado" gets one;
+*                   a compound-quoted file name is no longer read as empty
 program define roisim, rclass
     version 16.0
     // version 16.0 is the package baseline; the program uses only Mata's
@@ -104,12 +107,20 @@ program define roisim, rclass
     if `"`saving'"' != "" {
         local 0 `"`saving'"'
         syntax [anything] [, replace]
-        local svfile = subinstr(`"`anything'"', `"""', "", .)
+        * a quoted name (plain or compound quotes) is taken as one token;
+        * an unquoted name keeps any spaces
+        gettoken svfile svrest : anything, qed(svquoted)
+        if !`svquoted' | `"`svrest'"' != "" {
+            local svfile = subinstr(`"`anything'"', `"""', "", .)
+        }
         if `"`svfile'"' == "" {
             di as err "saving() requires a filename"
             exit 198
         }
-        if !strpos(`"`svfile'"', ".") local svfile `"`svfile'.csv"'
+        * add .csv only when the file name itself has no extension; a dot
+        * in a folder name does not count
+        mata: st_local("svext", pathsuffix(st_local("svfile")))
+        if `"`svext'"' == "" local svfile `"`svfile'.csv"'
         if "`replace'" == "" confirm new file `"`svfile'"'
         local dosave 1
     }

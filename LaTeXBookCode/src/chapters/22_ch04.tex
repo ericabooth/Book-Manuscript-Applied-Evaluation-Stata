@@ -55,13 +55,11 @@ Between the walk and the combine, spend ten minutes on a triage read that can sa
 The harder work comes at the combine step, not at the download. By the end of this section you will have a rename map and a stacking call small enough to run against two vintages of the \texttt{auto} data, shaped exactly like the one that harmonizes thirteen years of report cards. Element names mutate across years: a column called one thing in 2015 is renamed or split by 2020, so a naive append stacks unrelated variables. Keep a master reference of element names and a rename map that the \texttt{combineall}\index{combineall@\texttt{combineall}} command of the next box applies per vintage, so the panel is harmonized deliberately rather than by accident. That is the work hiding inside what sounds like a simple task, downloading and combining a multi-year panel, and documenting the rename decisions is what makes the resulting panel replicable by someone who was not there when you built it. The download loop and the combine step are two halves of one job: the walk writes one file per vintage into a \texttt{raw/} tree, and the harmonizer stacks that tree into a single panel while remembering which column came from which year.
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{combineall}]
-\textbf{Shipped tool:} \texttt{combineall} (v2.0.0, the release this book's examples were tested against), an engine the first author has used since 2011 to combine every file in a directory (append, merge, joinby, or convert-only), extended for this book with a vintage-aware harmonization layer. Point it at the \texttt{raw/} tree the download loop filled, and it stacks the files into the panel the chapter promised. Install it the house way:
+\textbf{Shipped tool:} \texttt{combineall}, an engine the first author has used since 2011 to combine every file in a directory (append, merge, joinby, or convert-only), extended for this book with a vintage-aware harmonization layer. Point it at the \texttt{raw/} tree the download loop filled, and it stacks the files into the panel the chapter promised. Install it the house way:
 \par
 {\footnotesize
 \begin{verbatim}
-local gh "https://raw.githubusercontent.com/ericabooth"
-net install combineall, ///
-    from("`gh'/combineall-stata-public/main/") replace force
+ssc install combineall
 \end{verbatim}
 }
 With \texttt{cmethod(append)}, three features do the combine half. The \texttt{year()} option reads a four-digit year out of each filename and writes it into a \texttt{year} variable, so the files sort and stack in vintage order. The \texttt{map()} option takes a small CSV, one row per rename (\texttt{oldname,newname,firstyear,lastyear}), and applies each rename to the vintages it names before the append, which aligns an unchanged measure whose variable name changed. A measure split into separate categories requires a substantive rule for combining or comparing those categories; renaming alone cannot establish equivalence. And a \texttt{varname[source]} characteristic, a per-variable text tag that Stata stores with the dataset (\texttt{help char}), records on each harmonized variable which file and year the values came from, so you can read the provenance back out of the built \texttt{.dta}. The command writes a harmonization table (which variable is present in which year) and reports \texttt{r(n\_files)}, \texttt{r(years)}, and \texttt{r(n\_missing)} for a quick sanity check. Keep the map CSV outside the \texttt{directory()} you point at, or it is swept up as an input file; and because the 2011 engine appends with \texttt{force}, a variable that is a string in one vintage and numeric in another coerces to missing rather than erroring, so read the harmonization table before you trust the stack.
@@ -247,13 +245,11 @@ You can replace an afternoon of opening files by hand with one call: point it at
 The mirrored tree is also where the triage read happens for a shared-drive drop. Sort \texttt{\_converted} by file size and open the outliers first: a worksheet that arrived empty converts to an empty dataset without complaint, and a workbook whose header row slid down a line yields variables named for spreadsheet columns rather than concepts. Spend ten minutes with the smallest and strangest files before any harmonizing: if they pass, proceed to Chapter~\ref{ch:panels}'s harmonization; if one fails, go back to the partner with a specific filename rather than a vague complaint.\marginnote{The pass extends without you: when the partner drops three more files next month, the same call at the same tree absorbs them into the same layout, the download loop's rerun habit aimed at a folder instead of a site.}
 
 \begin{kaobox}[frametitle=Package Integration: \texttt{convertanything}]
-\textbf{Integrated command:} \texttt{convertanything}. Converts a single file or a whole directory tree of mixed formats into clean \texttt{.dta} in one pass. Install it from the authors' GitHub, then convert a drop:
+\textbf{Integrated command:} \texttt{convertanything}. Converts a single file or a whole directory tree of mixed formats into clean \texttt{.dta} in one pass. Install it from SSC, then convert a drop:
 \par
 {\footnotesize
 \begin{verbatim}
-local gh "https://raw.githubusercontent.com/ericabooth"
-net install convertanything, ///
-    from("`gh'/convertanything-stata-public/main/") replace force
+ssc install convertanything
 
 convertanything using "$raw/partner_drop", recursive ///
     saving("$raw/_converted") replace clear         ///
@@ -267,9 +263,7 @@ The one dialect \texttt{convertanything} does not read is R's own. When a partne
 \par
 {\footnotesize
 \begin{verbatim}
-local gh "https://raw.githubusercontent.com/ericabooth"
-net install importr, ///
-    from("`gh'/importR-stata/main/") replace force
+ssc install importr
 importr using "partner_model_frame.Rdata", clear
 \end{verbatim}
 }

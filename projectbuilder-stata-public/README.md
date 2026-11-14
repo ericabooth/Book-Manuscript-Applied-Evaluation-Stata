@@ -13,7 +13,13 @@ calls, and the same behavior on macOS, Windows, and Linux.
 
 ## Install
 
-From GitHub:
+From SSC (version 2.0.1):
+
+```stata
+ssc install projectbuilder
+```
+
+From GitHub (version 2.1.2, the latest):
 
 ```stata
 net install projectbuilder, from("https://raw.githubusercontent.com/ericabooth/projectbuilder-stata-public/main/") replace force
@@ -30,7 +36,7 @@ net get projectbuilder, from("https://raw.githubusercontent.com/ericabooth/proje
 Requires Stata 16.0 or newer. No hard dependencies.
 
 
-<img width="2400" height="1260" alt="projectbuilder_srctag_suite" src="https://github.com/user-attachments/assets/f4aa142e-d63d-46b7-a805-247bac2fc10d" />
+<img width="2400" height="1260" alt="projectbuilder and srctag" src="assets/projectbuilder_srctag_suite.png" />
 
 ## Quick start
 
@@ -90,6 +96,8 @@ VendorFeed/
 │   ├── _runall.do           renders website/index.html
 │   ├── _project_meta.txt    recorded metadata, read back on rebuild
 │   ├── Readme.md
+│   ├── header_fallback.html self-contained render header (derived)
+│   ├── run_log.txt          per-stage runtimes (written by the run-all block)
 │   ├── website/index.html
 │   └── _archive/
 └── _archive/
@@ -138,7 +146,10 @@ automatic pass skips that step, and a one-line note names the install command.
 `header_fallback.html` into every project's `_documentation/` on every run,
 and the render stages it automatically when webdoc2's own themed
 `header.html` is not installed. (Before v2.1.0 this took a manual `net get`
-plus an adopath move; that step is gone.)
+plus an adopath move; that step is gone.) The fallback header and the
+`sitebuild` catalog page use fixed heading colors (navy `#1b2d55` with an
+orange `#d44500` rule); they are cosmetic only. For your own colors, put your
+own `header.html` in `_documentation/`.
 
 Run `projectbuilder check` to see every companion's status in one table,
 with clickable install commands.
@@ -163,6 +174,25 @@ When `webdoc2` is absent, `projectbuilder` writes a plain but complete
 - `r(nraw)` — number of files in `01_raw/`
 - `r(nconverted)` — number of `.dta` files in `01_raw/_converted/`
 - `r(rebuilt)` — `1` if this call refreshed an existing project, else `0`
+
+`projectbuilder sitebuild` stores `r(nprojects)` (projects cataloged) and
+`r(catalog)` (path of the catalog page). `projectbuilder check` stores
+`r(nmissing)` (companions not installed) and `r(missing)` (their names).
+
+## Subcommands
+
+```stata
+projectbuilder sitebuild [, path(folder) title(text)]
+projectbuilder check
+```
+
+`sitebuild` scans a base folder (default the current one) for projects, meaning
+folders holding `_documentation/_project_meta.txt`, and writes
+`projects_index.html` and `projects_index.md` there. A first-level folder with
+no metadata file is searched one level down, so a `Source/Subsource` project
+such as `projectbuilder Agency/Extract` is cataloged as `Agency/Extract`.
+`check` prints one table of the optional companions with clickable install
+commands.
 
 ## Your data in memory
 
@@ -197,6 +227,19 @@ by naming the package folder:
 stata-mp -b do test_projectbuilder.do
 stata-mp -b do test_projectbuilder.do "/path/to/projectbuilder-stata-public"
 ```
+
+## Changes in 2.1.2
+
+- `projectbuilder sitebuild` also catalogs projects made with the
+  `Source/Subsource` form, which sit one level down (`Agency/Extract`).
+  Before, they were left out of the catalog without a word.
+- The fixed heading colors of the fallback header and the catalog page are
+  now documented.
+- The version stamped into generated files and pages is current (it still
+  said v2.1.0).
+- The test battery quotes its tempfiles (it failed when `TMPDIR` held a
+  space) and points its unreachable-URL tests at `127.0.0.1:9` instead of
+  real domains.
 
 ## Changes in 2.1.1
 
