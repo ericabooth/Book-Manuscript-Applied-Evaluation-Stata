@@ -85,11 +85,6 @@ on the outcome's path before the policy, a balance table, a stability check,
 and a ledger file that records the shortlist and the choices behind it.
 
 {pstd}
-The command was called {cmd:twinmatch} through version 0.2.0; the name
-changed to {cmd:peermatch} in 0.2.1 with no change in behaviour, and the
-old repository address redirects to the new one.
-
-{pstd}
 It selects and describes.  It does not weight the twins, estimate effects,
 or compute uncertainty; see {help peermatch##related:Related and complementary commands}
 for the tools that do those jobs once the twins are chosen.

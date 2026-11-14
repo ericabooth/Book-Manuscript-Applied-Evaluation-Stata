@@ -1,6 +1,6 @@
 *! version 0.2.1  2026-11-14  Eric A. Booth, Sr Researcher, Texas 2036
 *! peermatch: policy-twin selection by Mahalanobis distance
-* 0.2.1  2026-11-14  renamed from twinmatch; no change in behaviour
+* 0.2.1  2026-11-14  new command name; no change in behaviour
 * 0.2.0  2026-11-14  strata() and caliper() shape the pool; pretrend() and
 *                   time()/outcome()/window() match on the outcome path
 *                   before the policy; balance table and support line;

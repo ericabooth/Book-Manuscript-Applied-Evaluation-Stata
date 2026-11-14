@@ -1,6 +1,6 @@
 # peermatch
 
-Policy-twin selection by Mahalanobis distance, for Stata 16.0+. (Called `twinmatch` through version 0.2.0; renamed in 0.2.1 with no change in behaviour. The old repository address redirects here.)
+Policy-twin selection by Mahalanobis distance, for Stata 16.0+.
 
 `peermatch` answers a question that comes up constantly in small-N program
 evaluation: one district, county, campus, hospital, or firm adopted a policy;
@@ -163,8 +163,7 @@ on the adopath.
 
 ## Changelog
 
-- 0.2.1 (2026-11-14): renamed from `twinmatch` to `peermatch`; files, help, and
-  repository renamed, behaviour unchanged.
+- 0.2.1 (2026-11-14): new command and repository name; behaviour unchanged.
 - 0.2.0 (2026-11-14): `strata()`, `caliper()`, `pretrend()`, the panel form
   (`time()`, `outcome()`, `window()`, `growth`, `preweight()`), `balance`,
   the support line, `stability`, `saving()`, `nodisplay`; new stored results
