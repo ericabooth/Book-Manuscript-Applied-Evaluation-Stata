@@ -269,10 +269,46 @@ Estimating the headline is the fast part; defending it is where the unreported s
 
 The ledger converts the forking paths from a temptation into a record. Every path taken is on the page, so the final report can state plainly which specifications were run and how the headline held up across them, and a hostile reviewer's \enquote{what else did you try} has a documented answer instead of a reconstructed one. It also writes the robustness appendix almost by itself: kept rows become the appendix table, dropped rows become its footnotes. Section~\ref{sec:prereg} supplies the companion discipline, since the pre-analysis memo states the paths in advance and the ledger records the ones actually walked.
 
+\subsection{Compared with whom: the pool, the factors, and the method}\label{ch08-sec:peers}
+Every comparison in this chapter, causal or descriptive, rests on a choice that reports rarely state: which units the focal unit is compared with. A county's uninsured rate is high or low only against some set of counties, and three separate decisions produce that set. The \emph{pool} is who may be a candidate at all: every county in the state, only metro counties, only the counties in the same accountability group. The \emph{factors} are the variables on which \enquote{similar} is measured. The \emph{method} is the rule that turns similarity on those factors into a group: the ten nearest by a distance, every unit in the same typology cell, a list someone published. Agencies routinely fix one of the three and leave the others open; a dashboard's \enquote{similar districts} is usually a typology cell whose factors were chosen years ago. Naming the three lets you say which was your choice and which was handed to you, and it tells a reader what would have to change for the comparison to come out differently. The matching literature treats the same decisions under the names covariate selection, caliper, and distance metric \parencite{stuart2010matching}; the vocabulary here is the one you can use in a meeting.\marginnote{The treated-unit case in the next subsection is the same three decisions with the nouns changed: the pool is the donor pool, the factors can include the outcome's path before the policy, and the method is the distance that ranks the twins.}
+
+The \texttt{peerpick}\index{peerpick@\texttt{peerpick}} command keeps the three apart, so each can be stated and each can be varied. Install it alongside the other tools; its example data ship with it:
+\par
+{\footnotesize
+\begin{verbatim}
+local gh "https://raw.githubusercontent.com/ericabooth"
+net install peerpick, from("`gh'/peerpick-stata-public/main/") replace
+net get peerpick, from("`gh'/peerpick-stata-public/main/")
+\end{verbatim}
+}
+The example file holds the 254 Texas counties with the share of adults 18--64 without health insurance (CDC PLACES, 2023 release) and four features from the 2019--23 American Community Survey. Webb County, on the border at Laredo, is at 36.2 percent. The question a report would ask is how that compares with similar counties, and the call below states each of the three decisions in its options: the pool is metro counties (\texttt{strata(metro)}), the factors are the poverty rate, log population, Hispanic share, and median age, and the method is the ten nearest by Mahalanobis distance:
+\par
+{\footnotesize
+\begin{verbatim}
+use tx_counties, clear
+peerpick pov lpop hisp medage, id(fips5) focal(48479) ///
+    name(county_name) strata(metro) k(10) outcome(unins)
+\end{verbatim}
+}
+The ten peers average 29.4 percent, so Webb is 6.8 points above them, with an interval of 2.6 to 10.9 that treats the ten as a draw from the counties that could have been chosen. Read the balance table before the gap. It lists, for each factor, Webb's value, the peer mean, and their difference in pool standard deviations, and the Hispanic-share row is $-1.07$: no metro county in Texas matches Webb's 95 percent, and the four border metro counties (Cameron, El Paso, Hidalgo, Maverick) come closest. A standardized difference near zero on every row means the peers resemble the focal unit on the things you chose to match; a large one means the pool has no close match on that factor, which is itself a finding.
+
+Three further calls replay the same comparison with one thing varied at a time, which is how you learn how much the answer depended on your choices rather than on Webb:
+\par
+{\footnotesize
+\begin{verbatim}
+peerpick spec, k(5 10 15) distance(all) dropone
+peerpick placebo
+peerpick stability
+\end{verbatim}
+}
+The first is a specification curve \parencite{simonsohn2020speccurve}: thirty versions of the comparison, varying the number of peers, the distance metric, and the factor set, and the gap runs from 0.3 to 14.9 points across them. The 14.9 appears only when Hispanic share is dropped from the factors; the stability table shows that dropping it also replaces nearly the whole peer list (an overlap of 0.11 with the original ten), while dropping any other factor leaves most of the list in place. That is the sentence for the report: the comparison turns on treating Hispanic share as a matching factor, and the reader should know it. The placebo check makes every other county the focal unit in turn and builds its peers the same way; 4.7 percent of Texas counties show a gap at least as large as Webb's, so the gap is unusual but not unheard of. The checks also show how far the first two decisions reach. With all counties as the pool instead of metro counties, the gap falls to 3.5 points. With the typology cell a dashboard would use (the same rural--urban code and border status, four counties), it is 1.0 point with an interval that spans zero. None of these is wrong. Each answers a different question, and the report should say which question was asked.\marginnote{\texttt{peerpick} offers other methods behind the same syntax: coarsened cells, a propensity score, predicted values, k-means clusters, entropy balancing, a hand-picked list, trajectory distance on a panel, and synthetic-control weights. Two of them, predicted values and trajectory, match on the outcome itself; that is sometimes what the question calls for, and the report must say so, because a group chosen on the outcome has part of the answer built in. See \texttt{help peerpick}.}
+
+The rule for a report follows directly. State the pool, the factors, and the method in one sentence where the comparison first appears. Print the balance, or at least name the factor on which the peers fall short. Give the range of the gap across the reasonable alternatives rather than the one number, as the ledger of Section~\ref{ch08-sc-ledger} does for estimators. When nothing was treated and the question is where a unit stands, that is the whole method. When one unit adopted a policy and the comparison is the start of a before/after design, the same three decisions carry over, and the next subsection takes them there.
+
 \subsection{Choosing comparison units transparently when N is small}\label{ch08-sec:twins}
 The synthetic-control machinery presumes a donor pool large enough to average, but an embedded evaluator is often handed the opposite: one treated site and a dozen candidate comparisons, where a formal synthetic weight would overfit and no reader could audit the choice. Instead of reaching for a black-box optimizer, we suggest you start transparently: rank the candidate units by how closely they resemble the treated site on the covariates that matter, and state the ranking out loud. \textcite{abadie2021synth} makes the same point from the other direction: a synthetic control is credible only when its donor pool contains genuinely comparable units, chosen before the outcome is seen, not reverse-engineered to fit the treated unit's trajectory. Picking the comparison group transparently is the small-N analogue of that discipline. In the rest of this subsection we install the tool that does the ranking and work one example end to end, so you finish with a shortlist you can put in front of a client and defend a year later, rather than a set of weights no one in the room can check.
 
-The \texttt{peermatch}\index{peermatch@\texttt{peermatch}} command ranks \emph{policy twins}: the candidate units nearest the treated one in Mahalanobis\index{Mahalanobis distance} distance on a stated covariate set. The distance from candidate unit~$i$ to the treated unit~$t$ is
+The \texttt{peermatch}\index{peermatch@\texttt{peermatch}} command ranks \emph{policy twins}: the candidate units nearest the treated one in Mahalanobis\index{Mahalanobis distance} distance on a stated covariate set. It is the treated-unit case of Section~\ref{ch08-sec:peers}: the pool is the donor pool, the factors can include the outcome's path before the policy, and the method is the distance that ranks the twins, with the same balance and stability checks behind it. The distance from candidate unit~$i$ to the treated unit~$t$ is
 \[
 d(i,t)=\sqrt{\,(\mathbf{x}_i-\mathbf{x}_t)^{\!\top}\,S^{-1}\,(\mathbf{x}_i-\mathbf{x}_t)\,},
 \]

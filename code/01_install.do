@@ -70,4 +70,8 @@ foreach pkg in cxchangelog rateshrink conformalpred hlmr2 peermatch roisim ///
     if _rc net install `pkg', from("`gh'/`pkg'-stata-public/main/") replace force
 }
 
+*--- Comparison groups (Chapter 8) ---------------------------------------------*
+capture which peerpick
+if _rc net install peerpick, from("`gh'/peerpick-stata-public/main/") replace force
+
 di as result "Package setup complete."

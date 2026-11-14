@@ -79,3 +79,20 @@ label data "CHR 2024 county extract (capstone). See capstone_chr.do."
 compress
 save "chr_2024_clean.dta", replace
 display as result "Deliverable saved: chr_2024_clean.dta, cap_ypll_poverty.png"
+
+*--- 7. Compared with whom (Chapter 8, Section on the pool, factors, method) --
+* Optional: a peer benchmark for one county on the same file.  Needs peerpick
+* (net install peerpick, from("https://raw.githubusercontent.com/ericabooth/peerpick-stata-public/main/")).
+capture which peerpick
+if !_rc {
+    destring populationrawvalue, gen(popn) force
+    gen double lpop = ln(popn)
+    * pool: counties in the same state; factors: child poverty, uninsured
+    * rate, log population; method: the ten nearest by Mahalanobis distance
+    peerpick childpov unins lpop, id(digitfipscode) focal(48479) name(name) ///
+        strata(state) k(10) outcome(ypll)
+    peerpick spec, k(5 10 15) distance(all) dropone
+    peerpick stability
+    drop popn lpop pp_*
+}
+else display as text "peerpick not installed; skipping the peer benchmark (stage 7)"
