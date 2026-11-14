@@ -187,6 +187,7 @@
 
   \item paradata, \hyperpage{84}
   \item parallel trends, \hyperpage{155}
+  \item \texttt{peermatch}, \hyperpage{158}
   \item Plan-Do-Study-Act cycle, \hyperpage{8}
   \item post-stratification, \hyperpage{131}
   \item \texttt{power}, \hyperpage{136}
@@ -229,7 +230,7 @@
   \item \texttt{reshapehelper}, \hyperpage{114}
   \item return on investment, \hyperpage{161}
   \item \texttt{riskscan}, \hyperpage{280}
-  \item \texttt{roisim}, \hyperpage{163}
+  \item \texttt{roisim}, \hyperpage{164}
   \item run chart, \hyperpage{182}
 
   \indexspace
@@ -269,7 +270,6 @@
   \item top-two-box, \hyperpage{80}
   \item total survey error, \hyperpage{73}
   \item tracking spine, \hyperpage{33}
-  \item \texttt{peermatch}, \hyperpage{158}
   \item two-way fixed effects, \hyperpage{152}
 
   \indexspace

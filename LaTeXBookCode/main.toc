@@ -151,10 +151,10 @@
 \contentsline {subsection}{\numberline {8.3.6}Choosing comparison units transparently when N is small}{158}{subsection.8.3.6}%
 \contentsline {subsection}{\numberline {8.3.7}The frontier: from ``did it work'' to ``for whom, and how sure''}{159}{subsection.8.3.7}%
 \contentsline {section}{\numberline {8.4}What did it cost, what did it return}{161}{section.8.4}%
-\contentsline {subsection}{\numberline {8.4.1}A worked ROI: from point estimate to a distribution}{161}{subsection.8.4.1}%
-\contentsline {subsection}{\numberline {8.4.2}The tornado: which assumption is driving the answer}{162}{subsection.8.4.2}%
+\contentsline {subsection}{\numberline {8.4.1}A worked ROI: from point estimate to a distribution}{162}{subsection.8.4.1}%
+\contentsline {subsection}{\numberline {8.4.2}The tornado: which assumption is driving the answer}{163}{subsection.8.4.2}%
 \contentsline {section}{\numberline {8.5}Subgroups without fishing}{164}{section.8.5}%
-\contentsline {subsection}{\numberline {8.5.1}Estimating subgroup effects without being fooled by noise}{164}{subsection.8.5.1}%
+\contentsline {subsection}{\numberline {8.5.1}Estimating subgroup effects without being fooled by noise}{165}{subsection.8.5.1}%
 \contentsline {paragraph}{\nonumberline Where this leaves you.}{166}{paragraph*.98}%
 \contentsline {section}{Exercises}{166}{section*.99}%
 \contentsline {part}{\nonumberline Part IV: Communicating Results \newline Graphics, Infographics, Spreadsheets, and Portals}{169}{part*.101}%
