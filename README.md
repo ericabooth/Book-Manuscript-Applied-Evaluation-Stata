@@ -8,6 +8,7 @@
 **Read it:** [`LaTeXBookCode/main.pdf`](LaTeXBookCode/main.pdf)
 
 ---
+<img width="508" height="762" alt="Cover of Applied Program Evaluation Using Stata" src="assets/book_cover.png" />
 
 ## What the book covers
 
